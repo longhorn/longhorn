@@ -27,3 +27,13 @@ get_container_ip() {
     fi
     echo $ip
 }
+
+validate_ip() {
+    ip=$1
+    rx='([1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
+    if [[ $ip =~ ^$rx\.$rx\.$rx\.$rx$ ]]; then
+        return 0
+    fi
+    echo Invalid ip address ${ip}
+    return 1
+}

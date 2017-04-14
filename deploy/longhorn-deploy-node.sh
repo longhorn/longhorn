@@ -38,6 +38,9 @@ if [ "$etcd_ip" == "" ]; then
         exit 1
 fi
 
+# will error out if fail since we have set -e
+validate_ip ${etcd_ip}
+
 network_option=
 if [ "$network" != "" ]; then
         network_option="--network ${network}"
