@@ -49,7 +49,7 @@ if [ "$port" != "" ]; then
 fi
 
 set +e
-iscsiadm_check=`iscsiadm --version 2>&1`
+iscsiadm_check=`iscsiadm --version > /dev/null 2>&1`
 if [ $? -ne 0 ]; then
         echo Cannot find \`iscsiadm\` on the host, please install \`open-iscsi\` package
         exit 1

@@ -3,7 +3,8 @@
 cleanup(){
     name=$1
     set +e
-    docker rm -vf ${name}
+    echo clean up ${name} if exists
+    docker rm -vf ${name} > /dev/null 2>&1
     set -e
 }
 
