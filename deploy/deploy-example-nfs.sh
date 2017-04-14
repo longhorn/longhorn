@@ -13,13 +13,38 @@ sleep 1
 
 source ./common.sh
 
+while [[ $# -gt 1 ]]
+do
+        key="$1"
+
+        case $key in
+                -n|--network)
+                        network="$2"
+                        shift # past argument
+                        ;;
+                *)
+                        # unknown
+                        # option
+                        echo ${USAGE}
+                        break
+                        ;;
+        esac
+        shift
+done
+
 NFS_SERVER=longhorn-nfs-server
 NFS_IMAGE=docker.io/erezhorev/dockerized_nfs_server
 
 BACKUPSTORE_PATH=/opt/backupstore
 
+network_option=
+if [ "$network" != "" ]; then
+        network_option="--network ${network}"
+fi
+
 docker run -d \
         --name ${NFS_SERVER} \
+        ${network_option} \
         --privileged \
         ${NFS_IMAGE} ${BACKUPSTORE_PATH}
 

@@ -39,7 +39,6 @@ if [ "$etcd_ip" == "" ]; then
 fi
 
 network_option=
-
 if [ "$network" != "" ]; then
         network_option="--network ${network}"
 fi

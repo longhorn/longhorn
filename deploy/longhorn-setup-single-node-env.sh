@@ -15,6 +15,10 @@ do
                         port="$2"
                         shift # past argument
                         ;;
+                -n|--network)
+                        network="$2"
+                        shift # past argument
+                        ;;
                 *)
                         # unknown
                         # option
@@ -25,9 +29,15 @@ do
         shift
 done
 
-port_option=
+options=
 if [ "$port" != "" ]; then
-        port_option="-p $port"
+        options="${options} -p $port"
+fi
+
+network_option=
+if [ "$network" != "" ]; then
+        options="${options} -n ${network}"
+        network_option="--network ${network}"
 fi
 
 ETCD_SERVER=longhorn-etcd-server
@@ -38,6 +48,7 @@ cleanup $ETCD_SERVER
 docker run -d \
         --name $ETCD_SERVER \
         --volume /etcd-data \
+        ${network_option} \
         $ETCD_IMAGE \
         /usr/local/bin/etcd \
         --name longhorn-etcd-server \
@@ -49,4 +60,4 @@ etcd_ip=$(get_container_ip $ETCD_SERVER)
 echo etcd server is up at ${etcd_ip}
 echo
 
-./longhorn-deploy-node.sh -e ${etcd_ip} $port_option
+./longhorn-deploy-node.sh -e ${etcd_ip} ${options}
