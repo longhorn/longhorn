@@ -4,12 +4,49 @@ set -e
 
 source ./common.sh
 
-network=$1
-etcd_ip=$2
+USAGE="Usage: $(basename $0) -e \<etcd_ip\> [-n \<network\> -p \<ui_port\>]"
 
-if [ "$network" == "" -o "$etcd_ip" == "" ]; then
-        echo usage: $(basename $0) \<network_name\> \<etcd_server_ip\>
+while [[ $# -gt 1 ]]
+do
+        key="$1"
+
+        case $key in
+                -e|--etcd-ip)
+                        etcd_ip="$2"
+                        shift # past argument
+                        ;;
+                -n|--network)
+                        network="$2"
+                        shift # past argument
+                        ;;
+                -p|--ui-port)
+                        port="$2"
+                        shift # past argument
+                        ;;
+                *)
+                        # unknown
+                        # option
+                        echo ${USAGE}
+                        break
+                        ;;
+        esac
+        shift
+done
+
+if [ "$etcd_ip" == "" ]; then
+        echo ${USAGE}
         exit 1
+fi
+
+network_option=
+
+if [ "$network" != "" ]; then
+        network_option="--network ${network}"
+fi
+
+ui_port=8080
+if [ "$port" != "" ]; then
+        ui_port=$port
 fi
 
 set +e
@@ -20,17 +57,16 @@ if [ $? -ne 0 ]; then
 fi
 set -e
 
-LONGHORN_ENGINE_BINARY_NAME="longhorn-engine-binary"
+
 LONGHORN_ENGINE_IMAGE="rancher/longhorn-engine:046b5a5"
-
-LONGHORN_MANAGER_NAME="longhorn-manager"
-LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:31b613b"
-
-LONGHORN_DRIVER_NAME="longhorn-driver"
+LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:5329795"
 LONGHORN_DRIVER_IMAGE="imikushin/storage-longhorn:8b1bb5c"
-
-LONGHORN_UI_NAME="longhorn-ui"
 LONGHORN_UI_IMAGE="rancher/longhorn-ui:5528110"
+
+LONGHORN_ENGINE_BINARY_NAME="longhorn-engine-binary"
+LONGHORN_MANAGER_NAME="longhorn-manager"
+LONGHORN_DRIVER_NAME="longhorn-driver"
+LONGHORN_UI_NAME="longhorn-ui"
 
 # longhorn-binary first, provides binary to longhorn-manager
 cleanup ${LONGHORN_ENGINE_BINARY_NAME}
@@ -46,7 +82,7 @@ cleanup ${LONGHORN_MANAGER_NAME}
 
 docker run -d \
         --name ${LONGHORN_MANAGER_NAME} \
-        --network ${network} \
+        ${network_option} \
         --privileged \
         --uts host \
         -v /dev:/host/dev \
@@ -76,16 +112,15 @@ echo ${LONGHORN_DRIVER_NAME} is ready
 
 manager_ip=$(get_container_ip ${LONGHORN_MANAGER_NAME})
 
-host_port=8080
-
 cleanup ${LONGHORN_UI_NAME}
+
 docker run -d \
         --name ${LONGHORN_UI_NAME} \
-        --network ${network} \
-        -p ${host_port}:8000/tcp \
+        ${network_option} \
+        -p ${ui_port}:8000/tcp \
         -e LONGHORN_MANAGER_IP=http://${manager_ip}:9500 \
         ${LONGHORN_UI_IMAGE}
 echo ${LONGHORN_UI_NAME} is ready
 
 echo
-echo Longhorn is up at port ${host_port}
+echo Longhorn is up at port ${ui_port}
