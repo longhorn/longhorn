@@ -1,10 +1,8 @@
 # Longhorn
 
-Longhorn is a microservice based distribution storage system.
+Longhorn is a distributed block storage system built using the idea of associating every volume with its own storage controller. Each controller functions like a typical mirroring RAID controller. The storage controller and its associated replicas are implemented using containers and are managed using a container orchestration system.
 
-It's in experimental stage now. Comments are welcome!
-
-See [wiki](https://github.com/rancher/longhorn/wiki) for more details.
+Longhorn is experimental software. We appreciate your comments as we continue to work on it!
 
 # Requirements
 
@@ -31,7 +29,7 @@ Longhorn is up at port 8080
 ```
 Congratulation! Now you have Longhorn running on the host and can access the UI at `http://<host_ip>:8080`.
 
-#### Setup example NFS server for backupstore
+#### Setup a simple NFS server for backup store
 Longhorn's backup feature requires an NFS server or an S3 endpoint. You can setup a simple NFS server on the same host and use that to store backups.
 ```
 # Make sure you have nfs-kernel-server package installed.
@@ -47,7 +45,7 @@ nfs://10.0.0.5:/opt/backupstore
 ```
 Open Longhorn UI, go to `Setting`, fill the `Backup Target` field with the URL above, click `Save`. Now you should able to use the backup feature of Longhorn.
 
-# Test volume creation and use
+# Create Longhorn volume from Docker CLI
 
 You can now create a persistent Longhorn volume from Docker CLI using the Longhorn volume driver and use the volume in Docker containers.
 
@@ -58,3 +56,7 @@ You can run the following on any of the Longhorn hosts:
 docker volume create -d longhorn vol1
 docker run -it --volume-driver longhorn -v vol1:/vol1 ubuntu bash
 ```
+
+# Multi-host setup
+
+Single-host setup is not suitable for production use. You can find instructions for multi-host setup here: https://github.com/rancher/longhorn/wiki/Multi-Host-Setup-Guide
