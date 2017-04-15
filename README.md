@@ -34,7 +34,7 @@ Longhorn's backup feature requires an NFS server or an S3 endpoint. You can setu
 ```
 # Make sure you have nfs-kernel-server package installed.
 sudo apt-get install nfs-kernel-server
-./deploy-example-nfs.sh
+./deploy-simple-nfs.sh
 ```
 This NFS server won't save any data after you delete the container. It's for development and testing only.
 
