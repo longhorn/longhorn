@@ -45,7 +45,7 @@ nfs://10.0.0.5:/opt/backupstore
 ```
 Open Longhorn UI, go to `Setting`, fill the `Backup Target` field with the URL above, click `Save`. Now you should able to use the backup feature of Longhorn.
 
-## Create Longhorn volume from Docker CLI
+## Create a Longhorn volume from Docker CLI
 
 You can now create a persistent Longhorn volume from Docker CLI using the Longhorn volume driver and use the volume in Docker containers.
 
