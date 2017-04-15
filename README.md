@@ -27,7 +27,7 @@ After the script completes, it produces output like this:
 ```
 Longhorn is up at port 8080
 ```
-Congratulation! Now you have Longhorn running on the host and can access the UI at `http://<host_ip>:8080`.
+Congratulations! Now you have Longhorn running on the host and can access the UI at `http://<host_ip>:8080`.
 
 #### Setup a simple NFS server for backup store
 Longhorn's backup feature requires an NFS server or an S3 endpoint. You can setup a simple NFS server on the same host and use that to store backups.
