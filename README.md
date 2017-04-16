@@ -1,6 +1,8 @@
 # Longhorn
 
-Longhorn is a distributed block storage system built using the idea of associating every volume with its own storage controller. Each controller functions like a typical mirroring RAID controller. The storage controller and its associated replicas are implemented using containers and are managed using a container orchestration system.
+Longhorn is a distributed block storage system built using containers and microservices. Longhorn creates a dedicated storage controller for each block device volume and sychronously replicates the volume across multiple replicas stored on multiple hosts. The storage controller and replicas are implemented using containers and are managed using a container orchestration system.
+
+Longhorn is lightweight, reliable, and easy-to-use. It is particularly suitable as persistent storage for containers. It supports snapshots, backups, and even allows you to schedule recurring snapshots and backups!
 
 Longhorn is experimental software. We appreciate your comments as we continue to work on it!
 
@@ -60,3 +62,20 @@ docker run -it --volume-driver longhorn -v vol1:/vol1 ubuntu bash
 ## Multi-host setup
 
 Single-host setup is not suitable for production use. You can find instructions for multi-host setup here: https://github.com/rancher/longhorn/wiki/Multi-Host-Setup-Guide
+
+
+## License
+Copyright (c) 2014-2017 [Rancher Labs, Inc.](http://rancher.com)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
