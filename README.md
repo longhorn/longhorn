@@ -4,6 +4,8 @@ Longhorn is a distributed block storage system built using containers and micros
 
 Longhorn is lightweight, reliable, and easy-to-use. It is particularly suitable as persistent storage for containers. It supports snapshots, backups, and even allows you to schedule recurring snapshots and backups!
 
+You can read more details of Longhorn and its design here: http://rancher.com/microservices-block-storage/.
+
 Longhorn is experimental software. We appreciate your comments as we continue to work on it!
 
 ## Requirements
