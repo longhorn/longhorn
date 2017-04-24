@@ -3,9 +3,9 @@
 set -e
 
 LONGHORN_ENGINE_IMAGE="rancher/longhorn-engine:046b5a5"
-LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:5329795"
+LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:e9ed45f"
 LONGHORN_DRIVER_IMAGE="rancher/storage-longhorn:11a4f5a"
-LONGHORN_UI_IMAGE="rancher/longhorn-ui:1c6e708"
+LONGHORN_UI_IMAGE="rancher/longhorn-ui:91908f6"
 
 source ./common.sh
 
