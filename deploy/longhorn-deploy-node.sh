@@ -2,6 +2,11 @@
 
 set -e
 
+LONGHORN_ENGINE_IMAGE="rancher/longhorn-engine:046b5a5"
+LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:5329795"
+LONGHORN_DRIVER_IMAGE="rancher/storage-longhorn:11a4f5a"
+LONGHORN_UI_IMAGE="rancher/longhorn-ui:1c6e708"
+
 source ./common.sh
 
 USAGE="Usage: $(basename $0) -e \<etcd_ip\> [-n \<network\> -p \<ui_port\>]"
@@ -58,12 +63,6 @@ if [ $? -ne 0 ]; then
         exit 1
 fi
 set -e
-
-
-LONGHORN_ENGINE_IMAGE="rancher/longhorn-engine:046b5a5"
-LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:5329795"
-LONGHORN_DRIVER_IMAGE="rancher/storage-longhorn:11a4f5a"
-LONGHORN_UI_IMAGE="rancher/longhorn-ui:1c6e708"
 
 LONGHORN_ENGINE_BINARY_NAME="longhorn-engine-binary"
 LONGHORN_MANAGER_NAME="longhorn-manager"
