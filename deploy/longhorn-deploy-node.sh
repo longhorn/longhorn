@@ -84,6 +84,7 @@ cleanup ${LONGHORN_MANAGER_NAME}
 docker run -d \
         --name ${LONGHORN_MANAGER_NAME} \
         ${network_option} \
+        --restart=on-failure:5 \
         --privileged \
         --uts host \
         -v /dev:/host/dev \
@@ -102,6 +103,7 @@ cleanup ${LONGHORN_DRIVER_NAME}
 
 docker run -d \
         --name ${LONGHORN_DRIVER_NAME} \
+        --restart=on-failure:5 \
         --network none \
         --privileged \
         -v /run:/run \
@@ -117,6 +119,7 @@ cleanup ${LONGHORN_UI_NAME}
 
 docker run -d \
         --name ${LONGHORN_UI_NAME} \
+        --restart=on-failure:5 \
         ${network_option} \
         -p ${ui_port}:8000/tcp \
         -e LONGHORN_MANAGER_IP=http://${manager_ip}:9500 \
