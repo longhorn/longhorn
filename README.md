@@ -15,7 +15,15 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 1. Longhorn engine -- core controller/replica logic https://github.com/rancher/longhorn-engine
 1. Longhorn manager -- Longhorn orchestration https://github.com/rancher/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
-1. Sparse tools -- utilities to sync and coalesce Linux sparse files https://github.com/rancher/sparse-tools
+1. Longhorn storage driver -- Docker driver. we're working on a PR to [Rancher Storage](http://github.com/rancher/storage), will update later.
+
+#### Build your own Longhorn 
+
+In order to build your own longhorn, you need to build a couple of separate components as stated above.
+
+Building process has been described in each component above.
+
+Each component will produce a Docker image at the end of building process. You can use it to swap the correlated lines in the [deploying script](https://github.com/rancher/longhorn/blob/master/deploy/longhorn-deploy-node.sh#L5) to test your own build.
 
 ## Requirements
 
