@@ -8,6 +8,15 @@ You can read more details of Longhorn and its design here: http://rancher.com/mi
 
 Longhorn is experimental software. We appreciate your comments as we continue to work on it!
 
+## Source Code
+
+Longhorn source code is spread across a number of repos:
+
+1. Longhorn engine -- core controller/replica logic https://github.com/rancher/longhorn-engine
+1. Longhorn manager -- Longhorn orchestration https://github.com/rancher/longhorn-manager
+1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
+1. Sparse tools -- utilities to sync and coalesce Linux sparse files https://github.com/rancher/sparse-tools
+
 ## Requirements
 
 Longhorn requires one or more hosts running the following software:
