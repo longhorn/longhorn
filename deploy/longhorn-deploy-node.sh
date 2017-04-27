@@ -3,7 +3,7 @@
 set -e
 
 LONGHORN_ENGINE_IMAGE="rancher/longhorn-engine:046b5a5"
-LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:e9ed45f"
+LONGHORN_MANAGER_IMAGE="rancher/longhorn-manager:51d1ff2"
 LONGHORN_DRIVER_IMAGE="rancher/storage-longhorn:11a4f5a"
 LONGHORN_UI_IMAGE="rancher/longhorn-ui:b09b215"
 
