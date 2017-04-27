@@ -10,7 +10,7 @@ Longhorn is experimental software. We appreciate your comments as we continue to
 
 ## Source Code
 
-Longhorn source code is spread across a number of repos:
+Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
 1. Longhorn engine -- core controller/replica logic https://github.com/rancher/longhorn-engine
 1. Longhorn manager -- Longhorn orchestration https://github.com/rancher/longhorn-manager
