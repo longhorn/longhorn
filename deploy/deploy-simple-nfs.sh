@@ -2,7 +2,7 @@
 
 set -e
 
-echo MAKE SURE you have \"nfs-kernel-common\" installed on the host before starting this NFS server
+echo MAKE SURE you have \"nfs-kernel-server\" installed on the host before starting this NFS server
 echo Press Ctrl-C to bail out in 3 seconds
 
 sleep 3
