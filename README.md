@@ -25,14 +25,14 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 4. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster.
 
 ## Deployment
-Create the deployment of Longhorn in your Kubernetes cluster is easy. For example, for GKE, you will only need to deploy the `deploy/example.yaml`. You may need to modify the yaml file a bit to match your own environment, e.g. the Flexvolume plugin directory.
+Create the deployment of Longhorn in your Kubernetes cluster is easy. For example, for GKE, you will only need to run `kubectl create -f deploy/example.yaml`.
 
-The configuration yaml will be slight different for each environment. Here we take GKE as a example:
+The configuration yaml will be slight different for each environment, for example:
 
 1. GKE requires user to manually claim himself as cluster admin to enable RBAC, using `kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<name@example.com>` (in which `name@example.com` is the user's account name in GCE, and it's case sensitive). See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control) for details.
-2. The default Flexvolume plugin directory is different in GKE 1.8+, which is at `/home/kubernetes/flexvolume`. You can find it by running `ps aux|grep kubelet` and check the `--flex-volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
+2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. You can find it by running `ps aux|grep kubelet` on the host and check the `--flex-volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
 
-Longhorn Manager and Longhorn Driver will be deployed as daemonset, as you can see in the yaml file.
+Longhorn Manager and Longhorn Driver will be deployed as daemonsets, as you can see in the yaml file.
 
 When you see those pods has started correctly as follows, you've deployed the Longhorn successfully.
 
@@ -61,7 +61,7 @@ Then user can use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhor
 
 ##  How to use the Longhorn Volume in your pod
 
-There are serveral ways to use the longhorn volume.
+There are serveral ways to use the Longhorn volume.
 
 ### Pod with Longhorn volume
 The following YAML file shows the definition of a pod that makes the Longhorn attach a volume to be used by the pod.
