@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-test
+  namespace: default
+spec:
+  containers:
+  - name: volume-test
+    image: nginx
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: voll
+      mountPath: /data
+    ports:
+    - containerPort: 80
+  volumes:
+  - name: voll
+    flexVolume:
+      driver: "rancher.io/longhorn"
+      fsType: "ext4"
+      options:
+        size: "2G"
+        numberOfReplicas: "2"
+        staleReplicaTimeout: "20"
+        fromBackup: ""
