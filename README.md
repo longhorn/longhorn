@@ -188,7 +188,7 @@ This NFS server won't save any data after you delete the Deployment. It's for de
 After this script completes, using the following URL as the Backup Target in the Longhorn setting:
 
 ```
-nfs://longhorn-backupstore:/opt/backupstore
+nfs://longhorn-nfs-svc:/opt/backupstore
 ```
 
 Open Longhorn UI, go to Setting, fill the Backup Target field with the URL above, click Save. Now you should able to use the backup feature of Longhorn.
