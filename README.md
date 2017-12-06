@@ -6,82 +6,192 @@ Longhorn is lightweight, reliable, and easy-to-use. It is particularly suitable 
 
 You can read more details of Longhorn and its design here: http://rancher.com/microservices-block-storage/.
 
-Longhorn is experimental software. We appreciate your comments as we continue to work on it!
+Longhorn is an experimental software. We appreciate your comments as we continue to work on it!
 
 ## Source Code
-
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
-1. Longhorn engine -- core controller/replica logic https://github.com/rancher/longhorn-engine
-1. Longhorn manager -- Longhorn orchestration https://github.com/rancher/longhorn-manager
+1. Longhorn Engine -- Core controller/replica logic https://github.com/rancher/longhorn-engine
+1. Longhorn Manager -- Longhorn orchestration, includes Flexvolume Driver for Kubernetes https://github.com/rancher/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
-1. Longhorn storage driver -- Docker driver. we're working on a PR to [Rancher Storage](http://github.com/rancher/storage), will update later.
 
-#### Build your own Longhorn 
-
-In order to build your own longhorn, you need to build a couple of separate components as stated above.
-
-Building process has been described in each component above.
-
-Each component will produce a Docker image at the end of building process. You can use it to swap the correlated lines in the [deploying script](https://github.com/rancher/longhorn/blob/master/deploy/longhorn-deploy-node.sh#L5) to test your own build.
+# Deploy in Kubernetes
 
 ## Requirements
 
-Longhorn requires one or more hosts running the following software:
+1. Docker v1.13+
+2. Kubernetes v1.8+
+3. Make sure `jq`, `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
+4. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster.
 
-1. We have tested with Ubuntu 16.04. Other Linux distros, including CentOS and RancherOS, will be tested in the future.
-2. Make sure `open-iscsi` package is installed on the host. If `open-iscsi` package is installed, the `iscsiadm` executable should be available. Ubuntu Server install by default includes `open-iscsi`. Ubuntu Desktop doesn't.
+## Deployment
+Create the deployment of Longhorn in your Kubernetes cluster is easy. For example, for GKE, you will only need to run `kubectl create -f deploy/example.yaml`.
 
-## Single node setup
+The configuration yaml will be slight different for each environment, for example:
 
-You can setup all the components required to run Longhorn on a single Linux host. In this case Longhorn will create multiple replicas for the same volume on the same host. This is therefore not a production-grade setup.
+1. GKE requires user to manually claim himself as cluster admin to enable RBAC, using `kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<name@example.com>` (in which `name@example.com` is the user's account name in GCE, and it's case sensitive). See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control) for details.
+2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. You can find it by running `ps aux|grep kubelet` on the host and check the `--flex-volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
 
-You can setup Longhorn by running a single script:
+Longhorn Manager and Longhorn Driver will be deployed as daemonsets, as you can see in the yaml file.
+
+When you see those pods has started correctly as follows, you've deployed the Longhorn successfully.
+
 ```
-git clone https://github.com/rancher/longhorn
-cd longhorn/deploy
-./longhorn-setup-single-node-env.sh
+NAME                           READY     STATUS    RESTARTS   AGE
+longhorn-driver-7b8l7          1/1       Running   0          3h
+longhorn-driver-tqrlw          1/1       Running   0          3h
+longhorn-driver-xqkjg          1/1       Running   0          3h
+longhorn-manager-67mqs         1/1       Running   0          3h
+longhorn-manager-bxfw9         1/1       Running   0          3h
+longhorn-manager-5kj2f         1/1       Running   0          3h
+longhorn-ui-76674c87b9-89swr   1/1       Running   0          3h
 ```
-The script will setup all the components required to run Longhorn, including the etcd server, longhorn-manager, and longhorn-ui automatically.
 
-After the script completes, it produces output like this:
-```
-Longhorn is up at port 8080
-```
-Congratulations! Now you have Longhorn running on the host and can access the UI at `http://<host_ip>:8080`.
+## Access the UI
+Use `kubectl get svc` to get the external service IP for UI:
 
-### Setup a simple NFS server for storing backups
+```
+NAME                TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+kubernetes          ClusterIP      10.20.240.1     <none>           443/TCP        9d
+longhorn-backend    ClusterIP      10.20.248.250   <none>           9500/TCP       58m
+longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123   80:30697/TCP   58m
+```
+
+Then user can use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhorn-frontend` to access the Longhorn UI.
+
+##  How to use the Longhorn Volume in your pod
+
+There are serveral ways to use the Longhorn volume.
+
+### Pod with Longhorn volume
+The following YAML file shows the definition of a pod that makes the Longhorn attach a volume to be used by the pod.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-test
+  namespace: default
+spec:
+  containers:
+  - name: volume-test
+    image: nginx
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: vol
+      mountPath: /data
+    ports:
+    - containerPort: 80
+  volumes:
+  - name: vol
+    flexVolume:
+      driver: "rancher.io/longhorn"
+      fsType: "ext4"
+      options:
+        size: "2G"
+        numberOfReplicas: "2"
+        staleReplicaTimeout: "20"
+        fromBackup: ""
+```
+
+Notice this field in YAML file `flexVolume.driver "rancher.io/longhorn"`. It specifies Longhorn FlexVolume plug-in shoule be used. There are some options fields in `options` user can fill.
+
+Option  | Required | Description
+------------- | ----|---------
+size    |  Yes | Specify the capacity of the volume in longhorn and the unit should be `G`
+numberOfReplicas | Yes | The number of replica (HA feature) for volume in this Longhorn volume
+fromBackup | No | In Longhorn Backup URL. Specify where user want to restore the volume from (Optional)
+
+### Persistent Volume
+
+This example shows how to use a YAML definition to manage Persistent Volume(PV).
+
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: longhorn-volv-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  flexVolume:
+    driver: "rancher.io/longhorn"
+    fsType: "ext4"
+    options:
+      size: "2G"
+      numberOfReplicas: "2"
+      staleReplicaTimeout: "20"
+      fromBackup: ""
+```
+
+The next YAML shows a Persistent Volume Claim (PVC) that matched the PV defined above.
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-volv-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi
+```
+
+The claim can then be used by a pod in a YAML definition as shown below:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-test
+  namespace: default
+spec:
+  containers:
+  - name: volume-test
+    image: nginx
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: volv
+      mountPath: /data
+    ports:
+    - containerPort: 80
+  volumes:
+  - name: volv
+    persistentVolumeClaim:
+      claimName: longhorn-volv-pvc
+```
+
+## Setup a simple NFS server for storing backups
+
+Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provides a simple way help to setup a testing NFS server.
+
+### Requirements
+
+1. Make sure `nfs-kernel-server` has been installed in all nodes of kubernetes.
+
+### Deployment
+
 Longhorn's backup feature requires an NFS server or an S3 endpoint. You can setup a simple NFS server on the same host and use that to store backups.
-```
-# Make sure you have nfs-kernel-server package installed.
-sudo apt-get install nfs-kernel-server
-./deploy-simple-nfs.sh
-```
-This NFS server won't save any data after you delete the container. It's for development and testing only.
 
-After this script completes, you will see:
+The deployment for the simple nfs server is also very easy.
+
 ```
-Use the following URL as the Backup Target in the Longhorn UI:
-nfs://10.0.0.5:/opt/backupstore
-```
-Open Longhorn UI, go to `Setting`, fill the `Backup Target` field with the URL above, click `Save`. Now you should able to use the backup feature of Longhorn.
-
-## Create a Longhorn volume from Docker CLI
-
-You can now create a persistent Longhorn volume from Docker CLI using the Longhorn volume driver and use the volume in Docker containers.
-
-Docker volume driver is `longhorn`.
-
-You can run the following on any of the Longhorn hosts:
-```
-docker volume create -d longhorn vol1
-docker run -it --volume-driver longhorn -v vol1:/vol1 ubuntu bash
+kubectl create -f deploy/example-backupstore.yaml
 ```
 
-## Multi-host setup
+This NFS server won't save any data after you delete the Deployment. It's for development and testing only.
 
-Single-host setup is not suitable for production use. You can find instructions for multi-host setup here: https://github.com/rancher/longhorn/wiki/Multi-Host-Setup-Guide
+After this script completes, using the following URL as the Backup Target in the Longhorn setting:
 
+```
+nfs://longhorn-nfs-svc:/opt/backupstore
+```
+
+Open Longhorn UI, go to Setting, fill the Backup Target field with the URL above, click Save. Now you should able to use the backup feature of Longhorn.
 
 ## License
 Copyright (c) 2014-2017 [Rancher Labs, Inc.](http://rancher.com)
@@ -97,4 +207,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
