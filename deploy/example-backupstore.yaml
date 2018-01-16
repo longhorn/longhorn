@@ -1,39 +1,35 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: longhorn-test-backupstore
+  name: longhorn-test-nfs
   labels:
-    app: longhorn-nfs
+    app: longhorn-test-nfs
 spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: longhorn-nfs
-    spec:
-      containers:
-        - name: longhorn-test-backupstore-pod
-          image: docker.io/erezhorev/dockerized_nfs_server
-          securityContext:
-            privileged: true
-          ports:
-          # dummy port to keep k8s happy
-          - containerPort: 1111
-            name: longhorn-nfs
-          args: ["/opt/backupstore"]
+  containers:
+  - name: longhorn-test-nfs-container
+    image: janeczku/nfs-ganesha:latest
+    imagePullPolicy: Always
+    env:
+    - name: EXPORT_ID
+      value: "14"
+    - name: EXPORT_PATH
+      value: /opt/backupstore
+    - name: PSEUDO_PATH
+      value: /opt/backupstore
+    command: ["bash", "-c", "mkdir -p /opt/backupstore && /opt/start_nfs.sh"]
+    securityContext:
+      capabilities:
+        add: ["SYS_ADMIN", "DAC_READ_SEARCH"]
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  labels:
-    app: longhorn-nfs
-  name: longhorn-nfs-svc
+  name: longhorn-test-nfs-svc
 spec:
   selector:
-    app: longhorn-nfs
+    app: longhorn-test-nfs
   clusterIP: None
   ports:
-  # dummy port to keep k8s happy
-  - name: longhorn-nfs
-    port: 1111
-    targetPort: longhorn-nfs
+  - name: notnecessary
+    port: 1234
+    targetPort: 1234
