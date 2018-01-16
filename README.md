@@ -205,6 +205,14 @@ instead of
 in the last part of the Longhorn system deployment yaml file.
 See [Troubleshooting](#troubleshooting) for details.
 
+## Uninstall Longhorn
+
+Two commands will be needed to uninstall Longhorn from your Kubernetes cluster, since Kubernetes' `CustomResourceDefiniton` has been used.
+```
+kubectl delete -f deploy/example.yaml
+kubectl delete crd -l longhorn-manager
+```
+
 ## Troubleshooting
 
 ### Volume can be attached/detached from UI, but Kubernetes Pod/Deployment etc cannot use it
