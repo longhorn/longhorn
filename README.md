@@ -4,7 +4,7 @@ Longhorn is a distributed block storage system built using containers and micros
 
 Longhorn is lightweight, reliable, and easy-to-use. It is particularly suitable as persistent storage for containers. It supports snapshots, backups, and even allows you to schedule recurring snapshots and backups!
 
-You can read more details of Longhorn and its design here: http://rancher.com/microservices-block-storage/.
+You can read more details of Longhorn and its design [here](http://rancher.com/microservices-block-storage/).
 
 Longhorn is an experimental software. We appreciate your comments as we continue to work on it!
 
@@ -21,22 +21,20 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 1. Docker v1.13+
 2. Kubernetes v1.8+
-3. Make sure `jq`, `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
+3. Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
 4. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
 
 ## Deployment
-Create the deployment of Longhorn in your Kubernetes cluster is easy. For example, for GKE, you will only need to run `kubectl create -f deploy/example.yaml`.
+Create the deployment of Longhorn in your Kubernetes cluster is easy. For most Kubernetes setup (except GKE), you will only need to run `kubectl create -f deploy/example.yaml`.
 
-The configuration yaml will be slight different for each environment, for example:
+For Google Kubernetes Engine (GKE) users, see [here](#google-kubernetes-engine) before proceed.
 
-1. GKE requires user to manually claim himself as cluster admin to enable RBAC, using `kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<name@example.com>` (in which `name@example.com` is the user's account name in GCE, and it's case sensitive). See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control) for details.
-2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. You can find it by running `ps aux|grep kubelet` on the host and check the `--flex-volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
-
-Longhorn Manager and Longhorn Driver will be deployed as daemonsets, as you can see in the yaml file.
+Longhorn Manager and Longhorn Driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
 
 When you see those pods has started correctly as follows, you've deployed the Longhorn successfully.
 
 ```
+# kubectl -n longhorn-system get pod
 NAME                           READY     STATUS    RESTARTS   AGE
 longhorn-driver-7b8l7          1/1       Running   0          3h
 longhorn-driver-tqrlw          1/1       Running   0          3h
@@ -48,11 +46,10 @@ longhorn-ui-76674c87b9-89swr   1/1       Running   0          3h
 ```
 
 ## Access the UI
-Use `kubectl get svc` to get the external service IP for UI:
+Use `kubectl -n longhorn-system get svc` to get the external service IP for UI:
 
 ```
 NAME                TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
-kubernetes          ClusterIP      10.20.240.1     <none>           443/TCP        9d
 longhorn-backend    ClusterIP      10.20.248.250   <none>           9500/TCP       58m
 longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123   80:30697/TCP   58m
 ```
@@ -169,32 +166,59 @@ spec:
 
 Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provides a simple way help to setup a testing NFS server.
 
-### Requirements
-
-1. Make sure `nfs-kernel-server` has been installed in all nodes of kubernetes.
-
 ### Deployment
-
-Longhorn's backup feature requires an NFS server or an S3 endpoint. You can setup a simple NFS server on the same host and use that to store backups.
-
-The deployment for the simple nfs server is also very easy.
-
 ```
 kubectl create -f deploy/example-backupstore.yaml
 ```
+It will create a simple NFS server in the `default` namespace, which can be addressed as `longhorn-test-nfs-svc.default` for other pods in the cluster.
 
-This NFS server won't save any data after you delete the Deployment. It's for development and testing only.
+WARNING: This NFS server won't save any data after you delete it. It's for development and testing only.
 
 After this script completes, using the following URL as the Backup Target in the Longhorn setting:
-
 ```
-nfs://longhorn-nfs-svc:/opt/backupstore
+nfs://longhorn-test-nfs-svc.default:/opt/backupstore
 ```
-
 Open Longhorn UI, go to Setting, fill the Backup Target field with the URL above, click Save. Now you should able to use the backup feature of Longhorn.
 
+## Google Kubernetes Engine
+The configuration yaml will be slight different for Google Kubernetes Engine (GKE):
+
+1. GKE requires user to manually claim himself as cluster admin to enable RBAC. User need to execute following command before create the Longhorn system using yaml files.
+```
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<name@example.com>
+```
+In which `name@example.com` is the user's account name in GCE, and it's case sensitive.
+See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control) for details.
+
+2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. User need to use
+```
+        - name: flexvolume-longhorn-mount
+          hostPath:
+            path: /home/kubernetes/flexvolume/
+```
+instead of
+```
+        - name: flexvolume-longhorn-mount
+          hostPath:
+            path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+```
+in the last part of the Longhorn system deployment yaml file.
+See [Troubleshooting](#troubleshooting) for details.
+
+## Troubleshooting
+
+### Volume can be attached/detached from UI, but Kubernetes Pod/Deployment etc cannot use it
+
+Check if volume plugin directory has been set correctly.
+
+By default, Kubernetes use `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` as the directory for volume plugin drivers, as stated in the [official document](https://github.com/kubernetes/community/blob/master/contributors/devel/flexvolume.md#prerequisites).
+
+But some vendors may choose to change the directory due to various reasons. For example, GKE uses `/home/kubernetes/flexvolume` instead.
+
+User can find the correct directory by running `ps aux|grep kubelet` on the host and check the `--flex-volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
+
 ## License
-Copyright (c) 2014-2017 [Rancher Labs, Inc.](http://rancher.com)
+Copyright (c) 2014-2018 [Rancher Labs, Inc.](http://rancher.com)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
