@@ -55,6 +55,96 @@ subjects:
   name: longhorn-service-account
   namespace: longhorn-system
 ---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Controller
+  name: controllers.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Controller
+    listKind: ControllerList
+    plural: controllers
+    shortNames:
+    - lhc
+    singular: controller
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Node
+  name: nodes.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Node
+    listKind: NodeList
+    plural: nodes
+    shortNames:
+    - lhn
+    singular: node
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Replica
+  name: replicas.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Replica
+    listKind: ReplicaList
+    plural: replicas
+    shortNames:
+    - lhr
+    singular: replica
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Setting
+  name: settings.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Setting
+    listKind: SettingList
+    plural: settings
+    shortNames:
+    - lhs
+    singular: setting
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Volume
+  name: volumes.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Volume
+    listKind: VolumeList
+    plural: volumes
+    shortNames:
+    - lhv
+    singular: volume
+  scope: Namespaced
+  version: v1alpha1
+---
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
@@ -70,19 +160,20 @@ spec:
     spec:
       initContainers:
       - name: init-container
-        image: rancher/longhorn-engine:17e33fc
+        image: rancher/longhorn-engine:8c8289f
         command: ['sh', '-c', 'cp /usr/local/bin/* /data/']
         volumeMounts:
         - name: execbin
           mountPath: /data/
       containers:
       - name: longhorn-manager
-        image: rancher/longhorn-manager:4d21cac
+        image: rancher/longhorn-manager:fc47da9
+        imagePullPolicy: Always
         securityContext:
           privileged: true
         command: ["launch-manager", "-d",
                 "--orchestrator", "kubernetes",
-                "--engine-image", "rancher/longhorn-engine:17e33fc"]
+                "--engine-image", "rancher/longhorn-engine:8c8289f"]
         ports:
         - containerPort: 9500
           name: manager
@@ -198,7 +289,7 @@ spec:
     spec:
       initContainers:
       - name: init-container
-        image: rancher/longhorn-driver:4d21cac
+        image: rancher/longhorn-driver:fc47da9
         securityContext:
             privileged: true
         command: ["/checkdependency.sh"]
@@ -206,7 +297,7 @@ spec:
         - name: host-proc-mount
           mountPath: /host/proc/
       containers:
-        - image: rancher/longhorn-driver:4d21cac
+        - image: rancher/longhorn-driver:fc47da9
           imagePullPolicy: Always
           name: longhorn-driver-container
           command: ["/entrypoint.sh"]
@@ -225,14 +316,15 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
       volumes:
-        - name: flexvolume-longhorn-mount
-          hostPath:
-            path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-            #FOR GKE
-            #path: /home/kubernetes/flexvolume/
         - name: usr-local-bin-mount
           hostPath:
             path: /usr/local/bin/
         - name: host-proc-mount
           hostPath:
             path: /proc/
+        - name: flexvolume-longhorn-mount
+          hostPath:
+            path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+            #FOR GKE
+            #path: /home/kubernetes/flexvolume/
+---
