@@ -223,7 +223,7 @@ By default, Kubernetes use `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
 But some vendors may choose to change the directory due to various reasons. For example, GKE uses `/home/kubernetes/flexvolume` instead.
 
-User can find the correct directory by running `ps aux|grep kubelet` on the host and check the `--flex-volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
+User can find the correct directory by running `ps aux|grep kubelet` on the host and check the `--volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
 
 ## License
 Copyright (c) 2014-2018 [Rancher Labs, Inc.](http://rancher.com)
