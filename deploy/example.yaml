@@ -21,10 +21,16 @@ rules:
   verbs:
   - "*"
 - apiGroups: [""]
-  resources: ["pods"]
+  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims", "nodes", "proxy/nodes"]
+  verbs: ["*"]
+- apiGroups: ["extensions"]
+  resources: ["daemonsets"]
   verbs: ["*"]
 - apiGroups: ["batch"]
-  resources: ["jobs"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["*"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
   verbs: ["*"]
 - apiGroups: ["longhorn.rancher.io"]
   resources: ["nodes"]
@@ -33,13 +39,13 @@ rules:
   resources: ["volumes"]
   verbs: ["*"]
 - apiGroups: ["longhorn.rancher.io"]
+  resources: ["engines"]
+  verbs: ["*"]
+- apiGroups: ["longhorn.rancher.io"]
   resources: ["replicas"]
   verbs: ["*"]
 - apiGroups: ["longhorn.rancher.io"]
   resources: ["settings"]
-  verbs: ["*"]
-- apiGroups: ["longhorn.rancher.io"]
-  resources: ["controllers"]
   verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -59,35 +65,17 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
-    longhorn-manager: Controller
-  name: controllers.longhorn.rancher.io
+    longhorn-manager: Engine
+  name: engines.longhorn.rancher.io
 spec:
   group: longhorn.rancher.io
   names:
-    kind: Controller
-    listKind: ControllerList
-    plural: controllers
+    kind: Engine
+    listKind: EngineList
+    plural: engines
     shortNames:
-    - lhc
-    singular: controller
-  scope: Namespaced
-  version: v1alpha1
----
-apiVersion: apiextensions.k8s.io/v1beta1
-kind: CustomResourceDefinition
-metadata:
-  labels:
-    longhorn-manager: Node
-  name: nodes.longhorn.rancher.io
-spec:
-  group: longhorn.rancher.io
-  names:
-    kind: Node
-    listKind: NodeList
-    plural: nodes
-    shortNames:
-    - lhn
-    singular: node
+    - lhe
+    singular: engine
   scope: Namespaced
   version: v1alpha1
 ---
@@ -160,20 +148,27 @@ spec:
     spec:
       initContainers:
       - name: init-container
-        image: rancher/longhorn-engine:8c8289f
+        image: rancher/longhorn-engine:de88734
         command: ['sh', '-c', 'cp /usr/local/bin/* /data/']
         volumeMounts:
         - name: execbin
           mountPath: /data/
       containers:
       - name: longhorn-manager
-        image: rancher/longhorn-manager:ea71bd3
+        image: rancher/longhorn-manager:7d61273
         imagePullPolicy: Always
         securityContext:
           privileged: true
-        command: ["launch-manager", "-d",
-                "--orchestrator", "kubernetes",
-                "--engine-image", "rancher/longhorn-engine:8c8289f"]
+        command:
+        - longhorn-manager
+        - -d
+        - daemon
+        - --engine-image
+        - rancher/longhorn-engine:de88734
+        - --manager-image
+        - rancher/longhorn-manager:7d61273
+        - --service-account
+        - longhorn-service-account
         ports:
         - containerPort: 9500
           name: manager
@@ -250,7 +245,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: rancher/longhorn-ui:99622cb
+        image: rancher/longhorn-ui:9f5874c
         ports:
         - containerPort: 8000
           name: longhorn-ui
@@ -273,58 +268,41 @@ spec:
     port: 80
     targetPort: longhorn-ui
   type: LoadBalancer
-  sessionAffinity: ClientIP
 ---
 apiVersion: extensions/v1beta1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: longhorn-driver
+  name: longhorn-flexvolume-driver-deployer
   namespace: longhorn-system
 spec:
+  replicas: 1
   template:
     metadata:
-      name: longhorn-driver
       labels:
-        app: longhorn-driver
+        app: longhorn-flexvolume-driver-deployer
     spec:
-      initContainers:
-      - name: init-container
-        image: rancher/longhorn-driver:ea71bd3
-        securityContext:
-            privileged: true
-        command: ["/checkdependency.sh"]
-        volumeMounts:
-        - name: host-proc-mount
-          mountPath: /host/proc/
       containers:
-        - image: rancher/longhorn-driver:ea71bd3
+        - name: longhorn-flexvolume-driver-deployer
+          image: rancher/longhorn-manager:7d61273
           imagePullPolicy: Always
-          name: longhorn-driver-container
-          command: ["/entrypoint.sh"]
-          securityContext:
-              privileged: true
-          volumeMounts:
-            - mountPath: /flexmnt
-              name: flexvolume-longhorn-mount
-            - mountPath: /binmnt
-              name: usr-local-bin-mount
+          command:
+          - longhorn-manager
+          - -d
+          - deploy-flexvolume-driver
+          - --manager-image
+          - rancher/longhorn-manager:7d61273
           env:
-            - name: LONGHORN_BACKEND_SVC
-              value: "longhorn-backend"
-            - name: NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-      volumes:
-        - name: usr-local-bin-mount
-          hostPath:
-            path: /usr/local/bin/
-        - name: host-proc-mount
-          hostPath:
-            path: /proc/
-        - name: flexvolume-longhorn-mount
-          hostPath:
-            path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: FLEXVOLUME_DIR
+            value: ""
             #FOR GKE
-            #path: /home/kubernetes/flexvolume/
+            #value: "/home/kubernetes/flexvolume/"
+      serviceAccountName: longhorn-service-account
 ---
