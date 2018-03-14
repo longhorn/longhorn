@@ -35,14 +35,15 @@ When you see those pods has started correctly as follows, you've deployed the Lo
 
 ```
 # kubectl -n longhorn-system get pod
-NAME                           READY     STATUS    RESTARTS   AGE
-longhorn-driver-7b8l7          1/1       Running   0          3h
-longhorn-driver-tqrlw          1/1       Running   0          3h
-longhorn-driver-xqkjg          1/1       Running   0          3h
-longhorn-manager-67mqs         1/1       Running   0          3h
-longhorn-manager-bxfw9         1/1       Running   0          3h
-longhorn-manager-5kj2f         1/1       Running   0          3h
-longhorn-ui-76674c87b9-89swr   1/1       Running   0          3h
+NAME                                                  READY     STATUS    RESTARTS   AGE
+longhorn-flexvolume-driver-4dnx6                      1/1       Running   0          1d
+longhorn-flexvolume-driver-cqwj5                      1/1       Running   0          1d
+longhorn-flexvolume-driver-deployer-bc7b95b5b-sb9kr   1/1       Running   0          1d
+longhorn-flexvolume-driver-q9h4f                      1/1       Running   0          1d
+longhorn-manager-dkdn9                                1/1       Running   0          2h
+longhorn-manager-l6npd                                1/1       Running   0          2h
+longhorn-manager-v4fz8                                1/1       Running   0          2h
+longhorn-ui-58796c68d-db4t6                           1/1       Running   0          1h
 ```
 
 ## Access the UI
@@ -97,7 +98,7 @@ Option  | Required | Description
 ------------- | ----|---------
 size    |  Yes | Specify the capacity of the volume in longhorn and the unit should be `G`
 numberOfReplicas | Yes | The number of replica (HA feature) for volume in this Longhorn volume
-fromBackup | No | In Longhorn Backup URL. Specify where user want to restore the volume from (Optional)
+fromBackup | No | Optional. Must be a Longhorn Backup URL. Specify where user want to restore the volume from.
 
 ### Persistent Volume
 
@@ -162,6 +163,37 @@ spec:
       claimName: longhorn-volv-pvc
 ```
 
+### Storage class
+
+Alternative to create PV manually, Longhorn also supports dynamic provisioner function, which can create PV automatically for the user according to the spec of storage class and PVC. User need to create a new storage class in order to use it. The storage class example is at [here](./deploy/example-storageclass.yaml)
+```
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn
+provisioner: rancher.io/longhorn
+parameters:
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "30"
+  fromBackup: ""
+```
+
+Then user can create PVC directly. For example:
+
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-volv-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi
+```
+
 ## Setup a simple NFS server for storing backups
 
 Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provides a simple way help to setup a testing NFS server.
@@ -192,15 +224,8 @@ See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-acc
 
 2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. User need to use
 ```
-        - name: flexvolume-longhorn-mount
-          hostPath:
-            path: /home/kubernetes/flexvolume/
-```
-instead of
-```
-        - name: flexvolume-longhorn-mount
-          hostPath:
-            path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          - name: FLEXVOLUME_DIR
+            value: "/home/kubernetes/flexvolume/"
 ```
 in the last part of the Longhorn system deployment yaml file.
 See [Troubleshooting](#troubleshooting) for details.
