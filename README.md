@@ -1,21 +1,21 @@
 # Longhorn
 
-Longhorn is a distributed block storage system built using containers and microservices. Longhorn creates a dedicated storage controller for each block device volume and sychronously replicates the volume across multiple replicas stored on multiple hosts. The storage controller and replicas are implemented using containers and are managed using a container orchestration system.
+Longhorn is a distributed block storage system for Kubernetes. Longhorn is lightweight, reliable, and easy-to-use. You can deploy Longhorn on an existing Kubernetes cluster with one simple command. Once Longhorn is deployed, it adds persistent volume support to the Kubernetes cluster.
 
-Longhorn is lightweight, reliable, and easy-to-use. It is particularly suitable as persistent storage for containers. It supports snapshots, backups, and even allows you to schedule recurring snapshots and backups!
+Longhorn implements distributed block storage using containers and microservices. Longhorn creates a dedicated storage controller for each block device volume and sychronously replicates the volume across multiple replicas stored on multiple nodes. The storage controller and replicas are themselves orchestrated using Kubernetes. Longhorn supports snapshots, backups, and even allows you to schedule recurring snapshots and backups!
 
 You can read more details of Longhorn and its design [here](http://rancher.com/microservices-block-storage/).
 
-Longhorn is an experimental software. We appreciate your comments as we continue to work on it!
+Longhorn is a work in progress. We appreciate your comments as we continue to work on it!
 
 ## Source Code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
 1. Longhorn Engine -- Core controller/replica logic https://github.com/rancher/longhorn-engine
-1. Longhorn Manager -- Longhorn orchestration, includes Flexvolume Driver for Kubernetes https://github.com/rancher/longhorn-manager
+1. Longhorn Manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/rancher/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
 
-# Deploy in Kubernetes
+# Deploy on Kubernetes
 
 ## Requirements
 
