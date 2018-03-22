@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
   - name: volume-test
-    image: nginx
+    image: nginx:stable-alpine
     imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: voll
@@ -19,7 +19,7 @@ spec:
       driver: "rancher.io/longhorn"
       fsType: "ext4"
       options:
-        size: "2G"
-        numberOfReplicas: "2"
+        size: "2Gi"
+        numberOfReplicas: "3"
         staleReplicaTimeout: "20"
         fromBackup: ""
