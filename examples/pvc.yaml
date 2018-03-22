@@ -18,7 +18,7 @@ metadata:
 spec:
   containers:
   - name: volume-test
-    image: nginx
+    image: nginx:stable-alpine
     imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: volv
