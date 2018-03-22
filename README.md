@@ -73,21 +73,21 @@ metadata:
 spec:
   containers:
   - name: volume-test
-    image: nginx
+    image: nginx:stable-alpine
     imagePullPolicy: IfNotPresent
     volumeMounts:
-    - name: vol
+    - name: voll
       mountPath: /data
     ports:
     - containerPort: 80
   volumes:
-  - name: vol
+  - name: voll
     flexVolume:
       driver: "rancher.io/longhorn"
       fsType: "ext4"
       options:
-        size: "2G"
-        numberOfReplicas: "2"
+        size: "2Gi"
+        numberOfReplicas: "3"
         staleReplicaTimeout: "20"
         fromBackup: ""
 ```
@@ -100,72 +100,9 @@ size    |  Yes | Specify the capacity of the volume in longhorn and the unit sho
 numberOfReplicas | Yes | The number of replica (HA feature) for volume in this Longhorn volume
 fromBackup | No | Optional. Must be a Longhorn Backup URL. Specify where user want to restore the volume from.
 
-### Persistent Volume
-
-This example shows how to use a YAML definition to manage Persistent Volume(PV).
-
-```
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: longhorn-volv-pv
-spec:
-  capacity:
-    storage: 2Gi
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  flexVolume:
-    driver: "rancher.io/longhorn"
-    fsType: "ext4"
-    options:
-      size: "2G"
-      numberOfReplicas: "2"
-      staleReplicaTimeout: "20"
-      fromBackup: ""
-```
-
-The next YAML shows a Persistent Volume Claim (PVC) that matched the PV defined above.
-```
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: longhorn-volv-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 2Gi
-```
-
-The claim can then be used by a pod in a YAML definition as shown below:
-```
-apiVersion: v1
-kind: Pod
-metadata:
-  name: volume-test
-  namespace: default
-spec:
-  containers:
-  - name: volume-test
-    image: nginx
-    imagePullPolicy: IfNotPresent
-    volumeMounts:
-    - name: volv
-      mountPath: /data
-    ports:
-    - containerPort: 80
-  volumes:
-  - name: volv
-    persistentVolumeClaim:
-      claimName: longhorn-volv-pvc
-```
-
 ### Storage class
 
-Alternative to create PV manually, Longhorn also supports dynamic provisioner function, which can create PV automatically for the user according to the spec of storage class and PVC. User need to create a new storage class in order to use it. The storage class example is at [here](./deploy/example-storageclass.yaml)
+Longhorn supports dynamic provisioner function, which can create PV automatically for the user according to the spec of storage class and PVC. User need to create a new storage class in order to use it. The storage class example is at [here](./deploy/example-storageclass.yaml)
 ```
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -179,7 +116,6 @@ parameters:
 ```
 
 Then user can create PVC directly. For example:
-
 ```
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -194,17 +130,39 @@ spec:
       storage: 2Gi
 ```
 
+THen use it in the pod:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-test
+  namespace: default
+spec:
+  containers:
+  - name: volume-test
+    image: nginx:stable-alpine
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: volv
+      mountPath: /data
+    ports:
+    - containerPort: 80
+  volumes:
+  - name: volv
+    persistentVolumeClaim:
+      claimName: longhorn-volv-pvc
+```
+
 ## Setup a simple NFS server for storing backups
 
-Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provides a simple way help to setup a testing NFS server.
+Longhorn supports backing up mechanism to export the user data out of Longhorn system. Currently Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provides a simple way help to setup a testing NFS server.
 
+WARNING: This NFS server won't save any data after you delete it. It's for development and testing only.
 ### Deployment
 ```
 kubectl create -f deploy/example-backupstore.yaml
 ```
 It will create a simple NFS server in the `default` namespace, which can be addressed as `longhorn-test-nfs-svc.default` for other pods in the cluster.
-
-WARNING: This NFS server won't save any data after you delete it. It's for development and testing only.
 
 After this script completes, using the following URL as the Backup Target in the Longhorn setting:
 ```
@@ -232,10 +190,9 @@ See [Troubleshooting](#troubleshooting) for details.
 
 ## Uninstall Longhorn
 
-Two commands will be needed to uninstall Longhorn from your Kubernetes cluster, since Kubernetes' `CustomResourceDefiniton` has been used.
+Longhorn can be easily uninstalled using:
 ```
 kubectl delete -f deploy/example.yaml
-kubectl delete crd -l longhorn-manager
 ```
 
 ## Troubleshooting
