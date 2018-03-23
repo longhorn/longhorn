@@ -155,7 +155,7 @@ spec:
           mountPath: /data/
       containers:
       - name: longhorn-manager
-        image: rancher/longhorn-manager:2b34b4e
+        image: rancher/longhorn-manager:1ebf5cb
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -166,7 +166,7 @@ spec:
         - --engine-image
         - rancher/longhorn-engine:de88734
         - --manager-image
-        - rancher/longhorn-manager:2b34b4e
+        - rancher/longhorn-manager:1ebf5cb
         - --service-account
         - longhorn-service-account
         ports:
@@ -283,14 +283,14 @@ spec:
     spec:
       containers:
         - name: longhorn-flexvolume-driver-deployer
-          image: rancher/longhorn-manager:2b34b4e
+          image: rancher/longhorn-manager:1ebf5cb
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-flexvolume-driver
           - --manager-image
-          - rancher/longhorn-manager:2b34b4e
+          - rancher/longhorn-manager:1ebf5cb
           env:
           - name: POD_NAMESPACE
             valueFrom:
