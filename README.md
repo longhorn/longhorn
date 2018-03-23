@@ -205,7 +205,7 @@ kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/0.2/deploy/
 
 ## Troubleshooting
 
-### Volume can be attached/detached from UI, but Kubernetes Pod/Deployment etc cannot use it
+### Volume can be attached/detached from UI, but Kubernetes Pod/StatefulSet etc cannot use it
 
 Check if volume plugin directory has been set correctly.
 
