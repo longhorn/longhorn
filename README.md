@@ -25,7 +25,10 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 4. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
 
 ## Deployment
-Create the deployment of Longhorn in your Kubernetes cluster is easy. For most Kubernetes setup (except GKE), you will only need to run `kubectl create -f deploy/example.yaml`.
+Create the deployment of Longhorn in your Kubernetes cluster is easy. For most Kubernetes setup (except GKE), you will only need to run the following command to install Longhorn:
+```
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/0.2/deploy/longhorn.yaml
+```
 
 For Google Kubernetes Engine (GKE) users, see [here](#google-kubernetes-engine) before proceed.
 
@@ -153,12 +156,12 @@ spec:
       claimName: longhorn-volv-pvc
 ```
 
-## Setup a simple NFS server for storing backups
+## Setup a TESTING ONLY NFS server for storing backups
 
 Longhorn supports backing up mechanism to export the user data out of Longhorn system. Currently Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provides a simple way help to setup a testing NFS server.
 
-WARNING: This NFS server won't save any data after you delete it. It's for development and testing only.
-### Deployment
+WARNING: This NFS server won't save any data after you delete it. It's for TESTING ONLY.
+
 ```
 kubectl create -f deploy/example-backupstore.yaml
 ```
@@ -180,19 +183,24 @@ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-ad
 In which `name@example.com` is the user's account name in GCE, and it's case sensitive.
 See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control) for details.
 
-2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. User need to use
+2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. User need to use following command instead:
+```
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/0.2/deploy/longhorn-gke.yaml
+```
+
+User can also customerize the Flexvolume directory in the last part of the Longhorn system deployment yaml file, e.g.:
 ```
           - name: FLEXVOLUME_DIR
             value: "/home/kubernetes/flexvolume/"
 ```
-in the last part of the Longhorn system deployment yaml file.
+
 See [Troubleshooting](#troubleshooting) for details.
 
 ## Uninstall Longhorn
 
 Longhorn can be easily uninstalled using:
 ```
-kubectl delete -f deploy/example.yaml
+kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/0.2/deploy/longhorn.yaml
 ```
 
 ## Troubleshooting
