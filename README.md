@@ -27,7 +27,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 ## Deployment
 Create the deployment of Longhorn in your Kubernetes cluster is easy. For most Kubernetes setup (except GKE), you will only need to run the following command to install Longhorn:
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/0.2/deploy/longhorn.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.2/deploy/longhorn.yaml
 ```
 
 For Google Kubernetes Engine (GKE) users, see [here](#google-kubernetes-engine) before proceed.
@@ -185,7 +185,7 @@ See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-acc
 
 2. The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. User need to use following command instead:
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/0.2/deploy/longhorn-gke.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.2/deploy/longhorn-gke.yaml
 ```
 
 User can also customerize the Flexvolume directory in the last part of the Longhorn system deployment yaml file, e.g.:
@@ -200,7 +200,7 @@ See [Troubleshooting](#troubleshooting) for details.
 
 Longhorn can be easily uninstalled using:
 ```
-kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/0.2/deploy/longhorn.yaml
+kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/v0.2/deploy/longhorn.yaml
 ```
 
 ## Troubleshooting
