@@ -58,7 +58,11 @@ longhorn-backend    ClusterIP      10.20.248.250   <none>           9500/TCP    
 longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123   80:30697/TCP   58m
 ```
 
-Then user can use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhorn-frontend` to access the Longhorn UI.
+If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhorn-frontend` to access the Longhorn UI. Otherwise the user can use `<node_ip>:<port>` (port is `30697` in the case above) to access the UI.
+
+Longhorn UI would connect to the Longhorn Manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
+
+Notice the current UI is unauthenticated.
 
 ##  How to use the Longhorn Volume in your pod
 
