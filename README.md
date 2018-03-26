@@ -202,7 +202,12 @@ See [Troubleshooting](#troubleshooting) for details.
 
 ## Uninstall Longhorn
 
-Longhorn can be easily uninstalled using:
+In order to uninstall Longhorn, user need to remove all the volumes first:
+```
+kubectl -n longhorn-system delete lhv --all
+```
+
+After confirming all the volumes are removed, then Longhorn can be easily uninstalled using:
 ```
 kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/v0.2/deploy/longhorn.yaml
 ```
