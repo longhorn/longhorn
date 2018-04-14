@@ -155,7 +155,7 @@ spec:
           mountPath: /data/
       containers:
       - name: longhorn-manager
-        image: rancher/longhorn-manager:1ebf5cb
+        image: rancher/longhorn-manager:010fe60
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -166,12 +166,11 @@ spec:
         - --engine-image
         - rancher/longhorn-engine:de88734
         - --manager-image
-        - rancher/longhorn-manager:1ebf5cb
+        - rancher/longhorn-manager:010fe60
         - --service-account
         - longhorn-service-account
         ports:
         - containerPort: 9500
-          name: manager
         volumeMounts:
         - name: dev
           mountPath: /host/dev/
@@ -224,9 +223,8 @@ spec:
   selector:
     app: longhorn-manager
   ports:
-  - name: manager
-    port: 9500
-    targetPort: manager
+  - port: 9500
+    targetPort: 9500
   sessionAffinity: ClientIP
 ---
 apiVersion: extensions/v1beta1
@@ -248,7 +246,6 @@ spec:
         image: rancher/longhorn-ui:1455f4f
         ports:
         - containerPort: 8000
-          name: longhorn-ui
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
@@ -264,9 +261,8 @@ spec:
   selector:
     app: longhorn-ui
   ports:
-  - name: longhorn-ui
-    port: 80
-    targetPort: longhorn-ui
+  - port: 80
+    targetPort: 8000
   type: LoadBalancer
 ---
 apiVersion: extensions/v1beta1
@@ -283,14 +279,14 @@ spec:
     spec:
       containers:
         - name: longhorn-flexvolume-driver-deployer
-          image: rancher/longhorn-manager:1ebf5cb
+          image: rancher/longhorn-manager:010fe60
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-flexvolume-driver
           - --manager-image
-          - rancher/longhorn-manager:1ebf5cb
+          - rancher/longhorn-manager:010fe60
           env:
           - name: POD_NAMESPACE
             valueFrom:
