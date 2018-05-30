@@ -103,17 +103,17 @@ spec:
         fromBackup: ""
 ```
 
-Notice this field in YAML file `flexVolume.driver "rancher.io/longhorn"`. It specifies Longhorn FlexVolume plug-in shoule be used. There are some options fields in `options` user can fill.
+Notice this field in the YAML file: `flexVolume.driver "rancher.io/longhorn"`. It specifies that the Longhorn FlexVolume plug-in should be used. There are some option fields in `options` the user can fill in.
 
 Option  | Required | Description
 ------------- | ----|---------
 size    |  Yes | Specify the capacity of the volume in longhorn and the unit should be `G`
-numberOfReplicas | Yes | The number of replica (HA feature) for volume in this Longhorn volume
-fromBackup | No | Optional. Must be a Longhorn Backup URL. Specify where user want to restore the volume from.
+numberOfReplicas | Yes | The number of replicas (HA feature) for volume in this Longhorn volume
+fromBackup | No | Optional. Must be a Longhorn Backup URL. Specify where the user want to restore the volume from.
 
 ### Storage class
 
-Longhorn supports dynamic provisioner function, which can create PV automatically for the user according to the spec of storage class and PVC. User need to create a new storage class in order to use it. The storage class example is at [here](./deploy/example-storageclass.yaml)
+Longhorn supports dynamic provisioner function, which can create PV automatically for the user according to the spec of storage class and PVC. The user needs to create a new storage class in order to use it. The storage class example can be downloaded from [here](./deploy/example-storageclass.yaml)
 ```
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -126,7 +126,7 @@ parameters:
   fromBackup: ""
 ```
 
-Then user can create PVC directly. For example:
+Then user can create a PVC directly. For example:
 ```
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -141,7 +141,7 @@ spec:
       storage: 2Gi
 ```
 
-THen use it in the pod:
+Then use it in the pod:
 ```
 apiVersion: v1
 kind: Pod
@@ -166,7 +166,7 @@ spec:
 
 ## Setup a TESTING ONLY NFS server for storing backups
 
-Longhorn supports backing up mechanism to export the user data out of Longhorn system. Currently Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provides a simple way help to setup a testing NFS server.
+Longhorn supports backing up mechanisms to export the user data out of the Longhorn system. Currently Longhorn supports backing up to a NFS server. In order to use this feature, you need to have a NFS server running and accessible in the Kubernetes cluster. Here we provide a simple way to setup a testing NFS server.
 
 WARNING: This NFS server won't save any data after you delete it. It's for TESTING ONLY.
 
