@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: longhorn-vol-pv
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  csi:
+    driver: io.rancher.longhorn
+    fsType: ext4
+    volumeAttributes:
+      numberOfReplicas: '3'
+      staleReplicaTimeout: '30'
+    volumeHandle: existing-longhorn-volume
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-vol-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: longhorn-vol-pv
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-test
+  namespace: default
+spec:
+  containers:
+  - name: volume-test
+    image: nginx:stable-alpine
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: vol
+      mountPath: /data
+    ports:
+    - containerPort: 80
+  volumes:
+  - name: vol
+    persistentVolumeClaim:
+      claimName: longhorn-vol-pvc
