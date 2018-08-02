@@ -21,31 +21,22 @@ rules:
   verbs:
   - "*"
 - apiGroups: [""]
-  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims", "nodes", "proxy/nodes"]
+  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims", "nodes", "proxy/nodes", "pods/log", "secrets", "services"]
   verbs: ["*"]
-- apiGroups: ["extensions"]
-  resources: ["daemonsets"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["daemonsets", "statefulsets"]
   verbs: ["*"]
 - apiGroups: ["batch"]
   resources: ["jobs", "cronjobs"]
   verbs: ["*"]
 - apiGroups: ["storage.k8s.io"]
-  resources: ["storageclasses"]
+  resources: ["storageclasses", "volumeattachments"]
   verbs: ["*"]
 - apiGroups: ["longhorn.rancher.io"]
-  resources: ["nodes"]
-  verbs: ["*"]
-- apiGroups: ["longhorn.rancher.io"]
-  resources: ["volumes"]
-  verbs: ["*"]
-- apiGroups: ["longhorn.rancher.io"]
-  resources: ["engines"]
-  verbs: ["*"]
-- apiGroups: ["longhorn.rancher.io"]
-  resources: ["replicas"]
-  verbs: ["*"]
-- apiGroups: ["longhorn.rancher.io"]
-  resources: ["settings"]
+  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes"]
   verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -133,7 +124,43 @@ spec:
   scope: Namespaced
   version: v1alpha1
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: EngineImage
+  name: engineimages.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: EngineImage
+    listKind: EngineImageList
+    plural: engineimages
+    shortNames:
+    - lhei
+    singular: engineimage
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Node
+  name: nodes.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Node
+    listKind: NodeList
+    plural: nodes
+    shortNames:
+    - lhn
+    singular: node
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apps/v1beta2
 kind: DaemonSet
 metadata:
   labels:
@@ -141,21 +168,17 @@ metadata:
   name: longhorn-manager
   namespace: longhorn-system
 spec:
+  selector:
+    matchLabels:
+      app: longhorn-manager
   template:
     metadata:
       labels:
         app: longhorn-manager
     spec:
-      initContainers:
-      - name: init-container
-        image: rancher/longhorn-engine:de88734
-        command: ['sh', '-c', 'cp /usr/local/bin/* /data/']
-        volumeMounts:
-        - name: execbin
-          mountPath: /data/
       containers:
       - name: longhorn-manager
-        image: rancher/longhorn-manager:010fe60
+        image: rancher/longhorn-manager:06a81b9
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -164,9 +187,9 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - rancher/longhorn-engine:de88734
+        - rancher/longhorn-engine:31c42f0
         - --manager-image
-        - rancher/longhorn-manager:010fe60
+        - rancher/longhorn-manager:06a81b9
         - --service-account
         - longhorn-service-account
         ports:
@@ -180,8 +203,7 @@ spec:
           mountPath: /var/run/
         - name: longhorn
           mountPath: /var/lib/rancher/longhorn/
-        - name: execbin
-          mountPath: /usr/local/bin/
+          mountPropagation: Bidirectional
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -208,8 +230,6 @@ spec:
       - name: longhorn
         hostPath:
           path: /var/lib/rancher/longhorn/
-      - name: execbin
-        emptyDir: {}
       serviceAccountName: longhorn-service-account
 ---
 kind: Service
@@ -227,7 +247,7 @@ spec:
     targetPort: 9500
   sessionAffinity: ClientIP
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   labels:
@@ -236,6 +256,9 @@ metadata:
   namespace: longhorn-system
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-ui
   template:
     metadata:
       labels:
@@ -243,7 +266,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: rancher/longhorn-ui:1455f4f
+        image: rancher/longhorn-ui:47e0b2a
         ports:
         - containerPort: 8000
         env:
@@ -265,28 +288,40 @@ spec:
     targetPort: 8000
   type: LoadBalancer
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: longhorn-flexvolume-driver-deployer
+  name: longhorn-driver-deployer
   namespace: longhorn-system
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-driver-deployer
   template:
     metadata:
       labels:
-        app: longhorn-flexvolume-driver-deployer
+        app: longhorn-driver-deployer
     spec:
+      initContainers:
+        - name: wait-longhorn-manager
+          image: rancher/longhorn-manager:06a81b9
+          command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
-        - name: longhorn-flexvolume-driver-deployer
-          image: rancher/longhorn-manager:010fe60
+        - name: longhorn-driver-deployer
+          image: rancher/longhorn-manager:06a81b9
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
-          - deploy-flexvolume-driver
+          - deploy-driver
           - --manager-image
-          - rancher/longhorn-manager:010fe60
+          - rancher/longhorn-manager:06a81b9
+          - --manager-url
+          - http://longhorn-backend:9500/v1
+          # manually choose "flexvolume" or "csi"
+          #- --driver
+          #- flexvolume
           env:
           - name: POD_NAMESPACE
             valueFrom:
@@ -296,9 +331,17 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
+          - name: SERVICE_ACCOUNT
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName
           - name: FLEXVOLUME_DIR
-            value: ""
-            #FOR GKE
+            value: "/var/lib/kubelet/volumeplugins"
+            # FOR RKE
+            #value: "/var/lib/kubelet/volumeplugins"
+            # FOR GKE
             #value: "/home/kubernetes/flexvolume/"
+            # For default or auto detection with Kubernetes <= v1.8
+            #value: ""
       serviceAccountName: longhorn-service-account
 ---
