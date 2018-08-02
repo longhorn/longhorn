@@ -207,35 +207,13 @@ Longhorn supports recurring snapshot and backup for volumes. User only need to s
 
 User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
 
-### Multiple disks support
-Longhorn supports to use more than one disk on the nodes to store the volume data.
+## Other topics
 
-To add a new disk for a node, heading to `Node` tab, select one of the node, and click the edit disk icon.
-
-By default, `/var/lib/rancher/longhorn` on the host will be used for storing the volume data.
-
-To add any additional disks, user needs to:
-1. Mount the disk on the host to a certain directory.
-2. Add the path of the mounted disk into the disk list of the node.
-
-Longhorn will detect the storage information (e.g. maximum space, available space) about the disk automatically, and start scheduling to it if it's possible to accomodate the volume in there. A path mounted by the existing disk won't be allowed.
-
-User can reserve a certain amount of space of the disk to stop Longhorn from using it. It can be set in the `Space Reserved` field for the disk. It's useful for the non-dedicated storage disk on the node.
-
-Nodes and disks can be excluded from future scheduling. Notice any scheduled storage space won't be released automatically if the scheduling was disabled for the node.
-
-There are two global settings affect the scheduling of the volume as well.
-
-`StorageOverProvisioningPercentage` defines the upper bound of `ScheduledStorage / (MaximumStorage - ReservedStorage)` . The default value is `500` (%). That means we can schedule a total of 750 GiB Longhorn volumes on a 200 GiB disk with 50G reserved for the root file system. Because normally people won't use that large amount of data in the volume, and we store the volumes as sparse files.
-
-`StorageMinimalAvailablePercentage` defines when a disk cannot be scheduled with more volumes. The default value is `10` (%). The bigger value between `MaximumStorage * StorageMinimalAvailablePercentage / 100` and `MaximumStorage - ReservedStorage` will be used to determine if a disk is running low and cannot be scheduled with more volumes.
-
-Notice currently there is no guarantee that the space volumes used won't exceed the `StorageMinimalAvailablePercentage`, because:
-1. Longhorn volume can be bigger than specified size, due to the snapshot contains the old state of the volume
-2. And Longhorn is doing over-provisioning by default.
+### [Multiple disks support](./docs/multidisk.md)
+### [Google Kubernetes Engine](./docs/gke.md)
+### [Troubleshotting](./docs/troubleshooting.md)
 
 ## Uninstall Longhorn
-
 
 Longhorn CRD has finalizers in them, so user should delete the volumes and related resource first, give manager a chance to clean up after them.
 
@@ -279,42 +257,6 @@ Make sure all reports `No resources found.` before continuing.
 ```
 kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml
 ```
-
-## Notes
-### Google Kubernetes Engine
-
-The configuration yaml will be slight different for Google Kubernetes Engine (GKE):
-
-1.  GKE requires user to manually claim himself as cluster admin to enable RBAC. User need to execute following command before create the Longhorn system using yaml files.
-
-```
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<name@example.com>
-
-```
-
-In which `name@example.com` is the user's account name in GCE, and it's case sensitive. See  [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control)  for details.
-
-2.  The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. User need to use following command instead:
-
-```
-FLEXVOLUME_DIR="/home/kubernetes/flexvolume/"
-curl -s https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
-kubectl create -f longhorn.yaml
-```
-
-See  [Troubleshooting](#troubleshooting)  for details.
-
-## Troubleshooting
-
-### Volume can be attached/detached from UI, but Kubernetes Pod/StatefulSet etc cannot use it
-
-Check if volume plugin directory has been set correctly.
-
-By default, Kubernetes use `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` as the directory for volume plugin drivers, as stated in the  [official document](https://github.com/kubernetes/community/blob/master/contributors/devel/flexvolume.md#prerequisites).
-
-But some vendors may choose to change the directory due to various reasons. For example, GKE uses `/home/kubernetes/flexvolume`, and RKE uses `/var/lib/kubelet/volumeplugins`.
-
-User can find the correct directory by running `ps aux|grep kubelet` on the host and check the `--volume-plugin-dir`parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
 
 ## License
 
