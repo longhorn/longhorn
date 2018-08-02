@@ -194,7 +194,7 @@ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/dep
 
 Now set `Settings/General/BackupTarget` to
 ```
-s3://minio-service.default:9000
+s3://backupbucket@us-east-1/backupstore
 ```
 And `Setttings/General/BackupTargetSecret` to
 ```
