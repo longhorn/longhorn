@@ -127,7 +127,7 @@ Longhorn provides persistent volume directly to Kubernetes through one of the Lo
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/rc/deploy/example-storageclass.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/rc/examples/storageclass.yaml
 ```
 Then user can create a PVC directly. For example:
 ```
