@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: bG9uZ2hvcm4tdGVzdC1hY2Nlc3Mta2V5 # longhorn-test-access-key
+  AWS_SECRET_ACCESS_KEY: bG9uZ2hvcm4tdGVzdC1zZWNyZXQta2V5 # longhorn-test-secret-key
+  AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
+---
+# same secret for longhorn-system namespace
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+  namespace: longhorn-system
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: bG9uZ2hvcm4tdGVzdC1hY2Nlc3Mta2V5 # longhorn-test-access-key
+  AWS_SECRET_ACCESS_KEY: bG9uZ2hvcm4tdGVzdC1zZWNyZXQta2V5 # longhorn-test-secret-key
+  AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: longhorn-test-minio
+  labels:
+    app: longhorn-test-minio
+spec:
+  volumes:
+  - name: minio-volume
+    emptyDir: {}
+  containers:
+  - name: minio
+    image: minio/minio
+    command: ["sh", "-c", "mkdir -p /storage/backupbucket && exec /usr/bin/minio server /storage"]
+    env:
+    - name: MINIO_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: minio-secret
+          key: AWS_ACCESS_KEY_ID
+    - name: MINIO_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: minio-secret
+          key: AWS_SECRET_ACCESS_KEY
+    ports:
+    - containerPort: 9000
+    volumeMounts:
+    - name: minio-volume
+      mountPath: "/storage"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+spec:
+  selector:
+    app: longhorn-test-minio
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+  sessionAffinity: ClientIP
