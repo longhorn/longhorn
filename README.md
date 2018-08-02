@@ -34,9 +34,9 @@ Longhorn can be used in Kubernetes to provide persistent storage through either 
 ### Requirement for the CSI driver
 
 1. Kubernetes v1.10+
-1.1 CSI is in beta release for this version of Kubernetes, and enabled by default.
+   1. CSI is in beta release for this version of Kubernetes, and enabled by default.
 2. Mount Propagation feature gate enabled.
-2.1 It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
+   1. It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
 3. If above conditions cannot be met, Longhorn will falls back to use Flexvolume driver.
 
 ### Requirement for the Flexvolume driver
