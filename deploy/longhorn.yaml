@@ -343,5 +343,7 @@ spec:
             #value: "/home/kubernetes/flexvolume/"
             # For default or auto detection with Kubernetes <= v1.8
             #value: ""
+            # For RKE on RancherOS
+            #value: /opt/rke/var/lib/kubelet/volumeplugins/
       serviceAccountName: longhorn-service-account
 ---
