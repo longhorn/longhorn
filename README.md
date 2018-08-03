@@ -302,6 +302,47 @@ curl -s https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longho
 kubectl create -f longhorn.yaml
 ```
 
+### RancherOS
+
+If you want to use RancherOS, you need to do some extra configuration. It should be noted that currently only Flexvolume is supported in RancherOS.
+
+1. Switch to the appropriate Docker version, this is for Kubernetes.
+
+```
+# for example:
+ros engine switch docker-17.03.2-ce
+```
+
+2. Switch to ubuntu console and install open-iscsi, also need some other configuration to ensure that iscsi is working properly. We will support default console in the future.
+
+```
+# switch to ubuntu console
+ros console switch ubuntu
+
+# install open-iscsi
+apt install --no-install-recommends open-iscsi
+mkdir /run/lock
+
+# update cloud-config in RancherOS, see https://rancher.com/docs/os/v1.x/en/installation/configuration/running-commands/
+#cloud-config
+runcmd:
+- [mkdir, /run/lock]
+```
+
+3. It is recommended to use RKE to deploy Kubernetes. In order to be compatible with Flexvolmue, the following configuration is required.
+
+```
+# enable these in your RKE cluster.yml
+services:
+  kubelet:
+    extra_args:
+      volume-plugin-dir: /opt/rke/var/lib/kubelet/volumeplugins
+
+# update FLEXVOLUME_DIR in your longhorn.yaml
+- name: FLEXVOLUME_DIR
+  value: "/opt/rke/var/lib/kubelet/volumeplugins"
+```
+
 See  [Troubleshooting](#troubleshooting)  for details.
 
 ## Troubleshooting
