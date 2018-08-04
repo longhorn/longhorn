@@ -132,7 +132,7 @@ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/exa
 
 Now you can create a pod using Longhorn like this:
 ```
-kubectl create -f https://github.com/rancher/longhorn/blob/v0.3-rc/examples/pvc.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/pvc.yaml
 ```
 
 The yaml contains two parts:
