@@ -129,7 +129,14 @@ Use following command to create a default Longhorn StorageClass named `longhorn`
 ```
 kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/storageclass.yaml
 ```
-Then user can create a PVC directly. For example:
+
+Now you can create a pod using Longhorn like this:
+```
+kubectl create -f https://github.com/rancher/longhorn/blob/v0.3-rc/examples/pvc.yaml
+```
+
+The yaml contains two parts:
+1. Create a PVC using Longhorn StorageClass.
 ```
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -144,7 +151,7 @@ spec:
       storage: 2Gi
 ```
 
-Then use it in the pod:
+2. Use it in the a Pod as a persistent volume:
 ```
 apiVersion: v1
 kind: Pod
@@ -201,6 +208,21 @@ And `Setttings/General/BackupTargetSecret` to
 minio-secret
 ```
 Click the `Backup` tab in the UI, it should report an empty list without error out.
+
+The `minio-secret` yaml looks like this:
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+  namespace: longhorn-system
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: bG9uZ2hvcm4tdGVzdC1hY2Nlc3Mta2V5 # longhorn-test-access-key
+  AWS_SECRET_ACCESS_KEY: bG9uZ2hvcm4tdGVzdC1zZWNyZXQta2V5 # longhorn-test-secret-key
+  AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
+```
+Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access. 
 
 ### Recurring Snapshot and Backup
 Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
