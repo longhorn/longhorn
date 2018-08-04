@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: flexvol-baseimage
+  namespace: default
+spec:
+  containers:
+  - name: flexvol-baseimage
+    image: nginx:stable-alpine
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: flexvol
+      mountPath: /usr/share/nginx/html
+    ports:
+    - containerPort: 80
+  volumes:
+  - name: flexvol
+    flexVolume:
+      driver: "rancher.io/longhorn"
+      # fsType: "iso9660"
+      options:
+        size: "16Mi"
+        numberOfReplicas: "3"
+        staleReplicaTimeout: "20"
+        fromBackup: ""
+        baseImage: "rancher/longhorn-test-baseimage"
