@@ -222,7 +222,7 @@ data:
   AWS_SECRET_ACCESS_KEY: bG9uZ2hvcm4tdGVzdC1zZWNyZXQta2V5 # longhorn-test-secret-key
   AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
 ```
-Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access. 
+Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access.
 
 ### Recurring Snapshot and Backup
 Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
@@ -234,6 +234,7 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 ### [Multiple disks support](./docs/multidisk.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Troubleshotting](./docs/troubleshooting.md)
+### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 
 ## Uninstall Longhorn
 
