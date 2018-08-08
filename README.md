@@ -231,7 +231,9 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 
 ## Other topics
 
+### [Upgrade from v0.2](./docs/upgrade.md)
 ### [Multiple disks support](./docs/multidisk.md)
+### [iSCSI support](./docs/iscsi.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Troubleshotting](./docs/troubleshooting.md)
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
