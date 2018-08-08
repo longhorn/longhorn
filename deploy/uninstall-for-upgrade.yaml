@@ -1,0 +1,169 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    app: longhorn-manager
+  name: longhorn-manager
+  namespace: longhorn-system
+spec:
+  template:
+    metadata:
+      labels:
+        app: longhorn-manager
+    spec:
+      initContainers:
+      - name: init-container
+        image: rancher/longhorn-engine:de88734
+        command: ['sh', '-c', 'cp /usr/local/bin/* /data/']
+        volumeMounts:
+        - name: execbin
+          mountPath: /data/
+      containers:
+      - name: longhorn-manager
+        image: rancher/longhorn-manager:010fe60
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        command:
+        - longhorn-manager
+        - -d
+        - daemon
+        - --engine-image
+        - rancher/longhorn-engine:de88734
+        - --manager-image
+        - rancher/longhorn-manager:010fe60
+        - --service-account
+        - longhorn-service-account
+        ports:
+        - containerPort: 9500
+        volumeMounts:
+        - name: dev
+          mountPath: /host/dev/
+        - name: proc
+          mountPath: /host/proc/
+        - name: varrun
+          mountPath: /var/run/
+        - name: longhorn
+          mountPath: /var/lib/rancher/longhorn/
+        - name: execbin
+          mountPath: /usr/local/bin/
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      volumes:
+      - name: dev
+        hostPath:
+          path: /dev/
+      - name: proc
+        hostPath:
+          path: /proc/
+      - name: varrun
+        hostPath:
+          path: /var/run/
+      - name: longhorn
+        hostPath:
+          path: /var/lib/rancher/longhorn/
+      - name: execbin
+        emptyDir: {}
+      serviceAccountName: longhorn-service-account
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: longhorn-manager
+  name: longhorn-backend
+  namespace: longhorn-system
+spec:
+  selector:
+    app: longhorn-manager
+  ports:
+  - port: 9500
+    targetPort: 9500
+  sessionAffinity: ClientIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: longhorn-ui
+  name: longhorn-ui
+  namespace: longhorn-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: longhorn-ui
+    spec:
+      containers:
+      - name: longhorn-ui
+        image: rancher/longhorn-ui:1455f4f
+        ports:
+        - containerPort: 8000
+        env:
+          - name: LONGHORN_MANAGER_IP
+            value: "http://longhorn-backend:9500"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: longhorn-ui
+  name: longhorn-frontend
+  namespace: longhorn-system
+spec:
+  selector:
+    app: longhorn-ui
+  ports:
+  - port: 80
+    targetPort: 8000
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: longhorn-flexvolume-driver-deployer
+  namespace: longhorn-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: longhorn-flexvolume-driver-deployer
+    spec:
+      containers:
+        - name: longhorn-flexvolume-driver-deployer
+          image: rancher/longhorn-manager:010fe60
+          imagePullPolicy: Always
+          command:
+          - longhorn-manager
+          - -d
+          - deploy-flexvolume-driver
+          - --manager-image
+          - rancher/longhorn-manager:010fe60
+          env:
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: FLEXVOLUME_DIR
+            value: "/var/lib/kubelet/volumeplugins"
+            #FOR GKE
+            #value: "/home/kubernetes/flexvolume/"
+      serviceAccountName: longhorn-service-account
+---
