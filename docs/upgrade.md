@@ -39,7 +39,7 @@ curl -s https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longho
 kubectl apply -f longhorn.yaml
 ```
 
-For Google Kubernetes Engine (GKE) users, see  [here](../gke.md)  before proceed.
+For Google Kubernetes Engine (GKE) users, see  [here](./gke.md)  before proceed.
 
 Longhorn Manager and Longhorn Driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
 
