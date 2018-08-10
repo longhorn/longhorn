@@ -254,6 +254,7 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Troubleshotting](./docs/troubleshooting.md)
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
+### [Base Image support](./docs/base-image.md)
 
 ## Uninstall Longhorn
 
