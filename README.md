@@ -39,7 +39,7 @@ Longhorn can be used in Kubernetes to provide persistent storage through either 
    1. It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
 3. If above conditions cannot be met, Longhorn will falls back to use Flexvolume driver.
 
-### Check if your setup satisfied CSI requirement
+### Check if your setup satisfies CSI requirements
 1. Use the following command to check your Kubernetes server version
 ```
 # kubectl version
@@ -48,14 +48,19 @@ Server Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.1", GitCom
 ```
 The `Server Version` should be `v1.10` or above.
 
-2. Use the following command on the hosts to check if the feature gate is enabled for Mount Propagation
+2. Run the following script to check if Mount Propagation is enabled on all nodes
 ```
-# ps aux|grep kube|grep MountPropagation
-root      1707  3.1 12.4 1087008 503848 ?      Ssl  Jul12 1288:35 kube-apiserver --storage-backend=etcd3 --client-ca-file=/etc/kubernetes/ssl/kube-ca.pem --tls-cert-file=/etc/kubernetes/ssl/kube-apiserver.pem --kubelet-client-certificate=/etc/kubernetes/ssl/kube-apiserver.pem --apiserver-count=1 --secure-port=6443 --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname --kubelet-client-key=/etc/kubernetes/ssl/kube-apiserver-key.pem --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --allow-privileged=true --insecure-port=0 --admission-control=ServiceAccount,NamespaceLifecycle,LimitRanger,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds --cloud-provider= --service-cluster-ip-range=10.43.0.0/16 --tls-private-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem --service-account-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem --authorization-mode=Node,RBAC --bind-address=0.0.0.0 --feature-gates=MountPropagation=true --insecure-bind-address=127.0.0.1 --etcd-cafile=/etc/kubernetes/ssl/kube-ca.pem --etcd-certfile=/etc/kubernetes/ssl/kube-node.pem --etcd-keyfile=/etc/kubernetes/ssl/kube-node-key.pem --etcd-servers=https://138.197.199.191:2379 --etcd-prefix=/registry
-root      1760  4.7  6.4 1508564 260724 ?      Ssl  Jul12 1970:59 kubelet --network-plugin=cni --resolv-conf=/etc/resolv.conf --cluster-domain=cluster.local --v=2 --enforce-node-allocatable= --cgroups-per-qos=True --cni-bin-dir=/opt/cni/bin --cluster-dns=10.43.0.10 --cloud-provider= --fail-swap-on=false --address=0.0.0.0 --cadvisor-port=0 --volume-plugin-dir=/var/lib/kubelet/volumeplugins --hostname-override=yasker-longhorn-dev-1 --client-ca-file=/etc/kubernetes/ssl/kube-ca.pem --root-dir=/var/lib/kubelet --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305 --feature-gates=MountPropagation=true --cni-conf-dir=/etc/cni/net.d --allow-privileged=true --pod-infra-container-image=rancher/pause-amd64:3.0 --kubeconfig=/etc/kubernetes/ssl/kubecfg-kube-node.yaml --read-only-port=0 --anonymous-auth=false --cgroup-driver=cgroupfs
-```
-Both `kube-apiserver` and `kubelet` should have `--feature-gates=MountPropagation=true`
+# curl -fsSL https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/scripts/csi_support_test.sh | bash
+daemonset.apps/csi-test created
+waiting for pods to become ready (0/3)
+waiting for pods to become ready (2/3)
+all pods ready (3/3)
 
+  CSI is supported
+
+daemonset.apps "csi-test" deleted
+```
+This should output `CSI is supported`, otherwise it will enumerate which nodes did not pass the Mount Propagation test.
 
 ### Requirement for the Flexvolume driver
 
