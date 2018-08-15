@@ -11,7 +11,9 @@ To add any additional disks, user needs to:
 
 Longhorn will detect the storage information (e.g. maximum space, available space) about the disk automatically, and start scheduling to it if it's possible to accomodate the volume in there. A path mounted by the existing disk won't be allowed.
 
-User can reserve a certain amount of space of the disk to stop Longhorn from using it. It can be set in the `Space Reserved` field for the disk. It's useful for the non-dedicated storage disk on the node.
+User can reserve a certain amount of space of the disk to stop Longhorn from using it. It can be set in the `Space Reserved` field for the disk. It's useful for the non-dedicated storage disk on the node. 
+
+The kubelet needs to preserve node stability when available compute resources are low. This is especially important when dealing with incompressible compute resources, such as memory or disk space. If such resources are exhausted, nodes become unstable. To avoid kubelet `Disk pressure` issue after scheduling several volumes, by default, longhorn reserved 30% of root disk space (`/var/lib/rancher/longhorn`) to ensure node stability.
 
 Nodes and disks can be excluded from future scheduling. Notice any scheduled storage space won't be released automatically if the scheduling was disabled for the node.
 
