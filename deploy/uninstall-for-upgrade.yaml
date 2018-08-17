@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: longhorn-manager
+  namespace: longhorn
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: longhorn-backend
+  namespace: longhorn
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: longhorn-ui
+  namespace: longhorn
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: longhorn-frontend
+  namespace: longhorn
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: longhorn-flexvolume-driver-deployer
+  namespace: longhorn
