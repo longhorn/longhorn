@@ -66,19 +66,23 @@ Both `kube-apiserver` and `kubelet` should have `--feature-gates=MountPropagatio
     2.  Google GKE: `/home/kubernetes/flexvolume`
     3.  For other distro, please find the correct directory by running `ps aux|grep kubelet` on the host and check the `--volume-plugin-dir` parameter. If there is none, it would be the default value `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` .
 
+# Upgrading
+
+For instructions on how to upgrade Longhorn v0.1 or v0.2 to v0.3, [see this document](docs/upgrade.md#upgrade).
+
 # Deployment
 
 Create the deployment of Longhorn in your Kubernetes cluster is easy.
 
 If you're using Rancher RKE, or other distro with Kubernetes v1.10+ and Mount Propagation enabled, you can just do:
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml
 ```
 If you're using Flexvolume driver with other Kubernetes Distro, replace the value of $FLEXVOLUME_DIR in the following command with your own Flexvolume Directory as specified above.
 ```
 FLEXVOLUME_DIR="/home/kubernetes/flexvolume/"
 curl -s https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
-kubectl create -f longhorn.yaml
+kubectl apply -f longhorn.yaml
 ```
 For Google Kubernetes Engine (GKE) users, see  [here](#google-kubernetes-engine)  before proceed.
 
@@ -145,12 +149,12 @@ Longhorn provides persistent volume directly to Kubernetes through one of the Lo
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/storageclass.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/storageclass.yaml
 ```
 
 Now you can create a pod using Longhorn like this:
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/pvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/pvc.yaml
 ```
 
 The yaml contains two parts:
@@ -214,7 +218,7 @@ We provides two testing purpose backupstore based on NFS server and Minio S3 ser
 
 Use following command to setup a Minio S3 server for BackupStore after `longhorn-system` was created.
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/backupstores/minio-backupstore.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/backupstores/minio-backupstore.yaml
 ```
 
 Now set `Settings/General/BackupTarget` to
