@@ -140,12 +140,12 @@ kubectl -n ${NAMESPACE} delete settings.longhorn.rancher.io --all
 ## Install Longhorn v0.3
 
 ### Installed with Longhorn App v0.1 in Rancher 2.x
-For Rancher users who are running Longhorn v0.1, *Do not click the upgrade button.*
+For Rancher users who are running Longhorn v0.1, **do not click the upgrade button in the Rancher App.**
 
-1. Delete the Longhorn App from `Catalog Apps` screen in Rancher UI.  Launch
-Longhorn App template version `0.3-rc4`.
-2. Restore Longhorn System. This step is only required for Rancher users running Longhorn App `v0.1`.
-Don't change the NAMESPACE variable below. Longhorn system will be installed in the `longhorn-system` namespace.
+1. Delete the Longhorn App from `Catalog Apps` screen in Rancher UI.
+2. Launch Longhorn App template version `0.3.0`.
+3. Restore Longhorn System data. This step is required for Rancher users running Longhorn App `v0.1`.
+Don't change the NAMESPACE variable below, since the newly installed Longhorn system will be installed in the `longhorn-system` namespace.
 
 ```
 NAMESPACE=longhorn-system
