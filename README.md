@@ -31,6 +31,34 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 Longhorn can be used in Kubernetes to provide persistent storage through either Longhorn Container Storage Interface (CSI) driver or Longhorn FlexVolume driver. Longhorn will automatically deploy one of the drivers, depending on the Kubernetes cluster configuration. User can also specify the driver in the deployment yaml file. CSI is preferred.
 
+### Environment check script
+
+We've wrote a script to help user to get enough information to configure the setup correctly.
+
+Before installing, run:
+```
+curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/scripts/environment_check.sh | bash
+```
+Example result:
+```
+pod/detect-flexvol-dir created
+daemonset.apps/longhorn-environment-check created
+waiting for pod/detect-flexvol-dir to finish
+pod/detect-flexvol-dir completed
+waiting for pods to become ready (1/7)
+waiting for pods to become ready (6/7)
+all pods ready (7/7)
+
+  FlexVolume Path: /var/lib/kubelet/volumeplugins
+
+
+  MountPropagation is enabled!
+
+pod "detect-flexvol-dir" deleted
+daemonset.apps "longhorn-environment-check" deleted
+```
+Please make a note of `Flexvolume Path` and `MountPropagation` state above.
+
 ### Requirement for the CSI driver
 
 1. Kubernetes v1.10+
@@ -42,78 +70,45 @@ Longhorn can be used in Kubernetes to provide persistent storage through either 
 ### Check if your setup satisfied CSI requirement
 1. Use the following command to check your Kubernetes server version
 ```
-# kubectl version
+kubectl version
+```
+Result:
+```
 Client Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.3", GitCommit:"2bba0127d85d5a46ab4b778548be28623b32d0b0", GitTreeState:"clean", BuildDate:"2018-05-21T09:17:39Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.1", GitCommit:"d4ab47518836c750f9949b9e0d387f20fb92260b", GitTreeState:"clean", BuildDate:"2018-04-12T14:14:26Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
 ```
 The `Server Version` should be `v1.10` or above.
 
-2. Use the following script to check if `MountPropagation` feature is enabled.
-```
-# curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/scripts/environment_check.sh | bash
-pod/detect-flexvol-dir created
-daemonset.apps/longhorn-environment-check created
-waiting for pod/detect-flexvol-dir to finish
-pod/detect-flexvol-dir completed
-waiting for pods to become ready (1/7)
-waiting for pods to become ready (6/7)
-all pods ready (7/7)
-
-  FlexVolume Path: /var/lib/kubelet/volumeplugins
-
-
-  MountPropagation is enabled!
-
-pod "detect-flexvol-dir" deleted
-daemonset.apps "longhorn-environment-check" deleted
-```
+2. The result of environment check script should contain `MountPropagation is enabled!`.
 
 ### Requirement for the Flexvolume driver
 
 1.  Kubernetes v1.8+
 2.  Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in the every node of the Kubernetes cluster.
 3.  User need to know the volume plugin directory in order to setup the driver correctly.
-    1.  Rancher RKE: `/var/lib/kubelet/volumeplugins`
-    2.  Google GKE: `/home/kubernetes/flexvolume`
-    3.  For any other distro, please run the directory detection script in the next section.
-
-### Detect Volume Plugin Directory
-
-Use the following script to detect your volume plugin directory.
-```
-# curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/scripts/environment_check.sh | bash
-pod/detect-flexvol-dir created
-daemonset.apps/longhorn-environment-check created
-waiting for pod/detect-flexvol-dir to finish
-pod/detect-flexvol-dir completed
-waiting for pods to become ready (1/7)
-waiting for pods to become ready (6/7)
-all pods ready (7/7)
-
-  FlexVolume Path: /var/lib/kubelet/volumeplugins
-
-
-  MountPropagation is enabled!
-
-pod "detect-flexvol-dir" deleted
-daemonset.apps "longhorn-environment-check" deleted
-```
+    1.  The correct directory should be reported by the environment check script. 
+    2.  Rancher RKE: `/var/lib/kubelet/volumeplugins`
+    3.  Google GKE: `/home/kubernetes/flexvolume`
+    4.  For any other distro, use the value reported by the environment check script.
 
 # Upgrading
 
-For instructions on how to upgrade Longhorn v0.1 or v0.2 to v0.3, [see this document](docs/upgrade.md#upgrade).
+For instructions on how to upgrade Longhorn App v0.1 or v0.2 to v0.3, [see this document](docs/upgrade.md#upgrade).
 
 # Deployment
 
-Create the deployment of Longhorn in your Kubernetes cluster is easy.
+Create the deployment of Longhorn in your Kubernetes cluster is straightforward.
 
-If you're using Rancher RKE, or other distro with Kubernetes v1.10+ and Mount Propagation enabled, you can just do:
+If CSI is supported (as stated above) you can just do:
 ```
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml
 ```
-If you're using Flexvolume driver with other Kubernetes Distro, replace the value of $FLEXVOLUME_DIR in the following command with your own Flexvolume Directory as specified above.
+If you're using Flexvolume driver with Kubernetes Distro other than RKE, replace the value of $FLEXVOLUME_DIR in the following command with your own Flexvolume Directory as specified above.
 ```
-FLEXVOLUME_DIR="/home/kubernetes/flexvolume/"
+FLEXVOLUME_DIR=<FLEXVOLUME_DIR>
+```
+Then run
+```
 curl -s https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
 kubectl apply -f longhorn.yaml
 ```
@@ -173,7 +168,7 @@ If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXT
 
 Longhorn UI would connect to the Longhorn Manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
 
-Notice the current UI is unauthenticated.
+Noted that the current UI is unauthenticated.
 
 # Use the Longhorn with Kubernetes
 
@@ -230,11 +225,12 @@ spec:
 ```
 More examples are available at `./examples/`
 
-# Feature Usage
+# Highlight features
 ### Snapshot
 A snapshot in Longhorn represents a volume state at a given time, stored in the same location of volume data on physical disk of the host. Snapshot creation is instant in Longhorn.
 
 User can revert to any previous taken snapshot using the UI. Since Longhorn is a distributed block storage, please make sure the Longhorn volume is umounted from the host when revert to any previous snapshot, otherwise it will confuse the node filesystem and cause corruption.
+
 ### Backup
 A backup in Longhorn represents a volume state at a given time, stored in the BackupStore which is outside of the Longhorn System. Backup creation will involving copying the data through the network, so it will take time.
 
@@ -284,21 +280,24 @@ Longhorn supports recurring snapshot and backup for volumes. User only need to s
 
 User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
 
-## Other topics
+## Other Features
 
-### [Upgrade from v0.2](./docs/upgrade.md)
 ### [Multiple disks support](./docs/multidisk.md)
 ### [iSCSI support](./docs/iscsi.md)
-### [Google Kubernetes Engine](./docs/gke.md)
-### [Troubleshotting](./docs/troubleshooting.md)
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Base Image support](./docs/base-image.md)
 
+## Additional instructions for deployment
+### [Google Kubernetes Engine](./docs/gke.md)
+### [Upgrade from v0.2](./docs/upgrade.md)
+### [Troubleshotting](./docs/troubleshooting.md)
+
 ## Uninstall Longhorn
 
-Longhorn CRD has finalizers in them, so user should delete the volumes and related resource first, give manager a chance to clean up after them.
+Longhorn CRD has the finalizers in them, so user should delete the volumes and related resource first, give manager a chance to clean up after them.
 
 ### 1. Clean up volume and related resources
+Noted that you would lose all you data after done this. It's recommended to make backups before proceeding if you intent to keep the data.
 
 ```
 kubectl -n longhorn-system delete volumes.longhorn.rancher.io --all
