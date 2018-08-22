@@ -289,7 +289,7 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 
 ## Additional instructions for deployment
 ### [Google Kubernetes Engine](./docs/gke.md)
-### [Upgrade from v0.2](./docs/upgrade.md)
+### [Upgrade from v0.1/v0.2](./docs/upgrade.md)
 ### [Troubleshotting](./docs/troubleshooting.md)
 
 ## Uninstall Longhorn
