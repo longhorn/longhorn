@@ -7,29 +7,44 @@ Here we cover how to upgrade to Longhorn v0.3 from all previous releases.
 It's recommended to create a recent backup of every volume to the backupstore
 before upgrade.
 
-Create an on-cluster backupstore if you haven't already. We'll use NFS in this
-example.
+If you don't have a on-cluster backupstore already, create one. Here we'll use NFS for example.
+1. Execute following command to create the backupstore
 ```
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/backupstores/nfs-backupstore.yaml
 ```
-
-On Settings page, set Backup Target to
+2. On Longhorn UI Settings page, set Backup Target to
 `nfs://longhorn-test-nfs-svc.default:/opt/backupstore` and click `Save`.
 
-Navigate to each volume detail page and click `Take Snapshot`. Click the new
-snapshot and click `Backup`.
+Navigate to each volume detail page and click `Take Snapshot` (it's recommended to run `sync` in the host command line before `Take Snapshot`). Click the new
+snapshot and click `Backup`. Wait for the new backup to show up in the volume's backup list before continuing.
 
 ## Check For Issues
 
 Make sure no volume is in degraded or faulted state. Wait for degraded
-volumes to heal and delete/restore faulted volumes before proceeding.
+volumes to heal and delete/salvage faulted volumes before proceeding.
 
 ## Detach Volumes
 
 Shutdown all Kubernetes Pods using Longhorn volumes in order to detach the
-volumes. The easiest way to achieve this is by deleting all workloads. If
+volumes. The easiest way to achieve this is by deleting all workloads and recreate them later after upgrade. If
 this is not desirable, some workloads may be suspended. We will cover how
 each workload can be modified to shut down its pods.
+
+### Deployment
+Edit the deployment with `kubectl edit deploy/<name>`.
+Set `.spec.replicas` to `0`.
+
+### StatefulSet
+Edit the statefulset with `kubectl edit statefulset/<name>`.
+Set `.spec.replicas` to `0`.
+
+### DaemonSet
+There is no way to suspend this workload.
+Delete the daemonset with `kubectl delete ds/<name>`.
+
+### Pod
+Delete the pod with `kubectl delete pod/<name>`.
+There is no way to suspend a pod not managed by a workload controller.
 
 ### CronJob
 Edit the cronjob with `kubectl edit cronjob/<name>`.
@@ -37,21 +52,9 @@ Set `.spec.suspend` to `true`.
 Wait for any currently executing jobs to complete, or terminate them by
 deleting relevant pods.
 
-### DaemonSet
-Delete the daemonset with `kubectl delete ds/<name>`.
-There is no way to suspend this workload.
-
-### Deployment
-Edit the deployment with `kubectl edit deploy/<name>`.
-Set `.spec.replicas` to `0`.
-
 ### Job
 Consider allowing the single-run job to complete.
 Otherwise, delete the job with `kubectl delete job/<name>`.
-
-### Pod
-Delete the pod with `kubectl delete pod/<name>`.
-There is no way to suspend a pod not managed by a workload controller.
 
 ### ReplicaSet
 Edit the replicaset with `kubectl edit replicaset/<name>`.
@@ -61,21 +64,19 @@ Set `.spec.replicas` to `0`.
 Edit the replicationcontroller with `kubectl edit rc/<name>`.
 Set `.spec.replicas` to `0`.
 
-### StatefulSet
-Edit the statefulset with `kubectl edit statefulset/<name>`.
-Set `.spec.replicas` to `0`.
+Wait for the volumes using by the Kubernetes to complete detaching.
 
-Detach all remaining volumes from Longhorn UI. These volumes were most likely
+Then detach all remaining volumes from Longhorn UI. These volumes were most likely
 created and attached outside of Kubernetes via Longhorn UI or REST API.
 
-## Uninstall Old Version
+## Uninstall the Old Version of Longhorn
 
 Make note of `BackupTarget` on the `Setting` page. You will need to manually
 set `BackupTarget` after upgrading from either v0.1 or v0.2.
 
 Delete Longhorn components.
 
-For Longhorn `v0.1`:
+For Longhorn `v0.1` (most likely installed using Longhorn App in Rancher 2.0):
 ```
 kubectl delete -f https://raw.githubusercontent.com/llparse/longhorn/v0.1/deploy/uninstall-for-upgrade.yaml
 ```
@@ -87,19 +88,20 @@ kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/v0.2/deploy
 
 If both commands returned `Not found` for all components, Longhorn is probably
 deployed in a different namespace. Determine which namespace is in use and
-adjust `NAMESPACE` accordingly:
+adjust `NAMESPACE` here accordingly:
 ```
-NAMESPACE=longhorn-custom-ns
+NAMESPACE=<some_longhorn_namespace>
 curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.1/deploy/uninstall-for-upgrade.yaml|sed "s#^\( *\)namespace: longhorn#\1namespace: ${NAMESPACE}#g" > longhorn.yaml
 kubectl delete -f longhorn.yaml
 ```
 
 ## Backup Longhorn System
 
-Backup Longhorn CRD yaml to local directory.
+We're going to backup Longhorn CRD yaml to local directory, so we can restore or inspect them later.
 
 ### v0.1
-Check your backups to make sure Longhorn was running in namespace `longhorn`.
+User must backup the CRDs for v0.1 because we will change the default deploying namespace for Longhorn.
+Check your backups to make sure Longhorn was running in namespace `longhorn`, otherwise change the value of `NAMESPACE` below.
 ```
 NAMESPACE=longhorn
 kubectl -n ${NAMESPACE} get volumes.longhorn.rancher.io -o yaml > longhorn-v0.1-backup-volumes.yaml
@@ -110,7 +112,7 @@ kubectl -n ${NAMESPACE} get settings.longhorn.rancher.io -o yaml > longhorn-v0.1
 
 ### v0.2
 Check your backups to make sure Longhorn was running in namespace
-`longhorn-system`.
+`longhorn-system`, otherwise change the value of `NAMESPACE` below.
 ```
 NAMESPACE=longhorn-system
 kubectl -n ${NAMESPACE} get volumes.longhorn.rancher.io -o yaml > longhorn-v0.2-backup-volumes.yaml
@@ -122,7 +124,7 @@ kubectl -n ${NAMESPACE} get settings.longhorn.rancher.io -o yaml > longhorn-v0.2
 ## Delete CRDs in Different Namespace
 
 This is only required for Rancher users running Longhorn App `v0.1`. Delete all
-CRDs from your namespace which is probably `longhorn`.
+CRDs from your namespace which is `longhorn` by default.
 ```
 NAMESPACE=longhorn
 kubectl -n ${NAMESPACE} get volumes.longhorn.rancher.io -o yaml | sed "s/\- longhorn.rancher.io//g" | kubectl apply -f -
@@ -137,19 +139,13 @@ kubectl -n ${NAMESPACE} delete settings.longhorn.rancher.io --all
 
 ## Install Longhorn v0.3
 
-### Rancher 2.x
-For Rancher users who are running Longhorn v0.1, delete the Longhorn App from
-`Catalog Apps` screen in Rancher UI. *Do not click the upgrade button.* Launch
+### Installed with Longhorn App v0.1 in Rancher 2.x
+For Rancher users who are running Longhorn v0.1, *Do not click the upgrade button.*
+
+1. Delete the Longhorn App from `Catalog Apps` screen in Rancher UI.  Launch
 Longhorn App template version `0.3.0-rc4`.
-
-### Other Kubernetes Distro
-
-For Longhorn v0.2 users who are not using Rancher, follow
-[the official Longhorn Deployment instructions](../README.md#deployment).
-
-## Restore Longhorn System
-
-This step is only required for Rancher users running Longhorn App `v0.1`.
+2. Restore Longhorn System. This step is only required for Rancher users running Longhorn App `v0.1`.
+Don't change the NAMESPACE variable below. Longhorn system will be installed in the `longhorn-system` namespace.
 
 ```
 NAMESPACE=longhorn-system
@@ -159,9 +155,15 @@ sed "s#^\( *\)namespace: .*#\1namespace: ${NAMESPACE}#g" longhorn-v0.1-backup-en
 sed "s#^\( *\)namespace: .*#\1namespace: ${NAMESPACE}#g" longhorn-v0.1-backup-volumes.yaml | kubectl apply -f -
 ```
 
+### Installed without using Longhorn App v0.1
+
+For Longhorn v0.2 users who are not using Rancher, follow
+[the official Longhorn Deployment instructions](../README.md#deployment).
+
+
 ## Access UI and Set BackupTarget
 
-Wait until the longhorn-ui pod is `Running`:
+Wait until the longhorn-ui and longhorn-manager pods are `Running`:
 ```
 kubectl -n longhorn-system get pod -w
 ```
@@ -189,7 +191,7 @@ manually.
 
 ## Note
 
-Upgrade is always tricky. Keeping recent backups for volumes is critical.
+Upgrade is always tricky. Keeping recent backups for volumes is critical. If anything goes wrong, you can restore the volume using the backup.
 
 If you have any issues, please report it at
 https://github.com/rancher/longhorn/issues and include your backup yaml files
