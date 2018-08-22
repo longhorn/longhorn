@@ -172,7 +172,7 @@ Noted that the current UI is unauthenticated.
 
 # Use the Longhorn with Kubernetes
 
-Longhorn provides persistent volume directly to Kubernetes through one of the Longhorn drivers. No matter which driver you're using, you can use Kubernetes StorageClass to provision your persistent volumes.
+Longhorn provides the persistent volume directly to Kubernetes through one of the Longhorn drivers. No matter which driver you're using, you can use Kubernetes StorageClass to provision your persistent volumes.
 
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
@@ -231,6 +231,14 @@ A snapshot in Longhorn represents a volume state at a given time, stored in the 
 
 User can revert to any previous taken snapshot using the UI. Since Longhorn is a distributed block storage, please make sure the Longhorn volume is umounted from the host when revert to any previous snapshot, otherwise it will confuse the node filesystem and cause corruption.
 
+#### Note about the block level snapshot
+
+Longhorn is a `crash-consistent` block storage solution.
+
+It's normal for the OS to keep content in the cache before writing into the block layer. However, it also means if the all the replicas are down, then the Longhorn may not contains the immediate change before the shutdown, since the content was kept in the OS level cache and hadn't transfered to Longhorn system yet. It's similar to if your desktop was down due to a power outage, after resuming the power, you may find some weird files in the hard drive.
+
+In order to force the data being written to the block layer at any given moment, the user can run `sync` command on the node manually, or umount the disk. OS would write the content from the cache to the block layer in either situation.
+
 ### Backup
 A backup in Longhorn represents a volume state at a given time, stored in the BackupStore which is outside of the Longhorn System. Backup creation will involving copying the data through the network, so it will take time.
 
@@ -287,14 +295,14 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Base Image support](./docs/base-image.md)
 
-## Additional instructions for deployment
+## Additional informations
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Upgrade from v0.1/v0.2](./docs/upgrade.md)
 ### [Troubleshotting](./docs/troubleshooting.md)
 
 ## Uninstall Longhorn
 
-Longhorn CRD has the finalizers in them, so user should delete the volumes and related resource first, give manager a chance to clean up after them.
+Longhorn CRD has the finalizers in them, so user should delete the volumes and related resource first, give the managers a chance to clean up after them.
 
 ### 1. Clean up volume and related resources
 Noted that you would lose all you data after done this. It's recommended to make backups before proceeding if you intent to keep the data.
