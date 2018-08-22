@@ -11,6 +11,8 @@ But some vendors may choose to change the directory due to various reasons. For 
 
 User can find the correct directory by running `ps aux|grep kubelet` on the host and check the `--volume-plugin-dir`parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
 
+User can also use the [environment check script](../README.md#environment-check-script) for this purpose.
+
 ## Troubleshooting guide
 
 There are a few compontents in the Longhorn. Manager, Engine, Driver and UI. All of those components runnings as pods in the `longhorn-system` namespace by default inside the Kubernetes cluster.
@@ -35,7 +37,9 @@ For CSI driver, check the logs for `csi-attacher-0` and `csi-provisioner-0`, as 
 
 ### Flexvolume driver
 
-For Flexvolume driver, you need to check the kubelet logs as the first step. Flexvolume driver itself doesn't run inside the container. It's the kubelet process who is responsible for calling the driver.
+For Flexvolume driver, first check where the driver has been installed on the node. Check the log of `longhorn-driver-deployer-xxxx` for that information.
+
+Then check the kubelet logs. Flexvolume driver itself doesn't run inside the container. It would run along with the kubelet process.
 
 If kubelet is running natively on the node, you can use the following command to get the log:
 ```
