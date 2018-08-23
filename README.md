@@ -6,7 +6,11 @@ Longhorn implements distributed block storage using containers and microservices
 
 You can read more details of Longhorn and its design [here](http://rancher.com/microservices-block-storage/).
 
-Longhorn is a work in progress. We appreciate your comments as we continue to work on it!
+## Current status
+
+Longhorn is a work in progress. It's an alpha quality software at the moment. We appreciate your comments as we continue to work on it.
+
+The latest release of Longhorn is v0.3.0.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
