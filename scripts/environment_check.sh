@@ -99,6 +99,7 @@ EOF
 }
 
 cleanup() {
+  echo "cleaning up detection workloads..."
   kubectl delete -f $TEMP_DIR/environment_check.yaml &
   a=$!
   kubectl delete -f $TEMP_DIR/detect-flexvol-dir.yaml &
@@ -106,6 +107,7 @@ cleanup() {
   wait $a
   wait $b
   rm -rf $TEMP_DIR
+  echo "clean up completed"
 }
 
 wait_pod_ready() {
@@ -125,7 +127,7 @@ wait_pod_ready() {
 
 validate_pod() {
   flexvol_path=$(kubectl logs detect-flexvol-dir)
-  echo -e "\n  FlexVolume Path: ${flexvol_path}\n"
+  echo -e "\n  FLEXVOLUME_DIR=\"${flexvol_path}\"\n"
 }
 
 wait_ds_ready() {
@@ -147,7 +149,7 @@ wait_ds_ready() {
 validate_ds() {
   local allSupported=true
   local pods=$(kubectl -l app=longhorn-environment-check get po -o json)
-  
+
   for ((i=0; i<1; i++)); do
     local pod=$(echo $pods | jq .items[$i])
     local nodeName=$(echo $pod | jq -r .spec.nodeName)
@@ -162,7 +164,7 @@ validate_ds() {
   if [ "$allSupported" != "true" ]; then
     echo
     echo "  MountPropagation is disabled on at least one node."
-    echo "  As a result, CSI Driver and Base Image aren't supported."
+    echo "  As a result, CSI driver and Base image cannot be supported."
     echo
     exit 1
   else
