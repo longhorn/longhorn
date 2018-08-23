@@ -17,8 +17,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 # Demo
 
-[![Longhorn v0.2 Demo](https://asciinema.org/a/172720.png)](https://asciinema.org/a/172720?autoplay=1&loop=1&speed=2)
-
+[![Longhorn Demo](https://asciinema.org/a/PzzOcONC5tUPQpHifi2QmDR2J.png)](https://asciinema.org/a/PzzOcONC5tUPQpHifi2QmDR2J?autoplay=1&loop=1&speed=3)
 # Requirements
 
 ## Minimal Requirements
