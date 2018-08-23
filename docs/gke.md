@@ -1,6 +1,6 @@
 # Google Kubernetes Engine
 
-The user must use `Ubuntu` as the OS on the node, instead of `Container-Optimized OS(default)`, since the latter doesn't support `open-iscsi` which is required by Longhorn.
+The user must uses `Ubuntu` as the OS on the node, instead of `Container-Optimized OS(default)`, since the latter doesn't support `open-iscsi` which is required by Longhorn.
 
 The configuration yaml will be slight different for Google Kubernetes Engine (GKE):
 
