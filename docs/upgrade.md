@@ -10,7 +10,7 @@ before upgrade.
 If you don't have a on-cluster backupstore already, create one. Here we'll use NFS for example.
 1. Execute following command to create the backupstore
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/backupstores/nfs-backupstore.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/nfs-backupstore.yaml
 ```
 2. On Longhorn UI Settings page, set Backup Target to
 `nfs://longhorn-test-nfs-svc.default:/opt/backupstore` and click `Save`.

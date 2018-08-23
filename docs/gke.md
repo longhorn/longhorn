@@ -17,7 +17,7 @@ In which `name@example.com` is the user's account name in GCE, and it's case sen
 
 ```
 FLEXVOLUME_DIR="/home/kubernetes/flexvolume/"
-curl -s https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
+curl -s https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
 kubectl create -f longhorn.yaml
 ```
 
