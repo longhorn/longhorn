@@ -8,11 +8,11 @@ You can read more details of Longhorn and its design [here](http://rancher.com/m
 
 Longhorn is a work in progress. We appreciate your comments as we continue to work on it!
 
-## Source Code
+## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
-1. Longhorn Engine -- Core controller/replica logic https://github.com/rancher/longhorn-engine
-1. Longhorn Manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/rancher/longhorn-manager
+1. Longhorn engine -- Core controller/replica logic https://github.com/rancher/longhorn-engine
+1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/rancher/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
 
 # Demo
@@ -27,7 +27,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 2.  Kubernetes v1.8+
 3.  Make sure open-iscsi has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
 
-## Kubernetes Driver Requirements
+## Kubernetes driver Requirements
 
 Longhorn can be used in Kubernetes to provide persistent storage through either Longhorn Container Storage Interface (CSI) driver or Longhorn FlexVolume driver. Longhorn will automatically deploy one of the drivers, depending on the Kubernetes cluster configuration. User can also specify the driver in the deployment yaml file. CSI is preferred.
 
@@ -63,7 +63,7 @@ Please make a note of `Flexvolume Path` and `MountPropagation` state above.
 
 1. Kubernetes v1.10+
    1. CSI is in beta release for this version of Kubernetes, and enabled by default.
-2. Mount Propagation feature gate enabled.
+2. Mount propagation feature gate enabled.
    1. It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
 3. If above conditions cannot be met, Longhorn will fall back to the FlexVolume driver.
 
@@ -114,7 +114,7 @@ kubectl apply -f longhorn.yaml
 ```
 For Google Kubernetes Engine (GKE) users, see  [here](#google-kubernetes-engine)  before proceed.
 
-Longhorn Manager and Longhorn Driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
+Longhorn manager and Longhorn driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
 
 When you see those pods has started correctly as follows, you've deployed the Longhorn successfully.
 
@@ -166,11 +166,11 @@ longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123   80:30697/TC
 
 If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhorn-frontend` to access the Longhorn UI. Otherwise the user can use `<node_ip>:<port>` (port is `30697`in the case above) to access the UI.
 
-Longhorn UI would connect to the Longhorn Manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
+Longhorn UI would connect to the Longhorn manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
 
 Noted that the current UI is unauthenticated.
 
-# Use the Longhorn with Kubernetes
+# Use Longhorn with Kubernetes
 
 Longhorn provides the persistent volume directly to Kubernetes through one of the Longhorn drivers. No matter which driver you're using, you can use Kubernetes StorageClass to provision your persistent volumes.
 
@@ -229,7 +229,7 @@ More examples are available at `./examples/`
 ### Snapshot
 A snapshot in Longhorn represents a volume state at a given time, stored in the same location of volume data on physical disk of the host. Snapshot creation is instant in Longhorn.
 
-User can revert to any previous taken snapshot using the UI. Since Longhorn is a distributed block storage, please make sure the Longhorn volume is umounted from the host when revert to any previous snapshot, otherwise it will confuse the node filesystem and cause corruption.
+User can revert to any previous taken snapshot using the UI. Since Longhorn is a distributed block storage, please make sure the Longhorn volume is umounted from the host when revert to any previous snapshot, otherwise it will confuse the node filesystem and cause filesystem corruption.
 
 #### Note about the block level snapshot
 
@@ -237,18 +237,18 @@ Longhorn is a `crash-consistent` block storage solution.
 
 It's normal for the OS to keep content in the cache before writing into the block layer. However, it also means if the all the replicas are down, then the Longhorn may not contains the immediate change before the shutdown, since the content was kept in the OS level cache and hadn't transfered to Longhorn system yet. It's similar to if your desktop was down due to a power outage, after resuming the power, you may find some weird files in the hard drive.
 
-In order to force the data being written to the block layer at any given moment, the user can run `sync` command on the node manually, or umount the disk. OS would write the content from the cache to the block layer in either situation.
+To force the data being written to the block layer at any given moment, the user can run `sync` command on the node manually, or umount the disk. OS would write the content from the cache to the block layer in either situation.
 
 ### Backup
-A backup in Longhorn represents a volume state at a given time, stored in the BackupStore which is outside of the Longhorn System. Backup creation will involving copying the data through the network, so it will take time.
+A backup in Longhorn represents a volume state at a given time, stored in the secondary storage (backupstore in Longhorn word) which is outside of the Longhorn system. Backup creation will involving copying the data through the network, so it will take time.
 
 A corresponding snapshot is needed for creating a backup. And user can choose to backup any snapshot previous created.
 
-A BackupStore is a NFS server or S3 compatible server.
+A backupstore is a NFS server or S3 compatible server.
 
-A BackupTarget represents a BackupStore in the Longhorn System. The BackupTarget can be set at `Settings/General/BackupTarget`
+A backup target represents a backupstore in the Longhorn. The backup target can be set at `Settings/General/BackupTarget`
 
-If user is using a S3 compatible server as the BackupTarget, the BackupTargetSecret is needed for authentication informations. User need to manually create it as a Kubernetes Secret in the `longhorn-system` namespace. See below for details.
+If user is using a S3 compatible server as the backup target, a backup target secret is needed for authentication informations. User need to manually create it as a Kubernetes Secret in the `longhorn-system` namespace. See below for details.
 
 #### Setup a testing backupstore
 We provides two testing purpose backupstore based on NFS server and Minio S3 server for testing, in `./deploy/backupstores`.
@@ -283,17 +283,17 @@ data:
 ```
 Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access.
 
-### Recurring Snapshot and Backup
+### Recurring snapshot and backup
 Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
 
 User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
 
-## Other Features
+## Other features
 
-### [Multiple disks support](./docs/multidisk.md)
-### [iSCSI support](./docs/iscsi.md)
+### [Multiple disks](./docs/multidisk.md)
+### [iSCSI](./docs/iscsi.md)
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
-### [Base Image support](./docs/base-image.md)
+### [Base image](./docs/base-image.md)
 
 ## Additional informations
 ### [Google Kubernetes Engine](./docs/gke.md)
@@ -302,7 +302,7 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 
 ## Uninstall Longhorn
 
-Longhorn CRD has the finalizers in them, so user should delete the volumes and related resource first, give the managers a chance to clean up after them.
+Longhorn store its data in the Kubernetes API server, in the format of CRD. Longhorn CRD has the finalizers in them, so user should delete the volumes and related resource first, give the managers a chance to do the clean up after them.
 
 ### 1. Clean up volume and related resources
 Noted that you would lose all you data after done this. It's recommended to make backups before proceeding if you intent to keep the data.
@@ -341,7 +341,7 @@ kubectl -n longhorn-system get nodes.longhorn.rancher.io
 
 Make sure all reports `No resources found.` before continuing.
 
-### 3. Uninstall Longhorn System
+### 3. Uninstall Longhorn
 ```
 kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml
 ```
