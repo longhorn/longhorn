@@ -1,5 +1,7 @@
 # Google Kubernetes Engine
 
+The user need to use `Ubuntu` as the OS on the node, instead of `Container-Optimized OS(default)`, since the latter doesn't support `open-iscsi` which is required by Longhorn.
+
 The configuration yaml will be slight different for Google Kubernetes Engine (GKE):
 
 1.  GKE requires user to manually claim himself as cluster admin to enable RBAC. User need to execute following command before create the Longhorn system using yaml files.
