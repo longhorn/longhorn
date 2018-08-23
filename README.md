@@ -41,21 +41,21 @@ curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/scripts/en
 ```
 Example result:
 ```
-pod/detect-flexvol-dir created
-daemonset.apps/longhorn-environment-check created
+pod "detect-flexvol-dir" created
+daemonset.apps "longhorn-environment-check" created
 waiting for pod/detect-flexvol-dir to finish
 pod/detect-flexvol-dir completed
-waiting for pods to become ready (1/7)
-waiting for pods to become ready (6/7)
-all pods ready (7/7)
+all pods ready (3/3)
 
-  FlexVolume Path: /var/lib/kubelet/volumeplugins
+  FLEXVOLUME_DIR="/home/kubernetes/flexvolume"
 
 
   MountPropagation is enabled!
 
+cleaning up detection workloads...
 pod "detect-flexvol-dir" deleted
 daemonset.apps "longhorn-environment-check" deleted
+clean up completed
 ```
 Please make a note of `Flexvolume Path` and `MountPropagation` state above.
 
