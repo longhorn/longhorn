@@ -45,7 +45,7 @@ following example creates an nginx pod serving content from a flexvolume with
 a base image and is accessible from a service.
 
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn-manager/v0.3-rc/examples/flexvolume/example_baseimage.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn-manager/master/examples/flexvolume/example_baseimage.yaml
 ```
 
 Wait until the pod is running.
@@ -86,7 +86,7 @@ http://<NODE-IP>:<NODE-PORT>/guests/hd/party-wizard.gif
 Finally, tear down the pod and service.
 
 ```
-kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn-manager/v0.3-rc/examples/flexvolume/example_baseimage.yaml
+kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn-manager/master/examples/flexvolume/example_baseimage.yaml
 ```
 
 ### CSI Driver
@@ -118,7 +118,7 @@ content from two csi-provisioned volumes backed by a base image. The
 statefulset is accessible from a service.
 
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn-manager/v0.3-rc/examples/provisioner_with_baseimage.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn-manager/master/examples/provisioner_with_baseimage.yaml
 ```
 
 Wait until both pods are running.
@@ -159,7 +159,7 @@ http://<NODE-IP>:<NODE-PORT>/guests/hd/party-wizard.gif
 Finally, tear down the pod and service.
 
 ```
-kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn-manager/v0.3-rc/examples/provisioner_with_baseimage.yaml
+kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn-manager/master/examples/provisioner_with_baseimage.yaml
 ```
 
 ## Building

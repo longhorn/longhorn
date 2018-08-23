@@ -37,7 +37,7 @@ We've wrote a script to help user to get enough information to configure the set
 
 Before installing, run:
 ```
-curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/scripts/environment_check.sh | bash
+curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/master/scripts/environment_check.sh | bash
 ```
 Example result:
 ```
@@ -101,7 +101,7 @@ Create the deployment of Longhorn in your Kubernetes cluster is straightforward.
 
 If CSI is supported (as stated above) you can just do:
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
 If you're using Flexvolume driver with Kubernetes Distro other than RKE, replace the value of $FLEXVOLUME_DIR in the following command with your own Flexvolume Directory as specified above.
 ```
@@ -109,7 +109,7 @@ FLEXVOLUME_DIR=<FLEXVOLUME_DIR>
 ```
 Then run
 ```
-curl -s https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
+curl -s https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
 kubectl apply -f longhorn.yaml
 ```
 For Google Kubernetes Engine (GKE) users, see  [here](#google-kubernetes-engine)  before proceed.
@@ -177,12 +177,12 @@ Longhorn provides the persistent volume directly to Kubernetes through one of th
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/storageclass.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/storageclass.yaml
 ```
 
 Now you can create a pod using Longhorn like this:
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/examples/pvc.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/pvc.yaml
 ```
 
 The yaml contains two parts:
@@ -255,7 +255,7 @@ We provides two testing purpose backupstore based on NFS server and Minio S3 ser
 
 Use following command to setup a Minio S3 server for BackupStore after `longhorn-system` was created.
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/backupstores/minio-backupstore.yaml
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/minio-backupstore.yaml
 ```
 
 Now set `Settings/General/BackupTarget` to
@@ -343,7 +343,7 @@ Make sure all reports `No resources found.` before continuing.
 
 ### 3. Uninstall Longhorn
 ```
-kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/v0.3-rc/deploy/longhorn.yaml
+kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
 
 ## License
