@@ -177,12 +177,12 @@ Longhorn provides the persistent volume directly to Kubernetes through one of th
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/storageclass.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/storageclass.yaml
 ```
 
 Now you can create a pod using Longhorn like this:
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/pvc.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/pvc.yaml
 ```
 
 The yaml contains two parts:
@@ -255,7 +255,7 @@ We provides two testing purpose backupstore based on NFS server and Minio S3 ser
 
 Use following command to setup a Minio S3 server for BackupStore after `longhorn-system` was created.
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/minio-backupstore.yaml
+kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/minio-backupstore.yaml
 ```
 
 Now set `Settings/General/BackupTarget` to
