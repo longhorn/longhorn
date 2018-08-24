@@ -109,6 +109,7 @@ kubectl -n ${NAMESPACE} get engines.longhorn.rancher.io -o yaml > longhorn-v0.1-
 kubectl -n ${NAMESPACE} get replicas.longhorn.rancher.io -o yaml > longhorn-v0.1-backup-replicas.yaml
 kubectl -n ${NAMESPACE} get settings.longhorn.rancher.io -o yaml > longhorn-v0.1-backup-settings.yaml
 ```
+After it's done, check those files, make sure they're not empty (unless you have no existing volumes).
 
 ### v0.2
 Check your backups to make sure Longhorn was running in namespace
@@ -120,6 +121,7 @@ kubectl -n ${NAMESPACE} get engines.longhorn.rancher.io -o yaml > longhorn-v0.2-
 kubectl -n ${NAMESPACE} get replicas.longhorn.rancher.io -o yaml > longhorn-v0.2-backup-replicas.yaml
 kubectl -n ${NAMESPACE} get settings.longhorn.rancher.io -o yaml > longhorn-v0.2-backup-settings.yaml
 ```
+After it's done, check those files, make sure they're not empty (unless you have no existing volumes).
 
 ## Delete CRDs in Different Namespace
 
