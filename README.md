@@ -307,6 +307,8 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 
 Longhorn store its data in the Kubernetes API server, in the format of CRD. Longhorn CRD has the finalizers in them, so user should delete the volumes and related resource first, give the managers a chance to do the clean up after them.
 
+Before starting uninstall Longhorn, the user need to delete all the PVC and PV resources which refer to a Longhorn volume in the Kubernetes first. Otherwise Kubernetes may get confused because the underlaying storage is gone but the PV/PVC remains.
+
 ### 1. Clean up volume and related resources
 Noted that you would lose all you data after done this. It's recommended to make backups before proceeding if you intent to keep the data.
 
