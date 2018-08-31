@@ -30,6 +30,8 @@ metadata:
   labels:
     app: mysql
 spec:
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -47,6 +49,9 @@ spec:
         volumeMounts:
         - name: mysql-volume
           mountPath: /var/lib/mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rancher"
       volumes:
       - name: mysql-volume
         persistentVolumeClaim:
