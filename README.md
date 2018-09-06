@@ -253,7 +253,52 @@ A backupstore is a NFS server or S3 compatible server.
 
 A backup target represents a backupstore in the Longhorn. The backup target can be set at `Settings/General/BackupTarget`
 
-If user is using a S3 compatible server as the backup target, a backup target secret is needed for authentication informations. User need to manually create it as a Kubernetes Secret in the `longhorn-system` namespace. See below for details.
+#### Setup AWS S3 backupstore
+1. Create a new bucket in AWS S3.
+
+2. By following that [guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console) create a new AWS IAM user, with the following permissions set:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::your-bucket-name",
+                "arn:aws:s3:::your-bucket-name/*"
+            ]
+        }
+    ]
+}
+```
+
+
+3. Add a new secret with a name such as `aws` in the namespace where longhorn is placed(`longhorn-system` by default). Put to that secret the following keys:
+
+```
+AWS_ACCESS_KEY_ID: YOUR_AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY: YOUR_AWS_SECRET_ACCESS_KEY
+```
+
+4. Go to the Longhorn UI and set `Settings/General/BackupTarget` to
+```
+s3://your-bucket-name@your-aws-region/
+```
+Pay attention that you should have `/` at the end, otherwise you will get an error.
+
+5.  Set `Settings/General/BackupTargetSecret` to
+```
+aws
+```
+Your secret name with AWS keys from 3rd point.
 
 #### Setup a testing backupstore
 We provides two testing purpose backupstore based on NFS server and Minio S3 server for testing, in `./deploy/backupstores`.
