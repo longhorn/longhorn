@@ -253,9 +253,54 @@ A backupstore is a NFS server or S3 compatible server.
 
 A backup target represents a backupstore in the Longhorn. The backup target can be set at `Settings/General/BackupTarget`
 
-If user is using a S3 compatible server as the backup target, a backup target secret is needed for authentication informations. User need to manually create it as a Kubernetes Secret in the `longhorn-system` namespace. See below for details.
+#### Setup AWS S3 backupstore
+1. Create a new bucket in AWS S3.
 
-#### Setup a testing backupstore
+2. Follow the [guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console) to create a new AWS IAM user, with the following permissions set:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "GrantLonghornBackupstoreAccess0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<your-bucket-name>",
+                "arn:aws:s3:::<your-bucket-name>/*"
+            ]
+        }
+    ]
+}
+```
+
+
+3. Create a Kubernetes secret with a name such as `aws-secret` in the namespace where longhorn is placed(`longhorn-system` by default). Put the following keys in the secret:
+
+```
+AWS_ACCESS_KEY_ID: <your_aws_access_key_id>
+AWS_SECRET_ACCESS_KEY: <your_aws_secret_access_key>
+```
+
+4. Go to the Longhorn UI and set `Settings/General/BackupTarget` to
+```
+s3://<your-bucket-name>@<your-aws-region>/
+```
+Pay attention that you should have `/` at the end, otherwise you will get an error.
+
+5.  Set `Settings/General/BackupTargetSecret` to
+```
+aws-secret
+```
+Your secret name with AWS keys from 3rd point.
+
+#### Setup a local testing backupstore
 We provides two testing purpose backupstore based on NFS server and Minio S3 server for testing, in `./deploy/backupstores`.
 
 Use following command to setup a Minio S3 server for BackupStore after `longhorn-system` was created.
