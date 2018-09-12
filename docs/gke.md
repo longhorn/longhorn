@@ -1,25 +1,12 @@
 # Google Kubernetes Engine
 
-The user must uses `Ubuntu` as the OS on the node, instead of `Container-Optimized OS(default)`, since the latter doesn't support `open-iscsi` which is required by Longhorn.
+1. GKE clusters must use `Ubuntu` OS instead of `Container-Optimized` OS, in order to satisfy Longhorn `open-iscsi` dependency.
 
-The configuration yaml will be slight different for Google Kubernetes Engine (GKE):
-
-1.  GKE requires user to manually claim himself as cluster admin to enable RBAC. User need to execute following command before create the Longhorn system using yaml files.
+2. GKE requires user to manually claim himself as cluster admin to enable RBAC. Before installing Longhorn, run the following command:
 
 ```
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<name@example.com>
 
 ```
 
-In which `name@example.com` is the user's account name in GCE, and it's case sensitive. See [here](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control)  for details.
-
-2.  The default Flexvolume plugin directory is different with GKE 1.8+, which is at `/home/kubernetes/flexvolume`. User need to use following command instead:
-
-```
-FLEXVOLUME_DIR="/home/kubernetes/flexvolume/"
-curl -s https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
-kubectl create -f longhorn.yaml
-```
-
-See [Troubleshooting](./troubleshooting.md) for details.
-
+where `name@example.com` is the user's account name in GCE, and it's case sensitive. See [this document](https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control) for more information.

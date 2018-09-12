@@ -336,9 +336,9 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           # For auto detection, leave this parameter unset
-          #- name: FLEXVOLUME_DIR
+          - name: FLEXVOLUME_DIR
             # FOR RKE
-            #value: "/var/lib/kubelet/volumeplugins"
+            value: "/var/lib/kubelet/volumeplugins"
             # FOR GKE
             #value: "/home/kubernetes/flexvolume/"
       serviceAccountName: longhorn-service-account
