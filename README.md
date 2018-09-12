@@ -16,7 +16,7 @@ The latest release of Longhorn is v0.3.0.
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
 1. Longhorn engine -- Core controller/replica logic https://github.com/rancher/longhorn-engine
-1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/rancher/longhorn-manager
+1. Longhorn manager -- Longhorn orchestration, includes FlexVolume driver for Kubernetes https://github.com/rancher/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
 
 # Demo
@@ -46,23 +46,17 @@ curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/master/scripts/env
 ```
 Example result:
 ```
-pod "detect-flexvol-dir" created
-daemonset.apps "longhorn-environment-check" created
-waiting for pod/detect-flexvol-dir to finish
-pod/detect-flexvol-dir completed
+daemonset.apps/longhorn-environment-check created
+waiting for pods to become ready (0/3)
 all pods ready (3/3)
-
-  FLEXVOLUME_DIR="/home/kubernetes/flexvolume"
-
 
   MountPropagation is enabled!
 
-cleaning up detection workloads...
-pod "detect-flexvol-dir" deleted
+cleaning up...
 daemonset.apps "longhorn-environment-check" deleted
-clean up completed
+clean up complete
 ```
-Please make a note of `Flexvolume Path` and `MountPropagation` state above.
+Please make a note of `MountPropagation` feature gate status.
 
 ### Requirement for the CSI driver
 
@@ -86,15 +80,10 @@ The `Server Version` should be `v1.10` or above.
 
 2. The result of environment check script should contain `MountPropagation is enabled!`.
 
-### Requirement for the Flexvolume driver
+### Requirement for the FlexVolume driver
 
 1.  Kubernetes v1.8+
 2.  Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in the every node of the Kubernetes cluster.
-3.  User need to know the volume plugin directory in order to setup the driver correctly.
-    1.  The correct directory should be reported by the environment check script. 
-    2.  Rancher RKE: `/var/lib/kubelet/volumeplugins`
-    3.  Google GKE: `/home/kubernetes/flexvolume`
-    4.  For any other distro, use the value reported by the environment check script.
 
 # Upgrading
 
@@ -104,24 +93,15 @@ For instructions on how to upgrade Longhorn App v0.1 or v0.2 to v0.3, [see this 
 
 Create the deployment of Longhorn in your Kubernetes cluster is straightforward.
 
-If CSI is supported (as stated above) you can just do:
 ```
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
-If you're using Flexvolume driver with Kubernetes Distro other than RKE, replace the value of $FLEXVOLUME_DIR in the following command with your own Flexvolume Directory as specified above.
-```
-FLEXVOLUME_DIR=<FLEXVOLUME_DIR>
-```
-Then run
-```
-curl -s https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml|sed "s#^\( *\)value: \"/var/lib/kubelet/volumeplugins\"#\1value: \"${FLEXVOLUME_DIR}\"#g" > longhorn.yaml
-kubectl apply -f longhorn.yaml
-```
-For Google Kubernetes Engine (GKE) users, see  [here](#google-kubernetes-engine)  before proceed.
+
+For Google Kubernetes Engine (GKE) users, see [here](#google-kubernetes-engine) before proceeding.
 
 Longhorn manager and Longhorn driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
 
-When you see those pods has started correctly as follows, you've deployed the Longhorn successfully.
+When you see those pods have started correctly as follows, you've deployed Longhorn successfully.
 
 Deployed with CSI driver:
 ```
@@ -141,7 +121,7 @@ longhorn-manager-8kqf4                      1/1       Running   0          6h
 longhorn-manager-kln4h                      1/1       Running   0          6h
 longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
 ```
-Or with Flexvolume driver
+Or with FlexVolume driver:
 ```
 # kubectl -n longhorn-system get pod
 NAME                                        READY     STATUS    RESTARTS   AGE
@@ -240,7 +220,7 @@ User can revert to any previous taken snapshot using the UI. Since Longhorn is a
 
 Longhorn is a `crash-consistent` block storage solution.
 
-It's normal for the OS to keep content in the cache before writing into the block layer. However, it also means if the all the replicas are down, then the Longhorn may not contains the immediate change before the shutdown, since the content was kept in the OS level cache and hadn't transfered to Longhorn system yet. It's similar to if your desktop was down due to a power outage, after resuming the power, you may find some weird files in the hard drive.
+It's normal for the OS to keep content in the cache before writing into the block layer. However, it also means if the all the replicas are down, then Longhorn may not contain the immediate change before the shutdown, since the content was kept in the OS level cache and hadn't transfered to Longhorn system yet. It's similar to if your desktop was down due to a power outage, after resuming the power, you may find some weird files in the hard drive.
 
 To force the data being written to the block layer at any given moment, the user can run `sync` command on the node manually, or umount the disk. OS would write the content from the cache to the block layer in either situation.
 
@@ -251,7 +231,7 @@ A corresponding snapshot is needed for creating a backup. And user can choose to
 
 A backupstore is a NFS server or S3 compatible server.
 
-A backup target represents a backupstore in the Longhorn. The backup target can be set at `Settings/General/BackupTarget`
+A backup target represents a backupstore in Longhorn. The backup target can be set at `Settings/General/BackupTarget`
 
 #### Setup AWS S3 backupstore
 1. Create a new bucket in AWS S3.
