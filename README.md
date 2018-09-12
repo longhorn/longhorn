@@ -332,48 +332,21 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 
 ## Uninstall Longhorn
 
-Longhorn store its data in the Kubernetes API server, in the format of CRD. Longhorn CRD has the finalizers in them, so user should delete the volumes and related resource first, give the managers a chance to do the clean up after them.
+Longhorn stores its data in the Kubernetes API server, in the format of CRD. Longhorn CRDs have finalizers; user should delete the volumes and related resource first to give the managers a chance to clean up.
 
-Before starting uninstall Longhorn, the user need to delete all the PVC and PV resources which refer to a Longhorn volume in the Kubernetes first. Otherwise Kubernetes may get confused because the underlaying storage is gone but the PV/PVC remains.
+Before uninstalling Longhorn, the user need to delete all the PVC and PV resources which refer to a Longhorn volume in Kubernetes. Otherwise, Kubernetes may get confused because the underlying storage is gone but the PV/PVC remains.
 
-### 1. Clean up volume and related resources
-Noted that you would lose all you data after done this. It's recommended to make backups before proceeding if you intent to keep the data.
-
-```
-kubectl -n longhorn-system delete volumes.longhorn.rancher.io --all
+### 1. Run cleanup script
+Note that you will lose all volume data after done this. If you intend on keeping any volume data, make backups (and test restoring a volume) before proceeding.
 
 ```
-
-Check the result using:
-
-```
-kubectl -n longhorn-system get volumes.longhorn.rancher.io
-kubectl -n longhorn-system get engines.longhorn.rancher.io
-kubectl -n longhorn-system get replicas.longhorn.rancher.io
-
+curl -sSfL https://raw.githubusercontent.com/rancher/longhorn-manager/master/deploy/scripts/cleanup.sh | bash
 ```
 
-Make sure all reports `No resources found.` before continuing.
+### 2. Delete remaining components
 
-### 2. Clean up engine images and nodes
+The cleanup script removes most components, but leaves RBAC related resources and the `longhorn-system` Namespace behind. Run this command to remove these resources.
 
-```
-kubectl -n longhorn-system delete engineimages.longhorn.rancher.io --all
-kubectl -n longhorn-system delete nodes.longhorn.rancher.io --all
-
-```
-
-Check the result using:
-
-```
-kubectl -n longhorn-system get engineimages.longhorn.rancher.io
-kubectl -n longhorn-system get nodes.longhorn.rancher.io
-
-```
-
-Make sure all reports `No resources found.` before continuing.
-
-### 3. Uninstall Longhorn
 ```
 kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
