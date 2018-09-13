@@ -187,7 +187,7 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - rancher/longhorn-engine:v0.3.1-rc1
+        - rancher/longhorn-engine:v0.3.0
         - --manager-image
         - rancher/longhorn-manager:v0.3.1-rc1
         - --service-account
