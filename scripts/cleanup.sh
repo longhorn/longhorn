@@ -7,14 +7,13 @@ remove_and_wait() {
   out=`kubectl -n ${NAMESPACE} delete $crd --all 2>&1`
   if [ $? -ne 0 ]; then
     echo $out
-    break
+    return
   fi
   while true; do
     out=`kubectl -n ${NAMESPACE} get $crd -o yaml | grep 'items: \[\]'`
     if [ $? -eq 0 ]; then
       break
     fi
-    echo $out
     sleep 1
   done
   echo all $crd instances deleted
