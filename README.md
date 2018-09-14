@@ -50,6 +50,8 @@ Longhorn manager and Longhorn driver will be deployed as daemonsets in a separat
 
 One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the environment of the user. User can also override the automatic choice if necessary.  See [here](docs/driver.md) for the detail.
 
+Noted that the volume created and used through one driver won't be recongized by Kubernetes using the other driver. So please don't switch driver (e.g. during upgrade) if you have existing volumes created using the old driver.
+
 When you see those pods have started correctly as follows, you've deployed Longhorn successfully.
 
 If Longhorn was deployed with CSI driver (csi-attacher/csi-provisioner/longhorn-csi-plugin exists):
@@ -107,8 +109,6 @@ Noted that the current UI is unauthenticated at the moment.
 # Use Longhorn with Kubernetes
 
 Longhorn provides the persistent volume directly to Kubernetes through one of the Longhorn drivers. No matter which driver you're using, you can use Kubernetes StorageClass to provision your persistent volumes.
-
-Noted the volume created and used by one driver won't be recongized by Kubernetes using another driver. So please don't switch driver (e.g. during upgrade) if you have existing volumes created using the old driver.
 
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
