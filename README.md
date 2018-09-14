@@ -16,7 +16,7 @@ The latest release of Longhorn is v0.3.0.
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
 1. Longhorn engine -- Core controller/replica logic https://github.com/rancher/longhorn-engine
-1. Longhorn manager -- Longhorn orchestration, includes FlexVolume driver for Kubernetes https://github.com/rancher/longhorn-manager
+1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/rancher/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
 
 # Demo
@@ -31,6 +31,59 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 3.  Make sure open-iscsi has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
     1. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
     2. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
+
+## Kubernetes driver Requirements
+
+Longhorn can be used in Kubernetes to provide persistent storage through either Longhorn Container Storage Interface (CSI) driver or Longhorn Flexvolume driver. Longhorn will automatically deploy one of the drivers, depending on the Kubernetes cluster configuration. User can also specify the driver in the deployment yaml file. CSI is preferred.
+
+### Environment check script
+
+We've wrote a script to help user to get enough information to configure the setup correctly.
+
+Before installing, run:
+```
+curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/master/scripts/environment_check.sh | bash
+```
+Example result:
+```
+daemonset.apps/longhorn-environment-check created
+waiting for pods to become ready (0/3)
+all pods ready (3/3)
+
+  MountPropagation is enabled!
+
+cleaning up...
+daemonset.apps "longhorn-environment-check" deleted
+clean up complete
+```
+Please make a note of `MountPropagation` feature gate status.
+
+### Requirement for the CSI driver
+
+1. Kubernetes v1.10+
+   1. CSI is in beta release for this version of Kubernetes, and enabled by default.
+2. Mount propagation feature gate enabled.
+   1. It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
+3. If above conditions cannot be met, Longhorn will fall back to the Flexvolume driver.
+
+### Check if your setup satisfied CSI requirement
+1. Use the following command to check your Kubernetes server version
+```
+kubectl version
+```
+Result:
+```
+Client Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.3", GitCommit:"2bba0127d85d5a46ab4b778548be28623b32d0b0", GitTreeState:"clean", BuildDate:"2018-05-21T09:17:39Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.1", GitCommit:"d4ab47518836c750f9949b9e0d387f20fb92260b", GitTreeState:"clean", BuildDate:"2018-04-12T14:14:26Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
+```
+The `Server Version` should be `v1.10` or above.
+
+2. The result of environment check script should contain `MountPropagation is enabled!`.
+
+### Requirement for the Flexvolume driver
+
+1.  Kubernetes v1.8+
+2.  Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in the every node of the Kubernetes cluster.
 
 # Upgrading
 
