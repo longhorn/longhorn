@@ -1,13 +1,29 @@
 # Upgrade
 
-Here we cover how to upgrade to Longhorn v0.3 from all previous releases.
+Here we cover how to upgrade to Longhorn v0.3.1 from all previous releases.
 
-## Backup Existing Volumes
+## Upgrading from v0.3.x
+
+On Rancher UI, navigate to the `Catalog Apps` screen and click the
+`Upgrade available` button. Do not change any of the settings. *Do not change
+any of the settings right now.* Click `Upgrade`.
+
+Access Longhorn UI. Periodically refresh the page until the version in the
+bottom left corner of the screen changes. Wait until websocket indicators in
+bottom right corner of the screen turn solid green. Navigate to
+`Setting> Engine Image` and wait until the new Engine Image is `Ready`.
+
+## Upgrading from v0.2 and older
+
+The upgrade procedure for Longhorn v0.2 and v0.1 deployments is more involved.
+
+### Backup Existing Volumes
 
 It's recommended to create a recent backup of every volume to the backupstore
-before upgrade.
+before upgrade. If you don't have a on-cluster backupstore already, create one.
 
-If you don't have a on-cluster backupstore already, create one. Here we'll use NFS for example.
+We'll use NFS backupstore for this example.
+
 1. Execute following command to create the backupstore
 ```
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/nfs-backupstore.yaml
@@ -18,49 +34,49 @@ kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deplo
 Navigate to each volume detail page and click `Take Snapshot` (it's recommended to run `sync` in the host command line before `Take Snapshot`). Click the new
 snapshot and click `Backup`. Wait for the new backup to show up in the volume's backup list before continuing.
 
-## Check For Issues
+### Check For Issues
 
 Make sure no volume is in degraded or faulted state. Wait for degraded
 volumes to heal and delete/salvage faulted volumes before proceeding.
 
-## Detach Volumes
+### Detach Volumes
 
 Shutdown all Kubernetes Pods using Longhorn volumes in order to detach the
 volumes. The easiest way to achieve this is by deleting all workloads and recreate them later after upgrade. If
 this is not desirable, some workloads may be suspended. We will cover how
 each workload can be modified to shut down its pods.
 
-### Deployment
+#### Deployment
 Edit the deployment with `kubectl edit deploy/<name>`.
 Set `.spec.replicas` to `0`.
 
-### StatefulSet
+#### StatefulSet
 Edit the statefulset with `kubectl edit statefulset/<name>`.
 Set `.spec.replicas` to `0`.
 
-### DaemonSet
+#### DaemonSet
 There is no way to suspend this workload.
 Delete the daemonset with `kubectl delete ds/<name>`.
 
-### Pod
+#### Pod
 Delete the pod with `kubectl delete pod/<name>`.
 There is no way to suspend a pod not managed by a workload controller.
 
-### CronJob
+#### CronJob
 Edit the cronjob with `kubectl edit cronjob/<name>`.
 Set `.spec.suspend` to `true`.
 Wait for any currently executing jobs to complete, or terminate them by
 deleting relevant pods.
 
-### Job
+#### Job
 Consider allowing the single-run job to complete.
 Otherwise, delete the job with `kubectl delete job/<name>`.
 
-### ReplicaSet
+#### ReplicaSet
 Edit the replicaset with `kubectl edit replicaset/<name>`.
 Set `.spec.replicas` to `0`.
 
-### ReplicationController
+#### ReplicationController
 Edit the replicationcontroller with `kubectl edit rc/<name>`.
 Set `.spec.replicas` to `0`.
 
@@ -69,7 +85,7 @@ Wait for the volumes using by the Kubernetes to complete detaching.
 Then detach all remaining volumes from Longhorn UI. These volumes were most likely
 created and attached outside of Kubernetes via Longhorn UI or REST API.
 
-## Uninstall the Old Version of Longhorn
+### Uninstall the Old Version of Longhorn
 
 Make note of `BackupTarget` on the `Setting` page. You will need to manually
 set `BackupTarget` after upgrading from either v0.1 or v0.2.
@@ -95,11 +111,11 @@ curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.1/deploy/uninst
 kubectl delete -f longhorn.yaml
 ```
 
-## Backup Longhorn System
+### Backup Longhorn System
 
 We're going to backup Longhorn CRD yaml to local directory, so we can restore or inspect them later.
 
-### v0.1
+#### Upgrade from v0.1
 User must backup the CRDs for v0.1 because we will change the default deploying namespace for Longhorn.
 Check your backups to make sure Longhorn was running in namespace `longhorn`, otherwise change the value of `NAMESPACE` below.
 ```
@@ -111,7 +127,7 @@ kubectl -n ${NAMESPACE} get settings.longhorn.rancher.io -o yaml > longhorn-v0.1
 ```
 After it's done, check those files, make sure they're not empty (unless you have no existing volumes).
 
-### v0.2
+#### Upgrade from v0.2
 Check your backups to make sure Longhorn was running in namespace
 `longhorn-system`, otherwise change the value of `NAMESPACE` below.
 ```
@@ -123,7 +139,7 @@ kubectl -n ${NAMESPACE} get settings.longhorn.rancher.io -o yaml > longhorn-v0.2
 ```
 After it's done, check those files, make sure they're not empty (unless you have no existing volumes).
 
-## Delete CRDs in Different Namespace
+### Delete CRDs in Different Namespace
 
 This is only required for Rancher users running Longhorn App `v0.1`. Delete all
 CRDs from your namespace which is `longhorn` by default.
@@ -139,13 +155,13 @@ kubectl -n ${NAMESPACE} delete replicas.longhorn.rancher.io --all
 kubectl -n ${NAMESPACE} delete settings.longhorn.rancher.io --all
 ```
 
-## Install Longhorn v0.3
+### Install Longhorn
 
-### Installed with Longhorn App v0.1 in Rancher 2.x
+#### Upgrade from v0.1
 For Rancher users who are running Longhorn v0.1, **do not click the upgrade button in the Rancher App.**
 
 1. Delete the Longhorn App from `Catalog Apps` screen in Rancher UI.
-2. Launch Longhorn App template version `0.3.0`.
+2. Launch Longhorn App template version `0.3.1`.
 3. Restore Longhorn System data. This step is required for Rancher users running Longhorn App `v0.1`.
 Don't change the NAMESPACE variable below, since the newly installed Longhorn system will be installed in the `longhorn-system` namespace.
 
@@ -157,13 +173,12 @@ sed "s#^\( *\)namespace: .*#\1namespace: ${NAMESPACE}#g" longhorn-v0.1-backup-en
 sed "s#^\( *\)namespace: .*#\1namespace: ${NAMESPACE}#g" longhorn-v0.1-backup-volumes.yaml | kubectl apply -f -
 ```
 
-### Installed without using Longhorn App v0.1
+### Upgrade from v0.2
 
 For Longhorn v0.2 users who are not using Rancher, follow
 [the official Longhorn Deployment instructions](../README.md#deployment).
 
-
-## Access UI and Set BackupTarget
+### Access UI and Set BackupTarget
 
 Wait until the longhorn-ui and longhorn-manager pods are `Running`:
 ```
@@ -176,24 +191,60 @@ On `Setting > General`, set `Backup Target` to the backup target used in
 the previous version. In our example, this is
 `nfs://longhorn-test-nfs-svc.default:/opt/backupstore`.
 
+## Migrating Between Flexvolume and CSI Driver
+
+Ensure your Longhorn App is up to date. Follow the relevant upgrade procedure
+above before proceeding.
+
+The migration path between drivers requires backing up and restoring each
+volume and will incur both API and workload downtime. This can be a tedious
+process; consider what benefit switching drivers will bring before proceeding.
+Consider deleting unimportant workloads using the old driver to reduce effort.
+
+### Flexvolume to CSI
+
+CSI is the newest out-of-tree Kubernetes storage interface.
+
+1. [Backup existing volumes](upgrade.md#backup-existing-volumes).
+2. On Rancher UI, navigate to the `Catalog Apps` screen, locate the `Longhorn`
+app and click the `Up to date` button. Under `Kubernetes Driver`, select
+`flexvolume`. We recommend leaving `Flexvolume Path` empty. Click `Upgrade`.
+3. Restore each volume by following the [CSI restore procedure](restore_statefulset.md#csi-instructions).
+This procedure is tailored to the StatefulSet workload, but the process is
+approximately the same for all workloads.
+
+### CSI to Flexvolume
+
+If you would like to migrate from CSI to Flexvolume driver, we are interested
+to hear from you. CSI is the newest out-of-tree storage interface and we
+expect it to replace Flexvolume's exec-based model.
+
+1. [Backup existing volumes](upgrade.md#backup-existing-volumes).
+2. On Rancher UI, navigate to the `Catalog Apps` screen, locate the `Longhorn`
+app and click the `Up to date` button. Under `Kubernetes Driver`, select
+`flexvolume`. We recommend leaving `Flexvolume Path` empty. Click `Upgrade`.
+3. Restore each volume by following the [Flexvolume restore procedure](restore_statefulset.md#flexvolume-instructions).
+This procedure is tailored to the StatefulSet workload, but the process is
+approximately the same for all workloads.
+
+
 ## Upgrade Engine Images
 
-Ensure all volumes are detached. If any are still attached, detach them now
-and wait until they are in `Detached` state.
+Note: this is entirely optional. Volumes using old engine images will continue
+to function, but won't take advantage of new features, performance enhancements
+and bug fixes.
 
-Select all the volumes using batch selection. Click batch operation button
+1. Follow [the detach procedure for relevant workloads](upgrade.md#detach-volumes).
+2.  Select all the volumes using batch selection. Click batch operation button
 `Upgrade Engine`, choose the only engine image available in the list. It's
 the default engine shipped with the manager for this release.
-
-## Attach Volumes
-
-Now we will resume all workloads by reversing the changes we made to detach
-the volumes. Any volume not part of a K8s workload or pod must be attached
-manually.
+3. Resume all workloads by reversing the [detach volumes procedure](upgrade.md#detach-volumes).
+Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
 
 ## Note
 
-Upgrade is always tricky. Keeping recent backups for volumes is critical. If anything goes wrong, you can restore the volume using the backup.
+Upgrade is always tricky. Keeping recent backups for volumes is critical. If
+anything goes wrong, you can restore the volume using the backup.
 
 If you have any issues, please report it at
 https://github.com/rancher/longhorn/issues and include your backup yaml files

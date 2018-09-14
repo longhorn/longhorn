@@ -9,7 +9,7 @@ deployed. The example below uses a Stateful Set with one volume attached to
 each Pod and two replicas.
 
 - [CSI Instructions](#csi-instructions)
-- [FlexVolume Instructions](#flexvolume-instructions)
+- [Flexvolume Instructions](#flexvolume-instructions)
 
 ### CSI Instructions
 1. Connect to the `Longhorn UI` page in your web browser. Under the `Backup` tab,
@@ -76,8 +76,8 @@ spec:
 
 3. Go to [General Instructions](#general-instructions).
 
-### FlexVolume Instructions
-Because of the implementation of `FlexVolume`, creating the Longhorn volumes
+### Flexvolume Instructions
+Because of the implementation of `Flexvolume`, creating the Longhorn volumes
 from the `Longhorn UI` manually can be skipped. Instead, follow these
 instructions:
 1. Connect to the `Longhorn UI` page in your web browser. Under the `Backup` tab,
@@ -91,7 +91,7 @@ volume entry and select `Get URL`.
     - `s3://backupbucket@us-east-1/backupstore?backup=backup-1713a64cd2774c43&volume=longhorn-testvol-g1n1de`
 
 2. Similar to `Step 2` for CSI, create a `Persistent Volume` for each volume you
-want to restore. `storage` capacity, `storageClassName`, and the FlexVolume
+want to restore. `storage` capacity, `storageClassName`, and the Flexvolume
 `options` must be replaced. This example uses `longhorn` as the
 `storageClassName`.
 
@@ -139,7 +139,7 @@ spec:
 
 ### General Instructions
 **Make sure you have followed either the [CSI](#csi-instructions) or
-[FlexVolume](#flexvolume-instructions) instructions before following the steps
+[Flexvolume](#flexvolume-instructions) instructions before following the steps
 in this section.**
 
 1. In the `namespace` the `Stateful Set` will be deployed in, create Persistent

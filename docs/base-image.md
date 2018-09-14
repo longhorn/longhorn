@@ -9,7 +9,7 @@ be used as a distribution mechanism for your Docker base images.
 Volumes backed by a base image can be created in three ways.
 
 1. [UI](#ui) - Create Longhorn volumes exposed as block device or iSCSI target
-2. [FlexVolume Driver](#flexvolume-driver) - Create Longhorn block devices and consume in Kubernetes pods
+2. [Flexvolume Driver](#flexvolume-driver) - Create Longhorn block devices and consume in Kubernetes pods
 3. [CSI Driver](#csi-driver) - (Newer) Create Longhorn block devices and consume in Kubernetes pods
 
 ### UI
@@ -17,10 +17,10 @@ Volumes backed by a base image can be created in three ways.
 On the `Volume` tab, click the `Create Volume` button. The `Base Image` field
 expects a Docker image name such as `rancher/vm-ubuntu:16.04.4-server-amd64`.
 
-### FlexVolume Driver
+### Flexvolume Driver
 
 The flexvolume driver supports volumes backed by base image. Below is a sample
-FlexVolume definition including `baseImage` option.
+Flexvolume definition including `baseImage` option.
 
 ```
 name: flexvol
