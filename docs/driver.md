@@ -10,6 +10,7 @@ Longhorn can be used in Kubernetes to provide persistent storage through either 
    1. CSI is in beta release for this version of Kubernetes, and enabled by default.
 2. Mount propagation feature gate enabled.
    1. It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
+   2. You can check it by using [environment check script](#environment-check-script).
 3. If above conditions cannot be met, Longhorn will fall back to the FlexVolume driver.
 
 ### Check if your setup satisfied CSI requirement
@@ -24,7 +25,7 @@ Server Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.1", GitCom
 ```
 The `Server Version` should be `v1.10` or above.
 
-2. The result of environment check script (see below) should contain `MountPropagation is enabled!`.
+2. The result of [environment check script](#environment-check-script) should contain `MountPropagation is enabled!`.
 
 ### Requirement for the FlexVolume driver
 
@@ -36,14 +37,13 @@ The `Server Version` should be `v1.10` or above.
 Longhorn now has ability to auto detect the location of Flexvolume directory.
 
 If the Flexvolume driver wasn't installed correctly, there can be a few reasons:
-1. If the kubelet is running inside a container rather than running on the host
-   OS, the host bind-mount path for the Flexvolume driver directory (`--volume-plugin-dir`) must be the same as the path used by the kubelet process.
+1. If `kubelet` is running inside a container rather than running on the host OS, the host bind-mount path for the Flexvolume driver directory (`--volume-plugin-dir`) must be the same as the path used by the kubelet process.
 1.1. For example, if the kubelet is using `/var/lib/kubelet/volumeplugins` as
 the Flexvolume driver directory, then the host bind-mount must exist for that
 directory, as e.g. `/var/lib/kubelet/volumeplugins:/var/lib/kubelet/volumeplugins` or any idential bind-mount for the parent directory.
-1.2. It's because we're detecting the directory used by the `kubelet` command line to decide where to install the driver on the host.
+1.2. It's because Longhorn would detect the directory used by the `kubelet` command line to decide where to install the driver on the host.
 2. The kubelet setting for the Flexvolume driver directory must be the same across all the nodes.
-2.1. We cannot support heterogeneous setup at the moment.
+2.1. Longhorn doesn't support heterogeneous setup at the moment.
 
 ### Environment check script
 
