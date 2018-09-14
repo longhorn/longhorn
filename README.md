@@ -32,59 +32,6 @@ Longhorn is 100% open source software. Project source code is spread across a nu
     1. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
     2. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
 
-## Kubernetes driver Requirements
-
-Longhorn can be used in Kubernetes to provide persistent storage through either Longhorn Container Storage Interface (CSI) driver or Longhorn FlexVolume driver. Longhorn will automatically deploy one of the drivers, depending on the Kubernetes cluster configuration. User can also specify the driver in the deployment yaml file. CSI is preferred.
-
-### Environment check script
-
-We've wrote a script to help user to get enough information to configure the setup correctly.
-
-Before installing, run:
-```
-curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/master/scripts/environment_check.sh | bash
-```
-Example result:
-```
-daemonset.apps/longhorn-environment-check created
-waiting for pods to become ready (0/3)
-all pods ready (3/3)
-
-  MountPropagation is enabled!
-
-cleaning up...
-daemonset.apps "longhorn-environment-check" deleted
-clean up complete
-```
-Please make a note of `MountPropagation` feature gate status.
-
-### Requirement for the CSI driver
-
-1. Kubernetes v1.10+
-   1. CSI is in beta release for this version of Kubernetes, and enabled by default.
-2. Mount propagation feature gate enabled.
-   1. It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
-3. If above conditions cannot be met, Longhorn will fall back to the FlexVolume driver.
-
-### Check if your setup satisfied CSI requirement
-1. Use the following command to check your Kubernetes server version
-```
-kubectl version
-```
-Result:
-```
-Client Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.3", GitCommit:"2bba0127d85d5a46ab4b778548be28623b32d0b0", GitTreeState:"clean", BuildDate:"2018-05-21T09:17:39Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
-Server Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.1", GitCommit:"d4ab47518836c750f9949b9e0d387f20fb92260b", GitTreeState:"clean", BuildDate:"2018-04-12T14:14:26Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
-```
-The `Server Version` should be `v1.10` or above.
-
-2. The result of environment check script should contain `MountPropagation is enabled!`.
-
-### Requirement for the FlexVolume driver
-
-1.  Kubernetes v1.8+
-2.  Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in the every node of the Kubernetes cluster.
-
 # Upgrading
 
 For instructions on how to upgrade Longhorn App v0.1 or v0.2 to v0.3, [see this document](docs/upgrade.md#upgrade).
@@ -97,13 +44,17 @@ Create the deployment of Longhorn in your Kubernetes cluster is straightforward.
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
 
-For Google Kubernetes Engine (GKE) users, see [here](#google-kubernetes-engine) before proceeding.
+For Google Kubernetes Engine (GKE) users, see [here](docs/gke.md) before proceeding.
 
 Longhorn manager and Longhorn driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
 
+One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the environment of the user. User can also override the automatic choice if necessary.  See [here](docs/driver.md) for the detail.
+
+Noted that the volume created and used through one driver won't be recongized by Kubernetes using the other driver. So please don't switch driver (e.g. during upgrade) if you have existing volumes created using the old driver.
+
 When you see those pods have started correctly as follows, you've deployed Longhorn successfully.
 
-Deployed with CSI driver:
+If Longhorn was deployed with CSI driver (csi-attacher/csi-provisioner/longhorn-csi-plugin exists):
 ```
 # kubectl -n longhorn-system get pod
 NAME                                        READY     STATUS    RESTARTS   AGE
@@ -121,7 +72,7 @@ longhorn-manager-8kqf4                      1/1       Running   0          6h
 longhorn-manager-kln4h                      1/1       Running   0          6h
 longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
 ```
-Or with FlexVolume driver:
+Or with FlexVolume driver (longhorn-flexvolume-driver exists):
 ```
 # kubectl -n longhorn-system get pod
 NAME                                        READY     STATUS    RESTARTS   AGE
@@ -153,7 +104,7 @@ If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXT
 
 Longhorn UI would connect to the Longhorn manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
 
-Noted that the current UI is unauthenticated.
+Noted that the current UI is unauthenticated at the moment.
 
 # Use Longhorn with Kubernetes
 
@@ -233,85 +184,7 @@ A backupstore is a NFS server or S3 compatible server.
 
 A backup target represents a backupstore in Longhorn. The backup target can be set at `Settings/General/BackupTarget`
 
-#### Setup AWS S3 backupstore
-1. Create a new bucket in AWS S3.
-
-2. Follow the [guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console) to create a new AWS IAM user, with the following permissions set:
-
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "GrantLonghornBackupstoreAccess0",
-            "Effect": "Allow",
-            "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:ListBucket",
-                "s3:DeleteObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::<your-bucket-name>",
-                "arn:aws:s3:::<your-bucket-name>/*"
-            ]
-        }
-    ]
-}
-```
-
-
-3. Create a Kubernetes secret with a name such as `aws-secret` in the namespace where longhorn is placed(`longhorn-system` by default). Put the following keys in the secret:
-
-```
-AWS_ACCESS_KEY_ID: <your_aws_access_key_id>
-AWS_SECRET_ACCESS_KEY: <your_aws_secret_access_key>
-```
-
-4. Go to the Longhorn UI and set `Settings/General/BackupTarget` to
-```
-s3://<your-bucket-name>@<your-aws-region>/
-```
-Pay attention that you should have `/` at the end, otherwise you will get an error.
-
-5.  Set `Settings/General/BackupTargetSecret` to
-```
-aws-secret
-```
-Your secret name with AWS keys from 3rd point.
-
-#### Setup a local testing backupstore
-We provides two testing purpose backupstore based on NFS server and Minio S3 server for testing, in `./deploy/backupstores`.
-
-Use following command to setup a Minio S3 server for BackupStore after `longhorn-system` was created.
-```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/minio-backupstore.yaml
-```
-
-Now set `Settings/General/BackupTarget` to
-```
-s3://backupbucket@us-east-1/backupstore
-```
-And `Setttings/General/BackupTargetSecret` to
-```
-minio-secret
-```
-Click the `Backup` tab in the UI, it should report an empty list without error out.
-
-The `minio-secret` yaml looks like this:
-```
-apiVersion: v1
-kind: Secret
-metadata:
-  name: minio-secret
-  namespace: longhorn-system
-type: Opaque
-data:
-  AWS_ACCESS_KEY_ID: bG9uZ2hvcm4tdGVzdC1hY2Nlc3Mta2V5 # longhorn-test-access-key
-  AWS_SECRET_ACCESS_KEY: bG9uZ2hvcm4tdGVzdC1zZWNyZXQta2V5 # longhorn-test-secret-key
-  AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
-```
-Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access.
+See [here](docs/backup.md) for details on how to setup backup target.
 
 ### Recurring snapshot and backup
 Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
@@ -322,13 +195,15 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 
 ### [Multiple disks](./docs/multidisk.md)
 ### [iSCSI](./docs/iscsi.md)
-### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Base image](./docs/base-image.md)
 
-## Additional informations
+## Usage guide
+### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Upgrade from v0.1/v0.2](./docs/upgrade.md)
-### [Troubleshooting](./docs/troubleshooting.md)
+
+## Troubleshooting
+See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 ## Uninstall Longhorn
 
