@@ -1,6 +1,8 @@
 # Backup
 
-The user can setup a S3 or NFS type backupstore to store the backups of Longhorn volumes. We've provided a quick way to setup a local S3 testing backupstore using Minio as well.
+The user can setup a S3 or NFS type backupstore to store the backups of Longhorn volumes.
+
+If the user doesn't have access to AWS S3 or want to give a try first, we've also provided a way to [setup a local S3 testing backupstore](https://github.com/yasker/longhorn/blob/work/docs/backup.md#setup-a-local-testing-backupstore) using [Minio](https://minio.io/).
 
 #### Setup AWS S3 backupstore
 1. Create a new bucket in AWS S3.
@@ -81,4 +83,3 @@ data:
   AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
 ```
 Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access.
-
