@@ -44,15 +44,15 @@ Create the deployment of Longhorn in your Kubernetes cluster is straightforward.
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
 
-For Google Kubernetes Engine (GKE) users, see [here](#google-kubernetes-engine) before proceeding.
+For Google Kubernetes Engine (GKE) users, see [here](docs/gke.md) before proceeding.
 
 Longhorn manager and Longhorn driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
 
-One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the environment of the user. User can also override the automatic choice if necessary.  See [here](docs/driver.md) for detail.
+One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the environment of the user. User can also override the automatic choice if necessary.  See [here](docs/driver.md) for the detail.
 
 When you see those pods have started correctly as follows, you've deployed Longhorn successfully.
 
-Deployed with CSI driver (csi-attacher/csi-provisioner/longhorn-csi-plugin exists):
+If Longhorn was deployed with CSI driver (csi-attacher/csi-provisioner/longhorn-csi-plugin exists):
 ```
 # kubectl -n longhorn-system get pod
 NAME                                        READY     STATUS    RESTARTS   AGE
@@ -102,11 +102,13 @@ If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXT
 
 Longhorn UI would connect to the Longhorn manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
 
-Noted that the current UI is unauthenticated.
+Noted that the current UI is unauthenticated at the moment.
 
 # Use Longhorn with Kubernetes
 
 Longhorn provides the persistent volume directly to Kubernetes through one of the Longhorn drivers. No matter which driver you're using, you can use Kubernetes StorageClass to provision your persistent volumes.
+
+Noted the volume created and used by one driver won't be recongized by Kubernetes using another driver. So please don't switch driver (e.g. during upgrade) if you have existing volumes created using the old driver.
 
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
