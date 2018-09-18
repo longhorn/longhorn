@@ -10,7 +10,7 @@ You can read more details of Longhorn and its design [here](http://rancher.com/m
 
 Longhorn is a work in progress. It's an alpha quality software at the moment. We appreciate your comments as we continue to work on it.
 
-The latest release of Longhorn is v0.3.0.
+The latest release of Longhorn is v0.3.1.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
