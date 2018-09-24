@@ -2,8 +2,15 @@
 
 Here we cover how to upgrade to Longhorn v0.3.1 from all previous releases.
 
-## Upgrading from v0.3.x
+## From v0.3.x
 
+### From Longhorn deployment yaml
+
+If you didn't change any configuration during Longhorn v0.3.0 installation, follow [the official Longhorn Deployment instructions](../README.md#deployment) to upgrade.
+
+Otherwise you will need to download the yaml file from [the official Longhorn Deployment instructions](../README.md#deployment), modify it to your need (e.g. choosing different storage driver), then use `kubectl apply -f` to upgrade.
+
+### From Longhorn App (Rancher Catalog App) 
 On Rancher UI, navigate to the `Catalog Apps` screen and click the
 `Upgrade available` button. Do not change any of the settings. *Do not change
 any of the settings right now.* Click `Upgrade`.
@@ -13,7 +20,7 @@ bottom left corner of the screen changes. Wait until websocket indicators in
 bottom right corner of the screen turn solid green. Navigate to
 `Setting> Engine Image` and wait until the new Engine Image is `Ready`.
 
-## Upgrading from v0.2 and older
+## From v0.2 and older
 
 The upgrade procedure for Longhorn v0.2 and v0.1 deployments is more involved.
 
