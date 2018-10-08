@@ -3,6 +3,7 @@
 ## Common issues
 ### Volume can be attached/detached from UI, but Kubernetes Pod/StatefulSet etc cannot use it
 
+#### Using with Flexvolume Plugin
 Check if volume plugin directory has been set correctly. This is automatically detected unless user explicitly set it.
 
 By default, Kubernetes uses `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/`, as stated in the [official document](https://github.com/kubernetes/community/blob/master/contributors/devel/flexvolume.md#prerequisites).
