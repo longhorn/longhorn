@@ -32,13 +32,13 @@ remove_crd_instances() {
 
 # Delete driver related workloads in specific order
 remove_driver() {
+  kubectl -n ${NAMESPACE} delete deployment.apps/longhorn-driver-deployer
   kubectl -n ${NAMESPACE} delete daemonset.apps/longhorn-csi-plugin
   kubectl -n ${NAMESPACE} delete statefulset.apps/csi-attacher
   kubectl -n ${NAMESPACE} delete service/csi-attacher
   kubectl -n ${NAMESPACE} delete statefulset.apps/csi-provisioner
   kubectl -n ${NAMESPACE} delete service/csi-provisioner
   kubectl -n ${NAMESPACE} delete daemonset.apps/longhorn-flexvolume-driver
-  kubectl -n ${NAMESPACE} delete deployment.apps/longhorn-driver-deployer
 }
 
 # Delete all workloads in the namespace
