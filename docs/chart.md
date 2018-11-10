@@ -23,7 +23,12 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 1. To prevent damage to the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc).
 
-2. From Rancher UI, navigate to `Catalog Apps` tab and delete Longhorn app.
+2. [Rancher v2.0.x users only] From the `Cluster` tab, click `Launch kubectl` and run this command:
+	```
+	curl -sSfL https://raw.githubusercontent.com/rancher/longhorn-manager/master/deploy/scripts/cleanup.sh | bash
+	```
+
+3. From Rancher UI, navigate to `Catalog Apps` tab and delete Longhorn app.
 
 ## Troubleshooting
 
