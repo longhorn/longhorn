@@ -2,6 +2,8 @@
 
 The following document pertains to running Longhorn from the Rancher 2.0 chart.
 
+Noted it's recommended to install Longhorn app in a separate Rancher Project, e.g. `Storage` or `Longhorn`.
+
 ## Source Code
 
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
