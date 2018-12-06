@@ -26,7 +26,7 @@ You can get the log from Longhorn Manager and Engines to help with the troublesh
 
 Since normally there are multiple Longhorn Manager running at the same time, we recommend using [kubetail](https://github.com/johanhaleby/kubetail) which is a great tool to keep track of the logs of multiple pods. You can use:
 ```
-kubetail longhorn-system -n longhorn-system
+kubetail longhorn-manager -n longhorn-system
 ```
 To track the manager logs in real time.
 
