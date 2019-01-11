@@ -237,6 +237,8 @@ approximately the same for all workloads.
 
 ## Upgrade Engine Images
 
+**ALWAYS MAKE BACKUPS BEFORE UPGRADE THE ENGINE IMAGES.**
+
 ### Offline upgrade
 If live upgrade is not available (e.g. from v0.1/v0.2 to v0.3): 
 1. Follow [the detach procedure for relevant workloads](upgrade.md#detach-volumes).
@@ -246,10 +248,15 @@ the default engine shipped with the manager for this release.
 3. Resume all workloads by reversing the [detach volumes procedure](upgrade.md#detach-volumes).
 Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
 
-### Live upgrade (expermential feature)
-Select all the volumes using batch selection. Click batch operation button
-`Upgrade Engine`, choose the engine image available in the list. It's
-the default engine shipped with the manager for this release.
+### Live upgrade (expermential feature since v0.3.3)
+1. Select the volume you want to upgrade.
+2. Click `Upgrade Engine` in the drop down.
+3. Select the engine image you want to upgrade to.
+    1. Normally it's the only engine image in the list, since the UI exclude the current image from the list.
+4. Click OK.
+
+### Clean up the old image
+After you've done upgrade for all the images, select `Settings/Engine Image` from Longhorn UI. Now you should able to remove the non-default image.
 
 ## Note
 
