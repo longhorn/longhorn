@@ -28,7 +28,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 1.  Docker v1.13+
 2.  Kubernetes v1.8 - v1.12
-2.1. Kubernetes v1.13 support is a work-in-progress.
+    1. Kubernetes v1.13 support is a work-in-progress.
 3.  Make sure open-iscsi has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
     1. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
     2. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
