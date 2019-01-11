@@ -260,24 +260,29 @@ See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 ## Uninstall Longhorn
 
-Longhorn stores its data in the Kubernetes API server, in the format of CRD. Longhorn CRDs have finalizers; user should delete the volumes and related resource first to give the managers a chance to clean up.
+1. To prevent damage to the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc).
 
-Before uninstalling Longhorn, the user need to delete all the PVC and PV resources which refer to a Longhorn volume in Kubernetes. Otherwise, Kubernetes may get confused because the underlying storage is gone but the PV/PVC remains.
+2. Create the uninstallation job to cleanly purge CRDs from the system and wait for success:
+  ```
+  kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/uninstall.yaml
+  kubectl -n longhorn-system get job/longhorn-uninstall -w
+  ```
 
-### 1. Run cleanup script
-Note that you will lose all volume data after done this. If you intend on keeping any volume data, make backups (and test restoring a volume) before proceeding.
-
+Example output:
 ```
-curl -sSfL https://raw.githubusercontent.com/rancher/longhorn-manager/master/deploy/scripts/cleanup.sh | bash
+$ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/uninstall.yaml
+job.batch/longhorn-uninstall created
+$ kubectl -n longhorn-system get job/longhorn-uninstall -w
+NAME                 DESIRED   SUCCESSFUL   AGE
+longhorn-uninstall   1         0            3s
+longhorn-uninstall   1         1            45s
+^C
 ```
 
-### 2. Delete remaining components
-
-The cleanup script removes most components, but leaves RBAC related resources and the `longhorn-system` Namespace behind. Run this command to remove these resources.
-
-```
-kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
-```
+3. Remove remaining components:
+  ```
+  kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
+  ```
 
 ## License
 

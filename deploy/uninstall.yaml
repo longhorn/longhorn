@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: longhorn-uninstall
+  namespace: longhorn-system
+spec:
+  activeDeadlineSeconds: 900
+  backoffLimit: 1
+  template:
+    metadata:
+      name: longhorn-uninstall
+    spec:
+      containers:
+      - name: longhorn-uninstall
+        image: rancher/longhorn-manager:v0.3.2
+        imagePullPolicy: Always
+        command:
+        - longhorn-manager
+        - uninstall
+        - --force
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      restartPolicy: OnFailure
+      serviceAccountName: longhorn-service-account
