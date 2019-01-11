@@ -2,8 +2,6 @@
 
 The following document pertains to running Longhorn from the Rancher 2.0 chart.
 
-Noted it's recommended to install Longhorn app in a separate Rancher Project, e.g. `Storage` or `Longhorn`.
-
 ## Source Code
 
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
@@ -14,23 +12,17 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 ## Prerequisites
 
-1. Docker v1.13+
-2. Kubernetes v1.8+ cluster with 1 or more nodes and Mount Propagation feature enabled. If your Kubernetes cluster was provisioned by Rancher v2.0.7+ or later, MountPropagation feature is enabled by default. [Check your Kubernetes environment now](https://github.com/rancher/longhorn#environment-check-script). If MountPropagation is disabled, the Kubernetes Flexvolume driver will be deployed instead of the default CSI driver. Base Image feature will also be disabled if MountPropagation is disabled.
-3. Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
-4. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
+1. Rancher v2.1+
+2. Docker v1.13+
+3. Kubernetes v1.8+ cluster with 1 or more nodes and Mount Propagation feature enabled. If your Kubernetes cluster was provisioned by Rancher v2.0.7+ or later, MountPropagation feature is enabled by default. [Check your Kubernetes environment now](https://github.com/rancher/longhorn#environment-check-script). If MountPropagation is disabled, the Kubernetes Flexvolume driver will be deployed instead of the default CSI driver. Base Image feature will also be disabled if MountPropagation is disabled.
+4. Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
+5. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
 
 ## Uninstallation
 
-**Do not attempt to immediately delete Longhorn App from Rancher UI. Longhorn propagates device mounts which can damage the host if not unmounted properly.** Follow this procedure instead.
-
 1. To prevent damage to the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc).
 
-2. [Rancher v2.0.x users only] From the `Cluster` tab, click `Launch kubectl` and run this command:
-	```
-	curl -sSfL https://raw.githubusercontent.com/rancher/longhorn-manager/master/deploy/scripts/cleanup.sh | bash
-	```
-
-3. From Rancher UI, navigate to `Catalog Apps` tab and delete Longhorn app.
+2. From Rancher UI, navigate to `Catalog Apps` tab and delete Longhorn app.
 
 ## Troubleshooting
 
@@ -59,7 +51,7 @@ By default, Kubernetes uses `/usr/libexec/kubernetes/kubelet-plugins/volume/exec
 
 Some vendors choose to change the directory for various reasons. For example, GKE uses `/home/kubernetes/flexvolume` instead.
 
-If you don't know what the correct directory is for your cluster, please leave the Chart question blank.
+User can find the correct directory by running `ps aux|grep kubelet` on the host and check the `--volume-plugin-dir` parameter. If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used.
 
 ---
 Please see [link](https://github.com/rancher/longhorn) for more information.
