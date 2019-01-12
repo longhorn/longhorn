@@ -178,7 +178,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: rancher/longhorn-manager:v0.3.2
+        image: rancher/longhorn-manager:v0.3.3-rc1
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -187,9 +187,9 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - rancher/longhorn-engine:v0.3.0
+        - rancher/longhorn-engine:v0.3.3-rc1
         - --manager-image
-        - rancher/longhorn-manager:v0.3.2
+        - rancher/longhorn-manager:v0.3.3-rc1
         - --service-account
         - longhorn-service-account
         ports:
@@ -266,7 +266,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: rancher/longhorn-ui:v0.3.2
+        image: rancher/longhorn-ui:v0.3.3-rc1
         ports:
         - containerPort: 8000
         env:
@@ -305,18 +305,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: rancher/longhorn-manager:v0.3.2
+          image: rancher/longhorn-manager:v0.3.3-rc1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: rancher/longhorn-manager:v0.3.2
+          image: rancher/longhorn-manager:v0.3.3-rc1
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - rancher/longhorn-manager:v0.3.2
+          - rancher/longhorn-manager:v0.3.3-rc1
           - --manager-url
           - http://longhorn-backend:9500/v1
           # manually choose "flexvolume" or "csi"

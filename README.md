@@ -265,13 +265,13 @@ See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 2. Create the uninstallation job to cleanly purge CRDs from the system and wait for success:
   ```
-  kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/uninstall.yaml
+  kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
   kubectl -n longhorn-system get job/longhorn-uninstall -w
   ```
 
 Example output:
 ```
-$ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/uninstall.yaml
+$ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
 job.batch/longhorn-uninstall created
 $ kubectl -n longhorn-system get job/longhorn-uninstall -w
 NAME                 DESIRED   SUCCESSFUL   AGE
