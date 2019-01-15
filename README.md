@@ -10,7 +10,7 @@ You can read more details of Longhorn and its design [here](http://rancher.com/m
 
 Longhorn is a work in progress. It's an alpha quality software at the moment. We appreciate your comments as we continue to work on it.
 
-The latest release of Longhorn is **v0.3.2**, shipped with Longhorn Engine **v0.3.0** as the default engine image.
+The latest release of Longhorn is **v0.3.3**, shipped with Longhorn Engine **v0.3.3** as the default engine image.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
@@ -245,6 +245,14 @@ Longhorn supports recurring snapshot and backup for volumes. User only need to s
 
 User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
 
+### Changing replica count of the volumes
+
+The default replica count can be changed in the setting.
+
+Also, when a volume is attached, the user can change the replica count for the volume in the UI.
+
+Longhorn will always try to maintain at least given number of healthy replicas for each volume. If the current healthy replica count is less than specified replica count, Longhorn will start rebuilding new replicas. If the current healthy replica count is more than specified replica count, Longhorn will do nothing. In the later situation, if user delete one or more healthy replicas, or there are healthy replicas failed, as long as the total healthy replica count doesn't dip below the specified replica count, Longhorn won't start rebuilding new replicas.
+
 ## Other features
 
 ### [Multiple disks](./docs/multidisk.md)
@@ -254,7 +262,7 @@ User can find the setting for the recurring snapshot and backup in the `Volume D
 ## Usage guide
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
-### [Upgrade from v0.1/v0.2](./docs/upgrade.md)
+### [Upgrade](./docs/upgrade.md)
 
 ## Troubleshooting
 See [here](./docs/troubleshooting.md) for the troubleshooting guide.
@@ -265,13 +273,13 @@ See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 2. Create the uninstallation job to cleanly purge CRDs from the system and wait for success:
   ```
-  kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/uninstall.yaml
+  kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
   kubectl -n longhorn-system get job/longhorn-uninstall -w
   ```
 
 Example output:
 ```
-$ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/uninstall.yaml
+$ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
 job.batch/longhorn-uninstall created
 $ kubectl -n longhorn-system get job/longhorn-uninstall -w
 NAME                 DESIRED   SUCCESSFUL   AGE
@@ -287,7 +295,7 @@ longhorn-uninstall   1         1            45s
 
 ## License
 
-Copyright (c) 2014-2018  [Rancher Labs, Inc.](http://rancher.com/)
+Copyright (c) 2014-2019  [Rancher Labs, Inc.](http://rancher.com/)
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
