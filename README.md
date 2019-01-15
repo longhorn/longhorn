@@ -10,7 +10,7 @@ You can read more details of Longhorn and its design [here](http://rancher.com/m
 
 Longhorn is a work in progress. It's an alpha quality software at the moment. We appreciate your comments as we continue to work on it.
 
-The latest release of Longhorn is **v0.3.2**, shipped with Longhorn Engine **v0.3.0** as the default engine image.
+The latest release of Longhorn is **v0.3.3**, shipped with Longhorn Engine **v0.3.3** as the default engine image.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
