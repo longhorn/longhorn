@@ -262,7 +262,7 @@ Longhorn will always try to maintain at least given number of healthy replicas f
 ## Usage guide
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
-### [Upgrade from v0.1/v0.2](./docs/upgrade.md)
+### [Upgrade](./docs/upgrade.md)
 
 ## Troubleshooting
 See [here](./docs/troubleshooting.md) for the troubleshooting guide.
@@ -295,7 +295,7 @@ longhorn-uninstall   1         1            45s
 
 ## License
 
-Copyright (c) 2014-2018  [Rancher Labs, Inc.](http://rancher.com/)
+Copyright (c) 2014-2019  [Rancher Labs, Inc.](http://rancher.com/)
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
