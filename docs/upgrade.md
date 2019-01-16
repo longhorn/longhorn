@@ -258,6 +258,8 @@ Live upgrade should only be done with healthy volumes.
 
 During the live upgrade, the user will see double number of the replicas temporarily. After upgrade complete, the user should see the same number of the replicas as before, and the `Engine Image` field of the volume should be updated.
 
+Notice after the live upgrade, Rancher or Kubernetes would still show the old version of image for the engine, and new version for the replicas. It's expected. The upgrade is success if you see the new version of image listed as the volume image in the Volume Detail page.
+
 ### Clean up the old image
 After you've done upgrade for all the images, select `Settings/Engine Image` from Longhorn UI. Now you should able to remove the non-default image.
 
