@@ -83,3 +83,15 @@ data:
   AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
 ```
 Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access.
+
+
+#### NFS backupstore
+
+For using NFS server as backupstore, NFS server must support NFSv4.
+
+The target URL would looks like:
+```
+nfs://longhorn-test-nfs-svc.default:/opt/backupstore
+```
+
+You can find an example NFS backupstore for testing purpose [here](https://github.com/rancher/longhorn/blob/master/deploy/backupstores/nfs-backupstore.yaml). 
