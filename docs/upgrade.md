@@ -250,11 +250,12 @@ Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
 
 ### Live upgrade (beta feature since v0.3.3)
 Live upgrade should only be done with healthy volumes.
-2. Select the volume you want to upgrade.
-3. Click `Upgrade Engine` in the drop down.
-4. Select the engine image you want to upgrade to.
+
+1. Select the volume you want to upgrade.
+2. Click `Upgrade Engine` in the drop down.
+3. Select the engine image you want to upgrade to.
     1. Normally it's the only engine image in the list, since the UI exclude the current image from the list.
-5. Click OK.
+4. Click OK.
 
 During the live upgrade, the user will see double number of the replicas temporarily. After upgrade complete, the user should see the same number of the replicas as before, and the `Engine Image` field of the volume should be updated.
 
