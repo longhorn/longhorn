@@ -263,8 +263,11 @@ Longhorn will always try to maintain at least given number of healthy replicas f
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Upgrade](./docs/upgrade.md)
+### [Deal with Kubernetes node failure](./docs/node-failure.md)
 
 ## Troubleshooting
+You can click `Generate Support Bundle` link at the bottom of the UI to download a zip file contains Longhorn related configuration and logs. 
+
 See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 ## Uninstall Longhorn
