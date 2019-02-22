@@ -16,6 +16,10 @@ User can find the correct directory by running `ps aux|grep kubelet` on the host
 
 There are a few compontents in the Longhorn. Manager, Engine, Driver and UI. All of those components runnings as pods in the `longhorn-system` namespace by default inside the Kubernetes cluster.
 
+Most of the logs are included in the Support Bundle. You can click Generate Support Bundle link at the bottom of the UI to download a zip file contains Longhorn related configuration and logs.
+
+One exception is the `dmesg`, which need to retrieve by the user on each node.
+
 ### UI
 Make use of the Longhorn UI is a good start for the troubleshooting. For example, if Kubernetes cannot mount one volume correctly, after stop the workload, try to attach and mount that volume manually on one node and access the content to check if volume is intact.
 
