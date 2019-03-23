@@ -6,7 +6,7 @@ This command gives users the ability to restore a backup to a `raw` image or a `
 
     1.1 Volume has no base image: Make a copy of `examples/restore_to_file.yaml.template` as e.g. `restore.yaml`.
     
-    1.2 Volume has a base image: Make a copy of `examples/restore_to_file_with_backing_file.yaml.template` as e.g. `restore.yaml`, and set argument `backing-file` by replacing `<BASE_IMAGE>` with your base image, e.g. `rancher/longhorn-test:baseimage-ext4`.
+    1.2 Volume has a base image: Make a copy of `examples/restore_to_file_with_base_image.yaml.template` as e.g. `restore.yaml`, and set argument `backing-file` by replacing `<BASE_IMAGE>` with your base image, e.g. `rancher/longhorn-test:baseimage-ext4`.
     
 2. Set the node which the output file should be placed on by replacing `<NODE_NAME>`, e.g. `node1`.
 
