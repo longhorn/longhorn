@@ -265,6 +265,7 @@ Longhorn will always try to maintain at least given number of healthy replicas f
 ### [Upgrade](./docs/upgrade.md)
 ### [Deal with Kubernetes node failure](./docs/node-failure.md)
 ### [Use CSI driver on RancherOS + RKE](./docs/rancheros.md)
+### [Restore a backup to an image file](./docs/restore-to-file.md)
 
 ## Troubleshooting
 You can click `Generate Support Bundle` link at the bottom of the UI to download a zip file contains Longhorn related configuration and logs.
