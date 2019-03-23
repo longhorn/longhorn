@@ -10,7 +10,7 @@ You can read more details of Longhorn and its design [here](http://rancher.com/m
 
 Longhorn is a work in progress. It's an alpha quality software at the moment. We appreciate your comments as we continue to work on it.
 
-The latest release of Longhorn is **v0.4.0**, shipped with Longhorn Engine **v0.4.0** as the default engine image.
+The latest release of Longhorn is **v0.4.1**, shipped with Longhorn Engine **v0.4.1** as the default engine image.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
@@ -264,6 +264,8 @@ Longhorn will always try to maintain at least given number of healthy replicas f
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Upgrade](./docs/upgrade.md)
 ### [Deal with Kubernetes node failure](./docs/node-failure.md)
+### [Use CSI driver on RancherOS + RKE](./docs/rancheros.md)
+### [Restore a backup to an image file](./docs/restore-to-file.md)
 
 ## Troubleshooting
 You can click `Generate Support Bundle` link at the bottom of the UI to download a zip file contains Longhorn related configuration and logs.
