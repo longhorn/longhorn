@@ -25,15 +25,14 @@
 
   #### 2. Install open-iscsi for each node. 
   ```
-  sudo su
-  apt update
-  apt install -y open-iscsi
+  sudo apt update
+  sudo apt install -y open-iscsi
   ```
   #### 3. Modify configuration for iscsi. 
     
   1. Open config file `/etc/iscsi/iscsid.conf`
   2. Comment `iscsid.startup = /bin/systemctl start iscsid.socket`
-  3. Uncomment `iscsid.startup = /sbin/iscsid`
+  3. Uncomment `iscsid.startup = /sbin/iscsid`
     
 
 
