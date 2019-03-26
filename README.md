@@ -264,7 +264,7 @@ Longhorn will always try to maintain at least given number of healthy replicas f
 ### [Google Kubernetes Engine](./docs/gke.md)
 ### [Upgrade](./docs/upgrade.md)
 ### [Deal with Kubernetes node failure](./docs/node-failure.md)
-### [Use CSI driver on RancherOS + RKE](./docs/rancheros.md)
+### [Use CSI driver on RancherOS/CoreOS + RKE or K3S](./docs/csi-config.md)
 ### [Restore a backup to an image file](./docs/restore-to-file.md)
 
 ## Troubleshooting
