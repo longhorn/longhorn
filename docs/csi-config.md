@@ -7,7 +7,7 @@
 
 
 ## Instruction
-### For Kubernetes v1.11 only 
+### For RancherOS/CoreOS + Kubernetes v1.11 only 
   The following step is not needed for Kubernetes v1.12+.
 
   Add extra_binds for kubelet in RKE `cluster.yml`:
@@ -59,12 +59,12 @@
 ### Common issues
 #### Failed to get arg root-dir: Cannot get kubelet root dir, no related proc for root-dir detection ...
 
-This error is due to Longhorn cannot find out where is the root dir setup for Kubelet, so the CSI plugin installation would fail.
+This error is due to Longhorn cannot find out where is the root dir setup for Kubelet, so the CSI plugin installation failed.
 
 User can override the root-dir detection by manually setting argument `kubelet-root-dir` here: 
 https://github.com/rancher/longhorn/blob/master/deploy/longhorn.yaml#L329
 
-**How to find `root-dir`?**
+#### How to find `root-dir`?
 
 **For RancherOS/CoreOS**
  
@@ -75,7 +75,7 @@ e.g.
 $ ps aux | grep kubelet
 root      3755  4.4  2.9 744404 120020 ?       Ssl  00:45   0:02 kubelet --root-dir=/opt/rke/var/lib/kubelet --volume-plugin-dir=/var/lib/kubelet/volumeplugins
 ```
-You will find `root-dir` in the cmdline of proc `kubelet`. By default it is `/opt/rke/var/lil/kubelet` if you are using RKE.
+You will find `root-dir` in the cmdline of proc `kubelet`. If it's not set, the default value `/var/lib/kubelet` would be used. In the case of RancherOS/CoreOS, the root-dir would be `/opt/rke/var/lib/kubelet` as shown above.
 
 **For K3S**
 
@@ -87,7 +87,7 @@ $ ps uax | grep k3s
 root      4160  0.0  0.0  51420  3948 pts/0    S+   00:55   0:00 sudo /usr/local/bin/k3s server --data-dir /opt/test/kubelet
 root      4161 49.0  4.0 259204 164292 pts/0   Sl+  00:55   0:04 /usr/local/bin/k3s server --data-dir /opt/test/kubelet
 ``` 
-You will find `data-dir` in the cmdline of proc `k3s`. By default it is not set and `/var/lib/rancher/k3s` will be used. Then joining `data-dir` with `/agent/kubelet` you will get the `root-dir`. So the default `root-dir` is `/var/lib/rancher/k3s/agent/kubelet`.
+You will find `data-dir` in the cmdline of proc `k3s`. By default it is not set and `/var/lib/rancher/k3s` will be used. Then joining `data-dir` with `/agent/kubelet` you will get the `root-dir`. So the default `root-dir` for K3S is `/var/lib/rancher/k3s/agent/kubelet`.
 
 
 ## Background 
