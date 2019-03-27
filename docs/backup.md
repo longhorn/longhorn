@@ -45,6 +45,10 @@ s3://<your-bucket-name>@<your-aws-region>/
 ```
 Pay attention that you should have `/` at the end, otherwise you will get an error.
 
+Also please make sure you've set **`<your-aws-region>` in the URL**.
+
+For example, for Google Cloud Storage, you can find the region code here: https://cloud.google.com/storage/docs/locations
+
 5.  Set `Settings/General/BackupTargetSecret` to
 ```
 aws-secret
