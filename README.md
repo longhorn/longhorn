@@ -40,8 +40,8 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 If you're using Rancher 2.1 or newer, you can install Longhorn using Rancher Apps. 
 1. On Rancher UI, select the cluster and project you want to install Longhorn on. We recommended to create a new project e.g. `Storage` for Longhorn.
 2. Navigate to the `Catalog Apps` screen. Select `Launch`, then find Longhorn in the list. Select `View Details`, then click Launch
-    1. Since v0.3.2, Longhorn App will create a Rancher Proxy by default, so Longhorn UI will be authenticated by Rancher server.
-    2. Longhorn will always be installed on `longhorn-system` namespace.
+    1. Longhorn will always be installed on `longhorn-system` namespace.
+    2. Since v0.3.2, Longhorn App will create a Rancher Proxy by default, so Longhorn UI will be authenticated by Rancher server.
 
 ## Using YAML file
 
@@ -76,7 +76,7 @@ longhorn-manager-kln4h                      1/1       Running   0          6h
 longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
 ```
 
-## Access the UI
+### Accessing the UI
 
 Use `kubectl -n longhorn-system get svc` to get the external service IP for UI:
 
@@ -91,7 +91,7 @@ If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXT
 
 Longhorn UI would connect to the Longhorn manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
 
-Noted that the UI is unauthenticated unless you installed Longhorn using Longhorn App on Rancher 2.1+.
+Noted that the UI is unauthenticated when you installed using YAML file.
 
 # Upgrade
 
