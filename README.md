@@ -1,8 +1,10 @@
 # Longhorn
 
-Longhorn is a distributed block storage system for Kubernetes. Longhorn is lightweight, reliable, and easy-to-use. You can deploy Longhorn on an existing Kubernetes cluster with one simple command. Once Longhorn is deployed, it adds persistent volume support to the Kubernetes cluster.
+Longhorn is a cloud native distributed block storage system for Kubernetes.
 
-Longhorn implements distributed block storage using containers and microservices. Longhorn creates a dedicated storage controller for each block device volume and sychronously replicates the volume across multiple replicas stored on multiple nodes. The storage controller and replicas are themselves orchestrated using Kubernetes. Longhorn supports snapshots, backups, and even allows you to schedule recurring snapshots and backups!
+Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one line of command or using Rancher Catalog App/Helm. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
+
+Longhorn implements distributed block storage using containers and microservices. Longhorn creates a dedicated storage controller for each block device volume and sychronously replicates the volume across multiple replicas stored on multiple nodes. The storage controller and replicas are themselves orchestrated using Kubernetes. Longhorn supports snapshots, backups, scheduling recurring snapshots and backups, non disruptive upgrade, and more.
 
 You can read more details of Longhorn and its design [here](http://rancher.com/microservices-block-storage/).
 
@@ -19,16 +21,15 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/rancher/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
 
-# Demo
+![Longhorn UI](https://s3-us-west-1.amazonaws.com/rancher-longhorn/LonghornUI.png)
 
-[![Longhorn Demo](https://asciinema.org/a/PzzOcONC5tUPQpHifi2QmDR2J.png)](https://asciinema.org/a/PzzOcONC5tUPQpHifi2QmDR2J?autoplay=1&loop=1&speed=3)
 # Requirements
 
 ## Minimal Requirements
 
 1.  Docker v1.13+
-2.  Kubernetes v1.8+
-3.  Make sure open-iscsi has been installed in all nodes of the Kubernetes cluster.
+2.  Kubernetes v1.8+. Recommend v1.12+.
+3.  `open-iscsi` has been installed on all the nodes of the Kubernetes cluster.
     1. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
     2. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
     3. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
@@ -41,7 +42,11 @@ If you're using Rancher 2.1 or newer, you can install Longhorn using Rancher Cat
 1. On Rancher UI, select the cluster and project you want to install Longhorn on. We recommended to create a new project e.g. `Storage` for Longhorn.
 2. Navigate to the `Catalog Apps` screen. Select `Launch`, find Longhorn in the list. Select `View Details`, then click `Launch`
     1. Longhorn will always be installed on `longhorn-system` namespace.
-    2. Since v0.3.2, Longhorn App will use Rancher Proxy for UI by default, so Longhorn UI can be authenticated by Rancher server.
+    2. Since v0.3.2, Longhorn App will use Rancher Proxy for UI by default, so Rancher can provide authentication to Longhorn UI.
+    
+After Longhorn has been successfully installed, you can access the Longhorn UI by navigating to the `Catalog Apps` screen.
+
+If there is a new version of Longhorn available, you will also see `Upgrade Available` sign on the `Catalog Apps` screen. You can click `Upgrade` button to upgrade Longhorn manager here. See more about upgrade [here](#upgrade).
 
 ## Using YAML file
 
@@ -83,23 +88,22 @@ Use `kubectl -n longhorn-system get svc` to get the external service IP for UI:
 ```
 NAME                TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
 longhorn-backend    ClusterIP      10.20.248.250   <none>           9500/TCP       58m
-longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123   80:30697/TCP   58m
+longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123  80:30697/TCP   58m
 
 ```
 
 If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhorn-frontend` to access the Longhorn UI. Otherwise the user can use `<node_ip>:<port>` (port is `30697`in the case above) to access the UI.
 
-Longhorn UI would connect to the Longhorn manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
-
-Noted that the UI is unauthenticated when you installed using YAML file.
+Noted that the UI is unauthenticated when you installed Longhorn using YAML file.
 
 # Upgrade
 
-Since Longhorn v0.3.3, upgrade process won't impact the accessibility of existing volumes.
+Since v0.3.3, Longhorn is able to perform non disruptive upgrade, meaning the upgrade process of Longhorn won't impact the accessibility of existing volumes.
 
 If you're upgrading from Longhorn v0.3.0 or newer:
 1. Follow [the same steps for installation](#install) to upgrade Longhorn manager
-2. After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes. 
+2. After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes.
+    1. For non distruptive upgrade, follow [the live upgrade steps here](./docs/upgrade.md#live-upgrade)
 
 For more details about upgrade in Longhorn or upgrade from older versions, [see here](docs/upgrade.md).
 
@@ -177,9 +181,9 @@ See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 ## Uninstall Longhorn
 
-1. To prevent damage to the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc).
+1. To prevent damaging the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc) first.
 
-2. Create the uninstallation job to cleanly purge CRDs from the system and wait for success:
+2. Create the uninstallation job to clean up CRDs from the system and wait for success:
   ```
   kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
   kubectl -n longhorn-system get job/longhorn-uninstall -w
