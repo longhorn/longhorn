@@ -37,7 +37,7 @@ Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
 
 ### Live upgrade
 
-Live upgrade is a beta feature since v0.3.3.
+Live upgrade is available since v0.3.3.
 
 Live upgrade should only be done with healthy volumes.
 
