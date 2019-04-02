@@ -98,8 +98,8 @@ Noted that the UI is unauthenticated when you installed using YAML file.
 Since Longhorn v0.3.3, upgrade process won't impact the accessibility of existing volumes.
 
 If you're upgrading from Longhorn v0.3.0 or newer:
-1. Follow the same [steps for installation](#install) to upgrade Longhorn manager
-2. Follow the steps [here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes. 
+1. Follow [the same steps for installation](#install) to upgrade Longhorn manager
+2. After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes. 
 
 For more details about upgrade in Longhorn or upgrade from older versions, [see here](docs/upgrade.md).
 
