@@ -22,7 +22,7 @@ bottom left corner of the screen changes. Wait until websocket indicators in
 bottom right corner of the screen turn solid green. Navigate to
 `Setting> Engine Image` and wait until the new Engine Image is `Ready`.
 
-## Upgrade Engine Images
+## Upgrade Longhorn engine
 
 **ALWAYS MAKE BACKUPS BEFORE UPGRADE THE ENGINE IMAGES.**
 
