@@ -1,10 +1,40 @@
+# Snapshot
+
+A snapshot in Longhorn represents a volume state at a given time, stored in the same location of volume data on physical disk of the host. Snapshot creation is instant in Longhorn.
+
+User can revert to any previous taken snapshot using the UI. Since Longhorn is a distributed block storage, please make sure the Longhorn volume is umounted from the host when revert to any previous snapshot, otherwise it will confuse the node filesystem and cause filesystem corruption.
+
+#### Note about the block level snapshot
+
+Longhorn is a `crash-consistent` block storage solution.
+
+It's normal for the OS to keep content in the cache before writing into the block layer. However, it also means if the all the replicas are down, then Longhorn may not contain the immediate change before the shutdown, since the content was kept in the OS level cache and hadn't transfered to Longhorn system yet. It's similar to if your desktop was down due to a power outage, after resuming the power, you may find some weird files in the hard drive.
+
+To force the data being written to the block layer at any given moment, the user can run `sync` command on the node manually, or umount the disk. OS would write the content from the cache to the block layer in either situation.
+
 # Backup
+A backup in Longhorn represents a volume state at a given time, stored in the secondary storage (backupstore in Longhorn word) which is outside of the Longhorn system. Backup creation will involving copying the data through the network, so it will take time.
+
+A corresponding snapshot is needed for creating a backup. And user can choose to backup any snapshot previous created.
+
+A backupstore is a NFS server or S3 compatible server.
+
+A backup target represents a backupstore in Longhorn. The backup target can be set at `Settings/General/BackupTarget`
+
+See [here](#set-backuptarget) for details on how to setup backup target.
+
+### Recurring snapshot and backup
+Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
+
+User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
+
+## Set BackupTarget
 
 The user can setup a S3 or NFS type backupstore to store the backups of Longhorn volumes.
 
 If the user doesn't have access to AWS S3 or want to give a try first, we've also provided a way to [setup a local S3 testing backupstore](https://github.com/yasker/longhorn/blob/work/docs/backup.md#setup-a-local-testing-backupstore) using [Minio](https://minio.io/).
 
-#### Setup AWS S3 backupstore
+### Setup AWS S3 backupstore
 1. Create a new bucket in AWS S3.
 
 2. Follow the [guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console) to create a new AWS IAM user, with the following permissions set:
@@ -55,7 +85,7 @@ aws-secret
 ```
 Your secret name with AWS keys from 3rd point.
 
-#### Setup a local testing backupstore
+### Setup a local testing backupstore
 We provides two testing purpose backupstore based on NFS server and Minio S3 server for testing, in `./deploy/backupstores`.
 
 Use following command to setup a Minio S3 server for BackupStore after `longhorn-system` was created.
@@ -89,7 +119,7 @@ data:
 Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access.
 
 
-#### NFS backupstore
+### NFS backupstore
 
 For using NFS server as backupstore, NFS server must support NFSv4.
 
