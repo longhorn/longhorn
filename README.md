@@ -53,11 +53,11 @@ kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deplo
 
 For Google Kubernetes Engine (GKE) users, see [here](docs/gke.md) before proceeding.
 
-Longhorn manager and Longhorn driver will be deployed as daemonsets in a separate namespace called `longhorn-system`, as you can see in the yaml file.
+Longhorn will be installed in the namespace `longhorn-system`
 
-One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the environment of the user. User can also override the automatic choice if necessary.  See [here](docs/driver.md) for the detail.
+One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the environment. See [here](docs/driver.md) for the detail.
 
-When you see those pods have started correctly as follows, you've deployed Longhorn successfully. The following shows a success deployment with CSI driver:
+The following shows a success deployment with CSI driver:
 ```
 # kubectl -n longhorn-system get pod
 NAME                                        READY     STATUS    RESTARTS   AGE
