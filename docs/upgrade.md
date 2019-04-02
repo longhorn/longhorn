@@ -35,7 +35,10 @@ the default engine shipped with the manager for this release.
 3. Resume all workloads by reversing the [detach volumes procedure](upgrade.md#detach-volumes).
 Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
 
-### Live upgrade (beta feature since v0.3.3)
+### Live upgrade
+
+Live upgrade is a beta feature since v0.3.3.
+
 Live upgrade should only be done with healthy volumes.
 
 1. Select the volume you want to upgrade.
