@@ -4,6 +4,8 @@
 
 Longhorn can be used in Kubernetes to provide persistent storage through either Longhorn Container Storage Interface (CSI) driver or Longhorn FlexVolume driver. Longhorn will automatically deploy one of the drivers, depending on the Kubernetes cluster configuration. User can also specify the driver in the deployment yaml file. CSI is preferred.
 
+Noted that the volume created and used through one driver won't be recongized by Kubernetes using the other driver. So please don't switch driver (e.g. during upgrade) if you have existing volumes created using the old driver. If you really want to switch driver, see [here](upgrade.md#migrating-between-flexvolume-and-csi-driver) for instructions.
+
 ### Requirement for the CSI driver
 
 1. Kubernetes v1.10+
