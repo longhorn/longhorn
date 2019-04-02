@@ -6,12 +6,6 @@ There are normally two steps in the upgrade process: first upgrade Longhorn mana
 
 ## Upgrade Longhorn manager from v0.3.0 or newer
 
-### From Longhorn deployment yaml
-
-If you didn't change any configuration during Longhorn v0.3.0 installation, follow [the official Longhorn Deployment instructions](../README.md#deployment) to upgrade.
-
-Otherwise you will need to download the yaml file from [the official Longhorn Deployment instructions](../README.md#deployment), modify it to your need, then use `kubectl apply -f` to upgrade.
-
 ### From Longhorn App (Rancher Catalog App) 
 On Rancher UI, navigate to the `Catalog Apps` screen and click the
 `Upgrade available` button. Do not change any of the settings. *Do not change
@@ -20,14 +14,20 @@ any of the settings right now.* Click `Upgrade`.
 Access Longhorn UI. Periodically refresh the page until the version in the
 bottom left corner of the screen changes. Wait until websocket indicators in
 bottom right corner of the screen turn solid green. Navigate to
-`Setting> Engine Image` and wait until the new Engine Image is `Ready`.
+`Setting->Engine Image` and wait until the new Engine Image is `Ready`.
+
+### From Longhorn deployment yaml
+
+If you didn't change any configuration during Longhorn installation, follow [the official Longhorn Deployment instructions](../README.md#deployment) to upgrade.
+
+Otherwise you will need to download the yaml file from [the official Longhorn Deployment instructions](../README.md#deployment), modify it to your need, then use `kubectl apply -f` to upgrade.
 
 ## Upgrade Longhorn engine
 
 **ALWAYS MAKE BACKUPS BEFORE UPGRADE THE ENGINE IMAGES.**
 
 ### Offline upgrade
-If live upgrade is not available (e.g. from v0.1/v0.2 to v0.3), or the volume stuck in degraded state: 
+If live upgrade is not available (e.g. before v0.3.3), or the volume stuck in degraded state: 
 1. Follow [the detach procedure for relevant workloads](upgrade.md#detach-volumes).
 2.  Select all the volumes using batch selection. Click batch operation button
 `Upgrade Engine`, choose the engine image available in the list. It's
