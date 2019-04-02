@@ -6,6 +6,8 @@ Longhorn can be used in Kubernetes to provide persistent storage through either 
 
 Noted that the volume created and used through one driver won't be recongized by Kubernetes using the other driver. So please don't switch driver (e.g. during upgrade) if you have existing volumes created using the old driver. If you really want to switch driver, see [here](upgrade.md#migrating-between-flexvolume-and-csi-driver) for instructions.
 
+## CSI
+
 ### Requirement for the CSI driver
 
 1. Kubernetes v1.10+
@@ -28,6 +30,27 @@ Server Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.1", GitCom
 The `Server Version` should be `v1.10` or above.
 
 2. The result of [environment check script](#environment-check-script) should contain `MountPropagation is enabled!`.
+
+### Environment check script
+
+We've wrote a script to help user to gather enough information about the factors
+
+Before installing, run:
+```
+curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/master/scripts/environment_check.sh | bash
+```
+Example result:
+```
+daemonset.apps/longhorn-environment-check created
+waiting for pods to become ready (0/3)
+all pods ready (3/3)
+
+  MountPropagation is enabled!
+
+cleaning up...
+daemonset.apps "longhorn-environment-check" deleted
+clean up complete
+```
 
 ### Successful CSI deployment example
 ```
@@ -52,12 +75,16 @@ longhorn-manager-snb9t                      1/1       Running   0          9d
 longhorn-ui-67b9b6887f-n7x9q                1/1       Running   0          9d
 ```
 
+For more information on CSI configuration, see [here](csi-config.md).
+
+
+## Flexvolume
 ### Requirement for the FlexVolume driver
 
 1.  Kubernetes v1.8+
 2.  Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in the every node of the Kubernetes cluster.
 
-#### Flexvolume driver directory
+### Flexvolume driver directory
 
 Longhorn now has ability to auto detect the location of Flexvolume directory.
 
@@ -69,27 +96,6 @@ directory, as e.g. `/var/lib/kubelet/volumeplugins:/var/lib/kubelet/volumeplugin
 1.2. It's because Longhorn would detect the directory used by the `kubelet` command line to decide where to install the driver on the host.
 2. The kubelet setting for the Flexvolume driver directory must be the same across all the nodes.
 2.1. Longhorn doesn't support heterogeneous setup at the moment.
-
-### Environment check script
-
-We've wrote a script to help user to gather enough information about the factors
-
-Before installing, run:
-```
-curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/master/scripts/environment_check.sh | bash
-```
-Example result:
-```
-daemonset.apps/longhorn-environment-check created
-waiting for pods to become ready (0/3)
-all pods ready (3/3)
-
-  MountPropagation is enabled!
-
-cleaning up...
-daemonset.apps "longhorn-environment-check" deleted
-clean up complete
-```
 
 ### Successful Flexvolume deployment example
 ```
