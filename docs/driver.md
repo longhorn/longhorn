@@ -29,6 +29,29 @@ The `Server Version` should be `v1.10` or above.
 
 2. The result of [environment check script](#environment-check-script) should contain `MountPropagation is enabled!`.
 
+### Successful CSI deployment example
+```
+$ kubectl -n longhorn-system get pod
+NAME                                        READY     STATUS    RESTARTS   AGE
+csi-attacher-6fdc77c485-8wlpg               1/1       Running   0          9d
+csi-attacher-6fdc77c485-psqlr               1/1       Running   0          9d
+csi-attacher-6fdc77c485-wkn69               1/1       Running   0          9d
+csi-provisioner-78f7db7d6d-rj9pr            1/1       Running   0          9d
+csi-provisioner-78f7db7d6d-sgm6w            1/1       Running   0          9d
+csi-provisioner-78f7db7d6d-vnjww            1/1       Running   0          9d
+engine-image-ei-6e2b0e32-2p9nk              1/1       Running   0          9d
+engine-image-ei-6e2b0e32-s8ggt              1/1       Running   0          9d
+engine-image-ei-6e2b0e32-wgkj5              1/1       Running   0          9d
+longhorn-csi-plugin-g8r4b                   2/2       Running   0          9d
+longhorn-csi-plugin-kbxrl                   2/2       Running   0          9d
+longhorn-csi-plugin-wv6sb                   2/2       Running   0          9d
+longhorn-driver-deployer-788984b49c-zzk7b   1/1       Running   0          9d
+longhorn-manager-nr5rs                      1/1       Running   0          9d
+longhorn-manager-rd4k5                      1/1       Running   0          9d
+longhorn-manager-snb9t                      1/1       Running   0          9d
+longhorn-ui-67b9b6887f-n7x9q                1/1       Running   0          9d
+```
+
 ### Requirement for the FlexVolume driver
 
 1.  Kubernetes v1.8+
@@ -66,4 +89,21 @@ all pods ready (3/3)
 cleaning up...
 daemonset.apps "longhorn-environment-check" deleted
 clean up complete
+```
+
+### Successful Flexvolume deployment example
+```
+# kubectl -n longhorn-system get pod
+NAME                                        READY     STATUS    RESTARTS   AGE
+engine-image-ei-57b85e25-8v65d              1/1       Running   0          7d
+engine-image-ei-57b85e25-gjjs6              1/1       Running   0          7d
+engine-image-ei-57b85e25-t2787              1/1       Running   0          7d
+longhorn-driver-deployer-5469b87b9c-b9gm7   1/1       Running   0          2h
+longhorn-flexvolume-driver-lth5g            1/1       Running   0          2h
+longhorn-flexvolume-driver-tpqf7            1/1       Running   0          2h
+longhorn-flexvolume-driver-v9mrj            1/1       Running   0          2h
+longhorn-manager-7x8x8                      1/1       Running   0          9h
+longhorn-manager-8kqf4                      1/1       Running   0          9h
+longhorn-manager-kln4h                      1/1       Running   0          9h
+longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
 ```
