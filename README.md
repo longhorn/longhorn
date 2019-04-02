@@ -27,72 +27,25 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 ## Minimal Requirements
 
 1.  Docker v1.13+
-2.  Kubernetes v1.8 - v1.12
-    1. Kubernetes v1.13 support is a work-in-progress.
-3.  Make sure open-iscsi has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
-    1. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
-    2. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
+2.  Kubernetes v1.8+
+3.  Make sure open-iscsi has been installed in all nodes of the Kubernetes cluster.
+    1. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
+    2. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
+    3. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
 
-## Kubernetes driver Requirements
+# Install
 
-Longhorn can be used in Kubernetes to provide persistent storage through either Longhorn Container Storage Interface (CSI) driver or Longhorn Flexvolume driver. Longhorn will automatically deploy one of the drivers, depending on the Kubernetes cluster configuration. User can also specify the driver in the deployment yaml file. CSI is preferred.
+## Using Longhorn App on Rancher 2.1 or newer
 
-### Environment check script
+If you're using Rancher 2.1 or newer, you can install Longhorn using Rancher Apps. 
+1. On Rancher UI, select the cluster and project you want to install Longhorn on. We recommended to create a new project e.g. `Storage` for Longhorn.
+2. Navigate to the `Catalog Apps` screen. Select `Launch`, then find Longhorn in the list. Select `View Details`, then click Launch
+    1. Since v0.3.2, Longhorn App will create a Rancher Proxy by default, so Longhorn UI will be authenticated by Rancher server.
+    2. Longhorn will always be installed on `longhorn-system` namespace.
 
-We've wrote a script to help user to get enough information to configure the setup correctly.
+## Using YAML file
 
-Before installing, run:
-```
-curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/master/scripts/environment_check.sh | bash
-```
-Example result:
-```
-daemonset.apps/longhorn-environment-check created
-waiting for pods to become ready (0/3)
-all pods ready (3/3)
-
-  MountPropagation is enabled!
-
-cleaning up...
-daemonset.apps "longhorn-environment-check" deleted
-clean up complete
-```
-Please make a note of `MountPropagation` feature gate status.
-
-### Requirement for the CSI driver
-
-1. Kubernetes v1.10+
-   1. CSI is in beta release for this version of Kubernetes, and enabled by default.
-2. Mount propagation feature gate enabled.
-   1. It's enabled by default in Kubernetes v1.10. But some early versions of RKE may not enable it.
-3. If above conditions cannot be met, Longhorn will fall back to the Flexvolume driver.
-
-### Check if your setup satisfied CSI requirement
-1. Use the following command to check your Kubernetes server version
-```
-kubectl version
-```
-Result:
-```
-Client Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.3", GitCommit:"2bba0127d85d5a46ab4b778548be28623b32d0b0", GitTreeState:"clean", BuildDate:"2018-05-21T09:17:39Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
-Server Version: version.Info{Major:"1", Minor:"10", GitVersion:"v1.10.1", GitCommit:"d4ab47518836c750f9949b9e0d387f20fb92260b", GitTreeState:"clean", BuildDate:"2018-04-12T14:14:26Z", GoVersion:"go1.9.3", Compiler:"gc", Platform:"linux/amd64"}
-```
-The `Server Version` should be `v1.10` or above.
-
-2. The result of environment check script should contain `MountPropagation is enabled!`.
-
-### Requirement for the Flexvolume driver
-
-1.  Kubernetes v1.8+
-2.  Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in the every node of the Kubernetes cluster.
-
-# Upgrading
-
-For instructions on how to upgrade Longhorn App v0.1 or v0.2 to v0.3, [see this document](docs/upgrade.md#upgrade).
-
-# Deployment
-
-Create the deployment of Longhorn in your Kubernetes cluster is straightforward.
+You can install the latest Longhorn in your Kubernetes cluster using following command:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
@@ -104,11 +57,7 @@ Longhorn manager and Longhorn driver will be deployed as daemonsets in a separat
 
 One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the environment of the user. User can also override the automatic choice if necessary.  See [here](docs/driver.md) for the detail.
 
-Noted that the volume created and used through one driver won't be recongized by Kubernetes using the other driver. So please don't switch driver (e.g. during upgrade) if you have existing volumes created using the old driver.
-
-When you see those pods have started correctly as follows, you've deployed Longhorn successfully.
-
-If Longhorn was deployed with CSI driver (csi-attacher/csi-provisioner/longhorn-csi-plugin exists):
+When you see those pods have started correctly as follows, you've deployed Longhorn successfully. The following shows a success deployment with CSI driver:
 ```
 # kubectl -n longhorn-system get pod
 NAME                                        READY     STATUS    RESTARTS   AGE
@@ -124,22 +73,6 @@ longhorn-driver-deployer-7b5bdcccc8-fbncl   1/1       Running   0          6h
 longhorn-manager-7x8x8                      1/1       Running   0          6h
 longhorn-manager-8kqf4                      1/1       Running   0          6h
 longhorn-manager-kln4h                      1/1       Running   0          6h
-longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
-```
-Or with FlexVolume driver (longhorn-flexvolume-driver exists):
-```
-# kubectl -n longhorn-system get pod
-NAME                                        READY     STATUS    RESTARTS   AGE
-engine-image-ei-57b85e25-8v65d              1/1       Running   0          7d
-engine-image-ei-57b85e25-gjjs6              1/1       Running   0          7d
-engine-image-ei-57b85e25-t2787              1/1       Running   0          7d
-longhorn-driver-deployer-5469b87b9c-b9gm7   1/1       Running   0          2h
-longhorn-flexvolume-driver-lth5g            1/1       Running   0          2h
-longhorn-flexvolume-driver-tpqf7            1/1       Running   0          2h
-longhorn-flexvolume-driver-v9mrj            1/1       Running   0          2h
-longhorn-manager-7x8x8                      1/1       Running   0          9h
-longhorn-manager-8kqf4                      1/1       Running   0          9h
-longhorn-manager-kln4h                      1/1       Running   0          9h
 longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
 ```
 
@@ -158,11 +91,19 @@ If the Kubernetes Cluster supports creating LoadBalancer, user can then use `EXT
 
 Longhorn UI would connect to the Longhorn manager API, provides the overview of the system, the volume operations, and the snapshot/backup operations. It's highly recommended for the user to check out Longhorn UI.
 
-Noted that the current UI is unauthenticated at the moment.
+Noted that the UI is unauthenticated unless you installed Longhorn using Longhorn App on Rancher 2.1+.
 
-# Use Longhorn with Kubernetes
+# Upgrade
 
-Longhorn provides the persistent volume directly to Kubernetes through one of the Longhorn drivers. No matter which driver you're using, you can use Kubernetes StorageClass to provision your persistent volumes.
+Since Longhorn v0.3.3, upgrade process won't impact the accessibility of existing volumes.
+
+If you're upgrading from Longhorn v0.3.0 or newer:
+1. Follow the same [steps for installation](#install) to upgrade Longhorn manager
+2. Follow the steps [here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes. 
+
+For more details about upgrade in Longhorn or upgrade from older versions, [see here](docs/upgrade.md).
+
+# Use Longhorn volumes for Kubernetes 
 
 Use following command to create a default Longhorn StorageClass named `longhorn`.
 
@@ -215,54 +156,16 @@ spec:
 ```
 More examples are available at `./examples/`
 
-# Highlight features
-### Snapshot
-A snapshot in Longhorn represents a volume state at a given time, stored in the same location of volume data on physical disk of the host. Snapshot creation is instant in Longhorn.
-
-User can revert to any previous taken snapshot using the UI. Since Longhorn is a distributed block storage, please make sure the Longhorn volume is umounted from the host when revert to any previous snapshot, otherwise it will confuse the node filesystem and cause filesystem corruption.
-
-#### Note about the block level snapshot
-
-Longhorn is a `crash-consistent` block storage solution.
-
-It's normal for the OS to keep content in the cache before writing into the block layer. However, it also means if the all the replicas are down, then Longhorn may not contain the immediate change before the shutdown, since the content was kept in the OS level cache and hadn't transfered to Longhorn system yet. It's similar to if your desktop was down due to a power outage, after resuming the power, you may find some weird files in the hard drive.
-
-To force the data being written to the block layer at any given moment, the user can run `sync` command on the node manually, or umount the disk. OS would write the content from the cache to the block layer in either situation.
-
-### Backup
-A backup in Longhorn represents a volume state at a given time, stored in the secondary storage (backupstore in Longhorn word) which is outside of the Longhorn system. Backup creation will involving copying the data through the network, so it will take time.
-
-A corresponding snapshot is needed for creating a backup. And user can choose to backup any snapshot previous created.
-
-A backupstore is a NFS server or S3 compatible server.
-
-A backup target represents a backupstore in Longhorn. The backup target can be set at `Settings/General/BackupTarget`
-
-See [here](docs/backup.md) for details on how to setup backup target.
-
-### Recurring snapshot and backup
-Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
-
-User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
-
-### Changing replica count of the volumes
-
-The default replica count can be changed in the setting.
-
-Also, when a volume is attached, the user can change the replica count for the volume in the UI.
-
-Longhorn will always try to maintain at least given number of healthy replicas for each volume. If the current healthy replica count is less than specified replica count, Longhorn will start rebuilding new replicas. If the current healthy replica count is more than specified replica count, Longhorn will do nothing. In the later situation, if user delete one or more healthy replicas, or there are healthy replicas failed, as long as the total healthy replica count doesn't dip below the specified replica count, Longhorn won't start rebuilding new replicas.
-
-## Other features
-
+## Feature manuals
+### [Snapshot and Backup](./docs/snapshot-backup.md)
+### [Volume operations](./docs/volume.md)
 ### [Multiple disks](./docs/multidisk.md)
 ### [iSCSI](./docs/iscsi.md)
 ### [Base image](./docs/base-image.md)
 
-## Usage guide
+## Usage guides
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
-### [Upgrade](./docs/upgrade.md)
 ### [Deal with Kubernetes node failure](./docs/node-failure.md)
 ### [Use CSI driver on RancherOS/CoreOS + RKE or K3S](./docs/csi-config.md)
 ### [Restore a backup to an image file](./docs/restore-to-file.md)
