@@ -37,9 +37,9 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 ## Using Longhorn App on Rancher 2.1 or newer
 
-If you're using Rancher 2.1 or newer, you can install Longhorn using Rancher Apps. 
+If you're using Rancher 2.1 or newer, you can install Longhorn using Rancher Catalog Apps. 
 1. On Rancher UI, select the cluster and project you want to install Longhorn on. We recommended to create a new project e.g. `Storage` for Longhorn.
-2. Navigate to the `Catalog Apps` screen. Select `Launch`, then find Longhorn in the list. Select `View Details`, then click Launch
+2. Navigate to the `Catalog Apps` screen. Select `Launch`, find Longhorn in the list. Select `View Details`, then click `Launch`
     1. Longhorn will always be installed on `longhorn-system` namespace.
     2. Since v0.3.2, Longhorn App will create a Rancher Proxy by default, so Longhorn UI will be authenticated by Rancher server.
 
