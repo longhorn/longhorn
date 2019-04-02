@@ -1,8 +1,10 @@
 # Upgrade
 
-Here we cover how to upgrade to Longhorn v0.3.1 from all previous releases.
+Here we cover how to upgrade to latest Longhorn from all previous releases.
 
-## From v0.3.x
+There are normally two steps in the upgrade process: first upgrade Longhorn manager to the latest version, then upgrade Longhorn engine to the latest version using latest Longhorn manager.
+
+## Upgrade Longhorn manager from v0.3.0 or newer
 
 ### From Longhorn deployment yaml
 
@@ -20,7 +22,72 @@ bottom left corner of the screen changes. Wait until websocket indicators in
 bottom right corner of the screen turn solid green. Navigate to
 `Setting> Engine Image` and wait until the new Engine Image is `Ready`.
 
-## From v0.2 and older
+## Upgrade Engine Images
+
+**ALWAYS MAKE BACKUPS BEFORE UPGRADE THE ENGINE IMAGES.**
+
+### Offline upgrade
+If live upgrade is not available (e.g. from v0.1/v0.2 to v0.3), or the volume stuck in degraded state: 
+1. Follow [the detach procedure for relevant workloads](upgrade.md#detach-volumes).
+2.  Select all the volumes using batch selection. Click batch operation button
+`Upgrade Engine`, choose the engine image available in the list. It's
+the default engine shipped with the manager for this release.
+3. Resume all workloads by reversing the [detach volumes procedure](upgrade.md#detach-volumes).
+Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
+
+### Live upgrade (beta feature since v0.3.3)
+Live upgrade should only be done with healthy volumes.
+
+1. Select the volume you want to upgrade.
+2. Click `Upgrade Engine` in the drop down.
+3. Select the engine image you want to upgrade to.
+    1. Normally it's the only engine image in the list, since the UI exclude the current image from the list.
+4. Click OK.
+
+During the live upgrade, the user will see double number of the replicas temporarily. After upgrade complete, the user should see the same number of the replicas as before, and the `Engine Image` field of the volume should be updated.
+
+Notice after the live upgrade, Rancher or Kubernetes would still show the old version of image for the engine, and new version for the replicas. It's expected. The upgrade is success if you see the new version of image listed as the volume image in the Volume Detail page.
+
+### Clean up the old image
+After you've done upgrade for all the images, select `Settings/Engine Image` from Longhorn UI. Now you should able to remove the non-default image.
+
+## Migrating Between Flexvolume and CSI Driver
+
+Ensure your Longhorn App is up to date. Follow the relevant upgrade procedure
+above before proceeding.
+
+The migration path between drivers requires backing up and restoring each
+volume and will incur both API and workload downtime. This can be a tedious
+process; consider what benefit switching drivers will bring before proceeding.
+Consider deleting unimportant workloads using the old driver to reduce effort.
+
+### Flexvolume to CSI
+
+CSI is the newest out-of-tree Kubernetes storage interface.
+
+1. [Backup existing volumes](upgrade.md#backup-existing-volumes).
+2. On Rancher UI, navigate to the `Catalog Apps` screen, locate the `Longhorn`
+app and click the `Up to date` button. Under `Kubernetes Driver`, select
+`flexvolume`. We recommend leaving `Flexvolume Path` empty. Click `Upgrade`.
+3. Restore each volume by following the [CSI restore procedure](restore_statefulset.md#csi-instructions).
+This procedure is tailored to the StatefulSet workload, but the process is
+approximately the same for all workloads.
+
+### CSI to Flexvolume
+
+If you would like to migrate from CSI to Flexvolume driver, we are interested
+to hear from you. CSI is the newest out-of-tree storage interface and we
+expect it to replace Flexvolume's exec-based model.
+
+1. [Backup existing volumes](upgrade.md#backup-existing-volumes).
+2. On Rancher UI, navigate to the `Catalog Apps` screen, locate the `Longhorn`
+app and click the `Up to date` button. Under `Kubernetes Driver`, select
+`flexvolume`. We recommend leaving `Flexvolume Path` empty. Click `Upgrade`.
+3. Restore each volume by following the [Flexvolume restore procedure](restore_statefulset.md#flexvolume-instructions).
+This procedure is tailored to the StatefulSet workload, but the process is
+approximately the same for all workloads.
+
+## Upgrade Longhorn manager from v0.2 and older
 
 The upgrade procedure for Longhorn v0.2 and v0.1 deployments is more involved.
 
@@ -197,72 +264,6 @@ kubectl -n longhorn-system get pod -w
 On `Setting > General`, set `Backup Target` to the backup target used in
 the previous version. In our example, this is
 `nfs://longhorn-test-nfs-svc.default:/opt/backupstore`.
-
-## Migrating Between Flexvolume and CSI Driver
-
-Ensure your Longhorn App is up to date. Follow the relevant upgrade procedure
-above before proceeding.
-
-The migration path between drivers requires backing up and restoring each
-volume and will incur both API and workload downtime. This can be a tedious
-process; consider what benefit switching drivers will bring before proceeding.
-Consider deleting unimportant workloads using the old driver to reduce effort.
-
-### Flexvolume to CSI
-
-CSI is the newest out-of-tree Kubernetes storage interface.
-
-1. [Backup existing volumes](upgrade.md#backup-existing-volumes).
-2. On Rancher UI, navigate to the `Catalog Apps` screen, locate the `Longhorn`
-app and click the `Up to date` button. Under `Kubernetes Driver`, select
-`flexvolume`. We recommend leaving `Flexvolume Path` empty. Click `Upgrade`.
-3. Restore each volume by following the [CSI restore procedure](restore_statefulset.md#csi-instructions).
-This procedure is tailored to the StatefulSet workload, but the process is
-approximately the same for all workloads.
-
-### CSI to Flexvolume
-
-If you would like to migrate from CSI to Flexvolume driver, we are interested
-to hear from you. CSI is the newest out-of-tree storage interface and we
-expect it to replace Flexvolume's exec-based model.
-
-1. [Backup existing volumes](upgrade.md#backup-existing-volumes).
-2. On Rancher UI, navigate to the `Catalog Apps` screen, locate the `Longhorn`
-app and click the `Up to date` button. Under `Kubernetes Driver`, select
-`flexvolume`. We recommend leaving `Flexvolume Path` empty. Click `Upgrade`.
-3. Restore each volume by following the [Flexvolume restore procedure](restore_statefulset.md#flexvolume-instructions).
-This procedure is tailored to the StatefulSet workload, but the process is
-approximately the same for all workloads.
-
-
-## Upgrade Engine Images
-
-**ALWAYS MAKE BACKUPS BEFORE UPGRADE THE ENGINE IMAGES.**
-
-### Offline upgrade
-If live upgrade is not available (e.g. from v0.1/v0.2 to v0.3), or the volume stuck in degraded state: 
-1. Follow [the detach procedure for relevant workloads](upgrade.md#detach-volumes).
-2.  Select all the volumes using batch selection. Click batch operation button
-`Upgrade Engine`, choose the engine image available in the list. It's
-the default engine shipped with the manager for this release.
-3. Resume all workloads by reversing the [detach volumes procedure](upgrade.md#detach-volumes).
-Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
-
-### Live upgrade (beta feature since v0.3.3)
-Live upgrade should only be done with healthy volumes.
-
-1. Select the volume you want to upgrade.
-2. Click `Upgrade Engine` in the drop down.
-3. Select the engine image you want to upgrade to.
-    1. Normally it's the only engine image in the list, since the UI exclude the current image from the list.
-4. Click OK.
-
-During the live upgrade, the user will see double number of the replicas temporarily. After upgrade complete, the user should see the same number of the replicas as before, and the `Engine Image` field of the volume should be updated.
-
-Notice after the live upgrade, Rancher or Kubernetes would still show the old version of image for the engine, and new version for the replicas. It's expected. The upgrade is success if you see the new version of image listed as the volume image in the Volume Detail page.
-
-### Clean up the old image
-After you've done upgrade for all the images, select `Settings/Engine Image` from Longhorn UI. Now you should able to remove the non-default image.
 
 ## Note
 
