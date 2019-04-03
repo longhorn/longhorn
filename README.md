@@ -104,7 +104,7 @@ Noted that the UI is unauthenticated when you installed Longhorn using YAML file
 
 # Upgrade
 
-Since v0.3.3, Longhorn is able to perform fully-automated non-disruptive upgrade, meaning the upgrade process won't disrupt the continning operation of existing volumes.
+Since v0.3.3, Longhorn is able to perform fully-automated non-disruptive upgrade, meaning the upgrade process won't disrupt  the access to existing volumes.
 
 If you're upgrading from Longhorn v0.3.0 or newer:
 
