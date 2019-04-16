@@ -1,7 +1,7 @@
 # Multiple disks support
 Longhorn supports to use more than one disk on the nodes to store the volume data.
 
-To add a new disk for a node, heading to `Node` tab, select one of the node, and click the edit disk icon.
+To add a new disk for a node, heading to `Node` tab, select one of the node, and select `Edit Disks` in the drop down menu.
 
 By default, `/var/lib/rancher/longhorn` on the host will be used for storing the volume data.
 
