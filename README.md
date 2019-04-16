@@ -171,7 +171,7 @@ More examples are available at `./examples/`
 
 ### [Snapshot and Backup](./docs/snapshot-backup.md)
 ### [Volume operations](./docs/volume.md)
-### [Multiple disks, including changing the default path for storage](./docs/multidisk.md)
+### [Multiple disks, including how to change the default path for storage](./docs/multidisk.md)
 ### [iSCSI](./docs/iscsi.md)
 ### [Base image](./docs/base-image.md)
 
