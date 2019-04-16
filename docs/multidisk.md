@@ -1,6 +1,13 @@
-# Multiple disks support
+# Multiple disks support or changing default /var/lib/rancher/longhorn
 Longhorn supports to use more than one disk on the nodes to store the volume data.
 
+## Changing default path /var/lib/rancher/longhorn
+ 1. In the Longhorn UI (via Catalog Apps / Longhorn), click on the "Node" menu
+ 2. For each node you can set the default path where files are stored on the node :
+  2.1 On the right side, dropdown, then "Edit disks"
+  2.2 Enter the new location you want to mount on the node's hard drive
+
+## Adding new disk
 To add a new disk for a node, heading to `Node` tab, select one of the node, and select `Edit Disks` in the drop down menu.
 
 By default, `/var/lib/rancher/longhorn` on the host will be used for storing the volume data.
