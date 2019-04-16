@@ -171,7 +171,7 @@ More examples are available at `./examples/`
 
 ### [Snapshot and Backup](./docs/snapshot-backup.md)
 ### [Volume operations](./docs/volume.md)
-### [Multiple disks](./docs/multidisk.md)
+### [Multiple disks or change default /var/lib/rancher/longhorn](./docs/multidisk.md)
 ### [iSCSI](./docs/iscsi.md)
 ### [Base image](./docs/base-image.md)
 
