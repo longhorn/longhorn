@@ -193,24 +193,32 @@ See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 2. Create the uninstallation job to clean up CRDs from the system and wait for success:
   ```
   kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
-  kubectl -n longhorn-system get job/longhorn-uninstall -w
+  kubectl get job/longhorn-uninstall -w
   ```
 
 Example output:
 ```
 $ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
+serviceaccount/longhorn-uninstall-service-account created
+clusterrole.rbac.authorization.k8s.io/longhorn-uninstall-role created
+clusterrolebinding.rbac.authorization.k8s.io/longhorn-uninstall-bind created
 job.batch/longhorn-uninstall created
-$ kubectl -n longhorn-system get job/longhorn-uninstall -w
-NAME                 DESIRED   SUCCESSFUL   AGE
-longhorn-uninstall   1         0            3s
-longhorn-uninstall   1         1            45s
+
+$ kubectl get job/longhorn-uninstall -w
+NAME                 COMPLETIONS   DURATION   AGE
+longhorn-uninstall   0/1           3s         3s
+longhorn-uninstall   1/1           20s        20s
 ^C
 ```
 
 3. Remove remaining components:
   ```
   kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
+  kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
   ```
+ 
+Tip: If you try `kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml` first and get stuck there, 
+pressing `Ctrl C` then running `kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml` can also help you remove Longhorn. Finally, don't forget to cleanup remaining components.
 
 ## License
 
