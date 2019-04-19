@@ -135,6 +135,8 @@ You can find an example NFS backupstore for testing purpose [here](https://githu
 
 Longhorn volume supports recurring jobs for automatic backup and snapshot creation.
 
+Users can setup recurring snapshot/backup via Longhorn UI, or Kubernetes StorageClass.
+
 ### Set up recurring jobs for StorageClass
 
 Users can set field `recurringJobs` in StorageClass. Any volume created using this StorageClass will have those recurring jobs automatically set up.
