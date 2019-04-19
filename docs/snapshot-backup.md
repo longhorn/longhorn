@@ -129,3 +129,39 @@ nfs://longhorn-test-nfs-svc.default:/opt/backupstore
 ```
 
 You can find an example NFS backupstore for testing purpose [here](https://github.com/rancher/longhorn/blob/master/deploy/backupstores/nfs-backupstore.yaml). 
+
+
+## Setup recurring snapshot/backup
+
+Longhorn volume supports recurring jobs for automatic backup and snapshot creation.
+
+### Set up recurring jobs for StorageClass
+
+Users can set field `recurringJobs` in StorageClass. Any volume created using this StorageClass will have those recurring jobs automatically set up.
+
+Field `recurringJobs` should follow JSON format. e.g. 
+
+```
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn
+provisioner: rancher.io/longhorn
+parameters:
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "30"
+  fromBackup: ""
+  recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
+                   {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1}]'
+
+```
+
+Explanation:
+
+1. `name`: Name of one job. Do not use duplicate name in one `recurringJobs`. And the length of `name` should be no more than 8 characters.
+
+2. `task`: Type of one job. It supports `snapshot` (periodically create snapshot) or `backup` (periodically create snapshot then do backup) only.
+
+3. `cron`: Cron expression. It tells execution time of one job.
+
+4. `retain`: How many snapshots/backups Longhorn will retain for one job. It should be no less than 1.
