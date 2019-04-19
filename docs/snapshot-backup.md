@@ -23,10 +23,7 @@ A backup target represents a backupstore in Longhorn. The backup target can be s
 
 See [here](#set-backuptarget) for details on how to setup backup target.
 
-### Recurring snapshot and backup
-Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
-
-User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
+Longhorn also supports setting up recurring snapshot/backup jobs for volumes, via Longhorn UI or Kubernetes Storage Class. See [here](#setup-recurring-snapshotbackup) for details.
 
 ## Set BackupTarget
 
@@ -131,15 +128,19 @@ nfs://longhorn-test-nfs-svc.default:/opt/backupstore
 You can find an example NFS backupstore for testing purpose [here](https://github.com/rancher/longhorn/blob/master/deploy/backupstores/nfs-backupstore.yaml). 
 
 
-## Setup recurring snapshot/backup
+# Setup recurring snapshot/backup
 
-Longhorn volume supports recurring jobs for automatic backup and snapshot creation.
+Longhorn supports recurring snapshot and backup for volumes. User only need to set when he/she wish to take the snapshot and/or backup, and how many snapshots/backups needs to be retains, then Longhorn will automatically create snapshot/backup for the user at that time, as long as the volume is attached to a node.
 
 Users can setup recurring snapshot/backup via Longhorn UI, or Kubernetes StorageClass.
 
-### Set up recurring jobs for StorageClass
+## Set up recurring jobs using Longhorn UI
 
-Users can set field `recurringJobs` in StorageClass. Any volume created using this StorageClass will have those recurring jobs automatically set up.
+User can find the setting for the recurring snapshot and backup in the `Volume Detail` page.
+
+## Set up recurring jobs using StorageClass
+
+Users can set field `recurringJobs` in StorageClass as parameters. Any future volumes created using this StorageClass will have those recurring jobs automatically set up.
 
 Field `recurringJobs` should follow JSON format. e.g. 
 
