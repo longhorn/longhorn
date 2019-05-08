@@ -42,6 +42,20 @@ questions:
     description: "Specify kubelet root-dir. Leave blank to autodetect."
     type: string
     label: Kubelet Root Directory
+  - variable: csi.attacherReplicaCount
+    type: int
+    default:
+    min: 1
+    max: 10
+    description: "Specify number of CSI Attacher replica. By default 3."
+    label: Longhorn CSI Attacher replica count
+  - variable: csi.provisionerReplicaCount
+    type: int
+    default:
+    min: 1
+    max: 10
+    description: "Specify number of CSI Provisioner replica. By default 3."
+    label: Longhorn CSI Provisioner replica count
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass"
