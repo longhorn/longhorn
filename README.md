@@ -56,13 +56,22 @@ If there is a new version of Longhorn available, you will see an `Upgrade Availa
 
 ## On any Kubernetes cluster
 
+### Install Longhorn with kubectl
 You can install Longhorn on any Kubernetes cluster using following command:
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
-
 Google Kubernetes Engine (GKE) requires additional setup in order for Longhorn to function properly. If your are a GKE user, read [this page](docs/gke.md) before proceeding.
+
+### Install Longhorn with Helm
+First, you need to initialize Helm locally and [install Tiller into your Kubernetes cluster with RBAC](https://helm.sh/docs/using_helm/#role-based-access-control).
+Then install longhorn:
+```
+helm install https://raw.githubusercontent.com/rancher/longhorn/master/chart --name longhorn --namespace longhorn-system
+```
+
+---
 
 Longhorn will be installed in the namespace `longhorn-system`
 
@@ -108,8 +117,19 @@ Since v0.3.3, Longhorn is able to perform fully-automated non-disruptive upgrade
 
 If you're upgrading from Longhorn v0.3.0 or newer:
 
-1. Follow [the same steps for installation](#install) to upgrade Longhorn manager
-2. After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes.
+## Upgrade Longhorn manager
+
+##### On Kubernetes clusters Managed by Rancher 2.1 or newer
+Follow [the same steps for installation](#install) to upgrade Longhorn manager
+
+##### Using kubectl
+`kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml`
+
+##### Using Helm
+`helm upgrade longhorn https://raw.githubusercontent.com/rancher/longhorn/master/chart`
+
+## Upgrade Longhorn engine
+After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes.
     1. For non distruptive upgrade, follow [the live upgrade steps here](./docs/upgrade.md#live-upgrade)
 
 For more details about upgrade in Longhorn or upgrade from older versions, [see here](docs/upgrade.md).
@@ -188,6 +208,7 @@ See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 # Uninstall Longhorn
 
+### Using kubectl
 1. To prevent damaging the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc) first.
 
 2. Create the uninstallation job to clean up CRDs from the system and wait for success:
@@ -219,6 +240,11 @@ longhorn-uninstall   1/1           20s        20s
  
 Tip: If you try `kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml` first and get stuck there, 
 pressing `Ctrl C` then running `kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml` can also help you remove Longhorn. Finally, don't forget to cleanup remaining components.
+
+### Using Helm
+```
+helm delete longhorn --purge
+```
 
 ## License
 
