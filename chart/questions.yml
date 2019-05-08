@@ -63,6 +63,14 @@ questions:
   type: boolean
   required: true
   label: Default Storage Class
+- variable: persistence.defaultClassReplicaCount
+  description: "Set replica count for default StorageClass"
+  group: "Longhorn Settings"
+  type: int
+  default: 3
+  min: 1
+  max: 10
+  label: Default Storage Class Replica Count
 - variable: ingress.enabled
   default: "false"
   description: "Expose app using Layer 7 Load Balancer - ingress"
