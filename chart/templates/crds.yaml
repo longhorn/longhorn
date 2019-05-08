@@ -1,0 +1,107 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Engine
+  name: engines.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Engine
+    listKind: EngineList
+    plural: engines
+    shortNames:
+    - lhe
+    singular: engine
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Replica
+  name: replicas.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Replica
+    listKind: ReplicaList
+    plural: replicas
+    shortNames:
+    - lhr
+    singular: replica
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Setting
+  name: settings.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Setting
+    listKind: SettingList
+    plural: settings
+    shortNames:
+    - lhs
+    singular: setting
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Volume
+  name: volumes.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Volume
+    listKind: VolumeList
+    plural: volumes
+    shortNames:
+    - lhv
+    singular: volume
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: EngineImage
+  name: engineimages.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: EngineImage
+    listKind: EngineImageList
+    plural: engineimages
+    shortNames:
+    - lhei
+    singular: engineimage
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Node
+  name: nodes.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: Node
+    listKind: NodeList
+    plural: nodes
+    shortNames:
+    - lhn
+    singular: node
+  scope: Namespaced
+  version: v1alpha1
