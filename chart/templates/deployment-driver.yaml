@@ -46,6 +46,10 @@ spec:
                 fieldPath: spec.serviceAccountName
           - name: FLEXVOLUME_DIR
             value: {{ .Values.persistence.flexvolumePath }}
+          {{- if .Values.csi.kubeletRootDir }}
+          - name: KUBELET_ROOT_DIR
+            value: {{ .Values.csi.kubeletRootDir }}
+          {{- end }}
           {{- if .Values.csi.attacherImage }}
           - name: CSI_ATTACHER_IMAGE
             value: {{ .Values.csi.attacherImage }}
