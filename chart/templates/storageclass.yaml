@@ -1,0 +1,17 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn
+  {{- if .Values.persistence.defaultClass }}
+  annotations:
+    storageclass.beta.kubernetes.io/is-default-class: "true"
+  {{- else }}
+  annotations:
+    storageclass.beta.kubernetes.io/is-default-class: "false"
+  {{- end }}
+provisioner: rancher.io/longhorn
+parameters:
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "30"
+  fromBackup: ""
+  baseImage: ""
