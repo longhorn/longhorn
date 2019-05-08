@@ -37,6 +37,11 @@ questions:
     description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Registrar Image
+  - variable: csi.kubeletRootDir
+    default:
+    description: "Specify kubelet root-dir. Leave blank to autodetect."
+    type: string
+    label: Kubelet Root Directory
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass"
