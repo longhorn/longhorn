@@ -27,6 +27,7 @@ persistence:
   # If there is none, the default /usr/libexec/kubernetes/kubelet-plugins/volume/exec/ will be used.
   flexvolumePath:
   defaultClass: true
+  defaultClassReplicaCount: 3
 
 csi:
   attacherImage:
