@@ -22,7 +22,7 @@ spec:
         - uninstall
         - --force
         env:
-        - name: POD_NAMESPACE
+        - name: LONGHORN_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
