@@ -62,4 +62,12 @@ spec:
           - name: CSI_DRIVER_REGISTRAR_IMAGE
             value: {{ .Values.csi.driverRegistrarImage }}
           {{- end }}
+          {{- if .Values.csi.attacherReplicaCount }}
+          - name: CSI_ATTACHER_REPLICA_COUNT
+            value: "{{ .Values.csi.attacherReplicaCount }}"
+          {{- end }}
+          {{- if .Values.csi.provisionerReplicaCount }}
+          - name: CSI_PROVISIONER_REPLICA_COUNT
+            value: "{{ .Values.csi.provisionerReplicaCount }}"
+          {{- end }}
       serviceAccountName: longhorn-service-account
