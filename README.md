@@ -66,9 +66,15 @@ Google Kubernetes Engine (GKE) requires additional setup in order for Longhorn t
 
 ### Install Longhorn with Helm
 First, you need to initialize Helm locally and [install Tiller into your Kubernetes cluster with RBAC](https://helm.sh/docs/using_helm/#role-based-access-control).
-Then install longhorn:
+
+Then download Longhorn repository:
 ```
-helm install https://raw.githubusercontent.com/rancher/longhorn/master/chart --name longhorn --namespace longhorn-system
+git clone https://github.com/rancher/longhorn.git
+```
+
+Now using following command to install Longhorn:
+```
+helm install ./longhorn/chart --name longhorn --namespace longhorn-system
 ```
 
 ---
@@ -123,10 +129,14 @@ If you're upgrading from Longhorn v0.3.0 or newer:
 Follow [the same steps for installation](#install) to upgrade Longhorn manager
 
 ##### Using kubectl
-`kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml`
+```
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml`
+```
 
 ##### Using Helm
-`helm upgrade longhorn https://raw.githubusercontent.com/rancher/longhorn/master/chart`
+```
+helm upgrade longhorn ./longhorn/chart
+```
 
 ## Upgrade Longhorn engine
 After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes.
