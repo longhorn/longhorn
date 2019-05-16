@@ -204,6 +204,7 @@ More examples are available at `./examples/`
 ### [Multiple disks](./docs/multidisk.md)
 ### [iSCSI](./docs/iscsi.md)
 ### [Base image](./docs/base-image.md)
+### [Kubernetes workload in Longhorn UI](./docs/k8s-workload.md)
 
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
