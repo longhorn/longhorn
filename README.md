@@ -211,6 +211,7 @@ More examples are available at `./examples/`
 ### [Deal with Kubernetes node failure](./docs/node-failure.md)
 ### [Use CSI driver on RancherOS/CoreOS + RKE or K3S](./docs/csi-config.md)
 ### [Restore a backup to an image file](./docs/restore-to-file.md)
+### [Disaster Recovery Volume](./docs/dr-volume.md)
 
 # Troubleshooting
 You can click `Generate Support Bundle` link at the bottom of the UI to download a zip file contains Longhorn related configuration and logs.
