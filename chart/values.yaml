@@ -4,11 +4,11 @@
 image:
   longhorn:
     engine: rancher/longhorn-engine
-    engineTag: v0.5.0-rc3
+    engineTag: v0.5.0
     manager: rancher/longhorn-manager
-    managerTag: v0.5.0-rc3
+    managerTag: v0.5.0
     ui: rancher/longhorn-ui
-    uiTag: v0.5.0-rc3
+    uiTag: v0.5.0
   pullPolicy: IfNotPresent
 
 service:
