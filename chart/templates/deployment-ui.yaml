@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: longhorn-ui
+  name: longhorn-ui
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-ui
+  template:
+    metadata:
+      labels:
+        app: longhorn-ui
+    spec:
+      containers:
+      - name: longhorn-ui
+        image: "{{ .Values.image.longhorn.ui }}:{{ .Values.image.longhorn.uiTag }}"
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+          - name: LONGHORN_MANAGER_IP
+            value: "http://longhorn-backend:9500"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: longhorn-ui
+    {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
+    kubernetes.io/cluster-service: "true"
+    {{- end }}
+  name: longhorn-frontend
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
+  type: ClusterIP
+  {{- else }}
+  type: {{ .Values.service.ui.type }}
+  {{- end }}
+  selector:
+    app: longhorn-ui
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    {{- if .Values.service.ui.nodePort }}
+    nodePort: {{ .Values.service.ui.nodePort }}
+    {{- end }}

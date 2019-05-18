@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+  name: longhorn-post-upgrade
+  namespace: {{ .Release.Namespace }}
+spec:
+  activeDeadlineSeconds: 900
+  backoffLimit: 1
+  template:
+    metadata:
+      name: longhorn-post-upgrade
+    spec:
+      containers:
+      - name: longhorn-post-upgrade
+        image: "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
+        imagePullPolicy: Always
+        command:
+        - longhorn-manager
+        - post-upgrade
+        - --from-version
+        - 0.0.1
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      restartPolicy: OnFailure
+      serviceAccountName: longhorn-service-account

@@ -1,8 +1,49 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: longhorn-uninstall-service-account
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: longhorn-uninstall-role
+rules:
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - "*"
+  - apiGroups: [""]
+    resources: ["pods", "persistentvolumes", "persistentvolumeclaims"]
+    verbs: ["*"]
+  - apiGroups: ["apps"]
+    resources: ["daemonsets", "statefulsets", "deployments"]
+    verbs: ["*"]
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["*"]
+  - apiGroups: ["longhorn.rancher.io"]
+    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: longhorn-uninstall-bind
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: longhorn-uninstall-role
+subjects:
+  - kind: ServiceAccount
+    name: longhorn-uninstall-service-account
+    namespace: default
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: longhorn-uninstall
-  namespace: longhorn-system
 spec:
   activeDeadlineSeconds: 900
   backoffLimit: 1
@@ -12,16 +53,14 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: rancher/longhorn-manager:v0.4.1
+        image: rancher/longhorn-manager:v0.5.0
         imagePullPolicy: Always
         command:
         - longhorn-manager
         - uninstall
         - --force
         env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
+        - name: LONGHORN_NAMESPACE
+          value: longhorn-system
       restartPolicy: OnFailure
-      serviceAccountName: longhorn-service-account
+      serviceAccountName: longhorn-uninstall-service-account

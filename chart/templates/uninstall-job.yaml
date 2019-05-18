@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": hook-succeeded
+  name: longhorn-uninstall
+  namespace: {{ .Release.Namespace }}
+spec:
+  activeDeadlineSeconds: 900
+  backoffLimit: 1
+  template:
+    metadata:
+      name: longhorn-uninstall
+    spec:
+      containers:
+      - name: longhorn-uninstall
+        image: "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
+        imagePullPolicy: Always
+        command:
+        - longhorn-manager
+        - uninstall
+        - --force
+        env:
+        - name: LONGHORN_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      restartPolicy: OnFailure
+      serviceAccountName: longhorn-service-account

@@ -1,0 +1,109 @@
+categories:
+- storage
+labels:
+  io.rancher.certified: experimental
+namespace: longhorn-system
+questions:
+- variable: driver
+  default: csi
+  description: "Deploy either the CSI or FlexVolume driver. CSI is newer but requires MountPropagation, a feature enabled by default in Kubernetes v1.10 and later"
+  type: enum
+  options:
+  - csi
+  - flexvolume
+  label: Longhorn Kubernetes Driver
+  group: "Longhorn Settings"
+  show_subquestion_if: flexvolume
+  subquestions:
+  - variable: persistence.flexvolumePath
+    default: ""
+    description: "Leave blank to autodetect. For RKE, use `/var/lib/kubelet/volumeplugins`. For GKE, use `/home/kubernetes/flexvolume/` instead. Users can find the correct directory by running `ps aux|grep kubelet` on the host and check the --volume-plugin-dir parameter.  If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used."
+    type: string
+    label: Longhorn Flexvolume Path
+  show_subquestion_if: csi
+  subquestions:
+  - variable: csi.attacherImage
+    default:
+    description: "Specify CSI attacher image. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Attacher Image
+  - variable: csi.provisionerImage
+    default:
+    description: "Specify CSI provisioner image. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Provisioner Image
+  - variable: csi.driverRegistrarImage
+    default:
+    description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Driver Registrar Image
+  - variable: csi.kubeletRootDir
+    default:
+    description: "Specify kubelet root-dir. Leave blank to autodetect."
+    type: string
+    label: Kubelet Root Directory
+  - variable: csi.attacherReplicaCount
+    type: int
+    default:
+    min: 1
+    max: 10
+    description: "Specify number of CSI Attacher replica. By default 3."
+    label: Longhorn CSI Attacher replica count
+  - variable: csi.provisionerReplicaCount
+    type: int
+    default:
+    min: 1
+    max: 10
+    description: "Specify number of CSI Provisioner replica. By default 3."
+    label: Longhorn CSI Provisioner replica count
+- variable: persistence.defaultClass
+  default: "true"
+  description: "Set as default StorageClass"
+  group: "Longhorn Settings"
+  type: boolean
+  required: true
+  label: Default Storage Class
+- variable: persistence.defaultClassReplicaCount
+  description: "Set replica count for default StorageClass"
+  group: "Longhorn Settings"
+  type: int
+  default: 3
+  min: 1
+  max: 10
+  label: Default Storage Class Replica Count
+- variable: ingress.enabled
+  default: "false"
+  description: "Expose app using Layer 7 Load Balancer - ingress"
+  type: boolean
+  group: "Services and Load Balancing"
+  label: Expose app using Layer 7 Load Balancer
+  show_subquestion_if: true
+  subquestions:
+  - variable: ingress.host
+    default: "xip.io"
+    description: "layer 7 Load Balancer hostname"
+    type: hostname
+    required: true
+    label: Layer 7 Load Balancer Hostname
+- variable: service.ui.type
+  default: "Rancher-Proxy"
+  description: "Define Longhorn UI service type"
+  type: enum
+  options:
+    - "ClusterIP"
+    - "NodePort"
+    - "LoadBalancer"
+    - "Rancher-Proxy"
+  label: Longhorn UI Service
+  show_if: "ingress.enabled=false"
+  group: "Services and Load Balancing"
+  show_subquestion_if: "NodePort"
+  subquestions: 
+  - variable: service.ui.nodePort
+    default: ""
+    description: "NodePort port number(to set explicitly, choose port between 30000-32767)"
+    type: int
+    min: 30000
+    max: 32767
+    show_if: "service.ui.type=NodePort||service.ui.type=LoadBalancer"
+    label: UI Service NodePort number
