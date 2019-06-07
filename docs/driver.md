@@ -90,12 +90,12 @@ Longhorn now has ability to auto detect the location of Flexvolume directory.
 
 If the Flexvolume driver wasn't installed correctly, there can be a few reasons:
 1. If `kubelet` is running inside a container rather than running on the host OS, the host bind-mount path for the Flexvolume driver directory (`--volume-plugin-dir`) must be the same as the path used by the kubelet process.
-1.1. For example, if the kubelet is using `/var/lib/kubelet/volumeplugins` as
+    1. For example, if the kubelet is using `/var/lib/kubelet/volumeplugins` as
 the Flexvolume driver directory, then the host bind-mount must exist for that
 directory, as e.g. `/var/lib/kubelet/volumeplugins:/var/lib/kubelet/volumeplugins` or any idential bind-mount for the parent directory.
-1.2. It's because Longhorn would detect the directory used by the `kubelet` command line to decide where to install the driver on the host.
+    2. It's because Longhorn would detect the directory used by the `kubelet` command line to decide where to install the driver on the host.
 2. The kubelet setting for the Flexvolume driver directory must be the same across all the nodes.
-2.1. Longhorn doesn't support heterogeneous setup at the moment.
+    1. Longhorn doesn't support heterogeneous setup at the moment.
 
 ### Successful Flexvolume deployment example
 ```
