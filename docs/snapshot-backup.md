@@ -92,7 +92,7 @@ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/depl
 
 Now set `Settings/General/BackupTarget` to
 ```
-s3://backupbucket@us-east-1/backupstore
+s3://backupbucket@us-east-1/
 ```
 And `Setttings/General/BackupTargetSecret` to
 ```
