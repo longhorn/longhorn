@@ -130,7 +130,7 @@ Follow [the same steps for installation](#install) to upgrade Longhorn manager
 
 ##### Using kubectl
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml`
+kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
 ```
 
 ##### Using Helm
