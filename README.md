@@ -24,9 +24,9 @@ The latest release of Longhorn is **v0.5.0**.
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
-1. Longhorn engine -- Core controller/replica logic https://github.com/rancher/longhorn-engine
-1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/rancher/longhorn-manager
-1. Longhorn UI -- Dashboard https://github.com/rancher/longhorn-ui
+1. Longhorn engine -- Core controller/replica logic https://github.com/longhorn/longhorn-engine
+1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/longhorn/longhorn-manager
+1. Longhorn UI -- Dashboard https://github.com/longhorn/longhorn-ui
 
 ![Longhorn UI](https://s3-us-west-1.amazonaws.com/rancher-longhorn/Longhorn_UI.png)
 
@@ -60,7 +60,7 @@ If there is a new version of Longhorn available, you will see an `Upgrade Availa
 You can install Longhorn on any Kubernetes cluster using following command:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
 ```
 Google Kubernetes Engine (GKE) requires additional setup in order for Longhorn to function properly. If your are a GKE user, read [this page](docs/gke.md) before proceeding.
 
@@ -69,7 +69,7 @@ First, you need to initialize Helm locally and [install Tiller into your Kuberne
 
 Then download Longhorn repository:
 ```
-git clone https://github.com/rancher/longhorn.git
+git clone https://github.com/longhorn/longhorn.git
 ```
 
 Now using following command to install Longhorn:
@@ -130,7 +130,7 @@ Follow [the same steps for installation](#install) to upgrade Longhorn manager
 
 ##### Using kubectl
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
 ```
 
 ##### Using Helm
@@ -149,12 +149,12 @@ For more details about upgrade in Longhorn or upgrade from older versions, [see 
 Before you create Kubernetes volumes, you must first create a storage class. Use following command to create a StorageClass called `longhorn`.
 
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/storageclass.yaml
+kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/examples/storageclass.yaml
 ```
 
 Now you can create a pod using Longhorn like this:
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/examples/pvc.yaml
+kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/examples/pvc.yaml
 ```
 
 The above yaml file contains two parts:
@@ -225,13 +225,13 @@ See [here](./docs/troubleshooting.md) for the troubleshooting guide.
 
 2. Create the uninstallation job to clean up CRDs from the system and wait for success:
   ```
-  kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
+  kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml
   kubectl get job/longhorn-uninstall -w
   ```
 
 Example output:
 ```
-$ kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
+$ kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml
 serviceaccount/longhorn-uninstall-service-account created
 clusterrole.rbac.authorization.k8s.io/longhorn-uninstall-role created
 clusterrolebinding.rbac.authorization.k8s.io/longhorn-uninstall-bind created
@@ -246,12 +246,12 @@ longhorn-uninstall   1/1           20s        20s
 
 3. Remove remaining components:
   ```
-  kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml
-  kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml
+  kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
+  kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml
   ```
  
-Tip: If you try `kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/longhorn.yaml` first and get stuck there, 
-pressing `Ctrl C` then running `kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/uninstall/uninstall.yaml` can also help you remove Longhorn. Finally, don't forget to cleanup remaining components.
+Tip: If you try `kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml` first and get stuck there, 
+pressing `Ctrl C` then running `kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml` can also help you remove Longhorn. Finally, don't forget to cleanup remaining components.
 
 ### Using Helm
 ```
