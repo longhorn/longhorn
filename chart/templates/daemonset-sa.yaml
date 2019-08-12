@@ -43,6 +43,8 @@ spec:
         - name: longhorn
           mountPath: /var/lib/rancher/longhorn/
           mountPropagation: Bidirectional
+        - name: longhorn-default-setting
+          mountPath: /var/lib/longhorn/setting/
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -58,6 +60,8 @@ spec:
               fieldPath: spec.nodeName
         - name: LONGHORN_BACKEND_SVC
           value: longhorn-backend
+        - name: DEFAULT_SETTING_PATH
+          value: /var/lib/longhorn/setting/default-setting.yaml
       volumes:
       - name: dev
         hostPath:
@@ -71,6 +75,9 @@ spec:
       - name: longhorn
         hostPath:
           path: /var/lib/rancher/longhorn/
+      - name: longhorn-default-setting
+        configMap:
+          name: longhorn-default-setting
       serviceAccountName: longhorn-service-account
 ---
 apiVersion: v1
