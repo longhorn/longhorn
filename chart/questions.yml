@@ -12,7 +12,7 @@ questions:
   - csi
   - flexvolume
   label: Longhorn Kubernetes Driver
-  group: "Longhorn Settings"
+  group: "Longhorn Driver Settings"
   show_subquestion_if: flexvolume
   subquestions:
   - variable: persistence.flexvolumePath
@@ -59,18 +59,96 @@ questions:
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass"
-  group: "Longhorn Settings"
+  group: "Longhorn Driver Settings"
   type: boolean
   required: true
   label: Default Storage Class
 - variable: persistence.defaultClassReplicaCount
   description: "Set replica count for default StorageClass"
-  group: "Longhorn Settings"
+  group: "Longhorn Driver Settings"
   type: int
   default: 3
   min: 1
   max: 10
   label: Default Storage Class Replica Count
+- variable: defaultSettings.backupTarget
+  label: Backup Target
+  description: "The target used for backup. Support NFS or S3."
+  group: "Longhorn Default Settings"
+  type: string
+  default:
+- variable: defaultSettings.backupTargetCredentialSecret
+  label: Backup Target Credential Secret
+  description: "The Kubernetes secret associated with the backup target."
+  group: "Longhorn Default Settings"
+  type: string
+  default:
+- variable: defaultSettings.createDefaultDiskLabeledNodes
+  label: Create Default Disk on Labeled Nodes
+  description: 'Create default Disk automatically only on Nodes with the label "node.longhorn.io/create-default-disk=true" if no other Disks exist. If disabled, default Disk will be created on all new Nodes (only on first add). By default false.'
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: "false"
+- variable: defaultSettings.defaultDataPath
+  label: Default Data Path
+  description: 'Default path to use for storing data on a host. By default "/var/lib/rancher/longhorn/"'
+  group: "Longhorn Default Settings"
+  type: string
+  default: "/var/lib/rancher/longhorn/"
+- variable: defaultSettings.replicaSoftAntiAffinity
+  label: Replica Soft Anti-Affinity
+  description: 'Allow scheduling on nodes with existing healthy replicas of the same volume. By default true.'
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: "true"
+- variable: defaultSettings.storageOverProvisioningPercentage
+  label: Storage Over Provisioning Percentage
+  description: "The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default 500."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 0
+  default: 500
+- variable: defaultSettings.storageMinimalAvailablePercentage
+  label: Storage Minimal Available Percentage
+  description: "If one disk's available capacity to it's maximum capacity in % is less than the minimal available percentage, the disk would become unschedulable until more space freed up. By default 10."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 0
+  max: 100
+  default: 10
+- variable: defaultSettings.upgradeChecker
+  label: Enable Upgrade Checker
+  description: 'Upgrade Checker will check for new Longhorn version periodically. When there is a new version available, it will notify the user using UI. By default true.'
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: "true"
+- variable: defaultSettings.defaultReplicaCount
+  label: Default Replica Count
+  description: "The default number of replicas when creating the volume from Longhorn UI. For Kubernetes, update the `numberOfReplicas` in the StorageClass. By default 3."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 1
+  max: 20
+  default: 3
+- variable: defaultSettings.guaranteedEngineCPU
+  label: Guaranteed Engine CPU
+  description: '(EXPERIMENTAL FEATURE) Allow Longhorn Engine to have guaranteed CPU allocation. The value is how many CPUs should be reserved for each Engine/Replica Manager Pod created by Longhorn. For example, 0.1 means one-tenth of a CPU. This will help maintain engine stability during high node workload. It only applies to the Engine/Replica Manager Pods created after the setting took effect. WARNING: Attaching of the volume may fail or stuck while using this feature due to the resource constraint. Disabled ("0") by default.'
+  group: "Longhorn Default Settings"
+  type: float
+  default: 0
+- variable: defaultSettings.defaultLonghornStaticStorageClass
+  label: Default Longhorn Static StorageClass Name
+  description: "The 'storageClassName' is for PV/PVC when creating PV/PVC for an existing Longhorn volume. Notice that it's unnecessary for users create the related StorageClass object in Kubernetes since the StorageClass would only be used as matching labels for PVC bounding purpose. By default 'longhorn-static'."
+  group: "Longhorn Default Settings"
+  type: string
+  default: "longhorn-static"
+- variable: defaultSettings.backupstorePollInterval
+  label: Backupstore Poll Interval
+  description: "In seconds. The interval to poll the backup store for updating volumes' Last Backup field. By default 300."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 0
+  default: 300
 - variable: ingress.enabled
   default: "false"
   description: "Expose app using Layer 7 Load Balancer - ingress"
