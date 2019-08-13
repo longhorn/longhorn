@@ -28,5 +28,5 @@ rules:
   resources: ["csinodeinfos"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["longhorn.rancher.io"]
-  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes"]
+  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
   verbs: ["*"]
