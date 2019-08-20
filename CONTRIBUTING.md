@@ -4,6 +4,16 @@ Welcome contributing to Longhorn!
 
 This guideline applies to all the repositories under Longhorn.
 
+The contribution to Longhorn is not limited to writing the code and submit the PR. We will also appreciate if you file issues, provide feedbacks and suggesting new features. Most of Longhorn's features are driven by the community's need and we believe the community is the most valuable part of Longhorn.
+
+Of course, code contribution is more than welcome. To make things simpler, if you're fixing a small issue (e.g. typo), go ahead to submit a PR and we will pick it up; but if you're planning to submit a bigger PR to implement a new feature, it's easier to submit an new issue to discuss the design with the maintainer first before go ahead implementing it.
+
+When you're ready to get involved in the code, [this developer guide](https://github.com/longhorn/longhorn/wiki/Getting-started-with-Longhorn-Development) should help you to get up to the speed.
+
+Feel free to join the discussion on Longhorn development at [longhorn-dev](https://rancher-users.slack.com/messages/CMLPKMYDC) slack channel.
+
+Happy contributing!
+
 ## DCO Sign off
 
 All authors to the project retain copyright to their work. However, to ensure
