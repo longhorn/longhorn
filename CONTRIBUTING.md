@@ -1,14 +1,14 @@
-# Contributing
+# Contributing Guideline
 
 Welcome contributing to Longhorn!
 
 This guideline applies to all the repositories under Longhorn.
 
-The contribution to Longhorn is not limited to writing the code and submit the PR. We will also appreciate if you file issues, provide feedbacks and suggesting new features. Most of Longhorn's features are driven by the community's need and we believe the community is the most valuable part of Longhorn.
+Contributing Longhorn is not limited to writing the code or submitting the PR. We will also appreciate if you can file issues, provide feedback and suggest new features. In fact, many of Longhorn's features are driven by the community's need. The community plays a big role in the development of Longhorn.
 
-Of course, code contribution is more than welcome. To make things simpler, if you're fixing a small issue (e.g. typo), go ahead to submit a PR and we will pick it up; but if you're planning to submit a bigger PR to implement a new feature, it's easier to submit an new issue to discuss the design with the maintainer first before go ahead implementing it.
+Of course, contributing the code is more than welcome. To make things simpler, if you're fixing a small issue (e.g. typo), go ahead submitting a PR and we will pick it up; but if you're planning to submit a bigger PR to implement a new feature, it's easier to submit a new issue to discuss the design with the maintainers first before implementing it.
 
-When you're ready to get involved in the code, [this developer guide](https://github.com/longhorn/longhorn/wiki/Getting-started-with-Longhorn-Development) should help you to get up to the speed.
+When you're ready to get involved in contributing the code, [this developer guide](https://github.com/longhorn/longhorn/wiki/Getting-started-with-Longhorn-Development) should help you to get up to the speed. And remember to [sign off your commits](#dco-sign-off)!
 
 Feel free to join the discussion on Longhorn development at [longhorn-dev](https://rancher-users.slack.com/messages/CMLPKMYDC) slack channel.
 
