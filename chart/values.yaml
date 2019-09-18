@@ -3,11 +3,11 @@
 # Declare variables to be passed into your templates.
 image:
   longhorn:
-    engine: rancher/longhorn-engine
+    engine: longhornio/longhorn-engine
     engineTag: v0.6.0-rc1
-    manager: rancher/longhorn-manager
+    manager: longhornio/longhorn-manager
     managerTag: v0.6.0-rc1
-    ui: rancher/longhorn-ui
+    ui: longhornio/longhorn-ui
     uiTag: v0.6.0-rc1
   pullPolicy: IfNotPresent
 
