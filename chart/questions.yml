@@ -151,7 +151,7 @@ questions:
   default: 300
 - variable: defaultSettings.taintToleration
   label: Kubernetes Taint Toleration
-  description: "By setting tolerations for Longhorn then adding taints for the nodes, the nodes with large storage can be dedicated to Longhorn only (to store replica data) and reject other general workloads. Multiple tolerations can be set here, and these tolerations are separated by comma. For example, \"key1=value1:NoSchedule, key2:NoExecute\". Notice that \"kubernetes.io\" is used as the key of all Kubernetes default tolerations, please do not contain this substring in your toleration setting."
+  description: "By setting tolerations for Longhorn then adding taints for the nodes, the nodes with large storage can be dedicated to Longhorn only (to store replica data) and reject other general workloads. Multiple tolerations can be set here, and these tolerations are separated by semicolon. For example, \"key1=value1:NoSchedule; key2:NoExecute\". Notice that \"kubernetes.io\" is used as the key of all Kubernetes default tolerations, please do not contain this substring in your toleration setting."
   group: "Longhorn Default Settings"
   type: string
   default: ""
