@@ -207,7 +207,6 @@ More examples are available at `./examples/`
 ### [Settings](./docs/settings.md)
 ### [Multiple disks](./docs/multidisk.md)
 ### [iSCSI](./docs/iscsi.md)
-### [Base image](./docs/base-image.md)
 ### [Kubernetes workload in Longhorn UI](./docs/k8s-workload.md)
 ### [Storage Tags](./docs/storage-tags.md)
 ### [Customized default setting](./docs/customized-default-setting.md)
