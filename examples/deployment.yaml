@@ -30,6 +30,9 @@ metadata:
   labels:
     app: mysql
 spec:
+  selector:
+    matchLabels:
+      app: mysql # has to match .spec.template.metadata.labels
   strategy:
     type: Recreate
   template:
