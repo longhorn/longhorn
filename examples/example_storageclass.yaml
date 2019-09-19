@@ -5,7 +5,7 @@ metadata:
 provisioner: rancher.io/longhorn
 parameters:
   numberOfReplicas: '3'
-  staleReplicaTimeout: '30'
+  staleReplicaTimeout: '2880'
 reclaimPolicy: Delete
 ---
 apiVersion: v1

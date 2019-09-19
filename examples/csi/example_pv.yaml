@@ -14,7 +14,7 @@ spec:
     fsType: ext4
     volumeAttributes:
       numberOfReplicas: '3'
-      staleReplicaTimeout: '30'
+      staleReplicaTimeout: '2880'
     volumeHandle: existing-longhorn-volume
 ---
 apiVersion: v1
