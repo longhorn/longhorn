@@ -9,7 +9,7 @@ metadata:
   name: longhorn-service-account
   namespace: longhorn-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: longhorn-role
@@ -42,7 +42,7 @@ rules:
   resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
   verbs: ["*"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: longhorn-bind
@@ -202,7 +202,7 @@ data:
     backupstore-poll-interval:
     taint-toleration:
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
@@ -220,7 +220,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v0.6.0-rc2
+        image: longhornio/longhorn-manager:v0.6.0
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -229,9 +229,9 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v0.6.0-rc2
+        - longhornio/longhorn-engine:v0.6.0
         - --manager-image
-        - longhornio/longhorn-manager:v0.6.0-rc2
+        - longhornio/longhorn-manager:v0.6.0
         - --service-account
         - longhorn-service-account
         ports:
@@ -297,7 +297,7 @@ spec:
     targetPort: 9500
   sessionAffinity: ClientIP
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -316,7 +316,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v0.6.0-rc2
+        image: longhornio/longhorn-ui:v0.6.0
         ports:
         - containerPort: 8000
         env:
@@ -339,7 +339,7 @@ spec:
     targetPort: 8000
   type: LoadBalancer
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: longhorn-driver-deployer
@@ -356,18 +356,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v0.6.0-rc2
+          image: longhornio/longhorn-manager:v0.6.0
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v0.6.0-rc2
+          image: longhornio/longhorn-manager:v0.6.0
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v0.6.0-rc2
+          - longhornio/longhorn-manager:v0.6.0
           - --manager-url
           - http://longhorn-backend:9500/v1
           # manually choose "flexvolume" or "csi"
