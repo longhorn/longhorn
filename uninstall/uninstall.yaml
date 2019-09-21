@@ -4,7 +4,7 @@ metadata:
   name: longhorn-uninstall-service-account
   namespace: default
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: longhorn-uninstall-role
@@ -28,7 +28,7 @@ rules:
     resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
     verbs: ["*"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: longhorn-uninstall-bind
@@ -55,7 +55,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v0.6.0-rc2
+        image: longhornio/longhorn-manager:v0.6.0
         imagePullPolicy: Always
         command:
         - longhorn-manager
