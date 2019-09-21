@@ -3,12 +3,12 @@
 # Declare variables to be passed into your templates.
 image:
   longhorn:
-    engine: rancher/longhorn-engine
-    engineTag: v0.5.0
-    manager: rancher/longhorn-manager
-    managerTag: v0.5.0
-    ui: rancher/longhorn-ui
-    uiTag: v0.5.0
+    engine: longhornio/longhorn-engine
+    engineTag: v0.6.0
+    manager: longhornio/longhorn-manager
+    managerTag: v0.6.0
+    ui: longhornio/longhorn-ui
+    uiTag: v0.6.0
   pullPolicy: IfNotPresent
 
 service:
@@ -36,6 +36,21 @@ csi:
   kubeletRootDir:
   attacherReplicaCount:
   provisionerReplicaCount:
+
+defaultSettings:
+  backupTarget:
+  backupTargetCredentialSecret:
+  createDefaultDiskLabeledNodes:
+  defaultDataPath:
+  replicaSoftAntiAffinity:
+  storageOverProvisioningPercentage:
+  storageMinimalAvailablePercentage:
+  upgradeChecker:
+  defaultReplicaCount:
+  guaranteedEngineCPU:
+  defaultLonghornStaticStorageClass:
+  backupstorePollInterval:
+  taintToleration:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

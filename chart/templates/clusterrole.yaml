@@ -1,4 +1,4 @@
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: longhorn-role
@@ -28,5 +28,5 @@ rules:
   resources: ["csinodeinfos"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["longhorn.rancher.io"]
-  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes"]
+  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
   verbs: ["*"]

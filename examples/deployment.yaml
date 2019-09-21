@@ -23,13 +23,16 @@ spec:
     requests:
       storage: 2Gi
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
   labels:
     app: mysql
 spec:
+  selector:
+    matchLabels:
+      app: mysql # has to match .spec.template.metadata.labels
   strategy:
     type: Recreate
   template:

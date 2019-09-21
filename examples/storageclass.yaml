@@ -5,7 +5,10 @@ metadata:
 provisioner: rancher.io/longhorn
 parameters:
   numberOfReplicas: "3"
-  staleReplicaTimeout: "30"
+  staleReplicaTimeout: "2880"
   fromBackup: ""
+#  diskSelector: "ssd,fast"
+#  nodeSelector: "storage,fast"
 #  recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
-#                   {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1}]'
+#                   {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,
+#                    "labels": {"interval":"2m"}}]'

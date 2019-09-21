@@ -50,7 +50,7 @@ The easiest way to install Longhorn is to deploy Longhorn from Rancher Catalog.
 
 1. On Rancher UI, select the cluster and project you want to install Longhorn. We recommended to create a new project e.g. `Storage` for Longhorn.
 2. Navigate to the `Catalog Apps` screen. Select `Launch`, find Longhorn in the list. Select `View Details`, then click `Launch`. Longhorn will be installed in the `longhorn-system` namespace.
-    
+
 After Longhorn has been successfully installed, you can access the Longhorn UI by navigating to the `Catalog Apps` screen.
 
 One benefit of installing Longhorn through Rancher catalog is Rancher provides authentication to Longhorn UI.
@@ -122,10 +122,6 @@ Noted that the UI is unauthenticated when you installed Longhorn using YAML file
 
 # Upgrade
 
-Since v0.3.3, Longhorn is able to perform fully-automated non-disruptive upgrades, meaning that the upgrade process won't disrupt the running volumes. Existing volumes continue to run even as the software that implements these volumes are upgraded.
-
-If you're upgrading from Longhorn v0.3.0 or newer:
-
 ## Upgrade Longhorn manager
 
 ##### On Kubernetes clusters Managed by Rancher 2.1 or newer
@@ -143,11 +139,12 @@ helm upgrade longhorn ./longhorn/chart
 
 ## Upgrade Longhorn engine
 After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes.
-    1. For non distruptive upgrade, follow [the live upgrade steps here](./docs/upgrade.md#live-upgrade)
+    1. Upgrade v0.5.0 to v0.6.0 requires offline upgrade. Live upgrade is not supported for this upgrade.
+    2. For non distruptive upgrade from previous version to v0.5.0, follow [the live upgrade steps here](./docs/upgrade.md#live-upgrade)
 
 For more details about upgrade in Longhorn or upgrade from older versions, [see here](docs/upgrade.md).
 
-# Create Longhorn Volumes 
+# Create Longhorn Volumes
 
 Before you create Kubernetes volumes, you must first create a storage class. Use following command to create a StorageClass called `longhorn`.
 
@@ -204,10 +201,13 @@ More examples are available at `./examples/`
 
 ### [Snapshot and Backup](./docs/snapshot-backup.md)
 ### [Volume operations](./docs/volume.md)
-### [Multiple disks, including how to change the default path for storage](./docs/multidisk.md)
+### [Settings](./docs/settings.md)
+### [Multiple disks](./docs/multidisk.md)
 ### [iSCSI](./docs/iscsi.md)
-### [Base image](./docs/base-image.md)
 ### [Kubernetes workload in Longhorn UI](./docs/k8s-workload.md)
+### [Storage Tags](./docs/storage-tags.md)
+### [Customized default setting](./docs/customized-default-setting.md)
+### [Taint Toleration](./docs/taint-toleration.md)
 
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)

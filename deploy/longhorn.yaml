@@ -9,7 +9,7 @@ metadata:
   name: longhorn-service-account
   namespace: longhorn-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: longhorn-role
@@ -39,10 +39,10 @@ rules:
   resources: ["csinodeinfos"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["longhorn.rancher.io"]
-  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes"]
+  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
   verbs: ["*"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: longhorn-bind
@@ -163,7 +163,46 @@ spec:
   scope: Namespaced
   version: v1alpha1
 ---
-apiVersion: apps/v1beta2
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: InstanceManager
+  name: instancemanagers.longhorn.rancher.io
+spec:
+  group: longhorn.rancher.io
+  names:
+    kind: InstanceManager
+    listKind: InstanceManagerList
+    plural: instancemanagers
+    shortNames:
+    - lhim
+    singular: instancemanager
+  scope: Namespaced
+  version: v1alpha1
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-default-setting
+  namespace: longhorn-system
+data:
+  default-setting.yaml: |-
+    backup-target:
+    backup-target-credential-secret:
+    create-default-disk-labeled-nodes:
+    default-data-path:
+    replica-soft-anti-affinity:
+    storage-over-provisioning-percentage:
+    storage-minimal-available-percentage:
+    upgrade-checker:
+    default-replica-count:
+    guaranteed-engine-cpu:
+    default-longhorn-static-storage-class:
+    backupstore-poll-interval:
+    taint-toleration:
+---
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
@@ -181,7 +220,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: rancher/longhorn-manager:v0.5.0
+        image: longhornio/longhorn-manager:v0.6.0
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -190,9 +229,9 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - rancher/longhorn-engine:v0.5.0
+        - longhornio/longhorn-engine:v0.6.0
         - --manager-image
-        - rancher/longhorn-manager:v0.5.0
+        - longhornio/longhorn-manager:v0.6.0
         - --service-account
         - longhorn-service-account
         ports:
@@ -207,6 +246,8 @@ spec:
         - name: longhorn
           mountPath: /var/lib/rancher/longhorn/
           mountPropagation: Bidirectional
+        - name: longhorn-default-setting
+          mountPath: /var/lib/longhorn/setting/
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -220,6 +261,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+        # Should be: mount path of the volume longhorn-default-setting + the key of the configmap data in 04-default-setting.yaml
+        - name: DEFAULT_SETTING_PATH
+          value: /var/lib/longhorn/setting/default-setting.yaml
       volumes:
       - name: dev
         hostPath:
@@ -233,6 +277,9 @@ spec:
       - name: longhorn
         hostPath:
           path: /var/lib/rancher/longhorn/
+      - name: longhorn-default-setting
+        configMap:
+          name: longhorn-default-setting
       serviceAccountName: longhorn-service-account
 ---
 kind: Service
@@ -250,7 +297,7 @@ spec:
     targetPort: 9500
   sessionAffinity: ClientIP
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -269,12 +316,13 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: rancher/longhorn-ui:v0.5.0
+        image: longhornio/longhorn-ui:v0.6.0
         ports:
         - containerPort: 8000
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
+      serviceAccountName: longhorn-service-account
 ---
 kind: Service
 apiVersion: v1
@@ -291,7 +339,7 @@ spec:
     targetPort: 8000
   type: LoadBalancer
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: longhorn-driver-deployer
@@ -308,18 +356,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: rancher/longhorn-manager:v0.5.0
+          image: longhornio/longhorn-manager:v0.6.0
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: rancher/longhorn-manager:v0.5.0
+          image: longhornio/longhorn-manager:v0.6.0
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - rancher/longhorn-manager:v0.5.0
+          - longhornio/longhorn-manager:v0.6.0
           - --manager-url
           - http://longhorn-backend:9500/v1
           # manually choose "flexvolume" or "csi"

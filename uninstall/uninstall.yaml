@@ -2,8 +2,9 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: longhorn-uninstall-service-account
+  namespace: default
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: longhorn-uninstall-role
@@ -24,10 +25,10 @@ rules:
     resources: ["jobs", "cronjobs"]
     verbs: ["*"]
   - apiGroups: ["longhorn.rancher.io"]
-    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes"]
+    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
     verbs: ["*"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: longhorn-uninstall-bind
@@ -44,6 +45,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: longhorn-uninstall
+  namespace: default
 spec:
   activeDeadlineSeconds: 900
   backoffLimit: 1
@@ -53,7 +55,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: rancher/longhorn-manager:v0.5.0
+        image: longhornio/longhorn-manager:v0.6.0
         imagePullPolicy: Always
         command:
         - longhorn-manager
