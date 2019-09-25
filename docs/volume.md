@@ -30,3 +30,11 @@ User can also delete unwanted snapshot manually through UI. Any system generated
 In Longhorn, the latest snapshot cannot be deleted. It because whenever a snapshot is deleted, Longhorn will coalesce it content with the next snapshot, makes sure the next and later snapshot will still have the correct content. But Longhorn cannot do that for the latest snapshot since there is no next snapshot to it. The next "snapshot" of the latest snapshot is the live volume(`volume-head`), which is being read/written by the user at the moment, so the coalescing process cannot happen. Instead, the latest snapshot will be marked as `removed`, and it will be cleaned up next time when possible.
 
 If the users want to clean up the latest snapshot, they can create a new snapshot, then remove the previous "latest" snapshot. 
+
+### Maintenance mode
+
+After v0.6.0, when the user attaching the volume from Longhorn UI, there is a checkbox for `Maintenance mode`. The option will result in attaching the volume without enabling the frontend (block device or iSCSI), to make sure no one can access the volume data when the volume is attached.
+
+It's mainly used to perform `Snapshot Revert`. After v0.6.0, Snapshot Reverting operation required volume to be in `Maintenance mode` since we cannot modify the block device's content with the volume mounted or being used, otherwise it will cause filesystem corruptions. 
+
+It's also useful to inspect the volume state without worry that the data can be accessed by accident.
