@@ -16,7 +16,7 @@ rules:
     verbs:
       - "*"
   - apiGroups: [""]
-    resources: ["pods", "persistentvolumes", "persistentvolumeclaims"]
+    resources: ["pods", "persistentvolumes", "persistentvolumeclaims", "nodes"]
     verbs: ["*"]
   - apiGroups: ["apps"]
     resources: ["daemonsets", "statefulsets", "deployments"]
@@ -55,7 +55,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v0.6.1
+        image: longhornio/longhorn-manager:v0.6.2-rc1
         imagePullPolicy: Always
         command:
         - longhorn-manager
