@@ -4,6 +4,10 @@
 During Longhorn system deployment, users can customize the default settings for Longhorn. e.g. specify `Create Default Disk With Node Labeled` and `Default Data Path` before starting the Longhorn system.
 
 ## Usage
+### Note:
+1. This default setting is only for Longhorn system that hasn't been deployed. And it has no impact on the existing Longhorn system.
+2. The users should modify the settings for an existing Longhorn system via UI. 
+
 ### Via Rancher UI
 [Cluster] -> System -> Apps -> Launch -> longhorn -> LONGHORN DEFAULT SETTINGS
 

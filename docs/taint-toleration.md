@@ -3,8 +3,7 @@
 ## Overview
 If users want to create nodes with large storage spaces and/or CPU resources for Longhorn only (to store replica data) and reject other general workloads, they can taint those nodes and add tolerations for Longhorn components. Then Longhorn can be deployed on those nodes.
 
-For more Kubernetes taint and toleration info, see:
-[Kubernetes Taint & Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
+Notice that the taint tolerations setting for one workload will not prevent it from being scheduled to the nodes that don't contain the corresponding taints. See [Kubernetes's taint and toleration](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) for details.
 
 ## Setup
 ### During installing Longhorn
