@@ -113,6 +113,9 @@ data:
   AWS_SECRET_ACCESS_KEY: bG9uZ2hvcm4tdGVzdC1zZWNyZXQta2V5 # longhorn-test-secret-key
   AWS_ENDPOINTS: aHR0cDovL21pbmlvLXNlcnZpY2UuZGVmYXVsdDo5MDAw # http://minio-service.default:9000
 ```
+Please follow [the Kubernetes document](https://kubernetes.io/docs/concepts/configuration/secret/#creating-a-secret-manually) to create the secret.
+* Make sure to use `echo -n` when generating the base64 encoding, otherwise an new line will be added at the end of the string and it will cause error when accessing the S3.
+
 Notice the secret must be created in the `longhorn-system` namespace for Longhorn to access.
 
 
