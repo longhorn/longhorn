@@ -1,5 +1,11 @@
 # Longhorn
 
+### Status
+* Engine: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-engine/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-engine) [![Go Report Card](https://goreportcard.com/badge/github.com/rancher/longhorn-engine)](https://goreportcard.com/report/github.com/rancher/longhorn-engine)
+* Manager: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-manager/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/rancher/longhorn-manager)](https://goreportcard.com/report/github.com/rancher/longhorn-manager)
+* UI: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-ui/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-ui)
+* Test: [![Build Status](http://drone-publish.rancher.io/api/badges/longhorn/longhorn-tests/status.svg)](http://drone-publish.rancher.io/longhorn/longhorn-tests)
+
 Longhorn is a distributed block storage system for Kubernetes.
 
 Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply` command or using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
