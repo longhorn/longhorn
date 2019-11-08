@@ -3,9 +3,9 @@ kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Engine
-  name: engines.longhorn.rancher.io
+  name: engines.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Engine
     listKind: EngineList
@@ -14,16 +14,18 @@ spec:
     - lhe
     singular: engine
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Replica
-  name: replicas.longhorn.rancher.io
+  name: replicas.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Replica
     listKind: ReplicaList
@@ -32,16 +34,18 @@ spec:
     - lhr
     singular: replica
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Setting
-  name: settings.longhorn.rancher.io
+  name: settings.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Setting
     listKind: SettingList
@@ -50,16 +54,16 @@ spec:
     - lhs
     singular: setting
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Volume
-  name: volumes.longhorn.rancher.io
+  name: volumes.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Volume
     listKind: VolumeList
@@ -68,16 +72,18 @@ spec:
     - lhv
     singular: volume
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: EngineImage
-  name: engineimages.longhorn.rancher.io
+  name: engineimages.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: EngineImage
     listKind: EngineImageList
@@ -86,16 +92,18 @@ spec:
     - lhei
     singular: engineimage
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Node
-  name: nodes.longhorn.rancher.io
+  name: nodes.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Node
     listKind: NodeList
@@ -104,16 +112,18 @@ spec:
     - lhn
     singular: node
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: InstanceManager
-  name: instancemanagers.longhorn.rancher.io
+  name: instancemanagers.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: InstanceManager
     listKind: InstanceManagerList
@@ -122,4 +132,6 @@ spec:
     - lhim
     singular: instancemanager
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
