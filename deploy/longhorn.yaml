@@ -33,11 +33,19 @@ rules:
   resources: ["jobs", "cronjobs"]
   verbs: ["*"]
 - apiGroups: ["storage.k8s.io"]
-  resources: ["storageclasses", "volumeattachments"]
+  resources: ["storageclasses", "volumeattachments", "csinodes", "csidrivers"]
   verbs: ["*"]
-- apiGroups: ["csi.storage.k8s.io"]
-  resources: ["csinodeinfos"]
-  verbs: ["get", "list", "watch"]
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["get", "watch", "list", "delete", "update", "create"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
+              "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status"]
+  verbs: ["*"]
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["*"]
+# to be removed after v0.7.0
 - apiGroups: ["longhorn.rancher.io"]
   resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
   verbs: ["*"]
@@ -60,9 +68,9 @@ kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Engine
-  name: engines.longhorn.rancher.io
+  name: engines.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Engine
     listKind: EngineList
@@ -71,16 +79,18 @@ spec:
     - lhe
     singular: engine
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Replica
-  name: replicas.longhorn.rancher.io
+  name: replicas.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Replica
     listKind: ReplicaList
@@ -89,16 +99,18 @@ spec:
     - lhr
     singular: replica
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Setting
-  name: settings.longhorn.rancher.io
+  name: settings.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Setting
     listKind: SettingList
@@ -107,16 +119,16 @@ spec:
     - lhs
     singular: setting
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Volume
-  name: volumes.longhorn.rancher.io
+  name: volumes.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Volume
     listKind: VolumeList
@@ -125,16 +137,18 @@ spec:
     - lhv
     singular: volume
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: EngineImage
-  name: engineimages.longhorn.rancher.io
+  name: engineimages.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: EngineImage
     listKind: EngineImageList
@@ -143,16 +157,18 @@ spec:
     - lhei
     singular: engineimage
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: Node
-  name: nodes.longhorn.rancher.io
+  name: nodes.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: Node
     listKind: NodeList
@@ -161,16 +177,18 @@ spec:
     - lhn
     singular: node
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   labels:
     longhorn-manager: InstanceManager
-  name: instancemanagers.longhorn.rancher.io
+  name: instancemanagers.longhorn.io
 spec:
-  group: longhorn.rancher.io
+  group: longhorn.io
   names:
     kind: InstanceManager
     listKind: InstanceManagerList
@@ -179,7 +197,9 @@ spec:
     - lhim
     singular: instancemanager
   scope: Namespaced
-  version: v1alpha1
+  version: v1beta1
+  subresources:
+    status: {}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -220,7 +240,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v0.6.2
+        image: longhornio/longhorn-manager:v0.7.0-rc1
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -229,9 +249,9 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v0.6.2
+        - longhornio/longhorn-engine:v0.7.0-rc1
         - --manager-image
-        - longhornio/longhorn-manager:v0.6.2
+        - longhornio/longhorn-manager:v0.7.0-rc1
         - --service-account
         - longhorn-service-account
         ports:
@@ -316,7 +336,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v0.6.2
+        image: longhornio/longhorn-ui:v0.7.0-rc1
         ports:
         - containerPort: 8000
         env:
@@ -356,18 +376,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v0.6.2
+          image: longhornio/longhorn-manager:v0.7.0-rc1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v0.6.2
+          image: longhornio/longhorn-manager:v0.7.0-rc1
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v0.6.2
+          - longhornio/longhorn-manager:v0.7.0-rc1
           - --manager-url
           - http://longhorn-backend:9500/v1
           # manually choose "flexvolume" or "csi"
