@@ -34,7 +34,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/longhorn/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/longhorn/longhorn-ui
 
-![Longhorn UI](https://s3-us-west-1.amazonaws.com/rancher-longhorn/Longhorn_UI.png)
+![Longhorn UI](./longhorn-ui.png)
 
 # Requirements
 
