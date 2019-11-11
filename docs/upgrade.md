@@ -4,6 +4,12 @@ Here we cover how to upgrade to latest Longhorn from all previous releases.
 
 There are normally two steps in the upgrade process: first upgrade Longhorn manager to the latest version, then upgrade Longhorn engine to the latest version using latest Longhorn manager.
 
+## Upgrade from v0.6.2 to v0.7.0
+
+See [here](./upgrade-from-v0.6.2-to-v0.7.0.md)
+
+## Upgrade from older versions to v0.6.2
+
 ## Upgrade Longhorn manager from v0.3.0 or newer
 
 ### From Longhorn App (Rancher Catalog App) 
