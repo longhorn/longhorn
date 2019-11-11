@@ -21,4 +21,4 @@ sources:
 maintainers:
 - name: rancher
   email: charts@rancher.com
-icon: https://s3.us-east-2.amazonaws.com/longhorn-assets/longhorn-logo.svg
+icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/horizontal/color/longhorn-horizontal-color.svg?sanitize=true
