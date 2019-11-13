@@ -13,7 +13,7 @@ The users need to follow this guide to upgrade from v0.6.2 to v0.7.0.
 3. Wait for the app to complete the upgrade.
 
 ### Use YAML file
-Use `kubectl apply --force https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/deploy/longhorn.yaml`
+Use `kubectl apply https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/deploy/longhorn.yaml`
 
 And wait for all the pods to become running and Longhorn UI working.
 
@@ -45,6 +45,25 @@ longhorn-manager-r5npp                      1/1     Running   1          3d14h
 longhorn-manager-t59kt                      1/1     Running   0          3d14h
 longhorn-ui-b466b6d74-w7wzf                 1/1     Running   0          50m
 ```
+
+#### Recreate StorageClass
+If you've encounted following error during applying the yaml
+```
+The StorageClass "longhorn" is invalid: provisioner: Forbidden: updates to provisioner are forbidden.
+```
+You need to recreate the `longhorn` storageClass in order to make Kubernetes work with Longhorn v0.7.0, since we've changed the provisioner from `rancher.io/longhorn` to `driver.longhorn.io`.
+
+Use the following command to recreate the default StorageClass:
+```
+kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/examples/storageclass.yaml
+kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/examples/storageclass.yaml
+```
+
+Noticed the PVs created by the old storageClass will still use `rancher.io/longhorn` as provisioner. Longhorn v0.7.0 supports attach/detach/deleting of the PVs created by the previous version of Longhorn, but it doesn't support creating new PVs using the old provisioner name. Please use the new StorageClass for the new volumes.
+
+#### Migrate the old PVs to use the new StorageClass
+
+TODO
 
 ## Post upgrade
 1. Bring back the workload online.
