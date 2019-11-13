@@ -38,8 +38,8 @@ If your CRD instances or the CRDs themselves can't be deleted for whatever reaso
 
 ```
 # Delete CRD instances and definitions
-curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrs.sh |bash -s v062
-curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrs.sh |bash -s v070
+curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh |bash -s v062
+curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh |bash -s v070
 ```
 
 ---
