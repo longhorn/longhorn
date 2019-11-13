@@ -40,9 +40,17 @@ spec:
       labels:
         app: mysql
     spec:
+      restartPolicy: Always
       containers:
       - image: mysql:5.6
         name: mysql
+        livenessProbe:
+          exec:
+            command:
+              - ls
+              - /var/lib/mysql/lost+found
+          initialDelaySeconds: 5
+          periodSeconds: 5
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: changeme
