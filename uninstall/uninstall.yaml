@@ -58,7 +58,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v0.7.0-rc1
+        image: longhornio/longhorn-manager:v0.7.0-rc2
         imagePullPolicy: Always
         command:
         - longhorn-manager

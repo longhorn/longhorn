@@ -27,10 +27,18 @@ spec:
       labels:
         app: nginx # has to match .spec.selector.matchLabels
     spec:
+      restartPolicy: Always
       terminationGracePeriodSeconds: 10
       containers:
       - name: nginx
         image: k8s.gcr.io/nginx-slim:0.8
+        livenessProbe:
+          exec:
+            command:
+              - ls
+              - /usr/share/nginx/html/lost+found
+          initialDelaySeconds: 5
+          periodSeconds: 5
         ports:
         - containerPort: 80
           name: web

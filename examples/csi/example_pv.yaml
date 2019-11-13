@@ -9,6 +9,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
+  storageClassName: longhorn
   csi:
     driver: driver.longhorn.io
     fsType: ext4
@@ -28,17 +29,26 @@ spec:
     requests:
       storage: 2Gi
   volumeName: longhorn-vol-pv
+  storageClassName: longhorn
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: volume-test
+  name: volume-pv-test
   namespace: default
 spec:
+  restartPolicy: Always
   containers:
-  - name: volume-test
+  - name: volume-pv-test
     image: nginx:stable-alpine
     imagePullPolicy: IfNotPresent
+    livenessProbe:
+      exec:
+        command:
+          - ls
+          - /data/lost+found
+      initialDelaySeconds: 5
+      periodSeconds: 5
     volumeMounts:
     - name: vol
       mountPath: /data
