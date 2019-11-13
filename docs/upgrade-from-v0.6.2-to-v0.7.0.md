@@ -1,6 +1,11 @@
 # Upgrade from v0.6.2 to v0.7.0
 
 The users need to follow this guide to upgrade from v0.6.2 to v0.7.0.
+
+## Warning
+Longhorn v0.7.0 breaks the regular rollback and some risky operations are needed as the workaround. 
+Please check the rollback part if you may want to do rollback later before upgrading to v0.7.0.
+
 ## Preparation
 
 1. Make backups for all the volumes.
@@ -8,8 +13,11 @@ The users need to follow this guide to upgrade from v0.6.2 to v0.7.0.
 
 ## Upgrade
 ### Use Rancher App
-1. Click the `Upgrade` button in the Rancher UI
-2. Select `Force Recreate` option at the bottom of the screen.
+1. Run the following command to avoid [this error](#error-the-storageclass-longhorn-is-invalid-provisioner-forbidden-updates-to-provisioner-are-forbidden):
+```
+kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/examples/storageclass.yaml
+```
+2. Click the `Upgrade` button in the Rancher UI
 3. Wait for the app to complete the upgrade.
 
 ### Use YAML file
@@ -46,20 +54,60 @@ longhorn-manager-t59kt                      1/1     Running   0          3d14h
 longhorn-ui-b466b6d74-w7wzf                 1/1     Running   0          50m
 ```
 
-#### Recreate StorageClass
-If you've encounted following error during applying the yaml
-```
-The StorageClass "longhorn" is invalid: provisioner: Forbidden: updates to provisioner are forbidden.
-```
-You need to recreate the `longhorn` storageClass in order to make Kubernetes work with Longhorn v0.7.0, since we've changed the provisioner from `rancher.io/longhorn` to `driver.longhorn.io`.
+## TroubleShooting
+### Error: `"longhorn" is invalid: provisioner: Forbidden: updates to provisioner are forbidden.`
+- This means you need to clean up the old `longhorn` storageClass for Longhorn v0.7.0 upgrade, since we've changed the provisioner from `rancher.io/longhorn` to `driver.longhorn.io`.
 
-Use the following command to recreate the default StorageClass:
+- Noticed the PVs created by the old storageClass will still use `rancher.io/longhorn` as provisioner. Longhorn v0.7.0 supports attach/detach/deleting of the PVs created by the previous version of Longhorn, but it doesn't support creating new PVs using the old provisioner name. Please use the new StorageClass for the new volumes.
+
+#### If you are using YAML file:
+1. Clean up the deprecated StorageClass:
 ```
 kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/examples/storageclass.yaml
-kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/examples/storageclass.yaml
+```
+2. Run
+```
+kubectl apply https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/deploy/longhorn.yaml
 ```
 
-Noticed the PVs created by the old storageClass will still use `rancher.io/longhorn` as provisioner. Longhorn v0.7.0 supports attach/detach/deleting of the PVs created by the previous version of Longhorn, but it doesn't support creating new PVs using the old provisioner name. Please use the new StorageClass for the new volumes.
+#### If you are using Rancher App:
+1. Clean up the default StorageClass:
+```
+kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/examples/storageclass.yaml
+```
+2. Follow [this error instruction](#error-kind-customresourcedefinition-with-the-name-xxx-already-exists-in-the-cluster-and-wasnt-defined-in-the-previous-release) 
+
+### Error: `kind CustomResourceDefinition with the name "xxx" already exists in the cluster and wasn't defined in the previous release...`
+- This is [a Helm bug](https://github.com/helm/helm/issues/6031).
+- Please make sure that you have not deleted the old Longhorn CRDs via the command `curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh | bash -s v062` or Longhorn uninstaller before executing the following command.
+    Otherwise you may lose all the data stored in the Longhorn system.
+
+1. Clean up the leftover:
+```
+kubectl -n longhorn-system delete ds longhorn-manager
+curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh | bash -s v070
+```
+
+2. Re-click the `Upgrade` button in the Rancher UI.
+
+## Rollback
+Since we upgrade the CSI framework from v0.4.2 to v1.1.0 in this release, rolling back from Longhorn v0.7.0 to v0.6.2 or lower means backward upgrade for the CSI plugin. 
+But Kubernetes does not support the CSI backward upgrade. **Hence restarting kubelet is unavoidable. Please be careful about the risky operation!**
+
+1. Clean up the components introduced by Longhorn v0.7.0 upgrade
+```
+kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/examples/storageclass.yaml
+curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh | bash -s v070
+```
+
+2. Restart the Kubelet container on all nodes running Longhorn system
+Connect to the node then run
+```
+docker restart kubelet
+```
+
+3. Rollback
+Use `kubectl apply` or Rancher App to rollback the Longhorn.
 
 #### Migrate the old PVs to use the new StorageClass
 
