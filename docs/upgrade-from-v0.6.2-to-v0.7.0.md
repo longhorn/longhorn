@@ -4,6 +4,7 @@ The users need to follow this guide to upgrade from v0.6.2 to v0.7.0.
 
 ## Preparation
 
+1. Make sure Kubernetes version >= v1.14.0
 1. Make backups for all the volumes.
 1. Stop the workload using the volumes.
     1. Live upgrade is not supported from v0.6.2 to v0.7.0
