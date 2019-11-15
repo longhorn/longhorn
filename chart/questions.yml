@@ -4,73 +4,62 @@ labels:
   io.rancher.certified: experimental
 namespace: longhorn-system
 questions:
-- variable: driver
-  default: csi
-  description: "Deploy either the CSI or FlexVolume driver. CSI is newer but requires MountPropagation, a feature enabled by default in Kubernetes v1.10 and later"
-  type: enum
-  options:
-  - csi
-  - flexvolume
-  label: Longhorn Kubernetes Driver
-  group: "Longhorn Driver Settings"
-  show_subquestion_if: flexvolume
-  subquestions:
-  - variable: persistence.flexvolumePath
-    default: ""
-    description: "Leave blank to autodetect. For RKE, use `/var/lib/kubelet/volumeplugins`. For GKE, use `/home/kubernetes/flexvolume/` instead. Users can find the correct directory by running `ps aux|grep kubelet` on the host and check the --volume-plugin-dir parameter.  If there is none, the default `/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` will be used."
-    type: string
-    label: Longhorn Flexvolume Path
-  show_subquestion_if: csi
-  subquestions:
-  - variable: csi.attacherImage
-    default:
-    description: "Specify CSI attacher image. Leave blank to autodetect."
-    type: string
-    label: Longhorn CSI Attacher Image
-  - variable: csi.provisionerImage
-    default:
-    description: "Specify CSI provisioner image. Leave blank to autodetect."
-    type: string
-    label: Longhorn CSI Provisioner Image
-  - variable: csi.driverRegistrarImage
-    default:
-    description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
-    type: string
-    label: Longhorn CSI Driver Registrar Image
-  - variable: csi.kubeletRootDir
-    default:
-    description: "Specify kubelet root-dir. Leave blank to autodetect."
-    type: string
-    label: Kubelet Root Directory
-  - variable: csi.attacherReplicaCount
-    type: int
-    default:
-    min: 1
-    max: 10
-    description: "Specify number of CSI Attacher replica. By default 3."
-    label: Longhorn CSI Attacher replica count
-  - variable: csi.provisionerReplicaCount
-    type: int
-    default:
-    min: 1
-    max: 10
-    description: "Specify number of CSI Provisioner replica. By default 3."
-    label: Longhorn CSI Provisioner replica count
+- variable: csi.attacherImage
+  default:
+  description: "Specify CSI attacher image. Leave blank to autodetect."
+  type: string
+  label: Longhorn CSI Attacher Image
+  group: "Longhorn CSI Driver Settings"
+- variable: csi.provisionerImage
+  default:
+  description: "Specify CSI provisioner image. Leave blank to autodetect."
+  type: string
+  label: Longhorn CSI Provisioner Image
+  group: "Longhorn CSI Driver Settings"
+- variable: csi.driverRegistrarImage
+  default:
+  description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
+  type: string
+  label: Longhorn CSI Driver Registrar Image
+  group: "Longhorn CSI Driver Settings"
+- variable: csi.kubeletRootDir
+  default:
+  description: "Specify kubelet root-dir. Leave blank to autodetect."
+  type: string
+  label: Kubelet Root Directory
+  group: "Longhorn CSI Driver Settings"
+- variable: csi.attacherReplicaCount
+  type: int
+  default:
+  min: 1
+  max: 10
+  description: "Specify replica count of CSI Attacher. By default 3."
+  label: Longhorn CSI Attacher replica count
+  group: "Longhorn CSI Driver Settings"
+- variable: csi.provisionerReplicaCount
+  type: int
+  default:
+  min: 1
+  max: 10
+  description: "Specify replica count of CSI Provisioner. By default 3."
+  label: Longhorn CSI Provisioner replica count
+  group: "Longhorn CSI Driver Settings"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass"
-  group: "Longhorn Driver Settings"
+  group: "Longhorn CSI Driver Settings"
   type: boolean
   required: true
   label: Default Storage Class
 - variable: persistence.defaultClassReplicaCount
   description: "Set replica count for default StorageClass"
-  group: "Longhorn Driver Settings"
+  group: "Longhorn CSI Driver Settings"
   type: int
   default: 3
   min: 1
   max: 10
   label: Default Storage Class Replica Count
+
 - variable: defaultSettings.backupTarget
   label: Backup Target
   description: "The target used for backup. Support NFS or S3."

@@ -53,7 +53,16 @@
   ```
 
 #### K3S: 
-  No extra configuration is needed as long as you have `open-iscsi` or `iscsiadm` installed on the node.
+  ##### 1. For Longhorn v0.7.0+ (v0.7.0 is included)
+  Longhorn v0.7.0+ supports k3s v0.10.0+ (v0.10.0 is included) only by default. 
+  
+  If you want to deploy these new Longhorn versions on k3s v0.10.0- (v0.10.0 is not included), you need to set `--kubelet-root-dir` to `<data-dir>/agent/kubelet` for the Deployment `longhorn-driver-deployer` in `longhorn/deploy/longhorn.yaml`. 
+  `data-dir` is a `k3s` arg and it can be set when you launch a k3s server. By default it is `/var/lib/rancher/k3s`.
+  
+  ##### 2. For Longhorn v0.7.0- (v0.7.0 is not included)
+  Longhorn v0.7.0- supports k3s v0.10.0- (v0.10.0 is not included) by default. 
+  
+  If you want to deploy these Longhorn versions on k3s v0.10.0+, you need to set `--kubelet-root-dir` to `/var/lib/kubelet` for the Deployment `longhorn-driver-deployer` in `longhorn/deploy/longhorn.yaml`
 
 ## Troubleshooting
 ### Common issues
@@ -79,22 +88,27 @@ You will find `root-dir` in the cmdline of proc `kubelet`. If it's not set, the 
 
 If kubelet is using a configuration file, you would need to check the configuration file to locate the `root-dir` parameter.
 
-**For K3S**
+**For K3S v0.10.0-**
 
-Run `ps aux | grep k3s` and get argument `--data-dir` or `-d` on k3s node.
+Run `ps aux | grep k3s` and get argument `--data-dir` or `-d` on k3s server node.
 
 e.g.
 ```
 $ ps uax | grep k3s
-root      4160  0.0  0.0  51420  3948 pts/0    S+   00:55   0:00 sudo /usr/local/bin/k3s server --data-dir /opt/test/kubelet
-root      4161 49.0  4.0 259204 164292 pts/0   Sl+  00:55   0:04 /usr/local/bin/k3s server --data-dir /opt/test/kubelet
+root      4160  0.0  0.0  51420  3948 pts/0    S+   00:55   0:00 sudo /usr/local/bin/k3s server --data-dir /opt/test/k3s/data/dir
+root      4161 49.0  4.0 259204 164292 pts/0   Sl+  00:55   0:04 /usr/local/bin/k3s server --data-dir /opt/test/k3s/data/dir
 ``` 
 You will find `data-dir` in the cmdline of proc `k3s`. By default it is not set and `/var/lib/rancher/k3s` will be used. Then joining `data-dir` with `/agent/kubelet` you will get the `root-dir`. So the default `root-dir` for K3S is `/var/lib/rancher/k3s/agent/kubelet`.
 
 If K3S is using a configuration file, you would need to check the configuration file to locate the `data-dir` parameter.
 
+**For K3S v0.10.0+**
+
+It is always `/var/lib/kubelet`
+
 ## Background 
-CSI doesn't work with RancherOS/CoreOS + RKE before Longhorn v0.4.1. The reason is:
+#### CSI doesn't work with RancherOS/CoreOS + RKE before Longhorn v0.4.1 
+The reason is:
 
 1. RKE sets argument `root-dir=/opt/rke/var/lib/kubelet` for kubelet in the case of RancherOS or CoreOS, which is different from the default value `/var/lib/kubelet`.
                                                                              
@@ -115,6 +129,9 @@ CSI doesn't work with RancherOS/CoreOS + RKE before Longhorn v0.4.1. The reason 
    But this path inside CSI plugin container won't be binded mount on host path. And the mount operation for Longhorn volume is meaningless.
    
    Hence Kubernetes cannot connect to Longhorn using CSI driver.
+   
+#### Longhorn v0.7.0- doesn't work on K3S v0.10.0+
+K3S now sets its kubelet directory to `/var/lib/kubelet`. See [the K3S release comment](https://github.com/rancher/k3s/releases/tag/v0.10.0) for details.
 
 ## Reference
 https://github.com/kubernetes-csi/driver-registrar

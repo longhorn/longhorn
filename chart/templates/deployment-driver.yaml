@@ -29,8 +29,6 @@ spec:
           - "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
           - --manager-url
           - http://longhorn-backend:9500/v1
-          - --driver
-          - "{{ .Values.driver }}"
           env:
           - name: POD_NAMESPACE
             valueFrom:
@@ -44,8 +42,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
-          - name: FLEXVOLUME_DIR
-            value: {{ .Values.persistence.flexvolumePath }}
           {{- if .Values.csi.kubeletRootDir }}
           - name: KUBELET_ROOT_DIR
             value: {{ .Values.csi.kubeletRootDir }}

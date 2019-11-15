@@ -20,8 +20,6 @@ spec:
         command:
         - longhorn-manager
         - post-upgrade
-        - --from-version
-        - 0.0.1
         env:
         - name: POD_NAMESPACE
           valueFrom:

@@ -4,11 +4,11 @@
 image:
   longhorn:
     engine: longhornio/longhorn-engine
-    engineTag: v0.6.2
+    engineTag: v0.7.0
     manager: longhornio/longhorn-manager
-    managerTag: v0.6.2
+    managerTag: v0.7.0
     ui: longhornio/longhorn-ui
-    uiTag: v0.6.2
+    uiTag: v0.7.0
   pullPolicy: IfNotPresent
 
 service:
@@ -19,13 +19,7 @@ service:
     type: ClusterIP
     nodePort: ""
 
-# deploy either 'flexvolume' or 'csi' driver
-driver: csi
-
 persistence:
-  # for GKE uses /home/kubernetes/flexvolume/ instead, User can find the correct directory by running ps aux|grep kubelet on the host and check the --volume-plugin-dir parameter.
-  # If there is none, the default /usr/libexec/kubernetes/kubelet-plugins/volume/exec/ will be used.
-  flexvolumePath:
   defaultClass: true
   defaultClassReplicaCount: 3
 
