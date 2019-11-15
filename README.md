@@ -23,9 +23,9 @@ You can read more technical details of Longhorn [here](http://rancher.com/micros
 
 ## Current status
 
-Longhorn is alpha-quality software. We appreciate your willingness to deploy Longhorn and provide feedback.
+Longhorn is beta-quality software. We appreciate your willingness to deploy Longhorn and provide feedback.
 
-The latest release of Longhorn is **v0.6.2**.
+The latest release of Longhorn is **v0.7.0**.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
