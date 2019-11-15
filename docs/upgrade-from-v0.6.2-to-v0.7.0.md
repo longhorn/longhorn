@@ -2,14 +2,11 @@
 
 The users need to follow this guide to upgrade from v0.6.2 to v0.7.0.
 
-## Warning
-Longhorn v0.7.0 breaks the regular rollback and some risky operations are needed as the workaround. 
-Please check the rollback part if you may want to do rollback later before upgrading to v0.7.0.
-
 ## Preparation
 
 1. Make backups for all the volumes.
 1. Stop the workload using the volumes.
+    1. Live upgrade is not supported from v0.6.2 to v0.7.0
 
 ## Upgrade
 ### Use Rancher App
@@ -79,8 +76,7 @@ kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/exa
 
 ### Error: `kind CustomResourceDefinition with the name "xxx" already exists in the cluster and wasn't defined in the previous release...`
 - This is [a Helm bug](https://github.com/helm/helm/issues/6031).
-- Please make sure that you have not deleted the old Longhorn CRDs via the command `curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh | bash -s v062` or Longhorn uninstaller before executing the following command.
-    Otherwise you may lose all the data stored in the Longhorn system.
+- Please make sure that you have not deleted the old Longhorn CRDs via the command `curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh | bash -s v062` or executed Longhorn uninstaller before executing the following command. Otherwise you MAY LOSE all the data stored in the Longhorn system.
 
 1. Clean up the leftover:
 ```
@@ -91,8 +87,14 @@ curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/
 2. Re-click the `Upgrade` button in the Rancher UI.
 
 ## Rollback
+
 Since we upgrade the CSI framework from v0.4.2 to v1.1.0 in this release, rolling back from Longhorn v0.7.0 to v0.6.2 or lower means backward upgrade for the CSI plugin. 
-But Kubernetes does not support the CSI backward upgrade. **Hence restarting kubelet is unavoidable. Please be careful about the risky operation!**
+But Kubernetes does not support the CSI backward upgrade. **Hence restarting kubelet is unavoidable. Please be careful, check the conditions beforehand and follow the instruction exactly.**
+
+Prerequisite: 
+* To rollback from v0.7.0 installation, you must haven't executed [the post upgrade steps](#post-upgrade).
+
+Steps to roll back:
 
 1. Clean up the components introduced by Longhorn v0.7.0 upgrade
 ```
@@ -100,7 +102,8 @@ kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.7.0/exa
 curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh | bash -s v070
 ```
 
-2. Restart the Kubelet container on all nodes running Longhorn system
+2. Restart the Kubelet container on all nodes or restart all the nodes. This step WILL DISRUPT all the workloads in the system.
+
 Connect to the node then run
 ```
 docker restart kubelet
