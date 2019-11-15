@@ -39,7 +39,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 # Requirements
 
 1.  Docker v1.13+
-2.  Kubernetes v1.8+. Recommend v1.12+.
+2.  Kubernetes v1.14+.
 3.  `open-iscsi` has been installed on all the nodes of the Kubernetes cluster.
     1. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
     2. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
@@ -128,6 +128,8 @@ Noted that the UI is unauthenticated when you installed Longhorn using YAML file
 
 # Upgrade
 
+[See here](docs/upgrade.md) for details.
+
 ## Upgrade Longhorn manager
 
 ##### On Kubernetes clusters Managed by Rancher 2.1 or newer
@@ -144,12 +146,7 @@ helm upgrade longhorn ./longhorn/chart
 ```
 
 ## Upgrade Longhorn engine
-After upgraded manager, follow [the steps here](docs/upgrade.md#upgrade-longhorn-engine) to upgrade Longhorn engine for existing volumes.
-
-1. Upgrade v0.5.0 to v0.6.0 requires offline upgrade. Live upgrade is not supported for this upgrade.
-2. For non distruptive upgrade from previous version to v0.5.0, follow [the live upgrade steps here](./docs/upgrade.md#live-upgrade)
-
-For more details about upgrade in Longhorn or upgrade from older versions, [see here](docs/upgrade.md).
+After Longhorn Manager was upgraded, Longhorn Engine also need to be upgraded using Longhorn UI. [See here](docs/upgrade.md) for details.
 
 # Create Longhorn Volumes
 
