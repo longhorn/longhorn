@@ -4,11 +4,11 @@
 image:
   longhorn:
     engine: longhornio/longhorn-engine
-    engineTag: v0.7.0-rc2
+    engineTag: v0.7.0
     manager: longhornio/longhorn-manager
-    managerTag: v0.7.0-rc2
+    managerTag: v0.7.0
     ui: longhornio/longhorn-ui
-    uiTag: v0.7.0-rc2
+    uiTag: v0.7.0
   pullPolicy: IfNotPresent
 
 service:
