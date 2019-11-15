@@ -120,6 +120,7 @@ TODO
 1. Bring back the workload online.
 1. Make sure all the volumes are back online.
 1. Check all the existing manager pods are running v0.7.0. No v0.6.2 pods is running.
+    1. Run `kubectl -n longhorn-system get pod -o yaml|grep "longhorn-manager:v0.6.2"` should yield no result.
 1. Run the following script to clean up the v0.6.2 CRDs.
     1. Must make sure all the v0.6.2 pods HAVE BEEN DELETED, otherwise the data WILL BE LOST!
 ```
