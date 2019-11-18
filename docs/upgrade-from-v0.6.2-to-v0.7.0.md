@@ -125,5 +125,5 @@ TODO
 1. Run the following script to clean up the v0.6.2 CRDs.
     1. Must make sure all the v0.6.2 pods HAVE BEEN DELETED, otherwise the data WILL BE LOST!
 ```
-curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrs.sh |bash -s v062
+curl -s https://raw.githubusercontent.com/longhorn/longhorn-manager/master/hack/cleancrds.sh | bash -s v062
 ```
