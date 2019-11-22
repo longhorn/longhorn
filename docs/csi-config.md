@@ -8,7 +8,7 @@
 
 ## Instruction
 ### For RancherOS/CoreOS + Kubernetes v1.11 only 
-  The following step is not needed for Kubernetes v1.12+.
+  The following step is not needed for Kubernetes v1.12 and above.
 
   Add extra_binds for kubelet in RKE `cluster.yml`:
   ```
@@ -53,16 +53,16 @@
   ```
 
 #### K3S: 
-  ##### 1. For Longhorn v0.7.0+ (v0.7.0 is included)
-  Longhorn v0.7.0+ supports k3s v0.10.0+ (v0.10.0 is included) only by default. 
+  ##### 1. For Longhorn v0.7.0 and above
+  Longhorn v0.7.0 and above support k3s v0.10.0 and above only by default. 
   
-  If you want to deploy these new Longhorn versions on k3s v0.10.0- (v0.10.0 is not included), you need to set `--kubelet-root-dir` to `<data-dir>/agent/kubelet` for the Deployment `longhorn-driver-deployer` in `longhorn/deploy/longhorn.yaml`. 
+  If you want to deploy these new Longhorn versions on versions before k3s v0.10.0, you need to set `--kubelet-root-dir` to `<data-dir>/agent/kubelet` for the Deployment `longhorn-driver-deployer` in `longhorn/deploy/longhorn.yaml`. 
   `data-dir` is a `k3s` arg and it can be set when you launch a k3s server. By default it is `/var/lib/rancher/k3s`.
   
-  ##### 2. For Longhorn v0.7.0- (v0.7.0 is not included)
-  Longhorn v0.7.0- supports k3s v0.10.0- (v0.10.0 is not included) by default. 
+  ##### 2. For Longhorn before v0.7.0
+  Longhorn versions before v0.7.0 support k3s below v0.10.0 only by default. 
   
-  If you want to deploy these Longhorn versions on k3s v0.10.0+, you need to set `--kubelet-root-dir` to `/var/lib/kubelet` for the Deployment `longhorn-driver-deployer` in `longhorn/deploy/longhorn.yaml`
+  If you want to deploy these older Longhorn versions on k3s v0.10.0 and above, you need to set `--kubelet-root-dir` to `/var/lib/kubelet` for the Deployment `longhorn-driver-deployer` in `longhorn/deploy/longhorn.yaml`
 
 ## Troubleshooting
 ### Common issues
@@ -112,7 +112,7 @@ The reason is:
 
 1. RKE sets argument `root-dir=/opt/rke/var/lib/kubelet` for kubelet in the case of RancherOS or CoreOS, which is different from the default value `/var/lib/kubelet`.
                                                                              
-2. **For k8s v1.12+**
+2. **For k8s v1.12 and above**
 
      Kubelet will detect the `csi.sock` according to argument `<--kubelet-registration-path>` passed in by Kubernetes CSI driver-registrar, and `<drivername>-reg.sock` (for Longhorn, it's `io.rancher.longhorn-reg.sock`) on kubelet path `<root-dir>/plugins`.
    
@@ -130,7 +130,7 @@ The reason is:
    
    Hence Kubernetes cannot connect to Longhorn using CSI driver.
    
-#### Longhorn v0.7.0- doesn't work on K3S v0.10.0+
+#### Longhorn versions before v0.7.0 don't work on K3S v0.10.0 or above
 K3S now sets its kubelet directory to `/var/lib/kubelet`. See [the K3S release comment](https://github.com/rancher/k3s/releases/tag/v0.10.0) for details.
 
 ## Reference
