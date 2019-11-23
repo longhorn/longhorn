@@ -49,7 +49,7 @@ spec:
     fsType: ext4
     volumeAttributes:
       numberOfReplicas: <replicas> # must match Longhorn volume value
-      staleReplicaTimeout: '30'
+      staleReplicaTimeout: '30' # in minutes
     volumeHandle: statefulset-vol-0 # must match volume name from Longhorn
   storageClassName: longhorn # must be same name that we will use later
 ---

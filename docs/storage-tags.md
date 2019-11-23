@@ -36,7 +36,7 @@ metadata:
 provisioner: rancher.io/longhorn
 parameters:
   numberOfReplicas: "3"
-  staleReplicaTimeout: "480"
+  staleReplicaTimeout: "480" # 8 hours in minutes
   diskSelector: "ssd"
   nodeSelector: "storage,fast"
 ```
