@@ -421,7 +421,7 @@ metadata:
 provisioner: driver.longhorn.io
 parameters:
   numberOfReplicas: "3"
-  staleReplicaTimeout: "2880"
+  staleReplicaTimeout: "2880" # 48 hours in minutes
   fromBackup: ""
 #  diskSelector: "ssd,fast"
 #  nodeSelector: "storage,fast"
