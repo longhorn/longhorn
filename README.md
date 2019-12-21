@@ -212,6 +212,7 @@ More examples are available at `./examples/`
 ### [Storage Tags](./docs/storage-tags.md)
 ### [Customized default setting](./docs/customized-default-setting.md)
 ### [Taint Toleration](./docs/taint-toleration.md)
+### [Volume Expansion](./docs/expansion.md)
 
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
