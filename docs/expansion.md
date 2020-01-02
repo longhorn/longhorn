@@ -70,11 +70,35 @@ Modify `spec.resources.requests.storage` of this PVC.
  
 
 ## Filesystem expansion
-Longhorn will try to expand the file system only if:
+#### Longhorn will try to expand the file system only if:
 1. The expanded size should be greater than the current size.
 2. There is a Linux filesystem in the Longhorn volume. 
 3. The filesystem used in the Longhorn volume is one of the followings:
-  3.1 ext4
-  3.2 XFS
+    1. ext4
+    2. XFS
 4. The Longhorn volume is not in maintanence mode
 5. The Longhorn volume is using block device frontend. 
+
+#### Handling volume revert:
+If users revert a volume to a snapshot with smaller size, the frontend of the volume is still holding the expanded size. But the filesystem size will be the same as that of the reverted snapshot. In this case, users need to handle the filesystem manually:
+  1. Attach the volume to a random nodes.
+  2. Log into the corresponding node, expand the filesystem:
+  - If the filesystem is `ext4`, the volume might need to be mounted and umounted once before resizing the filesystem manually. Otherwise, executing `resize2fs` might result in an error:
+    ```
+    resize2fs: Superblock checksum does not match superblock while trying to open ......
+    Couldn't find valid filesystem superblock.
+    ```
+    Follow the steps below to resize the filesystem:  
+    ```
+    mount /dev/longhorn/<volume name> <arbitrary mount directory>
+    umount /dev/longhorn/<volume name>
+    mount /dev/longhorn/<volume name> <arbitrary mount directory>
+    resize2fs /dev/longhorn/<volume name>
+    umount /dev/longhorn/<volume name>
+    ```
+  - If the filesystem is `xfs`, users can directly mount then expand the filesystem.
+    ```
+    mount /dev/longhorn/<volume name> <arbitrary mount directory>
+    xfs_growfs <the mount directory>
+    umount /dev/longhorn/<volume name>
+    ```
