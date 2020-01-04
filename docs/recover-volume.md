@@ -2,7 +2,16 @@
 
 ## Overview
 1. Now Longhorn can automatically reattach then remount volumes if unexpected detachment happens. e.g., [Kubernetes upgrade](https://github.com/longhorn/longhorn/issues/703), [Docker reboot](https://github.com/longhorn/longhorn/issues/686).
-2. After reattachment and remount complete, users may need to **manually restart the related workload containers** for the volume restoration **if the following recommended setup is not applied**.
+2. After **reattachment** and **remount** complete, users may need to **manually restart the related workload containers** for the volume restoration **if the following recommended setup is not applied**.
+
+#### Reattachment
+Longhorn will reattach the volume if the volume engine deads unexpectedly.
+
+#### Remount
+- Longhorn will detect and remount filesystem for the volume after the reattachment. 
+- But **the auto remount does not work for `xfs` filesystem**. 
+    - Since mounting one more layers with `xfs` filesystem is not allowed and will trigger the error `XFS (sdb): Filesystem has duplicate UUID <filesystem UUID> - can't mount`.
+    - Users need to manually unmount then mount the `xfs` filesystem on the host. The device path on host for the attached volume is `/dev/longhorn/<volume name>`  
 
 ## Recommended setup when using Longhorn volumes
 In order to recover unexpectedly detached volumes automatically, users can set `restartPolicy` to `Always` then add `livenessProbe` for the workloads using Longhorn volumes.
@@ -55,7 +64,7 @@ spec:
 
 ## Manually restart workload containers
 ## This solution is applied only if:
-1. The Longhorn volume is reattached automatically.
+1. The Longhorn volume is reattached and remounted automatically.
 2. The above setup is not included when the related workload is launched.
 
 ### Steps
