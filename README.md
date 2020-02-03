@@ -83,9 +83,11 @@ git clone https://github.com/longhorn/longhorn.git
 
 Now using following command to install Longhorn:
 ```
+# Helm2
 helm install ./longhorn/chart --name longhorn --namespace longhorn-system
+# or Helm3
+helm install longhorn ./longhorn/chart/ --namespace longhorn-system
 ```
-
 ---
 
 Longhorn will be installed in the namespace `longhorn-system`
