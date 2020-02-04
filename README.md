@@ -86,6 +86,7 @@ Now using following command to install Longhorn:
 # Helm2
 helm install ./longhorn/chart --name longhorn --namespace longhorn-system
 # or Helm3
+kubectl create namespace longhorn-system
 helm install longhorn ./longhorn/chart/ --namespace longhorn-system
 ```
 ---
