@@ -40,7 +40,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 1.  Docker v1.13+
 2.  Kubernetes v1.14+.
-3.  `open-iscsi` has been installed on all the nodes of the Kubernetes cluster.
+3.  `open-iscsi` has been installed on all the nodes of the Kubernetes cluster, and `iscsid` daemon is running on all the nodes.
     1. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
     2. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
     3. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
