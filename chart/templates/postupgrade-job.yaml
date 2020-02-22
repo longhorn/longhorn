@@ -3,7 +3,7 @@ kind: Job
 metadata:
   annotations:
     "helm.sh/hook": post-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
   name: longhorn-post-upgrade
   namespace: {{ .Release.Namespace }}
 spec:
