@@ -17,6 +17,12 @@ User can reserve a certain amount of space of the disk to stop Longhorn from usi
 
 The kubelet needs to preserve node stability when available compute resources are low. This is especially important when dealing with incompressible compute resources, such as memory or disk space. If such resources are exhausted, nodes become unstable. To avoid kubelet `Disk pressure` issue after scheduling several volumes, by default, longhorn reserved 30% of root disk space (`/var/lib/rancher/longhorn`) to ensure node stability.
 
+### Use an alternative path for disk on the node
+
+If the users don't want to use the original mount path of a disk on the node, they can use `mount --bind` to create an alternative/alias path for the disk then use the it with Longhorn. Notice that soft link `ln -s` won't work since it will not get populated correctly inside the pod.
+
+Longhorn will identify the disk using the path, so the users need to make sure the alternative path are correctly mounted when the node reboots, e.g. by adding it to `fstab`.
+
 ## Remove a disk
 Nodes and disks can be excluded from future scheduling. Notice any scheduled storage space won't be released automatically if the scheduling was disabled for the node.
 
