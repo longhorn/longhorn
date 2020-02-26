@@ -49,4 +49,6 @@ spec:
     targetPort: http
     {{- if .Values.service.ui.nodePort }}
     nodePort: {{ .Values.service.ui.nodePort }}
+    {{- else }}
+    nodePort: null
     {{- end }}

@@ -13,8 +13,8 @@ image:
 
 service:
   ui:
-    type: LoadBalancer
-    nodePort: ""
+    type: ClusterIP
+    nodePort: null
   manager:
     type: ClusterIP
     nodePort: ""
