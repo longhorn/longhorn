@@ -113,18 +113,21 @@ longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
 
 ### Accessing the UI
 
-You can run `kubectl -n longhorn-system get svc` to get the external service IP for UI:
+> For Longhorn v0.8.0+, UI service type has been changed from `LoadBalancer` to `ClusterIP`
+
+You can run `kubectl -n longhorn-system get svc` to get Longhorn UI service:
 
 ```
 NAME                TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
 longhorn-backend    ClusterIP      10.20.248.250   <none>           9500/TCP       58m
-longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123  80:30697/TCP   58m
+longhorn-frontend   ClusterIP      10.20.245.110   <none>           80/TCP         58m
 
 ```
 
-If the Kubernetes Cluster supports creating LoadBalancer, you can use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhorn-frontend` to access the Longhorn UI. Otherwise you can use `<node_ip>:<port>` (port is `30697`in the case above) to access the UI.
+To access Longhorn UI when installed from YAML manifest, you need to create an ingress controller.
 
-Noted that the UI is unauthenticated when you installed Longhorn using YAML file.
+See more about how to create an Nginx ingress controller with basic authentication [here](https://github.com/longhorn/longhorn/blob/master/docs/longhorn-ingress.md)
+
 
 # Upgrade
 
