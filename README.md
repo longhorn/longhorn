@@ -1,11 +1,13 @@
 # Longhorn
 
-### Status
+### Build Status
 * Engine: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-engine/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-engine) [![Go Report Card](https://goreportcard.com/badge/github.com/rancher/longhorn-engine)](https://goreportcard.com/report/github.com/rancher/longhorn-engine)
+* Instance Manager: [![Build Status](http://drone-publish.rancher.io/api/badges/longhorn/longhorn-instance-manager/status.svg)](http://drone-publish.rancher.io/longhorn/longhorn-instance-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-instance-manager)](https://goreportcard.com/report/github.com/longhorn/longhorn-instance-manager)
 * Manager: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-manager/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/rancher/longhorn-manager)](https://goreportcard.com/report/github.com/rancher/longhorn-manager)
 * UI: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-ui/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-ui)
 * Test: [![Build Status](http://drone-publish.rancher.io/api/badges/longhorn/longhorn-tests/status.svg)](http://drone-publish.rancher.io/longhorn/longhorn-tests)
 
+### Overview
 Longhorn is a distributed block storage system for Kubernetes.
 
 Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply` command or using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
@@ -277,7 +279,7 @@ Contributing code is not the only way of contributing. We value feedbacks very m
 
 ## License
 
-Copyright (c) 2014-2019 The Longhorn Authors
+Copyright (c) 2014-2020 The Longhorn Authors
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
