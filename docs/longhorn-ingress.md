@@ -36,3 +36,14 @@ spec:
 
 4. Create the ingress controller:
 `$ kubectl -n longhorn-system apply longhorn-ingress.yml`
+
+
+
+#### For AWS EKS clusters:
+User need to create an ELB to expose nginx ingress controller to the internet. (additional cost may apply)
+
+1. Create pre-requisite resources: 
+https://github.com/kubernetes/ingress-nginx/blob/master/docs/deploy/index.md#prerequisite-generic-deployment-command
+
+2. Create ELB:
+https://github.com/kubernetes/ingress-nginx/blob/master/docs/deploy/index.md#aws
