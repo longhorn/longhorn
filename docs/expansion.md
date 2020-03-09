@@ -1,11 +1,12 @@
 # Volume Expansion
 
 ## Overview
-- Longhorn supports both ONLINE and OFFLINE volume expansion. 
+- Longhorn supports OFFLINE volume expansion only. 
 - Longhorn will expand frontend (e.g. block device) then expand filesystem.
 
 ## Prerequisite:
-Longhorn version v0.8.0 or higher.
+1. Longhorn version v0.8.0 or higher.
+2. The volume to be expanded is state `detached`.
 
 ## Expand a Longhorn volume
 There are two ways to expand a Longhorn volume:
@@ -61,11 +62,8 @@ Modify `spec.resources.requests.storage` of this PVC.
 
 
 ## Frontend expansion
-- Longhorn will expand a Longhorn volume's frontend even if the volume is in the maintenance mode.
-- For the OFFLINE expansion, Longhorn will automatically attach the `detached` volume to a random node then do expansion.
- 
-  For the ONLINE expansion, users can read/write the volume while expansion. 
-  
+- To prevent the frontend expansion from being interfered by unexpected data R/W, Longhorn supports OFFLINE expansion only. 
+The `detached` volume will be automatically attached to a random node with maintenance mode.
 - Rebuilding/adding replicas is not allowed during the expansion and vice versa. 
  
 
@@ -76,8 +74,7 @@ Modify `spec.resources.requests.storage` of this PVC.
 3. The filesystem used in the Longhorn volume is one of the followings:
     1. ext4
     2. XFS
-4. The Longhorn volume is not in maintanence mode
-5. The Longhorn volume is using block device frontend. 
+4. The Longhorn volume is using block device frontend. 
 
 #### Handling volume revert:
 If users revert a volume to a snapshot with smaller size, the frontend of the volume is still holding the expanded size. But the filesystem size will be the same as that of the reverted snapshot. In this case, users need to handle the filesystem manually:
