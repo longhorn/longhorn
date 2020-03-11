@@ -240,7 +240,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v0.8.0-rc3
+        image: longhornio/longhorn-manager:v0.8.0
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -249,11 +249,11 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v0.8.0-rc3
+        - longhornio/longhorn-engine:v0.8.0
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20200301
         - --manager-image
-        - longhornio/longhorn-manager:v0.8.0-rc3
+        - longhornio/longhorn-manager:v0.8.0
         - --service-account
         - longhorn-service-account
         ports:
@@ -344,7 +344,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v0.8.0-rc3
+        image: longhornio/longhorn-ui:v0.8.0
         ports:
         - containerPort: 8000
         env:
@@ -385,18 +385,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v0.8.0-rc3
+          image: longhornio/longhorn-manager:v0.8.0
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v0.8.0-rc3
+          image: longhornio/longhorn-manager:v0.8.0
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v0.8.0-rc3
+          - longhornio/longhorn-manager:v0.8.0
           - --manager-url
           - http://longhorn-backend:9500/v1
           # manually set root directory for csi
