@@ -26,6 +26,8 @@ spec:
         - daemon
         - --engine-image
         - "{{ .Values.image.longhorn.engine }}:{{ .Values.image.longhorn.engineTag }}"
+        - --instance-manager-image
+        - "{{ .Values.image.longhorn.instanceManager }}:{{ .Values.image.longhorn.instanceManagerTag }}"
         - --manager-image
         - "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
         - --service-account
@@ -41,10 +43,10 @@ spec:
         - name: varrun
           mountPath: /var/run/
         - name: longhorn
-          mountPath: /var/lib/rancher/longhorn/
+          mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
         - name: longhorn-default-setting
-          mountPath: /var/lib/longhorn/setting/
+          mountPath: /var/lib/longhorn-setting/
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -61,7 +63,7 @@ spec:
         - name: LONGHORN_BACKEND_SVC
           value: longhorn-backend
         - name: DEFAULT_SETTING_PATH
-          value: /var/lib/longhorn/setting/default-setting.yaml
+          value: /var/lib/longhorn-setting/default-setting.yaml
       volumes:
       - name: dev
         hostPath:
@@ -74,11 +76,14 @@ spec:
           path: /var/run/
       - name: longhorn
         hostPath:
-          path: /var/lib/rancher/longhorn/
+          path: /var/lib/longhorn/
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
       serviceAccountName: longhorn-service-account
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: "100%"
 ---
 apiVersion: v1
 kind: Service

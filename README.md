@@ -1,11 +1,13 @@
 # Longhorn [![Astronomer](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fastronomer.ullaakut.eu%2Fshields%3Fowner%3Dlonghorn%26name%3Dlonghorn)](https://github.com/Ullaakut/astronomer)
 
-### Status
+### Build Status
 * Engine: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-engine/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-engine) [![Go Report Card](https://goreportcard.com/badge/github.com/rancher/longhorn-engine)](https://goreportcard.com/report/github.com/rancher/longhorn-engine)
+* Instance Manager: [![Build Status](http://drone-publish.rancher.io/api/badges/longhorn/longhorn-instance-manager/status.svg)](http://drone-publish.rancher.io/longhorn/longhorn-instance-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-instance-manager)](https://goreportcard.com/report/github.com/longhorn/longhorn-instance-manager)
 * Manager: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-manager/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/rancher/longhorn-manager)](https://goreportcard.com/report/github.com/rancher/longhorn-manager)
 * UI: [![Build Status](https://drone-publish.rancher.io/api/badges/longhorn/longhorn-ui/status.svg)](https://drone-publish.rancher.io/longhorn/longhorn-ui)
 * Test: [![Build Status](http://drone-publish.rancher.io/api/badges/longhorn/longhorn-tests/status.svg)](http://drone-publish.rancher.io/longhorn/longhorn-tests)
 
+### Overview
 Longhorn is a distributed block storage system for Kubernetes.
 
 Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply` command or using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
@@ -84,10 +86,15 @@ git clone https://github.com/longhorn/longhorn.git
 ```
 
 Now using following command to install Longhorn:
+* Helm2
 ```
 helm install ./longhorn/chart --name longhorn --namespace longhorn-system
 ```
-
+* Helm3
+```
+kubectl create namespace longhorn-system
+helm install longhorn ./longhorn/chart/ --namespace longhorn-system
+```
 ---
 
 Longhorn will be installed in the namespace `longhorn-system`
@@ -115,18 +122,21 @@ longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
 
 ### Accessing the UI
 
-You can run `kubectl -n longhorn-system get svc` to get the external service IP for UI:
+> For Longhorn v0.8.0+, UI service type has been changed from `LoadBalancer` to `ClusterIP`
+
+You can run `kubectl -n longhorn-system get svc` to get Longhorn UI service:
 
 ```
 NAME                TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
 longhorn-backend    ClusterIP      10.20.248.250   <none>           9500/TCP       58m
-longhorn-frontend   LoadBalancer   10.20.245.110   100.200.200.123  80:30697/TCP   58m
+longhorn-frontend   ClusterIP      10.20.245.110   <none>           80/TCP         58m
 
 ```
 
-If the Kubernetes Cluster supports creating LoadBalancer, you can use `EXTERNAL-IP`(`100.200.200.123` in the case above) of `longhorn-frontend` to access the Longhorn UI. Otherwise you can use `<node_ip>:<port>` (port is `30697`in the case above) to access the UI.
+To access Longhorn UI when installed from YAML manifest, you need to create an ingress controller.
 
-Noted that the UI is unauthenticated when you installed Longhorn using YAML file.
+See more about how to create an Nginx ingress controller with basic authentication [here](https://github.com/longhorn/longhorn/blob/master/docs/longhorn-ingress.md)
+
 
 # Upgrade
 
@@ -214,6 +224,7 @@ More examples are available at `./examples/`
 ### [Storage Tags](./docs/storage-tags.md)
 ### [Customized default setting](./docs/customized-default-setting.md)
 ### [Taint Toleration](./docs/taint-toleration.md)
+### [Volume Expansion](./docs/expansion.md)
 
 ### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
 ### [Google Kubernetes Engine](./docs/gke.md)
@@ -275,7 +286,7 @@ Contributing code is not the only way of contributing. We value feedbacks very m
 
 ## License
 
-Copyright (c) 2014-2019 The Longhorn Authors
+Copyright (c) 2014-2020 The Longhorn Authors
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

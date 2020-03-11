@@ -21,7 +21,7 @@ rules:
   verbs:
   - "*"
 - apiGroups: [""]
-  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps"]
+  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims","persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps"]
   verbs: ["*"]
 - apiGroups: [""]
   resources: ["namespaces"]
@@ -240,7 +240,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v0.7.0
+        image: longhornio/longhorn-manager:v0.8.0
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -249,13 +249,18 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v0.7.0
+        - longhornio/longhorn-engine:v0.8.0
+        - --instance-manager-image
+        - longhornio/longhorn-instance-manager:v1_20200301
         - --manager-image
-        - longhornio/longhorn-manager:v0.7.0
+        - longhornio/longhorn-manager:v0.8.0
         - --service-account
         - longhorn-service-account
         ports:
         - containerPort: 9500
+        readinessProbe:
+          tcpSocket:
+            port: 9500
         volumeMounts:
         - name: dev
           mountPath: /host/dev/
@@ -264,7 +269,7 @@ spec:
         - name: varrun
           mountPath: /var/run/
         - name: longhorn
-          mountPath: /var/lib/rancher/longhorn/
+          mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
         - name: longhorn-default-setting
           mountPath: /var/lib/longhorn-setting/
@@ -296,11 +301,14 @@ spec:
           path: /var/run/
       - name: longhorn
         hostPath:
-          path: /var/lib/rancher/longhorn/
+          path: /var/lib/longhorn/
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
       serviceAccountName: longhorn-service-account
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: "100%"
 ---
 kind: Service
 apiVersion: v1
@@ -336,7 +344,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v0.7.0
+        image: longhornio/longhorn-ui:v0.8.0
         ports:
         - containerPort: 8000
         env:
@@ -357,7 +365,8 @@ spec:
   ports:
   - port: 80
     targetPort: 8000
-  type: LoadBalancer
+    nodePort: null
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -376,18 +385,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v0.7.0
+          image: longhornio/longhorn-manager:v0.8.0
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v0.7.0
+          image: longhornio/longhorn-manager:v0.8.0
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v0.7.0
+          - longhornio/longhorn-manager:v0.8.0
           - --manager-url
           - http://longhorn-backend:9500/v1
           # manually set root directory for csi
@@ -419,9 +428,10 @@ apiVersion: storage.k8s.io/v1
 metadata:
   name: longhorn
 provisioner: driver.longhorn.io
+allowVolumeExpansion: true
 parameters:
   numberOfReplicas: "3"
-  staleReplicaTimeout: "2880" # 48 hours in minutes
+  staleReplicaTimeout: "2880"
   fromBackup: ""
 #  diskSelector: "ssd,fast"
 #  nodeSelector: "storage,fast"
