@@ -104,20 +104,24 @@ One of the two available drivers (CSI and Flexvolume) would be chosen automatica
 A successful CSI-based deployment looks like this:
 ```
 # kubectl -n longhorn-system get pod
-NAME                                        READY     STATUS    RESTARTS   AGE
-csi-attacher-0                              1/1       Running   0          6h
-csi-provisioner-0                           1/1       Running   0          6h
-engine-image-ei-57b85e25-8v65d              1/1       Running   0          7d
-engine-image-ei-57b85e25-gjjs6              1/1       Running   0          7d
-engine-image-ei-57b85e25-t2787              1/1       Running   0          7d
-longhorn-csi-plugin-4cpk2                   2/2       Running   0          6h
-longhorn-csi-plugin-ll6mq                   2/2       Running   0          6h
-longhorn-csi-plugin-smlsh                   2/2       Running   0          6h
-longhorn-driver-deployer-7b5bdcccc8-fbncl   1/1       Running   0          6h
-longhorn-manager-7x8x8                      1/1       Running   0          6h
-longhorn-manager-8kqf4                      1/1       Running   0          6h
-longhorn-manager-kln4h                      1/1       Running   0          6h
-longhorn-ui-f849dcd85-cgkgg                 1/1       Running   0          5d
+NAME                                        READY   STATUS              RESTARTS   AGE
+compatible-csi-attacher-d9fb48bcf-2rzmb     1/1     Running             0          8m58s
+csi-attacher-78bf9b9898-grn2c               1/1     Running             0          32s
+csi-attacher-78bf9b9898-lfzvq               1/1     Running             0          8m59s
+csi-attacher-78bf9b9898-r64sv               1/1     Running             0          33s
+csi-provisioner-8599d5bf97-c8r79            1/1     Running             0          33s
+csi-provisioner-8599d5bf97-fc5pz            1/1     Running             0          33s
+csi-provisioner-8599d5bf97-p9psl            1/1     Running             0          8m59s
+csi-resizer-586665f745-b7p6h                1/1     Running             0          8m59s
+csi-resizer-586665f745-kgdxs                1/1     Running             0          33s
+csi-resizer-586665f745-vsvvq                1/1     Running             0          33s
+engine-image-ei-e10d6bf5-pv2s6              1/1     Running             0          9m30s
+instance-manager-e-379373af                 1/1     Running             0          8m41s
+instance-manager-r-101f13ba                 1/1     Running             0          8m40s
+longhorn-csi-plugin-7v2dc                   4/4     Running             0          8m59s
+longhorn-driver-deployer-775897bdf6-k4sfd   1/1     Running             0          10m
+longhorn-manager-79xgj                      1/1     Running             0          9m50s
+longhorn-ui-9fbb5445-httqf                  0/1     Running             0          33s
 ```
 
 ### Accessing the UI
