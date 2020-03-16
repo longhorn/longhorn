@@ -31,7 +31,7 @@ data:
     backup-target: s3://backupbucket@us-east-1/backupstore
     backup-target-credential-secret: minio-secret 
     create-default-disk-labeled-nodes: true
-    default-data-path: /var/lib/rancher/longhorn-example/
+    default-data-path: /var/lib/longhorn-example/
     replica-soft-anti-affinity: false
     storage-over-provisioning-percentage: 600
     storage-minimal-available-percentage: 15
@@ -65,7 +65,7 @@ defaultSettings:
   backupTarget: s3://backupbucket@us-east-1/backupstore
   backupTargetCredentialSecret: minio-secret 
   createDefaultDiskLabeledNodes: true
-  defaultDataPath: /var/lib/rancher/longhorn-example/
+  defaultDataPath: /var/lib/longhorn-example/
   replicaSoftAntiAffinity: false
   storageOverProvisioningPercentage: 600
   storageMinimalAvailablePercentage: 15

@@ -1,7 +1,7 @@
 # Multiple disks support
 Longhorn supports to use more than one disk on the nodes to store the volume data.
 
-By default, `/var/lib/rancher/longhorn` on the host will be used for storing the volume data. You can avoid using the default directory by adding a new disk, then disable scheduling for `/var/lib/rancher/longhorn`.
+By default, `/var/lib/longhorn` on the host will be used for storing the volume data. You can avoid using the default directory by adding a new disk, then disable scheduling for `/var/lib/longhorn`.
 
 ## Add a disk
 
@@ -15,7 +15,7 @@ Longhorn will detect the storage information (e.g. maximum space, available spac
 
 User can reserve a certain amount of space of the disk to stop Longhorn from using it. It can be set in the `Space Reserved` field for the disk. It's useful for the non-dedicated storage disk on the node. 
 
-The kubelet needs to preserve node stability when available compute resources are low. This is especially important when dealing with incompressible compute resources, such as memory or disk space. If such resources are exhausted, nodes become unstable. To avoid kubelet `Disk pressure` issue after scheduling several volumes, by default, longhorn reserved 30% of root disk space (`/var/lib/rancher/longhorn`) to ensure node stability.
+The kubelet needs to preserve node stability when available compute resources are low. This is especially important when dealing with incompressible compute resources, such as memory or disk space. If such resources are exhausted, nodes become unstable. To avoid kubelet `Disk pressure` issue after scheduling several volumes, by default, longhorn reserved 30% of root disk space (`/var/lib/longhorn`) to ensure node stability.
 
 ### Use an alternative path for disk on the node
 
