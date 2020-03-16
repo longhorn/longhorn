@@ -23,7 +23,7 @@ To setup setting before installing Longhorn, see [Customized Default Setting](./
 * Note: It's useful if the user want to scale the cluster but doesn't want to use the storage on the new nodes.
 
 #### Default Data Path
-* Example: `/var/lib/rancher/longhorn`
+* Example: `/var/lib/longhorn`
 * Description: Default path to use for storing data on a host
 * Note: Can be used with `Create Default Disk on Labeled Nodes` option, to make Longhorn only use the nodes with specific storage mounted at e.g. `/opt/longhorn` directory when scaling the cluster.
 

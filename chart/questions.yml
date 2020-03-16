@@ -80,10 +80,10 @@ questions:
   default: "false"
 - variable: defaultSettings.defaultDataPath
   label: Default Data Path
-  description: 'Default path to use for storing data on a host. By default "/var/lib/rancher/longhorn/"'
+  description: 'Default path to use for storing data on a host. By default "/var/lib/longhorn/"'
   group: "Longhorn Default Settings"
   type: string
-  default: "/var/lib/rancher/longhorn/"
+  default: "/var/lib/longhorn/"
 - variable: defaultSettings.replicaSoftAntiAffinity
   label: Replica Soft Anti-Affinity
   description: 'Allow scheduling on nodes with existing healthy replicas of the same volume. By default true.'
