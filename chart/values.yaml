@@ -29,6 +29,7 @@ csi:
   attacherImage:
   provisionerImage:
   driverRegistrarImage:
+  resizerImage:
   kubeletRootDir:
   attacherReplicaCount:
   provisionerReplicaCount:
@@ -47,6 +48,12 @@ defaultSettings:
   defaultLonghornStaticStorageClass:
   backupstorePollInterval:
   taintToleration:
+  registrySecret:
+
+privateRegistry:
+    registryUrl:
+    registryUser:
+    registryPasswd:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
