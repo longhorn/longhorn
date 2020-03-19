@@ -26,4 +26,8 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
       restartPolicy: OnFailure
+      {{- if .Values.defaultSettings.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.defaultSettings.registrySecret }}
+      {{- end }}
       serviceAccountName: longhorn-service-account
