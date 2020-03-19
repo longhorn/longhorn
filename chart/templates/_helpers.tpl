@@ -20,3 +20,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- $fullname := (include "longhorn.fullname" .) -}}
 {{- printf "http://%s-backend:9500" $fullname | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+
+{{- define "secret" }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.privateRegistry.registryUrl (printf "%s:%s" .Values.privateRegistry.registryUser .Values.privateRegistry.registryPasswd | b64enc) | b64enc }}
+{{- end }}

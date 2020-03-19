@@ -18,3 +18,4 @@ data:
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
+    registry-secret:  {{ .Values.defaultSettings.registrySecret }}
