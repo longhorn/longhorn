@@ -80,6 +80,10 @@ spec:
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
+      {{- if .Values.defaultSettings.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.defaultSettings.registrySecret }}
+      {{- end }}
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:

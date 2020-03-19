@@ -24,6 +24,10 @@ spec:
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
+      {{- if .Values.defaultSettings.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.defaultSettings.registrySecret }}
+      {{- end }}
 ---
 kind: Service
 apiVersion: v1
