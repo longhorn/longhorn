@@ -237,6 +237,14 @@ More examples are available at `./examples/`
 ### [Restore a backup to an image file](./docs/restore-to-file.md)
 ### [Disaster Recovery Volume](./docs/dr-volume.md)
 ### [Recover volume after unexpected detachment](./docs/recover-volume.md)
+### [Air gap install](./docs/longhorn-airgap.md)
+
+
+# Kubernetes CSI Driver images:
+  * CSI Attacher:  `quay.io/k8scsi/csi-attacher:v2.0.0`
+  * CSI Provisioner:  `quay.io/k8scsi/csi-provisioner:v1.4.0`
+  * CSI Node Driver Registrar:  `quay.io/k8scsi/csi-node-driver-registrar:v1.2.0`
+  * CSI Resizer:  `quay.io/k8scsi/csi-resizer:v0.3.0`
 
 # Troubleshooting
 You can click `Generate Support Bundle` link at the bottom of the UI to download a zip file contains Longhorn related configuration and logs.
