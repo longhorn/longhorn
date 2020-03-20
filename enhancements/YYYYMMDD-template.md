@@ -10,9 +10,9 @@ The Summary section is incredibly important for producing high quality user-focu
 
 A good summary is probably at least a paragraph in length.
 
-### Related PR
+### Related Issues
 
-The URL For the related enhancement PR in Longhorn repo.
+The URL For the related enhancement issues in Longhorn repo.
 
 ## Motivation
 
