@@ -4,11 +4,11 @@
 
 This enhancement allows the user to customize the default disks and node configurations in Longhorn for newly added nodes using Kubernetes label and annotation, instead of using Longhorn API or UI.
 
-### Related PR
+### Related Issues
 
-https://github.com/longhorn/longhorn-manager/pull/514
+https://github.com/longhorn/longhorn/issues/1053
 
-https://github.com/longhorn/longhorn-tests/pull/275
+https://github.com/longhorn/longhorn/issues/991
 
 ## Motivation
 
@@ -111,7 +111,9 @@ The process will be done as a part of the node controller reconciliation logic i
 
 ##### Notice
 
-If one of the following conditions is satisfied, no partial configuration will be applied and the whole annotation will be discarded. Then no change will be done for the node tag/disks.
+If the label/annotations failed validation, no partial configuration will be applied and the whole annotation will be ignored. No change will be done for the node tag/disks.
+
+The validation failure can be caused by:
 1. The annotation format is invalid and cannot be parsed to tags/disks configuration.
 2. The format is valid but there is an unqualified tag in the tag list.
 3. The format is valid but there is an invalid disk parameter in the disk list. 
@@ -160,4 +162,4 @@ Now they will see that the node tags and disks are created correctly and match t
 
 ### Upgrade strategy
 
-None.
+N/A.
