@@ -38,3 +38,7 @@ After v0.6.0, when the user attaching the volume from Longhorn UI, there is a ch
 It's mainly used to perform `Snapshot Revert`. After v0.6.0, Snapshot Reverting operation required volume to be in `Maintenance mode` since we cannot modify the block device's content with the volume mounted or being used, otherwise it will cause filesystem corruptions. 
 
 It's also useful to inspect the volume state without worry that the data can be accessed by accident.
+
+## Volume parameters
+#### Stale Replica Timeout (`staleReplicaTimeout`)
+Stale Replica Timeout determines when would Longhorn cleanup an error replica after the replica become `ERROR`. Unit is in minutes. Default is `2880` (48 hours)
