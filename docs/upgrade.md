@@ -109,7 +109,7 @@ We'll use NFS backupstore for this example.
 
 1. Execute following command to create the backupstore
 ```
-kubectl apply -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/nfs-backupstore.yaml
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/backupstores/nfs-backupstore.yaml
 ```
 2. On Longhorn UI Settings page, set Backup Target to
 `nfs://longhorn-test-nfs-svc.default:/opt/backupstore` and click `Save`.
@@ -182,7 +182,7 @@ kubectl delete -f https://raw.githubusercontent.com/llparse/longhorn/v0.1/deploy
 
 For Longhorn `v0.2`:
 ```
-kubectl delete -f https://raw.githubusercontent.com/rancher/longhorn/v0.2/deploy/uninstall-for-upgrade.yaml
+kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v0.2/deploy/uninstall-for-upgrade.yaml
 ```
 
 If both commands returned `Not found` for all components, Longhorn is probably
@@ -190,7 +190,7 @@ deployed in a different namespace. Determine which namespace is in use and
 adjust `NAMESPACE` here accordingly:
 ```
 NAMESPACE=<some_longhorn_namespace>
-curl -sSfL https://raw.githubusercontent.com/rancher/longhorn/v0.1/deploy/uninstall-for-upgrade.yaml|sed "s#^\( *\)namespace: longhorn#\1namespace: ${NAMESPACE}#g" > longhorn.yaml
+curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v0.1/deploy/uninstall-for-upgrade.yaml|sed "s#^\( *\)namespace: longhorn#\1namespace: ${NAMESPACE}#g" > longhorn.yaml
 kubectl delete -f longhorn.yaml
 ```
 
@@ -280,5 +280,5 @@ Upgrade is always tricky. Keeping recent backups for volumes is critical. If
 anything goes wrong, you can restore the volume using the backup.
 
 If you have any issues, please report it at
-https://github.com/rancher/longhorn/issues and include your backup yaml files
+https://github.com/longhorn/longhorn/issues and include your backup yaml files
 as well as manager logs.

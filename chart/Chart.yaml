@@ -11,13 +11,13 @@ keywords:
 - block
 - device
 - iscsi
-home: https://github.com/rancher/longhorn
+home: https://github.com/longhorn/longhorn
 sources:
-- https://github.com/rancher/longhorn
-- https://github.com/rancher/longhorn-engine
-- https://github.com/rancher/longhorn-manager
-- https://github.com/rancher/longhorn-ui
-- https://github.com/rancher/longhorn-tests
+- https://github.com/longhorn/longhorn
+- https://github.com/longhorn/longhorn-engine
+- https://github.com/longhorn/longhorn-manager
+- https://github.com/longhorn/longhorn-ui
+- https://github.com/longhorn/longhorn-tests
 maintainers:
 - name: rancher
   email: charts@rancher.com

@@ -87,7 +87,7 @@ We provides two testing purpose backupstore based on NFS server and Minio S3 ser
 
 Use following command to setup a Minio S3 server for BackupStore after `longhorn-system` was created.
 ```
-kubectl create -f https://raw.githubusercontent.com/rancher/longhorn/master/deploy/backupstores/minio-backupstore.yaml
+kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/backupstores/minio-backupstore.yaml
 ```
 
 Now set `Settings/General/BackupTarget` to
@@ -128,7 +128,7 @@ The target URL would looks like:
 nfs://longhorn-test-nfs-svc.default:/opt/backupstore
 ```
 
-You can find an example NFS backupstore for testing purpose [here](https://github.com/rancher/longhorn/blob/master/deploy/backupstores/nfs-backupstore.yaml). 
+You can find an example NFS backupstore for testing purpose [here](https://github.com/longhorn/longhorn/blob/master/deploy/backupstores/nfs-backupstore.yaml).
 
 
 # Setup recurring snapshot/backup
@@ -152,7 +152,7 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: longhorn
-provisioner: rancher.io/longhorn
+provisioner: driver.longhorn.io
 parameters:
   numberOfReplicas: "3"
   staleReplicaTimeout: "30"
