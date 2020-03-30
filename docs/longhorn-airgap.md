@@ -240,7 +240,7 @@ CSI driver components images names and tags can be found [here](../README.md#kub
 
 ## Troubleshooting
 
-For Helm/Rancher installtion, if user forgot to submit a secret to authenticate to private registry, `longhorn-manager DaemonSet` will fail to create.
+#### For Helm/Rancher installtion, if user forgot to submit a secret to authenticate to private registry, `longhorn-manager DaemonSet` will fail to create.
 
 
 1. Create the Kubernetes secret
@@ -275,4 +275,23 @@ For Helm/Rancher installtion, if user forgot to submit a secret to authenticate 
       `helm uninstall longhorn ./chart --namespace longhorn-system`
 
       `helm install longhorn ./chart --namespace longhorn-system`
+
+
+
+
+#### longhorn-driver-deployer error: Node is not support mount propagation
+If longhorn-instance-manager image name is more than 63 character long, it will fail to deploy, and longhorn-driver-deployer pod will be in `CrashLoopBackOff`
+
+Checking Longhorn driver deployer logs will report the following:
+
+```
+time="2020-03-13T22:49:22Z" level=warning msg="Got an error when checking MountPropagation with node status, Node XXX is not support mount propagation"
+time="2020-03-13T22:49:22Z" level=fatal msg="Error deploying driver: CSI cannot be deployed because MountPropagation is not set: Node <NODE_NAME> is not support mount propagation"
+```
+
+Issue can be conformed by checking Longhorn manager log, you should be able to see the following logs:
+
+> "Dropping Longhorn node longhorn-system/**NODE_NAME** out of the queue: fail to sync node for longhorn-system/**NODE_NAME**: 
+> InstanceManager.longhorn.io \"instance-manager-e-605e9473\" is invalid: metadata.labels: Invalid value:
+> \"**PRIVATE_REGISTRY_URL**-**PREFIX**-longhorn-instance-manager-v1_20200301\": **must be no more than 63 characters**"
 
