@@ -49,14 +49,14 @@ After the enhancement, when the users add more disks to the node, API gateway wi
     1. If one of the disks already exists, the other disks will get condition `ready = false`, with the message indicating that they're pointing to the same filesystem as one of the existing disks.
 1. If there is more than one disk exists and pointing to the same filesystem. Longhorn will identify which disk is the valid one using `diskUUID` and set the condition of other disks to `ready = false`.
 
-## Design
-
 ### API changes
 1. API input for the diskUpdate call will be a map[string]DiskSpec instead of []DiskSpec.
 1. API no longer validates duplicate filesystem ID.
 
 ### UI changes
 UI can let the user customize the disk name. By default UI can generate name like `disk-<random>` for the disks.
+
+## Design
 
 ### Implementation Overview
 

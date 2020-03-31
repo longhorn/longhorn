@@ -40,6 +40,8 @@ The experience details should be in the `User Experience In Detail` later.
 
 Detail what user need to do to use this enhancement. Include as much detail as possible so that people can understand the "how" of the system. The goal here is to make this feel real for users without getting bogged down.
 
+### API changes
+
 ## Design
 
 ### Implementation Overview
