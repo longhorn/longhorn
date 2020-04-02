@@ -33,7 +33,7 @@ Otherwise you will need to download the yaml file from [the official Longhorn De
 **ALWAYS MAKE BACKUPS BEFORE UPGRADE THE ENGINE IMAGES.**
 
 ### Offline upgrade
-If live upgrade is not available (e.g. before v0.3.3 or from v0.5.0 to v0.6.0), or the volume stuck in degraded state:
+If live upgrade is not available (e.g. before v0.3.3, from v0.5.0 to v0.6.0, v0.7.0 to v0.8.0), or the volume stuck in degraded state:
 1. Follow [the detach procedure for relevant workloads](upgrade.md#detach-volumes).
 2.  Select all the volumes using batch selection. Click batch operation button
 `Upgrade Engine`, choose the engine image available in the list. It's
@@ -43,7 +43,7 @@ Any volume not part of a Kubernetes workload must be attached from Longhorn UI.
 
 ### Live upgrade
 
-Live upgrade is available since v0.3.3, with the exception of upgrade from v0.5.0 to v0.6.0.
+Live upgrade is available since v0.3.3, with the exception of upgrade from v0.5.0 to v0.6.0 and v0.7.0 to v0.8.0.
 
 Live upgrade should only be done with healthy volumes.
 
