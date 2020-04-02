@@ -92,19 +92,19 @@ questions:
   default: "true"
 - variable: defaultSettings.storageOverProvisioningPercentage
   label: Storage Over Provisioning Percentage
-  description: "The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default 500."
+  description: "The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default 200."
   group: "Longhorn Default Settings"
   type: int
   min: 0
-  default: 500
+  default: 200
 - variable: defaultSettings.storageMinimalAvailablePercentage
   label: Storage Minimal Available Percentage
-  description: "If one disk's available capacity to it's maximum capacity in % is less than the minimal available percentage, the disk would become unschedulable until more space freed up. By default 10."
+  description: "If one disk's available capacity to it's maximum capacity in % is less than the minimal available percentage, the disk would become unschedulable until more space freed up. By default 25."
   group: "Longhorn Default Settings"
   type: int
   min: 0
   max: 100
-  default: 10
+  default: 25
 - variable: defaultSettings.upgradeChecker
   label: Enable Upgrade Checker
   description: 'Upgrade Checker will check for new Longhorn version periodically. When there is a new version available, it will notify the user using UI. By default true.'
