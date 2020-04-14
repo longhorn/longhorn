@@ -33,255 +33,26 @@ The latest release of Longhorn is **v0.8.0**.
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
 1. Longhorn engine -- Core controller/replica logic https://github.com/longhorn/longhorn-engine
-1. Longhorn manager -- Longhorn orchestration, includes Flexvolume driver for Kubernetes https://github.com/longhorn/longhorn-manager
+1. Longhorn manager -- Longhorn orchestration https://github.com/longhorn/longhorn-manager
 1. Longhorn UI -- Dashboard https://github.com/longhorn/longhorn-ui
 
 ![Longhorn UI](./longhorn-ui.png)
 
 # Requirements
 
-1.  Docker v1.13+
-2.  Kubernetes v1.14+.
-3.  `open-iscsi` has been installed on all the nodes of the Kubernetes cluster, and `iscsid` daemon is running on all the nodes.
-    1. For GKE, recommended Ubuntu as guest OS image since it contains open-iscsi already.
-    2. For Debian/Ubuntu, use `apt-get install open-iscsi` to install.
-    3. For RHEL/CentOS, use `yum install iscsi-initiator-utils` to install.
-    4. For EKS with `EKS Kubernetes Worker AMI with AmazonLinux2 image`, 
-       use `yum install iscsi-initiator-utils` to install. You may need to edit cluster security group to allow ssh access.
-4. A host filesystem supports `file extents` feature on the nodes to store the data. Currently we support:
-    1. ext4
-    2. XFS
+For the installation requirements, refer to the [Longhorn documentation.](https://longhorn.io/docs/install/requirements)
 
 # Install
 
-## On Kubernetes clusters Managed by Rancher 2.1 or newer
+Longhorn can be installed on a Kubernetes cluster in several ways:
 
-The easiest way to install Longhorn is to deploy Longhorn from Rancher Catalog.
-
-1. On Rancher UI, select the cluster and project you want to install Longhorn. We recommended to create a new project e.g. `Storage` for Longhorn.
-2. Navigate to the `Catalog Apps` screen. Select `Launch`, find Longhorn in the list. Select `View Details`, then click `Launch`. Longhorn will be installed in the `longhorn-system` namespace.
-
-After Longhorn has been successfully installed, you can access the Longhorn UI by navigating to the `Catalog Apps` screen.
-
-One benefit of installing Longhorn through Rancher catalog is Rancher provides authentication to Longhorn UI.
-
-If there is a new version of Longhorn available, you will see an `Upgrade Available` sign on the `Catalog Apps` screen. You can click `Upgrade` button to upgrade Longhorn manager. See more about upgrade [here](#upgrade).
-
-## On any Kubernetes cluster
-
-### Install Longhorn with kubectl
-You can install Longhorn on any Kubernetes cluster using following command:
-
-```
-kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
-```
-Google Kubernetes Engine (GKE) requires additional setup in order for Longhorn to function properly. If your are a GKE user, read [this page](docs/gke.md) before proceeding.
-
-### Install Longhorn with Helm
-First, you need to initialize Helm locally and [install Tiller into your Kubernetes cluster with RBAC](https://helm.sh/docs/using_helm/#role-based-access-control).
-
-Then download Longhorn repository:
-```
-git clone https://github.com/longhorn/longhorn.git
-```
-
-Now using following command to install Longhorn:
-* Helm2
-```
-helm install ./longhorn/chart --name longhorn --namespace longhorn-system
-```
-* Helm3
-```
-kubectl create namespace longhorn-system
-helm install longhorn ./longhorn/chart/ --namespace longhorn-system
-```
----
-
-Longhorn will be installed in the namespace `longhorn-system`
-
-One of the two available drivers (CSI and Flexvolume) would be chosen automatically based on the version of Kubernetes you use. See [here](docs/driver.md) for details.
-
-A successful CSI-based deployment looks like this:
-```
-# kubectl -n longhorn-system get pod
-NAME                                        READY   STATUS              RESTARTS   AGE
-compatible-csi-attacher-d9fb48bcf-2rzmb     1/1     Running             0          8m58s
-csi-attacher-78bf9b9898-grn2c               1/1     Running             0          32s
-csi-attacher-78bf9b9898-lfzvq               1/1     Running             0          8m59s
-csi-attacher-78bf9b9898-r64sv               1/1     Running             0          33s
-csi-provisioner-8599d5bf97-c8r79            1/1     Running             0          33s
-csi-provisioner-8599d5bf97-fc5pz            1/1     Running             0          33s
-csi-provisioner-8599d5bf97-p9psl            1/1     Running             0          8m59s
-csi-resizer-586665f745-b7p6h                1/1     Running             0          8m59s
-csi-resizer-586665f745-kgdxs                1/1     Running             0          33s
-csi-resizer-586665f745-vsvvq                1/1     Running             0          33s
-engine-image-ei-e10d6bf5-pv2s6              1/1     Running             0          9m30s
-instance-manager-e-379373af                 1/1     Running             0          8m41s
-instance-manager-r-101f13ba                 1/1     Running             0          8m40s
-longhorn-csi-plugin-7v2dc                   4/4     Running             0          8m59s
-longhorn-driver-deployer-775897bdf6-k4sfd   1/1     Running             0          10m
-longhorn-manager-79xgj                      1/1     Running             0          9m50s
-longhorn-ui-9fbb5445-httqf                  0/1     Running             0          33s
-```
-
-### Accessing the UI
-
-> For Longhorn v0.8.0+, UI service type has been changed from `LoadBalancer` to `ClusterIP`
-
-You can run `kubectl -n longhorn-system get svc` to get Longhorn UI service:
-
-```
-NAME                TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
-longhorn-backend    ClusterIP      10.20.248.250   <none>           9500/TCP       58m
-longhorn-frontend   ClusterIP      10.20.245.110   <none>           80/TCP         58m
-
-```
-
-To access Longhorn UI when installed from YAML manifest, you need to create an ingress controller.
-
-See more about how to create an Nginx ingress controller with basic authentication [here](https://github.com/longhorn/longhorn/blob/master/docs/longhorn-ingress.md)
-
-
-# Upgrade
-
-[See here](docs/upgrade.md) for details.
-
-## Upgrade Longhorn manager
-
-##### On Kubernetes clusters Managed by Rancher 2.1 or newer
-Follow [the same steps for installation](#install) to upgrade Longhorn manager
-
-##### Using kubectl
-```
-kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
-```
-
-##### Using Helm
-```
-helm upgrade longhorn ./longhorn/chart
-```
-
-## Upgrade Longhorn engine
-After Longhorn Manager was upgraded, Longhorn Engine also need to be upgraded using Longhorn UI. [See here](docs/upgrade.md) for details.
-
-# Create Longhorn Volumes
-
-Before you create Kubernetes volumes, you must first create a storage class. Use following command to create a StorageClass called `longhorn`.
-
-```
-kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/examples/storageclass.yaml
-```
-
-Now you can create a pod using Longhorn like this:
-```
-kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/examples/pvc.yaml
-```
-
-The above yaml file contains two parts:
-1. Create a PVC using Longhorn StorageClass.
-```
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: longhorn-volv-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 2Gi
-```
-
-2. Use it in the a Pod as a persistent volume:
-```
-apiVersion: v1
-kind: Pod
-metadata:
-  name: volume-test
-  namespace: default
-spec:
-  containers:
-  - name: volume-test
-    image: nginx:stable-alpine
-    imagePullPolicy: IfNotPresent
-    volumeMounts:
-    - name: volv
-      mountPath: /data
-    ports:
-    - containerPort: 80
-  volumes:
-  - name: volv
-    persistentVolumeClaim:
-      claimName: longhorn-volv-pvc
-```
-More examples are available at `./examples/`
+- [kubectl](https://longhorn.io/docs/install/install-with-kubectl/)
+- [Helm](https://longhorn.io/docs/install/install-with-helm/)
+- [Rancher catalog app](https://longhorn.io/docs/install/install-with-rancher/)
 
 # Documentation
 
-### [Snapshot and Backup](./docs/snapshot-backup.md)
-### [Volume operations](./docs/volume.md)
-### [Settings](./docs/settings.md)
-### [Multiple disks](./docs/multidisk.md)
-### [iSCSI](./docs/iscsi.md)
-### [Kubernetes workload in Longhorn UI](./docs/k8s-workload.md)
-### [Storage Tags](./docs/storage-tags.md)
-### [Customized default setting](./docs/customized-default-setting.md)
-### [Taint Toleration](./docs/taint-toleration.md)
-### [Volume Expansion](./docs/expansion.md)
-
-### [Restoring Stateful Set volumes](./docs/restore_statefulset.md)
-### [Google Kubernetes Engine](./docs/gke.md)
-### [Deal with Kubernetes node failure](./docs/node-failure.md)
-### [Use CSI driver on RancherOS/CoreOS + RKE or K3S](./docs/csi-config.md)
-### [Restore a backup to an image file](./docs/restore-to-file.md)
-### [Disaster Recovery Volume](./docs/dr-volume.md)
-### [Recover volume after unexpected detachment](./docs/recover-volume.md)
-
-# Troubleshooting
-You can click `Generate Support Bundle` link at the bottom of the UI to download a zip file contains Longhorn related configuration and logs.
-
-See [here](./docs/troubleshooting.md) for the troubleshooting guide.
-
-# Uninstall Longhorn
-
-### Using kubectl
-1. To prevent damaging the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc) first.
-
-2. Create the uninstallation job to clean up CRDs from the system and wait for success:
-  ```
-  kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml
-  kubectl get job/longhorn-uninstall -w
-  ```
-
-Example output:
-```
-$ kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml
-serviceaccount/longhorn-uninstall-service-account created
-clusterrole.rbac.authorization.k8s.io/longhorn-uninstall-role created
-clusterrolebinding.rbac.authorization.k8s.io/longhorn-uninstall-bind created
-job.batch/longhorn-uninstall created
-
-$ kubectl get job/longhorn-uninstall -w
-NAME                 COMPLETIONS   DURATION   AGE
-longhorn-uninstall   0/1           3s         3s
-longhorn-uninstall   1/1           20s        20s
-^C
-```
-
-3. Remove remaining components:
-  ```
-  kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml
-  kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml
-  ```
- 
-Tip: If you try `kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/master/deploy/longhorn.yaml` first and get stuck there, 
-pressing `Ctrl C` then running `kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml` can also help you remove Longhorn. Finally, don't forget to cleanup remaining components.
-
-### Using Helm
-```
-helm delete longhorn --purge
-```
+The official Longhorn documentation is [here.](https://longhorn.io/docs)
 
 ## Community
 Longhorn is an open source software, so contribution are greatly welcome. Please read [Code of Conduct](./CODE_OF_CONDUCT.md) and [Contributing Guideline](./CONTRIBUTING.md) before contributing.
