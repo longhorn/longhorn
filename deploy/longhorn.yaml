@@ -221,6 +221,7 @@ data:
     default-longhorn-static-storage-class:
     backupstore-poll-interval:
     taint-toleration:
+    registry-secret:
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -240,7 +241,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v0.8.0
+        image: longhornio/longhorn-manager:v0.8.1-rc1
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -249,11 +250,11 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v0.8.0
+        - longhornio/longhorn-engine:v0.8.1-rc1
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20200301
         - --manager-image
-        - longhornio/longhorn-manager:v0.8.0
+        - longhornio/longhorn-manager:v0.8.1-rc1
         - --service-account
         - longhorn-service-account
         ports:
@@ -289,6 +290,8 @@ spec:
         # Should be: mount path of the volume longhorn-default-setting + the key of the configmap data in 04-default-setting.yaml
         - name: DEFAULT_SETTING_PATH
           value: /var/lib/longhorn-setting/default-setting.yaml
+      #imagePullSecrets:
+      #- name:
       volumes:
       - name: dev
         hostPath:
@@ -344,12 +347,14 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v0.8.0
+        image: longhornio/longhorn-ui:v0.8.1-rc1
         ports:
         - containerPort: 8000
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
+      #imagePullSecrets:
+      #- name:
       serviceAccountName: longhorn-service-account
 ---
 kind: Service
@@ -385,18 +390,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v0.8.0
+          image: longhornio/longhorn-manager:v0.8.1-rc1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v0.8.0
+          image: longhornio/longhorn-manager:v0.8.1-rc1
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v0.8.0
+          - longhornio/longhorn-manager:v0.8.1-rc1
           - --manager-url
           - http://longhorn-backend:9500/v1
           # manually set root directory for csi
@@ -421,6 +426,18 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
+          # For AirGap Installation
+          # Replce PREFIX with your private registery
+          #- name: CSI_ATTACHER_IMAGE
+          #  value: PREFIX/csi-attacher:v2.0.0
+          #- name: CSI_PROVISIONER_IMAGE
+          #  value: PREFIX/csi-provisioner:v1.4.0
+          #- name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
+          #  value: PREFIX/csi-node-driver-registrar:v1.2.0
+          #- name: CSI_RESIZER_IMAGE
+          #  value: PREFIX/csi-resizer:v0.3.0
+      #imagePullSecrets:
+      #- name:
       serviceAccountName: longhorn-service-account
 ---
 kind: StorageClass
