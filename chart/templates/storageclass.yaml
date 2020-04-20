@@ -10,6 +10,7 @@ metadata:
     storageclass.beta.kubernetes.io/is-default-class: "false"
   {{- end }}
 provisioner: driver.longhorn.io
+allowVolumeExpansion: true
 parameters:
   numberOfReplicas: "{{ .Values.persistence.defaultClassReplicaCount }}"
   staleReplicaTimeout: "30"

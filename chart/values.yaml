@@ -28,7 +28,7 @@ persistence:
 csi:
   attacherImage:
   provisionerImage:
-  driverRegistrarImage:
+  nodeDriverRegistrarImage:
   resizerImage:
   kubeletRootDir:
   attacherReplicaCount:
@@ -51,9 +51,9 @@ defaultSettings:
   registrySecret:
 
 privateRegistry:
-    registryUrl:
-    registryUser:
-    registryPasswd:
+  registryUrl:
+  registryUser:
+  registryPasswd:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

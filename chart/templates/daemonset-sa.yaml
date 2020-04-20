@@ -35,6 +35,9 @@ spec:
         ports:
         - containerPort: 9500
           name: manager
+        readinessProbe:
+          tcpSocket:
+            port: 9500
         volumeMounts:
         - name: dev
           mountPath: /host/dev/
@@ -60,8 +63,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_BACKEND_SVC
-          value: longhorn-backend
         - name: DEFAULT_SETTING_PATH
           value: /var/lib/longhorn-setting/default-setting.yaml
       volumes:
