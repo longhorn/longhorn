@@ -1,7 +1,5 @@
 categories:
 - storage
-labels:
-  io.rancher.certified: experimental
 namespace: longhorn-system
 questions:
 - variable: image.defaultImage

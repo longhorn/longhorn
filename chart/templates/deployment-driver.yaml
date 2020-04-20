@@ -54,9 +54,9 @@ spec:
           - name: CSI_PROVISIONER_IMAGE
             value: {{ .Values.csi.provisionerImage }}
           {{- end }}
-          {{- if .Values.csi.driverRegistrarImage }}
-          - name: CSI_DRIVER_REGISTRAR_IMAGE
-            value: {{ .Values.csi.driverRegistrarImage }}
+          {{- if .Values.csi.nodeDriverRegistrarImage }}
+          - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
+            value: {{ .Values.csi.nodeDriverRegistrarImage }}
           {{- end }}
           {{- if .Values.csi.resizerImage }}
           - name: CSI_RESIZER_IMAGE
