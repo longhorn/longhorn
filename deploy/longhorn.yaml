@@ -241,7 +241,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v0.8.1-rc2
+        image: longhornio/longhorn-manager:master
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -250,11 +250,11 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v0.8.1-rc2
+        - longhornio/longhorn-engine:master
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20200301
         - --manager-image
-        - longhornio/longhorn-manager:v0.8.1-rc2
+        - longhornio/longhorn-manager:master
         - --service-account
         - longhorn-service-account
         ports:
@@ -350,7 +350,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v0.8.1-rc2
+        image: longhornio/longhorn-ui:master
         ports:
         - containerPort: 8000
           name: http
@@ -394,18 +394,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v0.8.1-rc2
+          image: longhornio/longhorn-manager:master
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v0.8.1-rc2
+          image: longhornio/longhorn-manager:master
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v0.8.1-rc2
+          - longhornio/longhorn-manager:master
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
