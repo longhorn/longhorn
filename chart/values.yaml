@@ -4,11 +4,11 @@
 image:
   longhorn:
     engine: longhornio/longhorn-engine
-    engineTag: v0.8.0
+    engineTag: v0.8.1
     manager: longhornio/longhorn-manager
-    managerTag: v0.8.0
+    managerTag: v0.8.1
     ui: longhornio/longhorn-ui
-    uiTag: v0.8.0
+    uiTag: v0.8.1
     instanceManager: longhornio/longhorn-instance-manager
     instanceManagerTag: v1_20200301
   pullPolicy: IfNotPresent
@@ -28,7 +28,8 @@ persistence:
 csi:
   attacherImage:
   provisionerImage:
-  driverRegistrarImage:
+  nodeDriverRegistrarImage:
+  resizerImage:
   kubeletRootDir:
   attacherReplicaCount:
   provisionerReplicaCount:
@@ -47,6 +48,12 @@ defaultSettings:
   defaultLonghornStaticStorageClass:
   backupstorePollInterval:
   taintToleration:
+  registrySecret:
+
+privateRegistry:
+  registryUrl:
+  registryUser:
+  registryPasswd:
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

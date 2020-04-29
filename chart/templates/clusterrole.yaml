@@ -10,7 +10,7 @@ rules:
   verbs:
   - "*"
 - apiGroups: [""]
-  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps"]
+  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims","persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps"]
   verbs: ["*"]
 - apiGroups: [""]
   resources: ["namespaces"]
@@ -33,8 +33,4 @@ rules:
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
-  verbs: ["*"]
-# to be removed after v0.7.0
-- apiGroups: ["longhorn.rancher.io"]
-  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
   verbs: ["*"]

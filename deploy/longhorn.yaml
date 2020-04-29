@@ -45,10 +45,6 @@ rules:
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
   verbs: ["*"]
-# to be removed after v0.7.0
-- apiGroups: ["longhorn.rancher.io"]
-  resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
-  verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -221,6 +217,7 @@ data:
     default-longhorn-static-storage-class:
     backupstore-poll-interval:
     taint-toleration:
+    registry-secret:
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -240,7 +237,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v0.8.0
+        image: longhornio/longhorn-manager:v0.8.1
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -249,15 +246,16 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v0.8.0
+        - longhornio/longhorn-engine:v0.8.1
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20200301
         - --manager-image
-        - longhornio/longhorn-manager:v0.8.0
+        - longhornio/longhorn-manager:v0.8.1
         - --service-account
         - longhorn-service-account
         ports:
         - containerPort: 9500
+          name: manager
         readinessProbe:
           tcpSocket:
             port: 9500
@@ -305,25 +303,29 @@ spec:
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
+#      imagePullSecrets:
+#      - name: ""
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
       maxUnavailable: "100%"
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   labels:
     app: longhorn-manager
   name: longhorn-backend
   namespace: longhorn-system
 spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
-  - port: 9500
-    targetPort: 9500
-  sessionAffinity: ClientIP
+  - name: manager
+    port: 9500
+    targetPort: manager
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -344,13 +346,16 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v0.8.0
+        image: longhornio/longhorn-ui:v0.8.1
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
+          name: http
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
-      serviceAccountName: longhorn-service-account
+#      imagePullSecrets:
+#      - name:
 ---
 kind: Service
 apiVersion: v1
@@ -385,29 +390,20 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v0.8.0
+          image: longhornio/longhorn-manager:v0.8.1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v0.8.0
+          image: longhornio/longhorn-manager:v0.8.1
           imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v0.8.0
+          - longhornio/longhorn-manager:v0.8.1
           - --manager-url
           - http://longhorn-backend:9500/v1
-          # manually set root directory for csi
-          #- --kubelet-root-dir
-          #- /var/lib/rancher/k3s/agent/kubelet
-          # manually specify number of CSI attacher replicas
-          #- --csi-attacher-replica-count
-          #- "3"
-          # manually specify number of CSI provisioner replicas
-          #- --csi-provisioner-replica-count
-          #- "3"
           env:
           - name: POD_NAMESPACE
             valueFrom:
@@ -421,6 +417,27 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
+          # Manually set root directory for csi
+          #- name: KUBELET_ROOT_DIR
+          #  value: /var/lib/rancher/k3s/agent/kubelet
+          # For AirGap Installation
+          # Replace PREFIX with your private registery
+          #- name: CSI_ATTACHER_IMAGE
+          #  value: PREFIX/csi-attacher:v2.0.0
+          #- name: CSI_PROVISIONER_IMAGE
+          #  value: PREFIX/csi-provisioner:v1.4.0
+          #- name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
+          #  value: PREFIX/csi-node-driver-registrar:v1.2.0
+          #- name: CSI_RESIZER_IMAGE
+          #  value: PREFIX/csi-resizer:v0.3.0
+          # Manually specify number of CSI attacher replicas
+          #- name: CSI_ATTACHER_REPLICA_COUNT
+          #  value: "3"
+          # Manually specify number of CSI provisioner replicas
+          #- name: CSI_PROVISIONER_REPLICA_COUNT
+          #  value: "3"
+      #imagePullSecrets:
+      #- name:
       serviceAccountName: longhorn-service-account
 ---
 kind: StorageClass

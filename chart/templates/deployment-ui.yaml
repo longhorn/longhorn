@@ -18,12 +18,17 @@ spec:
       containers:
       - name: longhorn-ui
         image: "{{ .Values.image.longhorn.ui }}:{{ .Values.image.longhorn.uiTag }}"
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
           name: http
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
+      {{- if .Values.defaultSettings.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.defaultSettings.registrySecret }}
+      {{- end }}
 ---
 kind: Service
 apiVersion: v1

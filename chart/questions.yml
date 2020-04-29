@@ -1,27 +1,111 @@
 categories:
 - storage
-labels:
-  io.rancher.certified: experimental
 namespace: longhorn-system
 questions:
-- variable: csi.attacherImage
-  default:
-  description: "Specify CSI attacher image. Leave blank to autodetect."
+- variable: image.defaultImage
+  default: "true"
+  description: "Use default Longhorn images"
+  label: Use Default Images
+  type: boolean
+  show_subquestion_if: false
+  group: "Longhorn Images"
+  subquestions:
+  - variable: image.longhorn.manager
+    default: longhornio/longhorn-manager
+    description: "Specify Longhorn Manager Image Name"
+    type: string
+    label: Longhorn Manager Image Name
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.managerTag
+    default: v0.8.1
+    description: "Specify Longhorn Manager Image Tag"
+    type: string
+    label: Longhorn Manager Image Tag
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.engine
+    default: longhornio/longhorn-engine
+    description: "Specify Longhorn Engine Image Name"
+    type: string
+    label: Longhorn Engine Image Name
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.engineTag
+    default: v0.8.1
+    description: "Specify Longhorn Engine Image Tag"
+    type: string
+    label: Longhorn Engine Image Tag
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.ui
+    default:  longhornio/longhorn-ui
+    description: "Specify Longhorn UI Image Name"
+    type: string
+    label: Longhorn UI Image Name
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.uiTag
+    default: v0.8.1
+    description: "Specify Longhorn UI Image Tag"
+    type: string
+    label: Longhorn UI Image Tag
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.instanceManager
+    default: longhornio/longhorn-instance-manager
+    description: "Specify Longhorn Instance Manager Image Name"
+    type: string
+    label: Longhorn Instance Manager Image Name
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.instanceManagerTag
+    default: v1_20200301
+    description: "Specify Longhorn Instance Manager Image Tag"
+    type: string
+    label: Longhorn Manager Image Tag
+    group: "Longhorn Images Settings"
+  - variable: csi.attacherImage
+    default:
+    description: "Specify CSI attacher image. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Attacher Image
+    group: "Longhorn CSI Driver Images"
+  - variable: csi.provisionerImage
+    default:
+    description: "Specify CSI provisioner image. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Provisioner Image
+    group: "Longhorn CSI Driver Images"
+  - variable: csi.driverRegistrarImage
+    default:
+    description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Driver Registrar Image
+    group: "Longhorn CSI Driver Images"
+  - variable: csi.resizerImage
+    default:
+    description: "Specify CSI Driver Resizer image. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Driver Resizer Image
+    group: "Longhorn CSI Driver Images"
+- variable: privateRegistry.registryUrl
+  label: Private registry URL
+  description: "URL of private registry"
+  group: "Private Registry Settings"
   type: string
-  label: Longhorn CSI Attacher Image
-  group: "Longhorn CSI Driver Settings"
-- variable: csi.provisionerImage
-  default:
-  description: "Specify CSI provisioner image. Leave blank to autodetect."
+  default: ""
+- variable: privateRegistry.registryUser
+  label: Private registry user
+  description: "User used to authenticate to private registry"
+  group: "Private Registry Settings"
   type: string
-  label: Longhorn CSI Provisioner Image
-  group: "Longhorn CSI Driver Settings"
-- variable: csi.driverRegistrarImage
-  default:
-  description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
+  default: ""
+- variable: privateRegistry.registryPasswd
+  label: Private registry password
+  description: "Password used to authenticate to private registry"
+  group: "Private Registry Settings"
+  type: password
+  default: ""
+- variable: defaultSettings.registrySecret
+  label: Private registry secret
+  description: "The Kubernetes Secret name"
+  group: "Longhorn Default Settings"
   type: string
-  label: Longhorn CSI Driver Registrar Image
-  group: "Longhorn CSI Driver Settings"
+  default: ""
 - variable: csi.kubeletRootDir
   default:
   description: "Specify kubelet root-dir. Leave blank to autodetect."
@@ -59,7 +143,6 @@ questions:
   min: 1
   max: 10
   label: Default Storage Class Replica Count
-
 - variable: defaultSettings.backupTarget
   label: Backup Target
   description: "The target used for backup. Support NFS or S3."

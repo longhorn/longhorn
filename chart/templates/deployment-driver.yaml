@@ -54,9 +54,13 @@ spec:
           - name: CSI_PROVISIONER_IMAGE
             value: {{ .Values.csi.provisionerImage }}
           {{- end }}
-          {{- if .Values.csi.driverRegistrarImage }}
-          - name: CSI_DRIVER_REGISTRAR_IMAGE
-            value: {{ .Values.csi.driverRegistrarImage }}
+          {{- if .Values.csi.nodeDriverRegistrarImage }}
+          - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
+            value: {{ .Values.csi.nodeDriverRegistrarImage }}
+          {{- end }}
+          {{- if .Values.csi.resizerImage }}
+          - name: CSI_RESIZER_IMAGE
+            value: {{ .Values.csi.resizerImage }}
           {{- end }}
           {{- if .Values.csi.attacherReplicaCount }}
           - name: CSI_ATTACHER_REPLICA_COUNT
@@ -66,4 +70,8 @@ spec:
           - name: CSI_PROVISIONER_REPLICA_COUNT
             value: "{{ .Values.csi.provisionerReplicaCount }}"
           {{- end }}
+      {{- if .Values.defaultSettings.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.defaultSettings.registrySecret }}
+      {{- end }}
       serviceAccountName: longhorn-service-account

@@ -41,12 +41,13 @@ exec_command() {
 
     INSTANCE_MANAGER_NAME_FILTER="{.items[?(@.spec.volumeName==\"${VOLUME_NAME}\")].status.instanceManagerName}"
     INSTANCE_MANAGER_NAME=`kubectl -n ${NS} get lhe --output=jsonpath="${INSTANCE_MANAGER_NAME_FILTER}"`
-    
+
     ENGINE_PORT_FILTER="{.items[?(@.spec.volumeName==\"${VOLUME_NAME}\")].status.port}"
     ENGINE_PORT=`kubectl -n ${NS} get lhe --output=jsonpath="${ENGINE_PORT_FILTER}"`
 
-    kubectl -n ${NS} exec -it ${INSTANCE_MANAGER_NAME} -- bash -c "longhorn --url localhost:${ENGINE_PORT} ${COMMAND_ARGS}"
-     
+    LONGHORN_BIN_PATH=`kubectl -n ${NS} exec -it ${INSTANCE_MANAGER_NAME} -- bash -c "ps -eo command | grep \" ${VOLUME_NAME} \" | grep -v grep | awk '{ printf(\"%s\", \\$1)}'"`
+
+    kubectl -n ${NS} exec -it ${INSTANCE_MANAGER_NAME} -- bash -c "${LONGHORN_BIN_PATH} --url localhost:${ENGINE_PORT} ${COMMAND_ARGS}"
 }
 
 
