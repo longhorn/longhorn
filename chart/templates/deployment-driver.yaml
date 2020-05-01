@@ -79,3 +79,5 @@ spec:
       - name: {{ .Values.defaultSettings.registrySecret }}
       {{- end }}
       serviceAccountName: longhorn-service-account
+      securityContext:
+        runAsUser: 0

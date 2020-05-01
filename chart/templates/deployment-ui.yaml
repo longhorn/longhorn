@@ -19,6 +19,8 @@ spec:
       - name: longhorn-ui
         image: "{{ .Values.image.longhorn.ui }}:{{ .Values.image.longhorn.uiTag }}"
         imagePullPolicy: Always
+        securityContext:
+          runAsUser: 0
         ports:
         - containerPort: 8000
           name: http

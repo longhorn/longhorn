@@ -348,6 +348,8 @@ spec:
       - name: longhorn-ui
         image: longhornio/longhorn-ui:v0.8.1
         imagePullPolicy: Always
+        securityContext:
+          runAsUser: 0
         ports:
         - containerPort: 8000
           name: http
@@ -439,6 +441,8 @@ spec:
       #imagePullSecrets:
       #- name:
       serviceAccountName: longhorn-service-account
+      securityContext:
+        runAsUser: 0
 ---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
