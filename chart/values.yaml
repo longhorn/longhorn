@@ -26,35 +26,35 @@ persistence:
   defaultClassReplicaCount: 3
 
 csi:
-  attacherImage:
-  provisionerImage:
-  nodeDriverRegistrarImage:
-  resizerImage:
-  kubeletRootDir:
-  attacherReplicaCount:
-  provisionerReplicaCount:
-  resizerReplicaCount:
+  attacherImage: ~
+  provisionerImage: ~
+  nodeDriverRegistrarImage: ~
+  resizerImage: ~
+  kubeletRootDir: ~
+  attacherReplicaCount: ~
+  provisionerReplicaCount: ~
+  resizerReplicaCount: ~
 
 defaultSettings:
-  backupTarget:
-  backupTargetCredentialSecret:
-  createDefaultDiskLabeledNodes:
-  defaultDataPath:
-  replicaSoftAntiAffinity:
-  storageOverProvisioningPercentage:
-  storageMinimalAvailablePercentage:
-  upgradeChecker:
-  defaultReplicaCount:
-  guaranteedEngineCPU:
-  defaultLonghornStaticStorageClass:
-  backupstorePollInterval:
-  taintToleration:
-  registrySecret:
+  backupTarget: ~
+  backupTargetCredentialSecret: ~
+  createDefaultDiskLabeledNodes: ~
+  defaultDataPath: ~
+  replicaSoftAntiAffinity: ~
+  storageOverProvisioningPercentage: ~
+  storageMinimalAvailablePercentage: ~
+  upgradeChecker: ~
+  defaultReplicaCount: ~
+  guaranteedEngineCPU: ~
+  defaultLonghornStaticStorageClass: ~
+  backupstorePollInterval: ~
+  taintToleration: ~
+  registrySecret: ~
 
 privateRegistry:
-  registryUrl:
-  registryUser:
-  registryPasswd:
+  registryUrl: ~
+  registryUser: ~
+  registryPasswd: ~
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
