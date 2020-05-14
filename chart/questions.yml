@@ -103,7 +103,7 @@ questions:
 - variable: longhorn.default_setting
   default: "false"
   description: "Customize the default settings before installing Longhorn for the first time. This option will only work if the cluster hasn't installed Longhorn."
-  label: "Customize Default Setting"
+  label: "Customize Default Settings"
   type: boolean
   show_subquestion_if: true
   group: "Longhorn Default Settings"
