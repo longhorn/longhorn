@@ -33,6 +33,7 @@ csi:
   kubeletRootDir:
   attacherReplicaCount:
   provisionerReplicaCount:
+  resizerReplicaCount:
 
 defaultSettings:
   backupTarget:

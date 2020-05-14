@@ -70,6 +70,10 @@ spec:
           - name: CSI_PROVISIONER_REPLICA_COUNT
             value: "{{ .Values.csi.provisionerReplicaCount }}"
           {{- end }}
+          {{- if .Values.csi.resizerReplicaCount }}
+          - name: CSI_RESIZER_REPLICA_COUNT
+            value: "{{ .Values.csi.resizerReplicaCount }}"
+          {{- end }}
       {{- if .Values.defaultSettings.registrySecret }}
       imagePullSecrets:
       - name: {{ .Values.defaultSettings.registrySecret }}
