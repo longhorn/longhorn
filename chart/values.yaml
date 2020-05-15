@@ -108,3 +108,6 @@ ingress:
   # - name: longhorn.local-tls
   #   key:
   #   certificate:
+
+serviceAccount:
+  name: longhorn-service-account

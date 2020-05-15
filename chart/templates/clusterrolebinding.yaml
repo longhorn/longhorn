@@ -8,5 +8,5 @@ roleRef:
   name: longhorn-role
 subjects:
 - kind: ServiceAccount
-  name: longhorn-service-account
+  name: {{ .Values.serviceAccount.name }}
   namespace: {{ .Release.Namespace }}

@@ -262,7 +262,7 @@ questions:
   show_if: "ingress.enabled=false"
   group: "Services and Load Balancing"
   show_subquestion_if: "NodePort"
-  subquestions: 
+  subquestions:
   - variable: service.ui.nodePort
     default: ""
     description: "NodePort port number(to set explicitly, choose port between 30000-32767)"
@@ -271,3 +271,9 @@ questions:
     max: 32767
     show_if: "service.ui.type=NodePort||service.ui.type=LoadBalancer"
     label: UI Service NodePort number
+- variable: serviceAccount.name
+  default: "longhorn-service-account"
+  description: "The name of the Kubernetes ServiceAccount to create"
+  type: string
+  group: "Kubernetes RBAC"
+  label: Kubernetes ServiceAccount name

@@ -29,6 +29,7 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.defaultSettings.registrySecret }}
       {{- end }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
 ---
 kind: Service
 apiVersion: v1

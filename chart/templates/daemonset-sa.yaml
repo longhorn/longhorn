@@ -31,7 +31,7 @@ spec:
         - --manager-image
         - "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
         - --service-account
-        - longhorn-service-account
+        - {{ .Values.serviceAccount.name }}
         ports:
         - containerPort: 9500
           name: manager
@@ -85,7 +85,7 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.defaultSettings.registrySecret }}
       {{- end }}
-      serviceAccountName: longhorn-service-account
+      serviceAccountName: {{ .Values.serviceAccount.name }}
   updateStrategy:
     rollingUpdate:
       maxUnavailable: "100%"

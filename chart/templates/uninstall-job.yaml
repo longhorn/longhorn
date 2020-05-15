@@ -31,4 +31,4 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.defaultSettings.registrySecret }}
       {{- end }}
-      serviceAccountName: longhorn-service-account
+      serviceAccountName: {{ .Values.serviceAccount.name }}
