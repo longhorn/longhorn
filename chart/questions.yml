@@ -53,7 +53,7 @@ questions:
     label: Longhorn Instance Manager Image Name
     group: "Longhorn Images Settings"
   - variable: image.longhorn.instanceManagerTag
-    default: v1_20200301
+    default: v1_20200514
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
     label: Longhorn Manager Image Tag

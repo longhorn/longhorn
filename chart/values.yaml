@@ -10,7 +10,7 @@ image:
     ui: longhornio/longhorn-ui
     uiTag: v1.0.0-rc1
     instanceManager: longhornio/longhorn-instance-manager
-    instanceManagerTag: v1_20200301
+    instanceManagerTag: v1_20200514
   pullPolicy: IfNotPresent
 
 service:
