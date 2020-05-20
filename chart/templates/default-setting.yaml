@@ -19,3 +19,8 @@ data:
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
     registry-secret: {{ .Values.defaultSettings.registrySecret }}
+    auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
+    disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
+    replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
+    volume-attachment-recovery-policy: {{ .Values.defaultSettings.volumeAttachmentRecoveryPolicy }}
+    mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters  }}
