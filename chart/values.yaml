@@ -50,6 +50,11 @@ defaultSettings:
   backupstorePollInterval: ~
   taintToleration: ~
   registrySecret: ~
+  autoSalvage: ~
+  disableSchedulingOnCordonedNode: ~
+  replicaZoneSoftAntiAffinity: ~
+  volumeAttachmentRecoveryPolicy: ~
+  mkfsExt4Parameters: ~
 
 privateRegistry:
   registryUrl: ~
