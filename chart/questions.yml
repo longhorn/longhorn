@@ -56,7 +56,7 @@ questions:
     default: v1_20200514
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
-    label: Longhorn Manager Image Tag
+    label: Longhorn Instance Manager Image Tag
     group: "Longhorn Images Settings"
   - variable: csi.attacherImage
     default:
