@@ -16,7 +16,7 @@ Longhorn implements distributed block storage using containers and microservices
 
 1. Enterprise-grade distributed storage with no single point of failure
 2. Incremental snapshot of block storage
-3. Backup to secondary storage (NFS or S3-compatible object storage) built on efficient change block detection
+3. Backup to secondary storage (NFSv4 or S3-compatible object storage) built on efficient change block detection
 4. Recurring snapshot and backup
 5. Automated non-disruptive upgrade. You can upgrade the entire Longhorn software stack without disrupting running volumes!
 6. Intuitive GUI dashboard
