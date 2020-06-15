@@ -102,6 +102,7 @@ spec:
                 - SYS_RESOURCE
           args:
             - "-provisioner=nfs.longhorn.io"
+            - "-device-based-fsids=false"
           env:
             - name: POD_IP
               valueFrom:
@@ -114,6 +115,20 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           imagePullPolicy: "IfNotPresent"
+          readinessProbe:
+            exec:
+              command:
+                - ls
+                - /export
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - ls
+                - /export
+            initialDelaySeconds: 5
+            periodSeconds: 5
           volumeMounts:
             - name: export-volume
               mountPath: /export
@@ -121,6 +136,17 @@ spec:
         - name: export-volume
           persistentVolumeClaim:
             claimName: longhorn-nfs-provisioner
+      # we want really quick failover
+      terminationGracePeriodSeconds: 30
+      tolerations:
+        - effect: NoExecute
+          key: node.kubernetes.io/not-ready
+          operator: Exists
+          tolerationSeconds: 60
+        - effect: NoExecute
+          key: node.kubernetes.io/unreachable
+          operator: Exists
+          tolerationSeconds: 60
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -139,5 +165,5 @@ kind: StorageClass
 metadata:
   name: longhorn-nfs # workload storage class
 provisioner: nfs.longhorn.io
-parameters:
-  mountOptions: "vers=4.1"
+mountOptions:
+  - "vers=4.1"
