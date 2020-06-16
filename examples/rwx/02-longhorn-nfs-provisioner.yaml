@@ -10,6 +10,10 @@ metadata:
   labels:
     app: longhorn-nfs-provisioner
 spec:
+  # hardcode a cluster ip for the service
+  # so that on delete & recreate of the service the previous pv's still point
+  # to this nfs-provisioner, pick a new ip for each new nfs provisioner
+  clusterIP: 10.43.111.111
   ports:
     - name: nfs
       port: 2049
