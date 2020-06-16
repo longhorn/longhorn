@@ -167,3 +167,4 @@ metadata:
 provisioner: nfs.longhorn.io
 mountOptions:
   - "vers=4.1"
+  - "noresvport"
