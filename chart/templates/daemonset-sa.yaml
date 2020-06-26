@@ -17,7 +17,7 @@ spec:
       containers:
       - name: longhorn-manager
         image: "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
         command:

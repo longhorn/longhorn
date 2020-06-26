@@ -20,7 +20,7 @@ spec:
       containers:
         - name: longhorn-driver-deployer
           image: {{ printf "%s:%s" .Values.image.longhorn.manager .Values.image.longhorn.managerTag | quote }}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
