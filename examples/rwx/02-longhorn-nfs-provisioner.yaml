@@ -2,11 +2,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: longhorn-nfs-provisioner
+  namespace: longhorn-system
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: longhorn-nfs-provisioner
+  namespace: longhorn-system
   labels:
     app: longhorn-nfs-provisioner
 spec:
@@ -52,6 +54,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: longhorn-nfs-provisioner
+  namespace: longhorn-system
 spec:
   selector:
     matchLabels:
@@ -156,6 +159,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: longhorn-nfs-provisioner # longhorn backing pvc
+  namespace: longhorn-system
 spec:
   storageClassName: longhorn
   accessModes:
