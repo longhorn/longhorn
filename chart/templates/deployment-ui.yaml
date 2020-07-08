@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-ui
   name: longhorn-ui
   namespace: {{ .Release.Namespace }}
@@ -12,7 +12,7 @@ spec:
       app: longhorn-ui
   template:
     metadata:
-      labels:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-ui
     spec:
       containers:
@@ -35,7 +35,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-ui
     {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
     kubernetes.io/cluster-service: "true"

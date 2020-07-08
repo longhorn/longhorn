@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: longhorn-driver-deployer
   namespace: {{ .Release.Namespace }}
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
@@ -10,7 +11,7 @@ spec:
       app: longhorn-driver-deployer
   template:
     metadata:
-      labels:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-driver-deployer
     spec:
       initContainers:

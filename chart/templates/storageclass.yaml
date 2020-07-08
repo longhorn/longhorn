@@ -9,6 +9,7 @@ metadata:
   annotations:
     storageclass.beta.kubernetes.io/is-default-class: "false"
   {{- end }}
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
 provisioner: driver.longhorn.io
 allowVolumeExpansion: true
 parameters:

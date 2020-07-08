@@ -6,12 +6,14 @@ metadata:
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
   name: longhorn-post-upgrade
   namespace: {{ .Release.Namespace }}
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
 spec:
   activeDeadlineSeconds: 900
   backoffLimit: 1
   template:
     metadata:
       name: longhorn-post-upgrade
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
     spec:
       containers:
       - name: longhorn-post-upgrade

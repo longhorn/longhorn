@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: longhorn-default-setting
   namespace: {{ .Release.Namespace }}
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-setting.yaml: |-
     backup-target: {{ .Values.defaultSettings.backupTarget }}

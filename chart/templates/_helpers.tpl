@@ -25,3 +25,14 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "secret" }}
 {{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.privateRegistry.registryUrl (printf "%s:%s" .Values.privateRegistry.registryUser .Values.privateRegistry.registryPasswd | b64enc) | b64enc }}
 {{- end }}
+
+{{- /*
+longhorn.labels generates the standard Helm labels.
+*/ -}}
+{{- define "longhorn.labels" -}}
+app.kubernetes.io/name: {{ template "longhorn.name" . }}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
+{{- end -}}
