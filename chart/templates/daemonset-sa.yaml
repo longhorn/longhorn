@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-manager
   name: longhorn-manager
   namespace: {{ .Release.Namespace }}
@@ -11,7 +11,7 @@ spec:
       app: longhorn-manager
   template:
     metadata:
-      labels:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-manager
     spec:
       containers:
@@ -93,7 +93,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-manager
   name: longhorn-backend
   namespace: {{ .Release.Namespace }}

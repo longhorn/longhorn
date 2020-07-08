@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: longhorn-ingress
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-ingress
   annotations:
     {{- if .Values.ingress.tls }}

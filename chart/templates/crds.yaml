@@ -1,7 +1,7 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Engine
   name: engines.longhorn.io
 spec:
@@ -21,7 +21,7 @@ spec:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Replica
   name: replicas.longhorn.io
 spec:
@@ -41,7 +41,7 @@ spec:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Setting
   name: settings.longhorn.io
 spec:
@@ -59,7 +59,7 @@ spec:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Volume
   name: volumes.longhorn.io
 spec:
@@ -79,7 +79,7 @@ spec:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: EngineImage
   name: engineimages.longhorn.io
 spec:
@@ -99,7 +99,7 @@ spec:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Node
   name: nodes.longhorn.io
 spec:
@@ -119,7 +119,7 @@ spec:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  labels:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: InstanceManager
   name: instancemanagers.longhorn.io
 spec:
