@@ -1,0 +1,85 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: longhorn-nfs-provisioner
+spec:
+  fsGroup:
+    rule: RunAsAny
+  allowedCapabilities:
+    - DAC_READ_SEARCH
+    - SYS_RESOURCE
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+    - configMap
+    - downwardAPI
+    - emptyDir
+    - persistentVolumeClaim
+    - secret
+    - hostPath
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: longhorn-nfs-provisioner
+rules:
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["services", "endpoints"]
+    verbs: ["get"]
+  - apiGroups: ["extensions"]
+    resources: ["podsecuritypolicies"]
+    resourceNames: ["nfs-provisioner"]
+    verbs: ["use"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: longhorn-nfs-provisioner
+subjects:
+  - kind: ServiceAccount
+    name: longhorn-nfs-provisioner
+    namespace: longhorn-system
+roleRef:
+  kind: ClusterRole
+  name: longhorn-nfs-provisioner
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-longhorn-nfs-provisioner
+  namespace: longhorn-system
+rules:
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-longhorn-nfs-provisioner
+  namespace: longhorn-system
+subjects:
+  - kind: ServiceAccount
+    name: longhorn-nfs-provisioner
+    namespace: longhorn-system
+roleRef:
+  kind: Role
+  name: leader-locking-longhorn-nfs-provisioner
+  apiGroup: rbac.authorization.k8s.io

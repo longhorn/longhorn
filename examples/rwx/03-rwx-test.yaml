@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-test
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn-nfs
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-test
+  labels:
+    app: nfs-test
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nfs-test
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nfs-test
+    spec:
+      containers:
+        - image: ubuntu:xenial
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args:
+            - sleep 30; touch /mnt/nfs-test/test.log; while true; do date >> /mnt/nfs-test/test.log; sleep 1; done;
+          name: nfs-test
+          stdin: true
+          tty: true
+          livenessProbe:
+            exec:
+              command:
+                - timeout
+                - "10"
+                - ls
+                - /mnt/nfs-test
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+          volumeMounts:
+            - mountPath: /mnt/nfs-test
+              name: nfs-test
+      restartPolicy: Always
+      volumes:
+        - name: nfs-test
+          persistentVolumeClaim:
+            claimName: nfs-test
