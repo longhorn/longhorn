@@ -49,6 +49,7 @@ defaultSettings:
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
   taintToleration: ~
+  priorityClass: ~
   registrySecret: ~
   autoSalvage: ~
   disableSchedulingOnCordonedNode: ~
