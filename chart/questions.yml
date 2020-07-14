@@ -239,6 +239,12 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
     group: "Longhorn Default Settings"
     type: string
     default: ""
+  - variable: defaultSettings.priorityClass
+    label: Priority Class
+    description: "The name of the Priority Class to set on the Longhorn workloads. This can help prevent Longhorn workloads from being evicted under Node Pressure. WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+    group: "Longhorn Default Settings"
+    type: string
+    default: ""
   - variable: defaultSettings.autoSalvage
     label: Automatic salvage
     description: "If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection. Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true."
