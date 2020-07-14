@@ -305,7 +305,7 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
   show_if: "ingress.enabled=false"
   group: "Services and Load Balancing"
   show_subquestion_if: "NodePort"
-  subquestions: 
+  subquestions:
   - variable: service.ui.nodePort
     default: ""
     description: "NodePort port number(to set explicitly, choose port between 30000-32767)"
