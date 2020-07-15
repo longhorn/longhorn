@@ -45,6 +45,7 @@ spec:
           mountPath: /host/proc/
         - name: varrun
           mountPath: /var/run/
+          mountPropagation: Bidirectional
         - name: longhorn
           mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
