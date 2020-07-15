@@ -55,6 +55,7 @@ defaultSettings:
   replicaZoneSoftAntiAffinity: ~
   volumeAttachmentRecoveryPolicy: ~
   mkfsExt4Parameters: ~
+  priorityClass: ~
 
 privateRegistry:
   registryUrl: ~

@@ -272,6 +272,11 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
     description: "Allows setting additional filesystem creation parameters for ext4. For older host kernels it might be necessary to disable the optional ext4 metadata_csum feature by specifying `-O ^64bit,^metadata_csum`."
     group: "Longhorn Default Settings"
     type: string
+  - variable: defaultSettings.priorityClass
+    label: Priority Class
+    description: "The name of the Priority Class to set on the Longhorn workloads. This can help prevent Longhorn workloads from being evicted under Node Pressure.\nWARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+    group: "Longhorn Default Settings"
+    type: string
 - variable: ingress.enabled
   default: "false"
   description: "Expose app using Layer 7 Load Balancer - ingress"
