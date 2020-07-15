@@ -20,6 +20,8 @@ sources:
 - https://github.com/longhorn/longhorn-ui
 - https://github.com/longhorn/longhorn-tests
 maintainers:
-- name: rancher
-  email: charts@rancher.com
+- name: Longhorn maintainers
+  email: maintainers@longhorn.io
+- name: Sheng Yang
+  email: sheng@yasker.org
 icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/horizontal/color/longhorn-horizontal-color.svg?sanitize=true
