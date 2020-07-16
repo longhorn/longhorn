@@ -70,11 +70,11 @@ questions:
     type: string
     label: Longhorn CSI Provisioner Image
     group: "Longhorn CSI Driver Images"
-  - variable: csi.driverRegistrarImage
+  - variable: csi.nodeDriverRegistrarImage
     default:
-    description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
+    description: "Specify CSI Node Driver Registrar image. Leave blank to autodetect."
     type: string
-    label: Longhorn CSI Driver Registrar Image
+    label: Longhorn CSI Node Driver Registrar Image
     group: "Longhorn CSI Driver Images"
   - variable: csi.resizerImage
     default:
