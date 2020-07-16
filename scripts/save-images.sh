@@ -19,6 +19,11 @@ while [[ $# -gt 0 ]]; do
 		help="true"
 		shift
 		;;
+		*)
+		echo "Error! invalid flag: ${key}"
+		help="true"
+		break
+		;;
 	esac
 done
 
