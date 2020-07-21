@@ -3,7 +3,7 @@ name: longhorn
 version: 1.0.1
 appVersion: v1.0.1
 kubeVersion: ">=v1.14.0-r0"
-description: Longhorn is a distributed block storage system for Kubernetes powered by Rancher Labs.
+description: Longhorn is a distributed block storage system for Kubernetes.
 keywords:
 - longhorn
 - storage
@@ -24,4 +24,4 @@ maintainers:
   email: maintainers@longhorn.io
 - name: Sheng Yang
   email: sheng@yasker.org
-icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/horizontal/color/longhorn-horizontal-color.svg?sanitize=true
+icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/icon/color/longhorn-icon-color.svg?sanitize=true
