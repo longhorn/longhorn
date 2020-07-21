@@ -24,6 +24,9 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs", "cronjobs"]
     verbs: ["*"]
+  - apiGroups: ["scheduling.k8s.io"]
+    resources: ["priorityclasses"]
+    verbs: ["watch", "list"]
   - apiGroups: ["storage.k8s.io"]
     resources: ["csidrivers"]
     verbs: ["*"]
@@ -58,7 +61,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v1.0.0
+        image: longhornio/longhorn-manager:v1.0.1
         imagePullPolicy: Always
         command:
         - longhorn-manager

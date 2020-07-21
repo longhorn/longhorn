@@ -17,7 +17,7 @@ questions:
     label: Longhorn Manager Image Name
     group: "Longhorn Images Settings"
   - variable: image.longhorn.managerTag
-    default: v1.0.0
+    default: v1.0.1
     description: "Specify Longhorn Manager Image Tag"
     type: string
     label: Longhorn Manager Image Tag
@@ -29,7 +29,7 @@ questions:
     label: Longhorn Engine Image Name
     group: "Longhorn Images Settings"
   - variable: image.longhorn.engineTag
-    default: v1.0.0
+    default: v1.0.1
     description: "Specify Longhorn Engine Image Tag"
     type: string
     label: Longhorn Engine Image Tag
@@ -41,7 +41,7 @@ questions:
     label: Longhorn UI Image Name
     group: "Longhorn Images Settings"
   - variable: image.longhorn.uiTag
-    default: v1.0.0
+    default: v1.0.1
     description: "Specify Longhorn UI Image Tag"
     type: string
     label: Longhorn UI Image Tag
@@ -70,11 +70,11 @@ questions:
     type: string
     label: Longhorn CSI Provisioner Image
     group: "Longhorn CSI Driver Images"
-  - variable: csi.driverRegistrarImage
+  - variable: csi.nodeDriverRegistrarImage
     default:
-    description: "Specify CSI Driver Registrar image. Leave blank to autodetect."
+    description: "Specify CSI Node Driver Registrar image. Leave blank to autodetect."
     type: string
-    label: Longhorn CSI Driver Registrar Image
+    label: Longhorn CSI Node Driver Registrar Image
     group: "Longhorn CSI Driver Images"
   - variable: csi.resizerImage
     default:
@@ -239,6 +239,12 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
     group: "Longhorn Default Settings"
     type: string
     default: ""
+  - variable: defaultSettings.priorityClass
+    label: Priority Class
+    description: "The name of the Priority Class to set on the Longhorn workloads. This can help prevent Longhorn workloads from being evicted under Node Pressure. WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+    group: "Longhorn Default Settings"
+    type: string
+    default: ""
   - variable: defaultSettings.autoSalvage
     label: Automatic salvage
     description: "If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection. Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true."
@@ -299,7 +305,7 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
   show_if: "ingress.enabled=false"
   group: "Services and Load Balancing"
   show_subquestion_if: "NodePort"
-  subquestions: 
+  subquestions:
   - variable: service.ui.nodePort
     default: ""
     description: "NodePort port number(to set explicitly, choose port between 30000-32767)"
