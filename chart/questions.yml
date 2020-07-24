@@ -314,3 +314,9 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
     max: 32767
     show_if: "service.ui.type=NodePort||service.ui.type=LoadBalancer"
     label: UI Service NodePort number
+- variable: podSecurityPolicy.enabled
+  default: "true"
+  description: "Configure a custom pod security policy for the Longhorn namespace."
+  label: Pod Security Policy
+  type: boolean
+  group: "Other Settings"
