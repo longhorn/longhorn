@@ -118,3 +118,7 @@ ingress:
   # - name: longhorn.local-tls
   #   key:
   #   certificate:
+
+# Setup pod security policy in the Longhorn namespace to allow privileged pods
+podSecurityPolicy:
+  enabled: true
