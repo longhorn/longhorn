@@ -2,13 +2,8 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: longhorn
-  {{- if .Values.persistence.defaultClass }}
   annotations:
-    storageclass.beta.kubernetes.io/is-default-class: "true"
-  {{- else }}
-  annotations:
-    storageclass.beta.kubernetes.io/is-default-class: "false"
-  {{- end }}
+    storageclass.kubernetes.io/is-default-class: {{ .Values.persistence.defaultClass | quote }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 provisioner: driver.longhorn.io
 allowVolumeExpansion: true
