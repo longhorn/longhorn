@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: @STS_NAME@
+spec:
+  replicas: 0
+  serviceName: @STS_NAME@
+  selector:
+    matchLabels:
+      app: @STS_NAME@
+  template:
+    metadata:
+      labels:
+        app: @STS_NAME@
+    spec:
+      nodeName: @NODE_NAME@
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: '@STS_NAME@'
+        image: 'busybox:latest'
+        command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
+        livenessProbe:
+          exec:
+            command:
+              - ls
+              - /mnt/@STS_NAME@
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: @STS_NAME@
+          mountPath: /mnt/@STS_NAME@
+  volumeClaimTemplates:
+  - metadata:
+      name: @STS_NAME@
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "longhorn"
+      resources:
+        requests:
+          storage: 1Gi

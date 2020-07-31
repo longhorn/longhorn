@@ -1,0 +1,12 @@
+# ignores all goland project folders and files
+.idea
+*.iml
+*.ipr
+
+# ignore output folder
+out
+tmp
+results
+
+# ignore kubeconfig
+kubeconfig
