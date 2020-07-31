@@ -1,0 +1,4 @@
+# ignores all goland project folders and files
+.idea
+*.iml
+*.ipr
