@@ -26,10 +26,14 @@ persistence:
   defaultClassReplicaCount: 3
 
 csi:
-  attacherImage: ~
-  provisionerImage: ~
-  nodeDriverRegistrarImage: ~
-  resizerImage: ~
+  attacherImage: longhornio/csi-attacher
+  attacherImageTag: v2.0.0
+  provisionerImage: longhornio/csi-provisioner
+  provisionerImageTag: v1.4.0
+  nodeDriverRegistrarImage: longhornio/csi-node-driver-registrar
+  nodeDriverRegistrarImageTag: v1.2.0
+  resizerImage: longhornio/csi-resizer
+  resizerImageTag: v0.3.0
   kubeletRootDir: ~
   attacherReplicaCount: ~
   provisionerReplicaCount: ~

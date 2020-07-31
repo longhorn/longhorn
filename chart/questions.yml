@@ -59,28 +59,52 @@ questions:
     label: Longhorn Instance Manager Image Tag
     group: "Longhorn Images Settings"
   - variable: csi.attacherImage
-    default:
+    default: longhornio/csi-attacher
     description: "Specify CSI attacher image. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image
     group: "Longhorn CSI Driver Images"
+  - variable: csi.attacherImageTag
+    default: v2.0.0
+    description: "Specify CSI attacher image tag. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Attacher Image Tag
+    group: "Longhorn CSI Driver Images"
   - variable: csi.provisionerImage
-    default:
+    default: longhornio/csi-provisioner
     description: "Specify CSI provisioner image. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image
     group: "Longhorn CSI Driver Images"
+  - variable: csi.provisionerImageTag
+    default: v1.4.0
+    description: "Specify CSI provisioner image tag. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Provisioner Image Tag
+    group: "Longhorn CSI Driver Images"
   - variable: csi.nodeDriverRegistrarImage
-    default:
+    default: longhornio/csi-node-driver-registrar
     description: "Specify CSI Node Driver Registrar image. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image
     group: "Longhorn CSI Driver Images"
+  - variable: csi.nodeDriverRegistrarImageTag
+    default: v1.2.0
+    description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Node Driver Registrar Image Tag
+    group: "Longhorn CSI Driver Images"
   - variable: csi.resizerImage
-    default:
+    default: longhornio/csi-resizer
     description: "Specify CSI Driver Resizer image. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image
+    group: "Longhorn CSI Driver Images"
+  - variable: csi.resizerImageTag
+    default: v0.3.0
+    description: "Specify CSI Driver Resizer image tag. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Driver Resizer Image Tag
     group: "Longhorn CSI Driver Images"
 - variable: privateRegistry.registryUrl
   label: Private registry URL

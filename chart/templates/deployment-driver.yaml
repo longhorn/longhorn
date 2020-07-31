@@ -16,18 +16,30 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
+      {{- if .Values.privateRegistry.registryUrl }}
+          image: {{ printf "%s/%s:%s" .Values.privateRegistry.registryUrl .Values.image.longhorn.manager .Values.image.longhorn.managerTag | quote }}
+      {{- else }}
           image: {{ printf "%s:%s" .Values.image.longhorn.manager .Values.image.longhorn.managerTag | quote }}
+      {{- end }}
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
+      {{- if .Values.privateRegistry.registryUrl }}
+          image: {{ printf "%s/%s:%s" .Values.privateRegistry.registryUrl .Values.image.longhorn.manager .Values.image.longhorn.managerTag | quote }}
+      {{- else }}
           image: {{ printf "%s:%s" .Values.image.longhorn.manager .Values.image.longhorn.managerTag | quote }}
+      {{- end }}
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
+      {{- if .Values.privateRegistry.registryUrl }}
+          - {{ printf "%s/%s:%s" .Values.privateRegistry.registryUrl .Values.image.longhorn.manager .Values.image.longhorn.managerTag | quote }}
+      {{- else }}
           - {{ printf "%s:%s" .Values.image.longhorn.manager .Values.image.longhorn.managerTag | quote }}
+      {{- end }}
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -47,22 +59,41 @@ spec:
           - name: KUBELET_ROOT_DIR
             value: {{ .Values.csi.kubeletRootDir }}
           {{- end }}
-          {{- if .Values.csi.attacherImage }}
+      {{- if .Values.privateRegistry.registryUrl }}
+          {{- if and .Values.csi.attacherImage .Values.csi.attacherImageTag }}
           - name: CSI_ATTACHER_IMAGE
-            value: {{ .Values.csi.attacherImage }}
+            value: {{ printf "%s/%s:%s" .Values.privateRegistry.registryUrl .Values.csi.attacherImage .Values.csi.attacherImageTag | quote }}
           {{- end }}
-          {{- if .Values.csi.provisionerImage }}
+          {{- if and .Values.csi.provisionerImage .Values.csi.provisionerImageTag }}
           - name: CSI_PROVISIONER_IMAGE
-            value: {{ .Values.csi.provisionerImage }}
+            value: {{ printf "%s/%s:%s" .Values.privateRegistry.registryUrl .Values.csi.provisionerImage .Values.csi.provisionerImageTag | quote }}
           {{- end }}
-          {{- if .Values.csi.nodeDriverRegistrarImage }}
+          {{- if and .Values.csi.nodeDriverRegistrarImage .Values.csi.nodeDriverRegistrarImageTag }}
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: {{ .Values.csi.nodeDriverRegistrarImage }}
+            value: {{ printf "%s/%s:%s" .Values.privateRegistry.registryUrl .Values.csi.nodeDriverRegistrarImage .Values.csi.nodeDriverRegistrarImageTag | quote }}
           {{- end }}
-          {{- if .Values.csi.resizerImage }}
+          {{- if and .Values.csi.resizerImage .Values.csi.resizerImageTag }}
           - name: CSI_RESIZER_IMAGE
-            value: {{ .Values.csi.resizerImage }}
+            value: {{ printf "%s/%s:%s" .Values.privateRegistry.registryUrl .Values.csi.resizerImage .Values.csi.resizerImageTag | quote }}
           {{- end }}
+      {{- else }}
+          {{- if and .Values.csi.attacherImage .Values.csi.attacherImageTag }}
+          - name: CSI_ATTACHER_IMAGE
+            value: {{ printf "%s:%s" .Values.csi.attacherImage .Values.csi.attacherImageTag | quote }}
+          {{- end }}
+          {{- if and .Values.csi.provisionerImage .Values.csi.provisionerImageTag }}
+          - name: CSI_PROVISIONER_IMAGE
+            value: {{ printf "%s:%s" .Values.csi.provisionerImage .Values.csi.provisionerImageTag | quote }}
+          {{- end }}
+          {{- if and .Values.csi.nodeDriverRegistrarImage .Values.csi.nodeDriverRegistrarImageTag }}
+          - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
+            value: {{ printf "%s:%s" .Values.csi.nodeDriverRegistrarImage .Values.csi.nodeDriverRegistrarImageTag | quote }}
+          {{- end }}
+          {{- if and .Values.csi.resizerImage .Values.csi.resizerImageTag }}
+          - name: CSI_RESIZER_IMAGE
+            value: {{ printf "%s:%s" .Values.csi.resizerImage .Values.csi.resizerImageTag | quote }}
+          {{- end }}
+      {{- end }}
           {{- if .Values.csi.attacherReplicaCount }}
           - name: CSI_ATTACHER_REPLICA_COUNT
             value: {{ .Values.csi.attacherReplicaCount | quote }}
