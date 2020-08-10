@@ -115,6 +115,5 @@ ingress:
   #   key:
   #   certificate:
 
-# Setup pod security policy in the Longhorn namespace to allow privileged pods
-podSecurityPolicy:
-  enabled: true
+# Configure a pod security policy in the Longhorn namespace to allow privileged pods
+enablePSP: true
