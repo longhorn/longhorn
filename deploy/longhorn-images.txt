@@ -1,7 +1,7 @@
-longhornio/longhorn-engine:v1.0.1
+longhornio/longhorn-engine:v1.0.2
 longhornio/longhorn-instance-manager:v1_20200514
-longhornio/longhorn-manager:v1.0.1
-longhornio/longhorn-ui:v1.0.1
+longhornio/longhorn-manager:v1.0.2
+longhornio/longhorn-ui:v1.0.2
 longhornio/csi-attacher:v2.0.0
 longhornio/csi-node-driver-registrar:v1.2.0
 longhornio/csi-provisioner:v1.4.0

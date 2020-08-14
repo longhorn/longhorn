@@ -228,6 +228,68 @@ data:
     volume-attachment-recovery-policy:
     mkfs-ext4-parameters:
 ---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: longhorn-psp
+spec:
+  privileged: true
+  allowPrivilegeEscalation: true
+  requiredDropCapabilities:
+    - NET_RAW
+  allowedCapabilities:
+    - SYS_ADMIN
+  hostNetwork: false
+  hostIPC: false
+  hostPID: true
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+    - configMap
+    - downwardAPI
+    - emptyDir
+    - secret
+    - projected
+    - hostPath
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: longhorn-psp-role
+  namespace: longhorn-system
+rules:
+  - apiGroups:
+      - policy
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
+    resourceNames:
+      - longhorn-psp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: longhorn-psp-binding
+  namespace: longhorn-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: longhorn-psp-role
+subjects:
+  - kind: ServiceAccount
+    name: longhorn-service-account
+    namespace: longhorn-system
+  - kind: ServiceAccount
+    name: default
+    namespace: longhorn-system
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -246,7 +308,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.0.1
+        image: longhornio/longhorn-manager:v1.0.2
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -255,11 +317,11 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.0.1
+        - longhornio/longhorn-engine:v1.0.2
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20200514
         - --manager-image
-        - longhornio/longhorn-manager:v1.0.1
+        - longhornio/longhorn-manager:v1.0.2
         - --service-account
         - longhorn-service-account
         ports:
@@ -275,6 +337,7 @@ spec:
           mountPath: /host/proc/
         - name: varrun
           mountPath: /var/run/
+          mountPropagation: Bidirectional
         - name: longhorn
           mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
@@ -355,7 +418,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.0.1
+        image: longhornio/longhorn-ui:v1.0.2
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -402,18 +465,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.0.1
+          image: longhornio/longhorn-manager:v1.0.2
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.0.1
+          image: longhornio/longhorn-manager:v1.0.2
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.0.1
+          - longhornio/longhorn-manager:v1.0.2
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:

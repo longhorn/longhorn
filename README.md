@@ -25,7 +25,7 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 ## Current status
 
-The latest release of Longhorn is **v1.0.1**.
+The latest release of Longhorn is **v1.0.2**.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:

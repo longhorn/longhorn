@@ -4,11 +4,11 @@
 image:
   longhorn:
     engine: longhornio/longhorn-engine
-    engineTag: v1.0.1
+    engineTag: v1.0.2
     manager: longhornio/longhorn-manager
-    managerTag: v1.0.1
+    managerTag: v1.0.2
     ui: longhornio/longhorn-ui
-    uiTag: v1.0.1
+    uiTag: v1.0.2
     instanceManager: longhornio/longhorn-instance-manager
     instanceManagerTag: v1_20200514
   pullPolicy: IfNotPresent
@@ -26,10 +26,14 @@ persistence:
   defaultClassReplicaCount: 3
 
 csi:
-  attacherImage: ~
-  provisionerImage: ~
-  nodeDriverRegistrarImage: ~
-  resizerImage: ~
+  attacherImage: longhornio/csi-attacher
+  attacherImageTag: v2.0.0
+  provisionerImage: longhornio/csi-provisioner
+  provisionerImageTag: v1.4.0
+  nodeDriverRegistrarImage: longhornio/csi-node-driver-registrar
+  nodeDriverRegistrarImageTag: v1.2.0
+  resizerImage: longhornio/csi-resizer
+  resizerImageTag: v0.3.0
   kubeletRootDir: ~
   attacherReplicaCount: ~
   provisionerReplicaCount: ~
@@ -114,3 +118,6 @@ ingress:
   # - name: longhorn.local-tls
   #   key:
   #   certificate:
+
+# Configure a pod security policy in the Longhorn namespace to allow privileged pods
+enablePSP: true
