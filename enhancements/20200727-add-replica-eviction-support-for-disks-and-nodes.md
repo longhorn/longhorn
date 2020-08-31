@@ -14,10 +14,6 @@ https://github.com/longhorn/longhorn/issues/298
 2. Report any error to user during the eviction time.
 3. Allow user to cancel the eviction at any time.
 
-### Non-goals
-
-For now, we only focus on `Healthy` volumes, which means `Attached` and `Healthy` or the volume can be in `Degraded` state with rebuilding a new replica. If the volume is `Detached`, the eviction won't work for this volume.
-
 ## Proposal
 1. Add `Eviction Requested` with `true` and `false` selection buttons for disks and nodes. This is for user to evict or cancel the eviction of the disks or the nodes.
 2. Add new `evictionRequested` field to `Node.Spec`, `Node.Spec.disks` Spec and `Replica.Status`. These will help tracking the request from user and trigger replica controller to update `Replica.Status` and volume controler to do the eviction. And this will reconcile with `scheduledReplica` of selected disks on the nodes.
@@ -58,13 +54,14 @@ From an API perspective, the call to set `Eviction Requested` to `true` or `fals
 6. During reconcile the engine replica, based on `Replica.Status.EvictionRequested` of the volume replicas to trigger rebuild for different volumes' replicas. And remove one replica with `evictionRequested` `true`.
 7. Logged the errors to `Event log` during the reconcile process.
 8. By the end from `Longhorn UI`, the replica number on the eviction disks or nodes should be 0, this mean eviction is success.
+9. If the volume is 'Detached', Longhorn will 'Automatically Attach' the volume and do the eviction, after eviction success, the volume will be 'Automatically detach'. If there is any error during the eviction, it will get suspended, until user solve the problem, the 'Auto Detach' will be triggered at the end.
 
 ### Test plan
 
 #### Manual Test Plan For Disks and Nodes Eviction
 Positive Case:
 
-For both `Replica Node Level Soft Anti-Affinity` has been enabled and disabled.
+For both `Replica Node Level Soft Anti-Affinity` has been enabled and disabled. Also the volume can be 'Attaced' or 'Detached'.
 1. User can select one or more disks or nodes for eviction. Select `Eviction Requested` to `true` on the disabled disks or nodes, Longhorn should start rebuild replicas for the volumes which have replicas on the eviction disks or nodes, and after rebuild success, the replica number on the evicted disks or nodes should be 0. E.g. When there are 3 nodes in the cluster, and with `Replica Node Level Soft Anti-Affinity` is set to `false`, disable one node, and create a volume with replica count 2. And then evict one of them, the eviction should get stuck, then set `Replica Node Level Soft Anti-Affinity` to `true`, the eviction should go through.
 
 Negative Cases:
