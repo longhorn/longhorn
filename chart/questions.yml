@@ -175,6 +175,11 @@ questions:
     min: 1
     max: 10
     label: Default Storage Class Replica Count
+  - variable: persistence.defaultRecurringJobs
+    description: "Set snapshot and backup jobs for default StorageClass"
+    group: "Longhorn CSI Driver Settings"
+    type: string
+    default: '[]'
   - variable: defaultSettings.backupTarget
     label: Backup Target
     description: "The endpoint used to access the backupstore. NFS and S3 are supported."
