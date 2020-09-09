@@ -12,3 +12,4 @@ parameters:
   staleReplicaTimeout: "30"
   fromBackup: ""
   baseImage: ""
+  recurringJobs: "{{ .Values.persistence.defaultRecurringJobs }}"
