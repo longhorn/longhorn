@@ -250,6 +250,19 @@ We upgraded the csi-provsioner from 1.4 to 1.6, which still supports kubernetes 
 
 ## Note
 
+Since we cannot assume that the users distribution has csi snapshotter support, the user needs to create a
+`VolumeSnapshotClass` to be able to use the csi snapshot support.
+
+Example longhorn `VolumeSnapshotClass`
+```yaml
+kind: VolumeSnapshotClass
+apiVersion: snapshot.storage.k8s.io/v1beta1
+metadata:
+  name: longhorn
+driver: driver.longhorn.io
+deletionPolicy: Delete
+```
+
 The CRDs and snapshot controller installations are the responsibility of the Kubernetes distribution.
 See: https://kubernetes.io/docs/concepts/storage/volume-snapshots/#introduction
 
