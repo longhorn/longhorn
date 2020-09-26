@@ -189,6 +189,13 @@ questions:
     type: boolean
     required: true
     label: Default Storage Class
+  - variable: persistence.reclaimPolicy
+    default: "Delete"
+    description: "Define reclaim policy (Retain or Delete)"
+    group: "Longhorn CSI Driver Settings"
+    type: string
+    required: true
+    label: Storage Class Retain Policy
   - variable: persistence.defaultClassReplicaCount
     description: "Set replica count for default StorageClass"
     group: "Longhorn CSI Driver Settings"
