@@ -30,11 +30,8 @@ rules:
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
-  verbs: ["get", "watch", "list", "delete", "update", "create"]
+  verbs: ["*"]
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status"]
-  verbs: ["*"]
-- apiGroups: ["coordination.k8s.io"]
-  resources: ["leases"]
   verbs: ["*"]

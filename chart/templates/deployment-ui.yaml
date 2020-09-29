@@ -17,11 +17,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-    {{- if .Values.privateRegistry.registryUrl }}
-        image: "{{ .Values.privateRegistry.registryUrl }}/{{ .Values.image.longhorn.ui }}:{{ .Values.image.longhorn.uiTag }}"
-    {{- else }}
-        image: "{{ .Values.image.longhorn.ui }}:{{ .Values.image.longhorn.uiTag }}"
-    {{- end }}
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0

@@ -10,97 +10,97 @@ questions:
   show_subquestion_if: false
   group: "Longhorn Images"
   subquestions:
-  - variable: image.longhorn.manager
+  - variable: image.longhorn.manager.repository
     default: longhornio/longhorn-manager
-    description: "Specify Longhorn Manager Image Name"
+    description: "Specify Longhorn Manager Image Repository"
     type: string
-    label: Longhorn Manager Image Name
+    label: Longhorn Manager Image Repository
     group: "Longhorn Images Settings"
-  - variable: image.longhorn.managerTag
+  - variable: image.longhorn.manager.tag
     default: v1.0.2
     description: "Specify Longhorn Manager Image Tag"
     type: string
     label: Longhorn Manager Image Tag
     group: "Longhorn Images Settings"
-  - variable: image.longhorn.engine
+  - variable: image.longhorn.engine.repository
     default: longhornio/longhorn-engine
-    description: "Specify Longhorn Engine Image Name"
+    description: "Specify Longhorn Engine Image Repository"
     type: string
-    label: Longhorn Engine Image Name
+    label: Longhorn Engine Image Repository
     group: "Longhorn Images Settings"
-  - variable: image.longhorn.engineTag
+  - variable: image.longhorn.engine.tag
     default: v1.0.2
     description: "Specify Longhorn Engine Image Tag"
     type: string
     label: Longhorn Engine Image Tag
     group: "Longhorn Images Settings"
-  - variable: image.longhorn.ui
+  - variable: image.longhorn.ui.repository
     default:  longhornio/longhorn-ui
-    description: "Specify Longhorn UI Image Name"
+    description: "Specify Longhorn UI Image Repository"
     type: string
-    label: Longhorn UI Image Name
+    label: Longhorn UI Image Repository
     group: "Longhorn Images Settings"
-  - variable: image.longhorn.uiTag
+  - variable: image.longhorn.ui.tag
     default: v1.0.2
     description: "Specify Longhorn UI Image Tag"
     type: string
     label: Longhorn UI Image Tag
     group: "Longhorn Images Settings"
-  - variable: image.longhorn.instanceManager
+  - variable: image.longhorn.instanceManager.repository
     default: longhornio/longhorn-instance-manager
-    description: "Specify Longhorn Instance Manager Image Name"
+    description: "Specify Longhorn Instance Manager Image Repository"
     type: string
-    label: Longhorn Instance Manager Image Name
+    label: Longhorn Instance Manager Image Repository
     group: "Longhorn Images Settings"
-  - variable: image.longhorn.instanceManagerTag
+  - variable: image.longhorn.instanceManager.tag
     default: v1_20200514
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
     label: Longhorn Instance Manager Image Tag
     group: "Longhorn Images Settings"
-  - variable: csi.attacherImage
+  - variable: image.csi.attacher.repository
     default: longhornio/csi-attacher
-    description: "Specify CSI attacher image. Leave blank to autodetect."
+    description: "Specify CSI attacher image repository. Leave blank to autodetect."
     type: string
-    label: Longhorn CSI Attacher Image
+    label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
-  - variable: csi.attacherImageTag
+  - variable: image.csi.attacher.tag
     default: v2.0.0
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
     group: "Longhorn CSI Driver Images"
-  - variable: csi.provisionerImage
+  - variable: image.csi.provisioner.repository
     default: longhornio/csi-provisioner
-    description: "Specify CSI provisioner image. Leave blank to autodetect."
+    description: "Specify CSI provisioner image repository. Leave blank to autodetect."
     type: string
-    label: Longhorn CSI Provisioner Image
+    label: Longhorn CSI Provisioner Image Repository
     group: "Longhorn CSI Driver Images"
-  - variable: csi.provisionerImageTag
+  - variable: image.csi.provisioner.tag
     default: v1.4.0
     description: "Specify CSI provisioner image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Tag
     group: "Longhorn CSI Driver Images"
-  - variable: csi.nodeDriverRegistrarImage
+  - variable: image.csi.nodeDriverRegistrar.repository
     default: longhornio/csi-node-driver-registrar
-    description: "Specify CSI Node Driver Registrar image. Leave blank to autodetect."
+    description: "Specify CSI Node Driver Registrar image repository. Leave blank to autodetect."
     type: string
-    label: Longhorn CSI Node Driver Registrar Image
+    label: Longhorn CSI Node Driver Registrar Image Repository
     group: "Longhorn CSI Driver Images"
-  - variable: csi.nodeDriverRegistrarImageTag
+  - variable: image.csi.nodeDriverRegistrar.tag
     default: v1.2.0
     description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Tag
     group: "Longhorn CSI Driver Images"
-  - variable: csi.resizerImage
+  - variable: image.csi.resizer.repository
     default: longhornio/csi-resizer
-    description: "Specify CSI Driver Resizer image. Leave blank to autodetect."
+    description: "Specify CSI Driver Resizer image repository. Leave blank to autodetect."
     type: string
-    label: Longhorn CSI Driver Resizer Image
+    label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
-  - variable: csi.resizerImageTag
+  - variable: image.csi.resizer.tag
     default: v0.3.0
     description: "Specify CSI Driver Resizer image tag. Leave blank to autodetect."
     type: string
@@ -108,7 +108,7 @@ questions:
     group: "Longhorn CSI Driver Images"
 - variable: privateRegistry.registryUrl
   label: Private registry URL
-  description: "URL of private registry"
+  description: "URL of private registry. Leave blank to apply system default registry."
   group: "Private Registry Settings"
   type: string
   default: ""

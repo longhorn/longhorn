@@ -16,11 +16,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-    {{- if .Values.privateRegistry.registryUrl }}
-        image: "{{ .Values.privateRegistry.registryUrl }}/{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
-    {{- else }}
-        image: "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
-    {{- end }}
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -29,23 +25,11 @@ spec:
         - -d
         - daemon
         - --engine-image
-    {{- if .Values.privateRegistry.registryUrl }}
-        - "{{ .Values.privateRegistry.registryUrl }}/{{ .Values.image.longhorn.engine }}:{{ .Values.image.longhorn.engineTag }}"
-    {{- else }}
-        - "{{ .Values.image.longhorn.engine }}:{{ .Values.image.longhorn.engineTag }}"
-    {{- end }}
+        - "{{ template "registry_url" . }}{{ .Values.image.longhorn.engine.repository }}:{{ .Values.image.longhorn.engine.tag }}"
         - --instance-manager-image
-    {{- if .Values.privateRegistry.registryUrl }}
-        - "{{ .Values.privateRegistry.registryUrl }}/{{ .Values.image.longhorn.instanceManager }}:{{ .Values.image.longhorn.instanceManagerTag }}"
-    {{- else }}
-        - "{{ .Values.image.longhorn.instanceManager }}:{{ .Values.image.longhorn.instanceManagerTag }}"
-    {{- end }}
+        - "{{ template "registry_url" . }}{{ .Values.image.longhorn.instanceManager.repository }}:{{ .Values.image.longhorn.instanceManager.tag }}"
         - --manager-image
-    {{- if .Values.privateRegistry.registryUrl }}
-        - "{{ .Values.privateRegistry.registryUrl }}/{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
-    {{- else }}
-        - "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
-    {{- end }}
+        - "{{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
         - --service-account
         - longhorn-service-account
         ports:
