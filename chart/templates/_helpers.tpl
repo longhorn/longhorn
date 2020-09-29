@@ -36,3 +36,20 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end -}}
+
+
+{{- define "system_default_registry" -}}
+{{- if .Values.global.cattle.systemDefaultRegistry -}}
+{{- printf "%s/" .Values.global.cattle.systemDefaultRegistry -}}
+{{- else -}}
+{{- "" -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "registry_url" -}}
+{{- if .Values.privateRegistry.registryUrl -}}
+{{- printf "%s/" .Values.privateRegistry.registryUrl -}}
+{{- else -}}
+{{ include "system_default_registry" . }}
+{{- end -}}
+{{- end -}}

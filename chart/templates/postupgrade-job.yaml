@@ -17,11 +17,7 @@ spec:
     spec:
       containers:
       - name: longhorn-post-upgrade
-    {{- if .Values.privateRegistry.registryUrl }}
-        image: "{{ .Values.privateRegistry.registryUrl }}/{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
-    {{- else }}
-        image: "{{ .Values.image.longhorn.manager }}:{{ .Values.image.longhorn.managerTag }}"
-    {{- end }}
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: Always
         command:
         - longhorn-manager
