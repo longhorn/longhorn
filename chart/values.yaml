@@ -25,6 +25,14 @@ persistence:
   defaultClass: true
   defaultClassReplicaCount: 3
 
+recurringJobs:
+  enable: false
+  jobsList: []
+    # - name: snap
+    #   task: snapshot
+    #   cron: '*/1 * * * *'
+    #   retain: 1
+
 csi:
   attacherImage: longhornio/csi-attacher
   attacherImageTag: v2.0.0
