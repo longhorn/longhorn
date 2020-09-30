@@ -12,3 +12,6 @@ parameters:
   staleReplicaTimeout: "30"
   fromBackup: ""
   baseImage: ""
+  {{- if .Values.recurringJobs.enable }}
+  recurringJobs: '{{ .Values.recurringJobs.jobsList | toPrettyJson | indent 2 | trim }}'
+  {{- end }}
