@@ -60,9 +60,6 @@ spec:
         volumeMounts:
         - name: mysql-volume
           mountPath: /var/lib/mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "rancher"
       volumes:
       - name: mysql-volume
         persistentVolumeClaim:
