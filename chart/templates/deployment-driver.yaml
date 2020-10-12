@@ -63,6 +63,10 @@ spec:
           - name: CSI_RESIZER_IMAGE
             value: "{{ template "registry_url" . }}{{ .Values.image.csi.resizer.repository }}:{{ .Values.image.csi.resizer.tag }}"
           {{- end }}
+          {{- if and .Values.image.csi.snapshotter.repository .Values.image.csi.snapshotter.tag }}
+          - name: CSI_SNAPSHOTTER_IMAGE
+            value: "{{ template "registry_url" . }}{{ .Values.image.csi.snapshotter.repository }}:{{ .Values.image.csi.snapshotter.tag }}"
+          {{- end }}
           {{- if .Values.csi.attacherReplicaCount }}
           - name: CSI_ATTACHER_REPLICA_COUNT
             value: {{ .Values.csi.attacherReplicaCount | quote }}
@@ -75,6 +79,11 @@ spec:
           - name: CSI_RESIZER_REPLICA_COUNT
             value: {{ .Values.csi.resizerReplicaCount | quote }}
           {{- end }}
+          {{- if .Values.csi.snapshotterReplicaCount }}
+          - name: CSI_SNAPSHOTTER_REPLICA_COUNT
+            value: {{ .Values.csi.snapshotterReplicaCount | quote }}
+          {{- end }}
+
       {{- if .Values.defaultSettings.registrySecret }}
       imagePullSecrets:
       - name: {{ .Values.defaultSettings.registrySecret }}
