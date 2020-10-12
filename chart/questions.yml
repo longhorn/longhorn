@@ -106,6 +106,12 @@ questions:
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
     group: "Longhorn CSI Driver Images"
+  - variable: image.csi.snapshotter.tag
+    default: v2.1.1
+    description: "Specify CSI Driver Snapshotter image tag. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Driver Snapshotter Image Tag
+    group: "Longhorn CSI Driver Images"
 - variable: privateRegistry.registryUrl
   label: Private registry URL
   description: "URL of private registry. Leave blank to apply system default registry."
@@ -159,6 +165,22 @@ questions:
     max: 10
     description: "Specify replica count of CSI Provisioner. By default 3."
     label: Longhorn CSI Provisioner replica count
+    group: "Longhorn CSI Driver Settings"
+  - variable: csi.resizerReplicaCount
+    type: int
+    default:
+    min: 1
+    max: 10
+    description: "Specify replica count of CSI Resizer. By default 3."
+    label: Longhorn CSI Resizer replica count
+    group: "Longhorn CSI Driver Settings"
+  - variable: csi.snapshotterReplicaCount
+    type: int
+    default:
+    min: 1
+    max: 10
+    description: "Specify replica count of CSI Snapshotter. By default 3."
+    label: Longhorn CSI Snapshotter replica count
     group: "Longhorn CSI Driver Settings"
   - variable: persistence.defaultClass
     default: "true"

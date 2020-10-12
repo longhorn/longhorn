@@ -32,6 +32,9 @@ image:
     resizer:
       repository: longhornio/csi-resizer
       tag: v0.3.0
+    snapshotter:
+      repository: longhornio/csi-snapshotter
+      tag: v2.1.1
   pullPolicy: IfNotPresent
 
 service:
@@ -51,6 +54,7 @@ csi:
   attacherReplicaCount: ~
   provisionerReplicaCount: ~
   resizerReplicaCount: ~
+  snapshotterReplicaCount: ~
 
 defaultSettings:
   backupTarget: ~
