@@ -3,6 +3,8 @@ kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Engine
+  annotations:
+    helm.sh/resource-policy: keep
   name: engines.longhorn.io
 spec:
   group: longhorn.io
@@ -23,6 +25,8 @@ kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Replica
+  annotations:
+    helm.sh/resource-policy: keep
   name: replicas.longhorn.io
 spec:
   group: longhorn.io
@@ -43,6 +47,8 @@ kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Setting
+  annotations:
+    helm.sh/resource-policy: keep
   name: settings.longhorn.io
 spec:
   group: longhorn.io
@@ -61,6 +67,8 @@ kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Volume
+  annotations:
+    helm.sh/resource-policy: keep
   name: volumes.longhorn.io
 spec:
   group: longhorn.io
@@ -81,6 +89,8 @@ kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: EngineImage
+  annotations:
+    helm.sh/resource-policy: keep
   name: engineimages.longhorn.io
 spec:
   group: longhorn.io
@@ -101,6 +111,8 @@ kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Node
+  annotations:
+    helm.sh/resource-policy: keep
   name: nodes.longhorn.io
 spec:
   group: longhorn.io
@@ -121,6 +133,8 @@ kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: InstanceManager
+  annotations:
+    helm.sh/resource-policy: keep
   name: instancemanagers.longhorn.io
 spec:
   group: longhorn.io

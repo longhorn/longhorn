@@ -29,6 +29,11 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 2. From Rancher UI, navigate to `Catalog Apps` tab and delete Longhorn app.
 
+3. Delete Longhorn CRDs
+```
+kubectl delete crd engineimages.longhorn.io engines.longhorn.io instancemanagers.longhorn.io nodes.longhorn.io replicas.longhorn.io settings.longhorn.io volumes.longhorn.io
+```
+
 ## Troubleshooting
 
 ### I deleted the Longhorn App from Rancher UI instead of following the uninstallation procedure
