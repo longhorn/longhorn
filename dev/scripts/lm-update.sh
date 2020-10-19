@@ -29,8 +29,10 @@ docker push ${private}
 escaped_private=${private//\//\\\/}
 sed -i "s/image\:\ .*\/${project}:.*/image\:\ ${escaped_private}/g" $yaml
 sed -i "s/-\ .*\/${project}:.*/-\ ${escaped_private}/g" $yaml
+sed -i "s/imagePullPolicy\:\ .*/imagePullPolicy\:\ Always/g" $yaml
 sed -i "s/image\:\ .*\/${project}:.*/image\:\ ${escaped_private}/g" $driver_yaml
 sed -i "s/-\ .*\/${project}:.*/-\ ${escaped_private}/g" $driver_yaml
+sed -i "s/imagePullPolicy\:\ .*/imagePullPolicy\:\ Always/g" $driver_yaml
 
 set +e
 
