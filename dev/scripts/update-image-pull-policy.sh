@@ -1,35 +1,24 @@
-echo "Update imagePullPolicy to be Always for manager, UI, driver deployer, engine image"
+#!/bin/bash
 
-# Update imagePullPolicy for Longhorn manager daemonset
-kubectl patch daemonset longhorn-manager -n longhorn-system -p \
-'{"spec":{"template":{"spec":{"containers":[{"name":"longhorn-manager", "imagePullPolicy":"Always"}]}}}}'
-sleep 5
+NS=longhorn-system
+KINDS="daemonset deployments"
 
-# Update imagePullPolicy for Longhorn UI deployment
-kubectl patch deployment longhorn-ui -n longhorn-system -p \
-'{"spec":{"template":{"spec":{"containers":[{"name":"longhorn-ui", "imagePullPolicy":"Always"}]}}}}'
-sleep 5
+function patch_kind {
+	kind=$1
+	list=$(kubectl -n $NS get $kind -o name)
+	for obj in $list
+	do
+		echo Updating $obj to imagePullPolicy: Always
+		name=${obj##*/}
+		kubectl -n $NS patch $obj -p '{"spec": {"template": {"spec":{"containers":[{"name":"'$name'","imagePullPolicy":"Always"}]}}}}'
+	done
+}
 
-# Update imagePullPolicy for Longhorn Driver Deployer deployment
-kubectl patch deployment longhorn-driver-deployer -n longhorn-system -p \
-'{"spec":{"template":{"spec":{"containers":[{"name":"longhorn-driver-deployer", "imagePullPolicy":"Always"}]}}}}'
-sleep 1
-echo "wait 15s to make sure that the updated longhorn manager pods come up ..."
-sleep 15
-
-# Update all imagePullPolicy for Longhorn Engine Image Daemonsets
-temp_file='./.engine-image-daemon-list'
-kubectl get daemonsets -n longhorn-system | grep -oE "engine-image-ei-.{8}" > ${temp_file}
-
-while IFS= read -r line
+for kind in $KINDS
 do
-        kubectl patch daemonset ${line} -n longhorn-system -p \
-                "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${line}\", \"imagePullPolicy\":\"Always\"}]}}}}"
-        sleep 5
-done < ${temp_file}
-
-rm ${temp_file}
+	patch_kind $kind
+done
 
 echo "Warning: Make sure check and wait for all pods running again!"
-echo "Current status: (Ctl+c to exit)"
+echo "Current status: (CTRL-C to exit)"
 kubectl get pods -w -n longhorn-system
