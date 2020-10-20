@@ -46,7 +46,7 @@ spec:
 
   containers:
   - name: minio
-    image: minio/minio
+    image: longhornio/minio:RELEASE.2020-10-18T21-54-12Z
     command: ["sh", "-c", "mkdir -p /storage/backupbucket && mkdir -p /root/.minio/certs && ln -s /root/certs/private.key /root/.minio/certs/private.key && ln -s /root/certs/public.crt /root/.minio/certs/public.crt && exec /usr/bin/minio server /storage"]
     env:
     - name: MINIO_ACCESS_KEY
