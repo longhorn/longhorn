@@ -1,3 +1,5 @@
+{{- $longhornSC := (lookup "storage.k8s.io/v1" "StorageClass" "" "longhorn") -}}
+{{- if not $longhornSC }}
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
@@ -16,3 +18,8 @@ parameters:
   {{- if .Values.recurringJobs.enable }}
   recurringJobs: '{{ .Values.recurringJobs.jobsList | toPrettyJson | indent 2 | trim }}'
   {{- end }}
+{{- else if eq $longhornSC.provisioner "driver.longhorn.io"}}
+{{ $longhornSC | mustToPrettyJson }}
+{{- else}}
+{{- fail "the existing longhorn storageclass doesn't have provisioner as driver.longhorn.io" }}
+{{- end}}
