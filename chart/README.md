@@ -1,10 +1,8 @@
-# Rancher Longhorn Chart
+# Longhorn Chart
 
 > **Important**: Please install Longhorn chart in `longhorn-system` namespace only.
 
 > **Warning**: Longhorn doesn't support downgrading from a higher version to a lower version.
-
-The following document pertains to running Longhorn from the Rancher 2.0 chart.
 
 ## Source Code
 
@@ -17,37 +15,45 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 ## Prerequisites
 
-1. Rancher v2.1+
-2. Docker v1.13+
-3. Kubernetes v1.14+
-4. Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
-5. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
+1. Docker v1.13+
+2. Kubernetes v1.15+
+3. Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
+4. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
+
+## Installation
+1. Add Longhorn char repository.
+```
+helm repo add longhorn https://charts.longhorn.io
+```
+
+2. Update local Longhorn chart information from chart repository.
+```
+helm repo update
+```
+
+3. Install Longhorn chart.
+- With Helm 2, the following command will create `longhorn-system` namespaceand install Longhorn chart together.
+```
+helm install longhorn/longhorn --name longhorn --namespace longhorn-system
+``` 
+- With Helm 3, the following commands will create `longhorn-system` namespace first, then install Longhorn chart.
+
+```
+kubectl create namespace longhorn-system
+helm install longhorn longhorn/longhorn --namespace longhorn-system
+```
 
 ## Uninstallation
 
-1. To prevent damage to the Kubernetes cluster, we recommend deleting all Kubernetes workloads using Longhorn volumes (PersistentVolume, PersistentVolumeClaim, StorageClass, Deployment, StatefulSet, DaemonSet, etc).
-
-2. From Rancher UI, navigate to `Catalog Apps` tab and delete Longhorn app.
-
-3. Delete Longhorn CRDs
+With Helm 2 to uninstall Longhorn.
 ```
-kubectl delete crd engineimages.longhorn.io engines.longhorn.io instancemanagers.longhorn.io nodes.longhorn.io replicas.longhorn.io settings.longhorn.io volumes.longhorn.io
+helm delete longhorn --purge
 ```
 
-## Troubleshooting
-
-### I deleted the Longhorn App from Rancher UI instead of following the uninstallation procedure
-
-Redeploy the (same version) Longhorn App. Follow the uninstallation procedure above.
-
-### Problems with CRDs
-
-If your CRD instances or the CRDs themselves can't be deleted for whatever reason, run the commands below to clean up. Caution: this will wipe all Longhorn state!
-
+With Helm 3 to uninstall Longhorn.
 ```
-# Delete CRD instances and definitions
-curl -s https://raw.githubusercontent.com/longhorn/longhorn/v0.8.1/scripts/cleanup.sh |bash -s v062
-curl -s https://raw.githubusercontent.com/longhorn/longhorn/v0.8.1/scripts/cleanup.sh |bash -s v070
+helm uninstall longhorn -n longhorn-system
+kubectl delete namespace longhorn-system
 ```
 
 ---
