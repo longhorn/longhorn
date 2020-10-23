@@ -68,6 +68,7 @@ csi:
 defaultSettings:
   backupTarget: ~
   backupTargetCredentialSecret: ~
+  allowRecurringJobWhileVolumeDetached: ~
   createDefaultDiskLabeledNodes: ~
   defaultDataPath: ~
   replicaSoftAntiAffinity: ~
@@ -82,10 +83,18 @@ defaultSettings:
   priorityClass: ~
   registrySecret: ~
   autoSalvage: ~
+  autoDeletePodWhenVolumeDetachedUnexpectedly: ~
   disableSchedulingOnCordonedNode: ~
   replicaZoneSoftAntiAffinity: ~
   volumeAttachmentRecoveryPolicy: ~
+  nodeDownPodDeletionPolicy: ~
+  allowNodeDrainWithLastHealthyReplica: ~
   mkfsExt4Parameters: ~
+  disableReplicaRebuild: ~
+  disableRevisionCounter: ~
+  systemManagedPodsImagePullPolicy: ~
+  allowVolumeCreationWithDegradedAvailability: ~
+  autoCleanupSystemGeneratedSnapshot: ~
 
 privateRegistry:
   registryUrl: ~
