@@ -17,6 +17,26 @@ spec:
     singular: engine
   scope: Namespaced
   version: v1beta1
+  additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the engine
+      JSONPath: .status.currentState
+    - name: Node
+      type: string
+      description: The node that the engine is on
+      JSONPath: .spec.nodeID
+    - name: InstanceManager
+      type: string
+      description: The instance manager of the engine
+      JSONPath: .status.instanceManagerName
+    - name: Image
+      type: string
+      description: The current image of the engine
+      JSONPath: .status.currentImage
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
   subresources:
     status: {}
 ---
@@ -39,6 +59,30 @@ spec:
     singular: replica
   scope: Namespaced
   version: v1beta1
+  additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the replica
+      JSONPath: .status.currentState
+    - name: Node
+      type: string
+      description: The node that the replica is on
+      JSONPath: .spec.nodeID
+    - name: Disk
+      type: string
+      description: The disk that the replica is on
+      JSONPath: .spec.diskID
+    - name: InstanceManager
+      type: string
+      description: The instance manager of the replica
+      JSONPath: .status.instanceManagerName
+    - name: Image
+      type: string
+      description: The current image of the replica
+      JSONPath: .status.currentImage
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
   subresources:
     status: {}
 ---
@@ -61,6 +105,14 @@ spec:
     singular: setting
   scope: Namespaced
   version: v1beta1
+  additionalPrinterColumns:
+    - name: Value
+      type: string
+      description: The value of the setting
+      JSONPath: .value
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
@@ -81,6 +133,30 @@ spec:
     singular: volume
   scope: Namespaced
   version: v1beta1
+  additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The state of the volume
+      JSONPath: .status.state
+    - name: Robustness
+      type: string
+      description: The robustness of the volume
+      JSONPath: .status.robustness
+    - name: Scheduled
+      type: string
+      description: The scheduled condition of the volume
+      JSONPath: .status.conditions['scheduled']['status']
+    - name: Size
+      type: string
+      description: The size of the volume
+      JSONPath: .spec.size
+    - name: Node
+      type: string
+      description: The node that the volume is currently attaching to
+      JSONPath: .status.currentNodeID
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
   subresources:
     status: {}
 ---
@@ -103,6 +179,26 @@ spec:
     singular: engineimage
   scope: Namespaced
   version: v1beta1
+  additionalPrinterColumns:
+    - name: State
+      type: string
+      description: State of the engine image
+      JSONPath: .status.state
+    - name: Image
+      type: string
+      description: The Longhorn engine image
+      JSONPath: .spec.image
+    - name: RefCount
+      type: integer
+      description: Number of volumes are using the engine image
+      JSONPath: .status.refCount
+    - name: BuildDate
+      type: date
+      description: The build date of the engine image
+      JSONPath: .status.buildDate
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
   subresources:
     status: {}
 ---
@@ -125,6 +221,22 @@ spec:
     singular: node
   scope: Namespaced
   version: v1beta1
+  additionalPrinterColumns:
+    - name: Ready
+      type: string
+      description: Indicate whether the node is ready
+      JSONPath: .status.conditions['Ready']['status']
+    - name: AllowScheduling
+      type: boolean
+      description: Indicate whether the user disabled/enabled replica scheduling for the node
+      JSONPath: .spec.allowScheduling
+    - name: Schedulable
+      type: string
+      description: Indicate whether Longhorn can schedule replicas on the node
+      JSONPath: .status.conditions['Schedulable']['status']
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
   subresources:
     status: {}
 ---
@@ -147,5 +259,21 @@ spec:
     singular: instancemanager
   scope: Namespaced
   version: v1beta1
+  additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The state of the instance manager
+      JSONPath: .status.currentState
+    - name: Type
+      type: string
+      description: The type of the instance manager (engine or replica)
+      JSONPath: .spec.type
+    - name: Node
+      type: string
+      description: The node that the instance manager is running on
+      JSONPath: .spec.nodeID
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
   subresources:
     status: {}
