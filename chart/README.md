@@ -1,6 +1,6 @@
 # Longhorn Chart
 
-> **Important**: Please install the Longhorn chart in `longhorn-system` namespace only.
+> **Important**: Please install the Longhorn chart in the `longhorn-system` namespace only.
 
 > **Warning**: Longhorn doesn't support downgrading from a higher version to a lower version.
 
