@@ -44,7 +44,7 @@ rules:
     verbs: ["get"]
   - apiGroups: ["extensions"]
     resources: ["podsecuritypolicies"]
-    resourceNames: ["nfs-provisioner"]
+    resourceNames: ["longhorn-nfs-provisioner"]
     verbs: ["use"]
 ---
 kind: ClusterRoleBinding
