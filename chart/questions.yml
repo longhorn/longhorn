@@ -65,7 +65,7 @@ questions:
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v2.0.0
+    default: v2.2.1-lh1
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
@@ -77,7 +77,7 @@ questions:
     label: Longhorn CSI Provisioner Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.tag
-    default: v1.4.0
+    default: v1.6.0-lh1
     description: "Specify CSI provisioner image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Tag
@@ -89,7 +89,7 @@ questions:
     label: Longhorn CSI Node Driver Registrar Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.tag
-    default: v1.2.0
+    default: v1.2.0-lh1
     description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Tag
@@ -101,13 +101,19 @@ questions:
     label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.tag
-    default: v0.3.0
+    default: v0.5.1-lh1
     description: "Specify CSI Driver Resizer image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
     group: "Longhorn CSI Driver Images"
+  - variable: image.csi.snapshotter.repository
+    default: longhornio/csi-snapshotter
+    description: "Specify CSI Driver Snapshotter image repository. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Driver Snapshotter Image Repository
+    group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.tag
-    default: v2.1.1
+    default: v2.1.1-lh1
     description: "Specify CSI Driver Snapshotter image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
@@ -182,28 +188,6 @@ questions:
     description: "Specify replica count of CSI Snapshotter. By default 3."
     label: Longhorn CSI Snapshotter replica count
     group: "Longhorn CSI Driver Settings"
-  - variable: persistence.defaultClass
-    default: "true"
-    description: "Set as default StorageClass"
-    group: "Longhorn CSI Driver Settings"
-    type: boolean
-    required: true
-    label: Default Storage Class
-  - variable: persistence.reclaimPolicy
-    default: "Delete"
-    description: "Define reclaim policy (Retain or Delete)"
-    group: "Longhorn CSI Driver Settings"
-    type: string
-    required: true
-    label: Storage Class Retain Policy
-  - variable: persistence.defaultClassReplicaCount
-    description: "Set replica count for default StorageClass"
-    group: "Longhorn CSI Driver Settings"
-    type: int
-    default: 3
-    min: 1
-    max: 10
-    label: Default Storage Class Replica Count
   - variable: defaultSettings.backupTarget
     label: Backup Target
     description: "The endpoint used to access the backupstore. NFS and S3 are supported."
@@ -216,6 +200,13 @@ questions:
     group: "Longhorn Default Settings"
     type: string
     default:
+  - variable: defaultSettings.allowRecurringJobWhileVolumeDetached
+    label: Allow Recurring Job While Volume Is Detached
+    description: 'If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup when it is the time to do recurring snapshot/backup.
+Note that the volume is not ready for workload during the period when the volume was automatically attached. Workload will have to wait until the recurring job finishes.'
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
   - variable: defaultSettings.createDefaultDiskLabeledNodes
     label: Create Default Disk on Labeled Nodes
     description: 'Create default Disk automatically only on Nodes with the label "node.longhorn.io/create-default-disk=true" if no other disks exist. If disabled, the default disk will be created on all new nodes when each node is first added.'
@@ -228,6 +219,19 @@ questions:
     group: "Longhorn Default Settings"
     type: string
     default: "/var/lib/longhorn/"
+  - variable: defaultSettings.defaultDataLocality
+    label: Default Data Locality
+    description: 'We say a Longhorn volume has data locality if there is a local replica of the volume on the same node as the pod which is using the volume.
+This setting specifies the default data locality when a volume is created from the Longhorn UI. For Kubernetes configuration, update the `dataLocality` in the StorageClass
+The available modes are:
+- **disabled**. This is the default option. There may or may not be a replica on the same node as the attached volume (workload)
+- **best-effort**. This option instructs Longhorn to try to keep a replica on the same node as the attached volume (workload). Longhorn will not stop the volume, even if it cannot keep a replica local to the attached volume (workload) due to environment limitation, e.g. not enough disk space, incompatible disk tags, etc.'
+    group: "Longhorn Default Settings"
+    type: enum
+    options:
+    - "disabled"
+    - "best-effort"
+    default: "disabled"
   - variable: defaultSettings.replicaSoftAntiAffinity
     label: Replica Node Level Soft Anti-Affinity
     description: 'Allow scheduling on nodes with existing healthy replicas of the same volume. By default false.'
@@ -304,6 +308,14 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
+  - variable: defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly
+    label: Automatically Delete Workload Pod when The Volume Is Detached Unexpectedly
+    description: 'If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...) when Longhorn volume is detached unexpectedly (e.g. during Kubernetes upgrade, Docker reboot, or network disconnect). By deleting the pod, its controller restarts the pod and Kubernetes handles volume reattachment and remount.
+If disabled, Longhorn will not delete the workload pod that is managed by a controller. You will have to manually restart the pod to reattach and remount the volume.
+**Note:** This setting does not apply to the workload pods that do not have a controller. Longhorn never deletes them.'
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
   - variable: defaultSettings.disableSchedulingOnCordonedNode
     label: Disable Scheduling On Cordoned Node
     description: "Disable Longhorn manager to schedule replica on Kubernetes cordoned node. By default true."
@@ -322,15 +334,118 @@ WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.'
     group: "Longhorn Default Settings"
     type: enum
     options:
-      - "wait"
-      - "never"
-      - "immediate"
+    - "wait"
+    - "never"
+    - "immediate"
     default: "wait"
+  - variable: defaultSettings.nodeDownPodDeletionPolicy
+    label: Pod Deletion Policy When Node is Down
+    description: "Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down.
+- **do-nothing** is the default Kubernetes behavior of never force deleting StatefulSet/Deployment terminating pods. Since the pod on the node that is down isn't removed, Longhorn volumes are stuck on nodes that are down.
+- **delete-statefulset-pod** Longhorn will force delete StatefulSet terminating pods on nodes that are down to release Longhorn volumes so that Kubernetes can spin up replacement pods.
+- **delete-deployment-pod** Longhorn will force delete Deployment terminating pods on nodes that are down to release Longhorn volumes so that Kubernetes can spin up replacement pods.
+- **delete-both-statefulset-and-deployment-pod** Longhorn will force delete StatefulSet/Deployment terminating pods on nodes that are down to release Longhorn volumes so that Kubernetes can spin up replacement pods."
+    group: "Longhorn Default Settings"
+    type: enum
+    options:
+    - "do-nothing"
+    - "delete-statefulset-pod"
+    - "delete-deployment-pod"
+    - "delete-both-statefulset-and-deployment-pod"
+    default: "do-nothing"
+  - variable: defaultSettings.allowNodeDrainWithLastHealthyReplica
+    label: Allow Node Drain with the Last Healthy Replica
+    description: "By default, Longhorn will block `kubectl drain` action on a node if the node contains the last healthy replica of a volume.
+If this setting is enabled, Longhorn will **not** block `kubectl drain` action on a node even if the node contains the last healthy replica of a volume."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
   - variable: defaultSettings.mkfsExt4Parameters
     label: Custom mkfs.ext4 parameters
     description: "Allows setting additional filesystem creation parameters for ext4. For older host kernels it might be necessary to disable the optional ext4 metadata_csum feature by specifying `-O ^64bit,^metadata_csum`."
     group: "Longhorn Default Settings"
     type: string
+  - variable: defaultSettings.disableReplicaRebuild
+    label: Disable Replica Rebuild
+    description: "This setting disable replica rebuild cross the whole cluster, eviction and data locality feature won't work if this setting is true. But doesn't have any impact to any current replica rebuild and restore disaster recovery volume."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
+  - variable: defaultSettings.replicaReplenishmentWaitInterval
+    label: Replica Replenishment Wait Interval
+    description: "In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume.
+Warning: This option works only when there is a failed replica in the volume. And this option may block the rebuilding for a while in the case."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 600
+  - variable: defaultSettings.disableRevisionCounter
+    label: Disable Revision Counter
+    description: "This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the repica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
+  - variable: defaultSettings.systemManagedPodsImagePullPolicy
+    label: System Managed Pod Image Pull Policy
+    description: "This setting defines the Image Pull Policy of Longhorn system managed pods, e.g. instance manager, engine image, CSI driver, etc. The new Image Pull Policy will only apply after the system managed pods restart."
+    group: "Longhorn Default Settings"
+    type: enum
+    options:
+    - "if-not-present"
+    - "always"
+    - "never"
+    default: "if-not-present"
+  - variable: defaultSettings.allowVolumeCreationWithDegradedAvailability
+    label: Allow Volume Creation with Degraded Availability
+    description: "This setting allows user to create and attach a volume that doesn't have all the replicas scheduled at the time of creation."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
+  - variable: defaultSettings.autoCleanupSystemGeneratedSnapshot
+    label: Automatically Cleanup System Generated Snapshot
+    description: "This setting enables Longhorn to automatically cleanup the system generated snapshot after replica rebuild is done."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
+- variable: persistence.defaultClass
+  default: "true"
+  description: "Set as default StorageClass for Longhorn"
+  label: Default Storage Class
+  group: "Longhorn Storage Class Settings"
+  required: true
+  type: boolean
+- variable: persistence.reclaimPolicy
+  label: Storage Class Retain Policy
+  description: "Define reclaim policy (Retain or Delete)"
+  group: "Longhorn Storage Class Settings"
+  required: true
+  type: enum
+  options:
+  - "Delete"
+  - "Retain"
+  default: "Delete"
+- variable: persistence.defaultClassReplicaCount
+  description: "Set replica count for Longhorn StorageClass"
+  label: Default Storage Class Replica Count
+  group: "Longhorn Storage Class Settings"
+  type: int
+  min: 1
+  max: 10
+  default: 3
+- variable: persistence.recurringJobs.enable
+  description: "Enable recurring job for Longhorn StorageClass"
+  group: "Longhorn Storage Class Settings"
+  label: Enable Storage Class Recurring Job
+  type: boolean
+  default: false
+  show_subquestion_if: true
+  subquestions:
+  - variable: persistence.recurringJobs.jobList
+    description: 'Recurring job list for Longhorn StorageClass. Please be careful of quotes of input. e.g., [{"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,"labels": {"interval":"2m"}}]'
+    label: Storage Class Recurring Job List
+    group: "Longhorn Storage Class Settings"
+    type: string
+    default:
 - variable: ingress.enabled
   default: "false"
   description: "Expose app using Layer 7 Load Balancer - ingress"

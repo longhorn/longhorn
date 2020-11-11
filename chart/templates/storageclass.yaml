@@ -12,7 +12,6 @@ data:
       name: longhorn
       annotations:
         storageclass.kubernetes.io/is-default-class: {{ .Values.persistence.defaultClass | quote }}
-      labels: {{- include "longhorn.labels" . | nindent 4 }}
     provisioner: driver.longhorn.io
     allowVolumeExpansion: true
     reclaimPolicy: "{{ .Values.persistence.reclaimPolicy }}"
@@ -22,6 +21,6 @@ data:
       staleReplicaTimeout: "30"
       fromBackup: ""
       baseImage: ""
-      {{- if .Values.recurringJobs.enable }}
-      recurringJobs: '{{ .Values.recurringJobs.jobsList | toPrettyJson | indent 2 | trim }}'
+      {{- if .Values.persistence.recurringJobs.enable }}
+      recurringJobs: '{{ .Values.persistence.recurringJobs.jobList }}'
       {{- end }}
