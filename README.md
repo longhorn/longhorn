@@ -1,4 +1,4 @@
-# Longhorn [![Astronomer](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fastronomer.ullaakut.eu%2Fshields%3Fowner%3Dlonghorn%26name%3Dlonghorn)](https://github.com/Ullaakut/astronomer)
+# Longhorn
 
 ### Build Status
 * Engine: [![Build Status](https://drone-publish.longhorn.io/api/badges/longhorn/longhorn-engine/status.svg)](https://drone-publish.longhorn.io/longhorn/longhorn-engine) [![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-engine)](https://goreportcard.com/report/github.com/longhorn/longhorn-engine)
