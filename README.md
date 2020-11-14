@@ -8,7 +8,7 @@
 * Test: [![Build Status](http://drone-publish.longhorn.io/api/badges/longhorn/longhorn-tests/status.svg)](http://drone-publish.longhorn.io/longhorn/longhorn-tests)
 
 ### Overview
-Longhorn is a distributed block storage system for Kubernetes.
+Longhorn is a distributed block storage system for Kubernetes. Longhorn is cloud native storage because it is built using Kubernetes and container primatives. 
 
 Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply` command or using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
 
@@ -22,6 +22,13 @@ Longhorn implements distributed block storage using containers and microservices
 6. Intuitive GUI dashboard
 
 You can read more technical details of Longhorn [here](https://longhorn.io/).
+
+
+## Get Involved
+**Community Meeting and Office Hours**!: Hosted by the core maintainers of Longhorn: 2nd Friday of the every month at 09:00 Pacific Time (PT)/12:00 Eastern Time (ET) on Zoom: http://bit.ly/longhorn-community-meeting. Gcal event: http://bit.ly/longhorn-events
+**Longhorn Mailing List**!: Stay up to date on the latest news and events: https://lists.cncf.io/g/cncf-longhorn
+
+You can read more about the community and its events here: https://github.com/longhorn/community
 
 ## Current status
 
