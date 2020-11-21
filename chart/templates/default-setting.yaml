@@ -21,7 +21,6 @@ data:
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
     priority-class: {{ .Values.defaultSettings.priorityClass }}
-    registry-secret: {{ .Values.defaultSettings.registrySecret }}
     auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
     auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
     disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}

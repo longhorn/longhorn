@@ -130,6 +130,12 @@ questions:
   group: "Private Registry Settings"
   type: password
   default: ""
+- variable: privateRegistry.registrySecret
+  label: Private registry secret name
+  description: "Longhorn will automatically generate a Kubernetes secret with this name and use it to pull images from your private registry."
+  group: "Private Registry Settings"
+  type: string
+  default: ""
 - variable: longhorn.default_setting
   default: "false"
   description: "Customize the default settings before installing Longhorn for the first time. This option will only work if the cluster hasn't installed Longhorn."
@@ -138,12 +144,6 @@ questions:
   show_subquestion_if: true
   group: "Longhorn Default Settings"
   subquestions:
-  - variable: defaultSettings.registrySecret
-    label: Private registry secret
-    description: "The Kubernetes Secret name"
-    group: "Longhorn Default Settings"
-    type: string
-    default: ""
   - variable: csi.kubeletRootDir
     default:
     description: "Specify kubelet root-dir. Leave blank to autodetect."

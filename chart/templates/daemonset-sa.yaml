@@ -82,9 +82,9 @@ spec:
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
-      {{- if .Values.defaultSettings.registrySecret }}
+      {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
-      - name: {{ .Values.defaultSettings.registrySecret }}
+      - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       serviceAccountName: longhorn-service-account
   updateStrategy:
