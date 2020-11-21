@@ -18,7 +18,7 @@ spec:
       containers:
       - name: longhorn-uninstall
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         command:
         - longhorn-manager
         - uninstall
@@ -29,8 +29,8 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
       restartPolicy: OnFailure
-      {{- if .Values.defaultSettings.registrySecret }}
+      {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
-      - name: {{ .Values.defaultSettings.registrySecret }}
+      - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       serviceAccountName: longhorn-service-account
