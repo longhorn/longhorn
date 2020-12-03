@@ -53,3 +53,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{ include "system_default_registry" . }}
 {{- end -}}
 {{- end -}}
+
+{{- /*
+ define the longhorn release namespace
+*/ -}}
+{{- define "release_namespace" -}}
+{{- if .Values.namespaceOverride -}}
+{{- .Values.namespaceOverride -}}
+{{- else -}}
+{{- .Release.Namespace -}}
+{{- end -}}
+{{- end -}}

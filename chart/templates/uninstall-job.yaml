@@ -5,7 +5,7 @@ metadata:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": hook-succeeded
   name: longhorn-uninstall
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 spec:
   activeDeadlineSeconds: 900
