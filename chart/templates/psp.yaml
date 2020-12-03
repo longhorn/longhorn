@@ -35,7 +35,7 @@ kind: Role
 metadata:
   name: longhorn-psp-role
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 rules:
 - apiGroups:
   - policy
@@ -51,7 +51,7 @@ kind: RoleBinding
 metadata:
   name: longhorn-psp-binding
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -59,8 +59,8 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 - kind: ServiceAccount
   name: default
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 {{- end }}
