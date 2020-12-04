@@ -16,7 +16,8 @@ spec:
         app: longhorn-iscsi-installation
     spec:
       hostNetwork: true
-      containers:
+      hostPID: true
+      initContainers:
       - name: iscsi-installation
         command:
           - nsenter
@@ -28,4 +29,8 @@ spec:
         image: alpine:3.7
         securityContext:
           privileged: true
-      hostPID: true
+      containers:
+      - name: sleep
+        image: k8s.gcr.io/pause:3.1
+  updateStrategy:
+    type: RollingUpdate
