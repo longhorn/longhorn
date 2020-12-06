@@ -16,7 +16,7 @@ rules:
     verbs:
       - "*"
   - apiGroups: [""]
-    resources: ["pods", "persistentvolumes", "persistentvolumeclaims", "nodes"]
+    resources: ["pods", "persistentvolumes", "persistentvolumeclaims", "nodes", "configmaps"]
     verbs: ["*"]
   - apiGroups: ["apps"]
     resources: ["daemonsets", "statefulsets", "deployments"]
@@ -24,14 +24,20 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs", "cronjobs"]
     verbs: ["*"]
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["*"]
   - apiGroups: ["scheduling.k8s.io"]
     resources: ["priorityclasses"]
     verbs: ["watch", "list"]
   - apiGroups: ["storage.k8s.io"]
-    resources: ["csidrivers"]
+    resources: ["csidrivers", "storageclasses"]
     verbs: ["*"]
   - apiGroups: ["longhorn.io"]
     resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
+    verbs: ["*"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
     verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -61,7 +67,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v1.0.2
+        image: longhornio/longhorn-manager:master
         imagePullPolicy: Always
         command:
         - longhorn-manager

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-restore-snapshot-pvc
+  namespace: default
+spec:
+  storageClassName: longhorn
+  dataSource:
+    name: test-snapshot-pvc
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
