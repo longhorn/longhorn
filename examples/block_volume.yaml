@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: longhorn-block-vol
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce

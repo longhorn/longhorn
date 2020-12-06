@@ -1,0 +1,14 @@
+apiVersion: snapshot.storage.k8s.io/v1beta1
+kind: VolumeSnapshotContent
+metadata:
+  name: test-existing-backup
+spec:
+  volumeSnapshotClassName: longhorn
+  driver: driver.longhorn.io
+  deletionPolicy: Delete
+  source:
+    # NOTE: change this to point to an existing backup on the backupstore
+    snapshotHandle: bs://test-vol/backup-625159fb469e492e
+  volumeSnapshotRef:
+    name: test-snapshot-existing-backup
+    namespace: default

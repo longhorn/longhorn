@@ -15,6 +15,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pvc
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
@@ -29,6 +30,7 @@ metadata:
   name: mysql
   labels:
     app: mysql
+  namespace: default
 spec:
   selector:
     matchLabels:
@@ -51,9 +53,6 @@ spec:
               - /var/lib/mysql/lost+found
           initialDelaySeconds: 5
           periodSeconds: 5
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: changeme
         ports:
         - containerPort: 3306
           name: mysql
