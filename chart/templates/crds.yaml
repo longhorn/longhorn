@@ -349,3 +349,48 @@ spec:
     - name: Age
       type: date
       jsonPath: .metadata.creationTimestamp
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    longhorn-manager: ShareManager
+  annotations:
+    helm.sh/resource-policy: keep
+  name: sharemanagers.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: ShareManager
+    listKind: ShareManagerList
+    plural: sharemanagers
+    shortNames:
+    - lhsm
+    singular: sharemanager
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The state of the share manager
+      jsonPath: .status.state
+    - name: Node
+      type: string
+      description: The node that the share manager is owned by
+      jsonPath: .status.ownerID
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
