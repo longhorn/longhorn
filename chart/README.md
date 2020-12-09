@@ -16,7 +16,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 ## Prerequisites
 
 1. Docker v1.13+
-2. Kubernetes v1.15+
+2. Kubernetes v1.16+
 3. Make sure `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
 4. Make sure `open-iscsi` has been installed in all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
 
