@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: longhorn-iscsi-installation
+  labels:
+    app: longhorn-iscsi-installation
+  annotations:
+    command: &cmd OS=$(grep "ID_LIKE" /etc/os-release | cut -d '=' -f 2); if [[ $OS == *"debian"* ]]; then apt-get update -qy && apt-get install -qy open-iscsi && sudo systemctl enable iscsid && sudo systemctl start iscsid; else yum install iscsi-initiator-utils -y && sudo systemctl enable iscsid && sudo systemctl start iscsid; fi && if [ $? -eq 0 ]; then echo "iscsi install successfully"; else echo "iscsi install failed error code " $?; fi
+spec:
+  selector:
+    matchLabels:
+      app: longhorn-iscsi-installation
+  template:
+    metadata:
+      labels:
+        app: longhorn-iscsi-installation
+    spec:
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - name: iscsi-installation
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - sh
+          - -c
+          - *cmd
+        image: alpine:3.7
+        securityContext:
+          privileged: true
+      containers:
+      - name: sleep
+        image: k8s.gcr.io/pause:3.1
+  updateStrategy:
+    type: RollingUpdate

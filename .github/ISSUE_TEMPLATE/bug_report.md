@@ -27,7 +27,13 @@ If applicable, add the Longhorn managers' log when the issue happens.
 **Environment:**
  - Longhorn version:
  - Kubernetes version:
- - Node OS type and version:
+ - Node config
+   - OS type and version
+   - CPU per node:
+   - Memory per node:
+   - Disk type
+   - Network bandwidth and latency between the nodes:
+ - Underlying Infrastructure (e.g. on AWS/GCE, EKS/GKE, VMWare/KVM, Baremetal):
 
 **Additional context**
 Add any other context about the problem here.
