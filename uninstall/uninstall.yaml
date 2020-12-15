@@ -16,7 +16,7 @@ rules:
     verbs:
       - "*"
   - apiGroups: [""]
-    resources: ["pods", "persistentvolumes", "persistentvolumeclaims", "nodes", "configmaps"]
+    resources: ["pods", "persistentvolumes", "persistentvolumeclaims", "nodes", "configmaps", "secrets", "services", "endpoints"]
     verbs: ["*"]
   - apiGroups: ["apps"]
     resources: ["daemonsets", "statefulsets", "deployments"]
@@ -34,7 +34,7 @@ rules:
     resources: ["csidrivers", "storageclasses"]
     verbs: ["*"]
   - apiGroups: ["longhorn.io"]
-    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers"]
+    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers"]
     verbs: ["*"]
   - apiGroups: ["coordination.k8s.io"]
     resources: ["leases"]
@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v1.1.0-rc1
+        image: longhornio/longhorn-manager:master
         imagePullPolicy: Always
         command:
         - longhorn-manager
