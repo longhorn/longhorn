@@ -1,7 +1,7 @@
 apiVersion: v1
 name: longhorn
-version: 1.1.0-rc1
-appVersion: v1.1.0-rc1
+version: 1.1.0-rc2
+appVersion: v1.1.0-rc2
 kubeVersion: ">=v1.16.0-r0"
 description: Longhorn is a distributed block storage system for Kubernetes.
 keywords:
