@@ -10,7 +10,8 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 1. Longhorn Engine -- Core controller/replica logic https://github.com/longhorn/longhorn-engine
 2. Longhorn Instance Manager -- Controller/replica instance lifecycle management https://github.com/longhorn/longhorn-instance-manager
-3. Longhorn Manager -- Longhorn orchestration, includes CSI driver for Kubernetes https://github.com/longhorn/longhorn-manager
+3. Longhorn Share Manager -- NFS provisioner that exposes Longhorn volumes as ReadWriteMany volumes. https://github.com/longhorn/longhorn-share-manager
+4. Longhorn Manager -- Longhorn orchestration, includes CSI driver for Kubernetes https://github.com/longhorn/longhorn-manager
 4. Longhorn UI -- Dashboard https://github.com/longhorn/longhorn-ui
 
 ## Prerequisites
