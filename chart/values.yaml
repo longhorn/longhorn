@@ -9,32 +9,35 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.0.2
+      tag: v1.1.0
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.0.2
+      tag: v1.1.0
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.0.2
+      tag: v1.1.0
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20200514
+      tag: v1_20201216
+    shareManager:
+      repository: longhornio/longhorn-share-manager
+      tag: v1_20201204
   csi:
     attacher:
       repository: longhornio/csi-attacher
-      tag: v2.0.0
+      tag: v2.2.1-lh1
     provisioner:
       repository: longhornio/csi-provisioner
-      tag: v1.4.0
+      tag: v1.6.0-lh1
     nodeDriverRegistrar:
       repository: longhornio/csi-node-driver-registrar
-      tag: v1.2.0
+      tag: v1.2.0-lh1
     resizer:
       repository: longhornio/csi-resizer
-      tag: v0.3.0
+      tag: v0.5.1-lh1
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v2.1.1
+      tag: v2.1.1-lh1
   pullPolicy: IfNotPresent
 
 service:
@@ -49,14 +52,9 @@ persistence:
   defaultClass: true
   defaultClassReplicaCount: 3
   reclaimPolicy: Delete
-
-recurringJobs:
-  enable: false
-  jobsList: []
-    # - name: snap
-    #   task: snapshot
-    #   cron: '*/1 * * * *'
-    #   retain: 1
+  recurringJobs:
+    enable: false
+    jobList: []
 
 csi:
   kubeletRootDir: ~
@@ -68,8 +66,10 @@ csi:
 defaultSettings:
   backupTarget: ~
   backupTargetCredentialSecret: ~
+  allowRecurringJobWhileVolumeDetached: ~
   createDefaultDiskLabeledNodes: ~
   defaultDataPath: ~
+  defaultDataLocality: ~
   replicaSoftAntiAffinity: ~
   storageOverProvisioningPercentage: ~
   storageMinimalAvailablePercentage: ~
@@ -80,17 +80,26 @@ defaultSettings:
   backupstorePollInterval: ~
   taintToleration: ~
   priorityClass: ~
-  registrySecret: ~
   autoSalvage: ~
+  autoDeletePodWhenVolumeDetachedUnexpectedly: ~
   disableSchedulingOnCordonedNode: ~
   replicaZoneSoftAntiAffinity: ~
   volumeAttachmentRecoveryPolicy: ~
+  nodeDownPodDeletionPolicy: ~
+  allowNodeDrainWithLastHealthyReplica: ~
   mkfsExt4Parameters: ~
+  disableReplicaRebuild: ~
+  replicaReplenishmentWaitInterval: ~
+  disableRevisionCounter: ~
+  systemManagedPodsImagePullPolicy: ~
+  allowVolumeCreationWithDegradedAvailability: ~
+  autoCleanupSystemGeneratedSnapshot: ~
 
 privateRegistry:
   registryUrl: ~
   registryUser: ~
   registryPasswd: ~
+  registrySecret: ~
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -147,3 +156,7 @@ ingress:
 
 # Configure a pod security policy in the Longhorn namespace to allow privileged pods
 enablePSP: true
+
+## Specify override namespace, specifically this is useful for using longhorn as sub-chart
+## and its release namespace is not the `longhorn-system`
+namespaceOverride: ""

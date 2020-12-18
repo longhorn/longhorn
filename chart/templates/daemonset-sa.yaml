@@ -4,7 +4,7 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-manager
   name: longhorn-manager
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 spec:
   selector:
     matchLabels:
@@ -28,6 +28,8 @@ spec:
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.engine.repository }}:{{ .Values.image.longhorn.engine.tag }}"
         - --instance-manager-image
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.instanceManager.repository }}:{{ .Values.image.longhorn.instanceManager.tag }}"
+        - --share-manager-image
+        - "{{ template "registry_url" . }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}"
         - --manager-image
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
         - --service-account
@@ -82,9 +84,9 @@ spec:
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
-      {{- if .Values.defaultSettings.registrySecret }}
+      {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
-      - name: {{ .Values.defaultSettings.registrySecret }}
+      - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       serviceAccountName: longhorn-service-account
   updateStrategy:
@@ -97,7 +99,7 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-manager
   name: longhorn-backend
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 spec:
   type: {{ .Values.service.manager.type }}
   sessionAffinity: ClientIP

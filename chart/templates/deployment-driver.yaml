@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: longhorn-driver-deployer
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 spec:
   replicas: 1
@@ -84,9 +84,9 @@ spec:
             value: {{ .Values.csi.snapshotterReplicaCount | quote }}
           {{- end }}
 
-      {{- if .Values.defaultSettings.registrySecret }}
+      {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
-      - name: {{ .Values.defaultSettings.registrySecret }}
+      - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       serviceAccountName: longhorn-service-account
       securityContext:

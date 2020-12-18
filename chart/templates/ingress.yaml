@@ -3,6 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: longhorn-ingress
+  namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-ingress
   annotations:

@@ -4,7 +4,7 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-ui
   name: longhorn-ui
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 spec:
   replicas: 1
   selector:
@@ -27,9 +27,9 @@ spec:
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
-      {{- if .Values.defaultSettings.registrySecret }}
+      {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
-      - name: {{ .Values.defaultSettings.registrySecret }}
+      - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
 ---
 kind: Service
@@ -41,7 +41,7 @@ metadata:
     kubernetes.io/cluster-service: "true"
     {{- end }}
   name: longhorn-frontend
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
 spec:
   {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
   type: ClusterIP

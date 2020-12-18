@@ -1,18 +1,26 @@
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: longhorn
-  annotations:
-    storageclass.kubernetes.io/is-default-class: {{ .Values.persistence.defaultClass | quote }}
+  name: longhorn-storageclass
+  namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-provisioner: driver.longhorn.io
-allowVolumeExpansion: true
-reclaimPolicy: "{{ .Values.persistence.reclaimPolicy }}"
-parameters:
-  numberOfReplicas: "{{ .Values.persistence.defaultClassReplicaCount }}"
-  staleReplicaTimeout: "30"
-  fromBackup: ""
-  baseImage: ""
-  {{- if .Values.recurringJobs.enable }}
-  recurringJobs: '{{ .Values.recurringJobs.jobsList | toPrettyJson | indent 2 | trim }}'
-  {{- end }}
+data:
+  storageclass.yaml: |
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: longhorn
+      annotations:
+        storageclass.kubernetes.io/is-default-class: {{ .Values.persistence.defaultClass | quote }}
+    provisioner: driver.longhorn.io
+    allowVolumeExpansion: true
+    reclaimPolicy: "{{ .Values.persistence.reclaimPolicy }}"
+    volumeBindingMode: Immediate
+    parameters:
+      numberOfReplicas: "{{ .Values.persistence.defaultClassReplicaCount }}"
+      staleReplicaTimeout: "30"
+      fromBackup: ""
+      baseImage: ""
+      {{- if .Values.persistence.recurringJobs.enable }}
+      recurringJobs: '{{ .Values.persistence.recurringJobs.jobList }}'
+      {{- end }}

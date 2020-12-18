@@ -2,12 +2,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: longhorn-default-setting
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-setting.yaml: |-
     backup-target: {{ .Values.defaultSettings.backupTarget }}
     backup-target-credential-secret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}
+    allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
     create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
     default-data-path: {{ .Values.defaultSettings.defaultDataPath }}
     replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
@@ -15,14 +16,23 @@ data:
     storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}
     upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
     default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
+    default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}
     guaranteed-engine-cpu: {{ .Values.defaultSettings.guaranteedEngineCPU }}
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
     priority-class: {{ .Values.defaultSettings.priorityClass }}
-    registry-secret: {{ .Values.defaultSettings.registrySecret }}
     auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
+    auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
     disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
     replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
     volume-attachment-recovery-policy: {{ .Values.defaultSettings.volumeAttachmentRecoveryPolicy }}
-    mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters  }}
+    node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}
+    allow-node-drain-with-last-healthy-replica: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica }}
+    mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}
+    disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}
+    replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}
+    disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}
+    system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
+    allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
+    auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}

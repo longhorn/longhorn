@@ -1,0 +1,9 @@
+kind: VolumeSnapshotClass
+apiVersion: snapshot.storage.k8s.io/v1beta1
+metadata:
+  name: longhorn
+driver: driver.longhorn.io
+deletionPolicy: Delete
+#parameters:
+#  csi.storage.k8s.io/snapshotter-secret-name: mysecret
+#  csi.storage.k8s.io/snapshotter-secret-namespace: mysecretnamespace

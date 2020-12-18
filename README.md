@@ -33,7 +33,7 @@ You can read more about the community and its events here: https://github.com/lo
 
 ## Current status
 
-The latest release of Longhorn is **v1.0.2**.
+The latest release of Longhorn is **v1.1.0**.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:

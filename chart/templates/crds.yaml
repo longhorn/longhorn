@@ -1,10 +1,8 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Engine
-  annotations:
-    helm.sh/resource-policy: keep
   name: engines.longhorn.io
 spec:
   group: longhorn.io
@@ -16,17 +14,46 @@ spec:
     - lhe
     singular: engine
   scope: Namespaced
-  version: v1beta1
-  subresources:
-    status: {}
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the engine
+      jsonPath: .status.currentState
+    - name: Node
+      type: string
+      description: The node that the engine is on
+      jsonPath: .spec.nodeID
+    - name: InstanceManager
+      type: string
+      description: The instance manager of the engine
+      jsonPath: .status.instanceManagerName
+    - name: Image
+      type: string
+      description: The current image of the engine
+      jsonPath: .status.currentImage
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Replica
-  annotations:
-    helm.sh/resource-policy: keep
   name: replicas.longhorn.io
 spec:
   group: longhorn.io
@@ -38,17 +65,50 @@ spec:
     - lhr
     singular: replica
   scope: Namespaced
-  version: v1beta1
-  subresources:
-    status: {}
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the replica
+      jsonPath: .status.currentState
+    - name: Node
+      type: string
+      description: The node that the replica is on
+      jsonPath: .spec.nodeID
+    - name: Disk
+      type: string
+      description: The disk that the replica is on
+      jsonPath: .spec.diskID
+    - name: InstanceManager
+      type: string
+      description: The instance manager of the replica
+      jsonPath: .status.instanceManagerName
+    - name: Image
+      type: string
+      description: The current image of the replica
+      jsonPath: .status.currentImage
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Setting
-  annotations:
-    helm.sh/resource-policy: keep
   name: settings.longhorn.io
 spec:
   group: longhorn.io
@@ -60,15 +120,27 @@ spec:
     - lhs
     singular: setting
   scope: Namespaced
-  version: v1beta1
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        x-kubernetes-preserve-unknown-fields: true
+    additionalPrinterColumns:
+    - name: Value
+      type: string
+      description: The value of the setting
+      jsonPath: .value
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Volume
-  annotations:
-    helm.sh/resource-policy: keep
   name: volumes.longhorn.io
 spec:
   group: longhorn.io
@@ -80,17 +152,50 @@ spec:
     - lhv
     singular: volume
   scope: Namespaced
-  version: v1beta1
-  subresources:
-    status: {}
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The state of the volume
+      jsonPath: .status.state
+    - name: Robustness
+      type: string
+      description: The robustness of the volume
+      jsonPath: .status.robustness
+    - name: Scheduled
+      type: string
+      description: The scheduled condition of the volume
+      jsonPath: .status.conditions['scheduled']['status']
+    - name: Size
+      type: string
+      description: The size of the volume
+      jsonPath: .spec.size
+    - name: Node
+      type: string
+      description: The node that the volume is currently attaching to
+      jsonPath: .status.currentNodeID
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: EngineImage
-  annotations:
-    helm.sh/resource-policy: keep
   name: engineimages.longhorn.io
 spec:
   group: longhorn.io
@@ -102,17 +207,46 @@ spec:
     - lhei
     singular: engineimage
   scope: Namespaced
-  version: v1beta1
-  subresources:
-    status: {}
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: State of the engine image
+      jsonPath: .status.state
+    - name: Image
+      type: string
+      description: The Longhorn engine image
+      jsonPath: .spec.image
+    - name: RefCount
+      type: integer
+      description: Number of volumes are using the engine image
+      jsonPath: .status.refCount
+    - name: BuildDate
+      type: date
+      description: The build date of the engine image
+      jsonPath: .status.buildDate
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: Node
-  annotations:
-    helm.sh/resource-policy: keep
   name: nodes.longhorn.io
 spec:
   group: longhorn.io
@@ -124,17 +258,42 @@ spec:
     - lhn
     singular: node
   scope: Namespaced
-  version: v1beta1
-  subresources:
-    status: {}
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: Ready
+      type: string
+      description: Indicate whether the node is ready
+      jsonPath: .status.conditions['Ready']['status']
+    - name: AllowScheduling
+      type: boolean
+      description: Indicate whether the user disabled/enabled replica scheduling for the node
+      jsonPath: .spec.allowScheduling
+    - name: Schedulable
+      type: string
+      description: Indicate whether Longhorn can schedule replicas on the node
+      jsonPath: .status.conditions['Schedulable']['status']
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: InstanceManager
-  annotations:
-    helm.sh/resource-policy: keep
   name: instancemanagers.longhorn.io
 spec:
   group: longhorn.io
@@ -146,6 +305,76 @@ spec:
     - lhim
     singular: instancemanager
   scope: Namespaced
-  version: v1beta1
-  subresources:
-    status: {}
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The state of the instance manager
+      jsonPath: .status.currentState
+    - name: Type
+      type: string
+      description: The type of the instance manager (engine or replica)
+      jsonPath: .spec.type
+    - name: Node
+      type: string
+      description: The node that the instance manager is running on
+      jsonPath: .spec.nodeID
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    longhorn-manager: ShareManager
+  name: sharemanagers.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: ShareManager
+    listKind: ShareManagerList
+    plural: sharemanagers
+    shortNames:
+    - lhsm
+    singular: sharemanager
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The state of the share manager
+      jsonPath: .status.state
+    - name: Node
+      type: string
+      description: The node that the share manager is owned by
+      jsonPath: .status.ownerID
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
