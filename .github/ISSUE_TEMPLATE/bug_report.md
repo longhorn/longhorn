@@ -28,12 +28,14 @@ You can also attach a *Support Bundle* here. You can generate a Support Bundle u
 **Environment:**
  - Longhorn version:
  - Kubernetes distro (e.g. RKE/K3s/EKS/OpenShift) and version:
+   - Number of management node in the cluster:
+   - Number of worker node in the cluster
  - Node config
    - OS type and version:
    - CPU per node:
    - Memory per node:
    - Disk type(e.g. SSD/NVMe):
-   - Network bandwidth and latency between the nodes:
+   - Network bandwidth between the nodes:
  - Underlying Infrastructure (e.g. on AWS/GCE, EKS/GKE, VMWare/KVM, Baremetal):
 
 **Additional context**
