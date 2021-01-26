@@ -160,3 +160,9 @@ enablePSP: true
 ## Specify override namespace, specifically this is useful for using longhorn as sub-chart
 ## and its release namespace is not the `longhorn-system`
 namespaceOverride: ""
+
+iscsi: 
+  install: true
+
+nfs: 
+  install: true

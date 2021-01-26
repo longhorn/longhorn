@@ -5,6 +5,15 @@ metadata:
     app: longhorn-manager
   name: longhorn-manager
   namespace: {{ include "release_namespace" . }}
+  {{ if or .Values.iscsi.install .Values.nfs.install }}
+  annotations:
+    {{ if .Values.iscsi.install }}
+    iscsi-command: &iscsi-cmd OS=$(grep "ID_LIKE" /etc/os-release | cut -d '=' -f 2); if [[ "${OS}" == *"debian"* ]]; then sudo apt-get update -q -y && sudo apt-get install -q -y open-iscsi && sudo systemctl -q enable iscsid && sudo systemctl start iscsid; elif [[ "${OS}" == *"suse"* ]]; then sudo zypper --gpg-auto-import-keys -q refresh && sudo zypper --gpg-auto-import-keys -q install -y open-iscsi && sudo systemctl -q enable iscsid && sudo systemctl start iscsid; else sudo yum makecache fast -q -y && sudo yum --setopt=tsflags=noscripts install -q -y iscsi-initiator-utils && sudo systemctl -q enable iscsid && sudo systemctl start iscsid; fi && if [ $? -eq 0 ]; then echo "iscsi install successfully"; else echo "iscsi install failed error code $?"; fi
+    {{- end }}
+    {{ if .Values.nfs.install }}
+    nfs-command: &nfs-cmd OS=$(grep "ID_LIKE" /etc/os-release | cut -d '=' -f 2); if [[ "${OS}" == *"debian"* ]]; then sudo apt-get update -q -y && sudo apt-get install -q -y nfs-common; elif [[ "${OS}" == *"suse"* ]]; then sudo zypper --gpg-auto-import-keys -q refresh && sudo zypper --gpg-auto-import-keys -q install -y nfs-client; else sudo yum makecache fast -q -y && sudo yum --setopt=tsflags=noscripts install -q -y nfs-utils; fi && if [ $? -eq 0 ]; then echo "nfs install successfully"; else echo "nfs install failed error code $?"; fi
+    {{- end }}
+  {{- end }}
 spec:
   selector:
     matchLabels:
@@ -14,6 +23,37 @@ spec:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-manager
     spec:
+      {{ if or .Values.iscsi.install .Values.nfs.install }}
+      initContainers:
+      {{ if .Values.iscsi.install }}
+      - name: iscsi-installation
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - bash
+          - -c
+          - *iscsi-cmd
+        image: alpine:3.12
+        securityContext:
+          privileged: true
+      {{- end }}
+      {{ if .Values.nfs.install }}
+      - name: nfs-installation
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - bash
+          - -c
+          - *nfs-cmd
+        image: alpine:3.12
+        securityContext:
+          privileged: true
+      {{- end }}
+      hostNetwork: true
+      hostPID: true
+      {{- end }}
       containers:
       - name: longhorn-manager
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
