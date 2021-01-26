@@ -5,7 +5,7 @@ metadata:
   labels:
     app: longhorn-iscsi-installation
   annotations:
-    command: &cmd OS=$(grep "ID_LIKE" /etc/os-release | cut -d '=' -f 2); if [[ $OS == *"debian"* ]]; then apt-get update -qy && apt-get install -qy open-iscsi && sudo systemctl enable iscsid && sudo systemctl start iscsid; else yum install iscsi-initiator-utils -y && sudo systemctl enable iscsid && sudo systemctl start iscsid; fi && if [ $? -eq 0 ]; then echo "iscsi install successfully"; else echo "iscsi install failed error code " $?; fi
+    command: &cmd OS=$(grep "ID_LIKE" /etc/os-release | cut -d '=' -f 2); if [[ "${OS}" == *"debian"* ]]; then sudo apt-get update -q -y && sudo apt-get install -q -y open-iscsi && sudo systemctl -q enable iscsid && sudo systemctl start iscsid; elif [[ "${OS}" == *"suse"* ]]; then sudo zypper --gpg-auto-import-keys -q refresh && sudo zypper --gpg-auto-import-keys -q install -y open-iscsi && sudo systemctl -q enable iscsid && sudo systemctl start iscsid; else sudo yum makecache fast -q -y && sudo yum --setopt=tsflags=noscripts install -q -y iscsi-initiator-utils && sudo systemctl -q enable iscsid && sudo systemctl start iscsid; fi && if [ $? -eq 0 ]; then echo "iscsi install successfully"; else echo "iscsi install failed error code $?"; fi
 spec:
   selector:
     matchLabels:
@@ -23,10 +23,10 @@ spec:
           - nsenter
           - --mount=/proc/1/ns/mnt
           - --
-          - sh
+          - bash
           - -c
           - *cmd
-        image: alpine:3.7
+        image: alpine:3.12
         securityContext:
           privileged: true
       containers:
