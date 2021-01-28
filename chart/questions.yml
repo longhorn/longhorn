@@ -429,6 +429,13 @@ Warning: This option works only when there is a failed replica in the volume. An
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
+  - variable: defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit
+    label: Concurrent Automatic Engine Upgrade Per Node Limit
+    description: "This setting controls how Longhorn automatically upgrades volumes' engines to the new default engine image after upgrading Longhorn manager. The value of this setting specifies the maximum number of engines per node that are allowed to upgrade to the default engine image at the same time. If the value is 0, Longhorn will not automatically upgrade volumes' engines to default version."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 0
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"

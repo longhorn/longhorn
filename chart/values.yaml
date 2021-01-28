@@ -94,7 +94,7 @@ defaultSettings:
   systemManagedPodsImagePullPolicy: ~
   allowVolumeCreationWithDegradedAvailability: ~
   autoCleanupSystemGeneratedSnapshot: ~
-
+  concurrentAutomaticEngineUpgradePerNodeLimit: ~
 privateRegistry:
   registryUrl: ~
   registryUser: ~
