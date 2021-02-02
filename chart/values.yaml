@@ -95,6 +95,7 @@ defaultSettings:
   allowVolumeCreationWithDegradedAvailability: ~
   autoCleanupSystemGeneratedSnapshot: ~
   concurrentAutomaticEngineUpgradePerNodeLimit: ~
+  backingImageCleanupWaitInterval: ~
 privateRegistry:
   registryUrl: ~
   registryUser: ~

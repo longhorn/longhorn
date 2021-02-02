@@ -37,7 +37,7 @@ rules:
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
-              "sharemanagers", "sharemanagers/status"]
+              "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]

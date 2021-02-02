@@ -37,3 +37,4 @@ data:
     allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
     auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
     concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
+    backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}
