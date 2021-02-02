@@ -436,6 +436,13 @@ Warning: This option works only when there is a failed replica in the volume. An
     type: int
     min: 0
     default: 0
+  - variable: defaultSettings.backingImageCleanupWaitInterval
+    label: Backing Image Cleanup Wait Interval
+    description: "This interval in minutes determines how long Longhorn will wait before cleaning up the backing image file when there is no replica in the disk using it."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 60
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
