@@ -279,18 +279,6 @@ The available modes are:
     min: 1
     max: 20
     default: 3
-  - variable: defaultSettings.guaranteedEngineCPU
-    label: Guaranteed Engine CPU
-    description: "Allow Longhorn Instance Managers to have guaranteed CPU allocation. By default 0.25. The value is how many CPUs should be reserved for each Engine/Replica Instance Manager Pod created by Longhorn. For example, 0.1 means one-tenth of a CPU. This will help maintain engine stability during high node workload. It only applies to the Engine/Replica Instance Manager Pods created after the setting took effect.
-In order to prevent unexpected volume crash, you can use the following formula to calculate an appropriate value for this setting:
-'Guaranteed Engine CPU = The estimated max Longhorn volume/replica count on a node * 0.1'.
-The result of above calculation doesn't mean that's the maximum CPU resources the Longhorn workloads require. To fully exploit the Longhorn volume I/O performance, you can allocate/guarantee more CPU resources via this setting.
-If it's hard to estimate the volume/replica count now, you can leave it with the default value, or allocate 1/8 of total CPU of a node. Then you can tune it when there is no running workload using Longhorn volumes.
-WARNING: After this setting is changed, all the instance managers on all the nodes will be automatically restarted
-WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
-    group: "Longhorn Default Settings"
-    type: float
-    default: 0.25
   - variable: defaultSettings.defaultLonghornStaticStorageClass
     label: Default Longhorn Static StorageClass Name
     description: "The 'storageClassName' is given to PVs and PVCs that are created for an existing Longhorn volume. The StorageClass name can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. By default 'longhorn-static'."
@@ -443,6 +431,42 @@ Warning: This option works only when there is a failed replica in the volume. An
     type: int
     min: 0
     default: 60
+  - variable: defaultSettings.guaranteedEngineManagerCPU
+    label: Guaranteed Engine Manager CPU
+    description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each engine manager Pod. For example, 10 means 10% of the total CPU on a node will be allocated to each engine manager pod on this node. This will help maintain engine stability during high node workload.
+    In order to prevent unexpected volume engine crash as well as guarantee a relative acceptable IO performance, you can use the following formula to calculate a value for this setting:
+    Guaranteed Engine Manager CPU = The estimated max Longhorn volume engine count on a node * 0.1 / The total allocatable CPUs on the node * 100.
+    The result of above calculation doesn't mean that's the maximum CPU resources the Longhorn workloads require. To fully exploit the Longhorn volume I/O performance, you can allocate/guarantee more CPU resources via this setting.
+    If it's hard to estimate the usage now, you can leave it with the default value, which is 12%. Then you can tune it when there is no running workload using Longhorn volumes.
+    WARNING:
+      - Value 0 means unsetting CPU requests for engine manager pods.
+      - Considering the possible new instance manager pods in the further system upgrade, this integer value is range from 0 to 40. And the sum with setting 'Guaranteed Engine Manager CPU' should not be greater than 40.
+      - One more set of instance manager pods may need to be deployed when the Longhorn system is upgraded. If current available CPUs of the nodes are not enough for the new instance manager pods, you need to detach the volumes using the oldest instance manager pods so that Longhorn can clean up the old pods automatically and release the CPU resources. And the new pods with the latest instance manager image will be launched then.
+      - This global setting will be ignored for a node if the field \"EngineManagerCPURequest\" on the node is set.
+      - After this setting is changed, all engine manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    max: 40
+    default: 12
+  - variable: defaultSettings.guaranteedReplicaManagerCPU
+    label: Guaranteed Replica Manager CPU
+    description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each replica manager Pod. 10 means 10% of the total CPU on a node will be allocated to each replica manager pod on this node. This will help maintain replica stability during high node workload.
+    In order to prevent unexpected volume replica crash as well as guarantee a relative acceptable IO performance, you can use the following formula to calculate a value for this setting:
+    Guaranteed Replica Manager CPU = The estimated max Longhorn volume replica count on a node * 0.1 / The total allocatable CPUs on the node * 100.
+    The result of above calculation doesn't mean that's the maximum CPU resources the Longhorn workloads require. To fully exploit the Longhorn volume I/O performance, you can allocate/guarantee more CPU resources via this setting.
+    If it's hard to estimate the usage now, you can leave it with the default value, which is 12%. Then you can tune it when there is no running workload using Longhorn volumes.
+    WARNING:
+      - Value 0 means unsetting CPU requests for replica manager pods.
+      - Considering the possible new instance manager pods in the further system upgrade, this integer value is range from 0 to 40. And the sum with setting 'Guaranteed Replica Manager CPU' should not be greater than 40.
+      - One more set of instance manager pods may need to be deployed when the Longhorn system is upgraded. If current available CPUs of the nodes are not enough for the new instance manager pods, you need to detach the volumes using the oldest instance manager pods so that Longhorn can clean up the old pods automatically and release the CPU resources. And the new pods with the latest instance manager image will be launched then.
+      - This global setting will be ignored for a node if the field \"ReplicaManagerCPURequest\" on the node is set.
+      - After this setting is changed, all replica manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    max: 40
+    default: 12
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
