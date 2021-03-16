@@ -19,6 +19,8 @@ spec:
       - name: longhorn-uninstall
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
         command:
         - longhorn-manager
         - uninstall
