@@ -1,8 +1,8 @@
-longhornio/longhorn-engine:v1.1.0
+longhornio/longhorn-engine:v1.1.1-preview1
 longhornio/longhorn-instance-manager:v1_20201216
-longhornio/longhorn-share-manager:v1_20201204
-longhornio/longhorn-manager:v1.1.0
-longhornio/longhorn-ui:v1.1.0
+longhornio/longhorn-share-manager:v1_20210302
+longhornio/longhorn-manager:v1.1.1-preview1
+longhornio/longhorn-ui:v1.1.1-preview1
 longhornio/csi-attacher:v2.2.1-lh1
 longhornio/csi-provisioner:v1.6.0-lh1
 longhornio/csi-resizer:v0.5.1-lh1
