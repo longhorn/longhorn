@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rwx-test
+  labels:
+    app: rwx-test
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: rwx-test
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rwx-test
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rwx-test
+  labels:
+    app: rwx-test
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rwx-test
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: rwx-test
+    spec:
+      containers:
+        - image: ubuntu:xenial
+          imagePullPolicy: IfNotPresent
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - sleep 10; touch /data/index.html; while true; do date >> /data/index.html; sleep 1; done;
+          name: rwx-test
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /data
+              name: rwx-test
+        - image: nginx:stable
+          imagePullPolicy: IfNotPresent
+          name: nginx
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: rwx-test
+      restartPolicy: Always
+      volumes:
+        - name: rwx-test
+          persistentVolumeClaim:
+            claimName: rwx-test

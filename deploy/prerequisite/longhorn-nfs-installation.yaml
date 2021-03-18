@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: longhorn-nfs-installation
+  labels:
+    app: longhorn-nfs-installation
+  annotations:
+    command: &cmd OS=$(grep "ID_LIKE" /etc/os-release | cut -d '=' -f 2); if [[ "${OS}" == *"debian"* ]]; then sudo apt-get update -q -y && sudo apt-get install -q -y nfs-common; elif [[ "${OS}" == *"suse"* ]]; then sudo zypper --gpg-auto-import-keys -q refresh && sudo zypper --gpg-auto-import-keys -q install -y nfs-client; else sudo yum makecache -q -y && sudo yum --setopt=tsflags=noscripts install -q -y nfs-utils; fi && if [ $? -eq 0 ]; then echo "nfs install successfully"; else echo "nfs install failed error code $?"; fi
+spec:
+  selector:
+    matchLabels:
+      app: longhorn-nfs-installation
+  template:
+    metadata:
+      labels:
+        app: longhorn-nfs-installation
+    spec:
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - name: nfs-installation
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - bash
+          - -c
+          - *cmd
+        image: alpine:3.12
+        securityContext:
+          privileged: true
+      containers:
+      - name: sleep
+        image: k8s.gcr.io/pause:3.1
+  updateStrategy:
+    type: RollingUpdate

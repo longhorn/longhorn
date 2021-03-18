@@ -47,7 +47,7 @@ rules:
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
-              "sharemanagers", "sharemanagers/status"]
+              "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -450,6 +450,45 @@ spec:
         type: date
         jsonPath: .metadata.creationTimestamp
 ---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: BackingImage
+  name: backingimages.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: BackingImage
+    listKind: BackingImageList
+    plural: backingimages
+    shortNames:
+      - lhbm
+    singular: backingimage
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Image
+          type: string
+          description: The backing image name
+          jsonPath: .spec.image
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -487,6 +526,11 @@ data:
     system-managed-pods-image-pull-policy:
     allow-volume-creation-with-degraded-availability:
     auto-cleanup-system-generated-snapshot:
+    concurrent-automatic-engine-upgrade-per-node-limit:
+    backing-image-cleanup-wait-interval:
+    guaranteed-engine-manager-cpu:
+    guaranteed-replica-manager-cpu:
+
 ---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -569,6 +613,8 @@ data:
       numberOfReplicas: "3"
       staleReplicaTimeout: "2880"
       fromBackup: ""
+    #  backingImage: "bi-test"
+    #  backingImageURL: "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"
     #  diskSelector: "ssd,fast"
     #  nodeSelector: "storage,fast"
     #  recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
@@ -593,7 +639,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.1.0
+        image: longhornio/longhorn-manager:v1.1.1-preview1
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -602,13 +648,13 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.1.0
+        - longhornio/longhorn-engine:v1.1.1-preview1
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20201216
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20201204
+        - longhornio/longhorn-share-manager:v1_20210302
         - --manager-image
-        - longhornio/longhorn-manager:v1.1.0
+        - longhornio/longhorn-manager:v1.1.1-preview1
         - --service-account
         - longhorn-service-account
         ports:
@@ -699,7 +745,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.1.0
+        image: longhornio/longhorn-ui:v1.1.1-preview1
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -746,18 +792,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.1.0
+          image: longhornio/longhorn-manager:v1.1.1-preview1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.1.0
+          image: longhornio/longhorn-manager:v1.1.1-preview1
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.1.0
+          - longhornio/longhorn-manager:v1.1.1-preview1
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
