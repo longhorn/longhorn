@@ -13,6 +13,10 @@ spec:
     metadata:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-manager
+      {{- with .Values.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       containers:
       - name: longhorn-manager

@@ -163,3 +163,6 @@ enablePSP: true
 ## Specify override namespace, specifically this is useful for using longhorn as sub-chart
 ## and its release namespace is not the `longhorn-system`
 namespaceOverride: ""
+
+# Annotations to add to the Longhorn DaemonSet's. Optional.
+annotations: {}
