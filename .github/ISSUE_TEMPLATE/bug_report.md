@@ -27,6 +27,7 @@ You can also attach a *Support Bundle* here. You can generate a Support Bundle u
 
 **Environment:**
  - Longhorn version:
+ - Installation method (e.g. Rancher Catalog App/Helm/Kubectl):
  - Kubernetes distro (e.g. RKE/K3s/EKS/OpenShift) and version:
    - Number of management node in the cluster:
    - Number of worker node in the cluster:
