@@ -194,5 +194,5 @@ enablePSP: true
 ## and its release namespace is not the `longhorn-system`
 namespaceOverride: ""
 
-# Annotations to add to the Longhorn DaemonSet's. Optional.
+# Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
 annotations: {}
