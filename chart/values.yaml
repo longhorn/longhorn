@@ -22,6 +22,9 @@ image:
     shareManager:
       repository: longhornio/longhorn-share-manager
       tag: v1_20210406
+    backingImageManager:
+      repository: longhornio/backing-image-manager
+      tag: v1_20210407
   csi:
     attacher:
       repository: longhornio/csi-attacher
