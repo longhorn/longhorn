@@ -70,6 +70,18 @@ questions:
     type: string
     label: Longhorn Share Manager Image Tag
     group: "Longhorn Images Settings"
+  - variable: image.longhorn.backingImageManager.repository
+    default: longhornio/backing-image-manager
+    description: "Specify Longhorn Backing Image Manager Image Repository"
+    type: string
+    label: Longhorn Backing Image Manager Image Repository
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.backingImageManager.tag
+    default: v1_20210407
+    description: "Specify Longhorn Backing Image Manager Image Tag"
+    type: string
+    label: Longhorn Backing Image Manager Image Tag
+    group: "Longhorn Images Settings"
   - variable: image.csi.attacher.repository
     default: longhornio/csi-attacher
     description: "Specify CSI attacher image repository. Leave blank to autodetect."
