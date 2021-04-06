@@ -652,7 +652,7 @@ spec:
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20201216
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20210302
+        - longhornio/longhorn-share-manager:v1_20210406
         - --manager-image
         - longhornio/longhorn-manager:v1.1.1-preview1
         - --service-account
