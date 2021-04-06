@@ -119,7 +119,7 @@ spec:
           - disk:
               bus: virtio
             name: disk-0
-          inputs:
+          inputs: []
           interfaces:
           - masquerade: {}
             model: virtio
