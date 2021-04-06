@@ -21,7 +21,7 @@ image:
       tag: v1_20201216
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20210302
+      tag: v1_20210406
   csi:
     attacher:
       repository: longhornio/csi-attacher
