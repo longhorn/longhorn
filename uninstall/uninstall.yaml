@@ -1,3 +1,33 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: longhorn-uninstall-psp
+spec:
+  privileged: true
+  allowPrivilegeEscalation: true
+  requiredDropCapabilities:
+  - NET_RAW
+  allowedCapabilities:
+  - SYS_ADMIN
+  hostNetwork: false
+  hostIPC: false
+  hostPID: true
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - secret
+  - projected
+  - hostPath
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -34,11 +64,15 @@ rules:
     resources: ["csidrivers", "storageclasses"]
     verbs: ["*"]
   - apiGroups: ["longhorn.io"]
-    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers", "backingimages"]
+    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers", "backingimages", "backingimagemanagers"]
     verbs: ["*"]
   - apiGroups: ["coordination.k8s.io"]
     resources: ["leases"]
     verbs: ["*"]
+  - apiGroups: ["policy"]
+    resources: ["podsecuritypolicies"]
+    verbs: ["use"]
+    resourceNames: ["longhorn-uninstall-psp"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -67,8 +101,10 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v1.1.1-preview1
+        image: longhornio/longhorn-manager:v1.1.1-rc1
         imagePullPolicy: Always
+        securityContext:
+          privileged: true
         command:
         - longhorn-manager
         - uninstall
