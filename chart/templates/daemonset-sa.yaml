@@ -102,6 +102,12 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: {{ .Values.service.manager.type }}
+  {{- if .Values.service.manager.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.service.manager.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.service.manager.ipFamilies }}
+  ipFamilies: {{ .Values.service.manager.ipFamilies }}
+  {{- end }}
   sessionAffinity: ClientIP
   selector:
     app: longhorn-manager

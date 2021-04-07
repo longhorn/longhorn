@@ -48,6 +48,13 @@ spec:
   {{- else }}
   type: {{ .Values.service.ui.type }}
   {{- end }}
+  type: {{ .Values.service.ui.type }}
+  {{- if .Values.service.ui.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.service.ui.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.service.ui.ipFamilies }}
+  ipFamilies: {{ .Values.service.ui.ipFamilies }}
+  {{- end }}
   selector:
     app: longhorn-ui
   ports:
