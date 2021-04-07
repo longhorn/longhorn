@@ -449,6 +449,10 @@ spec:
     subresources:
       status: {}
     additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the manager
+      jsonPath: .status.currentState
     - name: Image
       type: string
       description: The image the manager pod will use
