@@ -1,7 +1,7 @@
 ---
 name: Question
 about: Question on Longhorn
-title: "[Question]"
+title: "[QUESTION]"
 labels: kind/question
 assignees: ''
 
