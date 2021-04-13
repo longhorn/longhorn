@@ -21,6 +21,7 @@ data:
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
+    system-managed-components-node-selector: {{ .Values.defaultSettings.systemManagedComponentsNodeSelector }}
     priority-class: {{ .Values.defaultSettings.priorityClass }}
     auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
     auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}

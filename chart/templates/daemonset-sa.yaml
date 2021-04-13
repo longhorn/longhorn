@@ -96,6 +96,10 @@ spec:
       tolerations:
 {{ toYaml .Values.longhornManager.tolerations | indent 6 }}
       {{- end }}
+      {{- if .Values.longhornManager.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
+      {{- end }}
   updateStrategy:
     rollingUpdate:
       maxUnavailable: "100%"
