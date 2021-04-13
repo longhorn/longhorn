@@ -82,6 +82,7 @@ defaultSettings:
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
   taintToleration: ~
+  systemManagedComponentsNodeSelector: ~
   priorityClass: ~
   autoSalvage: ~
   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
@@ -116,26 +117,41 @@ longhornManager:
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
+  nodeSelector: {}
+  ## If you want to set node selector for Longhorn Manager DaemonSet, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  label-key1: "label-value1"
+  #  label-key2: "label-value2"
 
 longhornDriver:
   priorityClass: ~
   tolerations: []
-  ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
+  ## If you want to set tolerations for Longhorn Driver Deployer Deployment, delete the `[]` in the line above
   ## and uncomment this example block
   # - key: "key"
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
+  nodeSelector: {}
+  ## If you want to set node selector for Longhorn Driver Deployer Deployment, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  label-key1: "label-value1"
+  #  label-key2: "label-value2"
 
 longhornUI:
   priorityClass: ~
   tolerations: []
-  ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
+  ## If you want to set tolerations for Longhorn UI Deployment, delete the `[]` in the line above
   ## and uncomment this example block
   # - key: "key"
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
+  nodeSelector: {}
+  ## If you want to set node selector for Longhorn UI Deployment, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  label-key1: "label-value1"
+  #  label-key2: "label-value2"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

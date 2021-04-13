@@ -95,6 +95,10 @@ spec:
       tolerations:
 {{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
       {{- end }}
+      {{- if .Values.longhornDriver.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+      {{- end }}
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0

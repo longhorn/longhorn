@@ -38,6 +38,10 @@ spec:
       tolerations:
 {{ toYaml .Values.longhornManager.tolerations | indent 6 }}
       {{- end }}
+      {{- if .Values.longhornUI.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
+      {{- end }}
 ---
 kind: Service
 apiVersion: v1

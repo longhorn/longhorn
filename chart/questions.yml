@@ -304,26 +304,6 @@ The available modes are:
     type: int
     min: 0
     default: 300
-  - variable: defaultSettings.taintToleration
-    label: Kubernetes Taint Toleration
-    description: "To dedicate nodes to store Longhorn replicas and reject other general workloads, set tolerations for Longhorn and add taints for the storage nodes.
-All Longhorn volumes should be detached before modifying toleration settings.
-We recommend setting tolerations during Longhorn deployment because the Longhorn system cannot be operated during the update.
-Multiple tolerations can be set here, and these tolerations are separated by semicolon. For example:
-* `key1=value1:NoSchedule; key2:NoExecute`
-* `:` this toleration tolerates everything because an empty key with operator `Exists` matches all keys, values and effects
-* `key1=value1:`  this toleration has empty effect. It matches all effects with key `key1`
-Because `kubernetes.io` is used as the key of all Kubernetes default tolerations, it should not be used in the toleration settings.
-WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES!"
-    group: "Longhorn Default Settings"
-    type: string
-    default: ""
-  - variable: defaultSettings.priorityClass
-    label: Priority Class
-    description: "The name of the Priority Class to set on the Longhorn workloads. This can help prevent Longhorn workloads from being evicted under Node Pressure. WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
-    group: "Longhorn Default Settings"
-    type: string
-    default: ""
   - variable: defaultSettings.autoSalvage
     label: Automatic salvage
     description: "If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection. Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true."
