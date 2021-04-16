@@ -11,8 +11,15 @@ spec:
       app: longhorn-manager
   template:
     metadata:
+      annotations:
+      {{- with .Values.managers.podAnnotations }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-manager
+      {{- with .Values.managers.podLabels }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       containers:
       - name: longhorn-manager

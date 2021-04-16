@@ -114,6 +114,12 @@ resources: {}
   #  memory: 128Mi
   #
 
+managers:
+  # Additional pod annotations (e.g. for mesh injection or prometheus scraping)
+  podAnnotations: {}
+  # Additional Pod labels (e.g. for filtering Pod by custom labels)
+  podLabels: {}
+
 ingress:
   ## Set to true to enable ingress record generation
   enabled: false
