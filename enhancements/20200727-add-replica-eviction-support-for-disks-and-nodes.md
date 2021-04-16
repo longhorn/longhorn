@@ -34,7 +34,7 @@ After this enhancement, user can click `true` to the `Eviction Requested` on sch
 #### Disks and Nodes Eviction
 1. User can select `true` to the `Eviction Requested` from `Longhorn UI` for disks or nodes. And user has to make sure the selected disks or nodes have been disabled, or select the `Disable` Scheduling at the same time of `true` to the `Eviction Requested`.
 2. Once `Eviction Requested` has been set to `true` on the disks or nodes, they can not be enabled for `Scheduling`.
-3. If the disks or the nodes haven't been disabled for `Scheduling`, there will be error message showed in `Dashboard` immediatly to indicate that user need to disable the disk or node for eviction.
+3. If the disks or the nodes haven't been disabled for `Scheduling`, there will be error message showed in `Dashboard` immediately to indicate that user need to disable the disk or node for eviction.
 4. And user will wait for the replica number for the disks or nodes to be 0.
 5. If there is any error e.g. no space or couldn't find other schedulable disk, the error message will be logged in the `Event log`. And the eviction will be suspended until either user sets the `Eviction Requested` to `false` or cleanup more disk spaces for the new replicas.
 6. If user cancel the eviction by setting the `Eviction Requested` to `false`, the remaining replicas on the selected disks or nodes will remain on the disks or nodes.
@@ -65,7 +65,7 @@ For both `Replica Node Level Soft Anti-Affinity` has been enabled and disabled. 
 1. User can select one or more disks or nodes for eviction. Select `Eviction Requested` to `true` on the disabled disks or nodes, Longhorn should start rebuild replicas for the volumes which have replicas on the eviction disks or nodes, and after rebuild success, the replica number on the evicted disks or nodes should be 0. E.g. When there are 3 nodes in the cluster, and with `Replica Node Level Soft Anti-Affinity` is set to `false`, disable one node, and create a volume with replica count 2. And then evict one of them, the eviction should get stuck, then set `Replica Node Level Soft Anti-Affinity` to `true`, the eviction should go through.
 
 Negative Cases:
-1. If user selects the disks or nodes have not been disabled scheduling, Longhorn should display the error message on `Dashboard` immediatly. Or during the eviction, the disabled disk or node can not be re-enabled again.
+1. If user selects the disks or nodes have not been disabled scheduling, Longhorn should display the error message on `Dashboard` immediately. Or during the eviction, the disabled disk or node can not be re-enabled again.
 2. If there is no enough disk spaces or nodes for disks or nodes eviction, Longhorn should log the error message in the `Event Log`. And once the disk spaces or nodes resources are good enough, the eviction should continue. Or if the user selects `Eviction Requested` to `false`, Longhorn should stop eviction and clear the `evictionRequested` fields for nodes, disks and volumes crd objects. E.g. When there are 3 nodes in the cluster, and the volume replica count is 3, the eviction should get stuck when the `Replica Node Level Soft Anti-Affinity` is `false`.
 
 #### Integration Test Plan

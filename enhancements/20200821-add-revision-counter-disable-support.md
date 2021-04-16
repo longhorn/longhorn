@@ -121,4 +121,4 @@ It can be set via 'StorageClass', and every PV created by this 'StorageClass' wi
 
 ### Upgrade strategy
 
-Deploy Longhorn image with v1.0.2 and upgrade Longhorn Manager, salvage function should still work. And then update Longhorn Engine, the revision counter disabled feature should be availabe.
+Deploy Longhorn image with v1.0.2 and upgrade Longhorn Manager, salvage function should still work. And then update Longhorn Engine, the revision counter disabled feature should be available.
