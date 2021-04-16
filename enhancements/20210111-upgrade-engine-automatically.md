@@ -169,5 +169,5 @@ Cleaning up:
 No upgrade strategy is needed.
 
 
-### Addtional Context
+### Additional Context
 None
