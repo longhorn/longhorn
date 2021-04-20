@@ -9,22 +9,22 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.1.1-rc1
+      tag: v1.1.1-rc2
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.1.1-rc1
+      tag: v1.1.1-rc2
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.1.1-rc1
+      tag: v1.1.1-rc2
     instanceManager:
       repository: longhornio/longhorn-instance-manager
       tag: v1_20201216
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20210406
+      tag: v1_20210416
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v1_20210407
+      tag: v1_20210420
   csi:
     attacher:
       repository: longhornio/csi-attacher
