@@ -6,11 +6,11 @@ labels: kind/task
 assignees: ''
 
 ---
-### Goals
-- TBU
+**What's the task? Please describe.**
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-### Definition of Done
-- [ ] TBU
+**Describe the items of the task (DoD, definition of done) you'd like.**
+- [ ] <use check box for each item>
 
-### References
-- TBU
+**Additional context**
+Add any other context or screenshots about the task request here.
