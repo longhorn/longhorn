@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 **What's the task? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+A clear and concise description of what the task is.
 
 **Describe the items of the task (DoD, definition of done) you'd like.**
 - [ ] <use check box for each item>
