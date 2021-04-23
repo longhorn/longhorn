@@ -20,6 +20,8 @@ spec:
       value: /opt/backupstore
     - name: PSEUDO_PATH
       value: /opt/backupstore
+    - name: NFS_DISK_IMAGE_SIZE_MB
+      value: "4096"
     command: ["bash", "-c", "chmod 700 /opt/backupstore && /opt/start_nfs.sh | tee /var/log/ganesha.log"]
     securityContext:
       privileged: true

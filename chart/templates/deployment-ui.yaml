@@ -31,6 +31,17 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
+      {{- if .Values.longhornUI.priorityClass }}
+      priorityClassName: {{ .Values.longhornUI.priorityClass | quote}}
+      {{- end }}
+      {{- if .Values.longhornUI.tolerations }}
+      tolerations:
+{{ toYaml .Values.longhornManager.tolerations | indent 6 }}
+      {{- end }}
+      {{- if .Values.longhornUI.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
+      {{- end }}
 ---
 kind: Service
 apiVersion: v1

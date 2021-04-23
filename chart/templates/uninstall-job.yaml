@@ -19,6 +19,8 @@ spec:
       - name: longhorn-uninstall
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
         command:
         - longhorn-manager
         - uninstall
@@ -33,4 +35,15 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
+      {{- if .Values.longhornManager.priorityClass }}
+      priorityClassName: {{ .Values.longhornManager.priorityClass | quote}}
+      {{- end }}
       serviceAccountName: longhorn-service-account
+      {{- if .Values.longhornManager.tolerations }}
+      tolerations:
+{{ toYaml .Values.longhornManager.tolerations | indent 6 }}
+      {{- end }}
+      {{- if .Values.longhornManager.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
+      {{- end }}

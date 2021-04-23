@@ -88,6 +88,17 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
+      {{- if .Values.longhornDriver.priorityClass }}
+      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote}}
+      {{- end }}
+      {{- if .Values.longhornDriver.tolerations }}
+      tolerations:
+{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+      {{- end }}
+      {{- if .Values.longhornDriver.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+      {{- end }}
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0

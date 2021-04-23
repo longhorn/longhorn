@@ -47,7 +47,8 @@ rules:
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
-              "sharemanagers", "sharemanagers/status"]
+              "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
+              "backingimagemanagers", "backingimagemanagers/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -450,6 +451,100 @@ spec:
         type: date
         jsonPath: .metadata.creationTimestamp
 ---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: BackingImage
+  name: backingimages.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: BackingImage
+    listKind: BackingImageList
+    plural: backingimages
+    shortNames:
+      - lhbi
+    singular: backingimage
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Image
+          type: string
+          description: The backing image name
+          jsonPath: .spec.image
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: BackingImageManager
+  name: backingimagemanagers.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: BackingImageManager
+    listKind: BackingImageManagerList
+    plural: backingimagemanagers
+    shortNames:
+    - lhbim
+    singular: backingimagemanager
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the manager
+      jsonPath: .status.currentState
+    - name: Image
+      type: string
+      description: The image the manager pod will use
+      jsonPath: .spec.image
+    - name: Node
+      type: string
+      description: The node the manager is on
+      jsonPath: .spec.nodeID
+    - name: DiskUUID
+      type: string
+      description: The disk the manager is responsible for
+      jsonPath: .spec.diskUUID
+    - name: DiskPath
+      type: string
+      description: The disk path the manager is using
+      jsonPath: .spec.diskPath
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -472,6 +567,7 @@ data:
     default-longhorn-static-storage-class:
     backupstore-poll-interval:
     taint-toleration:
+    system-managed-components-node-selector:
     priority-class:
     auto-salvage:
     auto-delete-pod-when-volume-detached-unexpectedly:
@@ -487,6 +583,11 @@ data:
     system-managed-pods-image-pull-policy:
     allow-volume-creation-with-degraded-availability:
     auto-cleanup-system-generated-snapshot:
+    concurrent-automatic-engine-upgrade-per-node-limit:
+    backing-image-cleanup-wait-interval:
+    guaranteed-engine-manager-cpu:
+    guaranteed-replica-manager-cpu:
+
 ---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -569,6 +670,8 @@ data:
       numberOfReplicas: "3"
       staleReplicaTimeout: "2880"
       fromBackup: ""
+    #  backingImage: "bi-test"
+    #  backingImageURL: "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"
     #  diskSelector: "ssd,fast"
     #  nodeSelector: "storage,fast"
     #  recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
@@ -593,7 +696,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.1.0
+        image: longhornio/longhorn-manager:v1.1.1
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -602,13 +705,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.1.0
+        - longhornio/longhorn-engine:v1.1.1
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20201216
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20201204
+        - longhornio/longhorn-share-manager:v1_20210416
+        - --backing-image-manager-image
+        - longhornio/backing-image-manager:v1_20210422
         - --manager-image
-        - longhornio/longhorn-manager:v1.1.0
+        - longhornio/longhorn-manager:v1.1.1
         - --service-account
         - longhorn-service-account
         ports:
@@ -658,6 +763,15 @@ spec:
           name: longhorn-default-setting
 #      imagePullSecrets:
 #      - name: ""
+#      priorityClassName:
+#      tolerations:
+#      - key: "key"
+#        operator: "Equal"
+#        value: "value"
+#        effect: "NoSchedule"
+#      nodeSelector:
+#        label-key1: "label-value1"
+#        label-key2: "label-value2"
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
@@ -699,7 +813,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.1.0
+        image: longhornio/longhorn-ui:v1.1.1
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -710,7 +824,16 @@ spec:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
 #      imagePullSecrets:
-#      - name:
+#        - name: ""
+#      priorityClassName:
+#      tolerations:
+#      - key: "key"
+#        operator: "Equal"
+#        value: "value"
+#        effect: "NoSchedule"
+#      nodeSelector:
+#        label-key1: "label-value1"
+#        label-key2: "label-value2"
 ---
 kind: Service
 apiVersion: v1
@@ -746,18 +869,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.1.0
+          image: longhornio/longhorn-manager:v1.1.1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.1.0
+          image: longhornio/longhorn-manager:v1.1.1
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.1.0
+          - longhornio/longhorn-manager:v1.1.1
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -777,7 +900,7 @@ spec:
           #- name: KUBELET_ROOT_DIR
           #  value: /var/lib/rancher/k3s/agent/kubelet
           # For AirGap Installation
-          # Replace PREFIX with your private registery
+          # Replace PREFIX with your private registry
           #- name: CSI_ATTACHER_IMAGE
           #  value: PREFIX/csi-attacher:v2.2.1-lh1
           #- name: CSI_PROVISIONER_IMAGE
@@ -798,8 +921,17 @@ spec:
           #  value: "3"
           #- name: CSI_SNAPSHOTTER_REPLICA_COUNT
           #  value: "3"
-      #imagePullSecrets:
-      #- name:
+#      imagePullSecrets:
+#        - name: ""
+#      priorityClassName:
+#      tolerations:
+#      - key: "key"
+#        operator: "Equal"
+#        value: "value"
+#        effect: "NoSchedule"
+#      nodeSelector:
+#        label-key1: "label-value1"
+#        label-key2: "label-value2"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0

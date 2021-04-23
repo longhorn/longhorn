@@ -9,19 +9,22 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.1.0
+      tag: v1.1.1
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.1.0
+      tag: v1.1.1
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.1.0
+      tag: v1.1.1
     instanceManager:
       repository: longhornio/longhorn-instance-manager
       tag: v1_20201216
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20201204
+      tag: v1_20210416
+    backingImageManager:
+      repository: longhornio/backing-image-manager
+      tag: v1_20210422
   csi:
     attacher:
       repository: longhornio/csi-attacher
@@ -79,6 +82,7 @@ defaultSettings:
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
   taintToleration: ~
+  systemManagedComponentsNodeSelector: ~
   priorityClass: ~
   autoSalvage: ~
   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
@@ -94,12 +98,60 @@ defaultSettings:
   systemManagedPodsImagePullPolicy: ~
   allowVolumeCreationWithDegradedAvailability: ~
   autoCleanupSystemGeneratedSnapshot: ~
-
+  concurrentAutomaticEngineUpgradePerNodeLimit: ~
+  backingImageCleanupWaitInterval: ~
+  guaranteedEngineManagerCPU: ~
+  guaranteedReplicaManagerCPU: ~
 privateRegistry:
   registryUrl: ~
   registryUser: ~
   registryPasswd: ~
   registrySecret: ~
+
+longhornManager:
+  priorityClass: ~
+  tolerations: []
+  ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
+  ## and uncomment this example block
+  # - key: "key"
+  #   operator: "Equal"
+  #   value: "value"
+  #   effect: "NoSchedule"
+  nodeSelector: {}
+  ## If you want to set node selector for Longhorn Manager DaemonSet, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  label-key1: "label-value1"
+  #  label-key2: "label-value2"
+
+longhornDriver:
+  priorityClass: ~
+  tolerations: []
+  ## If you want to set tolerations for Longhorn Driver Deployer Deployment, delete the `[]` in the line above
+  ## and uncomment this example block
+  # - key: "key"
+  #   operator: "Equal"
+  #   value: "value"
+  #   effect: "NoSchedule"
+  nodeSelector: {}
+  ## If you want to set node selector for Longhorn Driver Deployer Deployment, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  label-key1: "label-value1"
+  #  label-key2: "label-value2"
+
+longhornUI:
+  priorityClass: ~
+  tolerations: []
+  ## If you want to set tolerations for Longhorn UI Deployment, delete the `[]` in the line above
+  ## and uncomment this example block
+  # - key: "key"
+  #   operator: "Equal"
+  #   value: "value"
+  #   effect: "NoSchedule"
+  nodeSelector: {}
+  ## If you want to set node selector for Longhorn UI Deployment, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  label-key1: "label-value1"
+  #  label-key2: "label-value2"
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -118,6 +170,9 @@ ingress:
   ## Set to true to enable ingress record generation
   enabled: false
 
+  ## Add ingressClassName to the Ingress
+  ## Can replace the kubernetes.io/ingress.class annotation on v1.18+
+  ingressClassName: ~
 
   host: xip.io
 
@@ -160,3 +215,6 @@ enablePSP: true
 ## Specify override namespace, specifically this is useful for using longhorn as sub-chart
 ## and its release namespace is not the `longhorn-system`
 namespaceOverride: ""
+
+# Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
+annotations: {}

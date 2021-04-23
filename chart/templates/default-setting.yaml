@@ -21,6 +21,7 @@ data:
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
+    system-managed-components-node-selector: {{ .Values.defaultSettings.systemManagedComponentsNodeSelector }}
     priority-class: {{ .Values.defaultSettings.priorityClass }}
     auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
     auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
@@ -36,3 +37,7 @@ data:
     system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
     allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
     auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
+    concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
+    backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}
+    guaranteed-engine-manager-cpu: {{ .Values.defaultSettings.guaranteedEngineManagerCPU }}
+    guaranteed-replica-manager-cpu: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU }}
