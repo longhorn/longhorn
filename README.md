@@ -51,15 +51,15 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 # Requirements
 
-For the installation requirements, refer to the [Longhorn documentation.](https://longhorn.io/docs/install/requirements)
+For the installation requirements, refer to the [Longhorn documentation.](https://longhorn.io/docs/latest/deploy/install/#installation-requirements)
 
 # Install
 
 Longhorn can be installed on a Kubernetes cluster in several ways:
 
-- [kubectl](https://longhorn.io/docs/install/install-with-kubectl/)
-- [Helm](https://longhorn.io/docs/install/install-with-helm/)
-- [Rancher catalog app](https://longhorn.io/docs/install/install-with-rancher/)
+- [Rancher catalog app](https://longhorn.io/docs/latest/deploy/install/install-with-rancher/)
+- [kubectl](https://longhorn.io/docs/latest/deploy/install/install-with-kubectl/)
+- [Helm](https://longhorn.io/docs/latest/deploy/install/install-with-helm/)
 
 # Documentation
 
