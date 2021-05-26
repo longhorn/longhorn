@@ -27,20 +27,25 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 ## Get Involved
 **Community Meeting and Office Hours**!: Hosted by the core maintainers of Longhorn: 2nd Friday of the every month at 09:00 Pacific Time (PT)/12:00 Eastern Time (ET) on Zoom: http://bit.ly/longhorn-community-meeting. Gcal event: http://bit.ly/longhorn-events
+
 **Longhorn Mailing List**!: Stay up to date on the latest news and events: https://lists.cncf.io/g/cncf-longhorn
 
 You can read more about the community and its events here: https://github.com/longhorn/community
 
 ## Current status
 
-The latest release of Longhorn is **v1.1.0**.
+The latest release of Longhorn is **v1.1.1**.
 
 ## Source code
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
-1. Longhorn engine -- Core controller/replica logic https://github.com/longhorn/longhorn-engine
-1. Longhorn manager -- Longhorn orchestration https://github.com/longhorn/longhorn-manager
-1. Longhorn UI -- Dashboard https://github.com/longhorn/longhorn-ui
+| Component                 | What it does                                                           | GitHub repo                                                                                 |
+| :------------------------ | :--------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| Longhorn Engine           | Core controller/replica logic                                          | [longhorn/longhorn-engine](https://github.com/longhorn/longhorn-engine)                     |
+| Longhorn Manager          | Longhorn orchestration, includes CSI driver for Kubernetes             | [longhorn/longhorn-manager](https://github.com/longhorn/longhorn-manager)                   |
+| Longhorn Instance Manager | Controller/replica instance lifecycle management                       | [longhorn/longhorn-instance-manager](https://github.com/longhorn/longhorn-instance-manager) |
+| Longhorn Share Manager    | NFS provisioner that exposes Longhorn volumes as ReadWriteMany volumes | [longhorn/longhorn-share-manager](https://github.com/longhorn/longhorn-share-manager)       |
+| Longhorn UI               | The Longhorn dashboard                                                 | [longhorn/longhorn-ui](https://github.com/longhorn/longhorn-ui)                             |
 
 ![Longhorn UI](./longhorn-ui.png)
 
@@ -61,9 +66,10 @@ Longhorn can be installed on a Kubernetes cluster in several ways:
 The official Longhorn documentation is [here.](https://longhorn.io/docs)
 
 ## Community
+
 Longhorn is open source software, so contributions are greatly welcome. Please read [Code of Conduct](./CODE_OF_CONDUCT.md) and [Contributing Guideline](./CONTRIBUTING.md) before contributing.
 
-Contributing code is not the only way of contributing. We value feedbacks very much and many of the Longhorn features are originated from users' feedback. If you have any feedbacks, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new?title=*Summarize%20your%20issue%20here*&body=*Describe%20your%20issue%20here*%0A%0A---%0AVersion%3A%20``) and talk to the developers at the [CNCF](https://slack.cncf.io/) [#longhorn](https://cloud-native.slack.com/messages/longhorn) slack channel.
+Contributing code is not the only way of contributing. We value feedbacks very much and many of the Longhorn features are originated from users' feedback. If you have any feedbacks, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose) and talk to the developers at the [CNCF](https://slack.cncf.io/) [#longhorn](https://cloud-native.slack.com/messages/longhorn) slack channel.
 
 ## License
 
