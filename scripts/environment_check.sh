@@ -78,7 +78,10 @@ validate_ds() {
   local allSupported=true
   local pods=$(kubectl -l app=longhorn-environment-check get po -o json)
 
-  for ((i=0; i<1; i++)); do
+  local ds=$(kubectl get ds/longhorn-environment-check -o json)
+  local desiredNumberScheduled=$(echo $ds | jq .status.desiredNumberScheduled)
+
+  for ((i=0; i<desiredNumberScheduled; i++)); do
     local pod=$(echo $pods | jq .items[$i])
     local nodeName=$(echo $pod | jq -r .spec.nodeName)
     local mountPropagation=$(echo $pod | jq -r '.spec.containers[0].volumeMounts[] | select(.name=="mountpoint") | .mountPropagation')
