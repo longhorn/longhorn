@@ -74,6 +74,7 @@ defaultSettings:
   defaultDataPath: ~
   defaultDataLocality: ~
   replicaSoftAntiAffinity: ~
+  replicaAutoBalance: ~
   storageOverProvisioningPercentage: ~
   storageMinimalAvailablePercentage: ~
   upgradeChecker: ~
