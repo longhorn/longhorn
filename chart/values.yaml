@@ -124,9 +124,6 @@ longhornManager:
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
 
-  ## Set to true to disable profiler
-  disableProfiler: false
-
 longhornDriver:
   priorityClass: ~
   tolerations: []
