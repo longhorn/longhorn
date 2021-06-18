@@ -262,6 +262,26 @@ The available modes are:
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
+  - variable: defaultSettings.replicaAutoBalance
+    label: Replica Auto Balance
+    description: 'Enable this setting automatically rebalances replicas when discovered an available node.
+The available global options are:
+- **disabled**. This is the default option. No replica auto-balance will be done.
+- **least-effort**. This option instructs Longhorn to balance replicas for minimal redundancy.
+- **best-effort**. This option instructs Longhorn to balance replicas for even redundancy.
+Longhorn also support individual volume setting. The setting can be specified in volume.spec.replicaAutoBalance, this overrules the global setting.
+The available volume spec options are:
+- **ignored**. This is the default option that instructs Longhorn to inherit from the global setting.
+- **disabled**. This option instructs Longhorn no replica auto-balance should be done.
+- **least-effort**. This option instructs Longhorn to balance replicas for minimal redundancy.
+- **best-effort**. This option instructs Longhorn to balance replicas for even redundancy.'
+    group: "Longhorn Default Settings"
+    type: enum
+    options:
+    - "disabled"
+    - "least-effort"
+    - "best-effort"
+    default: "disabled"
   - variable: defaultSettings.storageOverProvisioningPercentage
     label: Storage Over Provisioning Percentage
     description: "The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default 200."
