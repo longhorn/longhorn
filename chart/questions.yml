@@ -293,10 +293,10 @@ The available modes are:
     default: 3
   - variable: defaultSettings.defaultLonghornStaticStorageClass
     label: Default Longhorn Static StorageClass Name
-    description: "The 'storageClassName' is given to PVs and PVCs that are created for an existing Longhorn volume. The StorageClass name can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. By default 'longhorn-static'."
+    description: "The 'storageClassName' is given to PVs and PVCs that are created for an existing Longhorn volume. The StorageClass name can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. By default 'longhorn'."
     group: "Longhorn Default Settings"
     type: string
-    default: "longhorn-static"
+    default: "longhorn"
   - variable: defaultSettings.backupstorePollInterval
     label: Backupstore Poll Interval
     description: "In seconds. The backupstore poll interval determines how often Longhorn checks the backupstore for new backups. Set to 0 to disable the polling. By default 300."
