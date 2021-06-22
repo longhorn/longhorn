@@ -9,16 +9,16 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.1.1
+      tag: v1.1.2-rc1
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.1.1
+      tag: v1.1.2-rc1
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.1.1
+      tag: v1.1.2-rc1
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20201216
+      tag: v1_20210621
     shareManager:
       repository: longhornio/longhorn-share-manager
       tag: v1_20210416
