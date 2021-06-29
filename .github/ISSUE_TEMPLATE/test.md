@@ -2,7 +2,7 @@
 name: Test
 about: Test implementation on Longhorn
 title: "[TEST]"
-labels: area/test
+labels: kind/test
 assignees: ''
 
 ---
