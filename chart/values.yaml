@@ -9,13 +9,13 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.1.2-rc1
+      tag: v1.1.2
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.1.2-rc1
+      tag: v1.1.2
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.1.2-rc1
+      tag: v1.1.2
     instanceManager:
       repository: longhornio/longhorn-instance-manager
       tag: v1_20210621
@@ -28,19 +28,19 @@ image:
   csi:
     attacher:
       repository: longhornio/csi-attacher
-      tag: v2.2.1-lh1
+      tag: v2.2.1-lh2
     provisioner:
       repository: longhornio/csi-provisioner
-      tag: v1.6.0-lh1
+      tag: v1.6.0-lh2
     nodeDriverRegistrar:
       repository: longhornio/csi-node-driver-registrar
       tag: v1.2.0-lh1
     resizer:
       repository: longhornio/csi-resizer
-      tag: v0.5.1-lh1
+      tag: v0.5.1-lh2
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v2.1.1-lh1
+      tag: v2.1.1-lh2
   pullPolicy: IfNotPresent
 
 service:
