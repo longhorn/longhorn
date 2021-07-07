@@ -78,7 +78,6 @@ defaultSettings:
   storageMinimalAvailablePercentage: ~
   upgradeChecker: ~
   defaultReplicaCount: ~
-  guaranteedEngineCPU: ~
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
   taintToleration: ~
