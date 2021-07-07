@@ -17,7 +17,6 @@ data:
     upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
     default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
     default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}
-    guaranteed-engine-cpu: {{ .Values.defaultSettings.guaranteedEngineCPU }}
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
