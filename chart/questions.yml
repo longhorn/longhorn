@@ -330,16 +330,6 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
-  - variable: defaultSettings.volumeAttachmentRecoveryPolicy
-    label: Volume Attachment Recovery Policy
-    description: "Defines the Longhorn action when a Volume is stuck with a Deployment Pod on a failed node. `wait` leads to the deletion of the volume attachment as soon as the pods deletion time has passed. `never` is the default Kubernetes behavior of never deleting volume attachments on terminating pods. `immediate` leads to the deletion of the volume attachment as soon as all workload pods are pending. By default wait."
-    group: "Longhorn Default Settings"
-    type: enum
-    options:
-    - "wait"
-    - "never"
-    - "immediate"
-    default: "wait"
   - variable: defaultSettings.nodeDownPodDeletionPolicy
     label: Pod Deletion Policy When Node is Down
     description: "Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down.
