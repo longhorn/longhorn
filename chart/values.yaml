@@ -88,7 +88,6 @@ defaultSettings:
   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
   disableSchedulingOnCordonedNode: ~
   replicaZoneSoftAntiAffinity: ~
-  volumeAttachmentRecoveryPolicy: ~
   nodeDownPodDeletionPolicy: ~
   allowNodeDrainWithLastHealthyReplica: ~
   mkfsExt4Parameters: ~
