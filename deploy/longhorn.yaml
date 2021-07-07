@@ -696,7 +696,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.1.1
+        image: longhornio/longhorn-manager:v1.1.2
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -705,15 +705,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.1.1
+        - longhornio/longhorn-engine:v1.1.2
         - --instance-manager-image
-        - longhornio/longhorn-instance-manager:v1_20201216
+        - longhornio/longhorn-instance-manager:v1_20210621
         - --share-manager-image
         - longhornio/longhorn-share-manager:v1_20210416
         - --backing-image-manager-image
         - longhornio/backing-image-manager:v1_20210422
         - --manager-image
-        - longhornio/longhorn-manager:v1.1.1
+        - longhornio/longhorn-manager:v1.1.2
         - --service-account
         - longhorn-service-account
         ports:
@@ -813,7 +813,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.1.1
+        image: longhornio/longhorn-ui:v1.1.2
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -869,18 +869,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.1.1
+          image: longhornio/longhorn-manager:v1.1.2
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.1.1
+          image: longhornio/longhorn-manager:v1.1.2
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.1.1
+          - longhornio/longhorn-manager:v1.1.2
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -902,15 +902,15 @@ spec:
           # For AirGap Installation
           # Replace PREFIX with your private registry
           #- name: CSI_ATTACHER_IMAGE
-          #  value: PREFIX/csi-attacher:v2.2.1-lh1
+          #  value: PREFIX/csi-attacher:v2.2.1-lh2
           #- name: CSI_PROVISIONER_IMAGE
-          #  value: PREFIX/csi-provisioner:v1.6.0-lh1
+          #  value: PREFIX/csi-provisioner:v1.6.0-lh2
           #- name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
           #  value: PREFIX/csi-node-driver-registrar:v1.2.0-lh1
           #- name: CSI_RESIZER_IMAGE
-          #  value: PREFIX/csi-resizer:v0.5.1-lh1
+          #  value: PREFIX/csi-resizer:v0.5.1-lh2
           #- name: CSI_SNAPSHOTTER_IMAGE
-          #  value: PREFIX/csi-snapshotter:v2.1.1-lh1
+          #  value: PREFIX/csi-snapshotter:v2.1.1-lh2
           # Manually specify number of CSI attacher replicas
           #- name: CSI_ATTACHER_REPLICA_COUNT
           #  value: "3"
