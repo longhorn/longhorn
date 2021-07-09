@@ -78,7 +78,6 @@ defaultSettings:
   storageMinimalAvailablePercentage: ~
   upgradeChecker: ~
   defaultReplicaCount: ~
-  guaranteedEngineCPU: ~
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
   taintToleration: ~
@@ -88,7 +87,6 @@ defaultSettings:
   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
   disableSchedulingOnCordonedNode: ~
   replicaZoneSoftAntiAffinity: ~
-  volumeAttachmentRecoveryPolicy: ~
   nodeDownPodDeletionPolicy: ~
   allowNodeDrainWithLastHealthyReplica: ~
   mkfsExt4Parameters: ~

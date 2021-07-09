@@ -17,7 +17,6 @@ data:
     upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
     default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
     default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}
-    guaranteed-engine-cpu: {{ .Values.defaultSettings.guaranteedEngineCPU }}
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     taint-toleration: {{ .Values.defaultSettings.taintToleration }}
@@ -27,7 +26,6 @@ data:
     auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
     disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
     replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
-    volume-attachment-recovery-policy: {{ .Values.defaultSettings.volumeAttachmentRecoveryPolicy }}
     node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}
     allow-node-drain-with-last-healthy-replica: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica }}
     mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}
