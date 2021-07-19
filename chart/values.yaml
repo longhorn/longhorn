@@ -47,9 +47,13 @@ service:
   ui:
     type: ClusterIP
     nodePort: null
+    ipFamilyPolicy: null
+    ipFamilies: null
   manager:
     type: ClusterIP
     nodePort: ""
+    ipFamilyPolicy: null
+    ipFamilies: null
 
 persistence:
   defaultClass: true
