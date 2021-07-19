@@ -269,7 +269,7 @@ None.
      name: the backup volume name.
    spec:
      syncRequestAt: the time to request run sync the remote backup volume. (*metav1.Time)
-     deleteRemoteConfig: indicate to delete the remote backup volume config or not. (bool)
+     fileCleanupRequired: indicate to delete the remote backup volume config or not. (bool)
    status:
      lastModificationTime: the backup volume config last modification time. (Time)
      size: the backup volume size. (string)
@@ -290,7 +290,7 @@ None.
      labels:
        longhornvolume=<backup-volume-name>`: this label indicates which backup volume the backup belongs to.
    spec:
-     deleteRemoteConfig: indicate to delete the remote backup config or not (and the related block files if needed). (bool)
+     fileCleanupRequired: indicate to delete the remote backup config or not (and the related block files if needed). (bool)
      snapshotName: the snapshot name. (string)
      labels: the labels of snapshot backup. (map[string]string)
      backingImage: the backing image. (string)
@@ -330,7 +330,7 @@ None.
 6. For the Longhorn manager HTTP endpoints:
 
    - **DELETE** `/v1/backupvolumes/{volName}`:
-     1. Update the BackupVolume CR `spec.deleteRemoteConfig=true` with the given volume name.
+     1. Update the BackupVolume CR `spec.fileCleanupRequired=true` with the given volume name.
      2. Delete a BackupVolume CR with the given volume name.
 
 7. Create a new controller `backup_volume_controller`.
@@ -338,9 +338,9 @@ None.
    Watches the change of BackupVolume CR. The backup volume controller is responsible for deleting Backup CR and deleting backup volume from remote backup target if delete BackupVolume CR event comes in, and updating BackupVolume CR status field, and creating/deleting Backup CR. The reconcile loop steps are:
    1. Check if the current node ID == BackupTarget CR spec.responsibleNodeID. If no, skip the reconcile process.
    2. If the delete BackupVolume CR event comes in:
-      1. updates Backup CRs `spec.deleteRemoteConfig=true` if BackupVolume CR `spec.deleteRemoteConfig=true`.
+      1. updates Backup CRs `spec.fileCleanupRequired=true` if BackupVolume CR `spec.fileCleanupRequired=true`.
       2. deletes Backup CR with the given volume name.
-      3. deletes the backup volume from the remote backup target `backup rm --volume <volume-name> <url>` if `spec.deleteRemoteConfig=true`.
+      3. deletes the backup volume from the remote backup target `backup rm --volume <volume-name> <url>` if `spec.fileCleanupRequired=true`.
       4. remove the finalizer.
    3. Check if the `status.lastSyncedAt < spec.syncRequestAt`. If no, skip the reconcile process.
    4. Call the longhorn engine to list all the backups `backup ls --volume <volume-name>` from the remote backup target `backupStoreBackups`.
@@ -371,7 +371,7 @@ None.
           backingImageURL: <backing-image-URL>
         ```
    - **DELETE** `/v1/backupvolumes/{volName}?action=backupDelete`:
-     1. Update the Backup CR `spec.deleteRemoteConfig=true` with the given volume name.
+     1. Update the Backup CR `spec.fileCleanupRequired=true` with the given volume name.
      2. Delete a Backup CR with the given backup name.
 
 9.  Create a new controller `backup_controller`.
@@ -379,7 +379,7 @@ None.
     Watches the change of Backup CR. The backup controller is responsible for updating the Backup CR status field and creating/deleting backup to/from the remote backup target. The reconcile loop steps are:
     1. Check if the current node ID == BackupTarget CR spec.responsibleNodeID. If no, skip the reconcile process.
     2. If the delete Backup CR event comes in:
-        1.  delete the backup from the remote backup target `backup rm <url>` if Backup CR `spec.deleteRemoteConfig=true`.
+        1.  delete the backup from the remote backup target `backup rm <url>` if Backup CR `spec.fileCleanupRequired=true`.
         2.  update the BackupVolume CR `spec.syncRequestAt=time.Now()`.
         3.  remove the finalizer.
     3. Check if the Backup CR `spec.snapshotName != ""` and `status.backupCreationIsStart == false`. If yes:
