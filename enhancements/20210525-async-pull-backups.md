@@ -320,7 +320,7 @@ None.
       1. Updates the BackupTarget CR `status.available=false` and `status.lastSyncedAt=time.Now()`.
       2. Skip the current reconcile process.
    4. List in cluster BackupVolume CRs `clusterBackupVolumes`.
-   5. Find the difference backup volumes `backupVolumesToPull = backupStoreBackupVolumes - clusterBackupVolumes` and create BackupVolume CR `metadata.name` + `metadata.finalizers["longhorn.io"]`.
+   5. Find the difference backup volumes `backupVolumesToPull = backupStoreBackupVolumes - clusterBackupVolumes` and create BackupVolume CR `metadata.name`.
    6. Find the difference backup volumes `backupVolumesToDelete = clusterBackupVolumes - backupStoreBackupVolumes` and delete BackupVolume CR.
    7. List in cluster BackupVolume CRs `clusterBackupVolumes` again and updates the BackupVolume CR `spec.syncRequestAt = time.Now()`.
    8. Updates the BackupTarget CR status:
@@ -345,7 +345,7 @@ None.
    3. Check if the `status.lastSyncedAt < spec.syncRequestAt`. If no, skip the reconcile process.
    4. Call the longhorn engine to list all the backups `backup ls --volume <volume-name>` from the remote backup target `backupStoreBackups`.
    5.  List in cluster Backup CRs `clusterBackups`.
-   6.  Find the difference backups `backupsToPull = backupStoreBackups - clusterBackups` and create Backup CR `metadata.name` + `metadata.labels["longhornvolume"]=<backup-volume-name>` + `metadata.finalizers["longhorn.io"]`.
+   6.  Find the difference backups `backupsToPull = backupStoreBackups - clusterBackups` and create Backup CR `metadata.name` + `metadata.labels["longhornvolume"]=<backup-volume-name>`.
    7.  Find the difference backups `backupsToDelete = clusterBackups - backupStoreBackups` and delete Backup CR.
    8.  Call the longhorn engine to get the backup volume config's last modification time `backup head <volume-config>` and compares to `status.lastModificationTime`. If the config last modification time not changed, abort the current reconcile process.
    9.  Call the longhorn engine to read the backup volumes' config `backup inspect-volume <volume-name>`.
@@ -387,7 +387,7 @@ None.
         2.  updates Backup CR `status.backupCreationIsStart = true`.
         3.  fork a go routine to monitor the backup creation progress. After backup creation finished (progress = 100):
             1.  update the BackupVolume CR `spec.syncRequestAt = time.Now()` if BackupVolume CR exist.
-            2.  create the BackupVolume CR `metadata.name` + `metadata.finalizers["longhorn.io"]` if BackupVolume CR not exist.
+            2.  create the BackupVolume CR `metadata.name` if BackupVolume CR not exist.
     4. If Backup CR `status.lastSyncedAt != nil`, the backup config had be synced, abort the current reconcile process
     5. Call the longhorn engine to read the backup config `backup inspect <backup-url>`.
     6. Updates the Backup CR status field according to the backup config.
