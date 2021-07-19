@@ -290,7 +290,7 @@ None.
      labels:
        longhornvolume=<backup-volume-name>`: this label indicates which backup volume the backup belongs to.
    spec:
-     deleteRemoteConfig: indicate to delete the remote backup config or not. (bool)
+     deleteRemoteConfig: indicate to delete the remote backup config or not (and the related block files if needed). (bool)
      snapshotName: the snapshot name. (string)
      labels: the labels of snapshot backup. (map[string]string)
      backingImage: the backing image. (string)
