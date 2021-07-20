@@ -388,7 +388,7 @@ None.
         3.  fork a go routine to monitor the backup creation progress. After backup creation finished (progress = 100):
             1.  update the BackupVolume CR `spec.syncRequestAt = time.Now()` if BackupVolume CR exist.
             2.  create the BackupVolume CR `metadata.name` if BackupVolume CR not exist.
-    4. If Backup CR `status.lastSyncedAt != nil`, the backup config had be synced, updates the `status.lastSyncedAt` and return.
+    4. If Backup CR `status.lastSyncedAt != nil`, the backup config had be synced, skip the reconcile process.
     5. Call the longhorn engine to read the backup config `backup inspect <backup-url>`.
     6. Updates the Backup CR status field according to the backup config.
     7. Updates the Backup CR `status.lastSyncedAt`.
@@ -429,13 +429,39 @@ from longhorn manager to the remote backup target:
    7. At cluster B, after `backupstore-poll-interval` seconds, the deleted backup volume does not exist on the Longhorn GUI.
    8. At cluster B, the DR volume `status.LastBackup` and `status.LastBackupAt` won't be updated anymore.
 
-- Test Backup Target is not accessible.
+- Test Backup Target URL clean up.
    1. The user configures the remote backup target URL/credential and poll interval to 5 mins.
    2. The user creates one backup on vol-A.
-   3. Make the Longhorn cluster not able to access the remote backup target. (Change the credential with wrong access/secret key _or_ make the Longhorn manager network disconnect to the remote backup target).
+   3. Change the backup target setting setting to empty.
    4. Within 5 mins the poll interval triggered:
       1. The default BackupTarget CR `status.available=false`.
       2. The default BackupTarget CR `status.lastSyncedAt` be updated.
+      3. All the BackupVolume CRs be deleted.
+      4. All the Backup CRs be deleted.
+      5. The vol-A CR `status.lastBackup` and `status.lastBackupAt` be cleaned up.
+   5. The GUI displays the backup target not available.
+
+- Test switch Backup Target URL.
+   1. The user configures the remote backup target URL/credential to S3 and poll interval to 5 mins.
+   2. The user creates one backup on vol-A to S3.
+   3. The user changes the remote backup URL/credential to NFS and poll interval to 5 mins.
+   4. The user creates one backup on vol-A to NFS.
+   5. The user changes the remote backup target URL/credential to S3.
+   6. Within 5 mins the poll interval triggered:
+      1. The default BackupTarget CR `status.available=true`.
+      2. The default BackupTarget CR `status.lastSyncedAt` be updated.
+      3. The BackupVolume CRs be synced as the data in S3.
+      4. The Backup CRs be synced as the data in S3.
+      5. The vol-A CR `status.lastBackup` and `status.lastBackupAt` be synced as the data in S3.
+
+- Test Backup Target credential secret changed.
+   1. The user configures the remote backup target URL/credential and poll interval to 5 mins.
+   2. The user creates one backup on vol-A.
+   3. Change the backup target credential secret setting to empty.
+   4. Within 5 mins the poll interval triggered:
+      1. The default BackupTarget CR `status.available=false`.
+      2. The default BackupTarget CR `status.lastSyncedAt` be updated.
+   5. The GUI displays the backup target not available.
 
 ### Upgrade strategy
 
