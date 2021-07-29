@@ -257,7 +257,7 @@ None.
      pollInterval: the backup target poll interval. (metav1.Duration)
      syncRequestAt: the time to request run sync the remote backup target. (*metav1.Time)
    status:
-     ownerID: the node ID which should responsible for run sync the remote backup target. (string)
+     ownerID: the node ID which is responsible for running operations of the backup target controller. (string)
      available: records if the remote backup target is available or not. (bool)
      lastSyncedAt: records the last time the backup target was running the reconcile process. (*metav1.Time)
    ```
@@ -271,7 +271,7 @@ None.
      syncRequestAt: the time to request run sync the remote backup volume. (*metav1.Time)
      fileCleanupRequired: indicate to delete the remote backup volume config or not. (bool)
    status:
-     ownerID: the node ID which should responsible for run sync the remote backup target. (string)
+     ownerID: the node ID which is responsible for running operations of the backup volume controller. (string)
      lastModificationTime: the backup volume config last modification time. (Time)
      size: the backup volume size. (string)
      labels: the backup volume labels. (map[string]string)
@@ -297,7 +297,7 @@ None.
      backingImage: the backing image. (string)
      backingImageURL: the backing image URL. (string)
    status:
-     ownerID: the node ID which should responsible for run sync the remote backup target. (string)
+     ownerID: the node ID which is responsible for running operations of the backup controller. (string)
      backupCreationIsStart: to indicate the snapshot backup creation is start or not. (bool)
      url: the snapshot backup URL. (string)
      snapshotName: the snapshot name. (string)
