@@ -392,7 +392,7 @@ spec:
     listKind: BackingImageList
     plural: backingimages
     shortNames:
-      - lhbi
+    - lhbi
     singular: backingimage
   scope: Namespaced
   versions:
@@ -431,7 +431,7 @@ spec:
     listKind: BackingImageManagerList
     plural: backingimagemanagers
     shortNames:
-      - lhbim
+    - lhbim
     singular: backingimagemanager
   scope: Namespaced
   versions:
@@ -469,6 +469,57 @@ spec:
       type: string
       description: The disk path the manager is using
       jsonPath: .spec.diskPath
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    longhorn-manager: BackingImageDataSource
+  name: backingimagedatasources.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: BackingImageDataSource
+    listKind: BackingImageDataSourceList
+    plural: backingimagedatasources
+    shortNames:
+    - lhbids
+    singular: backingimagedatasource
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the pod used to provisione the backing image file from source
+      jsonPath: .status.currentState
+    - name: SourceType
+      type: string
+      description: The data source type
+      jsonPath: .spec.sourceType
+    - name: Node
+      type: string
+      description: The node the backing image file will be prepared on
+      jsonPath: .spec.nodeID
+    - name: DiskUUID
+      type: string
+      description: The disk the backing image file will be prepared on
+      jsonPath: .spec.diskUUID
     - name: Age
       type: date
       jsonPath: .metadata.creationTimestamp
