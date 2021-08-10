@@ -20,7 +20,7 @@ data:
       numberOfReplicas: "{{ .Values.persistence.defaultClassReplicaCount }}"
       staleReplicaTimeout: "30"
       fromBackup: ""
-      baseImage: ""
+      backingImage: ""
       {{- if .Values.persistence.recurringJobs.enable }}
       recurringJobs: '{{ .Values.persistence.recurringJobs.jobList }}'
       {{- end }}
