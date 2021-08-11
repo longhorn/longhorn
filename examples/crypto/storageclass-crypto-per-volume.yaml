@@ -1,0 +1,26 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn-crypto-per-volume
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+parameters:
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "2880" # 48 hours in minutes
+  fromBackup: ""
+  encrypted: "true"
+  # we currently don't need secrets for volume creation
+  # but it allows for failing the CreateVolume call early
+  # if the required secret has not been setup yet.
+  csi.storage.k8s.io/provisioner-secret-name: ${pvc.name}
+  csi.storage.k8s.io/provisioner-secret-namespace: ${pvc.namespace}
+  csi.storage.k8s.io/node-publish-secret-name: ${pvc.name}
+  csi.storage.k8s.io/node-publish-secret-namespace: ${pvc.namespace}
+  csi.storage.k8s.io/node-stage-secret-name: ${pvc.name}
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+  # we only need crypto keys for node operations, I left these as examples
+  # in case we implement external key vaults in the future
+  # csi.storage.k8s.io/controller-publish-secret-name: ${pvc.name}
+  # csi.storage.k8s.io/controller-publish-secret-namespace: ${pvc.namespace}
+  # csi.storage.k8s.io/controller-expand-secret-name: ${pvc.name}
+  # csi.storage.k8s.io/controller-expand-secret-namespace: ${pvc.namespace}

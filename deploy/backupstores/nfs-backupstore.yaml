@@ -35,6 +35,7 @@ spec:
         command: ["bash", "-c", "grep \"No export entries found\" /var/log/ganesha.log > /dev/null 2>&1 ; [ $? -ne 0 ]"]
       initialDelaySeconds: 5
       periodSeconds: 5
+      timeoutSeconds: 4
 ---
 kind: Service
 apiVersion: v1

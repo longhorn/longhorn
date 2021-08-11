@@ -48,7 +48,8 @@ rules:
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
-              "backingimagemanagers", "backingimagemanagers/status"]
+              "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
+              "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -545,6 +546,205 @@ spec:
       type: date
       jsonPath: .metadata.creationTimestamp
 ---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: BackingImageDataSource
+  name: backingimagedatasources.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: BackingImageDataSource
+    listKind: BackingImageDataSourceList
+    plural: backingimagedatasources
+    shortNames:
+    - lhbids
+    singular: backingimagedatasource
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            x-kubernetes-preserve-unknown-fields: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: State
+      type: string
+      description: The current state of the pod used to provisione the backing image file from source
+      jsonPath: .status.currentState
+    - name: SourceType
+      type: string
+      description: The data source type
+      jsonPath: .spec.sourceType
+    - name: Node
+      type: string
+      description: The node the backing image file will be prepared on
+      jsonPath: .spec.nodeID
+    - name: DiskUUID
+      type: string
+      description: The disk the backing image file will be prepared on
+      jsonPath: .spec.diskUUID
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: BackupTarget
+  name: backuptargets.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: BackupTarget
+    listKind: BackupTargetList
+    plural: backuptargets
+    shortNames:
+      - lhbt
+    singular: backuptarget
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: URL
+          type: string
+          description: The backup target URL
+          jsonPath: .spec.backupTargetURL
+        - name: Credential
+          type: string
+          description: The backup target credential secret
+          jsonPath: .spec.credentialSecret
+        - name: Interval
+          type: string
+          description: The backup target poll interval
+          jsonPath: .spec.pollInterval
+        - name: Available
+          type: boolean
+          description: Indicate whether the backup target is available or not
+          jsonPath: .status.available
+        - name: LastSyncedAt
+          type: string
+          description: The backup target last synced time
+          jsonPath: .status.lastSyncedAt
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: BackupVolume
+  name: backupvolumes.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: BackupVolume
+    listKind: BackupVolumeList
+    plural: backupvolumes
+    shortNames:
+      - lhbv
+    singular: backupvolume
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: CreatedAt
+          type: string
+          description: The backup volume creation time
+          jsonPath: .status.createdAt
+        - name: LastBackupName
+          type: string
+          description: The backup volume last backup name
+          jsonPath: .status.lastBackupName
+        - name: LastBackupAt
+          type: string
+          description: The backup volume last backup time
+          jsonPath: .status.lastBackupAt
+        - name: LastSyncedAt
+          type: string
+          description: The backup volume last synced time
+          jsonPath: .status.lastSyncedAt
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: Backup
+  name: backups.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: Backup
+    listKind: BackupList
+    plural: backups
+    shortNames:
+      - lhb
+    singular: backup
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              x-kubernetes-preserve-unknown-fields: true
+            status:
+              x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: SnapshotName
+          type: string
+          description: The snapshot name
+          jsonPath: .status.snapshotName
+        - name: SnapshotSize
+          type: string
+          description: The snapshot size
+          jsonPath: .status.size
+        - name: SnapshotCreatedAt
+          type: string
+          description: The snapshot creation time
+          jsonPath: .status.snapshotCreatedAt
+        - name: LastSyncedAt
+          type: string
+          description: The backup last synced time
+          jsonPath: .status.lastSyncedAt
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -696,7 +896,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.1.1
+        image: longhornio/longhorn-manager:v1.2.0-preview1
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -705,15 +905,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.1.1
+        - longhornio/longhorn-engine:v1.2.0-preview1
         - --instance-manager-image
-        - longhornio/longhorn-instance-manager:v1_20201216
+        - longhornio/longhorn-instance-manager:v1_20210731
         - --share-manager-image
         - longhornio/longhorn-share-manager:v1_20210416
         - --backing-image-manager-image
-        - longhornio/backing-image-manager:v1_20210422
+        - longhornio/backing-image-manager:v2_20210809
         - --manager-image
-        - longhornio/longhorn-manager:v1.1.1
+        - longhornio/longhorn-manager:v1.2.0-preview1
         - --service-account
         - longhorn-service-account
         ports:
@@ -813,7 +1013,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.1.1
+        image: longhornio/longhorn-ui:v1.2.0-preview1
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -869,18 +1069,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.1.1
+          image: longhornio/longhorn-manager:v1.2.0-preview1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.1.1
+          image: longhornio/longhorn-manager:v1.2.0-preview1
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.1.1
+          - longhornio/longhorn-manager:v1.2.0-preview1
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
