@@ -504,17 +504,17 @@ Warning: This option works only when there is a failed replica in the volume. An
   min: 1
   max: 10
   default: 3
-- variable: persistence.recurringJobs.enable
-  description: "Enable recurring job for Longhorn StorageClass"
+- variable: persistence.recurringJobSelector.enable
+  description: "Enable recurring job selector for Longhorn StorageClass"
   group: "Longhorn Storage Class Settings"
-  label: Enable Storage Class Recurring Job
+  label: Enable Storage Class Recurring Job Selector
   type: boolean
   default: false
   show_subquestion_if: true
   subquestions:
-  - variable: persistence.recurringJobs.jobList
-    description: 'Recurring job list for Longhorn StorageClass. Please be careful of quotes of input. e.g., [{"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,"labels": {"interval":"2m"}}]'
-    label: Storage Class Recurring Job List
+  - variable: persistence.recurringJobSelector.jobList
+    description: 'Recurring job selector list for Longhorn StorageClass. Please be careful of quotes of input. e.g., [{"name":"backup", "isGroup":true}]'
+    label: Storage Class Recurring Job Selector List
     group: "Longhorn Storage Class Settings"
     type: string
     default:

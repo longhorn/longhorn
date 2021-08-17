@@ -55,7 +55,7 @@ persistence:
   defaultClass: true
   defaultClassReplicaCount: 3
   reclaimPolicy: Delete
-  recurringJobs:
+  recurringJobSelector:
     enable: false
     jobList: []
 
