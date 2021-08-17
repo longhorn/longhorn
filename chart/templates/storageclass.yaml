@@ -21,6 +21,6 @@ data:
       staleReplicaTimeout: "30"
       fromBackup: ""
       backingImage: ""
-      {{- if .Values.persistence.recurringJobs.enable }}
-      recurringJobs: '{{ .Values.persistence.recurringJobs.jobList }}'
+      {{- if .Values.persistence.recurringJobSelector.enable }}
+      recurringJobSelector: '{{ .Values.persistence.recurringJobSelector.jobList }}'
       {{- end }}

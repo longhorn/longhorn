@@ -672,3 +672,83 @@ spec:
           description: The backup last synced time
           jsonPath: .status.lastSyncedAt
 ---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    longhorn-manager: RecurringJob
+  name: recurringjobs.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: RecurringJob
+    listKind: RecurringJobList
+    plural: recurringjobs
+    shortNames:
+      - lhrj
+    singular: recurringjob
+  scope: Namespaced
+  versions:
+    - name: v1beta1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            metadata:
+              type: object
+              properties:
+                name:
+                  type: string
+            spec:
+              type: object
+              properties:
+                groups:
+                  type: array
+                  items:
+                    type: string
+                task:
+                  type: string
+                  pattern: "^snapshot|backup$"
+                cron:
+                  type: string
+                retain:
+                  type: integer
+                concurrency:
+                  type: integer
+                labels:
+                  x-kubernetes-preserve-unknown-fields: true
+            status:
+              x-kubernetes-preserve-unknown-fields: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Groups
+          type: string
+          description: Sets groupings to the jobs. When set to "default" group will be added to the volume label when no other job label exist in volume.
+          jsonPath: .spec.groups
+        - name: Task
+          type: string
+          description: Should be one of "backup" or "snapshot".
+          jsonPath: .spec.task
+        - name: Cron
+          type: string
+          description: The cron expression represents recurring job scheduling.
+          jsonPath: .spec.cron
+        - name: Retain
+          type: integer
+          description: The number of snapshots/backups to keep for the volume.
+          jsonPath: .spec.retain
+        - name: Concurrency
+          type: integer
+          description: The concurrent job to run by each cron job.
+          jsonPath: .spec.concurrency
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+        - name: Labels
+          type: string
+          description: Specify the labels
+          jsonPath: .spec.labels
+---

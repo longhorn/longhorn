@@ -39,7 +39,8 @@ rules:
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
-              "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status"]
+              "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status",
+              "recurringjobs", "recurringjobs/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
