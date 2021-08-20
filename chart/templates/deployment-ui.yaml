@@ -1,3 +1,33 @@
+{{- if .Values.openshift.ui.route }}
+# https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml
+# Create a proxy service account and ensure it will use the route "proxy"
+# Create a secure connection to the proxy via a route
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.openshift.ui.route }}
+spec:
+  to:
+    kind: Service
+    name: longhorn-ui
+  tls:
+    termination: Reencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: longhorn-ui
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: longhorn-ui-tls
+spec:
+  ports:
+  - name: longhorn-ui
+    port: {{ .Values.openshift.ui.port | default 443 }}
+    targetPort: {{ .Values.openshift.ui.proxy | default 8443 }}
+  selector:
+    app: longhorn-ui
+---
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,7 +45,29 @@ spec:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-ui
     spec:
+      {{- if .Values.openshift.ui.route }}
+      serviceAccountName: longhorn-service-account
+      {{- end }}
       containers:
+      {{- if .Values.openshift.ui.route }}
+      - name: oauth-proxy
+        image: {{ template "registry_url" . }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: {{ .Values.openshift.ui.proxy | default 8443 }}
+          name: public
+        args:
+        - --https-address=:{{ .Values.openshift.ui.proxy | default 8443 }}
+        - --provider=openshift
+        - --openshift-service-account=longhorn-service-account
+        - --upstream=http://localhost:8000
+        - --tls-cert=/etc/tls/private/tls.crt
+        - --tls-key=/etc/tls/private/tls.key
+        - --cookie-secret=SECRET
+        volumeMounts:
+        - mountPath: /etc/tls/private
+          name: longhorn-ui-tls
+      {{- end }}
       - name: longhorn-ui
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
         imagePullPolicy: IfNotPresent
@@ -27,6 +79,12 @@ spec:
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
+      {{- if .Values.openshift.ui.route }}
+      volumes:
+      - name: longhorn-ui-tls
+        secret:
+          secretName: longhorn-ui-tls
+      {{- end }}
       {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}

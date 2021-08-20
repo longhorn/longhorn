@@ -37,6 +37,9 @@ rules:
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
+  {{- if .Values.openshift.finalizers }}
+              "engineimages/finalizers", "nodes/finalizers",
+  {{- end }}
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status", "backingimagemanagers", "backingimagemanagers/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]

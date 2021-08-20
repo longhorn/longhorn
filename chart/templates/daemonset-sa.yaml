@@ -54,6 +54,11 @@ spec:
         - name: longhorn
           mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
+        {{- if .Values.openshift.mount }}
+        - name: mntlonghorn
+          mountPath: {{ .Values.openshift.mount }}
+          mountPropagation: Bidirectional
+        {{- end }}
         - name: longhorn-default-setting
           mountPath: /var/lib/longhorn-setting/
         env:
@@ -81,6 +86,11 @@ spec:
       - name: longhorn
         hostPath:
           path: /var/lib/longhorn/
+      {{- if .Values.openshift.mount }}
+      - name: mntlonghorn
+        hostPath:
+          path: {{ .Values.openshift.mount }}
+      {{- end }}
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
