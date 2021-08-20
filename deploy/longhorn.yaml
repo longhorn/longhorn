@@ -745,6 +745,7 @@ spec:
           type: string
           description: The backup last synced time
           jsonPath: .status.lastSyncedAt
+
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -825,6 +826,7 @@ spec:
           type: string
           description: Specify the labels
           jsonPath: .spec.labels
+---
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -952,7 +954,9 @@ data:
       staleReplicaTimeout: "2880"
       fromBackup: ""
     #  backingImage: "bi-test"
-    #  backingImageURL: "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"
+    #  backingImageDataSourceType: "download"
+    #  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
+    #  backingImageChecksum: "SHA512 checksum of the backing image"
     #  diskSelector: "ssd,fast"
     #  nodeSelector: "storage,fast"
     #  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
@@ -976,7 +980,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.2.0-preview1
+        image: longhornio/longhorn-manager:v1.2.0-rc1
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -985,15 +989,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.2.0-preview1
+        - longhornio/longhorn-engine:v1.2.0-rc1
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20210731
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20210416
+        - longhornio/longhorn-share-manager:v1_20210820
         - --backing-image-manager-image
-        - longhornio/backing-image-manager:v2_20210809
+        - longhornio/backing-image-manager:v2_20210820
         - --manager-image
-        - longhornio/longhorn-manager:v1.2.0-preview1
+        - longhornio/longhorn-manager:v1.2.0-rc1
         - --service-account
         - longhorn-service-account
         ports:
@@ -1093,7 +1097,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.2.0-preview1
+        image: longhornio/longhorn-ui:v1.2.0-rc1
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -1149,18 +1153,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.2.0-preview1
+          image: longhornio/longhorn-manager:v1.2.0-rc1
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.2.0-preview1
+          image: longhornio/longhorn-manager:v1.2.0-rc1
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.2.0-preview1
+          - longhornio/longhorn-manager:v1.2.0-rc1
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
