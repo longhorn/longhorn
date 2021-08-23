@@ -65,7 +65,7 @@ questions:
     label: Longhorn Share Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.shareManager.tag
-    default: v1_20210416
+    default: v1_20210820
     description: "Specify Longhorn Share Manager Image Tag"
     type: string
     label: Longhorn Share Manager Image Tag
@@ -77,7 +77,7 @@ questions:
     label: Longhorn Backing Image Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.backingImageManager.tag
-    default: v2_20210809
+    default: v2_20210820
     description: "Specify Longhorn Backing Image Manager Image Tag"
     type: string
     label: Longhorn Backing Image Manager Image Tag
@@ -89,7 +89,7 @@ questions:
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v2.2.1-lh1
+    default: v2.2.1-lh2
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
@@ -101,7 +101,7 @@ questions:
     label: Longhorn CSI Provisioner Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.tag
-    default: v1.6.0-lh1
+    default: v1.6.0-lh2
     description: "Specify CSI provisioner image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Tag
@@ -125,7 +125,7 @@ questions:
     label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.tag
-    default: v0.5.1-lh1
+    default: v0.5.1-lh2
     description: "Specify CSI Driver Resizer image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
@@ -137,7 +137,7 @@ questions:
     label: Longhorn CSI Driver Snapshotter Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.tag
-    default: v2.1.1-lh1
+    default: v2.1.1-lh2
     description: "Specify CSI Driver Snapshotter image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
@@ -350,16 +350,6 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
-  - variable: defaultSettings.volumeAttachmentRecoveryPolicy
-    label: Volume Attachment Recovery Policy
-    description: "Defines the Longhorn action when a Volume is stuck with a Deployment Pod on a failed node. `wait` leads to the deletion of the volume attachment as soon as the pods deletion time has passed. `never` is the default Kubernetes behavior of never deleting volume attachments on terminating pods. `immediate` leads to the deletion of the volume attachment as soon as all workload pods are pending. By default wait."
-    group: "Longhorn Default Settings"
-    type: enum
-    options:
-    - "wait"
-    - "never"
-    - "immediate"
-    default: "wait"
   - variable: defaultSettings.nodeDownPodDeletionPolicy
     label: Pod Deletion Policy When Node is Down
     description: "Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down.
