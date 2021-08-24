@@ -27,20 +27,20 @@ image:
       tag: v2_20210820
   csi:
     attacher:
-      repository: longhornio/csi-attacher
-      tag: v2.2.1-lh2
+      repository: k8s.gcr.io/sig-storage/csi-attacher
+      tag: v3.2.1
     provisioner:
-      repository: longhornio/csi-provisioner
-      tag: v1.6.0-lh2
+      repository: k8s.gcr.io/sig-storage/csi-provisioner
+      tag: v2.1.2
     nodeDriverRegistrar:
-      repository: longhornio/csi-node-driver-registrar
-      tag: v1.2.0-lh1
+      repository: k8s.gcr.io/sig-storage/csi-node-driver-registrar
+      tag: v2.3.0
     resizer:
-      repository: longhornio/csi-resizer
-      tag: v0.5.1-lh2
+      repository: k8s.gcr.io/sig-storage/csi-resizer
+      tag: v1.2.0
     snapshotter:
-      repository: longhornio/csi-snapshotter
-      tag: v2.1.1-lh2
+      repository: k8s.gcr.io/sig-storage/csi-snapshotter
+      tag: v3.0.3
   pullPolicy: IfNotPresent
 
 service:
