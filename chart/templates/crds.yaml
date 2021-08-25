@@ -667,6 +667,10 @@ spec:
           type: string
           description: The snapshot creation time
           jsonPath: .status.snapshotCreatedAt
+        - name: State
+          type: string
+          description: The backup state
+          jsonPath: .status.state
         - name: LastSyncedAt
           type: string
           description: The backup last synced time
