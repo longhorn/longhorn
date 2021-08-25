@@ -508,6 +508,55 @@ Warning: This option works only when there is a failed replica in the volume. An
     group: "Longhorn Storage Class Settings"
     type: string
     default:
+- variable: persistence.backingImage.enable
+  description: "Set backing image for Longhorn StorageClass"
+  group: "Longhorn Storage Class Settings"
+  label: Default Storage Class Backing Image
+  type: boolean
+  default: false
+  show_subquestion_if: true
+  subquestions:
+  - variable: persistence.backingImage.name
+    description: 'Specify a backing image that will be used by Longhorn volumes in Longhorn StorageClass. If not exists, the backing image data source type and backing image data source parameters should be specified so that Longhorn will create the backing image before using it.'
+    label: Storage Class Backing Image Name
+    group: "Longhorn Storage Class Settings"
+    type: string
+    default:
+  - variable: persistence.backingImage.expectedChecksum
+    description: 'Specify the expected SHA512 checksum of the selected backing image in Longhorn StorageClass.
+    WARNING:
+      - If the backing image name is not specified, setting this field is meaningless.
+      - It is not recommended to set this field if the data source type is \"export-from-volume\".'
+    label: Storage Class Backing Image Expected SHA512 Checksum
+    group: "Longhorn Storage Class Settings"
+    type: string
+    default:
+  - variable: persistence.backingImage.dataSourceType
+    description: 'Specify the data source type for the backing image used in Longhorn StorageClass.
+    If the backing image does not exists, Longhorn will use this field to create a backing image. Otherwise, Longhorn will use it to verify the selected backing image.
+    WARNING:
+      - If the backing image name is not specified, setting this field is meaningless.
+      - As for backing image creation with data source type \"upload\", it is recommended to do it via UI rather than StorageClass here. Uploading requires file data sending to the Longhorn backend after the object creation, which is complicated if you want to handle it manually.'
+    label: Storage Class Backing Image Data Source Type
+    group: "Longhorn Storage Class Settings"
+    type: enum
+    options:
+    - ""
+    - "download"
+    - "upload"
+    - "export-from-volume"
+    default: ""
+  - variable: persistence.backingImage.dataSourceParameters
+    description: "Specify the data source parameters for the backing image used in Longhorn StorageClass.
+    If the backing image does not exists, Longhorn will use this field to create a backing image. Otherwise, Longhorn will use it to verify the selected backing image.
+    This option accepts a json string of a map. e.g., '{\"url\":\"https://backing-image-example.s3-region.amazonaws.com/test-backing-image\"}'.
+    WARNING:
+      - If the backing image name is not specified, setting this field is meaningless.
+      - Be careful of the quotes here."
+    label: Storage Class Backing Image Data Source Parameters
+    group: "Longhorn Storage Class Settings"
+    type: string
+    default:
 - variable: ingress.enabled
   default: "false"
   description: "Expose app using Layer 7 Load Balancer - ingress"
