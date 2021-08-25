@@ -83,61 +83,61 @@ questions:
     label: Longhorn Backing Image Manager Image Tag
     group: "Longhorn Images Settings"
   - variable: image.csi.attacher.repository
-    default: longhornio/csi-attacher
+    default: k8s.gcr.io/sig-storage/csi-attacher
     description: "Specify CSI attacher image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v2.2.1-lh2
+    default: v3.2.1
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.repository
-    default: longhornio/csi-provisioner
+    default: k8s.gcr.io/sig-storage/csi-provisioner
     description: "Specify CSI provisioner image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.tag
-    default: v1.6.0-lh2
+    default: v2.1.2
     description: "Specify CSI provisioner image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.repository
-    default: longhornio/csi-node-driver-registrar
+    default: k8s.gcr.io/sig-storage/csi-node-driver-registrar
     description: "Specify CSI Node Driver Registrar image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.tag
-    default: v1.2.0-lh1
+    default: v2.3.0
     description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.repository
-    default: longhornio/csi-resizer
+    default: k8s.gcr.io/sig-storage/csi-resizer
     description: "Specify CSI Driver Resizer image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.tag
-    default: v0.5.1-lh2
+    default: v1.2.0
     description: "Specify CSI Driver Resizer image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.repository
-    default: longhornio/csi-snapshotter
+    default: k8s.gcr.io/sig-storage/csi-snapshotter
     description: "Specify CSI Driver Snapshotter image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.tag
-    default: v2.1.1-lh2
+    default: v3.0.3
     description: "Specify CSI Driver Snapshotter image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
