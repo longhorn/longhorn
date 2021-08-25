@@ -58,6 +58,12 @@ persistence:
   recurringJobSelector:
     enable: false
     jobList: []
+  backingImage:
+    enable: false
+    name: ~
+    dataSourceType: ~
+    dataSourceParameters: ~
+    expectedChecksum: ~
 
 csi:
   kubeletRootDir: ~
