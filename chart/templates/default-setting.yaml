@@ -12,6 +12,7 @@ data:
     create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
     default-data-path: {{ .Values.defaultSettings.defaultDataPath }}
     replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
+    replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}
     storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}
     storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}
     upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
