@@ -433,6 +433,16 @@ Warning: This option works only when there is a failed replica in the volume. An
     type: int
     min: 0
     default: 60
+  - variable: defaultSettings.backingImageRecoveryWaitInterval
+    label: Backing Image Recovery Wait Interval
+    description: "This interval in seconds determines how long Longhorn will wait before re-downloading the backing image file when all disk files of this backing image become failed or unknown.
+    WARNING:
+      - This recovery only works for the backing image of which the creation type is \"download\".
+      - File state \"unknown\" means the related manager pods on the pod is not running or the node itself is down/disconnected.",
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 300
   - variable: defaultSettings.guaranteedEngineManagerCPU
     label: Guaranteed Engine Manager CPU
     description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each engine manager Pod. For example, 10 means 10% of the total CPU on a node will be allocated to each engine manager pod on this node. This will help maintain engine stability during high node workload.

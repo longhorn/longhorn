@@ -106,6 +106,7 @@ defaultSettings:
   autoCleanupSystemGeneratedSnapshot: ~
   concurrentAutomaticEngineUpgradePerNodeLimit: ~
   backingImageCleanupWaitInterval: ~
+  backingImageRecoveryWaitInterval: ~
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
 privateRegistry:
