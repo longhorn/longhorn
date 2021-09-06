@@ -10,6 +10,7 @@ parameters:
   numberOfReplicas: "2"
   staleReplicaTimeout: "2880"
   fromBackup: ""
+  fsType: "ext4"
 #  backingImage: "bi-test"
 #  backingImageDataSourceType: "download"
 #  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
