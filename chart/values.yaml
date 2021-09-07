@@ -53,6 +53,7 @@ service:
 
 persistence:
   defaultClass: true
+  defaultFsType: ext4
   defaultClassReplicaCount: 3
   reclaimPolicy: Delete
   recurringJobSelector:
