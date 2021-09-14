@@ -994,7 +994,7 @@ spec:
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20210731
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20210820
+        - longhornio/longhorn-share-manager:v1_20210914
         - --backing-image-manager-image
         - longhornio/backing-image-manager:v2_20210820
         - --manager-image
