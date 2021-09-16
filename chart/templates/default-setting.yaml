@@ -32,6 +32,7 @@ data:
     mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}
     disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}
     replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}
+    concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}
     disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}
     system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
     allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
