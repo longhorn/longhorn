@@ -393,11 +393,16 @@ Warning: This option works only when there is a failed replica in the volume. An
     default: 600
   - variable: defaultSettings.concurrentReplicaRebuildPerNodeLimit
     label: Concurrent Replica Rebuild Per Node Limit
-    description: "This setting controls how many replicas on a node can be rebuilt simultaneously. If the value is 0, Longhorn will not limit the rebuilding."
+    description: "This setting controls how many replicas on a node can be rebuilt simultaneously.
+Typically, Longhorn can block the replica starting once the current rebuilding count on a node exceeds the limit. But when the value is 0, it means disabling the replica rebuilding.
+WARNING:
+- The old setting \"Disable Replica Rebuild\" is replaced by this setting.
+- Different from relying on replica starting delay to limit the concurrent rebuilding, if the rebuilding is disabled, replica object replenishment will be directly skipped.
+- When the value is 0, the eviction and data locality feature won't work. But this shouldn't have any impact to any current replica rebuild and backup restore.",
     group: "Longhorn Default Settings"
     type: int
     min: 0
-    default: 0
+    default: 5
   - variable: defaultSettings.disableRevisionCounter
     label: Disable Revision Counter
     description: "This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the repica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume."
