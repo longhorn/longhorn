@@ -1,26 +1,21 @@
-apiVersion: v1
-kind: ConfigMap
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
 metadata:
-  name: longhorn-storageclass
-  namespace: longhorn-system
-data:
-  storageclass.yaml: |
-    kind: StorageClass
-    apiVersion: storage.k8s.io/v1
-    metadata:
-      name: longhorn
-    provisioner: driver.longhorn.io
-    allowVolumeExpansion: true
-    reclaimPolicy: Delete
-    volumeBindingMode: Immediate
-    parameters:
-      numberOfReplicas: "2"
-      staleReplicaTimeout: "2880"
-      fromBackup: ""
-    #  backingImage: "bi-test"
-    #  backingImageURL: "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"
-    #  diskSelector: "ssd,fast"
-    #  nodeSelector: "storage,fast"
-    #  recurringJobs: '[{"name":"snap", "task":"snapshot", "cron":"*/1 * * * *", "retain":1},
-    #                   {"name":"backup", "task":"backup", "cron":"*/2 * * * *", "retain":1,
-    #                    "labels": {"interval":"2m"}}]'
+  name: longhorn-test
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  numberOfReplicas: "2"
+  staleReplicaTimeout: "2880"
+  fromBackup: ""
+  fsType: "ext4"
+#  backingImage: "bi-test"
+#  backingImageDataSourceType: "download"
+#  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
+#  backingImageChecksum: "SHA512 checksum of the backing image"
+#  diskSelector: "ssd,fast"
+#  nodeSelector: "storage,fast"
+#  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
+#                          {"name":"backup", "isGroup":false}]'

@@ -20,7 +20,15 @@ data:
       numberOfReplicas: "{{ .Values.persistence.defaultClassReplicaCount }}"
       staleReplicaTimeout: "30"
       fromBackup: ""
-      baseImage: ""
-      {{- if .Values.persistence.recurringJobs.enable }}
-      recurringJobs: '{{ .Values.persistence.recurringJobs.jobList }}'
+      {{- if .Values.persistence.defaultFsType }}
+      fsType: "{{.Values.persistence.defaultFsType}}"
+      {{- end }}
+      {{- if .Values.persistence.backingImage.enable }}
+      backingImage: {{ .Values.persistence.backingImage.name }}
+      backingImageDataSourceType: {{ .Values.persistence.backingImage.dataSourceType }}
+      backingImageDataSourceParameters: {{ .Values.persistence.backingImage.dataSourceParameters }}
+      backingImageChecksum: {{ .Values.persistence.backingImage.expectedChecksum }}
+      {{- end }}
+      {{- if .Values.persistence.recurringJobSelector.enable }}
+      recurringJobSelector: '{{ .Values.persistence.recurringJobSelector.jobList }}'
       {{- end }}
