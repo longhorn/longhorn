@@ -38,7 +38,7 @@ rules:
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
   {{- if .Values.openshift.finalizers }}
-              "engineimages/finalizers", "nodes/finalizers",
+              "engineimages/finalizers", "nodes/finalizers", "instancemanagers/finalizers",
   {{- end }}
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
