@@ -593,6 +593,12 @@ WARNING:
     type: hostname
     required: true
     label: Layer 7 Load Balancer Hostname
+  - variable: ingress.path
+      default: "/"
+      description: "If ingress is enabled you can set the default ingress path"
+      type: string
+      required: true
+      label: Ingress Path
 - variable: service.ui.type
   default: "Rancher-Proxy"
   description: "Define Longhorn UI service type"
