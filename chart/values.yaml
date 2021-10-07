@@ -45,7 +45,7 @@ image:
     oauthProxy:
       repository: openshift/oauth-proxy
       tag: latest
-deploy/release-images.txt  pullPolicy: IfNotPresent
+  pullPolicy: IfNotPresent
 
 service:
   ui:
