@@ -32,11 +32,13 @@ data:
     mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}
     disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}
     replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}
+    concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}
     disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}
     system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
     allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
     auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
     concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
     backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}
+    backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}
     guaranteed-engine-manager-cpu: {{ .Values.defaultSettings.guaranteedEngineManagerCPU }}
     guaranteed-replica-manager-cpu: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU }}
