@@ -17,6 +17,11 @@ exemptLabels:
   - kind/enhancement
   - kind/poc
   - kind/refactoring
+  - kind/test
+  - kind/task
+  - kind/backport
+  - kind/regression
+  - kind/evaluation
 
 # Set to true to ignore issues in a project (defaults to false)
 exemptProjects: true
