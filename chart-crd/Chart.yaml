@@ -1,0 +1,12 @@
+apiVersion: v1
+name: longhorn-crd
+version: 1.2.2
+kubeVersion: ">=1.18.0-0"
+description: Installs the CRDs for longhorn.
+home: https://github.com/longhorn/longhorn
+sources:
+- https://github.com/longhorn/longhorn
+maintainers:
+- name: Longhorn maintainers
+  email: maintainers@longhorn.io
+icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/icon/color/longhorn-icon-color.png

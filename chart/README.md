@@ -38,11 +38,9 @@ helm repo update
 ```
 helm install longhorn/longhorn --name longhorn --namespace longhorn-system
 ``` 
-- With Helm 3, the following commands will create the `longhorn-system` namespace first, then install the Longhorn chart.
-
+- With Helm 3, the following command will create the `longhorn-system` namespace and install the Longhorn chart together.
 ```
-kubectl create namespace longhorn-system
-helm install longhorn longhorn/longhorn --namespace longhorn-system
+helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace
 ```
 
 ## Uninstallation
