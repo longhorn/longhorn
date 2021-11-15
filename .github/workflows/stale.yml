@@ -18,8 +18,9 @@ jobs:
           days-before-pr-stale: 45
           days-before-close: 5
           days-before-pr-close: 10
-          stale-issue-label: 'wontfix'
-          stale-pr-label: 'wontfix'
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          exempt-all-assignees: true
           exempt-issue-labels: 'kind/bug,kind/doc,kind/enhancement,kind/poc,kind/refactoring,kind/test,kind/task,kind/backport,kind/regression,kind/evaluation'
           exempt-draft-pr: true
           exempt-all-milestones: true
