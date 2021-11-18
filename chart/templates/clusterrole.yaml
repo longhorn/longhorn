@@ -29,7 +29,7 @@ rules:
   resources: ["priorityclasses"]
   verbs: ["watch", "list"]
 - apiGroups: ["storage.k8s.io"]
-  resources: ["storageclasses", "volumeattachments", "volumeattachments/status", "csinodes", "csidrivers"]
+  resources: ["storageclasses", "volumeattachments", "csinodes", "csidrivers"]
   verbs: ["*"]
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
