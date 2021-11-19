@@ -864,12 +864,14 @@ data:
     mkfs-ext4-parameters:
     disable-replica-rebuild:
     replica-replenishment-wait-interval:
+    concurrent-replica-rebuild-per-node-limit:
     disable-revision-counter:
     system-managed-pods-image-pull-policy:
     allow-volume-creation-with-degraded-availability:
     auto-cleanup-system-generated-snapshot:
     concurrent-automatic-engine-upgrade-per-node-limit:
     backing-image-cleanup-wait-interval:
+    backing-image-recovery-wait-interval:
     guaranteed-engine-manager-cpu:
     guaranteed-replica-manager-cpu:
 ---
@@ -951,6 +953,7 @@ data:
     reclaimPolicy: Delete
     volumeBindingMode: Immediate
     parameters:
+      fsType: "ext4"
       numberOfReplicas: "3"
       staleReplicaTimeout: "2880"
       fromBackup: ""
@@ -982,7 +985,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.2.0
+        image: longhornio/longhorn-manager:v1.2.2
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -991,7 +994,7 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.2.0
+        - longhornio/longhorn-engine:v1.2.2
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20210731
         - --share-manager-image
@@ -999,7 +1002,7 @@ spec:
         - --backing-image-manager-image
         - longhornio/backing-image-manager:v2_20210820
         - --manager-image
-        - longhornio/longhorn-manager:v1.2.0
+        - longhornio/longhorn-manager:v1.2.2
         - --service-account
         - longhorn-service-account
         ports:
@@ -1099,7 +1102,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.2.0
+        image: longhornio/longhorn-ui:v1.2.2
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -1155,18 +1158,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.2.0
+          image: longhornio/longhorn-manager:v1.2.2
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.2.0
+          image: longhornio/longhorn-manager:v1.2.2
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.2.0
+          - longhornio/longhorn-manager:v1.2.2
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
