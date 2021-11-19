@@ -9,13 +9,13 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.2.0
+      tag: v1.2.2
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.2.0
+      tag: v1.2.2
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.2.0
+      tag: v1.2.2
     instanceManager:
       repository: longhornio/longhorn-instance-manager
       tag: v1_20210731
@@ -100,12 +100,14 @@ defaultSettings:
   mkfsExt4Parameters: ~
   disableReplicaRebuild: ~
   replicaReplenishmentWaitInterval: ~
+  concurrentReplicaRebuildPerNodeLimit: ~
   disableRevisionCounter: ~
   systemManagedPodsImagePullPolicy: ~
   allowVolumeCreationWithDegradedAvailability: ~
   autoCleanupSystemGeneratedSnapshot: ~
   concurrentAutomaticEngineUpgradePerNodeLimit: ~
   backingImageCleanupWaitInterval: ~
+  backingImageRecoveryWaitInterval: ~
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
 privateRegistry:
@@ -180,7 +182,7 @@ ingress:
   ## Can replace the kubernetes.io/ingress.class annotation on v1.18+
   ingressClassName: ~
 
-  host: xip.io
+  host: sslip.io
 
   ## Set this to true in order to enable TLS on the ingress record
   ## A side effect of this will be that the backend service will be connected at port 443
