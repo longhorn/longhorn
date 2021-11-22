@@ -1,14 +1,16 @@
 ---
 name: Question
 about: Question on Longhorn
-title: "[QUESTION]"
+title: "[QUESTION] "
 labels: kind/question
 assignees: ''
 
 ---
-**Question**
+## Question
+> Suggest to use https://github.com/longhorn/longhorn/discussions to ask questions.
 
-**Environment:**
+## Environment
+
  - Longhorn version:
  - Kubernetes version:
  - Node config
@@ -19,5 +21,6 @@ assignees: ''
    - Network bandwidth and latency between the nodes:
  - Underlying Infrastructure (e.g. on AWS/GCE, EKS/GKE, VMWare/KVM, Baremetal):
 
-**Additional context**
+## Additional context
+
 Add any other context about the problem here.

@@ -1,19 +1,19 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: "[FEATURE] "
-labels: kind/enhancement
+name: Improvement request
+about: Suggest an improvement of an existing feature for this project
+title: "[IMPROVEMENT] "
+labels: kind/improvement
 assignees: ''
 
 ---
 
-## Is your feature request related to a problem? Please describe
+## Is your improvement request related to a feature? Please describe
 
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
 ## Describe the solution you'd like
 
-A clear and concise description of what you want to happen
+A clear and concise description of what you want to happen.
 
 ## Describe alternatives you've considered
 
