@@ -7,25 +7,29 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+## Describe the bug
+
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+## To Reproduce
+
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Perform '....'
 4. See error
 
-**Expected behavior**
+## Expected behavior
+
 A clear and concise description of what you expected to happen.
 
-**Log**
-If applicable, add the Longhorn managers' log when the issue happens.
+## Log or Support bundle
 
-You can also attach a *Support Bundle* here. You can generate a Support Bundle using the link at the footer of the Longhorn UI.
+If applicable, add the Longhorn managers' log or support bundle when the issue happens. 
+You can generate a Support Bundle using the link at the footer of the Longhorn UI.
 
-**Environment:**
+## Environment
+
  - Longhorn version:
  - Installation method (e.g. Rancher Catalog App/Helm/Kubectl):
  - Kubernetes distro (e.g. RKE/K3s/EKS/OpenShift) and version:
@@ -40,5 +44,6 @@ You can also attach a *Support Bundle* here. You can generate a Support Bundle u
  - Underlying Infrastructure (e.g. on AWS/GCE, EKS/GKE, VMWare/KVM, Baremetal):
  - Number of Longhorn volumes in the cluster:
 
-**Additional context**
+## Additional context
+
 Add any other context about the problem here.
