@@ -920,6 +920,8 @@ spec:
           spec:
             description: EngineSpec defines the desired state of the Longhorn engine
             properties:
+              active:
+                type: boolean
               backupVolume:
                 type: string
               desireState:
