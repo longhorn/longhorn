@@ -1326,7 +1326,6 @@ spec:
                   type: object
                 type: object
               engineManagerCPURequest:
-                maximum: 40
                 minimum: 0
                 type: integer
               evictionRequested:
@@ -1334,7 +1333,6 @@ spec:
               name:
                 type: string
               replicaManagerCPURequest:
-                maximum: 40
                 minimum: 0
                 type: integer
               tags:
