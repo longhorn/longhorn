@@ -1,6 +1,6 @@
 # Longhorn
 
-### Build Status
+## Build Status
 * Engine: [![Build Status](https://drone-publish.longhorn.io/api/badges/longhorn/longhorn-engine/status.svg)](https://drone-publish.longhorn.io/longhorn/longhorn-engine)[![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-engine)](https://goreportcard.com/report/github.com/longhorn/longhorn-engine)[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-engine.svg?type=shield)](https://app.fossa.com/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-engine?ref=badge_shield)
 * Manager: [![Build Status](https://drone-publish.longhorn.io/api/badges/longhorn/longhorn-manager/status.svg)](https://drone-publish.longhorn.io/longhorn/longhorn-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-manager)](https://goreportcard.com/report/github.com/longhorn/longhorn-manager)[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-manager.svg?type=shield)](https://app.fossa.com/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-manager?ref=badge_shield)
 * Instance Manager: [![Build Status](http://drone-publish.longhorn.io/api/badges/longhorn/longhorn-instance-manager/status.svg)](http://drone-publish.longhorn.io/longhorn/longhorn-instance-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-instance-manager)](https://goreportcard.com/report/github.com/longhorn/longhorn-instance-manager)[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-instance-manager.svg?type=shield)](https://app.fossa.com/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-instance-manager?ref=badge_shield)
@@ -9,7 +9,14 @@
 * UI: [![Build Status](https://drone-publish.longhorn.io/api/badges/longhorn/longhorn-ui/status.svg)](https://drone-publish.longhorn.io/longhorn/longhorn-ui)[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-ui.svg?type=shield)](https://app.fossa.com/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-ui?ref=badge_shield)
 * Test: [![Build Status](http://drone-publish.longhorn.io/api/badges/longhorn/longhorn-tests/status.svg)](http://drone-publish.longhorn.io/longhorn/longhorn-tests)
 
-### Overview
+## Release Status
+
+| Release | Version | Type            |    
+| --------|---------|-----------------|
+| 1.1     | 1.1.2   | Latest & Stable |
+| 1.2     | 1.2.2   | Latest          |
+
+## Overview
 Longhorn is a distributed block storage system for Kubernetes. Longhorn is cloud native storage because it is built using Kubernetes and container primitives. 
 
 Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply` command or using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
@@ -55,7 +62,7 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 
 For the installation requirements, refer to the [Longhorn documentation.](https://longhorn.io/docs/latest/deploy/install/#installation-requirements)
 
-# Install
+# Installation
 
 Longhorn can be installed on a Kubernetes cluster in several ways:
 
