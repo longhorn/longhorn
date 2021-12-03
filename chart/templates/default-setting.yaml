@@ -1,44 +1,432 @@
-apiVersion: v1
-kind: ConfigMap
+{{- if not (kindIs "invalid" .Values.defaultSettings.backupTarget) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
 metadata:
-  name: longhorn-default-setting
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: backup-target
   namespace: {{ include "release_namespace" . }}
-  labels: {{- include "longhorn.labels" . | nindent 4 }}
-data:
-  default-setting.yaml: |-
-    backup-target: {{ .Values.defaultSettings.backupTarget }}
-    backup-target-credential-secret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}
-    allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
-    create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
-    default-data-path: {{ .Values.defaultSettings.defaultDataPath }}
-    replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
-    replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}
-    storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}
-    storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}
-    upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
-    default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
-    default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}
-    default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
-    backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
-    taint-toleration: {{ .Values.defaultSettings.taintToleration }}
-    system-managed-components-node-selector: {{ .Values.defaultSettings.systemManagedComponentsNodeSelector }}
-    priority-class: {{ .Values.defaultSettings.priorityClass }}
-    auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
-    auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
-    disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
-    replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
-    node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}
-    allow-node-drain-with-last-healthy-replica: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica }}
-    mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}
-    disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}
-    replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}
-    concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}
-    disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}
-    system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
-    allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
-    auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
-    concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
-    backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}
-    backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}
-    guaranteed-engine-manager-cpu: {{ .Values.defaultSettings.guaranteedEngineManagerCPU }}
-    guaranteed-replica-manager-cpu: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU }}
+value: {{ .Values.defaultSettings.backupTarget | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.backupTargetCredentialSecret) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: backup-target-credential-secret
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.backupTargetCredentialSecret | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: allow-recurring-job-while-volume-detached
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: create-default-disk-labeled-nodes
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: default-data-path
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.defaultDataPath | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: replica-soft-anti-affinity
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.replicaSoftAntiAffinity | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: replica-auto-balance
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.replicaAutoBalance | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: storage-over-provisioning-percentage
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.storageOverProvisioningPercentage | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: storage-minimal-available-percentage
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.storageMinimalAvailablePercentage | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: upgrade-checker
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.upgradeChecker | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: default-replica-count
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.defaultReplicaCount | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: default-data-locality
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.defaultDataLocality | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: default-longhorn-static-storage-class
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: backupstore-poll-interval
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.backupstorePollInterval | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.taintToleration) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: taint-toleration
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.taintToleration | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: system-managed-components-node-selector
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.systemManagedComponentsNodeSelector | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: priority-class
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.priorityClass | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: auto-salvage
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.autoSalvage | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: auto-delete-pod-when-volume-detached-unexpectedly
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: disable-scheduling-on-cordoned-node
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: replica-zone-soft-anti-affinity
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: node-down-pod-deletion-policy
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: allow-node-drain-with-last-healthy-replica
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.mkfsExt4Parameters) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: mkfs-ext4-parameters
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.mkfsExt4Parameters | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.disableReplicaRebuild) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: disable-replica-rebuild
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.disableReplicaRebuild | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: replica-replenishment-wait-interval
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: concurrent-replica-rebuild-per-node-limit
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.disableRevisionCounter) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: disable-revision-counter
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.disableRevisionCounter | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: system-managed-pods-image-pull-policy
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: allow-volume-creation-with-degraded-availability
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: auto-cleanup-system-generated-snapshot
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: concurrent-automatic-engine-upgrade-per-node-limit
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: backing-image-cleanup-wait-interval
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.backingImageCleanupWaitInterval | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: backing-image-recovery-wait-interval
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.guaranteedEngineManagerCPU) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: guaranteed-engine-manager-cpu
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.guaranteedEngineManagerCPU | quote }}
+---
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.guaranteedReplicaManagerCPU) }}
+apiVersion: longhorn.io/v1beta1
+kind: Setting
+metadata:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+  name: guaranteed-replica-manager-cpu
+  namespace: {{ include "release_namespace" . }}
+value: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU | quote }}
+---
+{{- end }}
