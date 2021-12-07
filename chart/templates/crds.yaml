@@ -98,6 +98,89 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The current state of the pod used to provision the backing image file from source
+      jsonPath: .status.currentState
+      name: State
+      type: string
+    - description: The data source type
+      jsonPath: .spec.sourceType
+      name: SourceType
+      type: string
+    - description: The node the backing image file will be prepared on
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - description: The disk the backing image file will be prepared on
+      jsonPath: .spec.diskUUID
+      name: DiskUUID
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: BackingImageDataSource is where Longhorn stores backing image data source object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BackingImageDataSourceSpec defines the desired state of the Longhorn backing image data source
+            properties:
+              checksum:
+                type: string
+              diskPath:
+                type: string
+              diskUUID:
+                type: string
+              fileTransferred:
+                type: boolean
+              nodeID:
+                type: string
+              parameters:
+                additionalProperties:
+                  type: string
+                type: object
+              sourceType:
+                enum:
+                - download
+                - upload
+                - export-from-volume
+                type: string
+            type: object
+          status:
+            description: BackingImageDataSourceStatus defines the observed state of the Longhorn backing image data source
+            properties:
+              checksum:
+                type: string
+              currentState:
+                type: string
+              message:
+                type: string
+              ownerID:
+                type: string
+              progress:
+                type: integer
+              runningParameters:
+                additionalProperties:
+                  type: string
+                type: object
+              size:
+                format: int64
+                type: integer
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -230,6 +313,111 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The current state of the manager
+      jsonPath: .status.currentState
+      name: State
+      type: string
+    - description: The image the manager pod will use
+      jsonPath: .spec.image
+      name: Image
+      type: string
+    - description: The node the manager is on
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - description: The disk the manager is responsible for
+      jsonPath: .spec.diskUUID
+      name: DiskUUID
+      type: string
+    - description: The disk path the manager is using
+      jsonPath: .spec.diskPath
+      name: DiskPath
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: BackingImageManager is where Longhorn stores backing image manager object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BackingImageManagerSpec defines the desired state of the Longhorn backing image manager
+            properties:
+              backingImages:
+                additionalProperties:
+                  type: string
+                type: object
+              diskPath:
+                type: string
+              diskUUID:
+                type: string
+              image:
+                type: string
+              nodeID:
+                type: string
+            type: object
+          status:
+            description: BackingImageManagerStatus defines the observed state of the Longhorn backing image manager
+            properties:
+              apiMinVersion:
+                type: integer
+              apiVersion:
+                type: integer
+              backingImageFileMap:
+                additionalProperties:
+                  properties:
+                    currentChecksum:
+                      type: string
+                    directory:
+                      description: 'Deprecated: This field is useless.'
+                      type: string
+                    downloadProgress:
+                      description: 'Deprecated: This field is renamed to `Progress`.'
+                      type: integer
+                    message:
+                      type: string
+                    name:
+                      type: string
+                    progress:
+                      type: integer
+                    senderManagerAddress:
+                      type: string
+                    sendingReference:
+                      type: integer
+                    size:
+                      format: int64
+                      type: integer
+                    state:
+                      type: string
+                    url:
+                      description: 'Deprecated: This field is useless now. The manager of backing image files doesn''t care if a file is downloaded and how.'
+                      type: string
+                    uuid:
+                      type: string
+                  type: object
+                type: object
+              currentState:
+                type: string
+              ip:
+                type: string
+              ownerID:
+                type: string
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -269,6 +457,96 @@ spec:
       name: Age
       type: date
     name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: BackingImage is where Longhorn stores backing image object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BackingImageSpec defines the desired state of the Longhorn backing image
+            properties:
+              checksum:
+                type: string
+              disks:
+                additionalProperties:
+                  type: string
+                type: object
+              imageURL:
+                description: 'Deprecated: This kind of info will be included in the related BackingImageDataSource.'
+                type: string
+              sourceParameters:
+                additionalProperties:
+                  type: string
+                type: object
+              sourceType:
+                enum:
+                - download
+                - upload
+                - export-from-volume
+                type: string
+            type: object
+          status:
+            description: BackingImageStatus defines the observed state of the Longhorn backing image status
+            properties:
+              checksum:
+                type: string
+              diskDownloadProgressMap:
+                additionalProperties:
+                  type: integer
+                description: 'Deprecated: Replaced by field `Progress` in `DiskFileStatusMap`.'
+                type: object
+              diskDownloadStateMap:
+                additionalProperties:
+                  description: BackingImageDownloadState is replaced by BackingImageState.
+                  type: string
+                description: 'Deprecated: Replaced by field `State` in `DiskFileStatusMap`.'
+                type: object
+              diskFileStatusMap:
+                additionalProperties:
+                  properties:
+                    lastStateTransitionTime:
+                      type: string
+                    message:
+                      type: string
+                    progress:
+                      type: integer
+                    state:
+                      type: string
+                  type: object
+                type: object
+              diskLastRefAtMap:
+                additionalProperties:
+                  type: string
+                type: object
+              ownerID:
+                type: string
+              size:
+                format: int64
+                type: integer
+              uuid:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The backing image name
+      jsonPath: .spec.image
+      name: Image
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
     schema:
       openAPIV3Schema:
         description: BackingImage is where Longhorn stores backing image object.
@@ -489,6 +767,121 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The snapshot name
+      jsonPath: .status.snapshotName
+      name: SnapshotName
+      type: string
+    - description: The snapshot size
+      jsonPath: .status.size
+      name: SnapshotSize
+      type: string
+    - description: The snapshot creation time
+      jsonPath: .status.snapshotCreatedAt
+      name: SnapshotCreatedAt
+      type: string
+    - description: The backup state
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The backup last synced time
+      jsonPath: .status.lastSyncedAt
+      name: LastSyncedAt
+      type: string
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: Backup is where Longhorn stores backup object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BackupSpec defines the desired state of the Longhorn backup
+            properties:
+              labels:
+                additionalProperties:
+                  type: string
+                description: The labels of snapshot backup.
+                type: object
+              snapshotName:
+                description: The snapshot name.
+                type: string
+              syncRequestedAt:
+                description: The time to request run sync the remote backup.
+                format: date-time
+                type: string
+            type: object
+          status:
+            description: BackupStatus defines the observed state of the Longhorn backup
+            properties:
+              backupCreatedAt:
+                description: The snapshot backup upload finished time.
+                type: string
+              error:
+                description: The error message when taking the snapshot backup.
+                type: string
+              labels:
+                additionalProperties:
+                  type: string
+                description: The labels of snapshot backup.
+                type: object
+              lastSyncedAt:
+                description: The last time that the backup was synced with the remote backup target.
+                format: date-time
+                type: string
+              messages:
+                additionalProperties:
+                  type: string
+                description: The error messages when calling longhorn engine on listing or inspecting backups.
+                type: object
+              ownerID:
+                description: The node ID on which the controller is responsible to reconcile this backup CR.
+                type: string
+              progress:
+                description: The snapshot backup progress.
+                type: integer
+              replicaAddress:
+                description: The address of the replica that runs snapshot backup.
+                type: string
+              size:
+                description: The snapshot size.
+                type: string
+              snapshotCreatedAt:
+                description: The snapshot creation time.
+                type: string
+              snapshotName:
+                description: The snapshot name.
+                type: string
+              state:
+                description: The backup creation state. Can be "", "InProgress", "Completed", "Error", "Unknown".
+                type: string
+              url:
+                description: The snapshot backup URL.
+                type: string
+              volumeBackingImageName:
+                description: The volume's backing image name.
+                type: string
+              volumeCreated:
+                description: The volume creation time.
+                type: string
+              volumeName:
+                description: The volume name.
+                type: string
+              volumeSize:
+                description: The volume size.
+                type: string
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -610,6 +1003,100 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The backup target URL
+      jsonPath: .spec.backupTargetURL
+      name: URL
+      type: string
+    - description: The backup target credential secret
+      jsonPath: .spec.credentialSecret
+      name: Credential
+      type: string
+    - description: The backup target poll interval
+      jsonPath: .spec.pollInterval
+      name: LastBackupAt
+      type: string
+    - description: Indicate whether the backup target is available or not
+      jsonPath: .status.available
+      name: Available
+      type: boolean
+    - description: The backup target last synced time
+      jsonPath: .status.lastSyncedAt
+      name: LastSyncedAt
+      type: string
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: BackupTarget is where Longhorn stores backup target object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BackupTargetSpec defines the desired state of the Longhorn backup target
+            properties:
+              backupTargetURL:
+                description: The backup target URL.
+                type: string
+              credentialSecret:
+                description: The backup target credential secret.
+                type: string
+              pollInterval:
+                description: The interval that the cluster needs to run sync with the backup target.
+                type: string
+              syncRequestedAt:
+                description: The time to request run sync the remote backup target.
+                format: date-time
+                type: string
+            type: object
+          status:
+            description: BackupTargetStatus defines the observed state of the Longhorn backup target
+            properties:
+              available:
+                description: Available indicates if the remote backup target is available or not.
+                type: boolean
+              conditions:
+                description: Records the reason on why the backup target is unavailable.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              lastSyncedAt:
+                description: The last time that the controller synced with the remote backup target.
+                format: date-time
+                type: string
+              ownerID:
+                description: The node ID on which the controller is responsible to reconcile this backup target CR.
+                type: string
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -658,6 +1145,95 @@ spec:
       name: LastSyncedAt
       type: string
     name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: BackupVolume is where Longhorn stores backup volume object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BackupVolumeSpec defines the desired state of the Longhorn backup volume
+            properties:
+              syncRequestedAt:
+                description: The time to request run sync the remote backup volume.
+                format: date-time
+                type: string
+            type: object
+          status:
+            description: BackupVolumeStatus defines the observed state of the Longhorn backup volume
+            properties:
+              backingImageChecksum:
+                description: the backing image checksum.
+                type: string
+              backingImageName:
+                description: The backing image name.
+                type: string
+              createdAt:
+                description: The backup volume creation time.
+                type: string
+              dataStored:
+                description: The backup volume block count.
+                type: string
+              labels:
+                additionalProperties:
+                  type: string
+                description: The backup volume labels.
+                type: object
+              lastBackupAt:
+                description: The latest volume backup time.
+                type: string
+              lastBackupName:
+                description: The latest volume backup name.
+                type: string
+              lastModificationTime:
+                description: The backup volume config last modification time.
+                format: date-time
+                type: string
+              lastSyncedAt:
+                description: The last time that the backup volume was synced into the cluster.
+                format: date-time
+                type: string
+              messages:
+                additionalProperties:
+                  type: string
+                description: The error messages when call longhorn engine on list or inspect backup volumes.
+                type: object
+              ownerID:
+                description: The node ID on which the controller is responsible to reconcile this backup volume CR.
+                type: string
+              size:
+                description: The backup volume size.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The backup volume creation time
+      jsonPath: .status.createdAt
+      name: CreatedAt
+      type: string
+    - description: The backup volume last backup name
+      jsonPath: .status.lastBackupName
+      name: LastBackupName
+      type: string
+    - description: The backup volume last backup time
+      jsonPath: .status.lastBackupAt
+      name: LastBackupAt
+      type: string
+    - description: The backup volume last synced time
+      jsonPath: .status.lastSyncedAt
+      name: LastSyncedAt
+      type: string
+    name: v1beta2
     schema:
       openAPIV3Schema:
         description: BackupVolume is where Longhorn stores backup volume object.
@@ -854,6 +1430,107 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: State of the engine image
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The Longhorn engine image
+      jsonPath: .spec.image
+      name: Image
+      type: string
+    - description: Number of volumes are using the engine image
+      jsonPath: .status.refCount
+      name: RefCount
+      type: integer
+    - description: The build date of the engine image
+      jsonPath: .status.buildDate
+      name: BuildDate
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: EngineImage is where Longhorn stores engine image object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: EngineImageSpec defines the desired state of the Longhorn engine image
+            properties:
+              image:
+                type: string
+            type: object
+          status:
+            description: EngineImageStatus defines the observed state of the Longhorn engine image
+            properties:
+              buildDate:
+                type: string
+              cliAPIMinVersion:
+                type: integer
+              cliAPIVersion:
+                type: integer
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              controllerAPIMinVersion:
+                type: integer
+              controllerAPIVersion:
+                type: integer
+              dataFormatMinVersion:
+                type: integer
+              dataFormatVersion:
+                type: integer
+              gitCommit:
+                type: string
+              noRefSince:
+                type: string
+              nodeDeploymentMap:
+                additionalProperties:
+                  type: boolean
+                type: object
+              ownerID:
+                type: string
+              refCount:
+                type: integer
+              state:
+                type: string
+              version:
+                type: string
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -905,6 +1582,247 @@ spec:
       name: Age
       type: date
     name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: Engine is where Longhorn stores engine object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: EngineSpec defines the desired state of the Longhorn engine
+            properties:
+              active:
+                type: boolean
+              backupVolume:
+                type: string
+              desireState:
+                type: string
+              disableFrontend:
+                type: boolean
+              engineImage:
+                type: string
+              frontend:
+                enum:
+                - blockdev
+                - iscsi
+                - ""
+                type: string
+              logRequested:
+                type: boolean
+              nodeID:
+                type: string
+              replicaAddressMap:
+                additionalProperties:
+                  type: string
+                type: object
+              requestedBackupRestore:
+                type: string
+              requestedDataSource:
+                enum:
+                - ""
+                - backup
+                - snapshot
+                - volume
+                type: string
+              revisionCounterDisabled:
+                type: boolean
+              salvageRequested:
+                type: boolean
+              upgradedReplicaAddressMap:
+                additionalProperties:
+                  type: string
+                type: object
+              volumeName:
+                type: string
+              volumeSize:
+                format: int64
+                type: string
+            type: object
+          status:
+            description: EngineStatus defines the observed state of the Longhorn engine
+            properties:
+              backupStatus:
+                additionalProperties:
+                  properties:
+                    backupURL:
+                      type: string
+                    error:
+                      type: string
+                    progress:
+                      type: integer
+                    replicaAddress:
+                      type: string
+                    snapshotName:
+                      type: string
+                    state:
+                      type: string
+                  type: object
+                type: object
+              cloneStatus:
+                additionalProperties:
+                  properties:
+                    error:
+                      type: string
+                    fromReplicaAddress:
+                      type: string
+                    isCloning:
+                      type: boolean
+                    progress:
+                      type: integer
+                    snapshotName:
+                      type: string
+                    state:
+                      type: string
+                  type: object
+                type: object
+              currentImage:
+                type: string
+              currentReplicaAddressMap:
+                additionalProperties:
+                  type: string
+                type: object
+              currentSize:
+                format: int64
+                type: string
+              currentState:
+                type: string
+              endpoint:
+                type: string
+              instanceManagerName:
+                type: string
+              ip:
+                type: string
+              isExpanding:
+                type: boolean
+              lastExpansionError:
+                type: string
+              lastExpansionFailedAt:
+                type: string
+              lastRestoredBackup:
+                type: string
+              logFetched:
+                type: boolean
+              ownerID:
+                type: string
+              port:
+                type: integer
+              purgeStatus:
+                additionalProperties:
+                  properties:
+                    error:
+                      type: string
+                    isPurging:
+                      type: boolean
+                    progress:
+                      type: integer
+                    state:
+                      type: string
+                  type: object
+                type: object
+              rebuildStatus:
+                additionalProperties:
+                  properties:
+                    error:
+                      type: string
+                    fromReplicaAddress:
+                      type: string
+                    isRebuilding:
+                      type: boolean
+                    progress:
+                      type: integer
+                    state:
+                      type: string
+                  type: object
+                type: object
+              replicaModeMap:
+                additionalProperties:
+                  type: string
+                type: object
+              restoreStatus:
+                additionalProperties:
+                  properties:
+                    backupURL:
+                      type: string
+                    currentRestoringBackup:
+                      type: string
+                    error:
+                      type: string
+                    filename:
+                      type: string
+                    isRestoring:
+                      type: boolean
+                    lastRestored:
+                      type: string
+                    progress:
+                      type: integer
+                    state:
+                      type: string
+                  type: object
+                type: object
+              salvageExecuted:
+                type: boolean
+              snapshots:
+                additionalProperties:
+                  properties:
+                    children:
+                      additionalProperties:
+                        type: boolean
+                      type: object
+                    created:
+                      type: string
+                    labels:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    name:
+                      type: string
+                    parent:
+                      type: string
+                    removed:
+                      type: boolean
+                    size:
+                      type: string
+                    usercreated:
+                      type: boolean
+                  type: object
+                type: object
+              snapshotsError:
+                type: string
+              started:
+                type: boolean
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The current state of the engine
+      jsonPath: .status.currentState
+      name: State
+      type: string
+    - description: The node that the engine is on
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - description: The instance manager of the engine
+      jsonPath: .status.instanceManagerName
+      name: InstanceManager
+      type: string
+    - description: The current image of the engine
+      jsonPath: .status.currentImage
+      name: Image
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
     schema:
       openAPIV3Schema:
         description: Engine is where Longhorn stores engine object.
@@ -1245,6 +2163,102 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The state of the instance manager
+      jsonPath: .status.currentState
+      name: State
+      type: string
+    - description: The type of the instance manager (engine or replica)
+      jsonPath: .spec.type
+      name: Type
+      type: string
+    - description: The node that the instance manager is running on
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: InstanceManager is where Longhorn stores instance manager object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
+            properties:
+              engineImage:
+                description: 'TODO: deprecate this field'
+                type: string
+              image:
+                type: string
+              nodeID:
+                type: string
+              type:
+                enum:
+                - engine
+                - replica
+                type: string
+            type: object
+          status:
+            description: InstanceManagerStatus defines the observed state of the Longhorn instance manager
+            properties:
+              apiMinVersion:
+                type: integer
+              apiVersion:
+                type: integer
+              currentState:
+                type: string
+              instances:
+                additionalProperties:
+                  properties:
+                    spec:
+                      properties:
+                        name:
+                          type: string
+                      type: object
+                    status:
+                      properties:
+                        endpoint:
+                          type: string
+                        errorMsg:
+                          type: string
+                        listen:
+                          type: string
+                        portEnd:
+                          format: int32
+                          type: integer
+                        portStart:
+                          format: int32
+                          type: integer
+                        resourceVersion:
+                          format: int64
+                          type: integer
+                        state:
+                          type: string
+                        type:
+                          type: string
+                      type: object
+                  type: object
+                type: object
+              ip:
+                type: string
+              ownerID:
+                type: string
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -1419,6 +2433,153 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: Indicate whether the node is ready
+      jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: Ready
+      type: string
+    - description: Indicate whether the user disabled/enabled replica scheduling for the node
+      jsonPath: .spec.allowScheduling
+      name: AllowScheduling
+      type: boolean
+    - description: Indicate whether Longhorn can schedule replicas on the node
+      jsonPath: .status.conditions[?(@.type=='Schedulable')].status
+      name: Schedulable
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: Node is where Longhorn stores Longhorn node object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: NodeSpec defines the desired state of the Longhorn node
+            properties:
+              allowScheduling:
+                type: boolean
+              disks:
+                additionalProperties:
+                  properties:
+                    allowScheduling:
+                      type: boolean
+                    evictionRequested:
+                      type: boolean
+                    path:
+                      type: string
+                    storageReserved:
+                      format: int64
+                      type: integer
+                    tags:
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                type: object
+              engineManagerCPURequest:
+                minimum: 0
+                type: integer
+              evictionRequested:
+                type: boolean
+              name:
+                type: string
+              replicaManagerCPURequest:
+                minimum: 0
+                type: integer
+              tags:
+                items:
+                  type: string
+                type: array
+            type: object
+          status:
+            description: NodeStatus defines the observed state of the Longhorn node
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              diskStatus:
+                additionalProperties:
+                  properties:
+                    conditions:
+                      items:
+                        properties:
+                          lastProbeTime:
+                            description: Last time we probed the condition.
+                            type: string
+                          lastTransitionTime:
+                            description: Last time the condition transitioned from one status to another.
+                            type: string
+                          message:
+                            description: Human-readable message indicating details about last transition.
+                            type: string
+                          reason:
+                            description: Unique, one-word, CamelCase reason for the condition's last transition.
+                            type: string
+                          status:
+                            description: Status is the status of the condition. Can be True, False, Unknown.
+                            type: string
+                          type:
+                            description: Type is the type of the condition.
+                            type: string
+                        type: object
+                      type: array
+                    diskUUID:
+                      type: string
+                    scheduledReplica:
+                      additionalProperties:
+                        format: int64
+                        type: integer
+                      type: object
+                    storageAvailable:
+                      format: int64
+                      type: integer
+                    storageMaximum:
+                      format: int64
+                      type: integer
+                    storageScheduled:
+                      format: int64
+                      type: integer
+                  type: object
+                type: object
+              region:
+                type: string
+              zone:
+                type: string
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -1478,6 +2639,93 @@ spec:
       name: Labels
       type: string
     name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: RecurringJob is where Longhorn stores recurring job object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: RecurringJobSpec defines the desired state of the Longhorn recurring job
+            properties:
+              concurrency:
+                description: The concurrency of taking the snapshot/backup.
+                minimum: 1
+                type: integer
+              cron:
+                description: The cron setting.
+                type: string
+              groups:
+                description: The recurring job group.
+                items:
+                  type: string
+                type: array
+              labels:
+                additionalProperties:
+                  type: string
+                description: The label of the snapshot/backup.
+                type: object
+              name:
+                description: The recurring job name.
+                type: string
+              retain:
+                description: The retain count of the snapshot/backup.
+                minimum: 1
+                type: integer
+              task:
+                description: The recurring job type. Can be "snapshot" or "backup".
+                enum:
+                - snapshot
+                - backup
+                type: string
+            type: object
+          status:
+            description: RecurringJobStatus defines the observed state of the Longhorn recurring job
+            properties:
+              ownerID:
+                description: The owner ID which is responsible to reconcile this recurring job CR.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: Sets groupings to the jobs. When set to "default" group will be added to the volume label when no other job label exist in volume
+      jsonPath: .spec.groups
+      name: Groups
+      type: string
+    - description: Should be one of "backup" or "snapshot"
+      jsonPath: .spec.task
+      name: Task
+      type: string
+    - description: The cron expression represents recurring job scheduling
+      jsonPath: .spec.cron
+      name: Cron
+      type: string
+    - description: The number of snapshots/backups to keep for the volume
+      jsonPath: .spec.retain
+      name: Retain
+      type: integer
+    - description: The concurrent job to run by each cron job
+      jsonPath: .spec.concurrency
+      name: Concurrency
+      type: integer
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - description: Specify the labels
+      jsonPath: .spec.labels
+      name: Labels
+      type: string
+    name: v1beta2
     schema:
       openAPIV3Schema:
         description: RecurringJob is where Longhorn stores recurring job object.
@@ -1673,6 +2921,119 @@ spec:
             type: object
         type: object
     served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The current state of the replica
+      jsonPath: .status.currentState
+      name: State
+      type: string
+    - description: The node that the replica is on
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - description: The disk that the replica is on
+      jsonPath: .spec.diskID
+      name: Disk
+      type: string
+    - description: The instance manager of the replica
+      jsonPath: .status.instanceManagerName
+      name: InstanceManager
+      type: string
+    - description: The current image of the replica
+      jsonPath: .status.currentImage
+      name: Image
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: Replica is where Longhorn stores replica object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ReplicaSpec defines the desired state of the Longhorn replica
+            properties:
+              active:
+                type: boolean
+              backingImage:
+                type: string
+              baseImage:
+                description: Deprecated. Rename to BackingImage
+                type: string
+              dataDirectoryName:
+                type: string
+              dataPath:
+                description: Deprecated
+                type: string
+              desireState:
+                type: string
+              diskID:
+                type: string
+              diskPath:
+                type: string
+              engineImage:
+                type: string
+              engineName:
+                type: string
+              failedAt:
+                type: string
+              hardNodeAffinity:
+                type: string
+              healthyAt:
+                type: string
+              logRequested:
+                type: boolean
+              nodeID:
+                type: string
+              rebuildRetryCount:
+                type: integer
+              revisionCounterDisabled:
+                type: boolean
+              salvageRequested:
+                type: boolean
+              volumeName:
+                type: string
+              volumeSize:
+                format: int64
+                type: string
+            type: object
+          status:
+            description: ReplicaStatus defines the observed state of the Longhorn replica
+            properties:
+              currentImage:
+                type: string
+              currentState:
+                type: string
+              evictionRequested:
+                type: boolean
+              instanceManagerName:
+                type: string
+              ip:
+                type: string
+              logFetched:
+                type: boolean
+              ownerID:
+                type: string
+              port:
+                type: integer
+              salvageExecuted:
+                type: boolean
+              started:
+                type: boolean
+            type: object
+        type: object
+    served: true
     storage: true
     subresources:
       status: {}
@@ -1712,6 +3073,36 @@ spec:
       name: Age
       type: date
     name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: Setting is where Longhorn stores setting object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          value:
+            type: string
+        required:
+        - value
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The value of the setting
+      jsonPath: .value
+      name: Value
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
     schema:
       openAPIV3Schema:
         description: Setting is where Longhorn stores setting object.
@@ -1773,6 +3164,52 @@ spec:
       name: Age
       type: date
     name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: ShareManager is where Longhorn stores share manager object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ShareManagerSpec defines the desired state of the Longhorn share manager
+            properties:
+              image:
+                type: string
+            type: object
+          status:
+            description: ShareManagerStatus defines the observed state of the Longhorn share manager
+            properties:
+              endpoint:
+                type: string
+              ownerID:
+                type: string
+              state:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The state of the share manager
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The node that the share manager is owned by
+      jsonPath: .status.ownerID
+      name: Node
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
     schema:
       openAPIV3Schema:
         description: ShareManager is where Longhorn stores share manager object.
@@ -2011,6 +3448,254 @@ spec:
                       type: string
                   type: object
                 type: object
+              currentImage:
+                type: string
+              currentNodeID:
+                type: string
+              expansionRequired:
+                type: boolean
+              frontendDisabled:
+                type: boolean
+              isStandby:
+                type: boolean
+              kubernetesStatus:
+                properties:
+                  lastPVCRefAt:
+                    type: string
+                  lastPodRefAt:
+                    type: string
+                  namespace:
+                    description: determine if PVC/Namespace is history or not
+                    type: string
+                  pvName:
+                    type: string
+                  pvStatus:
+                    type: string
+                  pvcName:
+                    type: string
+                  workloadsStatus:
+                    description: determine if Pod/Workload is history or not
+                    items:
+                      properties:
+                        podName:
+                          type: string
+                        podStatus:
+                          type: string
+                        workloadName:
+                          type: string
+                        workloadType:
+                          type: string
+                      type: object
+                    type: array
+                type: object
+              lastBackup:
+                type: string
+              lastBackupAt:
+                type: string
+              lastDegradedAt:
+                type: string
+              ownerID:
+                type: string
+              pendingNodeID:
+                type: string
+              remountRequestedAt:
+                type: string
+              restoreInitiated:
+                type: boolean
+              restoreRequired:
+                type: boolean
+              robustness:
+                type: string
+              shareEndpoint:
+                type: string
+              shareState:
+                type: string
+              state:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - description: The state of the volume
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The robustness of the volume
+      jsonPath: .status.robustness
+      name: Robustness
+      type: string
+    - description: The scheduled condition of the volume
+      jsonPath: .status.conditions[?(@.type=='Schedulable')].status
+      name: Scheduled
+      type: string
+    - description: The size of the volume
+      jsonPath: .spec.size
+      name: Size
+      type: string
+    - description: The node that the volume is currently attaching to
+      jsonPath: .status.currentNodeID
+      name: Node
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: Volume is where Longhorn stores volume object.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: VolumeSpec defines the desired state of the Longhorn volume
+            properties:
+              Standby:
+                type: boolean
+              accessMode:
+                enum:
+                - rwo
+                - rwx
+                type: string
+              backingImage:
+                type: string
+              baseImage:
+                description: Deprecated. Rename to BackingImage
+                type: string
+              dataLocality:
+                enum:
+                - disabled
+                - best-effort
+                type: string
+              dataSource:
+                enum:
+                - ""
+                - backup
+                - snapshot
+                - volume
+                type: string
+              disableFrontend:
+                type: boolean
+              diskSelector:
+                items:
+                  type: string
+                type: array
+              encrypted:
+                type: boolean
+              engineImage:
+                type: string
+              fromBackup:
+                type: string
+              frontend:
+                enum:
+                - blockdev
+                - iscsi
+                - ""
+                type: string
+              lastAttachedBy:
+                type: string
+              migratable:
+                type: boolean
+              migrationNodeID:
+                type: string
+              nodeID:
+                type: string
+              nodeSelector:
+                items:
+                  type: string
+                type: array
+              numberOfReplicas:
+                minimum: 1
+                type: integer
+              recurringJobs:
+                description: Deprecated. Replaced by a separate resource named "RecurringJob"
+                items:
+                  description: 'VolumeRecurringJobSpec is a deprecated struct. TODO: Should be removed when recurringJobs gets removed from the volume       spec.'
+                  properties:
+                    concurrency:
+                      type: integer
+                    cron:
+                      type: string
+                    groups:
+                      items:
+                        type: string
+                      type: array
+                    labels:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    name:
+                      type: string
+                    retain:
+                      type: integer
+                    task:
+                      enum:
+                      - snapshot
+                      - backup
+                      type: string
+                  type: object
+                type: array
+              replicaAutoBalance:
+                enum:
+                - ignored
+                - disabled
+                - least-effort
+                - best-effort
+                type: string
+              revisionCounterDisabled:
+                type: boolean
+              size:
+                format: int64
+                type: string
+              staleReplicaTimeout:
+                type: integer
+            type: object
+          status:
+            description: VolumeStatus defines the observed state of the Longhorn volume
+            properties:
+              actualSize:
+                format: int64
+                type: integer
+              cloneStatus:
+                properties:
+                  snapshot:
+                    type: string
+                  sourceVolume:
+                    type: string
+                  state:
+                    type: string
+                type: object
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
               currentImage:
                 type: string
               currentNodeID:
