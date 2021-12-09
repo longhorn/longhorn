@@ -5,7 +5,7 @@ longhornio/csi-resizer:v0.5.1-lh2
 longhornio/csi-snapshotter:v2.1.1-lh2
 longhornio/backing-image-manager:v1_20210422_patch1
 longhornio/longhorn-engine:v1.1.3-rc2
-longhornio/longhorn-instance-manager:v1_20210731
+longhornio/longhorn-instance-manager:v1_20211210
 longhornio/longhorn-manager:v1.1.3-rc2
 longhornio/longhorn-share-manager:v1_20210416_patch1
 longhornio/longhorn-ui:v1.1.3-rc2
