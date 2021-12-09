@@ -694,7 +694,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.1.3-rc2
+        image: longhornio/longhorn-manager:v1.1.3-rc3
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -703,7 +703,7 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.1.3-rc2
+        - longhornio/longhorn-engine:v1.1.3-rc3
         - --instance-manager-image
         - longhornio/longhorn-instance-manager:v1_20211210
         - --share-manager-image
@@ -711,7 +711,7 @@ spec:
         - --backing-image-manager-image
         - longhornio/backing-image-manager:v1_20210422_patch1
         - --manager-image
-        - longhornio/longhorn-manager:v1.1.3-rc2
+        - longhornio/longhorn-manager:v1.1.3-rc3
         - --service-account
         - longhorn-service-account
         ports:
@@ -792,6 +792,28 @@ spec:
     port: 9500
     targetPort: manager
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: longhorn-engine-manager
+  namespace: longhorn-system
+spec:
+  clusterIP: None
+  selector:
+    longhorn.io/component: instance-manager
+    longhorn.io/instance-manager-type: engine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: longhorn-replica-manager
+  namespace: longhorn-system
+spec:
+  clusterIP: None
+  selector:
+    longhorn.io/component: instance-manager
+    longhorn.io/instance-manager-type: replica
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -811,7 +833,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.1.3-rc2
+        image: longhornio/longhorn-ui:v1.1.3-rc3
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 0
@@ -867,18 +889,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.1.3-rc2
+          image: longhornio/longhorn-manager:v1.1.3-rc3
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.1.3-rc2
+          image: longhornio/longhorn-manager:v1.1.3-rc3
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.1.3-rc2
+          - longhornio/longhorn-manager:v1.1.3-rc3
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
