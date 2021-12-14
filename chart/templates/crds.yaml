@@ -91,6 +91,7 @@ spec:
               runningParameters:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               size:
                 format: int64
@@ -174,6 +175,7 @@ spec:
               runningParameters:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               size:
                 format: int64
@@ -303,6 +305,7 @@ spec:
                     uuid:
                       type: string
                   type: object
+                nullable: true
                 type: object
               currentState:
                 type: string
@@ -408,6 +411,7 @@ spec:
                     uuid:
                       type: string
                   type: object
+                nullable: true
                 type: object
               currentState:
                 type: string
@@ -501,12 +505,14 @@ spec:
                 additionalProperties:
                   type: integer
                 description: 'Deprecated: Replaced by field `Progress` in `DiskFileStatusMap`.'
+                nullable: true
                 type: object
               diskDownloadStateMap:
                 additionalProperties:
                   description: BackingImageDownloadState is replaced by BackingImageState.
                   type: string
                 description: 'Deprecated: Replaced by field `State` in `DiskFileStatusMap`.'
+                nullable: true
                 type: object
               diskFileStatusMap:
                 additionalProperties:
@@ -520,10 +526,12 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               diskLastRefAtMap:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               ownerID:
                 type: string
@@ -591,12 +599,14 @@ spec:
                 additionalProperties:
                   type: integer
                 description: 'Deprecated: Replaced by field `Progress` in `DiskFileStatusMap`.'
+                nullable: true
                 type: object
               diskDownloadStateMap:
                 additionalProperties:
                   description: BackingImageDownloadState is replaced by BackingImageState.
                   type: string
                 description: 'Deprecated: Replaced by field `State` in `DiskFileStatusMap`.'
+                nullable: true
                 type: object
               diskFileStatusMap:
                 additionalProperties:
@@ -610,10 +620,12 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               diskLastRefAtMap:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               ownerID:
                 type: string
@@ -703,6 +715,7 @@ spec:
               syncRequestedAt:
                 description: The time to request run sync the remote backup.
                 format: date-time
+                nullable: true
                 type: string
             type: object
           status:
@@ -718,15 +731,18 @@ spec:
                 additionalProperties:
                   type: string
                 description: The labels of snapshot backup.
+                nullable: true
                 type: object
               lastSyncedAt:
                 description: The last time that the backup was synced with the remote backup target.
                 format: date-time
+                nullable: true
                 type: string
               messages:
                 additionalProperties:
                   type: string
                 description: The error messages when calling longhorn engine on listing or inspecting backups.
+                nullable: true
                 type: object
               ownerID:
                 description: The node ID on which the controller is responsible to reconcile this backup CR.
@@ -818,6 +834,7 @@ spec:
               syncRequestedAt:
                 description: The time to request run sync the remote backup.
                 format: date-time
+                nullable: true
                 type: string
             type: object
           status:
@@ -833,15 +850,18 @@ spec:
                 additionalProperties:
                   type: string
                 description: The labels of snapshot backup.
+                nullable: true
                 type: object
               lastSyncedAt:
                 description: The last time that the backup was synced with the remote backup target.
                 format: date-time
+                nullable: true
                 type: string
               messages:
                 additionalProperties:
                   type: string
                 description: The error messages when calling longhorn engine on listing or inspecting backups.
+                nullable: true
                 type: object
               ownerID:
                 description: The node ID on which the controller is responsible to reconcile this backup CR.
@@ -961,6 +981,7 @@ spec:
               syncRequestedAt:
                 description: The time to request run sync the remote backup target.
                 format: date-time
+                nullable: true
                 type: string
             type: object
           status:
@@ -992,10 +1013,12 @@ spec:
                       type: string
                   type: object
                 description: Records the reason on why the backup target is unavailable.
+                nullable: true
                 type: object
               lastSyncedAt:
                 description: The last time that the controller synced with the remote backup target.
                 format: date-time
+                nullable: true
                 type: string
               ownerID:
                 description: The node ID on which the controller is responsible to reconcile this backup target CR.
@@ -1055,6 +1078,7 @@ spec:
               syncRequestedAt:
                 description: The time to request run sync the remote backup target.
                 format: date-time
+                nullable: true
                 type: string
             type: object
           status:
@@ -1086,10 +1110,12 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                nullable: true
                 type: array
               lastSyncedAt:
                 description: The last time that the controller synced with the remote backup target.
                 format: date-time
+                nullable: true
                 type: string
               ownerID:
                 description: The node ID on which the controller is responsible to reconcile this backup target CR.
@@ -1163,6 +1189,7 @@ spec:
               syncRequestedAt:
                 description: The time to request run sync the remote backup volume.
                 format: date-time
+                nullable: true
                 type: string
             type: object
           status:
@@ -1184,6 +1211,7 @@ spec:
                 additionalProperties:
                   type: string
                 description: The backup volume labels.
+                nullable: true
                 type: object
               lastBackupAt:
                 description: The latest volume backup time.
@@ -1194,15 +1222,18 @@ spec:
               lastModificationTime:
                 description: The backup volume config last modification time.
                 format: date-time
+                nullable: true
                 type: string
               lastSyncedAt:
                 description: The last time that the backup volume was synced into the cluster.
                 format: date-time
+                nullable: true
                 type: string
               messages:
                 additionalProperties:
                   type: string
                 description: The error messages when call longhorn engine on list or inspect backup volumes.
+                nullable: true
                 type: object
               ownerID:
                 description: The node ID on which the controller is responsible to reconcile this backup volume CR.
@@ -1252,6 +1283,7 @@ spec:
               syncRequestedAt:
                 description: The time to request run sync the remote backup volume.
                 format: date-time
+                nullable: true
                 type: string
             type: object
           status:
@@ -1273,6 +1305,7 @@ spec:
                 additionalProperties:
                   type: string
                 description: The backup volume labels.
+                nullable: true
                 type: object
               lastBackupAt:
                 description: The latest volume backup time.
@@ -1283,15 +1316,18 @@ spec:
               lastModificationTime:
                 description: The backup volume config last modification time.
                 format: date-time
+                nullable: true
                 type: string
               lastSyncedAt:
                 description: The last time that the backup volume was synced into the cluster.
                 format: date-time
+                nullable: true
                 type: string
               messages:
                 additionalProperties:
                   type: string
                 description: The error messages when call longhorn engine on list or inspect backup volumes.
+                nullable: true
                 type: object
               ownerID:
                 description: The node ID on which the controller is responsible to reconcile this backup volume CR.
@@ -1402,6 +1438,7 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                nullable: true
                 type: object
               controllerAPIMinVersion:
                 type: integer
@@ -1418,6 +1455,7 @@ spec:
               nodeDeploymentMap:
                 additionalProperties:
                   type: boolean
+                nullable: true
                 type: object
               ownerID:
                 type: string
@@ -1503,6 +1541,7 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                nullable: true
                 type: array
               controllerAPIMinVersion:
                 type: integer
@@ -1519,6 +1558,7 @@ spec:
               nodeDeploymentMap:
                 additionalProperties:
                   type: boolean
+                nullable: true
                 type: object
               ownerID:
                 type: string
@@ -1663,6 +1703,7 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               cloneStatus:
                 additionalProperties:
@@ -1680,12 +1721,14 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               currentImage:
                 type: string
               currentReplicaAddressMap:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               currentSize:
                 format: int64
@@ -1724,6 +1767,7 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               rebuildStatus:
                 additionalProperties:
@@ -1739,10 +1783,12 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               replicaModeMap:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               restoreStatus:
                 additionalProperties:
@@ -1764,6 +1810,7 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               salvageExecuted:
                 type: boolean
@@ -1791,6 +1838,7 @@ spec:
                     usercreated:
                       type: boolean
                   type: object
+                nullable: true
                 type: object
               snapshotsError:
                 type: string
@@ -1904,6 +1952,7 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               cloneStatus:
                 additionalProperties:
@@ -1921,12 +1970,14 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               currentImage:
                 type: string
               currentReplicaAddressMap:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               currentSize:
                 format: int64
@@ -1965,6 +2016,7 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               rebuildStatus:
                 additionalProperties:
@@ -1980,10 +2032,12 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               replicaModeMap:
                 additionalProperties:
                   type: string
+                nullable: true
                 type: object
               restoreStatus:
                 additionalProperties:
@@ -2005,6 +2059,7 @@ spec:
                     state:
                       type: string
                   type: object
+                nullable: true
                 type: object
               salvageExecuted:
                 type: boolean
@@ -2032,6 +2087,7 @@ spec:
                     usercreated:
                       type: boolean
                   type: object
+                nullable: true
                 type: object
               snapshotsError:
                 type: string
@@ -2155,6 +2211,7 @@ spec:
                           type: string
                       type: object
                   type: object
+                nullable: true
                 type: object
               ip:
                 type: string
@@ -2251,6 +2308,7 @@ spec:
                           type: string
                       type: object
                   type: object
+                nullable: true
                 type: object
               ip:
                 type: string
@@ -2381,6 +2439,7 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                nullable: true
                 type: object
               diskStatus:
                 additionalProperties:
@@ -2407,6 +2466,7 @@ spec:
                             description: Type is the type of the condition.
                             type: string
                         type: object
+                      nullable: true
                       type: object
                     diskUUID:
                       type: string
@@ -2414,6 +2474,7 @@ spec:
                       additionalProperties:
                         format: int64
                         type: integer
+                      nullable: true
                       type: object
                     storageAvailable:
                       format: int64
@@ -2425,6 +2486,7 @@ spec:
                       format: int64
                       type: integer
                   type: object
+                nullable: true
                 type: object
               region:
                 type: string
@@ -2528,6 +2590,7 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                nullable: true
                 type: array
               diskStatus:
                 additionalProperties:
@@ -2554,6 +2617,7 @@ spec:
                             description: Type is the type of the condition.
                             type: string
                         type: object
+                      nullable: true
                       type: array
                     diskUUID:
                       type: string
@@ -2561,6 +2625,7 @@ spec:
                       additionalProperties:
                         format: int64
                         type: integer
+                      nullable: true
                       type: object
                     storageAvailable:
                       format: int64
@@ -2572,6 +2637,7 @@ spec:
                       format: int64
                       type: integer
                   type: object
+                nullable: true
                 type: object
               region:
                 type: string
@@ -3447,6 +3513,7 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                nullable: true
                 type: object
               currentImage:
                 type: string
@@ -3486,6 +3553,7 @@ spec:
                         workloadType:
                           type: string
                       type: object
+                    nullable: true
                     type: array
                 type: object
               lastBackup:
@@ -3695,6 +3763,7 @@ spec:
                       description: Type is the type of the condition.
                       type: string
                   type: object
+                nullable: true
                 type: array
               currentImage:
                 type: string
@@ -3734,6 +3803,7 @@ spec:
                         workloadType:
                           type: string
                       type: object
+                    nullable: true
                     type: array
                 type: object
               lastBackup:
