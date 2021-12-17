@@ -226,3 +226,7 @@ namespaceOverride: ""
 
 # Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
 annotations: {}
+
+serviceAccount:
+  # Annotations to add to the service account
+  annotations: {}
