@@ -17,7 +17,7 @@ questions:
     label: Longhorn Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.manager.tag
-    default: v1.2.2
+    default: v1.2.3
     description: "Specify Longhorn Manager Image Tag"
     type: string
     label: Longhorn Manager Image Tag
@@ -29,7 +29,7 @@ questions:
     label: Longhorn Engine Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.engine.tag
-    default: v1.2.2
+    default: v1.2.3
     description: "Specify Longhorn Engine Image Tag"
     type: string
     label: Longhorn Engine Image Tag
@@ -41,7 +41,7 @@ questions:
     label: Longhorn UI Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.ui.tag
-    default: v1.2.2
+    default: v1.2.3
     description: "Specify Longhorn UI Image Tag"
     type: string
     label: Longhorn UI Image Tag
@@ -53,7 +53,7 @@ questions:
     label: Longhorn Instance Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.instanceManager.tag
-    default: v1_20210731
+    default: v1_20211210
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
     label: Longhorn Instance Manager Image Tag
@@ -65,7 +65,7 @@ questions:
     label: Longhorn Share Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.shareManager.tag
-    default: v1_20210914
+    default: v1_20211020
     description: "Specify Longhorn Share Manager Image Tag"
     type: string
     label: Longhorn Share Manager Image Tag
@@ -83,7 +83,7 @@ questions:
     label: Longhorn Backing Image Manager Image Tag
     group: "Longhorn Images Settings"
   - variable: image.csi.attacher.repository
-    default: k8s.gcr.io/sig-storage/csi-attacher
+    default: longhornio/csi-attacher
     description: "Specify CSI attacher image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Repository
@@ -95,7 +95,7 @@ questions:
     label: Longhorn CSI Attacher Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.repository
-    default: k8s.gcr.io/sig-storage/csi-provisioner
+    default: longhornio/csi-provisioner
     description: "Specify CSI provisioner image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Repository
@@ -107,7 +107,7 @@ questions:
     label: Longhorn CSI Provisioner Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.repository
-    default: k8s.gcr.io/sig-storage/csi-node-driver-registrar
+    default: longhornio/csi-node-driver-registrar
     description: "Specify CSI Node Driver Registrar image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Repository
@@ -119,7 +119,7 @@ questions:
     label: Longhorn CSI Node Driver Registrar Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.repository
-    default: k8s.gcr.io/sig-storage/csi-resizer
+    default: longhornio/csi-resizer
     description: "Specify CSI Driver Resizer image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Repository
@@ -131,7 +131,7 @@ questions:
     label: Longhorn CSI Driver Resizer Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.repository
-    default: k8s.gcr.io/sig-storage/csi-snapshotter
+    default: longhornio/csi-snapshotter
     description: "Specify CSI Driver Snapshotter image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Repository
