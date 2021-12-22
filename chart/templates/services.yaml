@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
   name: longhorn-engine-manager
-  namespace: longhorn-system
+  namespace: {{ include "release_namespace" . }}
 spec:
   clusterIP: None
   selector:
@@ -16,7 +16,7 @@ kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
   name: longhorn-replica-manager
-  namespace: longhorn-system
+  namespace: {{ include "release_namespace" . }}
 spec:
   clusterIP: None
   selector:
