@@ -50,6 +50,8 @@ service:
   manager:
     type: ClusterIP
     nodePort: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: ""
 
 persistence:
   defaultClass: true
