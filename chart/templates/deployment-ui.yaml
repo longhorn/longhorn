@@ -59,6 +59,12 @@ spec:
   {{- else }}
   type: {{ .Values.service.ui.type }}
   {{- end }}
+  {{- if and .Values.service.ui.loadBalancerIP (eq .Values.service.ui.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.service.ui.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.service.ui.type "LoadBalancer") .Values.service.ui.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.service.ui.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
   selector:
     app: longhorn-ui
   ports:
