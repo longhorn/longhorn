@@ -2742,6 +2742,7 @@ spec:
                 type: string
               retain:
                 description: The retain count of the snapshot/backup.
+                maximum: 50
                 minimum: 1
                 type: integer
               task:
@@ -2829,6 +2830,7 @@ spec:
                 type: string
               retain:
                 description: The retain count of the snapshot/backup.
+                maximum: 50
                 minimum: 1
                 type: integer
               task:
