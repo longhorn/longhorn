@@ -1664,11 +1664,6 @@ spec:
               requestedBackupRestore:
                 type: string
               requestedDataSource:
-                enum:
-                - ""
-                - backup
-                - snapshot
-                - volume
                 type: string
               revisionCounterDisabled:
                 type: boolean
@@ -1913,11 +1908,6 @@ spec:
               requestedBackupRestore:
                 type: string
               requestedDataSource:
-                enum:
-                - ""
-                - backup
-                - snapshot
-                - volume
                 type: string
               revisionCounterDisabled:
                 type: boolean
@@ -3396,11 +3386,6 @@ spec:
                 - best-effort
                 type: string
               dataSource:
-                enum:
-                - ""
-                - backup
-                - snapshot
-                - volume
                 type: string
               disableFrontend:
                 type: boolean
@@ -3646,11 +3631,6 @@ spec:
                 - best-effort
                 type: string
               dataSource:
-                enum:
-                - ""
-                - backup
-                - snapshot
-                - volume
                 type: string
               disableFrontend:
                 type: boolean
