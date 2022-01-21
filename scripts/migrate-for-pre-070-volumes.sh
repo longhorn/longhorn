@@ -30,6 +30,6 @@ case $ARG in
         if [[ $# -ne 1 ]]; then
             echo "Command args number shouldn't be greater than 1"
         fi
-        exec_command ${@}
+        exec_command "${@}"
         ;;
 esac

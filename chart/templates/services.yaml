@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+  name: longhorn-engine-manager
+  namespace: {{ include "release_namespace" . }}
+spec:
+  clusterIP: None
+  selector:
+    longhorn.io/component: instance-manager
+    longhorn.io/instance-manager-type: engine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+  name: longhorn-replica-manager
+  namespace: {{ include "release_namespace" . }}
+spec:
+  clusterIP: None
+  selector:
+    longhorn.io/component: instance-manager
+    longhorn.io/instance-manager-type: replica

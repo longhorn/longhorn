@@ -17,7 +17,7 @@ questions:
     label: Longhorn Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.manager.tag
-    default: v1.2.0
+    default: v1.2.3
     description: "Specify Longhorn Manager Image Tag"
     type: string
     label: Longhorn Manager Image Tag
@@ -29,7 +29,7 @@ questions:
     label: Longhorn Engine Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.engine.tag
-    default: v1.2.0
+    default: v1.2.3
     description: "Specify Longhorn Engine Image Tag"
     type: string
     label: Longhorn Engine Image Tag
@@ -41,7 +41,7 @@ questions:
     label: Longhorn UI Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.ui.tag
-    default: v1.2.0
+    default: v1.2.3
     description: "Specify Longhorn UI Image Tag"
     type: string
     label: Longhorn UI Image Tag
@@ -53,7 +53,7 @@ questions:
     label: Longhorn Instance Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.instanceManager.tag
-    default: v1_20210731
+    default: v1_20211210
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
     label: Longhorn Instance Manager Image Tag
@@ -65,7 +65,7 @@ questions:
     label: Longhorn Share Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.shareManager.tag
-    default: v1_20210914
+    default: v1_20211020
     description: "Specify Longhorn Share Manager Image Tag"
     type: string
     label: Longhorn Share Manager Image Tag
@@ -83,7 +83,7 @@ questions:
     label: Longhorn Backing Image Manager Image Tag
     group: "Longhorn Images Settings"
   - variable: image.csi.attacher.repository
-    default: k8s.gcr.io/sig-storage/csi-attacher
+    default: longhornio/csi-attacher
     description: "Specify CSI attacher image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Repository
@@ -95,7 +95,7 @@ questions:
     label: Longhorn CSI Attacher Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.repository
-    default: k8s.gcr.io/sig-storage/csi-provisioner
+    default: longhornio/csi-provisioner
     description: "Specify CSI provisioner image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Repository
@@ -107,7 +107,7 @@ questions:
     label: Longhorn CSI Provisioner Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.repository
-    default: k8s.gcr.io/sig-storage/csi-node-driver-registrar
+    default: longhornio/csi-node-driver-registrar
     description: "Specify CSI Node Driver Registrar image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Repository
@@ -119,7 +119,7 @@ questions:
     label: Longhorn CSI Node Driver Registrar Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.repository
-    default: k8s.gcr.io/sig-storage/csi-resizer
+    default: longhornio/csi-resizer
     description: "Specify CSI Driver Resizer image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Repository
@@ -131,7 +131,7 @@ questions:
     label: Longhorn CSI Driver Resizer Image Tag
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.repository
-    default: k8s.gcr.io/sig-storage/csi-snapshotter
+    default: longhornio/csi-snapshotter
     description: "Specify CSI Driver Snapshotter image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Repository
@@ -391,9 +391,21 @@ Warning: This option works only when there is a failed replica in the volume. An
     type: int
     min: 0
     default: 600
+  - variable: defaultSettings.concurrentReplicaRebuildPerNodeLimit
+    label: Concurrent Replica Rebuild Per Node Limit
+    description: "This setting controls how many replicas on a node can be rebuilt simultaneously.
+Typically, Longhorn can block the replica starting once the current rebuilding count on a node exceeds the limit. But when the value is 0, it means disabling the replica rebuilding.
+WARNING:
+- The old setting \"Disable Replica Rebuild\" is replaced by this setting.
+- Different from relying on replica starting delay to limit the concurrent rebuilding, if the rebuilding is disabled, replica object replenishment will be directly skipped.
+- When the value is 0, the eviction and data locality feature won't work. But this shouldn't have any impact to any current replica rebuild and backup restore."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 5
   - variable: defaultSettings.disableRevisionCounter
     label: Disable Revision Counter
-    description: "This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the repica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume."
+    description: "This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the replica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume."
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
@@ -433,6 +445,16 @@ Warning: This option works only when there is a failed replica in the volume. An
     type: int
     min: 0
     default: 60
+  - variable: defaultSettings.backingImageRecoveryWaitInterval
+    label: Backing Image Recovery Wait Interval
+    description: "This interval in seconds determines how long Longhorn will wait before re-downloading the backing image file when all disk files of this backing image become failed or unknown.
+    WARNING:
+      - This recovery only works for the backing image of which the creation type is \"download\".
+      - File state \"unknown\" means the related manager pods on the pod is not running or the node itself is down/disconnected."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 300
   - variable: defaultSettings.guaranteedEngineManagerCPU
     label: Guaranteed Engine Manager CPU
     description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each engine manager Pod. For example, 10 means 10% of the total CPU on a node will be allocated to each engine manager pod on this node. This will help maintain engine stability during high node workload.

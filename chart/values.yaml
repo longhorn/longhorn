@@ -9,37 +9,37 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.2.0
+      tag: v1.2.3
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.2.0
+      tag: v1.2.3
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.2.0
+      tag: v1.2.3
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20210731
+      tag: v1_20211210
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20210914
+      tag: v1_20211020
     backingImageManager:
       repository: longhornio/backing-image-manager
       tag: v2_20210820
   csi:
     attacher:
-      repository: k8s.gcr.io/sig-storage/csi-attacher
+      repository: longhornio/csi-attacher
       tag: v3.2.1
     provisioner:
-      repository: k8s.gcr.io/sig-storage/csi-provisioner
+      repository: longhornio/csi-provisioner
       tag: v2.1.2
     nodeDriverRegistrar:
-      repository: k8s.gcr.io/sig-storage/csi-node-driver-registrar
+      repository: longhornio/csi-node-driver-registrar
       tag: v2.3.0
     resizer:
-      repository: k8s.gcr.io/sig-storage/csi-resizer
+      repository: longhornio/csi-resizer
       tag: v1.2.0
     snapshotter:
-      repository: k8s.gcr.io/sig-storage/csi-snapshotter
+      repository: longhornio/csi-snapshotter
       tag: v3.0.3
   openshift:
     oauthProxy:
@@ -54,6 +54,8 @@ service:
   manager:
     type: ClusterIP
     nodePort: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: ""
 
 persistence:
   defaultClass: true
@@ -104,12 +106,14 @@ defaultSettings:
   mkfsExt4Parameters: ~
   disableReplicaRebuild: ~
   replicaReplenishmentWaitInterval: ~
+  concurrentReplicaRebuildPerNodeLimit: ~
   disableRevisionCounter: ~
   systemManagedPodsImagePullPolicy: ~
   allowVolumeCreationWithDegradedAvailability: ~
   autoCleanupSystemGeneratedSnapshot: ~
   concurrentAutomaticEngineUpgradePerNodeLimit: ~
   backingImageCleanupWaitInterval: ~
+  backingImageRecoveryWaitInterval: ~
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
 privateRegistry:
@@ -184,7 +188,7 @@ ingress:
   ## Can replace the kubernetes.io/ingress.class annotation on v1.18+
   ingressClassName: ~
 
-  host: xip.io
+  host: sslip.io
 
   ## Set this to true in order to enable TLS on the ingress record
   ## A side effect of this will be that the backend service will be connected at port 443
@@ -228,6 +232,10 @@ namespaceOverride: ""
 
 # Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
 annotations: {}
+
+serviceAccount:
+  # Annotations to add to the service account
+  annotations: {}
 
 ## openshift settings
 openshift: {}
