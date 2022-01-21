@@ -1445,12 +1445,14 @@ spec:
                     children:
                       additionalProperties:
                         type: boolean
+                      nullable: true
                       type: object
                     created:
                       type: string
                     labels:
                       additionalProperties:
                         type: string
+                      nullable: true
                       type: object
                     name:
                       type: string
