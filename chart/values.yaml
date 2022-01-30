@@ -176,6 +176,13 @@ resources: {}
   #  memory: 128Mi
   #
 
+metrics:
+  ## Enable the Prometheus ServiceMonitor.
+  enabled: false
+  ## Enable a default set of Prometheus alerting rules.
+  prometheusRule:
+    enabled: false
+
 ingress:
   ## Set to true to enable ingress record generation
   enabled: false

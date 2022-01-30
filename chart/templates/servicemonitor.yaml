@@ -1,0 +1,15 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+  name: longhorn
+  namespace: {{ include "release_namespace" . }}
+spec:
+  selector:
+    matchLabels:
+      app: longhorn-manager
+  endpoints:
+    - port: manager
+      path: /metrics
+{{- end }}
