@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 # Run this script with:
 # env HOST=https://rancher-lab.home PASS=admin USER=admin CLUSTER=c-zlwr8 sh -x ./check_lh.sh
+# $CLUSTER - cluster id of a cluster, where you want to deploy Longhorn
 # List of required tools: kubectl, curl, jq
 CURL=${CURL:-curl}
 JQ=${JQ:-jq}
