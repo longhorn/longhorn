@@ -2,7 +2,7 @@
 # Run this script with:
 # env HOST=https://rancher-lab.home PASS=admin USER=admin CLUSTER=c-zlwr8 sh -x ./check_lh.sh
 # $CLUSTER - cluster id of a cluster, where you want to deploy Longhorn
-# List of required tools: kubectl, curl, jq
+# List of required tools: kubectl, curl, jq, cat
 CURL=${CURL:-curl}
 JQ=${JQ:-jq}
 
@@ -18,25 +18,25 @@ curl() {
 jq() {
   ${JQ} -r "$@"
 }
-
 # Login to rancher so we can have our bearer token to do work, the user needs to be a cluster admin
-LOGINJSON=$(curl ${HOST}/v3-public/localProviders/local?action=login --data-binary "$(cat <<FIN
+LOGINJSON=$(curl --insecure --silent ${HOST}/v3-public/localProviders/local?action=login -H 'content-type: application/json' --data-binary "$(cat <<FIN
 {
   "username":"${USER}",
   "password":"${PASS}"
 }
 FIN
 )")
-TOKEN=$(echo ${LOGINJSON} | jq .token)
+TOKEN=$(echo ${LOGINJSON} | jq -r '.token')
 
 # Generate Kubeconfig and forward it into a file
-curl -X POST "${HOST}/v3/clusters/${CLUSTER}?action=generateKubeconfig" -H "Authorization: Bearer ${TOKEN}" -H 'Accept: application/json' | jq -r '.config' > cluster_config.yaml
+curl --insecure --silent -H 'content-type: application/json' -X POST "${HOST}/v3/clusters/${CLUSTER}?action=generateKubeconfig" -H "Authorization: Bearer ${TOKEN}" -H 'Accept: application/json' | jq -r '.config' > cluster_config.yaml
 export KUBECONFIG=./cluster_config.yaml
 
 # Looping through all of the mustbe deployed resources during 5 minutes with 10 seconds intervals
 count=0
 while [ "$count" -lt 30 ]
 do
+    # Functions and variables to calculate the number of resource to determine the success of the deployment    
     DESIRED_RESORCE_NUMBER=0
     AVAILABLE_RESOURCE_NUMBER=0
 
@@ -66,6 +66,29 @@ do
         fi
     }
 
+    ### Kubernetes nodes check
+    # Generate a list of nodes 
+    NODE_LIST=$(kubectl get nodes -o json | jq -r '.items[].metadata.name')
+
+    # Iterate through nodes and determine if each node has Kubelet in Ready status
+    for node in $(echo $NODE_LIST)
+    do
+        NODE_STATUS=$(kubectl get nodes $node -o json | jq -r '.status.conditions[] | select(.reason == "KubeletReady") | .status')
+        add_desired "1"
+        if [ -z "$NODE_STATUS" ]
+        then
+            echo "Node $node is not ready yet"
+            break
+        elif [ $NODE_STATUS = "True" ]
+        then
+            echo "Node $node is ready"
+            add_available "1"
+        else
+            echo "Node $node is not ready yet"
+            add_available "-1"
+        fi
+    done
+
     ### DAEMONSETS
     # Check the number of Longhorn Manager daemonsets
     DESIRED_LH_MANAGER_DS_NUMBER=$(kubectl get daemonsets.apps longhorn-manager  -n longhorn-system -o json | jq -r '.status | .desiredNumberScheduled')
@@ -84,41 +107,57 @@ do
 
 
     ### CRDs
-    # Generate a list of nodes that Lonhorn is installed on
-    NODE_LIST=$(kubectl get nodes -n longhorn-system -o json | jq -r '.items[].metadata.name')
-
-    # Iterate through Longhorn nodes and determine if each node has Kubelet in Ready status
-    for node in $(echo $NODE_LIST)
-    do
-        NODE_STATUS=$(kubectl get nodes $node -n longhorn-system -o json | jq -r '.status.conditions[] | select(.reason == "KubeletReady") | .status')
-        add_desired "1"
-        if [ $NODE_STATUS = "True" ]
-        then
-            echo "Longhorn Node $node is deployed successfully"
-            add_available "1"
-        else
-            echo "Longhorn Node $node is not deployed yet"
-            add_available "-1"
-        fi
-    done
-
-    # Iterate through nodes to see if instance-managers: engine and replica are deployed
-    for node in $(echo $NODE_LIST)
-    do
-        for manager in engine replica
+    # Compare the desired Longhorn manager number of daemonsets to a number of nodes in longhorn-system namespace
+    # If numbers match, proceed with checking nodes and instance-managers statuses
+    LONGHORN_NODE_LIST_NUMBER=$(kubectl get nodes.longhorn.io -n longhorn-system -o json | jq -r '.items[].spec.name' | wc -l)
+    if [ "$LONGHORN_NODE_LIST_NUMBER" -eq 0 ] || [ "$DESIRED_LH_MANAGER_DS_NUMBER" -ne "$LONGHORN_NODE_LIST_NUMBER" ]
+    then
+        echo "Longhorn nodes CRDs are not deployed yet"
+    else
+        # Generate a list of nodes that Lonhorn is installed on
+        LONGHORN_NODE_LIST=$(kubectl get nodes.longhorn.io -n longhorn-system -o json | jq -r '.items[].spec.name')
+        # Iterate through Longhorn nodes and determine if each node has Kubelet in Ready status
+        for node in $(echo $LONGHORN_NODE_LIST)
         do
-            STATUS=$(kubectl get instancemanagers -n longhorn-system -o json | jq -r ".items[] | select(.spec.nodeID == \"$node\") | select(.spec.type == \"$manager\") | .status.currentState")
+            LONGHORN_NODE_STATUS=$(kubectl get nodes.longhorn.io/node1 -n longhorn-system -o json | jq -r '.status.conditions.Ready.status')
             add_desired "1"
-            if [ "$STATUS" = "running" ]
+            if [ -z "$LONGHORN_NODE_STATUS" ]
             then
-                echo "Node $node has instance manager $manager deployed"
+                echo "Longhorn Node $node is not deployed yet"
+                break
+            elif [ $LONGHORN_NODE_STATUS = "True" ]
+            then
+                echo "Longhorn Node $node is deployed successfully"
                 add_available "1"
             else
-                echo "Node $node has instance manager $manager not deployed yet"
+                echo "Longhorn Node $node is not deployed yet"
                 add_available "-1"
             fi
         done
-    done
+
+        # Iterate through nodes to see if instance-managers: engine and replica are deployed
+        for node in $(echo $LONGHORN_NODE_LIST)
+        do
+            for manager in engine replica
+            do
+                STATUS=$(kubectl get instancemanagers -n longhorn-system -o json | jq -r ".items[] | select(.spec.nodeID == \"$node\") | select(.spec.type == \"$manager\") | .status.currentState")
+                add_desired "1"
+                # Variable STATUS will be empty when there are resources deployed yet, therefore break out of the loop
+                if [ -z "$STATUS" ]
+                then
+                    echo "Node $node has instance manager $manager not deployed yet"
+                    break
+                elif [ "$STATUS" = "running" ]
+                then
+                    echo "Node $node has instance manager $manager deployed"
+                    add_available "1"
+                else
+                    echo "Node $node has instance manager $manager not fully deployed yet"
+                    add_available "-1"
+                fi
+            done
+        done
+    fi
 
     # Engine images status
     ENGINE_IMAGES_STATUS=$(kubectl get engineimages -n longhorn-system -o json | jq -r '.items[].status.state')
