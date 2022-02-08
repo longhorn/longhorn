@@ -119,7 +119,7 @@ do
         # Iterate through Longhorn nodes and determine if each node has Kubelet in Ready status
         for node in $(echo $LONGHORN_NODE_LIST)
         do
-            LONGHORN_NODE_STATUS=$(kubectl get nodes.longhorn.io/node1 -n longhorn-system -o json | jq -r '.status.conditions.Ready.status')
+            LONGHORN_NODE_STATUS=$(kubectl get nodes.longhorn.io/${node} -n longhorn-system -o json | jq -r '.status.conditions.Ready.status')
             add_desired "1"
             if [ -z "$LONGHORN_NODE_STATUS" ]
             then
