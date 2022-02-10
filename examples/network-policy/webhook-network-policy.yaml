@@ -1,12 +1,28 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: longhorn-webhook
+  name: longhorn-conversion-webhook
   namespace: longhorn-system
 spec:
   podSelector:
     matchLabels:
-      app: longhorn-webhook
+      app: longhorn-conversion-webhook
+  policyTypes:
+  - Ingress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 9443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: longhorn-admission-webhook
+  namespace: longhorn-system
+spec:
+  podSelector:
+    matchLabels:
+      app: longhorn-admission-webhook
   policyTypes:
   - Ingress
   ingress:
