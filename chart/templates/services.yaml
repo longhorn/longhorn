@@ -1,3 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-conversion-webhook
+  name: longhorn-conversion-webhook
+  namespace: longhorn-system
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  selector:
+    app: longhorn-conversion-webhook
+  ports:
+  - name: conversion-webhook
+    port: 9443
+    targetPort: conversion-wh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-admission-webhook
+  name: longhorn-admission-webhook
+  namespace: longhorn-system
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  selector:
+    app: longhorn-admission-webhook
+  ports:
+  - name: admission-webhook
+    port: 9443
+    targetPort: admission-wh
 ---
 apiVersion: v1
 kind: Service

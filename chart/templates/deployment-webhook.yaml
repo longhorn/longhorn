@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-conversion-webhook
+  name: longhorn-conversion-webhook
+  namespace: {{ include "release_namespace" . }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-conversion-webhook
+  template:
+    metadata:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+        app: longhorn-conversion-webhook
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-conversion-webhook
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: longhorn-conversion-webhook
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+        - longhorn-manager
+        - conversion-webhook
+        - --service-account
+        - longhorn-service-account
+        ports:
+        - containerPort: 9443
+          name: conversion-wh
+        readinessProbe:
+          tcpSocket:
+            port: 9443
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      {{- if .Values.privateRegistry.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.registrySecret }}
+      {{- end }}
+      {{- if .Values.longhornDriver.priorityClass }}
+      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote}}
+      {{- end }}
+      {{- if .Values.longhornDriver.tolerations }}
+      tolerations:
+{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+      {{- end }}
+      {{- if .Values.longhornDriver.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+      {{- end }}
+      serviceAccountName: longhorn-service-account
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-admission-webhook
+  name: longhorn-admission-webhook
+  namespace: {{ include "release_namespace" . }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-admission-webhook
+  template:
+    metadata:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+        app: longhorn-admission-webhook
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-admission-webhook
+              topologyKey: kubernetes.io/hostname
+      initContainers:
+      - name: wait-longhorn-conversion-webhook
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-conversion-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
+      containers:
+      - name: longhorn-admission-webhook
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+        - longhorn-manager
+        - admission-webhook
+        - --service-account
+        - longhorn-service-account
+        ports:
+        - containerPort: 9443
+          name: admission-wh
+        readinessProbe:
+          tcpSocket:
+            port: 9443
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      {{- if .Values.privateRegistry.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.registrySecret }}
+      {{- end }}
+      {{- if .Values.longhornDriver.priorityClass }}
+      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote}}
+      {{- end }}
+      {{- if .Values.longhornDriver.tolerations }}
+      tolerations:
+{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+      {{- end }}
+      {{- if .Values.longhornDriver.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+      {{- end }}
+      serviceAccountName: longhorn-service-account
