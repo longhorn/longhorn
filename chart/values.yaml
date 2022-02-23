@@ -178,7 +178,9 @@ resources: {}
 
 metrics:
   ## Enable the Prometheus ServiceMonitor.
-  enabled: false
+  prometheusServiceMonitor:
+    enabled: false
+
   ## Enable a default set of Prometheus alerting rules.
   prometheusRule:
     enabled: false
