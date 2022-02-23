@@ -185,6 +185,9 @@ metrics:
   prometheusRule:
     enabled: false
 
+    rules:
+      volumeActualSpaceUsedWarning:
+        threshold: 90 # warn when above this percentage
 ingress:
   ## Set to true to enable ingress record generation
   enabled: false
