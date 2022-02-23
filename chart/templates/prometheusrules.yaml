@@ -14,7 +14,7 @@ spec:
             description: The actual space used by Longhorn volume {{ "{{" }} $labels.volume }} on {{ "{{" }} $labels.node }} is at {{ "{{" }} $value }}% capacity for
               more than 5 minutes.
             summary: The actual used space of Longhorn volume is over 90% of the capacity.
-          expr: (longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) * 100 > 90
+          expr: (longhorn_volume_actual_size_bytes / longhorn_volume_capacity_bytes) * 100 > {{ .Values.metrics.prometheusRule.rules.volumeActualSpaceUsedWarning.threshold }}
           for: 5m
           labels:
             issue: The actual used space of Longhorn volume {{ "{{" }} $labels.volume }} on {{ "{{" }} $labels.node }} is high.
