@@ -193,6 +193,10 @@ ingress:
   ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
   tlsSecret: longhorn.local-tls
 
+  ## If ingress is enabled you can set the default ingress path
+  ## then you can access the UI by using the following full path {{host}}+{{path}}
+  path: /
+
   ## Ingress annotations done as key:value pairs
   ## If you're using kube-lego, you will want to add:
   ## kubernetes.io/tls-acme: true
