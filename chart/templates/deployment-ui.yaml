@@ -19,28 +19,26 @@ spec:
       - name: longhorn-ui
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
         imagePullPolicy: IfNotPresent
-        securityContext:
-          runAsUser: 1000
         volumeMounts:
-        - mountPath: /var/cache/nginx/
-          name: cache-volume
-        - mountPath: /var/config/nginx/
-          name: cache-volume
-        - mountPath: /var/run/
-          name: cache-volume
+        - name : nginx-cache
+          mountPath: /var/cache/nginx/
+        - name : nginx-config
+          mountPath: /var/config/nginx/
+        - name: var-run
+          mountPath: /var/run/
         ports:
         - containerPort: 8000
           name: http
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
-      securityContext:
-        fsGroup: 2000
-        runAsGroup: 3000
-        runAsUser: 1000
       volumes:
       - emptyDir: {}
-        name: cache-volume        
+        name: nginx-cache
+      - emptyDir: {}
+        name: nginx-config
+      - emptyDir: {}
+        name: var-run
       {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
