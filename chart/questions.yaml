@@ -142,27 +142,33 @@ questions:
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
     group: "Longhorn CSI Driver Images"
+- variable: privateRegistry.createSecret
+  default: "true"
+  description: "Create a new private registry secret"
+  type: boolean
+  group: "Private Registry Settings"
+  label: Create Secret for Private Registry Settings
+  show_subquestion_if: true
+  subquestions:
+  - variable: privateRegistry.registryUser
+    label: Private registry user
+    description: "User used to authenticate to private registry"
+    type: string
+    default: ""
+  - variable: privateRegistry.registryPasswd
+    label: Private registry password
+    description: "Password used to authenticate to private registry"
+    type: password
+    default: ""
 - variable: privateRegistry.registryUrl
   label: Private registry URL
   description: "URL of private registry. Leave blank to apply system default registry."
   group: "Private Registry Settings"
   type: string
   default: ""
-- variable: privateRegistry.registryUser
-  label: Private registry user
-  description: "User used to authenticate to private registry"
-  group: "Private Registry Settings"
-  type: string
-  default: ""
-- variable: privateRegistry.registryPasswd
-  label: Private registry password
-  description: "Password used to authenticate to private registry"
-  group: "Private Registry Settings"
-  type: password
-  default: ""
 - variable: privateRegistry.registrySecret
   label: Private registry secret name
-  description: "Longhorn will automatically generate a Kubernetes secret with this name and use it to pull images from your private registry."
+  description: "If secret creation is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry."
   group: "Private Registry Settings"
   type: string
   default: ""
