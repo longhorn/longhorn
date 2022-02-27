@@ -1125,28 +1125,26 @@ spec:
       - name: longhorn-ui
         image: longhornio/longhorn-ui:v1.2.3
         imagePullPolicy: IfNotPresent
-        securityContext:
-          runAsUser: 1000
         volumeMounts:
-        - mountPath: /var/cache/nginx/
-          name: cache-volume
-        - mountPath: /var/config/nginx/
-          name: cache-volume
-        - mountPath: /var/run/
-          name: cache-volume          
+        - name : nginx-cache
+          mountPath: /var/cache/nginx/
+        - name : nginx-config
+          mountPath: /var/config/nginx/
+        - name: var-run
+          mountPath: /var/run/
         ports:
         - containerPort: 8000
           name: http
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
-      securityContext:
-        fsGroup: 2000
-        runAsGroup: 3000
-        runAsUser: 1000
       volumes:
       - emptyDir: {}
-        name: cache-volume
+        name: nginx-cache
+      - emptyDir: {}
+        name: nginx-config
+      - emptyDir: {}
+        name: var-run
 #      imagePullSecrets:
 #        - name: ""
 #      priorityClassName:
