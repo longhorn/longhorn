@@ -57,6 +57,7 @@ persistence:
   defaultClass: true
   defaultFsType: ext4
   defaultClassReplicaCount: 3
+  defaultDataLocality: disabled # best-effort otherwise
   reclaimPolicy: Delete
   recurringJobSelector:
     enable: false
