@@ -168,7 +168,7 @@ questions:
   default: ""
 - variable: privateRegistry.registrySecret
   label: Private registry secret name
-  description: "If secret creation is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry."
+  description: "If create secret is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry."
   group: "Private Registry Settings"
   type: string
   default: ""
