@@ -516,6 +516,15 @@ WARNING:
   min: 1
   max: 10
   default: 3
+- variable: persistence.defaultDataLocality
+  description: "Set data locality for Longhorn StorageClass"
+  label: Default Storage Class Data Locality
+  group: "Longhorn Storage Class Settings"
+  type: enum
+  options:
+  - "disabled"
+  - "best-effort"
+  default: "disabled"
 - variable: persistence.recurringJobSelector.enable
   description: "Enable recurring job selector for Longhorn StorageClass"
   group: "Longhorn Storage Class Settings"
