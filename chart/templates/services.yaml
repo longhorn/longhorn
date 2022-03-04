@@ -4,7 +4,7 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-conversion-webhook
   name: longhorn-conversion-webhook
-  namespace: longhorn-system
+  namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
   sessionAffinity: ClientIP
@@ -21,7 +21,7 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-admission-webhook
   name: longhorn-admission-webhook
-  namespace: longhorn-system
+  namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
   sessionAffinity: ClientIP
