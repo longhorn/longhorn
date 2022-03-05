@@ -15,7 +15,6 @@ spec:
       labels:
         app: longhorn-iscsi-installation
     spec:
-      hostNetwork: true
       hostPID: true
       initContainers:
       - name: iscsi-installation

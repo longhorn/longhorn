@@ -18,7 +18,7 @@ image:
       tag: v1.2.3
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20211210
+      tag: v1_20220303
     shareManager:
       repository: longhornio/longhorn-share-manager
       tag: v1_20211020
@@ -57,6 +57,7 @@ persistence:
   defaultClass: true
   defaultFsType: ext4
   defaultClassReplicaCount: 3
+  defaultDataLocality: disabled # best-effort otherwise
   reclaimPolicy: Delete
   recurringJobSelector:
     enable: false
