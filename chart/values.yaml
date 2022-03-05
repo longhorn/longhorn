@@ -9,13 +9,13 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.2.3
+      tag: master-head
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.2.3
+      tag: master-head
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.2.3
+      tag: master-head
     instanceManager:
       repository: longhornio/longhorn-instance-manager
       tag: v1_20220303
