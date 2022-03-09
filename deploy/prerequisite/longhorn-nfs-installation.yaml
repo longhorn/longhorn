@@ -15,6 +15,7 @@ spec:
       labels:
         app: longhorn-nfs-installation
     spec:
+      hostNetwork: true
       hostPID: true
       initContainers:
       - name: nfs-installation
