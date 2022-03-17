@@ -1132,7 +1132,10 @@ spec:
             description: EngineImageSpec defines the desired state of the Longhorn engine image
             properties:
               image:
+                minLength: 1
                 type: string
+            required:
+            - image
             type: object
           status:
             description: EngineImageStatus defines the observed state of the Longhorn engine image
