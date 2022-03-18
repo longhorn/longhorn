@@ -114,6 +114,7 @@ defaultSettings:
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
 privateRegistry:
+  createSecret: ~
   registryUrl: ~
   registryUser: ~
   registryPasswd: ~
