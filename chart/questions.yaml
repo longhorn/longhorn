@@ -77,7 +77,7 @@ questions:
     label: Longhorn Backing Image Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.backingImageManager.tag
-    default: v2_20210820
+    default: v3_20220318
     description: "Specify Longhorn Backing Image Manager Image Tag"
     type: string
     label: Longhorn Backing Image Manager Image Tag
@@ -148,24 +148,30 @@ questions:
   group: "Private Registry Settings"
   type: string
   default: ""
-- variable: privateRegistry.registryUser
-  label: Private registry user
-  description: "User used to authenticate to private registry"
-  group: "Private Registry Settings"
-  type: string
-  default: ""
-- variable: privateRegistry.registryPasswd
-  label: Private registry password
-  description: "Password used to authenticate to private registry"
-  group: "Private Registry Settings"
-  type: password
-  default: ""
 - variable: privateRegistry.registrySecret
   label: Private registry secret name
-  description: "Longhorn will automatically generate a Kubernetes secret with this name and use it to pull images from your private registry."
+  description: "If create a new private registry secret is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry."
   group: "Private Registry Settings"
   type: string
   default: ""
+- variable: privateRegistry.createSecret
+  default: "true"
+  description: "Create a new private registry secret"
+  type: boolean
+  group: "Private Registry Settings"
+  label: Create Secret for Private Registry Settings
+  show_subquestion_if: true
+  subquestions:
+  - variable: privateRegistry.registryUser
+    label: Private registry user
+    description: "User used to authenticate to private registry."
+    type: string
+    default: ""
+  - variable: privateRegistry.registryPasswd
+    label: Private registry password
+    description: "Password used to authenticate to private registry."
+    type: password
+    default: ""
 - variable: longhorn.default_setting
   default: "false"
   description: "Customize the default settings before installing Longhorn for the first time. This option will only work if the cluster hasn't installed Longhorn."
