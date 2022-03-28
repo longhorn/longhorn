@@ -53,4 +53,4 @@ rules:
   verbs: ["list", "watch"]
 - apiGroups: ["admissionregistration.k8s.io"]
   resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
-  verbs: ["list", "create", "patch"]
+  verbs: ["get", "list", "create", "patch", "delete"]

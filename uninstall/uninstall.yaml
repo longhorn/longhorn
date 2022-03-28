@@ -73,6 +73,9 @@ rules:
     resources: ["podsecuritypolicies"]
     verbs: ["use"]
     resourceNames: ["longhorn-uninstall-psp"]
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
+    verbs: ["get", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
