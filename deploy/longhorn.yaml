@@ -1979,14 +1979,12 @@ spec:
                   type: object
                 type: object
               engineManagerCPURequest:
-                minimum: 0
                 type: integer
               evictionRequested:
                 type: boolean
               name:
                 type: string
               replicaManagerCPURequest:
-                minimum: 0
                 type: integer
               tags:
                 items:
@@ -2204,7 +2202,6 @@ spec:
             properties:
               concurrency:
                 description: The concurrency of taking the snapshot/backup.
-                minimum: 1
                 type: integer
               cron:
                 description: The cron setting.
@@ -2224,8 +2221,6 @@ spec:
                 type: string
               retain:
                 description: The retain count of the snapshot/backup.
-                maximum: 50
-                minimum: 1
                 type: integer
               task:
                 description: The recurring job type. Can be "snapshot" or "backup".
@@ -2817,7 +2812,6 @@ spec:
                   type: string
                 type: array
               numberOfReplicas:
-                minimum: 1
                 type: integer
               recurringJobs:
                 description: Deprecated. Replaced by a separate resource named "RecurringJob"
@@ -3038,7 +3032,7 @@ rules:
   verbs: ["list", "watch"]
 - apiGroups: ["admissionregistration.k8s.io"]
   resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
-  verbs: ["list", "create", "patch"]
+  verbs: ["get", "list", "create", "patch", "delete"]
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
