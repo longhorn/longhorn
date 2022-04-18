@@ -3533,7 +3533,7 @@ spec:
         image: longhornio/longhorn-manager:master-head
         imagePullPolicy: IfNotPresent
         securityContext:
-          runAsUser: 2000
+          privileged: true
         command:
         - longhorn-manager
         - admission-webhook
@@ -3545,6 +3545,9 @@ spec:
         readinessProbe:
           tcpSocket:
             port: 9443
+        volumeMounts:
+        - name: longhorn
+          mountPath: /var/lib/longhorn/
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -3554,4 +3557,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+      volumes:
+      - name: longhorn
+        hostPath:
+          path: /var/lib/longhorn/
       serviceAccountName: longhorn-service-account
