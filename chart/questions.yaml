@@ -497,6 +497,17 @@ WARNING:
     min: 0
     max: 40
     default: 12
+- variable: defaultSettings.kubernetesClusterAutoscalerEnabled
+    label: Kubernetes Cluster Autoscaler Enabled (Experimental)
+    description: "Enable this setting will notify Longhorn that the cluster is using Kubernetes cluster-autoscaler.
+    Longhorn prevents data loss by only allowing CA to scale down a node that met all conditions:
+      - No volume attached
+      - Is not the last node containing the replica of a detached volume.
+      - Is not running backing image components pod.
+      - Is not running share manager components pod."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"

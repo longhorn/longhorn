@@ -114,6 +114,7 @@ defaultSettings:
   backingImageRecoveryWaitInterval: ~
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
+  kubernetesClusterAutoscalerEnabled: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
