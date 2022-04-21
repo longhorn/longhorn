@@ -99,6 +99,7 @@ data:
     backing-image-recovery-wait-interval: 
     guaranteed-engine-manager-cpu: 
     guaranteed-replica-manager-cpu:
+    kubernetes-cluster-autoscaler-enabled:
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
