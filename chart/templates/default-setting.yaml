@@ -43,3 +43,4 @@ data:
     guaranteed-engine-manager-cpu: {{ .Values.defaultSettings.guaranteedEngineManagerCPU }}
     guaranteed-replica-manager-cpu: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU }}
     kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
+    orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}

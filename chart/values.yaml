@@ -115,6 +115,7 @@ defaultSettings:
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
   kubernetesClusterAutoscalerEnabled: ~
+  orphanAutoDeletion: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
