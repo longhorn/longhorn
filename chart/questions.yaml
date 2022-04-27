@@ -508,6 +508,12 @@ WARNING:
     group: "Longhorn Default Settings"
     type: boolean
     default: false
+- variable: defaultSettings.orphanAutoDeletion
+    label: Orphaned Data Cleanup
+    description: "This setting allows Longhorn to delete the orphan resource and its corresponding orphaned data automatically. Orphan resources on down or unknown nodes will not be cleaned up automatically.
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
