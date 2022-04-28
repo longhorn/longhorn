@@ -10,10 +10,10 @@ global:
       enabled: false
       # -- Tolerate Linux nodes to run Longhorn user deployed components
       tolerations:
-      - key: "cattle.io/os"
-        value: "linux"
-        effect: "NoSchedule"
-        operator: "Equal"
+        - key: "cattle.io/os"
+          value: "linux"
+          effect: "NoSchedule"
+          operator: "Equal"
       # -- Select Linux nodes to run Longhorn user deployed components
       nodeSelector:
         kubernetes.io/os: "linux"
@@ -59,7 +59,7 @@ image:
     backingImageManager:
       # -- Specify Longhorn backing image manager image repository
       repository: longhornio/backing-image-manager
-      # -- Specify Longhorn backing image manager image tag 
+      # -- Specify Longhorn backing image manager image tag
       tag: master-head
     supportBundleKit:
       # -- Specify Longhorn support bundle manager image repository
@@ -93,7 +93,7 @@ image:
       # -- Specify CSI driver snapshotter image tag. Leave blank to autodetect.
       tag: v6.2.1
     livenessProbe:
-      # -- Specify CSI liveness probe image repository. Leave blank to autodetect 
+      # -- Specify CSI liveness probe image repository. Leave blank to autodetect
       repository: longhornio/livenessprobe
       # -- Specify CSI liveness probe image tag. Leave blank to autodetect
       tag: v2.9.0
@@ -178,7 +178,7 @@ defaultSettings:
   backupTarget: ~
   # -- The name of the Kubernetes secret associated with the backup target.
   backupTargetCredentialSecret: ~
-  # -- If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup 
+  # -- If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup
   # when it is the time to do recurring snapshot/backup.
   allowRecurringJobWhileVolumeDetached: ~
   # -- Create default Disk automatically only on Nodes with the label "node.longhorn.io/create-default-disk=true" if no other disks exist.
@@ -232,7 +232,7 @@ defaultSettings:
   # -- If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection.
   # Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true.
   autoSalvage: ~
-  # -- If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...) 
+  # -- If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...)
   # when Longhorn volume is detached unexpectedly (e.g. during Kubernetes upgrade, Docker reboot, or network disconnect).
   # By deleting the pod, its controller restarts the pod and Kubernetes handles volume reattachment and remount.
   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
