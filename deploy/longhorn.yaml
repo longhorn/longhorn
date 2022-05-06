@@ -3352,7 +3352,7 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:master-head"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v1_20220303"
+        - "longhornio/longhorn-instance-manager:v1_20220505"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20211020"
         - --backing-image-manager-image
