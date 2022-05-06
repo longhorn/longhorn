@@ -3375,6 +3375,8 @@ spec:
         - name: longhorn
           mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
+        - name: longhorn-grpc-tls
+          mountPath: /tls-files/
         - name: longhorn-default-setting
           mountPath: /var/lib/longhorn-setting/
         env:
@@ -3402,6 +3404,10 @@ spec:
       - name: longhorn
         hostPath:
           path: /var/lib/longhorn/
+      - name: longhorn-grpc-tls
+        secret:
+          secretName: longhorn-grpc-tls
+          optional: true
       - name: longhorn-default-setting
         configMap:
           name: longhorn-default-setting
