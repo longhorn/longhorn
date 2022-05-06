@@ -3354,9 +3354,9 @@ spec:
         - --instance-manager-image
         - "longhornio/longhorn-instance-manager:v1_20220505"
         - --share-manager-image
-        - "longhornio/longhorn-share-manager:v1_20211020"
+        - "longhornio/longhorn-share-manager:v1_20220506"
         - --backing-image-manager-image
-        - "longhornio/backing-image-manager:v3_20220318"
+        - "longhornio/backing-image-manager:v3_20220506"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
