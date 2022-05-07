@@ -93,6 +93,10 @@ set_packages_and_check_cmd()
     CHECK_CMD='rpm -q'
     PACKAGES=(nfs-client open-iscsi)
     ;;
+  *"arch"* )
+    CHECK_CMD='pacman -Q'
+    PACKAGES=(nfs-utils open-iscsi)
+    ;;
   *)
     CHECK_CMD=''
     PACKAGES=()
