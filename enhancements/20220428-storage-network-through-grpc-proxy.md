@@ -62,8 +62,8 @@ https://github.com/longhorn/longhorn/issues/3546
 - Add `k8s.v1.cni.cncf.io/networks` annotation to pods that involve data transfer. The annotation will use the value from the storage network setting. Multus will attach a secondary network to pods with this annotation.
   - Engine instance manager pods
   - Replica instance manager pods
-  - Backing image data source pods
-  - Backing image manager pods
+  - Backing image data source pods. Data traffic between replicas and backing image data source.
+  - Backing image manager pods. Data traffic in-between backing image managers.
 
 - Add new `storageIP` to `Engine`, `Replica` and `BackingImageManager` CRD status. The storage IP will be use to communicate to the instance processes.
 
