@@ -2,3 +2,6 @@
 .idea
 *.iml
 *.ipr
+
+# python venv for dev scripts
+.venv
