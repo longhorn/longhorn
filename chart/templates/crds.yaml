@@ -317,6 +317,8 @@ spec:
                 type: string
               ownerID:
                 type: string
+              storageIP:
+                type: string
             type: object
         type: object
     served: true
@@ -1510,6 +1512,8 @@ spec:
                 type: string
               started:
                 type: boolean
+              storageIP:
+                type: string
             type: object
         type: object
     served: true
@@ -2345,6 +2349,8 @@ spec:
                 type: boolean
               started:
                 type: boolean
+              storageIP:
+                type: string
             type: object
         type: object
     served: true
