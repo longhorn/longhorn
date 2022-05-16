@@ -77,8 +77,6 @@ spec:
               fieldPath: spec.nodeName
         - name: DEFAULT_SETTING_PATH
           value: /var/lib/longhorn-setting/default-setting.yaml
-        - name: DEFAULT_SETTING_CONFIGMAP
-          value: longhorn-default-setting
       volumes:
       - name: dev
         hostPath:
