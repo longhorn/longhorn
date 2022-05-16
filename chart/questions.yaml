@@ -53,7 +53,7 @@ questions:
     label: Longhorn Instance Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.instanceManager.tag
-    default: v1_20220303
+    default: v1_20220512
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
     label: Longhorn Instance Manager Image Tag
@@ -497,6 +497,23 @@ WARNING:
     min: 0
     max: 40
     default: 12
+- variable: defaultSettings.kubernetesClusterAutoscalerEnabled
+  label: Kubernetes Cluster Autoscaler Enabled (Experimental)
+  description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
+  Longhorn prevents data loss by only allowing the Cluster Autoscaler to scale down a node that met all conditions:
+    - No volume attached to the node.
+    - Is not the last node containing the replica of any volume.
+    - Is not running backing image components pod.
+    - Is not running share manager components pod."
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: false
+- variable: defaultSettings.orphanAutoDeletion
+  label: Orphaned Data Cleanup
+  description: "This setting allows Longhorn to delete the orphan resource and its corresponding orphaned data automatically like stale replicas. Orphan resources on down or unknown nodes will not be cleaned up automatically."
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"

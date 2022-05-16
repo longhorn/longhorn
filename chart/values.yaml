@@ -9,22 +9,22 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: master-head
+      tag: v1.3.0-preview1
     manager:
       repository: longhornio/longhorn-manager
-      tag: master-head
+      tag: v1.3.0-preview1
     ui:
       repository: longhornio/longhorn-ui
-      tag: master-head
+      tag: v1.3.0-preview1
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20220303
+      tag: v1_20220512
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20211020
+      tag: v1_20220506
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v3_20220318
+      tag: v3_20220506
   csi:
     attacher:
       repository: longhornio/csi-attacher
@@ -59,6 +59,7 @@ persistence:
   defaultClassReplicaCount: 3
   defaultDataLocality: disabled # best-effort otherwise
   reclaimPolicy: Delete
+  migratable: false
   recurringJobSelector:
     enable: false
     jobList: []
@@ -113,6 +114,8 @@ defaultSettings:
   backingImageRecoveryWaitInterval: ~
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
+  kubernetesClusterAutoscalerEnabled: ~
+  orphanAutoDeletion: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
