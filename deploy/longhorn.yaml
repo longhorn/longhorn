@@ -3359,7 +3359,7 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:v1.3.0-preview1"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v1_20220512"
+        - "longhornio/longhorn-instance-manager:v1_20220516"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20220506"
         - --backing-image-manager-image
