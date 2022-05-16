@@ -100,7 +100,8 @@ data:
     guaranteed-engine-manager-cpu: 
     guaranteed-replica-manager-cpu: 
     kubernetes-cluster-autoscaler-enabled: 
-    orphan-auto-deletion:
+    orphan-auto-deletion: 
+    storage-network:
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
@@ -457,6 +458,8 @@ spec:
               ip:
                 type: string
               ownerID:
+                type: string
+              storageIP:
                 type: string
             type: object
         type: object
@@ -1675,6 +1678,8 @@ spec:
                 type: string
               started:
                 type: boolean
+              storageIP:
+                type: string
             type: object
         type: object
     served: true
@@ -2527,6 +2532,8 @@ spec:
                 type: boolean
               started:
                 type: boolean
+              storageIP:
+                type: string
             type: object
         type: object
     served: true
