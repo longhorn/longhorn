@@ -514,6 +514,17 @@ WARNING:
   group: "Longhorn Default Settings"
   type: boolean
   default: false
+- variable: defaultSettings.storageNetwork
+  label: Storage Network
+  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network.
+	To segregate the storage network, input the pre-existing NetworkAttachmentDefinition in \"<namespace>/<name>\" format.
+	WARNING:
+	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
+	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
+	  - When applying the setting, Longhorn will restart all manager, instance-manager, and backing-image-manager pods."
+  group: "Longhorn Default Settings"
+  type: string
+  default:
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
