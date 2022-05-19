@@ -1768,6 +1768,10 @@ spec:
                 type: integer
               apiVersion:
                 type: integer
+              proxyApiMinVersion:
+                type: integer
+              proxyApiVersion:
+                type: integer
               currentState:
                 type: string
               instances:
