@@ -3473,8 +3473,6 @@ spec:
           mountPropagation: Bidirectional
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
-        - name: longhorn-default-setting
-          mountPath: /var/lib/longhorn-setting/
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -3488,8 +3486,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: DEFAULT_SETTING_PATH
-          value: /var/lib/longhorn-setting/default-setting.yaml
       volumes:
       - name: dev
         hostPath:
@@ -3504,9 +3500,6 @@ spec:
         secret:
           secretName: longhorn-grpc-tls
           optional: true
-      - name: longhorn-default-setting
-        configMap:
-          name: longhorn-default-setting
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
