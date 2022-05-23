@@ -2629,6 +2629,7 @@ spec:
                   additionalProperties:
                     type: string
                   description: The labels of snapshot
+                  nullable: true
                   type: object
                 volume:
                   description: the volume that this snapshot belongs to. This field is immutable after creation. Required
