@@ -11,7 +11,7 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-ingress
   annotations:
-    {{- if .Values.ingress.tls }}
+    {{- if .Values.ingress.secureBackends }}
     ingress.kubernetes.io/secure-backends: "true"
     {{- end }}
     {{- range $key, $value := .Values.ingress.annotations }}
