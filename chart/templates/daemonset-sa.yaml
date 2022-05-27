@@ -25,7 +25,7 @@ spec:
       containers:
       - name: longhorn-manager
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         securityContext:
           privileged: true
         command:

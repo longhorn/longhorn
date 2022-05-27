@@ -18,7 +18,7 @@ spec:
       containers:
       - name: longhorn-ui
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
         - name : nginx-cache
           mountPath: /var/cache/nginx/
