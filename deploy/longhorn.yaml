@@ -160,6 +160,10 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
+    - description: The system generated UUID of the provisioned backing image file
+      jsonPath: .spec.uuid
+      name: UUID
+      type: string
     - description: The current state of the pod used to provision the backing image file from source
       jsonPath: .status.currentState
       name: State
@@ -167,6 +171,10 @@ spec:
     - description: The data source type
       jsonPath: .spec.sourceType
       name: SourceType
+      type: string
+    - description: The backing image file size
+      jsonPath: .status.size
+      name: Size
       type: string
     - description: The node the backing image file will be prepared on
       jsonPath: .spec.nodeID
@@ -215,6 +223,8 @@ spec:
                 - upload
                 - export-from-volume
                 type: string
+              uuid:
+                type: string
             type: object
           status:
             description: BackingImageDataSourceStatus defines the observed state of the Longhorn backing image data source
@@ -222,6 +232,8 @@ spec:
               checksum:
                 type: string
               currentState:
+                type: string
+              ip:
                 type: string
               message:
                 type: string
@@ -237,6 +249,8 @@ spec:
               size:
                 format: int64
                 type: integer
+              storageIP:
+                type: string
             type: object
         type: object
     served: true
@@ -502,9 +516,17 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
-    - description: The backing image name
-      jsonPath: .spec.image
-      name: Image
+    - description: The system generated UUID
+      jsonPath: .status.uuid
+      name: UUID
+      type: string
+    - description: The source of the backing image file data
+      jsonPath: .spec.sourceType
+      name: SourceType
+      type: string
+    - description: The backing image file size in each disk
+      jsonPath: .status.size
+      name: Size
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
