@@ -30,7 +30,9 @@ spec:
           privileged: true
         command:
         - longhorn-manager
+        {{- if .Values.longhornManager.debugLogs }}
         - -d
+        {{- end }}
         - daemon
         - --engine-image
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.engine.repository }}:{{ .Values.image.longhorn.engine.tag }}"

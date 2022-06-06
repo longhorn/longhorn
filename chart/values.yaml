@@ -125,6 +125,7 @@ privateRegistry:
   registrySecret: ~
 
 longhornManager:
+  debugLogs: False
   priorityClass: ~
   tolerations: []
   ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
