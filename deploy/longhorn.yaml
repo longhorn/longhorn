@@ -3475,7 +3475,7 @@ spec:
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20220531"
         - --backing-image-manager-image
-        - "longhornio/backing-image-manager:v3_20220531"
+        - "longhornio/backing-image-manager:v3_20220606"
         - --manager-image
         - "longhornio/longhorn-manager:v1.3.0-rc2"
         - --service-account
