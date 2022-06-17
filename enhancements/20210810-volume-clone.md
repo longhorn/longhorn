@@ -190,7 +190,7 @@ Using those methods, the Sparse-tools know where is a data/hole interval to tran
 
 ### Longhorn CSI plugin
 * Advertise that Longhorn CSI driver has ability to clone a volume, `csi.ControllerServiceCapability_RPC_CLONE_VOLUME`
-* When receiving a volume creat request, inspect `req.GetVolumeContentSource()` to see if it is from anther volume.
+* When receiving a volume creat request, inspect `req.GetVolumeContentSource()` to see if it is from another volume.
   If so, create a new Longhorn volume with appropriate `DataSource` set so Longhorn volume controller can start cloning later on.
 
 ### Test plan
