@@ -29,7 +29,7 @@ What is out of scope for this enhancement? Listing non-goals helps to focus disc
 This is where we get down to the nitty gritty of what the proposal actually is.
 
 ### User Stories
-Detail the things that people will be able to do if this enhancement is implemented. A good practise is including a comparsion of what user cannot do before the enhancement implemented, why user would want an enhancement and what user need to do after, to make it clear why the enhancement beneficial to the user.
+Detail the things that people will be able to do if this enhancement is implemented. A good practise is including a comparison of what user cannot do before the enhancement implemented, why user would want an enhancement and what user need to do after, to make it clear why the enhancement beneficial to the user.
 
 The experience details should be in the `User Experience In Detail` later.
 

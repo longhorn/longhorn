@@ -155,14 +155,14 @@ With an example of cluster set for 2 zones and default of 2 replicas volume:
   - The default value is `ignored`.
 
 - In Volume Controller `syncVolume` -> `ReconcileEngineReplicaState` -> `replenishReplicas`, calculate and add number of replicas to be rebalanced to `replenishCount`.
-  > The logic ignores all `soft-anti-affinity` settings. This will always try to achieve zone balance then node balance. And creating for replicas will leave for ReplicaScheduler to determine for the canidates.
+  > The logic ignores all `soft-anti-affinity` settings. This will always try to achieve zone balance then node balance. And creating for replicas will leave for ReplicaScheduler to determine for the candidates.
   1. Skip volume replica rebalance when volume spec `replicaAutoBalance` is `disabled`.
   2. Skip if volume `Robustness` is not `healthy`.
   3. For `least-effort`, try to get the replica rebalance count.
       1. For `zone` duplicates, get the replenish number.
             1. List all the occupied node zones with volume replicas running.
                   - The zone is balanced when this is equal to volume spec `NumberOfReplicas`.
-            2. List all available and schedulabled nodes in non-occupied zones.
+            2. List all available and schedulable nodes in non-occupied zones.
                   - The zone is balanced when no available nodes are found.
             3. Get the number of replicas off-balanced:
                   - number of replicas in volume spec - number of occupied node zones.
