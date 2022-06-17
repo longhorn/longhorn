@@ -45,7 +45,7 @@ For part 2, we upgrade engine image for a volume when the following conditions a
 ### User Stories
 
 Before this enhancement, users have to manually upgrade engine images for volume after upgrading Longhorn system to a newer version.
-If there are thoudsands of volumes in the system, this is a significant manual work.
+If there are thousands of volumes in the system, this is a significant manual work.
 
 After this enhancement users either have to do nothing (in case live upgrade is possible) 
 or they only have to scale down/up the workload (in case there is a new default IM image)

@@ -354,7 +354,7 @@ Labels
 [labels/2]: [b]
 ```
 - `Name` field should be immutable.
-- `Task` field should be imuutable.
+- `Task` field should be immutable.
 
 *And* user edit the fields in the form.
 

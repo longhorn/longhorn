@@ -61,12 +61,12 @@ Same as the Design
 ### Test plan
 1. Setup a cluster of 3 nodes
 1. Install Longhorn and set `Default Replica Count = 2` (because we will turn off one node)
-1. Create a SetfullSet with 2 pods using the command:
+1. Create a StatefulSet with 2 pods using the command:
     ```
     kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/master/examples/statefulset.yaml
     ```
 1. Create a volume + pv + pvc named `vol1` and create a deployment of default ubuntu named `shell` with the usage of pvc `vol1` mounted under `/mnt/vol1`
-1. Find the node which contains one pod of the StatefullSet/Deployment. Power off the node
+1. Find the node which contains one pod of the StatefulSet/Deployment. Power off the node
 
 #### StatefulSet
 ##### if `NodeDownPodDeletionPolicy ` is set to `do-nothing ` | `delete-deployment-pod`
