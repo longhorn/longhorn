@@ -61,6 +61,10 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
+    - description: The system generated UUID of the provisioned backing image file
+      jsonPath: .spec.uuid
+      name: UUID
+      type: string
     - description: The current state of the pod used to provision the backing image file from source
       jsonPath: .status.currentState
       name: State
@@ -68,6 +72,10 @@ spec:
     - description: The data source type
       jsonPath: .spec.sourceType
       name: SourceType
+      type: string
+    - description: The backing image file size
+      jsonPath: .status.size
+      name: Size
       type: string
     - description: The node the backing image file will be prepared on
       jsonPath: .spec.nodeID
@@ -116,6 +124,8 @@ spec:
                 - upload
                 - export-from-volume
                 type: string
+              uuid:
+                type: string
             type: object
           status:
             description: BackingImageDataSourceStatus defines the observed state of the Longhorn backing image data source
@@ -123,6 +133,8 @@ spec:
               checksum:
                 type: string
               currentState:
+                type: string
+              ip:
                 type: string
               message:
                 type: string
@@ -138,6 +150,8 @@ spec:
               size:
                 format: int64
                 type: integer
+              storageIP:
+                type: string
             type: object
         type: object
     served: true
@@ -395,9 +409,17 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
-    - description: The backing image name
-      jsonPath: .spec.image
-      name: Image
+    - description: The system generated UUID
+      jsonPath: .status.uuid
+      name: UUID
+      type: string
+    - description: The source of the backing image file data
+      jsonPath: .spec.sourceType
+      name: SourceType
+      type: string
+    - description: The backing image file size in each disk
+      jsonPath: .status.size
+      name: Size
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -2578,104 +2600,104 @@ spec:
     listKind: SnapshotList
     plural: snapshots
     shortNames:
-      - lhsnap
+    - lhsnap
     singular: snapshot
   scope: Namespaced
   versions:
-    - additionalPrinterColumns:
-        - description: The volume that this snapshot belongs to
-          jsonPath: .spec.volume
-          name: Volume
-          type: string
-        - description: Timestamp when the point-in-time snapshot was taken
-          jsonPath: .status.creationTime
-          name: CreationTime
-          type: string
-        - description: Indicates if the snapshot is ready to be used to restore/backup a volume
-          jsonPath: .status.readyToUse
-          name: ReadyToUse
-          type: boolean
-        - description: Represents the minimum size of volume required to rehydrate from this snapshot
-          jsonPath: .status.restoreSize
-          name: RestoreSize
-          type: string
-        - description: The actual size of the snapshot
-          jsonPath: .status.size
-          name: Size
-          type: string
-        - jsonPath: .metadata.creationTimestamp
-          name: Age
-          type: date
-      name: v1beta2
-      schema:
-        openAPIV3Schema:
-          description: Snapshot is the Schema for the snapshots API
-          properties:
-            apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-              type: string
-            kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: SnapshotSpec defines the desired state of Longhorn Snapshot
-              properties:
-                createSnapshot:
-                  description: require creating a new snapshot
+  - additionalPrinterColumns:
+    - description: The volume that this snapshot belongs to
+      jsonPath: .spec.volume
+      name: Volume
+      type: string
+    - description: Timestamp when the point-in-time snapshot was taken
+      jsonPath: .status.creationTime
+      name: CreationTime
+      type: string
+    - description: Indicates if the snapshot is ready to be used to restore/backup a volume
+      jsonPath: .status.readyToUse
+      name: ReadyToUse
+      type: boolean
+    - description: Represents the minimum size of volume required to rehydrate from this snapshot
+      jsonPath: .status.restoreSize
+      name: RestoreSize
+      type: string
+    - description: The actual size of the snapshot
+      jsonPath: .status.size
+      name: Size
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: Snapshot is the Schema for the snapshots API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SnapshotSpec defines the desired state of Longhorn Snapshot
+            properties:
+              createSnapshot:
+                description: require creating a new snapshot
+                type: boolean
+              labels:
+                additionalProperties:
+                  type: string
+                description: The labels of snapshot
+                nullable: true
+                type: object
+              volume:
+                description: the volume that this snapshot belongs to. This field is immutable after creation. Required
+                type: string
+            required:
+            - volume
+            type: object
+          status:
+            description: SnapshotStatus defines the observed state of Longhorn Snapshot
+            properties:
+              children:
+                additionalProperties:
                   type: boolean
-                labels:
-                  additionalProperties:
-                    type: string
-                  description: The labels of snapshot
-                  nullable: true
-                  type: object
-                volume:
-                  description: the volume that this snapshot belongs to. This field is immutable after creation. Required
+                nullable: true
+                type: object
+              creationTime:
+                type: string
+              error:
+                type: string
+              labels:
+                additionalProperties:
                   type: string
-              required:
-                - volume
-              type: object
-            status:
-              description: SnapshotStatus defines the observed state of Longhorn Snapshot
-              properties:
-                children:
-                  additionalProperties:
-                    type: boolean
-                  nullable: true
-                  type: object
-                creationTime:
-                  type: string
-                error:
-                  type: string
-                labels:
-                  additionalProperties:
-                    type: string
-                  nullable: true
-                  type: object
-                markRemoved:
-                  type: boolean
-                ownerID:
-                  type: string
-                parent:
-                  type: string
-                readyToUse:
-                  type: boolean
-                restoreSize:
-                  format: int64
-                  type: integer
-                size:
-                  format: int64
-                  type: integer
-                userCreated:
-                  type: boolean
-              type: object
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
+                nullable: true
+                type: object
+              markRemoved:
+                type: boolean
+              ownerID:
+                type: string
+              parent:
+                type: string
+              readyToUse:
+                type: boolean
+              restoreSize:
+                format: int64
+                type: integer
+              size:
+                format: int64
+                type: integer
+              userCreated:
+                type: boolean
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
 status:
   acceptedNames:
     kind: ""
@@ -2688,7 +2710,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: volumes.longhorn.io

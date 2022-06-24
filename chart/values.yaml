@@ -9,32 +9,32 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.3.0-rc1
+      tag: v1.3.0
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.3.0-rc1
+      tag: v1.3.0
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.3.0-rc1
+      tag: v1.3.0
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20220516
+      tag: v1_20220611
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20220523
+      tag: v1_20220531
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v3_20220506
+      tag: v3_20220609
   csi:
     attacher:
       repository: longhornio/csi-attacher
-      tag: v3.2.1
+      tag: v3.4.0
     provisioner:
       repository: longhornio/csi-provisioner
       tag: v2.1.2
     nodeDriverRegistrar:
       repository: longhornio/csi-node-driver-registrar
-      tag: v2.3.0
+      tag: v2.5.0
     resizer:
       repository: longhornio/csi-resizer
       tag: v1.2.0
@@ -155,6 +155,7 @@ longhornDriver:
   #  label-key2: "label-value2"
 
 longhornUI:
+  replicas: 1
   priorityClass: ~
   tolerations: []
   ## If you want to set tolerations for Longhorn UI Deployment, delete the `[]` in the line above
