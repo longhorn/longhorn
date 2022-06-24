@@ -6,7 +6,7 @@ metadata:
   name: longhorn-ui
   namespace: {{ include "release_namespace" . }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.longhornUI.replicas }}
   selector:
     matchLabels:
       app: longhorn-ui
