@@ -47,7 +47,7 @@ No API change is required.
         3. replica eviction happens (volume.Status.Robustness is Healthy)
         4. there is no potential reusable replica
         5. there is a potential reusable replica but the replica replenishment wait interval is passed.
-    3. Reuse the failed replica by cleaning up `ReplicaSpec.HealthyAt` and `ReplicaSpec.FailedAt`. And `Replica.Spec.RebuildRetryCount` will be increasd by 1. 
+    3. Reuse the failed replica by cleaning up `ReplicaSpec.HealthyAt` and `ReplicaSpec.FailedAt`. And `Replica.Spec.RebuildRetryCount` will be increased by 1. 
     4. Clean up the related record in `Replica.Spec.RebuildRetryCount` when the rebuilding replica becomes mode `RW`.
     5. Guarantee the reused failed replica will be stopped before re-launching it.
 

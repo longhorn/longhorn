@@ -15,7 +15,7 @@ https://github.com/longhorn/longhorn/issues/972
 1. Previously Longhorn is using filesystem ID as keys to the map of disks on the node. But we found there is no guarantee that filesystem ID won't change after the node reboots for certain filesystems e.g. XFS.
 1. We want to enable the ability to configure CRD directly, prepare for the CRD based API access in the future
 1. We also need to make sure previously implemented safe guards are not impacted by this change:
-    1. If a disk was accidentally umounted on the node, we should detect that and stop replica from scheduling into it.
+    1. If a disk was accidentally unmounted on the node, we should detect that and stop replica from scheduling into it.
     1. We shouldn't allow user to add two disks pointed to the same filesystem
 
 ### Non-goals

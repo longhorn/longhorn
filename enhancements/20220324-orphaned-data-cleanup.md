@@ -66,7 +66,7 @@ After the enhancement, Longhorn automatically finds out the orphaned replica dir
     - Users can enable the global auto-deletion on setting page. By default, the auto-deletion is disabled.
 
 - Via `kubectl`
-    - Users can list the orphaned replica directoris by `kubectl -n longhorn-system get orphans`.
+    - Users can list the orphaned replica directories by `kubectl -n longhorn-system get orphans`.
     - Users can delete the orphaned replica directories by `kubectl -n longhorn-system delete orphan <name>`.
     - Users can enable the global auto-deletion by `kubectl -n longhorn-system edit settings orphan-auto-deletion`
 

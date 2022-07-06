@@ -70,7 +70,7 @@ spec:
   url: https://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
 ```
 
-Afterwards deploy the `cirros-rwx-blk.yaml` to create a live migratabale virtual machine.
+Afterwards deploy the `cirros-rwx-blk.yaml` to create a live migratable virtual machine.
 ```yaml
 apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
