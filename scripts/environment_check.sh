@@ -71,9 +71,9 @@ detect_node_os()
 {
   local pod="$1"
 
-  OS=`kubectl exec -it $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2'`
+  OS=`kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2'`
   if [[ -z "${OS}" ]]; then
-    OS=`kubectl exec -it $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2'`
+    OS=`kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2'`
   fi
   echo "$OS"
 }
@@ -227,7 +227,7 @@ check_package_installed() {
     for ((i=0; i<${#PACKAGES[@]}; i++)); do
       local package=${PACKAGES[$i]}
 
-      kubectl exec -it $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
+      kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
       if [ $? != 0 ]; then
         allFound=false
         node=`kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName`
