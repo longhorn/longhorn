@@ -15,7 +15,7 @@ https://github.com/longhorn/longhorn/issues/508
 1. By default 'DisableRevisionCounter' is 'false', but Longhorn provides an optional for user to disable it.
 2. Once user set 'DisableRevisionCounter' to 'true' globally or individually, this will improve Longhorn data path performance.
 3. And for 'DisableRevisionCounter' is 'true', Longhorn will keep the ability to find the most suitable replica to recover the volume when the engine is faulted(all the replicas are in 'ERR' state).
-4. Also during Longhorn Engine starting, with head file information it's unlikly to find out out of synced replicas. So will skip the check.
+4. Also during Longhorn Engine starting, with head file information it's unlikely to find out out of synced replicas. So will skip the check.
 
 ## Proposal
 
@@ -41,7 +41,7 @@ Or from StorageClass yaml file, user can set 'parameters' 'revisionCounterDisabl
 
 User can also set 'DisableRevisionCounter' for each individual volumes created by Longhorn UI this individual setting will over write the global setting.
 
-Once the volume has 'DisableRevisionCounter' to 'true', there won't be revision counter file. And the 'Automatic salvage' is 'true', when the engine is fauled, the engine will pick the most suitable replica as 'Source of Truth' to recover the volume.
+Once the volume has 'DisableRevisionCounter' to 'true', there won't be revision counter file. And the 'Automatic salvage' is 'true', when the engine is faulted, the engine will pick the most suitable replica as 'Source of Truth' to recover the volume.
 
 ### API changes
 
@@ -63,12 +63,12 @@ And for the API compatibility issues, always check the 'EngineImage.Statue.cliAP
 
 1. Add 'Volume.Spec.RevisionCounterDisabled', 'Replica.Spec.RevisionCounterDisabled' and 'Engine.Spec.RevisionCounterDisabled' to volume, replica and engine objects.
 2. Once 'RevisionCounterDisabled' is 'true', volume controller will set 'Volume.Spec.RevisionCounterDisabled' to true, 'Replica.Spec.RevisionCounterDisabled' and 'Engine.Spec.RevisionCounterDisabled' will set to true. And during 'ReplicaProcessCreate' and 'EngineProcessCreate' , this will be passed to engine replica process and engine controller process to start a replica and controller without revision counter.
-3. During 'ReplicaProcessCreate' and 'EngineProcessCreate', if 'Replica.Spec.RevisionCounterDisabled' or 'Engine.Spec.RevisionCounterDisabled' is true, it will pass extra parameter to engine replica to start replica without revision counter or to engine controller to start controller without revision counter support, otherwise keep it the same as current and engine replica will use the default value 'false' for this extra paramter. This is the same as the engine controller to set the 'salvageRequested' flag.
+3. During 'ReplicaProcessCreate' and 'EngineProcessCreate', if 'Replica.Spec.RevisionCounterDisabled' or 'Engine.Spec.RevisionCounterDisabled' is true, it will pass extra parameter to engine replica to start replica without revision counter or to engine controller to start controller without revision counter support, otherwise keep it the same as current and engine replica will use the default value 'false' for this extra parameter. This is the same as the engine controller to set the 'salvageRequested' flag.
 4. Add 'RevisionCounterDisabled' in 'ReplicaInfo', when engine controller start, it will get all replica information.
-4. For engine controlloer starting cases:
+4. For engine controller starting cases:
 - If revision counter is not disabled, stay with the current logic.
 - If revision counter is disabled, engine will not check the synchronization of the replicas.
-- If unexpected case (engine controller has revision counter diabled but any of the replica doesn't, or engine controller has revision counter enabled, but any of the replica doesn't), engine controller will log this as error and mark unmatched replicas to 'ERR'.
+- If unexpected case (engine controller has revision counter disabled but any of the replica doesn't, or engine controller has revision counter enabled, but any of the replica doesn't), engine controller will log this as error and mark unmatched replicas to 'ERR'.
 
 #### Add New Logic for Salvage
 
