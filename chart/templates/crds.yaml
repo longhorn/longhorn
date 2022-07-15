@@ -1055,6 +1055,7 @@ metadata:
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
+  preserveUnknownFields: false
   conversion:
     strategy: Webhook
     webhook:
@@ -1725,6 +1726,7 @@ metadata:
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
+  preserveUnknownFields: false
   conversion:
     strategy: Webhook
     webhook:
@@ -2714,6 +2716,7 @@ metadata:
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
+  preserveUnknownFields: false
   conversion:
     strategy: Webhook
     webhook:
