@@ -31,6 +31,9 @@ spec:
         command:
         - longhorn-manager
         - -d
+        {{- if eq .Values.longhornManager.log.format "json" }}
+        - -j
+        {{- end }}
         - daemon
         - --engine-image
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.engine.repository }}:{{ .Values.image.longhorn.engine.tag }}"
