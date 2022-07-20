@@ -117,6 +117,10 @@ metadata:
     app: longhorn-manager
   name: longhorn-backend
   namespace: {{ include "release_namespace" . }}
+  {{- if .Values.longhornManager.serviceAnnotations }}
+  annotations:
+{{ toYaml .Values.longhornManager.serviceAnnotations | indent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.manager.type }}
   sessionAffinity: ClientIP
