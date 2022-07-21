@@ -91,13 +91,23 @@ spec:
       {{- if .Values.longhornDriver.priorityClass }}
       priorityClassName: {{ .Values.longhornDriver.priorityClass | quote}}
       {{- end }}
-      {{- if .Values.longhornDriver.tolerations }}
+      {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
+{{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+{{- end }}
+{{- if .Values.longhornDriver.tolerations }}
 {{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+{{- end }}
       {{- end }}
-      {{- if .Values.longhornDriver.nodeSelector }}
+      {{- if or .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
+{{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.longhornDriver.nodeSelector }}
 {{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+{{- end }}
       {{- end }}
       serviceAccountName: longhorn-service-account
       securityContext:
