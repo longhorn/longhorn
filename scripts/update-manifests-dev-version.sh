@@ -4,9 +4,8 @@
 #   ./scripts/update-manifests-dev-version.sh 1.3.0 1.4.0
 #
 # Result:
-#   Chart version will be updated to 1.4.0-dev
-#   Images (manager, engine, ui) will be updated to master-head
-#
+#   - Chart version will be updated to 1.4.0-dev
+#   - Images (manager, engine, ui) will be updated to master-head
 
 set -o errexit
 set -o nounset
