@@ -46,7 +46,7 @@ spec:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       {{- if .Values.longhornUI.priorityClass }}
-      priorityClassName: {{ .Values.longhornUI.priorityClass | quote}}
+      priorityClassName: {{ .Values.longhornUI.priorityClass | quote }}
       {{- end }}
       {{- if or .Values.longhornUI.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:

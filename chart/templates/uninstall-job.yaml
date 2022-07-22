@@ -36,7 +36,7 @@ spec:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       {{- if .Values.longhornManager.priorityClass }}
-      priorityClassName: {{ .Values.longhornManager.priorityClass | quote}}
+      priorityClassName: {{ .Values.longhornManager.priorityClass | quote }}
       {{- end }}
       serviceAccountName: longhorn-service-account
       {{- if or .Values.longhornManager.tolerations .Values.global.cattle.windowsCluster.enabled }}

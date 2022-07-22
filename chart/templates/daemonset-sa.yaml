@@ -95,7 +95,7 @@ spec:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       {{- if .Values.longhornManager.priorityClass }}
-      priorityClassName: {{ .Values.longhornManager.priorityClass | quote}}
+      priorityClassName: {{ .Values.longhornManager.priorityClass | quote }}
       {{- end }}
       {{- if or .Values.longhornManager.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:

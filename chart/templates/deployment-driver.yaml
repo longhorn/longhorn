@@ -89,7 +89,7 @@ spec:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       {{- if .Values.longhornDriver.priorityClass }}
-      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote}}
+      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote }}
       {{- end }}
       {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
