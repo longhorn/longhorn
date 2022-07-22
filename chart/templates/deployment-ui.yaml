@@ -44,15 +44,25 @@ spec:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       {{- if .Values.longhornUI.priorityClass }}
-      priorityClassName: {{ .Values.longhornUI.priorityClass | quote}}
+      priorityClassName: {{ .Values.longhornUI.priorityClass | quote }}
       {{- end }}
-      {{- if .Values.longhornUI.tolerations }}
+      {{- if or .Values.longhornUI.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+        {{- end }}
+        {{- if .Values.longhornUI.tolerations }}
 {{ toYaml .Values.longhornUI.tolerations | indent 6 }}
+        {{- end }}
       {{- end }}
-      {{- if .Values.longhornUI.nodeSelector }}
+      {{- if or .Values.longhornUI.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if .Values.longhornUI.nodeSelector }}
 {{ toYaml .Values.longhornUI.nodeSelector | indent 8 }}
+        {{- end }}
       {{- end }}
 ---
 kind: Service

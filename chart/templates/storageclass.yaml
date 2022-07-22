@@ -21,10 +21,10 @@ data:
       staleReplicaTimeout: "30"
       fromBackup: ""
       {{- if .Values.persistence.defaultFsType }}
-      fsType: "{{.Values.persistence.defaultFsType}}"
+      fsType: "{{ .Values.persistence.defaultFsType }}"
       {{- end }}
       {{- if .Values.persistence.migratable }}
-      migratable: "{{.Values.persistence.migratable}}"
+      migratable: "{{ .Values.persistence.migratable }}"
       {{- end }}
       {{- if .Values.persistence.backingImage.enable }}
       backingImage: {{ .Values.persistence.backingImage.name }}
