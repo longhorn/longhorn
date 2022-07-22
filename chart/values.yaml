@@ -4,6 +4,22 @@
 global:
   cattle:
     systemDefaultRegistry: ""
+    windowsCluster:
+      # Enable this to allow Longhorn to run on the Rancher deployed Windows cluster
+      enabled: false
+      # Tolerate Linux node taint
+      tolerations:
+      - key: "cattle.io/os"
+        value: "linux"
+        effect: "NoSchedule"
+        operator: "Equal"
+      # Select Linux nodes
+      nodeSelector:
+        kubernetes.io/os: "linux"
+      # Recognize toleration and node selector for Longhorn run-time created components
+      defaultSetting:
+        taintToleration: cattle.io/os=linux:NoSchedule
+        systemManagedComponentsNodeSelector: kubernetes.io/os:linux
 
 image:
   longhorn:

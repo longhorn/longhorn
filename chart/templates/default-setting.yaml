@@ -20,8 +20,26 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.taintToleration) }}taint-toleration: {{ .Values.defaultSettings.taintToleration }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector) }}system-managed-components-node-selector: {{ .Values.defaultSettings.systemManagedComponentsNodeSelector }}{{ end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (not (kindIs "invalid" .Values.global.cattle.windowsCluster.enabled)) }}
+    taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
+        {{- $windowsDefaultSettingTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.taintToleration) -}}
+        {{- $defaultSettingTaintToleration = .Values.defaultSettings.taintToleration -}}
+      {{- end -}}
+      {{- $taintToleration := list $windowsDefaultSettingTaintToleration $defaultSettingTaintToleration }}{{ join ";" (compact $taintToleration) -}}
+    {{- end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (not (kindIs "invalid" .Values.global.cattle.windowsCluster.enabled)) }}
+    system-managed-components-node-selector: {{ $windowsDefaultSettingNodeSelector := list }}{{ $defaultSettingNodeSelector := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
+        {{ $windowsDefaultSettingNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector) -}}
+        {{- $defaultSettingNodeSelector = .Values.defaultSettings.systemManagedComponentsNodeSelector -}}
+      {{- end -}}
+      {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
+    {{- end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}priority-class: {{ .Values.defaultSettings.priorityClass }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}auto-salvage: {{ .Values.defaultSettings.autoSalvage }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}{{ end }}
