@@ -40,19 +40,19 @@ spec:
       serviceAccountName: longhorn-service-account
       {{- if or .Values.longhornManager.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
-{{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
 {{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
-{{- end }}
-{{- if .Values.longhornManager.tolerations }}
+        {{- end }}
+        {{- if .Values.longhornManager.tolerations }}
 {{ toYaml .Values.longhornManager.tolerations | indent 6 }}
-{{- end }}
+        {{- end }}
       {{- end }}
       {{- if or .Values.longhornManager.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
-{{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
 {{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
-{{- end }}
-{{- if .Values.longhornManager.nodeSelector }}
+        {{- end }}
+        {{- if .Values.longhornManager.nodeSelector }}
 {{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
-{{- end }}
+        {{- end }}
       {{- end }}

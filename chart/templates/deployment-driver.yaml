@@ -93,21 +93,21 @@ spec:
       {{- end }}
       {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
-{{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
 {{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
-{{- end }}
-{{- if .Values.longhornDriver.tolerations }}
+        {{- end }}
+        {{- if .Values.longhornDriver.tolerations }}
 {{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
-{{- end }}
+        {{- end }}
       {{- end }}
       {{- if or .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
-{{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
 {{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
-{{- end }}
-{{- if .Values.longhornDriver.nodeSelector }}
+        {{- end }}
+        {{- if .Values.longhornDriver.nodeSelector }}
 {{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
-{{- end }}
+        {{- end }}
       {{- end }}
       serviceAccountName: longhorn-service-account
       securityContext:
