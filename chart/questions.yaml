@@ -670,3 +670,9 @@ WARNING:
   label: Pod Security Policy
   type: boolean
   group: "Other Settings"
+- variable: global.cattle.windowsCluster.enabled
+  default: "false"
+  description: "Enable this to allow Longhorn to run on the Rancher deployed Windows cluster."
+  label: Rancher Windows Cluster
+  type: boolean
+  group: "Other Settings"
