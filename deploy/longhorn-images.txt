@@ -4,8 +4,8 @@ longhornio/csi-resizer:v1.2.0
 longhornio/csi-snapshotter:v3.0.3
 longhornio/csi-node-driver-registrar:v2.5.0
 longhornio/backing-image-manager:v3_20220609
-longhornio/longhorn-engine:v1.3.0
-longhornio/longhorn-instance-manager:v1_20220611
-longhornio/longhorn-manager:v1.3.0
+longhornio/longhorn-engine:master-head
+longhornio/longhorn-instance-manager:v1_20220722
+longhornio/longhorn-manager:master-head
 longhornio/longhorn-share-manager:v1_20220531
-longhornio/longhorn-ui:v1.3.0
+longhornio/longhorn-ui:master-head

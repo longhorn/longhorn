@@ -13,7 +13,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
 spec:
   privileged: true
   allowPrivilegeEscalation: true
@@ -49,7 +49,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
 ---
 # Source: longhorn/templates/default-setting.yaml
 apiVersion: v1
@@ -60,7 +60,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
 data:
   default-setting.yaml: |-
 ---
@@ -73,7 +73,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
 data:
   storageclass.yaml: |
     kind: StorageClass
@@ -103,7 +103,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: backingimagedatasources.longhorn.io
 spec:
@@ -274,7 +274,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: backingimagemanagers.longhorn.io
 spec:
@@ -459,7 +459,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: backingimages.longhorn.io
 spec:
@@ -634,7 +634,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: backups.longhorn.io
 spec:
@@ -827,7 +827,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: backuptargets.longhorn.io
 spec:
@@ -1010,7 +1010,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: backupvolumes.longhorn.io
 spec:
@@ -1174,7 +1174,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
@@ -1365,7 +1365,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: engines.longhorn.io
 spec:
@@ -1686,7 +1686,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: instancemanagers.longhorn.io
 spec:
@@ -1856,7 +1856,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
@@ -2086,7 +2086,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: orphans.longhorn.io
 spec:
@@ -2352,7 +2352,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: replicas.longhorn.io
 spec:
@@ -2544,7 +2544,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: settings.longhorn.io
 spec:
@@ -2635,7 +2635,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: sharemanagers.longhorn.io
 spec:
@@ -2746,7 +2746,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: snapshots.longhorn.io
 spec:
@@ -2870,7 +2870,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
@@ -3201,7 +3201,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
 rules:
 - apiGroups:
   - apiextensions.k8s.io
@@ -3262,7 +3262,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -3280,7 +3280,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
   namespace: longhorn-system
 rules:
 - apiGroups:
@@ -3300,7 +3300,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
   namespace: longhorn-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3321,7 +3321,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-manager
   name: longhorn-backend
   namespace: longhorn-system
@@ -3342,7 +3342,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-ui
   name: longhorn-frontend
   namespace: longhorn-system
@@ -3363,7 +3363,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-conversion-webhook
   name: longhorn-conversion-webhook
   namespace: longhorn-system
@@ -3384,7 +3384,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-admission-webhook
   name: longhorn-admission-webhook
   namespace: longhorn-system
@@ -3405,7 +3405,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
   name: longhorn-engine-manager
   namespace: longhorn-system
 spec:
@@ -3421,7 +3421,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
   name: longhorn-replica-manager
   namespace: longhorn-system
 spec:
@@ -3437,7 +3437,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-manager
   name: longhorn-manager
   namespace: longhorn-system
@@ -3450,16 +3450,16 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.3.0
+        app.kubernetes.io/version: v1.4.0-dev
         app: longhorn-manager
     spec:
       initContainers:
       - name: wait-longhorn-admission-webhook
-        image: longhornio/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:master-head
         command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-admission-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:master-head
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -3468,15 +3468,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - "longhornio/longhorn-engine:v1.3.0"
+        - "longhornio/longhorn-engine:master-head"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v1_20220611"
+        - "longhornio/longhorn-instance-manager:v1_20220722"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20220531"
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:v3_20220609"
         - --manager-image
-        - "longhornio/longhorn-manager:v1.3.0"
+        - "longhornio/longhorn-manager:master-head"
         - --service-account
         - longhorn-service-account
         ports:
@@ -3536,7 +3536,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
 spec:
   replicas: 1
   selector:
@@ -3547,23 +3547,23 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.3.0
+        app.kubernetes.io/version: v1.4.0-dev
         app: longhorn-driver-deployer
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.3.0
+          image: longhornio/longhorn-manager:master-head
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.3.0
+          image: longhornio/longhorn-manager:master-head
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - "longhornio/longhorn-manager:v1.3.0"
+          - "longhornio/longhorn-manager:master-head"
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -3600,7 +3600,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-ui
   name: longhorn-ui
   namespace: longhorn-system
@@ -3614,12 +3614,12 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.3.0
+        app.kubernetes.io/version: v1.4.0-dev
         app: longhorn-ui
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.3.0
+        image: longhornio/longhorn-ui:master-head
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name : nginx-cache
@@ -3651,7 +3651,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-conversion-webhook
   name: longhorn-conversion-webhook
   namespace: longhorn-system
@@ -3665,7 +3665,7 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.3.0
+        app.kubernetes.io/version: v1.4.0-dev
         app: longhorn-conversion-webhook
     spec:
       affinity:
@@ -3682,7 +3682,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: longhorn-conversion-webhook
-        image: longhornio/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:master-head
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 2000
@@ -3711,7 +3711,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.3.0
+    app.kubernetes.io/version: v1.4.0-dev
     app: longhorn-admission-webhook
   name: longhorn-admission-webhook
   namespace: longhorn-system
@@ -3725,7 +3725,7 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.3.0
+        app.kubernetes.io/version: v1.4.0-dev
         app: longhorn-admission-webhook
     spec:
       affinity:
@@ -3742,14 +3742,14 @@ spec:
               topologyKey: kubernetes.io/hostname
       initContainers:
       - name: wait-longhorn-conversion-webhook
-        image: longhornio/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:master-head
         command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-conversion-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 2000
       containers:
       - name: longhorn-admission-webhook
-        image: longhornio/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:master-head
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 2000
