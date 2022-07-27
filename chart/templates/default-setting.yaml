@@ -20,7 +20,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}{{ end }}
-    {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (not (kindIs "invalid" .Values.global.cattle.windowsCluster.enabled)) }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
     taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
         {{- $windowsDefaultSettingTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
@@ -30,7 +30,7 @@ data:
       {{- end -}}
       {{- $taintToleration := list $windowsDefaultSettingTaintToleration $defaultSettingTaintToleration }}{{ join ";" (compact $taintToleration) -}}
     {{- end }}
-    {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (not (kindIs "invalid" .Values.global.cattle.windowsCluster.enabled)) }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
     system-managed-components-node-selector: {{ $windowsDefaultSettingNodeSelector := list }}{{ $defaultSettingNodeSelector := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
         {{ $windowsDefaultSettingNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
