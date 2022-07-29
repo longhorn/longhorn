@@ -97,6 +97,10 @@ set_packages_and_check_cmd()
     CHECK_CMD='pacman -Q'
     PACKAGES=(nfs-utils open-iscsi)
     ;;
+  *"gentoo"* )
+    CHECK_CMD='qlist -I'
+    PACKAGES=(net-fs/nfs-utils sys-block/open-iscsi)
+    ;;
   *)
     CHECK_CMD=''
     PACKAGES=()
