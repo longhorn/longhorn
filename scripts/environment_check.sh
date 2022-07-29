@@ -131,6 +131,56 @@ check_dependencies() {
 
 create_ds() {
 cat <<EOF > $TEMP_DIR/environment_check.yaml
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: longhorn-environment-check-sa
+  namespace: default
+  labels:
+    app: longhorn-environment-check
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: longhorn-environment-check-role
+  labels:
+    app: longhorn-environment-check
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - longhorn-environment-check-psp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: longhorn-environment-check-binding
+  labels:
+    app: longhorn-environment-check
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: longhorn-environment-check-role
+subjects:
+  - kind: ServiceAccount
+    name: longhorn-environment-check-sa
+    namespace: default
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: longhorn-environment-check-psp
+  labels:
+    app: longhorn-environment-check
+spec:
+  privileged: true
+  allowPrivilegeEscalation: true
+  allowedCapabilities: ['*']
+  volumes: ['*']
+  hostNetwork: true
+  hostIPC: true
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -146,6 +196,7 @@ spec:
       labels:
         app: longhorn-environment-check
     spec:
+      serviceAccount: longhorn-environment-check-sa
       hostPID: true
       containers:
       - name: longhorn-environment-check
