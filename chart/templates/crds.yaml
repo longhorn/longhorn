@@ -232,7 +232,7 @@ spec:
       jsonPath: .spec.image
     - name: RefCount
       type: integer
-      description: Number of volumes are using the engine image
+      description: Number of resources using the engine image
       jsonPath: .status.refCount
     - name: BuildDate
       type: date
