@@ -1210,7 +1210,7 @@ spec:
       jsonPath: .spec.image
       name: Image
       type: string
-    - description: Number of volumes are using the engine image
+    - description: Number of resources using the engine image
       jsonPath: .status.refCount
       name: RefCount
       type: integer
@@ -1252,7 +1252,7 @@ spec:
       jsonPath: .spec.image
       name: Image
       type: string
-    - description: Number of volumes are using the engine image
+    - description: Number of resources using the engine image
       jsonPath: .status.refCount
       name: RefCount
       type: integer
