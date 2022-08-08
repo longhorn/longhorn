@@ -3473,7 +3473,7 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:v1.3.1-rc1"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v1_20220722"
+        - "longhornio/longhorn-instance-manager:v1_20220808"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20220808"
         - --backing-image-manager-image
