@@ -37,10 +37,10 @@ image:
       tag: v1_20220722
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20220531
+      tag: v1_20220808
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v3_20220609
+      tag: v3_20220808
   csi:
     attacher:
       repository: longhornio/csi-attacher
