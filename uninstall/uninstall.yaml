@@ -61,7 +61,7 @@ rules:
     resources: ["priorityclasses"]
     verbs: ["watch", "list"]
   - apiGroups: ["storage.k8s.io"]
-    resources: ["csidrivers", "storageclasses"]
+    resources: ["csidrivers", "storageclasses", "volumeattachments"]
     verbs: ["*"]
   - apiGroups: ["longhorn.io"]
     resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers", "backingimages", "backingimagemanagers", "backingimagedatasources", "backuptargets", "backupvolumes", "backups", "recurringjobs"]
