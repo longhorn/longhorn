@@ -36,6 +36,23 @@ apiVersion: v1
 kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-recovery-backend
+  name: longhorn-recovery-backend
+  namespace: {{ include "release_namespace" . }}
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  selector:
+    app: longhorn-recovery-backend
+  ports:
+  - name: recovery-backend
+    port: 9600
+    targetPort: recov-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
   name: longhorn-engine-manager
   namespace: {{ include "release_namespace" . }}
 spec:

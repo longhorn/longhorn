@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-recovery-backend
+  name: longhorn-recovery-backend
+  namespace: {{ include "release_namespace" . }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-recovery-backend
+  template:
+    metadata:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+        app: longhorn-recovery-backend
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-recovery-backend
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: longhorn-recovery-backend
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          runAsUser: 2000
+        command:
+        - longhorn-manager
+        - recovery-backend
+        - --service-account
+        - longhorn-service-account
+        ports:
+        - containerPort: 9600
+          name: recov-backend
+        readinessProbe:
+          tcpSocket:
+            port: 9600
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      {{- if .Values.privateRegistry.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.registrySecret }}
+      {{- end }}
+      {{- if .Values.longhornDriver.priorityClass }}
+      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote}}
+      {{- end }}
+      {{- if .Values.longhornDriver.tolerations }}
+      tolerations:
+{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+      {{- end }}
+      {{- if .Values.longhornDriver.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+      {{- end }}
+      serviceAccountName: longhorn-service-account
