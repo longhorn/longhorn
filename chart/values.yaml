@@ -105,6 +105,7 @@ defaultSettings:
   defaultReplicaCount: ~
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
+  failedBackupTTL: ~
   taintToleration: ~
   systemManagedComponentsNodeSelector: ~
   priorityClass: ~
