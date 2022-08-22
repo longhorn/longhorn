@@ -61,10 +61,12 @@ rules:
     resources: ["priorityclasses"]
     verbs: ["watch", "list"]
   - apiGroups: ["storage.k8s.io"]
-    resources: ["csidrivers", "storageclasses"]
+    resources: ["csidrivers", "storageclasses", "volumeattachments"]
     verbs: ["*"]
   - apiGroups: ["longhorn.io"]
-    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers", "backingimages", "backingimagemanagers", "backingimagedatasources", "backuptargets", "backupvolumes", "backups", "recurringjobs", "orphans"]
+    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers",
+                "backingimages", "backingimagemanagers", "backingimagedatasources", "backuptargets", "backupvolumes", "backups",
+                "recurringjobs", "orphans", "snapshots"]
     verbs: ["*"]
   - apiGroups: ["coordination.k8s.io"]
     resources: ["leases"]
@@ -104,7 +106,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: longhornio/longhorn-manager:v1.3.0-preview1
+        image: longhornio/longhorn-manager:master-head
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true

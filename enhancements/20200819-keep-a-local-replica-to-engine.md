@@ -119,7 +119,7 @@ UI modification:
    * On the right volume info panel, add a <div> to display `selectedVolume.dataLocality`
    * On the right volume panel, in the Health row, add an icon for data locality status. 
      Specifically, if  `dataLocality=best-effort` but there is not a local replica then display a warning icon.
-     Similar to the replica node redundancy wanring [here](https://github.com/longhorn/longhorn-ui/blob/0a52c1f0bef172d8ececdf4e1e953bfe78c86f29/src/routes/volume/detail/VolumeInfo.js#L47)
+     Similar to the replica node redundancy warning [here](https://github.com/longhorn/longhorn-ui/blob/0a52c1f0bef172d8ececdf4e1e953bfe78c86f29/src/routes/volume/detail/VolumeInfo.js#L47)
    * In the volume's actions dropdown, add a new action to update `dataLocality`
 1. In Rancher UI, add a parameter `dataLocality` when create storage class using Longhorn provisioner. 
    

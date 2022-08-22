@@ -6,41 +6,60 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-setting.yaml: |-
-    backup-target: {{ .Values.defaultSettings.backupTarget }}
-    backup-target-credential-secret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}
-    allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
-    create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
-    default-data-path: {{ .Values.defaultSettings.defaultDataPath }}
-    replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
-    replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}
-    storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}
-    storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}
-    upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
-    default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
-    default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}
-    default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
-    backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
-    taint-toleration: {{ .Values.defaultSettings.taintToleration }}
-    system-managed-components-node-selector: {{ .Values.defaultSettings.systemManagedComponentsNodeSelector }}
-    priority-class: {{ .Values.defaultSettings.priorityClass }}
-    auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
-    auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
-    disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
-    replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
-    node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}
-    allow-node-drain-with-last-healthy-replica: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica }}
-    mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}
-    disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}
-    replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}
-    concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}
-    disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}
-    system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
-    allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
-    auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
-    concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
-    backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}
-    backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}
-    guaranteed-engine-manager-cpu: {{ .Values.defaultSettings.guaranteedEngineManagerCPU }}
-    guaranteed-replica-manager-cpu: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU }}
-    kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
-    orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.backupTarget) }}backup-target: {{ .Values.defaultSettings.backupTarget }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.backupTargetCredentialSecret) }}backup-target-credential-secret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}default-data-path: {{ .Values.defaultSettings.defaultDataPath }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}{{ end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
+    taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
+        {{- $windowsDefaultSettingTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.taintToleration) -}}
+        {{- $defaultSettingTaintToleration = .Values.defaultSettings.taintToleration -}}
+      {{- end -}}
+      {{- $taintToleration := list $windowsDefaultSettingTaintToleration $defaultSettingTaintToleration }}{{ join ";" (compact $taintToleration) -}}
+    {{- end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
+    system-managed-components-node-selector: {{ $windowsDefaultSettingNodeSelector := list }}{{ $defaultSettingNodeSelector := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
+        {{ $windowsDefaultSettingNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector) -}}
+        {{- $defaultSettingNodeSelector = .Values.defaultSettings.systemManagedComponentsNodeSelector -}}
+      {{- end -}}
+      {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
+    {{- end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}priority-class: {{ .Values.defaultSettings.priorityClass }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}auto-salvage: {{ .Values.defaultSettings.autoSalvage }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica) }}allow-node-drain-with-last-healthy-replica: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.mkfsExt4Parameters) }}mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.disableReplicaRebuild) }}disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.disableRevisionCounter) }}disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.guaranteedEngineManagerCPU) }}guaranteed-engine-manager-cpu: {{ .Values.defaultSettings.guaranteedEngineManagerCPU }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.guaranteedReplicaManagerCPU) }}guaranteed-replica-manager-cpu: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.orphanAutoDeletion) }}orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}storage-network: {{ .Values.defaultSettings.storageNetwork }}{{ end }}

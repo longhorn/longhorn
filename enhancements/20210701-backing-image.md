@@ -337,7 +337,7 @@ After the enhancement, users can directly specify the BackingImage during volume
             - BackingImageDataSource has not been created. Add retry would solve this case.
             - BackingImageDataSource is gone but BackingImage has not been cleaned up. Longhorn can ignore BackingImageDataSource when BackingImage deletion timestamp is set.
     - BackingImage disk cleanup:
-        - This cannot break the HA besides affacting replicas. The main idea is similar to the cleanup in BackingImage Controller.
+        - This cannot break the HA besides attaching replicas. The main idea is similar to the cleanup in BackingImage Controller.
 9. In CSI:
     - Check the backing image during the volume creation.
     - The missing BackingImage will be created when both BackingImage name and data source info are provided.
@@ -370,7 +370,7 @@ After the enhancement, users can directly specify the BackingImage during volume
         - Similar to `Fetch`, the image will try to reuse existing files.
         - The manager is responsible for managing all port. The image will use the functions provided by the manager to get then release ports.
     - API `Send`: Send a backing image file to a receiver. This should be similar to replica rebuilding.
-    - API `Delete`: Unregister the image then delete the imge work directory. Make sure syncing or pulling will be cancelled if exists.
+    - API `Delete`: Unregister the image then delete the image work directory. Make sure syncing or pulling will be cancelled if exists.
     - API `Get`/`List`: Collect the status of one backing image file/all backing image files.
     - API `Watch`: establish a streaming connection to report BackingImage file info.
 - As I mentioned above, we will use BackingImage UUID to generate work directories for each BackingImage. The work directory is like:

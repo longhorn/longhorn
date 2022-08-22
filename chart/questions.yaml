@@ -53,7 +53,7 @@ questions:
     label: Longhorn Instance Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.instanceManager.tag
-    default: v1_20220512
+    default: v1_20220808
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
     label: Longhorn Instance Manager Image Tag
@@ -65,7 +65,7 @@ questions:
     label: Longhorn Share Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.shareManager.tag
-    default: v1_20211020
+    default: v1_20220808
     description: "Specify Longhorn Share Manager Image Tag"
     type: string
     label: Longhorn Share Manager Image Tag
@@ -77,7 +77,7 @@ questions:
     label: Longhorn Backing Image Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.backingImageManager.tag
-    default: v3_20220318
+    default: v3_20220808
     description: "Specify Longhorn Backing Image Manager Image Tag"
     type: string
     label: Longhorn Backing Image Manager Image Tag
@@ -514,6 +514,17 @@ WARNING:
   group: "Longhorn Default Settings"
   type: boolean
   default: false
+- variable: defaultSettings.storageNetwork
+  label: Storage Network
+  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network.
+	To segregate the storage network, input the pre-existing NetworkAttachmentDefinition in \"<namespace>/<name>\" format.
+	WARNING:
+	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
+	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
+	  - When applying the setting, Longhorn will restart all manager, instance-manager, and backing-image-manager pods."
+  group: "Longhorn Default Settings"
+  type: string
+  default:
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
@@ -657,5 +668,11 @@ WARNING:
   default: "true"
   description: "Setup a pod security policy for Longhorn workloads."
   label: Pod Security Policy
+  type: boolean
+  group: "Other Settings"
+- variable: global.cattle.windowsCluster.enabled
+  default: "false"
+  description: "Enable this to allow Longhorn to run on the Rancher deployed Windows cluster."
+  label: Rancher Windows Cluster
   type: boolean
   group: "Other Settings"

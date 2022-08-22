@@ -72,7 +72,7 @@ For example, there are many times users ask us for supporting and the problems w
 If there is a CPU monitoring dashboard for instance managers, those problems can be quickly detected.
 
 #### Story 2
-User want to be notified about abnomal event such as disk space limit approaching. 
+User want to be notified about abnormal event such as disk space limit approaching. 
 We can expose metrics provide information about it and user can scrape the metrics and setup alert system.
 
 ### User Experience In Detail
@@ -82,7 +82,7 @@ Users can use Prometheus or other monitoring systems to collect those metrics by
 Then, user can display the collected data using tools such as Grafana.
 User can also setup alert by using tools such as Prometheus Alertmanager.
 
-Below are the desciptions of metrics which Longhorn exposes and how users can use them:
+Below are the descriptions of metrics which Longhorn exposes and how users can use them:
 
 1. longhorn_volume_capacity_bytes
 
@@ -347,7 +347,7 @@ We add a new end point `/metrics` to exposes all longhorn Prometheus metrics.
 
 ### Implementation Overview
 We follow the [Prometheus best practice](https://prometheus.io/docs/instrumenting/writing_exporters/#deployment), each Longhorn manager reports information about the components it manages.
-Prometheus can use service discovery mechanisim to find all longhorn-manager pods in longhorn-backend service.
+Prometheus can use service discovery mechanism to find all longhorn-manager pods in longhorn-backend service.
 
 We create a new collector for each type (volumeCollector, backupCollector, nodeCollector, etc..) and have a common baseCollector. 
 This structure is similar to the controller package: we have volumeController, nodeController, etc.. which have a common baseController.
