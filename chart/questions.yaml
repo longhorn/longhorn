@@ -335,7 +335,7 @@ The available volume spec options are:
     description: "In minutes. This setting determines how long Longhorn will keep the backup resource that was failed. Set to 0 to disable the auto-deletion.
 Failed backups will be checked and cleaned up during backupstore polling which is controlled by **Backupstore Poll Interval** setting.
 Hence this value determines the minimal wait interval of the cleanup. And the actual cleanup interval is multiple of **Backupstore Poll Interval**.
-			Disabling **Backupstore Poll Interval** also means to disable failed backup auto-deletion."
+Disabling **Backupstore Poll Interval** also means to disable failed backup auto-deletion."
     group: "Longhorn Default Settings"
     type: int
     min: 0
