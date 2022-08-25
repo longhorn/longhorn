@@ -6,13 +6,13 @@ The file name should be lowercased and spaces/punctuation should be replaced wit
 
 ## Summary
 
-The Summary section is incredibly important for producing high quality user-focused documentation such as release notes or a development roadmap.
+The Summary section is incredibly important for producing high-quality user-focused documentation such as release notes or a development roadmap.
 
 A good summary is probably at least a paragraph in length.
 
 ### Related Issues
 
-The URL For the related enhancement issues in Longhorn repo.
+The URL For the related enhancement issues in the Longhorn repository.
 
 ## Motivation
 
@@ -26,10 +26,10 @@ What is out of scope for this enhancement? Listing non-goals helps to focus disc
 
 ## Proposal
 
-This is where we get down to the nitty gritty of what the proposal actually is.
+This is where we get down to the nitty-gritty of what the proposal actually is.
 
 ### User Stories
-Detail the things that people will be able to do if this enhancement is implemented. A good practise is including a comparison of what user cannot do before the enhancement implemented, why user would want an enhancement and what user need to do after, to make it clear why the enhancement beneficial to the user.
+Detail the things that people will be able to do if this enhancement is implemented. A good practice is including a comparison of what the user cannot do before the enhancement is implemented, why the user would want an enhancement, and what the user needs to do after, to make it clear why the enhancement is beneficial to the user.
 
 The experience details should be in the `User Experience In Detail` later.
 
@@ -38,7 +38,7 @@ The experience details should be in the `User Experience In Detail` later.
 
 ### User Experience In Detail
 
-Detail what user need to do to use this enhancement. Include as much detail as possible so that people can understand the "how" of the system. The goal here is to make this feel real for users without getting bogged down.
+Detail what the user needs to do to use this enhancement. Include as much detail as possible so that people can understand the "how" of the system. The goal here is to make this feel real for users without getting bogged down.
 
 ### API changes
 
@@ -46,7 +46,7 @@ Detail what user need to do to use this enhancement. Include as much detail as p
 
 ### Implementation Overview
 
-Overview on how the enhancement will be implemented.
+Overview of how the enhancement will be implemented.
 
 ### Test plan
 
@@ -56,8 +56,8 @@ For engine enhancement, also requires engine integration test plan.
 
 ### Upgrade strategy
 
-Anything that requires if user want to upgrade to this enhancement
+Anything that requires if the user wants to upgrade to this enhancement.
 
 ## Note [optional]
 
-Additional nodes.
+Additional notes.
