@@ -959,11 +959,11 @@ spec:
         - --engine-image
         - longhornio/longhorn-engine:v1.2.5-rc1
         - --instance-manager-image
-        - longhornio/longhorn-instance-manager:v1_20220303
+        - longhornio/longhorn-instance-manager:v1_20220303_patch1
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20211020
+        - longhornio/longhorn-share-manager:v1_20211020_patch1
         - --backing-image-manager-image
-        - longhornio/backing-image-manager:v2_20210820
+        - longhornio/backing-image-manager:v2_20210820_patch1
         - --manager-image
         - longhornio/longhorn-manager:v1.2.5-rc1
         - --service-account
