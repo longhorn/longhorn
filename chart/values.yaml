@@ -25,13 +25,13 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.2.5-rc2
+      tag: v1.2.5
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.2.5-rc2
+      tag: v1.2.5
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.2.5-rc2
+      tag: v1.2.5
     instanceManager:
       repository: longhornio/longhorn-instance-manager
       tag: v1_20220303_patch1
