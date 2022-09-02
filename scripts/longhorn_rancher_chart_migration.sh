@@ -12,9 +12,9 @@ set -e
 usage() {
   echo ""
   echo "The migration includes:"
-  echo "1. Running the script with --type=migrate to migrate the labels and annotations for Longhorn resources"
+  echo "1. Running the script with --type migrate to migrate the labels and annotations for Longhorn resources"
   echo "2. Manually installing Longhorn chart in app&marketplace UI"
-  echo "3. Running script with --type=cleanup to remove the old Longhorn chart from old catalog UI"
+  echo "3. Running script with --type cleanup to remove the old Longhorn chart from old catalog UI"
   echo ""
   echo "usage:"
   echo "$0 [options]"
@@ -119,7 +119,7 @@ if [ "$TYPE" == "cleanup" ] ; then
 
   MANAGER=$(kubectl --kubeconfig ${DOWNSTREAM_KUBECONFIG} -n ${RELEASE_NAMESPACE} get ds longhorn-manager -ojsonpath="{.metadata.labels['app\.kubernetes\.io/managed-by']}")
   if [ $MANAGER != "Helm" ] ; then
-    echo "Labels have not been migrated. Did you run the part 1 by specifying the flag --type=migrate ?"
+    echo "Labels have not been migrated. Did you run the part 1 by specifying the flag --type migrate ?"
     exit 1
   fi
 
@@ -198,4 +198,4 @@ echo "  3. Select the chart version corresponding the Longhorn version ${RANCHER
 echo "  4. Install the chart with the correct helm values. Here are the helm values of your old charts: "
 printf '%s\n' "${RANCHERAPPVALUES:-$RANCHERAPPANSWERS}"
 echo "  5. Verify that the migrated charts are working ok"
-echo "  6. Run this script again with the flag --type=cleanup to remove the old chart from the legacy UI"
+echo "  6. Run this script again with the flag --type cleanup to remove the old chart from the legacy UI"
