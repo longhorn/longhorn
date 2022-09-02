@@ -1,0 +1,47 @@
+# Specify the name of the application that is using this Upgrade Responder server
+# This will be used to create a database named <application-name>_upgrade_responder
+# in the InfluxDB to store all data for this Upgrade Responder
+# The name must be in snake case format
+applicationName: longhorn
+
+image:
+  repository: longhornio/upgrade-responder
+  tag: longhorn-head
+  pullPolicy: Always
+
+secret:
+  name: upgrade-responder-secret
+  # Set this to false if you don't want to manage these secrets with helm
+  managed: false
+
+# This configmap contains information about the latest release
+# of the application that is using this Upgrade Responder
+configMap:
+  responseConfig: |-
+    {
+      "Versions": [
+        {
+          "Name": "v1.1.3",
+          "ReleaseDate": "2021-12-17T00:00:00Z",
+          "Tags": [
+            "stable"
+          ]
+        },
+        {
+          "Name": "v1.2.5",
+          "ReleaseDate": "2022-09-01T00:00:00Z",
+          "Tags": [
+            "stable"
+          ]
+        },
+        {
+          "Name": "v1.3.1",
+          "ReleaseDate": "2022-08-11T00:00:00Z",
+          "Tags": [
+            "latest",
+            "stable"
+          ]
+        }
+      ]
+    }
+
