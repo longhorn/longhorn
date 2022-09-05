@@ -12,14 +12,13 @@ Longhorn will leave the failed backups behind and will not delete the backups au
 
 ### Goals
 
-- Automatic deletion of failed backups when detected.
+- Support the auto-deletion of failed backups that exceeded the TTL.
 - Support the global auto-deletion option of failed backups cleanup for users.
 - The process should not be stuck in the reconciliation of the controllers.
 
 ### Non-goals [optional]
 
 - Clean up unknown files or directories on the remote backup target.
-- Support the auto-deletion of failed backups that exceeded the TTL.
 
 ## Proposal
 
@@ -66,7 +65,7 @@ After the enhancement, Longhorn can delete the failed backups automatically afte
   - Users can check the event log to understand why the backup failed and deleted.
 
 - Via `kubectl`
-  - Users can list the failed backups if auto-deletion is disabled by `kubectl -n longhorn-system get backups`.
+  - Users can list the failed backups by `kubectl -n longhorn-system get backups` if auto-deletion is disabled.
 
 ## Design
 
@@ -74,7 +73,7 @@ After the enhancement, Longhorn can delete the failed backups automatically afte
 
 **Settings**
 
-- Add setting `failed-backup-auto-deletion`. Default value is `true`.
+- Add setting `failed-backup-ttl`. Default value is `1440` minutes and set to `0` to disable the auto-deletion.
 
 **Failed Backup**
 
@@ -88,6 +87,7 @@ After the enhancement, Longhorn can delete the failed backups automatically afte
 
 **Backup Volume controller**
 
+- Reconcile loop usually is triggered after backupstore polling which is controlled by **Backupstore Poll Interval** setting.
 - Start to get all backups in each reconcile loop
 - Tell failed backups from all backups and try to delete failed backups by default.
 - Update the backup volume CR status.
@@ -96,8 +96,8 @@ After the enhancement, Longhorn can delete the failed backups automatically afte
 
 **Integration tests**
 
-- `backups` CRs with `Error` or `Unknown` state will be removed soon by `backup_volume_controller` by default when the `backup_monitor` detects the backup failed.
-- `backups` CRs with `Error` or `Unknown` state will not be handled if `failed-backup-auto-deletion` is disabled.
+- `backups` CRs with `Error` or `Unknown` state will be removed by `backup_volume_controller` triggered by backupstore polling when the `backup_monitor` detects the backup failed.
+- `backups` CRs with `Error` or `Unknown` state will not be handled if the auto-deletion is disabled.
 
 ## Note [optional]
 
