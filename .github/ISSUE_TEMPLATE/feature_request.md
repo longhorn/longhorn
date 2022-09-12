@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for this project
 title: "[FEATURE] "
-labels: ["kind/enhancement", "require/automation-e2e"]
+labels: kind/enhancement
 assignees: ''
 
 ---

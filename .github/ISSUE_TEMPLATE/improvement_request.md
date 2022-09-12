@@ -2,7 +2,7 @@
 name: Improvement request
 about: Suggest an improvement of an existing feature for this project
 title: "[IMPROVEMENT] "
-labels: ["kind/improvement", "require/automation-e2e"]
+labels: kind/improvement
 assignees: ''
 
 ---
