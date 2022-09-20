@@ -35,6 +35,7 @@ jobs:
         id: labels
         run: |
           RAW_LABELS="${{ join(github.event.issue.labels.*.name, ' ') }}"
+          RAW_LABELS="${RAW_LABELS} kind/backport"
           echo "RAW LABELS: $RAW_LABELS"
           LABELS=$(echo "$RAW_LABELS" | sed -r 's/\s*backport-needed\S+//g' | sed -r 's/\s*require\/automation-e2e//g' | xargs | sed 's/ /, /g')
           echo "LABELS: $LABELS"
