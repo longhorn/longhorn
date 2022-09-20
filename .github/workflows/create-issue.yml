@@ -92,4 +92,6 @@ jobs:
             [TEST]${{ github.event.issue.title }}
           body: |
             adding/updating auto e2e test cases for ${{ github.event.issue.html_url }} if they can be automated
-          assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}
+            
+            cc @longhorn/qa
+          labels: kind/test
