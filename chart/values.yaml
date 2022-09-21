@@ -85,6 +85,9 @@ persistence:
     dataSourceType: ~
     dataSourceParameters: ~
     expectedChecksum: ~
+  defaultNodeSelector:
+    enable: false # disable by default
+    selector: []
 
 csi:
   kubeletRootDir: ~
