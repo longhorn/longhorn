@@ -597,6 +597,20 @@ WARNING:
     group: "Longhorn Storage Class Settings"
     type: string
     default:
+- variable: defaultSettings.defaultNodeSelector.enable
+  description: "Enable recurring Node selector for Longhorn StorageClass"
+  group: "Longhorn Storage Class Settings"
+  label: Enable Storage Class Node Selector
+  type: boolean
+  default: false
+  show_subquestion_if: true
+  subquestions:
+  - variable: defaultSettings.defaultNodeSelector.selector
+    label: Storage Class Node Selector
+    description: 'We use NodeSelector when we want to bind PVC via StorageClass into desired mountpoint on the nodes tagged whith its value'
+    group: "Longhorn Default Settings"
+    type: string
+    default:
 - variable: persistence.backingImage.enable
   description: "Set backing image for Longhorn StorageClass"
   group: "Longhorn Storage Class Settings"
