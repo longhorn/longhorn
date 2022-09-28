@@ -109,6 +109,8 @@ defaultSettings:
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
   failedBackupTTL: ~
+  recurringSuccessfulJobsHistoryLimit: ~
+  recurringFailedJobsHistoryLimit: ~
   taintToleration: ~
   systemManagedComponentsNodeSelector: ~
   priorityClass: ~
