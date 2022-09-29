@@ -21,6 +21,8 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}recurring-successful-jobs-history-limit: {{ .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.recurringFailedJobsHistoryLimit) }}recurring-failed-jobs-history-limit: {{ .Values.defaultSettings.recurringFailedJobsHistoryLimit }}{{ end }}
     {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
     taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
