@@ -53,7 +53,7 @@ questions:
     label: Longhorn Instance Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.instanceManager.tag
-    default: v1_20220808
+    default: v1_20220920
     description: "Specify Longhorn Instance Manager Image Tag"
     type: string
     label: Longhorn Instance Manager Image Tag
@@ -65,7 +65,7 @@ questions:
     label: Longhorn Share Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.shareManager.tag
-    default: v1_20220825
+    default: v1_20220914
     description: "Specify Longhorn Share Manager Image Tag"
     type: string
     label: Longhorn Share Manager Image Tag
@@ -340,6 +340,20 @@ Disabling **Backupstore Poll Interval** also means to disable failed backup auto
     type: int
     min: 0
     default: 1440
+  - variable: defaultSettings.recurringSuccessfulJobsHistoryLimit
+    label: Cronjob Successful Jobs History Limit
+    description: "This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0.",
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 1
+  - variable: defaultSettings.recurringFailedJobsHistoryLimit
+    label: Cronjob Failed Jobs History Limit
+    description: "This setting specifies how many failed backup or snapshot job histories should be retained. History will not be retained if the value is 0."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 1
   - variable: defaultSettings.autoSalvage
     label: Automatic salvage
     description: "If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection. Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true."
