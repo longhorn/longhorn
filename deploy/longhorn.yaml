@@ -5,41 +5,6 @@ kind: Namespace
 metadata:
   name: longhorn-system
 ---
-# Source: longhorn/templates/psp.yaml
-apiVersion: policy/v1beta1
-kind: PodSecurityPolicy
-metadata:
-  name: longhorn-psp
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.4.0-dev
-spec:
-  privileged: true
-  allowPrivilegeEscalation: true
-  requiredDropCapabilities:
-  - NET_RAW
-  allowedCapabilities:
-  - SYS_ADMIN
-  hostNetwork: false
-  hostIPC: false
-  hostPID: true
-  runAsUser:
-    rule: RunAsAny
-  seLinux:
-    rule: RunAsAny
-  fsGroup:
-    rule: RunAsAny
-  supplementalGroups:
-    rule: RunAsAny
-  volumes:
-  - configMap
-  - downwardAPI
-  - emptyDir
-  - secret
-  - projected
-  - hostPath
----
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -3275,48 +3240,6 @@ subjects:
   name: longhorn-service-account
   namespace: longhorn-system
 ---
-# Source: longhorn/templates/psp.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: longhorn-psp-role
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.4.0-dev
-  namespace: longhorn-system
-rules:
-- apiGroups:
-  - policy
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
-  resourceNames:
-  - longhorn-psp
----
-# Source: longhorn/templates/psp.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: longhorn-psp-binding
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.4.0-dev
-  namespace: longhorn-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: longhorn-psp-role
-subjects:
-- kind: ServiceAccount
-  name: longhorn-service-account
-  namespace: longhorn-system
-- kind: ServiceAccount
-  name: default
-  namespace: longhorn-system
----
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: v1
 kind: Service
@@ -3610,9 +3533,9 @@ spec:
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
             value: "longhornio/csi-node-driver-registrar:v2.5.0"
           - name: CSI_RESIZER_IMAGE
-            value: "longhornio/csi-resizer:v1.2.0"
+            value: "longhornio/csi-resizer:v1.3.0"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "longhornio/csi-snapshotter:v3.0.3"
+            value: "longhornio/csi-snapshotter:v5.0.1"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
