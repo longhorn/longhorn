@@ -1,7 +1,7 @@
 longhornio/csi-attacher:v3.4.0
 longhornio/csi-provisioner:v2.1.2
-longhornio/csi-resizer:v1.2.0
-longhornio/csi-snapshotter:v3.0.3
+longhornio/csi-resizer:v1.3.0
+longhornio/csi-snapshotter:v5.0.1
 longhornio/csi-node-driver-registrar:v2.5.0
 longhornio/backing-image-manager:v3_20220808
 longhornio/longhorn-engine:master-head
