@@ -6,6 +6,8 @@ export CYAN='\x1b[36m'
 export YELLOW='\x1b[33m'
 export NO_COLOR='\x1b[0m'
 
+export need_support_filesystems=(ext4 xfs)
+
 if [ -z "${LOG_TITLE}" ]; then
   LOG_TITLE=''
 fi
@@ -285,12 +287,34 @@ check_iscsid() {
   fi
 }
 
+check_filesystem(){
+  supported_filesystems="Required filesystems are supported:"
+  local allFound=true
+
+  for filesystem in "${need_support_filesystems[@]}"; do
+    if [ "$(cat /proc/filesystems | grep -E $filesystem | xargs)" != "$filesystem" ]; then
+      allFound=false
+      break
+    fi
+    supported_filesystems="${supported_filesystems} ${filesystem}"
+  done
+
+  if [ "$allFound" == "false" ]; then
+    error "Unsupported filesystems: $filesystem"
+    exit 2
+  else
+    info "${supported_filesystems}"
+  fi
+}
+
+
 DEPENDENCIES=(kubectl jq mktemp)
 check_dependencies ${DEPENDENCIES[@]}
 
 TEMP_DIR=$(mktemp -d)
 
 trap cleanup EXIT
+check_filesystem
 create_ds
 wait_ds_ready
 check_package_installed
