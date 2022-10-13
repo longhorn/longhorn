@@ -66,3 +66,4 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.orphanAutoDeletion) }}orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}storage-network: {{ .Values.defaultSettings.storageNetwork }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}{{ end }}

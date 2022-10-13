@@ -139,6 +139,7 @@ defaultSettings:
   kubernetesClusterAutoscalerEnabled: ~
   orphanAutoDeletion: ~
   storageNetwork: ~
+  deletingConfirmationFlag: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
