@@ -549,6 +549,14 @@ WARNING:
   group: "Longhorn Default Settings"
   type: string
   default:
+- variable: defaultSettings.deletingConfirmationFlag
+  label: Deleting Confirmation Flag
+  description: "This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost.
+	Set this flag to **true** to allow Longhorn uninstallation. 
+	If this flag **false**, Longhorn uninstallation job will fail. "
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: "false"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
