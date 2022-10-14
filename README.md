@@ -32,7 +32,7 @@ The latest release of Longhorn is [![Releases](https://img.shields.io/github/rel
 
 | Release | Version | Type   |    
 |---------|---------|--------|
-| 1.3     | 1.3.1   | Stable |
+| 1.3     | 1.3.2   | Stable |
 | 1.2     | 1.2.5   | Stable |
 | 1.1     | 1.1.3   | Stable |
 
