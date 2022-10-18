@@ -1,0 +1,24 @@
+name: Community-Issue
+on:
+  issues:
+    types: [opened]
+jobs:
+  community:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Is Longhorn Member
+        uses: tspascoal/get-user-teams-membership@v1.0.4
+        id: is-longhorn-member
+        with:
+          username: ${{ github.event.issue.user.login }}
+          organization: longhorn
+          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+      - name: Add To Community Project
+        if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null
+        uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+        with:
+          gh_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          organization: longhorn
+          project_id: 5
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: New
