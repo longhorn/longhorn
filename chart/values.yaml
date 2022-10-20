@@ -53,10 +53,10 @@ image:
       tag: v2.5.0
     resizer:
       repository: longhornio/csi-resizer
-      tag: v1.2.0
+      tag: v1.3.0
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v3.0.3
+      tag: v5.0.1
   pullPolicy: IfNotPresent
 
 service:
@@ -139,6 +139,7 @@ defaultSettings:
   kubernetesClusterAutoscalerEnabled: ~
   orphanAutoDeletion: ~
   storageNetwork: ~
+  deletingConfirmationFlag: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
@@ -249,8 +250,9 @@ ingress:
   #   key:
   #   certificate:
 
-# Configure a pod security policy in the Longhorn namespace to allow privileged pods
-enablePSP: true
+#  For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller,
+#  set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start
+enablePSP: false
 
 ## Specify override namespace, specifically this is useful for using longhorn as sub-chart
 ## and its release namespace is not the `longhorn-system`

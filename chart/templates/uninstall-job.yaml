@@ -3,7 +3,7 @@ kind: Job
 metadata:
   annotations:
     "helm.sh/hook": pre-delete
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   name: longhorn-uninstall
   namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
@@ -30,7 +30,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-      restartPolicy: OnFailure
+      restartPolicy: Never
       {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}

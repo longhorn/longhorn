@@ -89,7 +89,7 @@ questions:
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v3.2.1
+    default: v3.4.0
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
@@ -113,7 +113,7 @@ questions:
     label: Longhorn CSI Node Driver Registrar Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.tag
-    default: v2.3.0
+    default: v2.5.0
     description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Tag
@@ -125,7 +125,7 @@ questions:
     label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.tag
-    default: v1.2.0
+    default: v1.3.0
     description: "Specify CSI Driver Resizer image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
@@ -137,7 +137,7 @@ questions:
     label: Longhorn CSI Driver Snapshotter Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.tag
-    default: v3.0.3
+    default: v5.0.1
     description: "Specify CSI Driver Snapshotter image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
@@ -549,6 +549,14 @@ WARNING:
   group: "Longhorn Default Settings"
   type: string
   default:
+- variable: defaultSettings.deletingConfirmationFlag
+  label: Deleting Confirmation Flag
+  description: "This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost.
+	Set this flag to **true** to allow Longhorn uninstallation. 
+	If this flag **false**, Longhorn uninstallation job will fail. "
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: "false"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
