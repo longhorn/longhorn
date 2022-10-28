@@ -1000,7 +1000,7 @@ spec:
         - --share-manager-image
         - longhornio/longhorn-share-manager:v1_20211020_patch2
         - --backing-image-manager-image
-        - longhornio/backing-image-manager:v2_20210820_patch2
+        - longhornio/backing-image-manager:v2_20221027
         - --manager-image
         - longhornio/longhorn-manager:v1.2.6-rc1
         - --service-account
