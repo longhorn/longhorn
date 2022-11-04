@@ -35,8 +35,8 @@ configMap:
           ]
         },
         {
-          "Name": "v1.3.1",
-          "ReleaseDate": "2022-08-11T00:00:00Z",
+          "Name": "v1.3.2",
+          "ReleaseDate": "2022-10-03T00:00:00Z",
           "Tags": [
             "latest",
             "stable"
