@@ -28,8 +28,8 @@ configMap:
           ]
         },
         {
-          "Name": "v1.2.5",
-          "ReleaseDate": "2022-09-01T00:00:00Z",
+          "Name": "v1.2.6",
+          "ReleaseDate": "2022-11-04T00:00:00Z",
           "Tags": [
             "stable"
           ]
