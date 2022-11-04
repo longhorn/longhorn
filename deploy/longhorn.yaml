@@ -985,7 +985,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.2.5
+        image: longhornio/longhorn-manager:v1.2.6
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -994,15 +994,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - longhornio/longhorn-engine:v1.2.5
+        - longhornio/longhorn-engine:v1.2.6
         - --instance-manager-image
-        - longhornio/longhorn-instance-manager:v1_20220303_patch1
+        - longhornio/longhorn-instance-manager:v1_20220303_patch2
         - --share-manager-image
-        - longhornio/longhorn-share-manager:v1_20211020_patch1
+        - longhornio/longhorn-share-manager:v1_20211020_patch2
         - --backing-image-manager-image
-        - longhornio/backing-image-manager:v2_20210820_patch1
+        - longhornio/backing-image-manager:v2_20221027
         - --manager-image
-        - longhornio/longhorn-manager:v1.2.5
+        - longhornio/longhorn-manager:v1.2.6
         - --service-account
         - longhorn-service-account
         ports:
@@ -1116,7 +1116,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.2.5
+        image: longhornio/longhorn-ui:v1.2.6
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name : nginx-cache
@@ -1184,18 +1184,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.2.5
+          image: longhornio/longhorn-manager:v1.2.6
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.2.5
+          image: longhornio/longhorn-manager:v1.2.6
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - longhornio/longhorn-manager:v1.2.5
+          - longhornio/longhorn-manager:v1.2.6
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:

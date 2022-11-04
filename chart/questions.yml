@@ -89,7 +89,7 @@ questions:
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v3.2.1
+    default: v3.4.0
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
@@ -113,7 +113,7 @@ questions:
     label: Longhorn CSI Node Driver Registrar Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.tag
-    default: v2.3.0
+    default: v2.5.0
     description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Tag
