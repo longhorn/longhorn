@@ -2028,6 +2028,14 @@ spec:
                 type: object
               region:
                 type: string
+              snapshotCheckStatus:
+                properties:
+                  lastPeriodicCheckedAt:
+                    format: date-time
+                    type: string
+                  snapshotCheckState:
+                    type: string
+                type: object
               zone:
                 type: string
             type: object
@@ -2785,6 +2793,8 @@ spec:
           status:
             description: SnapshotStatus defines the observed state of Longhorn Snapshot
             properties:
+              checksum:
+                type: string
               children:
                 additionalProperties:
                   type: boolean
@@ -3040,6 +3050,13 @@ spec:
                 type: boolean
               size:
                 format: int64
+                type: string
+              snapshotDataIntegrity:
+                enum:
+                - ignored
+                - disabled
+                - enabled
+                - fast-check
                 type: string
               staleReplicaTimeout:
                 type: integer
