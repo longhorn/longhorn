@@ -1,15 +1,15 @@
 ---
-name: Improvement request
-about: Suggest an improvement of an existing feature for this project
-title: "[IMPROVEMENT] "
-labels: kind/improvement
+name: Refactoring request
+about: Suggest a refactoring request of an existing feature or design
+title: "[REFACTORING] "
+labels: kind/refactoring
 assignees: ''
 
 ---
 
 ## Is your improvement request related to a feature? Please describe
 
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+A clear and concise description of what the problem is.
 
 ## Describe the solution you'd like
 
@@ -21,4 +21,4 @@ A clear and concise description of any alternative solutions or features you've 
 
 ## Additional context
 
-Add any other context or screenshots about the feature request here.
+Add any other context or screenshots about the refactoring request here.
