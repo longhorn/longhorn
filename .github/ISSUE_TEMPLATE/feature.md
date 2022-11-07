@@ -1,13 +1,13 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest an idea/feature
 title: "[FEATURE] "
 labels: kind/enhancement
 assignees: ''
 
 ---
 
-## Is your feature request related to a problem? Please describe
+## Is your feature request related to a problem? Please describe (👍 if you like this request)
 
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
