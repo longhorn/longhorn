@@ -131,7 +131,6 @@ check_dependencies() {
 
 create_ds() {
 cat <<EOF > $TEMP_DIR/environment_check.yaml
----
 kind: ServiceAccount
 apiVersion: v1
 metadata:
@@ -181,6 +180,7 @@ spec:
   volumes: ['*']
   hostNetwork: true
   hostIPC: true
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -350,4 +350,3 @@ check_multipathd
 check_mount_propagation
 
 exit 0
-
