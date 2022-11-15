@@ -140,6 +140,7 @@ defaultSettings:
   orphanAutoDeletion: ~
   storageNetwork: ~
   deletingConfirmationFlag: ~
+  engineReplicaTimeout: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
