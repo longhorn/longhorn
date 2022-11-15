@@ -34,7 +34,7 @@ image:
       tag: master-head
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20220920
+      tag: v2_20221115
     shareManager:
       repository: longhornio/longhorn-share-manager
       tag: v1_20220914
