@@ -557,6 +557,12 @@ WARNING:
   group: "Longhorn Default Settings"
   type: boolean
   default: "false"
+- variable: defaultSettings.engineReplicaTimeout
+  label: Timeout between Engine and Replica
+  description: "In seconds. The setting specifies the timeout between the engine and replica(s), and the value should be between 8 to 30 seconds. The default value is 8 seconds."
+  group: "Longhorn Default Settings"
+  type: int
+  default: "8"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
