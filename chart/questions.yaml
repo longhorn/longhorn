@@ -563,6 +563,29 @@ WARNING:
   group: "Longhorn Default Settings"
   type: int
   default: "8"
+- variable: defaultSettings.snapshotDataIntegrity
+  label: Snapshot Data Integrity
+  description: "This setting allows users to enable or disable snapshot hashing and data integrity checking.
+  Available options are
+    - **disabled**: Disable snapshot disk file hashing and data integrity checking.
+    - **enabled**: Enables periodic snapshot disk file hashing and data integrity checking. To detect the filesystem-unaware corruption caused by bit rot or other issues in snapshot disk files, Longhorn system periodically hashes files and finds corrupted ones. Hence, the system performance will be impacted during the periodical checking.
+    - **fast-check**: Enable snapshot disk file hashing and fast data integrity checking. Longhorn system only hashes snapshot disk files if their are not hashed or the modification time are changed. In this mode, filesystem-unaware corruption cannot be detected, but the impact on system performance can be minimized."
+  group: "Longhorn Default Settings"
+  type: string
+  default: "disabled"
+- variable: defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation
+  label: Immediate Snapshot Data Integrity Check After Creating a Snapshot
+  description: "Hashing snapshot disk files impacts the performance of the system. The immediate snapshot hashing and checking can be disabled to minimize the impact after creating a snapshot."
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: "false"
+- variable: defaultSettings.snapshotDataIntegrityCronjob
+  label: Snapshot Data Integrity Check CronJob
+  description: "Unix-cron string format. The setting specifies when Longhorn checks the data integrity of snapshot disk files.
+  Warning: Hashing snapshot disk files impacts the performance of the system. It is recommended to run data integrity checks during off-peak times and to reduce the frequency of checks."
+  group: "Longhorn Default Settings"
+  type: string
+  default: "0 0 */7 * *"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
