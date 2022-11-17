@@ -141,6 +141,9 @@ defaultSettings:
   storageNetwork: ~
   deletingConfirmationFlag: ~
   engineReplicaTimeout: ~
+  snapshotDataIntegrity: ~
+  snapshotDataIntegrityImmediateCheckAfterSnapshotCreation: ~
+  snapshotDataIntegrityCronjob: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~

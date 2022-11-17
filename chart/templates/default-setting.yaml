@@ -67,5 +67,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.orphanAutoDeletion) }}orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}storage-network: {{ .Values.defaultSettings.storageNetwork }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.engineReplicaTimeout) }}deleting-confirmation-flag: {{ .Values.defaultSettings.engineReplicaTimeout }}{{ end }}
-
+    {{ if not (kindIs "invalid" .Values.defaultSettings.engineReplicaTimeout) }}engine-replica-timeout: {{ .Values.defaultSettings.engineReplicaTimeout }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrity) }}snapshot-data-integrity: {{ .Values.defaultSettings.snapshotDataIntegrity }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation) }}snapshot-data-integrity-immediate-check-after-snapshot-creation: {{ .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityCronjob) }}snapshot-data-integrity-cronjob: {{ .Values.defaultSettings.snapshotDataIntegrityCronjob }}{{ end }}
