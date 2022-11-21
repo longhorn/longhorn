@@ -23,6 +23,9 @@ data:
       {{- if .Values.persistence.defaultFsType }}
       fsType: "{{ .Values.persistence.defaultFsType }}"
       {{- end }}
+      {{- if .Values.persistence.defaultMkfsParams }}
+      mkfsParams: "{{ .Values.persistence.defaultMkfsParams }}"
+      {{- end }}
       {{- if .Values.persistence.migratable }}
       migratable: "{{ .Values.persistence.migratable }}"
       {{- end }}    
