@@ -354,6 +354,15 @@ Disabling **Backupstore Poll Interval** also means to disable failed backup auto
     type: int
     min: 0
     default: 1
+  - variable: defaultSettings.supportBundleFailedHistoryLimit
+    label: SupportBundle Failed History Limit
+    description: This setting specifies how many failed support bundles can exist in the cluster.
+The retained failed support bundle is for analysis purposes and needs to clean up manually.
+Set this value to **0** to have Longhorn automatically purge all failed support bundles.
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 1
   - variable: defaultSettings.autoSalvage
     label: Automatic salvage
     description: "If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection. Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true."

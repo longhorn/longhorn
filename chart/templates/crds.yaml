@@ -2722,6 +2722,128 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    longhorn-manager: ""
+  name: supportbundles.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: SupportBundle
+    listKind: SupportBundleList
+    plural: supportbundles
+    shortNames:
+    - lhbundle
+    singular: supportbundle
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The state of the support bundle
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The issue URL
+      jsonPath: .spec.issueURL
+      name: Issue
+      type: string
+    - description: A brief description of the issue
+      jsonPath: .spec.description
+      name: Description
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: SupportBundle is where Longhorn stores support bundle object
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SupportBundleSpec defines the desired state of the Longhorn SupportBundle
+            properties:
+              description:
+                description: A brief description of the issue
+                type: string
+              issueURL:
+                description: The issue URL
+                nullable: true
+                type: string
+              nodeID:
+                description: The preferred responsible controller node ID.
+                type: string
+            required:
+            - description
+            type: object
+          status:
+            description: SupportBundleStatus defines the observed state of the Longhorn SupportBundle
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              filename:
+                type: string
+              filesize:
+                format: int64
+                type: integer
+              image:
+                description: The support bundle manager image
+                type: string
+              managerIP:
+                description: The support bundle manager IP
+                type: string
+              ownerID:
+                description: The current responsible controller node ID
+                type: string
+              progress:
+                type: integer
+              state:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.7.0
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: volumes.longhorn.io
