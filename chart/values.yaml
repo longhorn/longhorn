@@ -41,6 +41,9 @@ image:
     backingImageManager:
       repository: longhornio/backing-image-manager
       tag: v3_20220808
+    supportBundleKit:
+      repository: longhornio/support-bundle-kit
+      tag: v0.0.13
   csi:
     attacher:
       repository: longhornio/csi-attacher
@@ -115,6 +118,7 @@ defaultSettings:
   failedBackupTTL: ~
   recurringSuccessfulJobsHistoryLimit: ~
   recurringFailedJobsHistoryLimit: ~
+  supportBundleFailedHistoryLimit: ~
   taintToleration: ~
   systemManagedComponentsNodeSelector: ~
   priorityClass: ~

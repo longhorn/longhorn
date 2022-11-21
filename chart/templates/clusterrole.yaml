@@ -40,7 +40,8 @@ rules:
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
               "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status",
-              "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status"]
+              "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
+              "supportbundles", "supportbundles/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
