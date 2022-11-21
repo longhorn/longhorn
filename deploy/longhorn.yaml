@@ -16,6 +16,17 @@ metadata:
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.4.0-dev
 ---
+# Source: longhorn/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: longhorn-support-bundle
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.4.0-dev
+---
 # Source: longhorn/templates/default-setting.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -2844,6 +2855,132 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.4.0-dev
+    longhorn-manager: ""
+  name: supportbundles.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: SupportBundle
+    listKind: SupportBundleList
+    plural: supportbundles
+    shortNames:
+    - lhbundle
+    singular: supportbundle
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The state of the support bundle
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The issue URL
+      jsonPath: .spec.issueURL
+      name: Issue
+      type: string
+    - description: A brief description of the issue
+      jsonPath: .spec.description
+      name: Description
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: SupportBundle is where Longhorn stores support bundle object
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SupportBundleSpec defines the desired state of the Longhorn SupportBundle
+            properties:
+              description:
+                description: A brief description of the issue
+                type: string
+              issueURL:
+                description: The issue URL
+                nullable: true
+                type: string
+              nodeID:
+                description: The preferred responsible controller node ID.
+                type: string
+            required:
+            - description
+            type: object
+          status:
+            description: SupportBundleStatus defines the observed state of the Longhorn SupportBundle
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                type: array
+              filename:
+                type: string
+              filesize:
+                format: int64
+                type: integer
+              image:
+                description: The support bundle manager image
+                type: string
+              managerIP:
+                description: The support bundle manager IP
+                type: string
+              ownerID:
+                description: The current responsible controller node ID
+                type: string
+              progress:
+                type: integer
+              state:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.7.0
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -3224,7 +3361,8 @@ rules:
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
               "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status",
-              "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status"]
+              "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
+              "supportbundles", "supportbundles/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -3255,6 +3393,24 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
+  namespace: longhorn-system
+---
+# Source: longhorn/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: longhorn-support-bundle
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.4.0-dev
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: longhorn-support-bundle
   namespace: longhorn-system
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
@@ -3439,6 +3595,8 @@ spec:
         - "longhornio/longhorn-share-manager:v1_20220914"
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:v3_20220808"
+        - --support-bundle-manager-image
+        - "longhornio/support-bundle-kit:v0.0.13"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
