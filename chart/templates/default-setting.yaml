@@ -72,3 +72,4 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrity) }}snapshot-data-integrity: {{ .Values.defaultSettings.snapshotDataIntegrity }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation) }}snapshot-data-integrity-immediate-check-after-snapshot-creation: {{ .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityCronjob) }}snapshot-data-integrity-cronjob: {{ .Values.defaultSettings.snapshotDataIntegrityCronjob }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim) }}remove-snapshots-during-filesystem-trim: {{ .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim }}{{ end }}

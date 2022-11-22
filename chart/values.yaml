@@ -92,6 +92,7 @@ persistence:
   defaultNodeSelector:
     enable: false # disable by default
     selector: []
+  removeSnapshotsDuringFilesystemTrim: ignored # "enabled" or "disabled" otherwise
 
 csi:
   kubeletRootDir: ~
@@ -149,6 +150,7 @@ defaultSettings:
   snapshotDataIntegrity: ~
   snapshotDataIntegrityImmediateCheckAfterSnapshotCreation: ~
   snapshotDataIntegrityCronjob: ~
+  removeSnapshotsDuringFilesystemTrim: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
