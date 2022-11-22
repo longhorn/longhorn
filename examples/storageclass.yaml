@@ -16,6 +16,7 @@ parameters:
 #  backingImageDataSourceType: "download"
 #  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
 #  backingImageChecksum: "SHA512 checksum of the backing image"
+#  unmapMarkSnapChainRemoved: "ignored"
 #  diskSelector: "ssd,fast"
 #  nodeSelector: "storage,fast"
 #  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
