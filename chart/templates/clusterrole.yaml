@@ -11,7 +11,7 @@ rules:
   verbs:
   - "*"
 - apiGroups: [""]
-  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims","persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps"]
+  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims","persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps", "serviceaccounts"]
   verbs: ["*"]
 - apiGroups: [""]
   resources: ["namespaces"]
@@ -23,7 +23,7 @@ rules:
   resources: ["jobs", "cronjobs"]
   verbs: ["*"]
 - apiGroups: ["policy"]
-  resources: ["poddisruptionbudgets"]
+  resources: ["poddisruptionbudgets", "podsecuritypolicies"]
   verbs: ["*"]
 - apiGroups: ["scheduling.k8s.io"]
   resources: ["priorityclasses"]
@@ -41,7 +41,7 @@ rules:
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
               "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status",
               "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
-              "supportbundles", "supportbundles/status"]
+              "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -55,3 +55,6 @@ rules:
 - apiGroups: ["admissionregistration.k8s.io"]
   resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
   verbs: ["get", "list", "create", "patch", "delete"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings", "clusterrolebindings", "clusterroles"]
+  verbs: ["*"]
