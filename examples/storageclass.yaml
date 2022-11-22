@@ -11,7 +11,7 @@ parameters:
   staleReplicaTimeout: "2880"
   fromBackup: ""
   fsType: "ext4"
-  mkfsParams: "-I 512 -b 2048 -O ^metadata_csum,^64bit"
+#  mkfsParams: "-I 256 -b 4096 -O ^metadata_csum,^64bit"
 #  backingImage: "bi-test"
 #  backingImageDataSourceType: "download"
 #  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
