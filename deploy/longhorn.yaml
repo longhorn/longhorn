@@ -56,7 +56,6 @@ data:
       staleReplicaTimeout: "30"
       fromBackup: ""
       fsType: "ext4"
-      mkfsParams: ""
       dataLocality: "disabled"
 ---
 # Source: longhorn/templates/crds.yaml
@@ -2977,7 +2976,6 @@ spec:
                 enum:
                 - disabled
                 - best-effort
-                - strict-local
                 type: string
               dataSource:
                 type: string
@@ -3436,7 +3434,7 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:master-head"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v3_20221117"
+        - "longhornio/longhorn-instance-manager:v2_20221123"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20220914"
         - --backing-image-manager-image
