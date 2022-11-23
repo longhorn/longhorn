@@ -2851,7 +2851,6 @@ spec:
                 enum:
                 - disabled
                 - best-effort
-                - strict-local
                 type: string
               dataSource:
                 type: string
