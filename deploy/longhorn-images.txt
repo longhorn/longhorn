@@ -9,3 +9,4 @@ longhornio/longhorn-instance-manager:v2_20221123
 longhornio/longhorn-manager:master-head
 longhornio/longhorn-share-manager:v1_20220914
 longhornio/longhorn-ui:master-head
+longhornio/support-bundle-kit:v0.0.13
