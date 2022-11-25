@@ -3129,6 +3129,12 @@ spec:
                 type: string
               fromBackup:
                 type: string
+              restoreVolumeRecurringJob:
+                enum:
+                - ignored
+                - enabled
+                - disabled
+                type: string
               frontend:
                 enum:
                 - blockdev
