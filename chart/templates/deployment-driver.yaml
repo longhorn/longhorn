@@ -67,6 +67,10 @@ spec:
           - name: CSI_SNAPSHOTTER_IMAGE
             value: "{{ template "registry_url" . }}{{ .Values.image.csi.snapshotter.repository }}:{{ .Values.image.csi.snapshotter.tag }}"
           {{- end }}
+          {{- if and .Values.image.csi.livenessProbe.repository .Values.image.csi.livenessProbe.tag }}
+          - name: CSI_LIVENESS_PROBE_IMAGE
+            value: "{{ template "registry_url" . }}{{ .Values.image.csi.livenessProbe.repository }}:{{ .Values.image.csi.livenessProbe.tag }}"
+          {{- end }}
           {{- if .Values.csi.attacherReplicaCount }}
           - name: CSI_ATTACHER_REPLICA_COUNT
             value: {{ .Values.csi.attacherReplicaCount | quote }}
