@@ -60,6 +60,9 @@ image:
     snapshotter:
       repository: longhornio/csi-snapshotter
       tag: v5.0.1
+    livenessProbe:
+      repository: longhornio/livenessprobe
+      tag: v2.8.0
   pullPolicy: IfNotPresent
 
 service:
