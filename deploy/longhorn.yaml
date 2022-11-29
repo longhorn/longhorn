@@ -3119,6 +3119,7 @@ spec:
                 enum:
                 - disabled
                 - best-effort
+                - strict-local
                 type: string
               dataSource:
                 type: string
@@ -3133,6 +3134,12 @@ spec:
               engineImage:
                 type: string
               fromBackup:
+                type: string
+              restoreVolumeRecurringJob:
+                enum:
+                - ignored
+                - enabled
+                - disabled
                 type: string
               frontend:
                 enum:
@@ -3608,7 +3615,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:v3_20220808"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.13"
+        - "longhornio/support-bundle-kit:v0.0.14"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
@@ -3723,6 +3730,8 @@ spec:
             value: "longhornio/csi-resizer:v1.3.0"
           - name: CSI_SNAPSHOTTER_IMAGE
             value: "longhornio/csi-snapshotter:v5.0.1"
+          - name: CSI_LIVENESS_PROBE_IMAGE
+            value: "longhornio/livenessprobe:v2.8.0"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0

@@ -21,6 +21,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.restoreVolumeRecurringJobs) }}restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}recurring-successful-jobs-history-limit: {{ .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.recurringFailedJobsHistoryLimit) }}recurring-failed-jobs-history-limit: {{ .Values.defaultSettings.recurringFailedJobsHistoryLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.supportBundleFailedHistoryLimit) }}support-bundle-failed-history-limit: {{ .Values.defaultSettings.supportBundleFailedHistoryLimit }}{{ end }}

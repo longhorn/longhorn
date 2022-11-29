@@ -2979,6 +2979,7 @@ spec:
                 enum:
                 - disabled
                 - best-effort
+                - strict-local
                 type: string
               dataSource:
                 type: string
@@ -2993,6 +2994,12 @@ spec:
               engineImage:
                 type: string
               fromBackup:
+                type: string
+              restoreVolumeRecurringJob:
+                enum:
+                - ignored
+                - enabled
+                - disabled
                 type: string
               frontend:
                 enum:

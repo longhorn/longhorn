@@ -142,6 +142,18 @@ questions:
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
     group: "Longhorn CSI Driver Images"
+  - variable: image.csi.livenessProbe.repository
+    default: longhornio/livenessprobe
+    description: "Specify CSI liveness probe image repository. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Liveness Probe Image Repository
+    group: "Longhorn CSI Liveness Probe Images"
+  - variable: image.csi.livenessProbe.tag
+    default: v2.8.0
+    description: "Specify CSI liveness probe image tag. Leave blank to autodetect."
+    type: string
+    label: Longhorn CSI Liveness Probe Image Tag
+    group: "Longhorn CSI Driver Images"
 - variable: privateRegistry.registryUrl
   label: Private registry URL
   description: "URL of private registry. Leave blank to apply system default registry."
@@ -340,6 +352,17 @@ Disabling **Backupstore Poll Interval** also means to disable failed backup auto
     type: int
     min: 0
     default: 1440
+  - variable: defaultSettings.restoreVolumeRecurringJobs
+		label: Restore Volume Recurring Jobs
+		description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration.
+Longhorn also supports individual volume setting. The setting can be specified on Backup page when making a backup restoration, this overrules the global setting.
+The available volume setting options are:
+- **ignored**. This is the default option that instructs Longhorn to inherit from the global setting.
+- **enabled**. This option instructs Longhorn to restore recurring jobs/groups from the backup target forcibly.
+- **disabled**. This option instructs Longhorn no restoring recurring jobs/groups should be done."
+		group: "Longhorn Default Settings"
+		type: boolean
+		default: "false"
   - variable: defaultSettings.recurringSuccessfulJobsHistoryLimit
     label: Cronjob Successful Jobs History Limit
     description: "This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0.",
@@ -561,7 +584,7 @@ WARNING:
 - variable: defaultSettings.deletingConfirmationFlag
   label: Deleting Confirmation Flag
   description: "This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost.
-	Set this flag to **true** to allow Longhorn uninstallation. 
+	Set this flag to **true** to allow Longhorn uninstallation.
 	If this flag **false**, Longhorn uninstallation job will fail. "
   group: "Longhorn Default Settings"
   type: boolean

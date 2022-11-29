@@ -43,7 +43,7 @@ image:
       tag: v3_20220808
     supportBundleKit:
       repository: longhornio/support-bundle-kit
-      tag: v0.0.13
+      tag: v0.0.14
   csi:
     attacher:
       repository: longhornio/csi-attacher
@@ -60,6 +60,9 @@ image:
     snapshotter:
       repository: longhornio/csi-snapshotter
       tag: v5.0.1
+    livenessProbe:
+      repository: longhornio/livenessprobe
+      tag: v2.8.0
   pullPolicy: IfNotPresent
 
 service:
@@ -117,6 +120,7 @@ defaultSettings:
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
   failedBackupTTL: ~
+  restoreVolumeRecurringJobs: ~
   recurringSuccessfulJobsHistoryLimit: ~
   recurringFailedJobsHistoryLimit: ~
   supportBundleFailedHistoryLimit: ~
