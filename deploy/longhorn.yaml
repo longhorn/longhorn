@@ -1466,6 +1466,8 @@ spec:
                 type: boolean
               salvageRequested:
                 type: boolean
+              unmapMarkSnapChainRemovedEnabled:
+                type: boolean
               upgradedReplicaAddressMap:
                 additionalProperties:
                   type: string
@@ -1640,6 +1642,8 @@ spec:
                 type: boolean
               storageIP:
                 type: string
+              unmapMarkSnapChainRemovedEnabled:
+                type: boolean
             type: object
         type: object
     served: true
@@ -2476,6 +2480,8 @@ spec:
                 type: boolean
               salvageRequested:
                 type: boolean
+              unmapMarkDiskChainRemovedEnabled:
+                type: boolean
               volumeName:
                 type: string
               volumeSize:
@@ -3204,6 +3210,12 @@ spec:
                 type: string
               staleReplicaTimeout:
                 type: integer
+              unmapMarkSnapChainRemoved:
+                enum:
+                - ignored
+                - disabled
+                - enabled
+                type: string
             type: object
           status:
             description: VolumeStatus defines the observed state of the Longhorn volume
