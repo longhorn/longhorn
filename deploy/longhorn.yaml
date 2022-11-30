@@ -3609,7 +3609,7 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:master-head"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v2_20221123"
+        - "longhornio/longhorn-instance-manager:v2_20221130"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20220914"
         - --backing-image-manager-image
