@@ -155,6 +155,7 @@ defaultSettings:
   snapshotDataIntegrityImmediateCheckAfterSnapshotCreation: ~
   snapshotDataIntegrityCronjob: ~
   removeSnapshotsDuringFilesystemTrim: ~
+  fastReplicaRebuildEnabled: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~

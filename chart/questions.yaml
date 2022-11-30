@@ -627,6 +627,12 @@ WARNING:
   group: "Longhorn Default Settings"
   type: boolean
   default: "false"
+- variable: defaultSettings.fastReplicaRebuildEnabled
+  label: Fast Replica Rebuild Enabled
+  description: "This feature supports the fast replica rebuilding. It relies on the checksum of snapshot disk files, so setting the snapshot-data-integrity to **enable** or **fast-check** is a prerequisite."
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
