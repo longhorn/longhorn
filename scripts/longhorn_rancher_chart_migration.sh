@@ -162,7 +162,18 @@ fi
 echo ""
 echo ""
 echo "Looking up existing Resources ..."
-RESOURCES=$(kubectl get-all --kubeconfig ${DOWNSTREAM_KUBECONFIG} --exclude AppRevision -o name -l io.cattle.field/appId=${RELEASE_NAME} 2>/dev/null | sort)
+
+
+KASTENRESOURCES=`kubectl api-resources --kubeconfig ${DOWNSTREAM_KUBECONFIG} | grep kasten`
+
+if [ -z "${KASTENRESOURCES}" ]; then
+#if kubectl api-resources --kubeconfig ${DOWNSTREAM_KUBECONFIG} | grep -q kasten; then
+  RESOURCES=$(kubectl get-all --kubeconfig ${DOWNSTREAM_KUBECONFIG} --exclude AppRevision,applications.apps.kio.kasten.io,passkeys.vault.kio.kasten.io -o name -l io.cattle.field/appId=${RELEASE_NAME} 2>/dev/null | sort)
+else
+  RESOURCES=$(kubectl get-all --kubeconfig ${DOWNSTREAM_KUBECONFIG} --exclude AppRevision -o name -l io.cattle.field/appId=${RELEASE_NAME} 2>/dev/null | sort)
+fi
+
+
 if [[ "$RESOURCES" == "No resources"* ]]; then
   RESOURCES=""
 fi
