@@ -5,7 +5,7 @@ on:
 jobs:
   backport:
     runs-on: ubuntu-latest
-    if: contains(github.event.label.name, 'backport-needed')
+    if: contains(github.event.label.name, 'backport/')
     steps:
       - name: Get Backport Version
         uses: xom9ikk/split@v1

@@ -1,7 +1,7 @@
 ---
 name: Refactoring request
 about: Suggest a refactoring request of an existing feature or design
-title: "[REFACTORING] "
+title: "[REFACTOR] "
 labels: kind/refactoring
 assignees: ''
 
