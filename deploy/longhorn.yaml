@@ -1539,6 +1539,30 @@ spec:
                   type: object
                 nullable: true
                 type: object
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
               currentImage:
                 type: string
               currentReplicaAddressMap:
@@ -2505,6 +2529,30 @@ spec:
           status:
             description: ReplicaStatus defines the observed state of the Longhorn replica
             properties:
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status is the status of the condition. Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
               currentImage:
                 type: string
               currentState:
