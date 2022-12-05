@@ -465,6 +465,15 @@ WARNING:
     type: int
     min: 0
     default: 5
+  - variable: defaultSettings.concurrentVolumeBackupRestorePerNodeLimit
+    label: Concurrent Volume Backup Restore Per Node Limit
+    description: "This setting controls how many volumes on a node can restore the backup concurrently.
+Longhorn blocks the backup restore once the restoring volume count exceeds the limit.
+Set the value to **0** to disable backup restore."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 5
   - variable: defaultSettings.disableRevisionCounter
     label: Disable Revision Counter
     description: "This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the replica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume."
