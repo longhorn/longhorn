@@ -137,6 +137,7 @@ defaultSettings:
   disableReplicaRebuild: ~
   replicaReplenishmentWaitInterval: ~
   concurrentReplicaRebuildPerNodeLimit: ~
+  concurrentVolumeBackupRestorePerNodeLimit: ~
   disableRevisionCounter: ~
   systemManagedPodsImagePullPolicy: ~
   allowVolumeCreationWithDegradedAvailability: ~
