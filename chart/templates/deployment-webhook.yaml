@@ -1,0 +1,166 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-conversion-webhook
+  name: longhorn-conversion-webhook
+  namespace: {{ include "release_namespace" . }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-conversion-webhook
+  template:
+    metadata:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+        app: longhorn-conversion-webhook
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-conversion-webhook
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: longhorn-conversion-webhook
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          runAsUser: 2000
+        command:
+        - longhorn-manager
+        - conversion-webhook
+        - --service-account
+        - longhorn-service-account
+        ports:
+        - containerPort: 9443
+          name: conversion-wh
+        readinessProbe:
+          tcpSocket:
+            port: 9443
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      {{- if .Values.privateRegistry.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.registrySecret }}
+      {{- end }}
+      {{- if .Values.longhornDriver.priorityClass }}
+      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote }}
+      {{- end }}
+      {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      tolerations:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+        {{- end }}
+        {{- if .Values.longhornDriver.tolerations }}
+{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      nodeSelector:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if .Values.longhornDriver.nodeSelector }}
+{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+        {{- end }}
+      {{- end }}
+      serviceAccountName: longhorn-service-account
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-admission-webhook
+  name: longhorn-admission-webhook
+  namespace: {{ include "release_namespace" . }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-admission-webhook
+  template:
+    metadata:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+        app: longhorn-admission-webhook
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-admission-webhook
+              topologyKey: kubernetes.io/hostname
+      initContainers:
+      - name: wait-longhorn-conversion-webhook
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-conversion-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          runAsUser: 2000
+      containers:
+      - name: longhorn-admission-webhook
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          runAsUser: 2000
+        command:
+        - longhorn-manager
+        - admission-webhook
+        - --service-account
+        - longhorn-service-account
+        ports:
+        - containerPort: 9443
+          name: admission-wh
+        readinessProbe:
+          tcpSocket:
+            port: 9443
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      {{- if .Values.privateRegistry.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.registrySecret }}
+      {{- end }}
+      {{- if .Values.longhornDriver.priorityClass }}
+      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote }}
+      {{- end }}
+      {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      tolerations:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+        {{- end }}
+        {{- if .Values.longhornDriver.tolerations }}
+{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      nodeSelector:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if or .Values.longhornDriver.nodeSelector }}
+{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+        {{- end }}
+      {{- end }}
+      serviceAccountName: longhorn-service-account

@@ -1,6 +1,6 @@
 ---
 name: Task
-about: Task on Longhorn
+about: Create a general task
 title: "[TASK] "
 labels: kind/task
 assignees: ''

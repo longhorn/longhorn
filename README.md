@@ -30,10 +30,11 @@ The latest release of Longhorn is [![Releases](https://img.shields.io/github/rel
 
 ## Release Status
 
-| Release | Version | Type           |    
-| --------|---------|----------------|
-| 1.2     | 1.2.3   | Stable, Latest |
-| 1.1     | 1.1.3   | Stable, Latest |
+| Release | Version | Type   |    
+|---------|---------|--------|
+| 1.3     | 1.3.2   | Stable |
+| 1.2     | 1.2.6   | Stable |
+| 1.1     | 1.1.3   | Stable |
 
 ## Get Involved
 
@@ -66,6 +67,9 @@ For the installation requirements, refer to the [Longhorn documentation.](https:
 
 ## Installation
 
+> **NOTE**: Please note that the master branch is for the upcoming feature release development. 
+> For an official release installation or upgrade, please refer to the below ways.
+
 Longhorn can be installed on a Kubernetes cluster in several ways:
 
 - [Rancher catalog app](https://longhorn.io/docs/latest/deploy/install/install-with-rancher/)
@@ -78,13 +82,13 @@ The official Longhorn documentation is [here.](https://longhorn.io/docs)
 
 # Community
 
-Longhorn is open source software, so contributions are greatly welcome. 
+Longhorn is open source software, so contributions are greatly welcome.
 Please read [Code of Conduct](./CODE_OF_CONDUCT.md) and [Contributing Guideline](./CONTRIBUTING.md) before contributing.
 
-Contributing code is not the only way of contributing. We value feedbacks very much and many of the Longhorn features are originated from users' feedback. 
+Contributing code is not the only way of contributing. We value feedbacks very much and many of the Longhorn features are originated from users' feedback.
 If you have any feedbacks, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose) and talk to the developers at the [CNCF](https://slack.cncf.io/) [#longhorn](https://cloud-native.slack.com/messages/longhorn) Slack channel.
 
-If having any discussion, feedbacks, requests, issues or security reports, please follow below ways. 
+If having any discussion, feedbacks, requests, issues or security reports, please follow below ways.
 We also have a [CNCF Slack channel: longhorn](https://cloud-native.slack.com/messages/longhorn) for discussion.
 
 ## Discussions or Feedbacks
@@ -93,13 +97,13 @@ If having any discussions or feedbacks, feel free to [file a discussion](https:/
 
 ## Requests or Issues
 
-If having any issues, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose). 
+If having any issues, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose).
 We have a weekly community issue review meeting to review all reported issues or enhancement requests.
 
 When creating a bug issue, please help upload the support bundle to the issue or send to
-[longhorn-support-bundle](mailto:longhorn-support-bundle@suse.com).  
+[longhorn-support-bundle](mailto:longhorn-support-bundle@suse.com).
 
-## Report Vulnerabilities 
+## Report Vulnerabilities
 
 If having any vulnerabilities found, please report to [longhorn-security](mailto:longhorn-security@suse.com).
 

@@ -1,6 +1,6 @@
 ---
 name: Test
-about: Test task on Longhorn
+about: Create or update test
 title: "[TEST] "
 labels: kind/test
 assignees: ''

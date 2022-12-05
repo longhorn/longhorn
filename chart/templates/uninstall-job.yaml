@@ -3,7 +3,7 @@ kind: Job
 metadata:
   annotations:
     "helm.sh/hook": pre-delete
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   name: longhorn-uninstall
   namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
@@ -18,7 +18,7 @@ spec:
       containers:
       - name: longhorn-uninstall
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         securityContext:
           privileged: true
         command:
@@ -30,20 +30,30 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-      restartPolicy: OnFailure
+      restartPolicy: Never
       {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
       {{- if .Values.longhornManager.priorityClass }}
-      priorityClassName: {{ .Values.longhornManager.priorityClass | quote}}
+      priorityClassName: {{ .Values.longhornManager.priorityClass | quote }}
       {{- end }}
       serviceAccountName: longhorn-service-account
-      {{- if .Values.longhornManager.tolerations }}
+      {{- if or .Values.longhornManager.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+        {{- end }}
+        {{- if .Values.longhornManager.tolerations }}
 {{ toYaml .Values.longhornManager.tolerations | indent 6 }}
+        {{- end }}
       {{- end }}
-      {{- if .Values.longhornManager.nodeSelector }}
+      {{- if or .Values.longhornManager.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if or .Values.longhornManager.nodeSelector }}
 {{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
+        {{- end }}
       {{- end }}

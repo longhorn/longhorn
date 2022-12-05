@@ -2,7 +2,7 @@
 
 ## Summary
 
-This enhancement adds support for user configured (storage class, secrets) encrypted volumes, 
+This enhancement adds support for user configured (storage class, secrets) encrypted volumes,
 this in return means that backups of that volume end up also being encrypted.
 
 ### Related Issues
@@ -16,7 +16,7 @@ this in return means that backups of that volume end up also being encrypted.
 ## Motivation
 
 ### Goals
-- user is able to create & use an encrypted volume
+- user is able to create & use an encrypted volume with cipher customization options
 - user is able to configure the keys that are used for encryption
 - user is able to take backups from an encrypted volume
 - user is able to restore an encrypted backup to a new encrypted volume
@@ -29,20 +29,20 @@ this in return means that backups of that volume end up also being encrypted.
 ## Proposal
 
 ### User Stories
-All regular longhorn operations should also be supported for encrypted volumes, 
+All regular longhorn operations should also be supported for encrypted volumes,
 therefore the only user story that is mentioned is
 how to create and use an encrypted volume.
 
 #### Create and use an encrypted volume
 - create a storage class with (encrypted=true) and either a global secret or a per volume secret
-- create the secret for that volume in the configured namespace
+- create the secret for that volume in the configured namespace with customization options of the cipher for instance `cipher`, `key-size` and `hash`
 - create a pvc that references the created storage class
 - volume will be created then encrypted during first use
 - afterwards a regular filesystem that lives on top of the encrypted volume will be exposed to the pod
 
 ### User Experience In Detail
 
-Creation and usage of an encrypted volume requires 2 things: 
+Creation and usage of an encrypted volume requires 2 things:
 - the storage class needs to specify `encrypted: "true"` as part of its parameters.
 - secrets need to be created and reference for the csi operations need to be setup.
 - see below examples for different types of secret usage.
@@ -85,6 +85,9 @@ metadata:
 stringData:
   CRYPTO_KEY_VALUE: "Simple passphrase"
   CRYPTO_KEY_PROVIDER: "secret" # this is optional we currently only support direct keys via secrets
+  CRYPTO_KEY_CIPHER: "aes-xts-plain64" # this is optional
+  CRYPTO_KEY_HASH: "sha256" # this is optional
+  CRYPTO_KEY_SIZE: "256" # this is optional
 ```
 
 #### Create storage class that utilizes per volume secrets
@@ -112,18 +115,26 @@ parameters:
 
 
 ### API changes
-add a `Encrypted` boolean to the `Volume` struct utilized by the http client, 
+add a `Encrypted` boolean to the `Volume` struct utilized by the http client,
 this ends up being stored in `Volume.Spec.encrypted` of the volume cr.
-Storing the `Encrypted` value is necessary to support encryption for RWX volumes. 
+Storing the `Encrypted` value is necessary to support encryption for RWX volumes.
 
 ## Design
 
 ### Implementation Overview
 Host requires `dm_crypt` kernel module as well as `cryptsetup` installed.
-We utilize the below parameters from a secret, `CRYPTO_KEY_PROVIDER` allows us in the future to add other key management systems.
+We utilize the below parameters from a secret,
+- `CRYPTO_KEY_PROVIDER` allows us in the future to add other key management systems
+- `CRYPTO_KEY_CIPHER` allow users to choose the cipher algorithm when creating an encrypted volume by `cryptsetup`
+- `CRYPTO_KEY_HASH` specifies the hash used in the LUKS key setup scheme and volume key digest
+- `CRYPTO_KEY_SIZE` sets the key size in bits. The argument has to be a multiple of 8 and the maximum interactive passphrase length is 512 (characters)
+
 ```yaml
   CRYPTO_KEY_VALUE: "Simple passphrase"
   CRYPTO_KEY_PROVIDER: "secret" # this is optional we currently only support direct keys via secrets
+  CRYPTO_KEY_CIPHER: "aes-xts-plain64" # this is optional
+  CRYPTO_KEY_HASH: "sha256" # this is optional
+  CRYPTO_KEY_SIZE: "256" # this is optional
 ```
 
 - utilize host `dm_crypt` kernel module for device encryption
@@ -135,7 +146,7 @@ We utilize the below parameters from a secret, `CRYPTO_KEY_PROVIDER` allows us i
 - during csi `NodeStageVolume` encrypt (first time use) / open regular longhorn device
   - this exposes a crypto mapped device (/dev/mapper/<volume-name>)
   - mount crypto device into `staging_path`
-- during csi `NodeUnstageVolume` unmount `staging_path` close crypto device 
+- during csi `NodeUnstageVolume` unmount `staging_path` close crypto device
 
 ### Test plan
 
@@ -145,6 +156,14 @@ We utilize the below parameters from a secret, `CRYPTO_KEY_PROVIDER` allows us i
 - create a pvc that references the created storage class
 - create a pod that uses that pvc for a volume mount
 - wait for pod up and healthy
+
+#### Successful Creation of an encrypted volume with customization of the cipher
+- create a storage class with (encrypted=true) and either a global secret or a per volume secret
+- create the secret with customized options of the cipher for that volume in the configured namespace
+- create a pvc that references the created storage class
+- create a pod that uses that pvc for a volume mount
+- wait for pod up and healthy
+- check if the customized options of the cipher are correct
 
 #### Missing Secret for encrypted volume creation
 - create a storage class with (encrypted=true) and either a global secret or a per volume secret

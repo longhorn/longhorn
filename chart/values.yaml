@@ -4,47 +4,62 @@
 global:
   cattle:
     systemDefaultRegistry: ""
+    windowsCluster:
+      # Enable this to allow Longhorn to run on the Rancher deployed Windows cluster
+      enabled: false
+      # Tolerate Linux node taint
+      tolerations:
+      - key: "cattle.io/os"
+        value: "linux"
+        effect: "NoSchedule"
+        operator: "Equal"
+      # Select Linux nodes
+      nodeSelector:
+        kubernetes.io/os: "linux"
+      # Recognize toleration and node selector for Longhorn run-time created components
+      defaultSetting:
+        taintToleration: cattle.io/os=linux:NoSchedule
+        systemManagedComponentsNodeSelector: kubernetes.io/os:linux
 
 image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.2.3
+      tag: master-head
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.2.3
+      tag: master-head
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.2.3
+      tag: master-head
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20211210
+      tag: v2_20221130
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20211020
+      tag: v1_20220914
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v2_20210820
+      tag: v3_20220808
+    supportBundleKit:
+      repository: longhornio/support-bundle-kit
+      tag: v0.0.16
   csi:
     attacher:
       repository: longhornio/csi-attacher
-      tag: v3.2.1
+      tag: v3.4.0
     provisioner:
       repository: longhornio/csi-provisioner
       tag: v2.1.2
     nodeDriverRegistrar:
       repository: longhornio/csi-node-driver-registrar
-      tag: v2.3.0
+      tag: v2.5.0
     resizer:
       repository: longhornio/csi-resizer
-      tag: v1.2.0
+      tag: v1.3.0
     snapshotter:
       repository: longhornio/csi-snapshotter
       tag: v3.0.3
-  openshift:
-    oauthProxy:
-      repository: openshift/oauth-proxy
-      tag: latest
   pullPolicy: IfNotPresent
 
 service:
@@ -60,8 +75,11 @@ service:
 persistence:
   defaultClass: true
   defaultFsType: ext4
+  defaultMkfsParams: ""
   defaultClassReplicaCount: 3
+  defaultDataLocality: disabled # best-effort otherwise
   reclaimPolicy: Delete
+  migratable: false
   recurringJobSelector:
     enable: false
     jobList: []
@@ -71,6 +89,10 @@ persistence:
     dataSourceType: ~
     dataSourceParameters: ~
     expectedChecksum: ~
+  defaultNodeSelector:
+    enable: false # disable by default
+    selector: []
+  removeSnapshotsDuringFilesystemTrim: ignored # "enabled" or "disabled" otherwise
 
 csi:
   kubeletRootDir: ~
@@ -94,6 +116,11 @@ defaultSettings:
   defaultReplicaCount: ~
   defaultLonghornStaticStorageClass: ~
   backupstorePollInterval: ~
+  failedBackupTTL: ~
+  restoreVolumeRecurringJobs: ~
+  recurringSuccessfulJobsHistoryLimit: ~
+  recurringFailedJobsHistoryLimit: ~
+  supportBundleFailedHistoryLimit: ~
   taintToleration: ~
   systemManagedComponentsNodeSelector: ~
   priorityClass: ~
@@ -116,13 +143,27 @@ defaultSettings:
   backingImageRecoveryWaitInterval: ~
   guaranteedEngineManagerCPU: ~
   guaranteedReplicaManagerCPU: ~
+  kubernetesClusterAutoscalerEnabled: ~
+  orphanAutoDeletion: ~
+  storageNetwork: ~
+  deletingConfirmationFlag: ~
+  engineReplicaTimeout: ~
+  snapshotDataIntegrity: ~
+  snapshotDataIntegrityImmediateCheckAfterSnapshotCreation: ~
+  snapshotDataIntegrityCronjob: ~
+  removeSnapshotsDuringFilesystemTrim: ~
+  fastReplicaRebuildEnabled: ~
 privateRegistry:
+  createSecret: ~
   registryUrl: ~
   registryUser: ~
   registryPasswd: ~
   registrySecret: ~
 
 longhornManager:
+  log:
+    ## Allowed values are `plain` or `json`.
+    format: plain
   priorityClass: ~
   tolerations: []
   ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
@@ -136,6 +177,11 @@ longhornManager:
   ## and uncomment this example block
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
+  serviceAnnotations: {}
+  ## If you want to set annotations for the Longhorn Manager service, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  annotation-key1: "annotation-value1"
+  #  annotation-key2: "annotation-value2"
 
 longhornDriver:
   priorityClass: ~
@@ -153,6 +199,7 @@ longhornDriver:
   #  label-key2: "label-value2"
 
 longhornUI:
+  replicas: 1
   priorityClass: ~
   tolerations: []
   ## If you want to set tolerations for Longhorn UI Deployment, delete the `[]` in the line above
@@ -167,19 +214,6 @@ longhornUI:
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
-  #
-
 ingress:
   ## Set to true to enable ingress record generation
   enabled: false
@@ -191,11 +225,17 @@ ingress:
   host: sslip.io
 
   ## Set this to true in order to enable TLS on the ingress record
-  ## A side effect of this will be that the backend service will be connected at port 443
   tls: false
+
+  ## Enable this in order to enable that the backend service will be connected at port 443
+  secureBackends: false
 
   ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
   tlsSecret: longhorn.local-tls
+
+  ## If ingress is enabled you can set the default ingress path
+  ## then you can access the UI by using the following full path {{host}}+{{path}}
+  path: /
 
   ## Ingress annotations done as key:value pairs
   ## If you're using kube-lego, you will want to add:
@@ -223,8 +263,9 @@ ingress:
   #   key:
   #   certificate:
 
-# Configure a pod security policy in the Longhorn namespace to allow privileged pods
-enablePSP: true
+#  For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller,
+#  set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start
+enablePSP: false
 
 ## Specify override namespace, specifically this is useful for using longhorn as sub-chart
 ## and its release namespace is not the `longhorn-system`
@@ -236,12 +277,3 @@ annotations: {}
 serviceAccount:
   # Annotations to add to the service account
   annotations: {}
-
-## openshift settings
-openshift: {}
-#  ui:
-#    route: "longhorn-ui"
-#    port: 443
-#    proxy: 8443
-#  finalizers: true
-#  mount: "/var/mnt/longhorn"

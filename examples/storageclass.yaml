@@ -11,10 +11,12 @@ parameters:
   staleReplicaTimeout: "2880"
   fromBackup: ""
   fsType: "ext4"
+#  mkfsParams: "-I 256 -b 4096 -O ^metadata_csum,^64bit"
 #  backingImage: "bi-test"
 #  backingImageDataSourceType: "download"
 #  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
 #  backingImageChecksum: "SHA512 checksum of the backing image"
+#  unmapMarkSnapChainRemoved: "ignored"
 #  diskSelector: "ssd,fast"
 #  nodeSelector: "storage,fast"
 #  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
