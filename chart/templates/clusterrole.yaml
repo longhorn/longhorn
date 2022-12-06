@@ -58,3 +58,9 @@ rules:
 - apiGroups: ["admissionregistration.k8s.io"]
   resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
   verbs: ["get", "list", "create", "patch", "delete"]
+{{- if .Values.openshift.privileged }}
+- apiGroups: ["security.openshift.io"]
+  resources: ["securitycontextconstraints"]
+  resourceNames: ["anyuid", "privileged"]
+  verbs: ["use"]
+{{- end }}

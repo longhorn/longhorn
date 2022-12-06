@@ -1,151 +1,125 @@
-# OpenShift Usage
-
-This setup has been tested with OCP 4.6 and 4.7, and is based on these previous discussions:
-- okd 4.5: https://github.com/longhorn/longhorn/issues/1831#issuecomment-702690613
-- okd 4.6: https://github.com/longhorn/longhorn/issues/1831#issuecomment-765884631
-- oauth-proxy: https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml
+# OpenShift / OKD Extra Configuration Steps
 
 Main changes and tasks for OCP are:
-- security setup for namespace longhorn-system
-- option to use separate disk in /var/mnt/longhorn
-- exposing longhorn ui via oauth-proxy
-- adding finalizers for mount propagation
-- machineconfig file to start iscsid
-- mahcineconfig file to mount /var/mnt/longhorn
+
+- OCP Imposes [Security Context Constraints](https://docs.openshift.com/container-platform/4.11/authentication/managing-security-context-constraints.html)
+  - This requires everything to run with the least privilege possible. For the moment every component has been given access to run as higher privilege.
+  - Something to circle back on is network polices and which components can have their privileges reduced without impacting functionality.
+    - The UI probably can be for example.
+- On OCP / OKD, the Operating System is Managed by the Cluster
+- openshift/oauth-proxy container image needs to be updated
+- Option to use separate disk in /var/mnt/longhorn
+- Exposing longhorn ui via oauth-proxy
+- Adding finalizers for mount propagation
+- MachineConfig file to mount /var/mnt/longhorn
 
 ## Preparing nodes
-
-### Setup selinux and iscsid
-
-Run `oc apply -f` using yaml like this (example is for worker nodes):
-```
-apiVersion: machineconfiguration.openshift.io/v1
-kind: MachineConfig
-metadata:
-  name: 51-set-longhorn-worker
-  labels:
-    #{{- include "project.labels" . | nindent 4 }}
-    machineconfiguration.openshift.io/role: worker
-spec:
-  config:
-    ignition:
-      version: 3.1.0
-    systemd:
-      units:
-        - contents: |
-            [Unit]
-            Description=Set SELinux chcon for longhorn
-            Before=kubelet.service
-
-            [Service]
-            Type=oneshot
-            RemainAfterExit=true
-            ExecStartPre=/usr/bin/mkdir -p  /var/lib/kubelet/obsoleted-longhorn-plugins /var/lib/longhorn /var/mnt/longhorn
-            ExecStart=-/usr/bin/chcon -Rt container_file_t /var/lib/kubelet/obsoleted-longhorn-plugins
-            ExecStart=-/usr/bin/chcon -Rt container_file_t /var/lib/longhorn
-            ExecStart=-/usr/bin/chcon -Rt container_file_t /var/mnt/longhorn
-
-            [Install]
-            WantedBy=multi-user.target
-          enabled: true
-          name: longhorn-provisioner.service
-        - name: iscsid.service
-          enabled: true
-          state: "started"
-```
 
 ### Default /var/lib/longhorn setup
 
 Label each node for storage with:
-```
-oc label node work0 node.longhorn.io/create-default-disk=true
+
+```bash
+oc get nodes --no-headers | awk '{print $1}'
+
+export NODE="worker-0"
+oc label node "${WORKER}" node.longhorn.io/create-default-disk=true
 ```
 
 ### Separate /var/mnt/longhorn setup
 
-- Create filesystem with label longhorn on storage node like:
-  ```
-  sudo mkfs.ext4 -L longhorn /dev/sdb
-  ```
-- Apply with `oc apply -f` machineconfig file like this to mount it on boot:
-  ```
-  apiVersion: machineconfiguration.openshift.io/v1
-  kind: MachineConfig
-  metadata:
-    labels:
-      machineconfiguration.openshift.io/role: worker
-    name: 71-mount-storage-worker
-  spec:
-    config:
-      ignition:
-        version: 3.1.0
-      systemd:
-        units:
-          - name: var-mnt-longhorn.mount
-            enabled: true
-            contents: |
-              [Unit]
-              Before=local-fs.target
-              [Mount]
-              Where=/var/mnt/longhorn
-              What=/dev/disk/by-label/longhorn
-              Options=rw,relatime,discard
-              [Install]
-              WantedBy=local-fs.target
-  ```
-- Label and annotate storage nodes like this:
-  ```
-  # label node with node.longhorn.io/create-defaeultdisk=config
-  oc label node work0 node.longhorn.io/create-default-disk=config
-  ...
-  
-  # node.longhorn.io/default-node-tags: ["storage"]
-  oc annotate node work0 --overwrite node.longhorn.io/default-node-tags='["storage"]'
-  ...
-  
-  # node.longhorn.io/default-disks-config: [{"path":"/var/mnt/longhorn","allowScheduling":true,"tags":["ssd"],"name":"longhorn-ssd"}]
-  oc annotate node work0 --overwrite node.longhorn.io/default-disks-config='[{"path":"/var/mnt/longhorn","allowScheduling":true,"tags":["ssd"],"name":"longhorn-ssd"}]'
-  ...
-  ```
+#### Create Filesystem
+
+On the storage nodes create a filesystem with the label longhorn:
+
+```bash
+oc get nodes --no-headers | awk '{print $1}'
+
+export NODE="worker-0"
+oc debug node/${NODE} -t -- chroot /host bash
+
+# Validate Target Drive is Present
+lsblk
+
+export DRIVE="sdb" #vdb
+sudo mkfs.ext4 -L longhorn /dev/${DRIVE}
+```
+
+> ⚠️ Note: If you add New Nodes After the below Machine Config is applied, you will need to also reboot the node.
+
+#### Mounting Disk On Boot
+
+The Secondary Drive needs to be mounted on every boot. Save the Concents and Apply the MachineConfig with `oc apply -f`:
+
+> ⚠️ This will trigger an machine config profile update and reboot all worker nodes on the cluster
+
+```yaml
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  name: 71-mount-storage-worker
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+    systemd:
+      units:
+        - name: var-mnt-longhorn.mount
+          enabled: true
+          contents: |
+            [Unit]
+            Before=local-fs.target
+            [Mount]
+            Where=/var/mnt/longhorn
+            What=/dev/disk/by-label/longhorn
+            Options=rw,relatime,discard
+            [Install]
+            WantedBy=local-fs.target
+```
+
+#### Label and Annotate Nodes
+
+Label and annotate storage nodes like this:
+
+```bash
+oc get nodes --no-headers | awk '{print $1}'
+
+export NODE="worker-0"
+oc annotate node ${NODE} --overwrite node.longhorn.io/default-disks-config='[{"path":"/var/mnt/longhorn","allowScheduling":true}]'
+oc label node ${NODE} node.longhorn.io/create-default-disk=config
+```
 
 ## Example values.yaml
 
-```
+Minium Adjustments Required
+
+```yaml
+defaultSettings:
+  createDefaultDiskLabeledNodes: true
+
 openshift:
   ui:
     route: "longhorn-ui"
     port: 443
     proxy: 8443
   finalizers: true
-  mount: "/var/lib/longhorn"
-
-defaultSettings:
-  createDefaultDiskLabeledNodes: true
-  defaultDataPath: /var/lib/longhorn
-  defaultDataLocality: best-effort
-  replicaSoftAntiAffinity: false
-  defaultReplicaCount: 3
-  replicaZoneSoftAntiAffinity: true
-  nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod
-
-longhornManager:
-  nodeSelector:
-    node-role.kubernetes.io/worker: ""
-
-longhornDriver:
-  nodeSelector:
-    node-role.kubernetes.io/worker: ""
-
-longhornUI:
-  nodeSelector:
-    node-role.kubernetes.io/master: ""
+  privileged: true
 ```
 
 ## Installation
 
+```bash
+helm template longhorn --namespace longhorn-system --values values.yaml --no-hooks  > longhorn.yaml
+oc create namespace longhorn-system -o yaml --dry-run=client | oc apply -f -
+oc apply -f longhorn.yaml -n longhorn-system
 ```
-oc create namespace longhorn-system
-oc adm policy add-scc-to-user anyuid -z default -n longhorn-system
-oc adm policy add-scc-to-user privileged -z longhorn-service-account -n longhorn-system
-helm install longhorn --namespace longhorn-system --values values.yaml
-```
+
+## REFS
+
+- <https://docs.openshift.com/container-platform/4.11/storage/persistent_storage/persistent-storage-iscsi.html>
+- <https://docs.okd.io/4.11/storage/persistent_storage/persistent-storage-iscsi.html>
+- okd 4.5: <https://github.com/longhorn/longhorn/issues/1831#issuecomment-702690613>
+- okd 4.6: <https://github.com/longhorn/longhorn/issues/1831#issuecomment-765884631>
+- oauth-proxy: <https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml>

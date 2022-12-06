@@ -9,10 +9,10 @@ global:
       enabled: false
       # Tolerate Linux node taint
       tolerations:
-      - key: "cattle.io/os"
-        value: "linux"
-        effect: "NoSchedule"
-        operator: "Equal"
+        - key: "cattle.io/os"
+          value: "linux"
+          effect: "NoSchedule"
+          operator: "Equal"
       # Select Linux nodes
       nodeSelector:
         kubernetes.io/os: "linux"
@@ -59,7 +59,14 @@ image:
       tag: v1.3.0
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v3.0.3
+      tag: v5.0.1
+    livenessProbe:
+      repository: longhornio/livenessprobe
+      tag: v2.8.0
+  openshift:
+    oauthProxy:
+      repository: openshift/oauth-proxy
+      tag: latest
   pullPolicy: IfNotPresent
 
 service:
@@ -277,3 +284,12 @@ annotations: {}
 serviceAccount:
   # Annotations to add to the service account
   annotations: {}
+#
+## openshift settings
+# openshift:
+#   ui:
+#     route: "longhorn-ui"
+#     port: 443
+#     proxy: 8443
+#   finalizers: true
+#   privileged: true

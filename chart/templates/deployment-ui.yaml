@@ -65,8 +65,8 @@ spec:
         - --tls-key=/etc/tls/private/tls.key
         - --cookie-secret=SECRET
         volumeMounts:
-        - mountPath: /etc/tls/private
-          name: longhorn-ui-tls
+          - mountPath: /etc/tls/private
+            name: longhorn-ui-tls
       {{- end }}
       - name: longhorn-ui
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
@@ -84,15 +84,14 @@ spec:
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
-      {{- if .Values.openshift.ui.route }}
+          - name: LONGHORN_UI_PORT
+            value: "8000"
       volumes:
+      {{- if .Values.openshift.ui.route }}
       - name: longhorn-ui-tls
         secret:
           secretName: longhorn-ui-tls
       {{- end }}
-          - name: LONGHORN_UI_PORT
-            value: "8000"
-      volumes:
       - emptyDir: {}
         name: nginx-cache
       - emptyDir: {}
