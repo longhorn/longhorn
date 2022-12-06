@@ -37,8 +37,10 @@ rules:
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
+  {{- if .Values.openshift.enabled }}
   {{- if .Values.openshift.finalizers }}
               "engineimages/finalizers", "nodes/finalizers", "instancemanagers/finalizers",
+  {{- end }}
   {{- end }}
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
@@ -58,9 +60,11 @@ rules:
 - apiGroups: ["admissionregistration.k8s.io"]
   resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
   verbs: ["get", "list", "create", "patch", "delete"]
+{{- if .Values.openshift.enabled }}
 {{- if .Values.openshift.privileged }}
 - apiGroups: ["security.openshift.io"]
   resources: ["securitycontextconstraints"]
   resourceNames: ["anyuid", "privileged"]
   verbs: ["use"]
+{{- end }}
 {{- end }}

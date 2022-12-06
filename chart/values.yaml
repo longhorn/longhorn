@@ -284,9 +284,10 @@ annotations: {}
 serviceAccount:
   # Annotations to add to the service account
   annotations: {}
-#
+
 ## openshift settings
-# openshift:
+openshift:
+  enabled: false
 #   ui:
 #     route: "longhorn-ui"
 #     port: 443

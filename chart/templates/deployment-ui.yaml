@@ -1,3 +1,4 @@
+{{- if .Values.openshift.enabled }}
 {{- if .Values.openshift.ui.route }}
 # https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml
 # Create a proxy service account and ensure it will use the route "proxy"
@@ -28,6 +29,7 @@ spec:
     app: longhorn-ui
 ---
 {{- end }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,10 +47,13 @@ spec:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-ui
     spec:
+      {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
       serviceAccountName: longhorn-service-account
       {{- end }}
+      {{- end }}
       containers:
+      {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
       - name: oauth-proxy
         image: {{ template "registry_url" . }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
@@ -67,6 +72,7 @@ spec:
         volumeMounts:
           - mountPath: /etc/tls/private
             name: longhorn-ui-tls
+      {{- end }}
       {{- end }}
       - name: longhorn-ui
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
@@ -87,10 +93,12 @@ spec:
           - name: LONGHORN_UI_PORT
             value: "8000"
       volumes:
+      {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
       - name: longhorn-ui-tls
         secret:
           secretName: longhorn-ui-tls
+      {{- end }}
       {{- end }}
       - emptyDir: {}
         name: nginx-cache

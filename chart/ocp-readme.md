@@ -100,6 +100,7 @@ defaultSettings:
   createDefaultDiskLabeledNodes: true
 
 openshift:
+  enabled: true
   ui:
     route: "longhorn-ui"
     port: 443
