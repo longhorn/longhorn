@@ -3886,11 +3886,11 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:master-head"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v2_20221130"
+        - "longhornio/longhorn-instance-manager:master-head"
         - --share-manager-image
-        - "longhornio/longhorn-share-manager:v1_20220914"
+        - "longhornio/longhorn-share-manager:master-head"
         - --backing-image-manager-image
-        - "longhornio/backing-image-manager:v3_20220808"
+        - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
         - "longhornio/support-bundle-kit:v0.0.16"
         - --manager-image
