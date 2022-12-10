@@ -7,7 +7,9 @@ Main changes and tasks for OCP are:
   - Something to circle back on is network polices and which components can have their privileges reduced without impacting functionality.
     - The UI probably can be for example.
 - On OCP / OKD, the Operating System is Managed by the Cluster
-- openshift/oauth-proxy container image needs to be updated
+- openshift/oauth-proxy for authentication to the Longhorn Ui
+  - **⚠️** This provides access to ALL Authenticated users, this should be scoped down if required.
+    - TODO: Validate Scope Down
 - Option to use separate disk in /var/mnt/longhorn
 - Exposing longhorn ui via oauth-proxy
 - Adding finalizers for mount propagation
@@ -23,7 +25,7 @@ Label each node for storage with:
 oc get nodes --no-headers | awk '{print $1}'
 
 export NODE="worker-0"
-oc label node "${WORKER}" node.longhorn.io/create-default-disk=true
+oc label node "${NODE}" node.longhorn.io/create-default-disk=true
 ```
 
 ### Separate /var/mnt/longhorn setup
@@ -96,6 +98,11 @@ oc label node ${NODE} node.longhorn.io/create-default-disk=config
 Minium Adjustments Required
 
 ```yaml
+openshift:
+  oauthProxy:
+    repository: quay.io/openshift/origin-oauth-proxy
+    tag: latest # Pin to OCP/OKD 4.X Version
+
 defaultSettings:
   createDefaultDiskLabeledNodes: true
 

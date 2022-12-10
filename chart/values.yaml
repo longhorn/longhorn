@@ -65,8 +65,8 @@ image:
       tag: v2.8.0
   openshift:
     oauthProxy:
-      repository: openshift/oauth-proxy
-      tag: latest
+      repository: quay.io/openshift/origin-oauth-proxy
+      tag: latest  # Pin to OCP/OKD 4.X Version
   pullPolicy: IfNotPresent
 
 service:
@@ -288,9 +288,9 @@ serviceAccount:
 ## openshift settings
 openshift:
   enabled: false
-#   ui:
-#     route: "longhorn-ui"
-#     port: 443
-#     proxy: 8443
-#   finalizers: true
-#   privileged: true
+  # ui:
+  #   route: "longhorn-ui"
+  #   port: 443
+  #   proxy: 8443
+  # finalizers: true
+  # privileged: true
