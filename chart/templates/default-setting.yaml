@@ -56,6 +56,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.disableReplicaRebuild) }}disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.disableRevisionCounter) }}disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}{{ end }}

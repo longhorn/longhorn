@@ -1,5 +1,8 @@
 #!/bin/bash
 
+######################################################
+# Log
+######################################################
 export RED='\x1b[0;31m'
 export GREEN='\x1b[38;5;22m'
 export CYAN='\x1b[36m'
@@ -67,17 +70,9 @@ error() {
   fi
 }
 
-detect_node_os()
-{
-  local pod="$1"
-
-  OS=`kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2'`
-  if [[ -z "${OS}" ]]; then
-    OS=`kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2'`
-  fi
-  echo "$OS"
-}
-
+######################################################
+# Check logics
+######################################################
 set_packages_and_check_cmd()
 {
   case $OS in
@@ -110,23 +105,37 @@ set_packages_and_check_cmd()
    esac
 }
 
-check_dependencies() {
+detect_node_os()
+{
+  local pod="$1"
+
+  OS=`kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2'`
+  if [[ -z "${OS}" ]]; then
+    OS=`kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2'`
+  fi
+  echo "$OS"
+}
+
+check_local_dependencies() {
   local targets=($@)
 
-  local allFound=true
+  local all_found=true
   for ((i=0; i<${#targets[@]}; i++)); do
     local target=${targets[$i]}
     if [ "$(which $target)" == "" ]; then
-      allFound=false
+      all_found=false
       error "Not found: $target"
     fi
   done
-  if [ "$allFound" == "false" ]; then
-    error "Please install missing dependencies."
+
+  if [ "$all_found" == "false" ]; then
+    msg="Please install missing dependencies: ${targets[@]}."
+    info "$msg"
     exit 2
-  else
-    info "Required dependencies are installed."
   fi
+
+  msg="Required dependencies '${targets[@]}' are installed."
+  info "$msg"
 }
 
 create_ds() {
@@ -215,9 +224,9 @@ check_mount_propagation() {
 }
 
 check_package_installed() {
-  local pods=$(kubectl get pods -o name | grep longhorn-environment-check)
+  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
 
-  local allFound=true
+  local all_found=true
 
   for pod in ${pods}; do
     OS=`detect_node_os $pod`
@@ -233,70 +242,95 @@ check_package_installed() {
 
       kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
       if [ $? != 0 ]; then
-        allFound=false
+        all_found=false
         node=`kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName`
         error "$package is not found in $node."
       fi
     done
   done
 
-  if [ "$allFound" == "false" ]; then
+  if [ "$all_found" == "false" ]; then
     error "Please install missing packages."
     exit 2
-  else
-    info "Required packages are installed."
   fi
+
+  info "Required packages are installed."
+}
+
+check_hostname_uniqueness() {
+  hostnames=$(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="Hostname")].address}')
+
+  declare -A deduplicate_hostnames
+  num_nodes=0
+  for hostname in ${hostnames}; do
+    num_nodes=$((num_nodes+1))
+    deduplicate_hostnames["${hostname}"]="${hostname}"
+  done
+
+  if [ "${#deduplicate_hostnames[@]}" != "${num_nodes}" ]; then
+    error "Nodes do not have unique hostnames."
+    exit 2
+  fi
+
+  info "Hostname uniqueness check is passed."
 }
 
 check_multipathd() {
-  local pods=$(kubectl get pods -o name | grep longhorn-environment-check)
-  local allNotFound=true
+  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
+  local all_not_found=true
 
   for pod in ${pods}; do
     kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
     if [ $? = 0 ]; then
-      allNotFound=false
+      all_not_found=false
       node=`kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName`
       warn "multipathd is running on $node."
     fi
   done
 
-  if [ "$allNotFound" == "false" ]; then
+  if [ "$all_not_found" == "false" ]; then
     warn "multipathd would probably result in the Longhorn volume mount failure. Please refer to https://longhorn.io/kb/troubleshooting-volume-with-multipath for more information."
   fi
 }
 
 check_iscsid() {
-  local pods=$(kubectl get pods -o name | grep longhorn-environment-check)
-  local allFound=true
+  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
+  local all_found=true
 
   for pod in ${pods}; do
     kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.service" > /dev/null 2>&1
 
     if [ $? != 0 ]; then
-      allFound=false
+      all_found=false
       node=`kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName`
       error "iscsid is not running on $node."
     fi
   done
 
-  if [ "$allFound" == "false" ]; then
+  if [ "$all_found" == "false" ]; then
     exit 2
   fi
 }
 
-DEPENDENCIES=(kubectl jq mktemp)
-check_dependencies ${DEPENDENCIES[@]}
+######################################################
+# Main logics
+######################################################
+DEPENDENCIES=("kubectl" "jq" "mktemp")
+check_local_dependencies "${DEPENDENCIES[@]}"
 
+# Check the each host has a unique hostname (for RWX volume)
+check_hostname_uniqueness
+
+# Create a daemonset for checking the requirements in each node
 TEMP_DIR=$(mktemp -d)
 
 trap cleanup EXIT
 create_ds
 wait_ds_ready
+
 check_package_installed
 check_iscsid
 check_multipathd
 check_mount_propagation
 
 exit 0
-

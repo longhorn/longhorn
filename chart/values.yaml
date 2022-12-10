@@ -34,13 +34,13 @@ image:
       tag: master-head
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v2_20221130
+      tag: master-head
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20220914
+      tag: master-head
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v3_20220808
+      tag: master-head
     supportBundleKit:
       repository: longhornio/support-bundle-kit
       tag: v0.0.16
@@ -141,6 +141,7 @@ defaultSettings:
   disableReplicaRebuild: ~
   replicaReplenishmentWaitInterval: ~
   concurrentReplicaRebuildPerNodeLimit: ~
+  concurrentVolumeBackupRestorePerNodeLimit: ~
   disableRevisionCounter: ~
   systemManagedPodsImagePullPolicy: ~
   allowVolumeCreationWithDegradedAvailability: ~
