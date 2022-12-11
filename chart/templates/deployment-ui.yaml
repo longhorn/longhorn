@@ -53,11 +53,7 @@ spec:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-ui
     spec:
-      {{- if .Values.openshift.enabled }}
-      {{- if .Values.openshift.ui.route }}
-      serviceAccountName: longhorn-service-account
-      {{- end }}
-      {{- end }}
+      serviceAccountName: longhorn-ui-service-account
       containers:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
@@ -70,7 +66,7 @@ spec:
         args:
         - --https-address=:{{ .Values.openshift.ui.proxy | default 8443 }}
         - --provider=openshift
-        - --openshift-service-account=longhorn-service-account
+        - --openshift-service-account=longhorn-ui-service-account
         - --upstream=http://localhost:8000
         - --tls-cert=/etc/tls/private/tls.crt
         - --tls-key=/etc/tls/private/tls.key

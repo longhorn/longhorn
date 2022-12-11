@@ -65,6 +65,13 @@ rules:
   verbs: ["*"]
 {{- if .Values.openshift.enabled }}
 {{- if .Values.openshift.privileged }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-ocp-privileged-role
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+rules:
 - apiGroups: ["security.openshift.io"]
   resources: ["securitycontextconstraints"]
   resourceNames: ["anyuid", "privileged"]
