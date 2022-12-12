@@ -71,6 +71,7 @@ spec:
         - --tls-cert=/etc/tls/private/tls.crt
         - --tls-key=/etc/tls/private/tls.key
         - --cookie-secret=SECRET
+        - --openshift-sar={"namespace":"{{ include "release_namespace" . }}","group":"longhorn.io","resource":"setting","verb":"delete"}
         volumeMounts:
           - mountPath: /etc/tls/private
             name: longhorn-ui-tls

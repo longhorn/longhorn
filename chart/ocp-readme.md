@@ -2,18 +2,17 @@
 
 Main changes and tasks for OCP are:
 
+- On OCP / OKD, the Operating System is Managed by the Cluster
 - OCP Imposes [Security Context Constraints](https://docs.openshift.com/container-platform/4.11/authentication/managing-security-context-constraints.html)
   - This requires everything to run with the least privilege possible. For the moment every component has been given access to run as higher privilege.
   - Something to circle back on is network polices and which components can have their privileges reduced without impacting functionality.
     - The UI probably can be for example.
-- On OCP / OKD, the Operating System is Managed by the Cluster
 - openshift/oauth-proxy for authentication to the Longhorn Ui
-  - **⚠️** This provides access to ALL Authenticated users, this should be scoped down if required.
-    - TODO: Validate Scope Down
-- Option to use separate disk in /var/mnt/longhorn
-- Exposing longhorn ui via oauth-proxy
+  - **⚠️** Currently Scoped to Authenticated Users that can delete a longhorn settings object.
+    - **⚠️** Since the UI it self is not protected, network policies will need to be created to prevent namespace <--> namespace communication against the pod or service object directly.
+    - Anyone with access to the UI Deployment can remove the route restriction. (Namespace Scoped Admin)
+- Option to use separate disk in /var/mnt/longhorn & MachineConfig file to mount /var/mnt/longhorn
 - Adding finalizers for mount propagation
-- MachineConfig file to mount /var/mnt/longhorn
 
 ## Known Issues
 
