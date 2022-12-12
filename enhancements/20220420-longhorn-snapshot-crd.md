@@ -39,7 +39,7 @@ After this enhancement, users will be able to use kubectl to query/create/delete
 The experience details should be in the `User Experience In Detail` later.
 
 #### Story 1
-User wants to limit the snapshot count to save space. Snapshot RecurringJobs set to Retain X number of snapshots do not touch unrelated snapshots, so if one ever changes the name of the RecurringJob, the old snapshots will stick around forever. These then have to be manually deleted in the UI.  There might be some kind of browser automation framework might also work for pruning large numbers of snapshots, but this feels janky. Having a CRD for snapshots would greatly simplify this, as one could prune snapshots using kubectl, much like how one can currently manage backups using kubectl due to the existance of the `backups.longhorn.io` CRD.
+User wants to limit the snapshot count to save space. Snapshot RecurringJobs set to Retain X number of snapshots do not touch unrelated snapshots, so if one ever changes the name of the RecurringJob, the old snapshots will stick around forever. These then have to be manually deleted in the UI.  There might be some kind of browser automation framework might also work for pruning large numbers of snapshots, but this feels janky. Having a CRD for snapshots would greatly simplify this, as one could prune snapshots using kubectl, much like how one can currently manage backups using kubectl due to the existence of the `backups.longhorn.io` CRD.
 
 ### User Experience In Detail
 
@@ -106,9 +106,9 @@ The life cycle of a snapshot CR is as below:
 
 1. **Create**
     1. When a snapshot CR is created, Longhorn mutation webhook will:
-        1. Add a volume label `longhornvolume: <VOLUME-NAME>` to the snapshot CR. This allow us to efficiently find snapshots corressponding to a volume without having listing potientially thoundsands of snapshots.
+        1. Add a volume label `longhornvolume: <VOLUME-NAME>` to the snapshot CR. This allow us to efficiently find snapshots corresponding to a volume without having listing potientially thoundsands of snapshots.
         1. Add `longhornFinalizerKey` to snapshot CR to prevent it from being removed before Longhorn has change to clean up the corresponding snapshot
-        1. Populate the value for `snapshot.OwnerReferences` to uniquely indentify the volume of this snapshot. This field contains the volume UID to uniquely identify the volume in case  the old volume was deleted and a new volume was created with the same name.
+        1. Populate the value for `snapshot.OwnerReferences` to uniquely identify the volume of this snapshot. This field contains the volume UID to uniquely identify the volume in case  the old volume was deleted and a new volume was created with the same name.
     2. For user created snapshot CR, the field `Spec.CreateSnapshot` should be set to `true` indicating that Longhorn should provision a new snapshot for this CR.
         1. Longhorn snapshot controller will pick up this CR, check to see if there already is a snapshot inside the `engine.Status.Snapshots`.
            1. If there is there already a snapshot inside engine.Status.Snapshots, update the snapshot.Status with the snapshot info inside `engine.Status.Snapshots`
@@ -147,7 +147,7 @@ Anything that requires if user want to upgrade to this enhancement
 How do we address scalability issue?
 1. Controller workqueue
     1. Disable resync period for snapshot informer
-    1. Enque snapshot only when:
+    1. Enqueue snapshot only when:
         1. There is a change in snapshot CR
         1. There is a change in `engine.Status.CurrentState` (volume attach/detach event), `engine.Status.PurgeStatus` (for snapshot deletion event), `engine.Status.Snapshots` (for snapshot creation/update event)
 1. This enhancement proposal doesn't make additional call to engine process comparing to the existing design.

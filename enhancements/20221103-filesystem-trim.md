@@ -57,7 +57,7 @@ After the enhancement, users can directly reclaim the space by trimming the file
         1. The process creation function should specify the option `unmap-mark-disk-chain-removed`.
 
 #### longhorn-engine:
-1. Update dependency `rancher/tgt`, `longhorn/longhornlib`, and `longhorn/sparse-tools` for the opertaion `UNMAP` support.
+1. Update dependency `rancher/tgt`, `longhorn/longhornlib`, and `longhorn/sparse-tools` for the operation `UNMAP` support.
 2. Add new option `unmap-mark-snap-chain-removed` for the engine process creation call. 
    Add new option `unmap-mark-disk-chain-removed` for the replica process creation call.
 3. Add a new API `unmap-mark-snap-chain-removed` to update the field for the engine and all its replicas.
