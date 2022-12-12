@@ -250,7 +250,7 @@ Integration test plan.
       * Scale down the workload to detach the `test-vol`
       * Create the same PVC `test-restore-pvc` as in the `Source volume is attached && Longhorn snapshot exist` section
       * Verify that PVC provisioning failed because the source volume is detached so Longhorn cannot verify the existence of the Longhorn snapshot in the source volume.
-      * Scale up the workload to attache `test-vol`  
+      * Scale up the workload to attach `test-vol`  
       * Wait for PVC to finish provisioning and be bounded
       * Attach the PVC `test-restore-pvc` and verify the data
       * Delete the PVC
