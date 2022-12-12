@@ -15,6 +15,19 @@ Main changes and tasks for OCP are:
 - Adding finalizers for mount propagation
 - MachineConfig file to mount /var/mnt/longhorn
 
+## Known Issues
+
+- General Feature/Issue Thread
+  - [[FEATURE] Deploying Longhorn on OKD/Openshift](https://github.com/longhorn/longhorn/issues/1831)
+- 4.10 / 1.23:
+  - 4.10.0-0.okd-2022-03-07-131213 to 4.10.0-0.okd-2022-07-09-073606: Tested, No Known Issues
+- 4.11 / 1.24:
+  - 4.11.0-0.okd-2022-07-27-052000 to 4.11.0-0.okd-2022-11-19-050030: Tested, No Known Issues
+  - 4.11.0-0.okd-2022-12-02-145640:
+    - Workaround: [[BUG] Volumes Stuck in Attach/Detach Loop](https://github.com/longhorn/longhorn/issues/4988)
+- 4.12 / 1.25:
+  - 4.12.0-0.okd-2022-12-05-210624 to 4.12.0-0.okd-2022-12-11-164611: Tested, No Known Issues
+
 ## Preparing nodes
 
 ### Default /var/lib/longhorn setup
@@ -95,7 +108,7 @@ oc label node ${NODE} node.longhorn.io/create-default-disk=config
 
 ## Example values.yaml
 
-Minium Adjustments Required
+Minimum Adjustments Required
 
 ```yaml
 openshift:
