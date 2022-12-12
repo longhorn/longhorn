@@ -329,7 +329,7 @@ After the enhancement, users can directly specify the BackingImage during volume
         - Longhorn needs to verify the BackingImage if it's specified.
         - For restore/DR volumes, the BackingImage name stored in the backup volume will be used automatically if users do not specify the BackingImage name. Verify the checksum before using the BackingImage.
     - Snapshot backup:
-        - BackingImage name and checksum will be recored into BackupVolume now.
+        - BackingImage name and checksum will be record into BackupVolume now.
     - BackingImage creation:
         - Need to create both BackingImage CR and the BackingImageDataSource CR. Besides, a random ready disk will be picked up so that Longhorn can prepare the 1st file for the BackingImage immediately.
     - BackingImage get/list:
@@ -353,7 +353,7 @@ After the enhancement, users can directly specify the BackingImage during volume
 - The server will download the file immediately once the type is `download` and the server is up.
     - A cancelled context will be put the HTTP download request. When the server is stopped/failed while downloading is still in-progress, the context can help stop the download.
     - The service will wait for 30s at max for download start. If time exceeds, the download is considered as failed.
-    - The download file is in `<Disk path in containter>/tmp/<BackingImage name>-<BackingImage UUID>`
+    - The download file is in `<Disk path in container>/tmp/<BackingImage name>-<BackingImage UUID>`
     - Each time when the image downloads a chunk of data, the progress will be updated. For the first time updating the progress, it means the downloading starts and the state will be updated from `starting` to `in-progress`.    
 - The server is ready for handling the uploaded data once the type is `upload` and the server is up.
     - The query `size` is required for the API `upload`.
