@@ -25,22 +25,22 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: master-head
+      tag: v1.4.0-rc1
     manager:
       repository: longhornio/longhorn-manager
-      tag: master-head
+      tag: v1.4.0-rc1
     ui:
       repository: longhornio/longhorn-ui
-      tag: master-head
+      tag: v1.4.0-rc1
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: master-head
+      tag: v1.4.0-rc1
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: master-head
+      tag: v1.4.0-rc1
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: master-head
+      tag: v1.4.0-rc1
     supportBundleKit:
       repository: longhornio/support-bundle-kit
       tag: v0.0.16
