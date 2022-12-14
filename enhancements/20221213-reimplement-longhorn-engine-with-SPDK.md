@@ -70,7 +70,7 @@ SPDK logical volume have a couple of features that we will use:
 
 ### Replica rebuild
 
-When a new replica has to be added or a replica has to be rebuilded, we have to recreate the entire snapshot stack of each volume that are hosted on that node. Actually SPDK doesn't have nothing to do that, but after discussing with core maintainers we arranged a procedure. Let's make an example.
+When a new replica has to be added or a replica has to be rebuilt, we have to recreate the entire snapshot stack of each volume that are hosted on that node. Actually SPDK doesn't have nothing to do that, but after discussing with core maintainers we arranged a procedure. Let's make an example.
 
 Supposing we have to rebuild a volume with two layer of snapshots, snapshotA is the oldest and snapshotB the younger, basically we have to (in _italic_ what we miss):
 
