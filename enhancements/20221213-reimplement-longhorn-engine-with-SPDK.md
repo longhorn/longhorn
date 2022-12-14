@@ -27,18 +27,18 @@ These are the reasons that have driven us:
 ### Goals
 
 * Implement all actual `longhorn-engine` functionalities
-* Continuing to support multiple `longhorn-engine` versions concurrently
+* Continue to support multiple `longhorn-engine` versions concurrently
 * Maintain as much as possible the same user experience between Longhorn with and without SPDK
 * Lay the groundwork for extending Longhorn to sharding and aggegration of storage devices
 
 
 ## Proposal
 
-Create an external orchestrator that, with JSON-RPC calls towards multiple instances of `spdk_tgt` app running in different machines, could manage the durability and reliability of data. Actually, not all needed functionalities to do that are already available in SPDK, so some new JSON-RPC commands will be developed over SPDK upstream. The name of such an orchestrator could be `longhorn-spdk-agent`, taking as example [Storage Management Agent](https://spdk.io/doc/sma.html) that has some similar functionalities.
+Create an external orchestrator that, with JSON-RPC calls towards multiple instances of `spdk_tgt` app running in different machines, could manage the durability and reliability of data. Actually, not all needed functionalities to do that are already available in SPDK, so some new JSON-RPC commands will be developed over SPDK. The name of such an orchestrator could be `longhorn-spdk-agent`, taking as example [Storage Management Agent](https://spdk.io/doc/sma.html) that has some similar functionalities.
 
 * The main purpose of `longhorn-spdk-agent` is to create and export via NVMe-oF logical volumes from multiple replica nodes (one of them likely local), attach to these volumes on a controller node, use resulting bdevs to create a RAID1 bdev and exporting it via NVMe-oF locally. At this point NVMe Kernel module can be used to connect to this NVMe-oF subsystem and so to create a block device `/dev/nvmeXnY` to be used by the Longhorn CSI driver. In this way we will have multiple replica of the same data written on this block device.
-* Below a diagram that show the new proposal ![SPDK New Architecture](./image/spdk-new-architecture.png)
-* In release 23.01 support for ublk will be added in SPDK: with this functionality we can directly create a block device without using the NVMe layer on Linux kernel versions >6.0. This will be a quite big enhancement over using NVMe-oF locally.
+* Below a diagram that shows the proposal ![SPDK New Architecture](./image/spdk-new-architecture.png)
+* In release 23.01, support for ublk will be added in SPDK: with this functionality we can directly create a block device without using the NVMe layer on Linux kernel versions >6.0. This will be a quite big enhancement over using NVMe-oF locally.
 
 The `longhorn-spdk-agent` will be responsible to make all others control operations, like for example creating snapshots over all replicas of the same volume. Other functionalities orchestrated by the Agent will be the remote rebuild, a complete rebuild of the entire snapshot stack of a volume needed to add or repair a replica, the backup and restore, export/import of a SPDK logical volumes to/from sparse files stored on an external storage system via S3.
 
@@ -54,16 +54,15 @@ Actually there is a `longhorn-engine` controller and some `longhorn-engine` repl
 
 To orchestrate SPDK instances running on different nodes in a way to make up a set of replicas, we will introduce, as discussed before, the `longhorn-spdk-agent`; to make the volume management lighter we will have an instance of the agent per volume. `longhorn-spdk-agent` will implement actual gRPC interface used by `longhorn-engine` to talk with `instance-manager`, so this last one will became the portal to communicate with `longhorn-manager` by different data plane.
 
-`spdk_tgt` by default start with a single thread, but it can be configured to use multiple threads: we can have a thread per core available on the CPU. This will increase the performance but comes with the cost of an high CPU utilization. Working in polling mode instead than in interrupt mode, CPU core utilization by a single thread is always rising 100% even with no workload to handle. This could be a problem, so we can configure `spdk_tgt` with dynamic scheduler: in this way, if no workload is present, only one core will be used and only one thread will continue polling. Other thread will be put in a idle state and will become active again only when needed. Moreover, dynamic scheduler has a way to reduce the CPU frequency. (See future work section.)
-
-TODO: Include architecture diagram, and concise description of the various entities and where they're running.
+`spdk_tgt` by default starts with a single thread, but it can be configured to use multiple threads: we can have a thread per core available on the CPU. This will increase the performance but comes with the cost of an high CPU utilization. Working in polling mode instead than in interrupt mode, CPU core utilization by a single thread is always rising 100% even with no workload to handle. This could be a problem, so we can configure `spdk_tgt` with dynamic scheduler: in this way, if no workload is present, only one core will be used and only one thread will continue polling. Other thread will be put in a idle state and will become active again only when needed. Moreover, dynamic scheduler has a way to reduce the CPU frequency. (See future work section.)
 
 
 ### Snapshots
 
 When `longhorn-spdk-agent` receive a snapshot request from `instance-manager`, before to proceed all I/O operations over volume's block device `/dev/nvmeXnY` must be stopped to ensure that snapshots over all the replicas contains the same data.
-Actually there is no way to suspend the I/O operation over a block device, but if it is acceptable that this block device can disappear for the time needed to make the snapshot, then we can perform the operation (if the block device is created with the NVMe layer, for ublk we must wait the release of this feature to see what functionalities it will have). In brief, it can be done using a null bdev namespace into the NVMe-oF subsystem used to export the volume to be snapshotted.
-Once received a snapshot request, `longhorn-spdk-agent` will call a JSON-RPC to make a snapshot over all the replicas of the volume involved. The snapshot RPC command will ensure to freeze all I/O over the logical volume to be snapshotted, so all pending I/O will be executed before the snapshot.
+Actually there is no way to suspend the I/O operation over a block device, but if it is acceptable that this block device can disappear for the time needed to make the snapshot, then we can perform the operation (if the block device is created with the NVMe layer, it can be done using a null bdev namespace into the NVMe-oF subsystem used to export the volume to be snapshotted; for ublk we must wait the release of this feature to see what functionalities it will have).
+Once received a snapshot request, `longhorn-spdk-agent` will call the JSON-RPC to make a snapshot over all the replicas of the volume involved. The snapshot RPC command will ensure to freeze all I/O over the logical volume to be snapshotted, so all pending I/O will be executed before the snapshot.
+
 SPDK logical volume have a couple of features that we will use:
 * clone, used to create new logical volume based on a snapshot. It can be used to revert a volume to a snapshot too, cloning a new volume, deleting the old one and then renaming the new one as the old one
 * decouple, feature that can be used to delete a snapshot, first decoupling the child volume from this snapshot and then deleting the snapshot.
@@ -71,7 +70,7 @@ SPDK logical volume have a couple of features that we will use:
 
 ### Replica rebuild
 
-When a new replica has to be added or a replica has to be rebuilded, we have to recreate the entire snapshot stack of each volume that are hosted on that node. Actually SPDK doesn't have nothing to do that, but after discussing with core maintainers we arranged a procedure to do that. Let's show an example.
+When a new replica has to be added or a replica has to be rebuilded, we have to recreate the entire snapshot stack of each volume that are hosted on that node. Actually SPDK doesn't have nothing to do that, but after discussing with core maintainers we arranged a procedure. Let's make an example.
 
 Supposing we have to rebuild a volume with two layer of snapshots, snapshotA is the oldest and snapshotB the younger, basically we have to (in _italic_ what we miss):
 
@@ -92,14 +91,14 @@ So, in this way we can rebuild the snapshot stack of a volume. But what about th
 * _add the bdev of the attached volume to the RAID1 bdev excluded from the read balancing_
 * wait for the snapshot stack rebuilding to finish
 * _change the upper volume of the snapshot stack from the current to this one with the live data_
-* _enable the bdev of the attached volume from RAID1 read balancing_
+* _enable the bdev of the attached volume for RAID1 read balancing_
 
 What we have at the end of the rebuilding's phase is a snapshot stack with an empty volume at the top, while in the RAID1 we have a volume with the live data but without any snapshot. So we have to couple these 2 stacks exchanging the upper volume and to do that we need a new JSON-RPC. We will need to implement the JSON-RPC to enable/disable a bdev from the RAID1 read balancing too.
 
 
 ### Backup and Restore
 
-Backup will be implemented exporting a volume to a sparse file and then save this file over an external storage via S3. SPDK already has a `spdk_dd` application that can copy a bdev to a file and this app has an option to preserve bdev sparseness. But using spdk_dd has some problems: actually the sparse option works only with bdev that represent a local logical volume, not an exported one via NVMe-oF. So to export a volume we cannot work on a remote node where to export this volume, we need to work on the node where we have the data source. But in this way, to perform a backup, we would need to stop the `spdk_tgt` app, run the `spdk_dd` and then restart the `spdk_tgt`. This operation is needed because it could not be safe to run multiple spdk applications over the same disk (even if spdk_dd would read from a read only volume) and moreover `spdk_dd` could not see the volume to export if this has been created after the last restart of `spdk_tgt` app. This because blobstore metadata, and so newly created logical volume, are saved on disk only on application exit.
+Backup will be implemented exporting a volume to a sparse file and then save this file over an external storage via S3. SPDK already has a `spdk_dd` application that can copy a bdev to a file and this app has an option to preserve bdev sparseness. But using spdk_dd has some problems: actually the sparse option works only with bdev that represent a local logical volume, not an exported one via NVMe-oF. So to backup a volume we cannot work on a remote node where to export this volume, we need to work on the node where we have the data source. But in this way, to perform a backup, we would need to stop the `spdk_tgt` app, run the `spdk_dd` and then restart the `spdk_tgt`. This operation is needed because it could not be safe to run multiple spdk applications over the same disk (even if spdk_dd would read from a read only volume) and moreover `spdk_dd` could not see the volume to export if this has been created after the last restart of `spdk_tgt` app. This because blobstore metadata, and so newly created logical volume, are saved on disk only on application exit.
 
 Stopping `spdk_tgt` is not acceptable because it would suspend operation over all other volumes hosted in this node so, to solve these problems, we have 2 possible solutions:
 
@@ -110,14 +109,14 @@ With the second solution we could export the volume via NVMe-oF to a dedicated n
 
 The restore operation can be done in a couple of way:
 * read the backup sparse file and write its content into the longhorn block device. In this way data will be fully replicated
-* clone from backup over each replica, importing the backup sparse file into a new thinly provisioned logical volume. We can perform this operation over the local node, owner of the new volume, if for the backup we choose to develop a JSON-RPC to export/import logical volume to/from sparse files. Otherwise we can do it or over a dedicated node with `spdk_dd` application, that handle sparse file with SEEK_HOLE and SEEK_DATA functionalities of `lseek`.
+* clone from backup over each replica, importing the backup sparse file into a new thinly provisioned logical volume. We can perform this operation over the local node, owner of the new volume, if for the backup process we choose to develop a JSON-RPC to export/import logical volume to/from sparse files. Otherwise we can do it or over a dedicated node with `spdk_dd` application, that handle sparse file with SEEK_HOLE and SEEK_DATA functionalities of `lseek`.
 
-If we leverage the same backup & restore mechanism of `longhorn-engine`, we can restore a backup done by this one to a SPDK volume.
+If we leverage the same backup & restore mechanism of `longhorn-engine`, we can restore a backup done by the actual engine to a SPDK volume.
 
 
 ### Remote Control
 
-The JSON-RPC API by default is only available over the `/var/tmp/spdk.sock` Unix domain socket, but SPDK offer a sample python script [rpc_http_proxy](https://spdk.io/doc/jsonrpc_proxy.html) that provides http server which listens for JSON objects from users. Otherwise we could use the `socat` application to forward requests received from an IP socket towards a Unix socket. Both `socat` and `rpc_http_proxy` can perform user authentication with password.
+The JSON-RPC API by default is only available over the `/var/tmp/spdk.sock` Unix domain socket, but SPDK offer the sample python script [rpc_http_proxy](https://spdk.io/doc/jsonrpc_proxy.html) that provides http server which listens for JSON objects from users. Otherwise we could use the `socat` application to forward requests received from an IP socket towards a Unix socket. Both `socat` and `rpc_http_proxy` can perform user authentication with password.
 
 
 ### Upgrade Strategy
@@ -130,7 +129,7 @@ Moreover this is a good time to introduce backup versioning, which allows us to 
 
 ### Future Work
 
-* For Edge use cases, energy efficiency is important. We may need further enhancements and an interrupt-driven mode during low load periods for the scheduler. [Here](https://www.snia.org/educational-library/spdk-schedulers-%E2%80%93-saving-cpu-cores-polled-mode-storage-application-2021) an introduction to SPDK Schedulers that describes briefly interrupt mode.
+* For Edge use cases, energy efficiency is important. We may need further enhancements and an interrupt-driven mode during low load periods for the scheduler. [Here](https://www.snia.org/educational-library/spdk-schedulers-%E2%80%93-saving-cpu-cores-polled-mode-storage-application-2021) an introduction to SPDK Schedulers that describes briefly the interrupt mode.
 
 
 ### Roadmap
