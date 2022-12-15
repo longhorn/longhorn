@@ -4091,7 +4091,7 @@ metadata:
   name: longhorn-ui
   namespace: longhorn-system
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: longhorn-ui
@@ -4103,6 +4103,18 @@ spec:
         app.kubernetes.io/version: v1.4.0-dev
         app: longhorn-ui
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-ui
+              topologyKey: kubernetes.io/hostname
       containers:
       - name: longhorn-ui
         image: longhornio/longhorn-ui:master-head
