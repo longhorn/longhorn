@@ -15,6 +15,18 @@ spec:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-ui
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-ui
+              topologyKey: kubernetes.io/hostname
       containers:
       - name: longhorn-ui
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
