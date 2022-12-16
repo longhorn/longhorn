@@ -6,7 +6,7 @@ metadata:
   name: longhorn-conversion-webhook
   namespace: {{ include "release_namespace" . }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.longhornConversionWebhook.replicas }}
   selector:
     matchLabels:
       app: longhorn-conversion-webhook
@@ -53,25 +53,25 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
-      {{- if .Values.longhornDriver.priorityClass }}
-      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote }}
+      {{- if .Values.longhornConversionWebhook.priorityClass }}
+      priorityClassName: {{ .Values.longhornConversionWebhook.priorityClass | quote }}
       {{- end }}
-      {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.longhornConversionWebhook.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
 {{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
         {{- end }}
-        {{- if .Values.longhornDriver.tolerations }}
-{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+        {{- if .Values.longhornConversionWebhook.tolerations }}
+{{ toYaml .Values.longhornConversionWebhook.tolerations | indent 6 }}
         {{- end }}
       {{- end }}
-      {{- if or .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.longhornConversionWebhook.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
 {{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
         {{- end }}
-        {{- if .Values.longhornDriver.nodeSelector }}
-{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+        {{- if .Values.longhornConversionWebhook.nodeSelector }}
+{{ toYaml .Values.longhornConversionWebhook.nodeSelector | indent 8 }}
         {{- end }}
       {{- end }}
       serviceAccountName: longhorn-service-account
@@ -84,7 +84,7 @@ metadata:
   name: longhorn-admission-webhook
   namespace: {{ include "release_namespace" . }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.longhornAdmissionWebhook.replicas }}
   selector:
     matchLabels:
       app: longhorn-admission-webhook
@@ -142,25 +142,25 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
-      {{- if .Values.longhornDriver.priorityClass }}
-      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote }}
+      {{- if .Values.longhornAdmissionWebhook.priorityClass }}
+     priorityClassName: {{ .Values.longhornAdmissionWebhook.priorityClass | quote }}
       {{- end }}
-      {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.longhornAdmissionWebhook.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
 {{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
         {{- end }}
-        {{- if .Values.longhornDriver.tolerations }}
-{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+        {{- if .Values.longhornAdmissionWebhook.tolerations }}
+{{ toYaml .Values.longhornAdmissionWebhook.tolerations | indent 6 }}
         {{- end }}
       {{- end }}
-      {{- if or .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.longhornAdmissionWebhook.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
 {{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
         {{- end }}
-        {{- if or .Values.longhornDriver.nodeSelector }}
-{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+        {{- if .Values.longhornAdmissionWebhook.nodeSelector }}
+{{ toYaml .Values.longhornAdmissionWebhook.nodeSelector | indent 8 }}
         {{- end }}
       {{- end }}
       serviceAccountName: longhorn-service-account
