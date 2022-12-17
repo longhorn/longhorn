@@ -8,6 +8,7 @@
 
 [![Releases](https://img.shields.io/github/release/longhorn/longhorn/all.svg)](https://github.com/longhorn/longhorn/releases)
 [![GitHub](https://img.shields.io/github/license/longhorn/longhorn)](https://github.com/longhorn/longhorn/blob/master/LICENSE)
+[![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://longhorn.io/docs/latest/)
 
 </div>
 
