@@ -7,7 +7,7 @@
 <div align="center">
 
 [![Releases](https://img.shields.io/github/release/longhorn/longhorn/all.svg)](https://github.com/longhorn/longhorn/releases)
-[![Docker Pulls](https://img.shields.io/docker/pulls/longhornio/longhorn-manager)](https://hub.docker.com/r/longhornio/longhorn-manager)
+[![Docker Pulls](https://img.shields.io/docker/pulls/longhornio/longhorn-manager?maxAge=604800)](https://hub.docker.com/r/longhornio/longhorn-manager)
 
 </div>
 
