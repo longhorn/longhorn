@@ -34,16 +34,23 @@ These are the reasons that have driven us:
 
 ## Proposal
 
-Create an external orchestrator that, with JSON-RPC calls towards multiple instances of `spdk_tgt` app running in different machines, could manage the durability and reliability of data. Actually, not all needed functionalities to do that are already available in SPDK, so some new JSON-RPC commands will be developed over SPDK. The name of such an orchestrator could be `longhorn-spdk-agent`, taking as example [Storage Management Agent](https://spdk.io/doc/sma.html) that has some similar functionalities.
+SPDK implements a JSON-RPC 2.0 server to allow external management tools to dynamically configure SPDK components ([documentation](https://spdk.io/doc/jsonrpc.html)).
+
+What we aim is to create an external orchestrator that, with JSON-RPC calls towards multiple instances of `spdk_tgt` app running in different machines, could manage the durability and reliability of data. Actually, not all needed functionalities to do that are already available in SPDK, so some new JSON-RPC commands will be developed over SPDK. The name of such an orchestrator could be `longhorn-spdk-agent`, taking as example [Storage Management Agent](https://spdk.io/doc/sma.html) that has some similar functionalities.
 
 * The main purpose of `longhorn-spdk-agent` is to create and export via NVMe-oF logical volumes from multiple replica nodes (one of them likely local), attach to these volumes on a controller node, use resulting bdevs to create a RAID1 bdev and exporting it via NVMe-oF locally. At this point NVMe Kernel module can be used to connect to this NVMe-oF subsystem and so to create a block device `/dev/nvmeXnY` to be used by the Longhorn CSI driver. In this way we will have multiple replica of the same data written on this block device.
-* Below a diagram that shows the proposal ![SPDK New Architecture](./image/spdk-new-architecture.png)
+* Below a diagram that shows the control plane of the proposal ![SPDK New Architecture](./image/spdk-control-plane.png)
 * In release 23.01, support for ublk will be added in SPDK: with this functionality we can directly create a block device without using the NVMe layer on Linux kernel versions >6.0. This will be a quite big enhancement over using NVMe-oF locally.
 
 The `longhorn-spdk-agent` will be responsible to make all others control operations, like for example creating snapshots over all replicas of the same volume. Other functionalities orchestrated by the Agent will be the remote rebuild, a complete rebuild of the entire snapshot stack of a volume needed to add or repair a replica, the backup and restore, export/import of a SPDK logical volumes to/from sparse files stored on an external storage system via S3.
 
 The `longhorn-spdk-agent` will be developed in Go so maybe we can reuse some code from `instance-manager` and from `longhorn-engine`, for example gRPC handling to receive control commands and error handling during snapshot/backup/restore operations.
 
+
+What about the data plane, below a comparison between actual architecture and new design:
+* longhorn-engine ![](./image/engine-data-plane.png)
+* spdk_tgt       
+  ![](./image/spdk-data-plane.png)
 
 ## Design
 
