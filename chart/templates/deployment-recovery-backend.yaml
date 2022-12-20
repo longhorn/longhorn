@@ -6,7 +6,7 @@ metadata:
   name: longhorn-recovery-backend
   namespace: {{ include "release_namespace" . }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.longhornRecoveryBackend.replicas }}
   selector:
     matchLabels:
       app: longhorn-recovery-backend
@@ -59,15 +59,25 @@ spec:
       imagePullSecrets:
       - name: {{ .Values.privateRegistry.registrySecret }}
       {{- end }}
-      {{- if .Values.longhornDriver.priorityClass }}
-      priorityClassName: {{ .Values.longhornDriver.priorityClass | quote}}
+      {{- if .Values.longhornRecoveryBackend.priorityClass }}
+      priorityClassName: {{ .Values.longhornRecoveryBackend.priorityClass | quote }}
       {{- end }}
-      {{- if .Values.longhornDriver.tolerations }}
+      {{- if or .Values.longhornRecoveryBackend.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
-{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+        {{- end }}
+        {{- if .Values.longhornRecoveryBackend.tolerations }}
+{{ toYaml .Values.longhornRecoveryBackend.tolerations | indent 6 }}
+        {{- end }}
       {{- end }}
-      {{- if .Values.longhornDriver.nodeSelector }}
+      {{- if or .Values.longhornRecoveryBackend.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
-{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if .Values.longhornRecoveryBackend.nodeSelector }}
+{{ toYaml .Values.longhornRecoveryBackend.nodeSelector | indent 8 }}
+        {{- end }}
       {{- end }}
       serviceAccountName: longhorn-service-account
