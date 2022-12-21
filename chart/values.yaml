@@ -157,6 +157,7 @@ defaultSettings:
   snapshotDataIntegrityCronjob: ~
   removeSnapshotsDuringFilesystemTrim: ~
   fastReplicaRebuildEnabled: ~
+  replicaFileSyncHttpClientTimeout: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
