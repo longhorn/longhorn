@@ -1,0 +1,34 @@
+pull_request_rules:
+- name: automatic merge after review
+  conditions:
+  - check-success=continuous-integration/drone/pr
+  - check-success=DCO
+  - check-success=CodeFactor
+  - check-success=codespell
+  - "#approved-reviews-by>=1"
+  - approved-reviews-by=@longhorn/maintainer
+  - label=ready-to-merge
+  actions:
+    merge:
+      method: rebase
+
+- name: ask to resolve conflict
+  conditions:
+  - conflict
+  actions:
+    comment:
+      message: This pull request is now in conflicts. Could you fix it @{{author}}? 🙏
+
+# Comment on the PR to trigger backport. ex: @Mergifyio copy stable/3.1 stable/4.0
+- name: backport patches to stable branch
+  conditions:
+  - base=master
+  actions:
+    backport:
+      title: "[BACKPORT][{{ destination_branch }}] {{ title }}"
+      body: |
+        This is an automatic backport of pull request #{{number}}.
+        
+        {{cherry_pick_error}}
+      assignees:
+      - "{{ author }}"
