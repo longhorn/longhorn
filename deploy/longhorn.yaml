@@ -3903,7 +3903,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.16"
+        - "longhornio/support-bundle-kit:v0.0.17"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account

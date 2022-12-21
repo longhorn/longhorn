@@ -642,6 +642,12 @@ Set the value to **0** to disable backup restore."
   group: "Longhorn Default Settings"
   type: boolean
   default: false
+- variable: defaultSettings.replicaFileSyncHttpClientTimeout
+  label: Timeout of HTTP Client to Replica File Sync Server
+  description: "In seconds. The setting specifies the HTTP client timeout to the file sync server."
+  group: "Longhorn Default Settings"
+  type: int
+  default: "30"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
