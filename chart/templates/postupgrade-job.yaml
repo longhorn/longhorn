@@ -56,3 +56,7 @@ spec:
 {{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
         {{- end }}
       {{- end }}
+      {{- if .Values.longhornManager.affinity }}
+      affinitiy:
+{{ toYaml .Values.longhornManager.affinity | indent 8 }}
+      {{- end }}
