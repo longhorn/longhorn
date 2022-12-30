@@ -66,7 +66,6 @@ Follow the upgrade instructions [here](https://longhorn.io/docs/1.4.0/deploy/upg
 
 Please follow up on [here](https://github.com/longhorn/longhorn/wiki/Outstanding-Known-Issues-of-Releases) about any outstanding issues found after this release.
 
-
 ## Highlights
 
 - [FEATURE] Reclaim/Shrink space of volume ([836](https://github.com/longhorn/longhorn/issues/836)) - @yangchiu @derekbit @smallteeths @shuo-wu
@@ -239,7 +238,7 @@ Please follow up on [here](https://github.com/longhorn/longhorn/wiki/Outstanding
 - [BUG] Nil pointer dereference error on restoring the system backup ([5134](https://github.com/longhorn/longhorn/issues/5134)) - @yangchiu @c3y1huang
 - [BUG] UI option Update Replicas Auto Balance should use capital letter like others ([5154](https://github.com/longhorn/longhorn/issues/5154)) - @smallteeths @chriscchien
 - [BUG] System restore cannot roll out when volume name is different to the PV ([5157](https://github.com/longhorn/longhorn/issues/5157)) - @yangchiu @c3y1huang
-- [BUG] Online expansion doesn't succeed after a failed expansion ([5169](https://github.com/longhorn/longhorn/issues/5169)) - @derekbit @shuo-wu
+- [BUG] Online expansion doesn't succeed after a failed expansion ([5169](https://github.com/longhorn/longhorn/issues/5169)) - @derekbit @shuo-wu @khushboo-rancher
 
 ## Misc
 
