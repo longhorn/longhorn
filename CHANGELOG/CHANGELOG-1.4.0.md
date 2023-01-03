@@ -24,7 +24,7 @@ This release introduces many enhancements, improvements, and bug fixes as descri
 - [Volume Trim](https://github.com/longhorn/longhorn/issues/836) [[lep]](https://github.com/longhorn/longhorn/blob/master/enhancements/20221103-filesystem-trim.md)[[doc]](https://longhorn.io/docs/1.4.0/volumes-and-nodes/trim-filesystem/#trim-the-filesystem-in-a-longhorn-volume)
   Longhorn engine supports UNMAP SCSI command to reclaim space from the block volume.
 
-- [Online Volume Expansion](https://github.com/longhorn/longhorn/issues/1674)
+- [Online Volume Expansion](https://github.com/longhorn/longhorn/issues/1674) [[doc]](https://longhorn.io/docs/1.4.0/volumes-and-nodes/expansion)
   Longhorn engine supports optional parameters to pass size expansion requests when updating the volume frontend to support online volume expansion and resize the filesystem via CSI node driver.
 
 - [Local Volume via Data Locality Strict Mode](https://github.com/longhorn/longhorn/issues/3957) [[lep]](https://github.com/longhorn/longhorn/blob/master/enhancements/20200819-keep-a-local-replica-to-engine.md)[[doc]](https://longhorn.io/docs/1.4.0/references/settings/#default-data-locality)
@@ -33,10 +33,10 @@ This release introduces many enhancements, improvements, and bug fixes as descri
 - [Volume Recurring Job Backup Restore](https://github.com/longhorn/longhorn/issues/2227) [[lep]](https://github.com/longhorn/longhorn/blob/master/enhancements/20201002-allow-recurring-backup-detached-volumes.md)[[doc]](https://longhorn.io/docs/1.4.0/snapshots-and-backups/backup-and-restore/restore-recurring-jobs-from-a-backup/)
   Recurring jobs binding to a volume can be backed up to the remote backup target together with the volume backup metadata. They can be restored back as well for a better operation experience.
 
-- [Volume IO Metrics](https://github.com/longhorn/longhorn/issues/2406)
+- [Volume IO Metrics](https://github.com/longhorn/longhorn/issues/2406) [[doc]](https://longhorn.io/docs/1.4.0/monitoring/metrics/#volume)
   Longhorn enriches Volume metrics by providing real-time IO stats including IOPS, latency, and throughput of R/W IO. Users can set up a monotoning solution like Prometheus to monitor volume performance.
 
-- [Longhorn System Backup & Restore](https://github.com/longhorn/longhorn/issues/1455) [[lep]](https://github.com/longhorn/longhorn/blob/master/enhancements/20220913-longhorn-system-backup-restore.md)
+- [Longhorn System Backup & Restore](https://github.com/longhorn/longhorn/issues/1455) [[lep]](https://github.com/longhorn/longhorn/blob/master/enhancements/20220913-longhorn-system-backup-restore.md)[[doc]](https://longhorn.io/docs/1.4.0/advanced-resources/system-backup-restore/)
   Users can back up the longhorn system to the remote backup target. Afterward, it's able to restore back to an existing cluster in place or a new cluster for specific operational purposes.
 
 - [Support Bundle Enhancement](https://github.com/longhorn/longhorn/issues/2759) [[lep]](https://github.com/longhorn/longhorn/blob/master/enhancements/20221109-support-bundle-enhancement.md)
@@ -65,7 +65,6 @@ Follow the upgrade instructions [here](https://longhorn.io/docs/1.4.0/deploy/upg
 ## Known Issues after Release
 
 Please follow up on [here](https://github.com/longhorn/longhorn/wiki/Outstanding-Known-Issues-of-Releases) about any outstanding issues found after this release.
-
 
 ## Highlights
 
@@ -239,6 +238,7 @@ Please follow up on [here](https://github.com/longhorn/longhorn/wiki/Outstanding
 - [BUG] Nil pointer dereference error on restoring the system backup ([5134](https://github.com/longhorn/longhorn/issues/5134)) - @yangchiu @c3y1huang
 - [BUG] UI option Update Replicas Auto Balance should use capital letter like others ([5154](https://github.com/longhorn/longhorn/issues/5154)) - @smallteeths @chriscchien
 - [BUG] System restore cannot roll out when volume name is different to the PV ([5157](https://github.com/longhorn/longhorn/issues/5157)) - @yangchiu @c3y1huang
+- [BUG] Online expansion doesn't succeed after a failed expansion ([5169](https://github.com/longhorn/longhorn/issues/5169)) - @derekbit @shuo-wu @khushboo-rancher
 
 ## Misc
 
