@@ -312,6 +312,39 @@ check_iscsid() {
   fi
 }
 
+check_nfs_client_kernel_support() {
+  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
+  local all_found=true
+  local nfs_client_kernel_configs=("CONFIG_NFS_V4_1" "CONFIG_NFS_V4_2")
+
+  for config in "${nfs_client_kernel_configs[@]}"; do
+    declare -A nodes=()
+
+    for pod in ${pods}; do
+      node=`kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName`
+      res=`kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-$(uname -r)" > /dev/null 2>&1`
+      if [[ $? == 0 ]]; then
+        all_found=false
+        nodes["${node}"]="${node}"
+      else
+        res=`kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-$(uname -r)" > /dev/null 2>&1`
+        if [[ $? != 0 ]]; then
+          all_found=false
+          warn "Unable to check kernel config ${config} on node ${node}"
+        fi
+      fi
+    done
+
+    if [ ${#nodes[@]} != 0 ]; then
+      warn ""${config}" kernel config is not enabled on nodes ${nodes[*]}."
+    fi
+  done
+
+  if [[ ${all_found} == false ]]; then
+    warn "NFS client kernel support, ${nfs_client_kernel_configs[*]}, is not enabled on Longhorn nodes. Please refer to https://longhorn.io/docs/1.4.0/deploy/install/#installing-nfsv4-client for more information."
+  fi
+}
+
 ######################################################
 # Main logics
 ######################################################
@@ -328,6 +361,7 @@ trap cleanup EXIT
 create_ds
 wait_ds_ready
 
+check_nfs_client_kernel_support
 check_package_installed
 check_iscsid
 check_multipathd
