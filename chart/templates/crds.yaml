@@ -637,6 +637,9 @@ spec:
               backupCreatedAt:
                 description: The snapshot backup upload finished time.
                 type: string
+              compressionMethod:
+                description: Compression method
+                type: string
               error:
                 description: The error message when taking the snapshot backup.
                 type: string
@@ -3240,6 +3243,12 @@ spec:
                 type: string
               baseImage:
                 description: Deprecated. Rename to BackingImage
+                type: string
+              backupCompressionMethod:
+                enum:
+                - none
+                - lz4
+                - gzip
                 type: string
               dataLocality:
                 enum:
