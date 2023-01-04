@@ -353,16 +353,16 @@ Disabling **Backupstore Poll Interval** also means to disable failed backup auto
     min: 0
     default: 1440
   - variable: defaultSettings.restoreVolumeRecurringJobs
-		label: Restore Volume Recurring Jobs
-		description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration.
+    label: Restore Volume Recurring Jobs
+    description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration.
 Longhorn also supports individual volume setting. The setting can be specified on Backup page when making a backup restoration, this overrules the global setting.
 The available volume setting options are:
 - **ignored**. This is the default option that instructs Longhorn to inherit from the global setting.
 - **enabled**. This option instructs Longhorn to restore recurring jobs/groups from the backup target forcibly.
 - **disabled**. This option instructs Longhorn no restoring recurring jobs/groups should be done."
-		group: "Longhorn Default Settings"
-		type: boolean
-		default: "false"
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
   - variable: defaultSettings.recurringSuccessfulJobsHistoryLimit
     label: Cronjob Successful Jobs History Limit
     description: "This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0.",
