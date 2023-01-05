@@ -365,7 +365,7 @@ The available volume setting options are:
     default: "false"
   - variable: defaultSettings.recurringSuccessfulJobsHistoryLimit
     label: Cronjob Successful Jobs History Limit
-    description: "This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0.",
+    description: "This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -379,9 +379,9 @@ The available volume setting options are:
     default: 1
   - variable: defaultSettings.supportBundleFailedHistoryLimit
     label: SupportBundle Failed History Limit
-    description: This setting specifies how many failed support bundles can exist in the cluster.
+    description: "This setting specifies how many failed support bundles can exist in the cluster.
 The retained failed support bundle is for analysis purposes and needs to clean up manually.
-Set this value to **0** to have Longhorn automatically purge all failed support bundles.
+Set this value to **0** to have Longhorn automatically purge all failed support bundles."
     group: "Longhorn Default Settings"
     type: int
     min: 0
