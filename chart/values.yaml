@@ -186,6 +186,18 @@ longhornManager:
   ## and uncomment this example block
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
+  affinity: {}
+  ## If you want to set nodeAffinity for Longhorn Manager DaemonSet, delete the `{}` in the line above
+  ## and uncomment this example block
+  # nodeAffinity:
+  #   requiredDuringSchedulingIgnoredDuringExecution:
+  #     nodeSelectorTerms:
+  #       - matchExpressions:
+  #         - key: label-key1
+  #           operator: In
+  #           values:
+  #             - label-value1
+  #             - label-value2  
   serviceAnnotations: {}
   ## If you want to set annotations for the Longhorn Manager service, delete the `{}` in the line above
   ## and uncomment this example block
