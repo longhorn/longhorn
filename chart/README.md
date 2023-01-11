@@ -49,11 +49,13 @@ helm install longhorn longhorn/longhorn --namespace longhorn-system
 
 With Helm 2 to uninstall Longhorn.
 ```
+kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
 helm delete longhorn --purge
 ```
 
 With Helm 3 to uninstall Longhorn.
 ```
+kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
 helm uninstall longhorn -n longhorn-system
 kubectl delete namespace longhorn-system
 ```
