@@ -82,6 +82,18 @@ questions:
     type: string
     label: Longhorn Backing Image Manager Image Tag
     group: "Longhorn Images Settings"
+  - variable: image.longhorn.supportBundleKit.repository
+    default: longhornio/support-bundle-kit
+    description: "Specify Longhorn Support Bundle Kit Image Repository"
+    type: string
+    label: Longhorn Support Bundle Kit Image Repository
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.supportBundleKit.tag
+    default: v0.0.17
+    description: "Specify Longhorn Support Bundle Kit Image Tag"
+    type: string
+    label: Longhorn Support Bundle Kit Image Tag
+    group: "Longhorn Images Settings"
   - variable: image.csi.attacher.repository
     default: longhornio/csi-attacher
     description: "Specify CSI attacher image repository. Leave blank to autodetect."
