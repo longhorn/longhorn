@@ -322,12 +322,12 @@ check_nfs_client_kernel_support() {
 
     for pod in ${pods}; do
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-$(uname -r)" > /dev/null 2>&1)
+      res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-\$(uname -r)" > /dev/null 2>&1)
       if [[ $? == 0 ]]; then
         all_found=false
         nodes["${node}"]="${node}"
       else
-        res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-$(uname -r)" > /dev/null 2>&1)
+        res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-\$(uname -r)" > /dev/null 2>&1)
         if [[ $? != 0 ]]; then
           all_found=false
           warn "Unable to check kernel config ${config} on node ${node}"
