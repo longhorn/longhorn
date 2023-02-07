@@ -4272,3 +4272,6 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
       serviceAccountName: longhorn-service-account
+---
+# Source: longhorn/templates/validate-psp-install.yaml
+#
