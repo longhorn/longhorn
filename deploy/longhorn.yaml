@@ -724,6 +724,9 @@ spec:
               backupCreatedAt:
                 description: The snapshot backup upload finished time.
                 type: string
+              compressionMethod:
+                description: Compression method
+                type: string
               error:
                 description: The error message when taking the snapshot backup.
                 type: string
@@ -3389,6 +3392,12 @@ spec:
               baseImage:
                 description: Deprecated. Rename to BackingImage
                 type: string
+              backupCompressionMethod:
+                enum:
+                - none
+                - lz4
+                - gzip
+                type: string
               dataLocality:
                 enum:
                 - disabled
@@ -3939,7 +3948,7 @@ spec:
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
-          optional: true
+          optional: true      
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
