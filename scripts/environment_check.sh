@@ -105,6 +105,14 @@ set_packages_and_check_cmd()
    esac
 }
 
+detect_node_kernel_release()
+{
+  local pod="$1"
+
+  KERNEL_RELEASE=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -r')
+  echo "$KERNEL_RELEASE"
+}
+
 detect_node_os()
 {
   local pod="$1"
@@ -321,13 +329,19 @@ check_nfs_client_kernel_support() {
     declare -A nodes=()
 
     for pod in ${pods}; do
+      local kernel_release=$(detect_node_kernel_release $pod)
+      if [ x"$kernel_release" == x"" ]; then
+        error "Unable to detect kernel release on node $node."
+        exit 2
+      fi
+
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-\$(uname -r)" > /dev/null 2>&1)
+      res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-${kernel_release}" > /dev/null 2>&1)
       if [[ $? == 0 ]]; then
         all_found=false
         nodes["${node}"]="${node}"
       else
-        res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-\$(uname -r)" > /dev/null 2>&1)
+        res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-${kernel_release}" > /dev/null 2>&1)
         if [[ $? != 0 ]]; then
           all_found=false
           warn "Unable to check kernel config ${config} on node ${node}"
