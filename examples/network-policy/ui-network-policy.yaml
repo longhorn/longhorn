@@ -13,6 +13,7 @@ spec:
   - from:
     # Depending on the ingress controller setup in your cluster, Change the following
     # info to allow the traffic from the ingress controller pods to Longhorn UI
+    # RKE1
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: ingress-nginx
@@ -21,3 +22,41 @@ spec:
           app.kubernetes.io/component: controller
           app.kubernetes.io/instance: ingress-nginx
           app.kubernetes.io/name: ingress-nginx
+
+    # RKE2
+    # - namespaceSelector:
+    #     matchLabels:
+    #       kubernetes.io/metadata.name: kube-system
+    #   podSelector:
+    #     matchLabels:
+    #       app.kubernetes.io/component: controller
+    #       app.kubernetes.io/instance: rke2-ingress-nginx
+    #       app.kubernetes.io/name: rke2-ingress-nginx
+    
+    # k3s
+    # - namespaceSelector:
+    #     matchLabels:
+    #       kubernetes.io/metadata.name: kube-system
+    #   podSelector:
+    #     matchLabels:
+    #       app.kubernetes.io/instance: traefik-kube-system
+    #       app.kubernetes.io/name: traefik
+    ports:
+      - port: 8000
+        protocol: TCP
+  
+  # Enable service/proxy (Rancher UI)
+  # - from:
+  # RKE1/RKE2 with Canal
+  #   - namespaceSelector:
+  #       matchLabels:
+  #         kubernetes.io/metadata.name: kube-system
+  #     podSelector:
+  #       matchLabels:
+  #         tier: control-plane
+  # Otherwise listing the first IP of all podCIDRs (10.42.0.0/24 -> 10.42.0.0/32)
+  #   - ipBlock:
+  #      cidr: 10.42.0.0/32
+  #   ports:
+  #     - port: 8000
+  #       protocol: TCP
