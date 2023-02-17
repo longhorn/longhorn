@@ -1779,7 +1779,7 @@ spec:
             description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
             properties:
               engineImage:
-                description: 'TODO: deprecate this field'
+                description: 'Deprecated: This field is useless.'
                 type: string
               image:
                 type: string
@@ -3447,7 +3447,7 @@ spec:
               recurringJobs:
                 description: Deprecated. Replaced by a separate resource named "RecurringJob"
                 items:
-                  description: 'VolumeRecurringJobSpec is a deprecated struct. TODO: Should be removed when recurringJobs gets removed from the volume       spec.'
+                  description: 'Deprecated: This field is useless and has been replaced by the RecurringJob CRD'
                   properties:
                     concurrency:
                       type: integer
