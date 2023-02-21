@@ -2156,7 +2156,7 @@ spec:
       jsonPath: .spec.groups
       name: Groups
       type: string
-    - description: Should be one of "backup" or "snapshot"
+    - description: Should be one of "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup"
       jsonPath: .spec.task
       name: Task
       type: string
@@ -2218,9 +2218,11 @@ spec:
                 description: The retain count of the snapshot/backup.
                 type: integer
               task:
-                description: The recurring job type. Can be "snapshot" or "backup".
+                description: The recurring job task. Can be "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup".
                 enum:
                 - snapshot
+                - snapshot-cleanup
+                - snapshot-delete
                 - backup
                 type: string
             type: object
@@ -3320,6 +3322,8 @@ spec:
                     task:
                       enum:
                       - snapshot
+                      - snapshot-cleanup
+                      - snapshot-delete
                       - backup
                       type: string
                   type: object
