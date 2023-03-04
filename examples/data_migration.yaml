@@ -19,7 +19,7 @@ spec:
           image: ubuntu:xenial
           tty: true
           command: [ "/bin/sh" ]
-          args: [ "-c", "cp -r -v /mnt/old/* /mnt/new" ]
+          args: [ "-c", "cp -r -v /mnt/old/. /mnt/new" ]
           volumeMounts:
             - name: old-vol
               mountPath: /mnt/old
