@@ -82,6 +82,18 @@ questions:
     type: string
     label: Longhorn Backing Image Manager Image Tag
     group: "Longhorn Images Settings"
+  - variable: image.longhorn.supportBundleKit.repository
+    default: longhornio/support-bundle-kit
+    description: "Specify Longhorn Support Bundle Manager Image Repository"
+    type: string
+    label: Longhorn Support Bundle Kit Image Repository
+    group: "Longhorn Images Settings"
+  - variable: image.longhorn.supportBundleKit.tag
+    default: v0.0.17
+    description: "Specify Longhorn Support Bundle Manager Image Tag"
+    type: string
+    label: Longhorn Support Bundle Kit Image Tag
+    group: "Longhorn Images Settings"
   - variable: image.csi.attacher.repository
     default: longhornio/csi-attacher
     description: "Specify CSI attacher image repository. Leave blank to autodetect."
@@ -147,7 +159,7 @@ questions:
     description: "Specify CSI liveness probe image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Liveness Probe Image Repository
-    group: "Longhorn CSI Liveness Probe Images"
+    group: "Longhorn CSI Driver Images"
   - variable: image.csi.livenessProbe.tag
     default: v2.8.0
     description: "Specify CSI liveness probe image tag. Leave blank to autodetect."
@@ -812,7 +824,7 @@ Set the value to **0** to disable backup restore."
     show_if: "service.ui.type=NodePort||service.ui.type=LoadBalancer"
     label: UI Service NodePort number
 - variable: enablePSP
-  default: "true"
+  default: "false"
   description: "Setup a pod security policy for Longhorn workloads."
   label: Pod Security Policy
   type: boolean

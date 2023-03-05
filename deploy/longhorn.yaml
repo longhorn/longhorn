@@ -735,6 +735,9 @@ spec:
               backupCreatedAt:
                 description: The snapshot backup upload finished time.
                 type: string
+              compressionMethod:
+                description: Compression method
+                type: string
               error:
                 description: The error message when taking the snapshot backup.
                 type: string
@@ -1787,7 +1790,7 @@ spec:
             description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
             properties:
               engineImage:
-                description: 'TODO: deprecate this field'
+                description: 'Deprecated: This field is useless.'
                 type: string
               image:
                 type: string
@@ -2280,7 +2283,7 @@ spec:
       jsonPath: .spec.groups
       name: Groups
       type: string
-    - description: Should be one of "backup" or "snapshot"
+    - description: Should be one of "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup"
       jsonPath: .spec.task
       name: Task
       type: string
@@ -2342,9 +2345,11 @@ spec:
                 description: The retain count of the snapshot/backup.
                 type: integer
               task:
-                description: The recurring job type. Can be "snapshot" or "backup".
+                description: The recurring job task. Can be "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup".
                 enum:
                 - snapshot
+                - snapshot-cleanup
+                - snapshot-delete
                 - backup
                 type: string
             type: object
@@ -3400,6 +3405,12 @@ spec:
               baseImage:
                 description: Deprecated. Rename to BackingImage
                 type: string
+              backupCompressionMethod:
+                enum:
+                - none
+                - lz4
+                - gzip
+                type: string
               dataLocality:
                 enum:
                 - disabled
@@ -3449,7 +3460,7 @@ spec:
               recurringJobs:
                 description: Deprecated. Replaced by a separate resource named "RecurringJob"
                 items:
-                  description: 'VolumeRecurringJobSpec is a deprecated struct. TODO: Should be removed when recurringJobs gets removed from the volume       spec.'
+                  description: 'Deprecated: This field is useless and has been replaced by the RecurringJob CRD'
                   properties:
                     concurrency:
                       type: integer
@@ -3470,6 +3481,8 @@ spec:
                     task:
                       enum:
                       - snapshot
+                      - snapshot-cleanup
+                      - snapshot-delete
                       - backup
                       type: string
                   type: object
@@ -3903,7 +3916,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.17"
+        - "longhornio/support-bundle-kit:v0.0.19"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
@@ -3950,7 +3963,7 @@ spec:
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
-          optional: true
+          optional: true      
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
@@ -4284,3 +4297,6 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
       serviceAccountName: longhorn-service-account
+---
+# Source: longhorn/templates/validate-psp-install.yaml
+#

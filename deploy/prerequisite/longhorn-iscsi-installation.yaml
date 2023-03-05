@@ -26,11 +26,11 @@ spec:
           - bash
           - -c
           - *cmd
-        image: alpine:3.12
+        image: alpine:3.17
         securityContext:
           privileged: true
       containers:
       - name: sleep
-        image: k8s.gcr.io/pause:3.1
+        image: registry.k8s.io/pause:3.1
   updateStrategy:
     type: RollingUpdate
