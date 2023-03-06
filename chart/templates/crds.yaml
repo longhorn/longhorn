@@ -1680,6 +1680,7 @@ spec:
                 type: string
               type:
                 enum:
+                - aio
                 - engine
                 - replica
                 type: string
@@ -1697,6 +1698,72 @@ spec:
                 type: integer
               currentState:
                 type: string
+              instanceEngines:
+                additionalProperties:
+                  properties:
+                    spec:
+                      properties:
+                        name:
+                          type: string
+                      type: object
+                    status:
+                      properties:
+                        endpoint:
+                          type: string
+                        errorMsg:
+                          type: string
+                        listen:
+                          type: string
+                        portEnd:
+                          format: int32
+                          type: integer
+                        portStart:
+                          format: int32
+                          type: integer
+                        resourceVersion:
+                          format: int64
+                          type: integer
+                        state:
+                          type: string
+                        type:
+                          type: string
+                      type: object
+                  type: object
+                nullable: true
+                type: object
+              instanceReplicas:
+                additionalProperties:
+                  properties:
+                    spec:
+                      properties:
+                        name:
+                          type: string
+                      type: object
+                    status:
+                      properties:
+                        endpoint:
+                          type: string
+                        errorMsg:
+                          type: string
+                        listen:
+                          type: string
+                        portEnd:
+                          format: int32
+                          type: integer
+                        portStart:
+                          format: int32
+                          type: integer
+                        resourceVersion:
+                          format: int64
+                          type: integer
+                        state:
+                          type: string
+                        type:
+                          type: string
+                      type: object
+                  type: object
+                nullable: true
+                type: object
               instances:
                 additionalProperties:
                   properties:
@@ -1729,6 +1796,7 @@ spec:
                       type: object
                   type: object
                 nullable: true
+                description: 'Deprecated: Replaced by InstanceEngines and InstanceReplicas'
                 type: object
               ip:
                 type: string
@@ -1871,12 +1939,16 @@ spec:
                   type: object
                 type: object
               engineManagerCPURequest:
+                description: 'Deprecated: Replaced by InstanceManagerCPURequest'
                 type: integer
               evictionRequested:
                 type: boolean
+              instanceManagerCPURequest:
+                type: integer
               name:
                 type: string
               replicaManagerCPURequest:
+                description: 'Deprecated: Replaced by InstanceManagerCPURequest'
                 type: integer
               tags:
                 items:
