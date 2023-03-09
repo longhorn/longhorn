@@ -106,7 +106,7 @@ The life cycle of a snapshot CR is as below:
 
 1. **Create**
     1. When a snapshot CR is created, Longhorn mutation webhook will:
-        1. Add a volume label `longhornvolume: <VOLUME-NAME>` to the snapshot CR. This allow us to efficiently find snapshots corresponding to a volume without having listing potientially thoundsands of snapshots.
+        1. Add a volume label `longhornvolume: <VOLUME-NAME>` to the snapshot CR. This allow us to efficiently find snapshots corresponding to a volume without having listing potentially thoundsands of snapshots.
         1. Add `longhornFinalizerKey` to snapshot CR to prevent it from being removed before Longhorn has change to clean up the corresponding snapshot
         1. Populate the value for `snapshot.OwnerReferences` to uniquely identify the volume of this snapshot. This field contains the volume UID to uniquely identify the volume in case  the old volume was deleted and a new volume was created with the same name.
     2. For user created snapshot CR, the field `Spec.CreateSnapshot` should be set to `true` indicating that Longhorn should provision a new snapshot for this CR.
