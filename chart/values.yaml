@@ -34,7 +34,7 @@ image:
       tag: v1.3.2
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1_20221003
+      tag: v1_20230310
     shareManager:
       repository: longhornio/longhorn-share-manager
       tag: v1_20221003
