@@ -9,17 +9,18 @@
 {{- /* First round, populate $generatedJobs and $generatedGroups */}}
 {{- range $groupName, $groupSettings := .Values.recurringJobs.groups -}}
   {{- range $jobType, $job := $groupSettings -}}
-    {{- if or (eq $jobType "snapshot") (eq $jobType "backup") -}}
+    {{- if not (eq $jobType "options") -}}
       {{- range $job -}}
         {{- $concurrency := ( .concurrency | default $.Values.recurringJobs.defaultConcurrency ) -}}
+        {{- $retain := ( .retain | default $.Values.recurringJobs.defaultRetain ) -}}
 
         {{- /* Example $jobName: snapshot-10m-retain-1-concurrency-4 */}}
-        {{- $jobName := printf "%s-%s-retain-%s-concurrency-%s" $jobType .interval (.retain | toString) ( $concurrency | toString ) -}}
+        {{- $jobName := printf "%s-%s-retain-%s-concurrency-%s" $jobType .interval ( $retain | toString) ( $concurrency | toString ) -}}
 
         {{- $jobProperties := dict -}}
         {{- $_ := set $jobProperties "interval" .interval -}}
         {{- $_ := set $jobProperties "jobType" $jobType -}}
-        {{- $_ := set $jobProperties "retain" .retain -}}
+        {{- $_ := set $jobProperties "retain" $retain -}}
         {{- $_ := set $jobProperties "concurrency" $concurrency -}}
 
         {{- $_ := set $generatedJobs $jobName $jobProperties -}}
@@ -37,11 +38,12 @@
 {{- /* Second round, calculate cron expressions for the jobs based on how many jobs there are */}}
 {{- range $groupName, $groupSettings := .Values.recurringJobs.groups -}}
   {{- range $jobType, $job := $groupSettings -}}
-    {{- if or (eq $jobType "snapshot") (eq $jobType "backup") -}}
+    {{- if not (eq $jobType "options") -}}
       {{- range $job -}}
         {{- $concurrency := ( .concurrency | default $.Values.recurringJobs.defaultConcurrency ) -}}
+        {{- $retain := ( .retain | default $.Values.recurringJobs.defaultRetain ) -}}
         {{- /* Example $jobName: snapshot-10m-retain-1-concurrency-4 */}}
-        {{- $jobName := printf "%s-%s-retain-%s-concurrency-%s" $jobType .interval (.retain | toString) ( $concurrency | toString ) -}}
+        {{- $jobName := printf "%s-%s-retain-%s-concurrency-%s" $jobType .interval ( $retain | toString) ( $concurrency | toString ) -}}
 
         {{- $jobProperties := get $generatedJobs $jobName -}}
 
@@ -135,7 +137,7 @@ apiVersion: longhorn.io/v1beta1
 kind: RecurringJob
 metadata:
   name: {{ $name }}
-  namespace: {{ include "release_namespace" . }}
+  namespace: {{ include "release_namespace" $ }}
 spec:
   cron: {{ $properties.cron | quote }}
   task: {{ $properties.jobType }}
@@ -158,32 +160,17 @@ apiVersion: storage.k8s.io/v1
 metadata:
   name: longhorn-{{ lower $group }}
 provisioner: driver.longhorn.io
-{{- /* We can't use 'default' because unset evaluates to false */}}
-{{ $allowVolumeExpansion := false }}
-{{- if eq $property.allowVolumeExpansion false -}}
-  {{- $allowVolumeExpansion = false -}}
-{{- else if eq $property.allowVolumeExpansion true -}}
-  {{- $allowVolumeExpansion = true -}}
-{{- else -}}
-  {{- $allowVolumeExpansion = $.Values.recurringJobs.allowVolumeExpansion -}}
-{{- end -}}
-allowVolumeExpansion: {{ $allowVolumeExpansion }}
-reclaimPolicy: "{{ $property.reclaimPolicy | default $.Values.reclaimPolicy }}"
+allowVolumeExpansion: {{ ((($property).options).storageclass).allowVolumeExpansion | default ((($.Values).recurringJobs).storageclass).allowVolumeExpansion }}
+reclaimPolicy: "{{ ((($property).options).storageclass).reclaimPolicy | default $.Values.recurringJobs.storageclass.reclaimPolicy }}"
 parameters:
 {{- /* Set parameters if they're specified at the top level OR for this specific group */}}
-{{- if or (not (empty $.Values.recurringJobs.parameters)) (not (empty $property.parameters)) -}}
-  {{- $parameters := mergeOverwrite dict ($.Values.recurringJobs.parameters | default dict) ($property.parameters | default dict) -}}
+{{- if or (hasKey $.Values.recurringJobs "parameters") (hasKey $property "options.parameters") -}}
+  {{- $parameters := mergeOverwrite dict ((($.Values).recurringJobs).parameters | default dict) ((($property).options).parameters | default dict) -}}
   {{- range $key, $value := $parameters }}
   {{ $key }}: {{ $value | quote }}
   {{- end -}}
 {{ end }}
-  recurringJobSelector: >-
-    [
-      {
-      "name":"{{ $group }}",
-      "isGroup":true
-      }
-    ]
+  recurringJobSelector: "[{\"name\":\"{{ $group }}\",\"isGroup\":true}]"
 ---
 {{ end }}
 {{- end -}}
