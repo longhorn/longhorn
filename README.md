@@ -31,12 +31,12 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 https://github.com/longhorn/longhorn/releases
 
-| Release  | Version | Type   | Release Note (Changelog) | Important Note |
-|----------|---------|--------|--------------| ---------------| 
-| **1.4**  | 1.4.0   | Latest | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.0) | [🔗](https://longhorn.io/docs/1.4.0/deploy/important-notes) |
+| Release  | Version | Type   | Release Note (Changelog)                                       | Important Note                                              |
+|----------|---------|--------|----------------------------------------------------------------|-------------------------------------------------------------| 
+| **1.4**  | 1.4.1   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.1) | [🔗](https://longhorn.io/docs/1.4.1/deploy/important-notes) |
 | **1.3**  | 1.3.2   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.2) | [🔗](https://longhorn.io/docs/1.3.2/deploy/important-notes) |
 | 1.2      | 1.2.6   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.2.6) | [🔗](https://longhorn.io/docs/1.2.6/deploy/important-notes) |
-| 1.1      | 1.1.3   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.1.3) | |
+| 1.1      | 1.1.3   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.1.3) |                                                             |
 
 # Roadmap
 
