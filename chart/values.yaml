@@ -332,9 +332,9 @@ defaultSettings:
 ## recurring jobs by simply specifying one or more groups
 ## and at least one job type interval (ex: snapshot, backup, snapshot-cleanup etc)
 recurringJobs:
-  ## Default job concurrency
+  ## Default concurrency for every task
   defaultConcurrency: 4
-  ## Default job retention
+  ## Default retention for every task
   defaultRetain: 0
 
   ## Whether or not to spread the jobs so that the start times are "randomized"
@@ -358,11 +358,11 @@ recurringJobs:
   createStorageClasses: true
 
   storageclass:
-    ## Default StorageClass properties.
+    ## StorageClass properties that should apply to all groups by default.
     allowVolumeExpansion: true
     reclaimPolicy: Retain
 
-  ## Longhorn-specific parameters.
+  ## Longhorn-specific parameters that should apply to all groups by default.
   parameters:
     {}
     # replicaAutoBalance: "ignored"
@@ -375,15 +375,17 @@ recurringJobs:
   ## Group names can only have [A-Za-z0-9\-_.] or [A-Za-z0-9\-]
   ## if createStorageClasses is true
   # groups:
-  #   ## Quoting isn't required, but improves readability
+  #   ## Quoting isn't required, but improves readability.
   #   "ExampleGroup":
-  #     ## You can specify longhorn-specific parameters under this key
   #     options:
+  #       ## You may override these properties group-wide for the storage.
+  ## classes for this group.
+  #       ## This only takes effect if createStorageClasses is true
   #       storageclass:
-  #         ## You may override these properties for the storage classes for this group
-  #         ## This only takes effect if createStorageClasses is true
   #         allowVolumeExpansion: true
   #         reclaimPolicy: Delete
+  #       ## You can specify group-wide longhorn-specific parameters here.
+  #       ## Below are just a few examples, all parameters are supported.
   #       parameters:
   #         replicaAutoBalance: "best-effort"
   #         dataLocality: "best-effort"
@@ -393,14 +395,15 @@ recurringJobs:
   #     snapshot:
   #       - interval: 10m
   #         retain: 6
-  #         # You may override the defaultConcurrency on each interval specification
+  #         # You may override the concurrnecy on any task specification.
   #         concurrency: 10
   #     backup:
   #       - interval: 1h
   #         retain: 5
   #       - interval: 6h
   #         retain: 4
-  #     ## `retain` is ignored for snapshot-cleanup and snapshot-delete
+  #     ## `retain` is ignored for snapshot-cleanup and snapshot-delete, so
+  #     ## you can leave them out.
   #     snapshot-cleanup:
   #       - interval: 1h
   #     snapshot-delete:
