@@ -11,8 +11,8 @@
   {{- range $jobType, $job := $groupSettings -}}
     {{- if not (eq $jobType "options") -}}
       {{- range $job -}}
-        {{- $concurrency := ( .concurrency | default $.Values.recurringJobs.defaultConcurrency ) -}}
-        {{- $retain := ( .retain | default $.Values.recurringJobs.defaultRetain ) -}}
+        {{- $concurrency := ( (.concurrency) | default $.Values.recurringJobs.defaultConcurrency ) -}}
+        {{- $retain := ( (.retain) | default $.Values.recurringJobs.defaultRetain ) -}}
 
         {{- /* Example $jobName: snapshot-10m-retain-1-concurrency-4 */}}
         {{- $jobName := printf "%s-%s-retain-%s-concurrency-%s" $jobType .interval ( $retain | toString) ( $concurrency | toString ) -}}
@@ -40,8 +40,8 @@
   {{- range $jobType, $job := $groupSettings -}}
     {{- if not (eq $jobType "options") -}}
       {{- range $job -}}
-        {{- $concurrency := ( .concurrency | default $.Values.recurringJobs.defaultConcurrency ) -}}
-        {{- $retain := ( .retain | default $.Values.recurringJobs.defaultRetain ) -}}
+        {{- $concurrency := ( (.concurrency) | default $.Values.recurringJobs.defaultConcurrency ) -}}
+        {{- $retain := ( (.retain) | default $.Values.recurringJobs.defaultRetain ) -}}
         {{- /* Example $jobName: snapshot-10m-retain-1-concurrency-4 */}}
         {{- $jobName := printf "%s-%s-retain-%s-concurrency-%s" $jobType .interval ( $retain | toString) ( $concurrency | toString ) -}}
 
