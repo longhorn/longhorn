@@ -121,6 +121,7 @@ defaultSettings:
   replicaZoneSoftAntiAffinity: ~
   nodeDownPodDeletionPolicy: ~
   allowNodeDrainWithLastHealthyReplica: ~
+  nodeDrainPolicy : ~
   mkfsExt4Parameters: ~
   disableReplicaRebuild: ~
   replicaReplenishmentWaitInterval: ~

@@ -400,6 +400,19 @@ If this setting is enabled, Longhorn will **not** block `kubectl drain` action o
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
+  - variable: defaultSettings.nodeDrainPolicy
+    label: Node Drain Policy
+    description: "Define the policy to use when a node with the last healthy replica of a volume is drained.
+- **block-if-contains-last-replica** Longhorn will block the drain when the node contains the last healthy replica of a volume.
+- **allow-if-replica-is-stopped** Longhorn will allow the drain when the node contains the last healthy replica of a volume but the replica is stopped. WARNING: possible data loss if the node is removed after draining. Select this option if you want to drain the node and do in-place upgrade/maintenance.
+- **always-allow** Longhorn will allow the drain even though the node contains the last healthy replica of a volume. WARNING: possible data loss if the node is removed after draining. Also possible data corruption if the last replica was running during the draining."
+    group: "Longhorn Default Settings"
+    type: enum
+    options:
+      - "block-if-contains-last-replica"
+      - "allow-if-replica-is-stopped"
+      - "always-allow"
+    default: "block-if-contains-last-replica"
   - variable: defaultSettings.mkfsExt4Parameters
     label: Custom mkfs.ext4 parameters
     description: "Allows setting additional filesystem creation parameters for ext4. For older host kernels it might be necessary to disable the optional ext4 metadata_csum feature by specifying `-O ^64bit,^metadata_csum`."
