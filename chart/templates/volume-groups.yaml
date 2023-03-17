@@ -1,0 +1,161 @@
+{{- /* $generatedTasks is fed into a range to generate each unique RecurringJob */}}
+{{- $generatedTasks := dict -}}
+
+{{- /* $generatedGroups is a dict whose keys are the names of the generated tasks
+      and the values of those keys are an array of group names */}}
+{{- $generatedGroups := dict -}}
+{{- /* See below for an example of these objects */}}
+
+{{- /* First round, populate $generatedTasks and $generatedGroups */}}
+{{- range $group := .Values.volumeGroups.groups -}}
+  {{- range $taskType, $task := $group.recurringJobs -}}
+    {{- range $task -}}
+      {{- $concurrency := ( (.concurrency) | default $.Values.volumeGroups.recurringJobDefaults.concurrency ) -}}
+      {{- $retain := ( (.retain) | default $.Values.volumeGroups.recurringJobDefaults.retain ) -}}
+
+      {{- /* Example $taskName: snapshot-10m-retain-1-concurrency-4 */}}
+      {{- $taskName := printf "%s-%s-retain-%s-concurrency-%s" $taskType .interval ( $retain | toString) ( $concurrency | toString ) -}}
+
+      {{- $taskProperties := dict -}}
+      {{- $_ := set $taskProperties "interval" .interval -}}
+      {{- $_ := set $taskProperties "taskType" $taskType -}}
+      {{- $_ := set $taskProperties "retain" $retain -}}
+      {{- $_ := set $taskProperties "concurrency" $concurrency -}}
+
+      {{- $_ := set $generatedTasks $taskName $taskProperties -}}
+      {{- $existingGroupList := get $generatedGroups $taskName | default list -}}
+      {{- /* Set and deduplicate the groups for this $taskName */}}
+      {{- $_ := set $generatedGroups $taskName ( append $existingGroupList $group.name | uniq ) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $numberOfGroups := len .Values.volumeGroups.groups -}}
+{{- $taskIndex := 0 -}}
+
+{{- /* Second round, calculate cron expressions for the tasks based on how many tasks there are */}}
+{{- range $group := .Values.volumeGroups.groups -}}
+  {{- range $taskType, $task := $group.recurringJobs -}}
+    {{- range $task -}}
+      {{- $concurrency := ( (.concurrency) | default $.Values.volumeGroups.recurringJobDefaults.concurrency ) -}}
+      {{- $retain := ( (.retain) | default $.Values.volumeGroups.recurringJobDefaults.retain ) -}}
+      {{- /* Example $taskName: snapshot-10m-retain-1-concurrency-4 */}}
+      {{- $taskName := printf "%s-%s-retain-%s-concurrency-%s" $taskType .interval ( $retain | toString) ( $concurrency | toString ) -}}
+
+      {{- $taskProperties := get $generatedTasks $taskName -}}
+
+      {{- /* These values will always get overwritten, we just need an initial value */}}
+      {{- $minute := "99" -}}
+      {{- $hour := "99" -}}
+      {{- $day := "99" -}}
+
+      {{- $minuteStep := int (.minuteStep) | default (int $.Values.volumeGroups.recurringJobDefaults.minuteStep) -}}
+      {{- /* Here we set the minute for cron expressions that have other fields set */}}
+      {{- if not (regexMatch "[0-9]+m" .interval) -}}
+        {{- if (or (.spreadCronStartTimes) $.Values.volumeGroups.recurringJobDefaults.spreadCronStartTimes) -}}
+          {{- /* Use modulus to pick a minute between 0 and 59, in $minuteStep minute intervals */}}
+          {{- $minuteOptions := untilStep 0 59 $minuteStep -}}
+          {{- $minute = (toString (index $minuteOptions (mod $taskIndex (len $minuteOptions)))) -}}
+        {{- else -}}
+          {{- $minute = "0" -}}
+        {{- end -}}
+      {{- else -}}
+        {{- /* The interval was something like "10m", so make $minute equals something like "35/10" */}}
+        {{- $minuteInterval := trimSuffix "m" .interval -}}
+        {{- /* Make a list of all the possible options that are $minuteStep apart but less than $minuteInterval */}}
+        {{- $minuteOptions := untilStep 0 (atoi $minuteInterval) $minuteStep -}}
+        {{- /* Use modulus to pick a minute between 0 and $minuteInterval */}}
+        {{- $customMinuteStart := index $minuteOptions (mod $taskIndex (len $minuteOptions)) -}}
+        {{- $minute = (printf "%s/%s" ($customMinuteStart | toString) $minuteInterval) -}}
+      {{- end -}}
+      
+      {{- $hourStep := int (.hourStep) | default (int $.Values.volumeGroups.recurringJobDefaults.hourStep) -}}
+      {{- if or (regexMatch "[0-9]+m" .interval) (eq "1h" .interval) -}}
+        {{- $hour = "*" -}}
+      {{- /* Here we set the hour for cron expressions that have days or more set */}}
+      {{- else if not (regexMatch "[0-9]+h" .interval) -}}
+        {{- if (or (.spreadCronStartTimes) $.Values.volumeGroups.recurringJobDefaults.spreadCronStartTimes) -}}
+          {{- $hourOptions := untilStep 0 23 $hourStep -}}
+          {{- $hour = (toString (index $hourOptions (mod $taskIndex (len $hourOptions)))) -}}
+        {{- else -}}
+          {{- $hour = "0" -}}
+        {{- end -}}
+      {{- else -}}
+        {{- $hourInterval := trimSuffix "h" .interval -}}
+        {{- /* Make a list of all the possible options that are $hourStep apart but less than $hourInterval */}}
+        {{- $hourOptions := untilStep 0 (atoi $hourInterval) $hourStep -}}
+        {{- /* Use modulus to pick an hour between 0 and $hourInterval */}}
+        {{- $customHourStart := index $hourOptions (mod $taskIndex (len $hourOptions)) -}}
+        {{- $hour = (printf "%s/%s" ($customHourStart | toString) $hourInterval) -}}
+      {{- end -}}
+
+      {{- $day := "*" -}}
+      {{- /* If minutes, hours or '1d' is set, $day = "*" */}}
+      {{- if or (or (regexMatch "[0-9]+m" .interval) (regexMatch "[0-9]+h" .interval) (eq "1d" .interval)) -}}
+        {{- $day = "*" -}}
+      {{- else -}}
+        {{- $dayInterval := trimSuffix "d" .interval | toString -}}
+        {{- /* We should always use "*" which evaluates to "Every X days" */}}
+        {{- $day = (printf "*/%s" ($dayInterval | toString)) -}}
+      {{- end -}}
+
+      {{- $cron := printf "%s %s %s * *" $minute $hour $day -}}
+      {{- $_ := set $taskProperties "cron" $cron -}}
+      {{- $_ := set $generatedTasks $taskName $taskProperties -}}
+      {{- $taskIndex = add1 $taskIndex -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /*
+What $generatedTasks looks like
+$generatedTasks:
+  snapshot-10m-retain-1-concurrency-4:
+    interval: 10m
+    cron: "0/10 * * * *"
+    retain: 1
+    taskType: snapshot
+    concurrency: 4
+  snapshot-1h-retain-1-concurrency-4:
+    [...]
+
+What $generatedGroups looks like
+$generatedGroups:
+  snapshot-10m-retain-1-concurrency-4:
+    - ExampleGroup
+    - OtherGroup
+  snapshot-1h-retain-1-concurrency-4:
+    - [...]
+*/}}
+
+{{- range $name, $properties := $generatedTasks }}
+apiVersion: longhorn.io/v1beta1
+kind: RecurringJob
+metadata:
+  name: {{ $name }}
+  namespace: {{ include "release_namespace" $ }}
+spec:
+  cron: {{ $properties.cron | quote }}
+  task: {{ $properties.taskType }}
+  groups:
+  {{- range (get $generatedGroups $name ) }}
+    - {{ . }}
+  {{- end }}
+  retain: {{ $properties.retain }}
+  concurrency: {{ $properties.concurrency }}
+  labels:
+    jobName: {{ $name }}
+---
+{{- end }}
+
+{{- /* Storage Classes */}}
+{{- range $group := .Values.volumeGroups.groups -}}
+{{- if (or ((.storageClass).create) $.Values.volumeGroups.createStorageClass) -}}
+metadata:
+  name: longhorn-{{ lower $group.name }}
+{{- /* Include the rest of the StorageClass resource, adding parameter.recurringJobSelector */}}
+{{ $.Values.volumeGroups.storageClassDefaults | merge ((.storageClass).properties) | merge (dict "parameters" (dict "recurringJobSelector" (cat "[{\"name\":\"{{" .name "}}\",\"isGroup\":true}]"))) | toYaml }}
+---
+{{ end }}
+{{- end -}}
+
