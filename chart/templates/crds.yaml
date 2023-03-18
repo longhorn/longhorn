@@ -2704,16 +2704,20 @@ spec:
             description: ShareManagerSpec defines the desired state of the Longhorn share manager
             properties:
               image:
+                description: Share manager image used for creating a share manager pod
                 type: string
             type: object
           status:
             description: ShareManagerStatus defines the observed state of the Longhorn share manager
             properties:
               endpoint:
+                description: NFS endpoint that can access the mounted filesystem of the volume
                 type: string
               ownerID:
+                description: The node ID on which the controller is responsible to reconcile this share manager resource
                 type: string
               state:
+                description: The state of the share manager resource
                 type: string
             type: object
         type: object
