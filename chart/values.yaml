@@ -40,7 +40,7 @@ image:
       tag: v1_20221003
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v3_20221003
+      tag: v3_20230320
   csi:
     attacher:
       repository: longhornio/csi-attacher
