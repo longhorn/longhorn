@@ -37,7 +37,7 @@ image:
       tag: v1_20230317
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1_20221003
+      tag: v1_20221003_patch1
     backingImageManager:
       repository: longhornio/backing-image-manager
       tag: v3_20230320

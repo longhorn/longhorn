@@ -2257,7 +2257,7 @@ spec:
       jsonPath: .spec.groups
       name: Groups
       type: string
-    - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create".
+    - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create"
       jsonPath: .spec.task
       name: Task
       type: string
@@ -3483,7 +3483,7 @@ spec:
         - --instance-manager-image
         - "longhornio/longhorn-instance-manager:v1_20230317"
         - --share-manager-image
-        - "longhornio/longhorn-share-manager:v1_20221003"
+        - "longhornio/longhorn-share-manager:v1_20221003_patch1"
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:v3_20230320"
         - --manager-image
