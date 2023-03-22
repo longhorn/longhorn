@@ -43,7 +43,7 @@ image:
       tag: master-head
     supportBundleKit:
       repository: longhornio/support-bundle-kit
-      tag: v0.0.19
+      tag: v0.0.20
   csi:
     attacher:
       repository: longhornio/csi-attacher
@@ -133,6 +133,7 @@ defaultSettings:
   replicaZoneSoftAntiAffinity: ~
   nodeDownPodDeletionPolicy: ~
   allowNodeDrainWithLastHealthyReplica: ~
+  nodeDrainPolicy : ~
   mkfsExt4Parameters: ~
   disableReplicaRebuild: ~
   replicaReplenishmentWaitInterval: ~

@@ -2272,7 +2272,7 @@ spec:
       jsonPath: .spec.groups
       name: Groups
       type: string
-    - description: Should be one of "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup"
+    - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create".
       jsonPath: .spec.task
       name: Task
       type: string
@@ -2334,12 +2334,14 @@ spec:
                 description: The retain count of the snapshot/backup.
                 type: integer
               task:
-                description: The recurring job task. Can be "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup".
+                description: The recurring job task. Can be "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create".
                 enum:
                 - snapshot
+                - snapshot-force-create
                 - snapshot-cleanup
                 - snapshot-delete
                 - backup
+                - backup-force-create
                 type: string
             type: object
           status:
@@ -3470,9 +3472,11 @@ spec:
                     task:
                       enum:
                       - snapshot
+                      - snapshot-force-create
                       - snapshot-cleanup
                       - snapshot-delete
                       - backup
+                      - backup-force-create
                       type: string
                   type: object
                 type: array
@@ -3905,7 +3909,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.19"
+        - "longhornio/support-bundle-kit:v0.0.20"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
