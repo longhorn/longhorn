@@ -447,7 +447,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: longhorn-system
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -818,7 +818,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: longhorn-system
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -1166,7 +1166,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: longhorn-system
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -1877,7 +1877,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: longhorn-system
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -2272,7 +2272,7 @@ spec:
       jsonPath: .spec.groups
       name: Groups
       type: string
-    - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create".
+    - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create"
       jsonPath: .spec.task
       name: Task
       type: string
@@ -3284,7 +3284,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: longhorn-system
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -3783,10 +3783,10 @@ spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-conversion-webhook
+    app: longhorn-manager
   ports:
   - name: conversion-webhook
-    port: 9443
+    port: 9501
     targetPort: conversion-wh
 ---
 # Source: longhorn/templates/services.yaml
@@ -3804,10 +3804,10 @@ spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-admission-webhook
+    app: longhorn-manager
   ports:
   - name: admission-webhook
-    port: 9443
+    port: 9502
     targetPort: admission-wh
 ---
 # Source: longhorn/templates/services.yaml
@@ -3825,10 +3825,10 @@ spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-recovery-backend
+    app: longhorn-manager
   ports:
   - name: recovery-backend
-    port: 9600
+    port: 9503
     targetPort: recov-backend
 ---
 # Source: longhorn/templates/services.yaml
@@ -3886,10 +3886,6 @@ spec:
         app.kubernetes.io/version: v1.4.0-dev
         app: longhorn-manager
     spec:
-      initContainers:
-      - name: wait-longhorn-admission-webhook
-        image: longhornio/longhorn-manager:master-head
-        command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-admission-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
       containers:
       - name: longhorn-manager
         image: longhornio/longhorn-manager:master-head
@@ -3917,9 +3913,17 @@ spec:
         ports:
         - containerPort: 9500
           name: manager
+        - containerPort: 9501
+          name: conversion-wh
+        - containerPort: 9502
+          name: admission-wh
+        - containerPort: 9503
+          name: recov-backend
         readinessProbe:
-          tcpSocket:
-            port: 9500
+          httpGet:
+            path: /v1/healthz
+            port: 9501
+            scheme: HTTPS
         volumeMounts:
         - name: dev
           mountPath: /host/dev/
@@ -4030,72 +4034,6 @@ spec:
       securityContext:
         runAsUser: 0
 ---
-# Source: longhorn/templates/deployment-recovery-backend.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.4.0-dev
-    app: longhorn-recovery-backend
-  name: longhorn-recovery-backend
-  namespace: longhorn-system
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: longhorn-recovery-backend
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: longhorn
-        app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.4.0-dev
-        app: longhorn-recovery-backend
-    spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - longhorn-recovery-backend
-              topologyKey: kubernetes.io/hostname
-      containers:
-      - name: longhorn-recovery-backend
-        image: longhornio/longhorn-manager:master-head
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          runAsUser: 2000
-        command:
-        - longhorn-manager
-        - recovery-backend
-        - --service-account
-        - longhorn-service-account
-        ports:
-        - containerPort: 9600
-          name: recov-backend
-        readinessProbe:
-          tcpSocket:
-            port: 9600
-          initialDelaySeconds: 3
-          periodSeconds: 5
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: NODE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
-      serviceAccountName: longhorn-service-account
----
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -4158,137 +4096,6 @@ spec:
         name: nginx-config
       - emptyDir: {}
         name: var-run
----
-# Source: longhorn/templates/deployment-webhook.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.4.0-dev
-    app: longhorn-conversion-webhook
-  name: longhorn-conversion-webhook
-  namespace: longhorn-system
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: longhorn-conversion-webhook
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: longhorn
-        app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.4.0-dev
-        app: longhorn-conversion-webhook
-    spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - longhorn-conversion-webhook
-              topologyKey: kubernetes.io/hostname
-      containers:
-      - name: longhorn-conversion-webhook
-        image: longhornio/longhorn-manager:master-head
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          runAsUser: 2000
-        command:
-        - longhorn-manager
-        - conversion-webhook
-        - --service-account
-        - longhorn-service-account
-        ports:
-        - containerPort: 9443
-          name: conversion-wh
-        readinessProbe:
-          tcpSocket:
-            port: 9443
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-      serviceAccountName: longhorn-service-account
----
-# Source: longhorn/templates/deployment-webhook.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.4.0-dev
-    app: longhorn-admission-webhook
-  name: longhorn-admission-webhook
-  namespace: longhorn-system
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: longhorn-admission-webhook
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: longhorn
-        app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.4.0-dev
-        app: longhorn-admission-webhook
-    spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - longhorn-admission-webhook
-              topologyKey: kubernetes.io/hostname
-      initContainers:
-      - name: wait-longhorn-conversion-webhook
-        image: longhornio/longhorn-manager:master-head
-        command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-conversion-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          runAsUser: 2000
-      containers:
-      - name: longhorn-admission-webhook
-        image: longhornio/longhorn-manager:master-head
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          runAsUser: 2000
-        command:
-        - longhorn-manager
-        - admission-webhook
-        - --service-account
-        - longhorn-service-account
-        ports:
-        - containerPort: 9443
-          name: admission-wh
-        readinessProbe:
-          tcpSocket:
-            port: 9443
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: NODE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
-      serviceAccountName: longhorn-service-account
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
