@@ -88,6 +88,13 @@ persistence:
     dataSourceType: ~
     dataSourceParameters: ~
     expectedChecksum: ~
+<<<<<<< HEAD
+=======
+  defaultNodeSelector:
+    enable: false # disable by default
+    selector: ""
+  removeSnapshotsDuringFilesystemTrim: ignored # "enabled" or "disabled" otherwise
+>>>>>>> 3f5e636 (Update values.yaml)
 
 csi:
   kubeletRootDir: ~
