@@ -94,7 +94,7 @@ persistence:
     expectedChecksum: ~
   defaultNodeSelector:
     enable: false # disable by default
-    selector: []
+    selector: ""
   removeSnapshotsDuringFilesystemTrim: ignored # "enabled" or "disabled" otherwise
 
 csi:
