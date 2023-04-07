@@ -1,9 +1,9 @@
-longhornio/csi-attacher:v3.4.0
+longhornio/csi-attacher:v4.2.0
 longhornio/csi-provisioner:v2.1.2
-longhornio/csi-resizer:v1.3.0
+longhornio/csi-resizer:v1.7.0
 longhornio/csi-snapshotter:v5.0.1
-longhornio/csi-node-driver-registrar:v2.5.0
-longhornio/livenessprobe:v2.8.0
+longhornio/csi-node-driver-registrar:v2.7.0
+longhornio/livenessprobe:v2.9.0
 longhornio/backing-image-manager:v1.4.1
 longhornio/longhorn-engine:v1.4.1
 longhornio/longhorn-instance-manager:v1.4.1
