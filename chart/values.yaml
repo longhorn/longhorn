@@ -50,7 +50,7 @@ image:
       tag: v4.2.0
     provisioner:
       repository: longhornio/csi-provisioner
-      tag: v2.1.2
+      tag: v3.4.1
     nodeDriverRegistrar:
       repository: longhornio/csi-node-driver-registrar
       tag: v2.7.0
@@ -59,7 +59,7 @@ image:
       tag: v1.7.0
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v5.0.1
+      tag: v6.2.1
     livenessProbe:
       repository: longhornio/livenessprobe
       tag: v2.9.0
