@@ -3529,7 +3529,7 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:v1.3.3-rc2"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v1_20230317"
+        - "longhornio/longhorn-instance-manager:v1_20230407"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:v1_20230320"
         - --backing-image-manager-image
