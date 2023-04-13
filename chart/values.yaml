@@ -43,7 +43,7 @@ image:
       tag: master-head
     supportBundleKit:
       repository: longhornio/support-bundle-kit
-      tag: v0.0.22
+      tag: v0.0.23
   csi:
     attacher:
       repository: longhornio/csi-attacher
