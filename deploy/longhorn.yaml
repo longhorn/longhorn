@@ -3900,7 +3900,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:v1.4.1"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.23"
+        - "longhornio/support-bundle-kit:v0.0.24"
         - --manager-image
         - "longhornio/longhorn-manager:v1.4.1"
         - --service-account
