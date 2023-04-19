@@ -20,6 +20,3 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-manager
-    - podSelector:
-        matchLabels:
-          longhorn.io/component: backing-image-data-source
