@@ -2283,7 +2283,7 @@ spec:
       jsonPath: .spec.groups
       name: Groups
       type: string
-    - description: Should be one of "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup"
+    - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create"
       jsonPath: .spec.task
       name: Task
       type: string
@@ -2345,12 +2345,14 @@ spec:
                 description: The retain count of the snapshot/backup.
                 type: integer
               task:
-                description: The recurring job task. Can be "snapshot", "snapshot-cleanup", "snapshot-delete" or "backup".
+                description: The recurring job task. Can be "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup" or "backup-force-create".
                 enum:
                 - snapshot
+                - snapshot-force-create
                 - snapshot-cleanup
                 - snapshot-delete
                 - backup
+                - backup-force-create
                 type: string
             type: object
           status:
@@ -3481,9 +3483,11 @@ spec:
                     task:
                       enum:
                       - snapshot
+                      - snapshot-force-create
                       - snapshot-cleanup
                       - snapshot-delete
                       - backup
+                      - backup-force-create
                       type: string
                   type: object
                 type: array
@@ -3916,7 +3920,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.19"
+        - "longhornio/support-bundle-kit:v0.0.24"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
@@ -4022,17 +4026,17 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "longhornio/csi-attacher:v3.4.0"
+            value: "longhornio/csi-attacher:v4.2.0"
           - name: CSI_PROVISIONER_IMAGE
-            value: "longhornio/csi-provisioner:v2.1.2"
+            value: "longhornio/csi-provisioner:v3.4.1"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "longhornio/csi-node-driver-registrar:v2.5.0"
+            value: "longhornio/csi-node-driver-registrar:v2.7.0"
           - name: CSI_RESIZER_IMAGE
-            value: "longhornio/csi-resizer:v1.3.0"
+            value: "longhornio/csi-resizer:v1.7.0"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "longhornio/csi-snapshotter:v5.0.1"
+            value: "longhornio/csi-snapshotter:v6.2.1"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "longhornio/livenessprobe:v2.8.0"
+            value: "longhornio/livenessprobe:v2.9.0"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
