@@ -45,7 +45,15 @@ data:
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
     {{- end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}priority-class: {{ .Values.defaultSettings.priorityClass }}{{ end }}
+    {{- if .Release.IsInstall -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
+    priority-class: {{ .Values.defaultSettings.priorityClass }}
+      {{- end }}
+    {{- else if .Release.IsUpgrade -}}
+      {{- if ne (lookup "longhorn.io/v1beta2" "Setting" "longhorn-system" "priority-class").value "" }}
+    priority-class: {{ (lookup "longhorn.io/v1beta2" "Setting" "longhorn-system" "priority-class").value }}
+      {{- end }}
+    {{- end -}}
     {{ if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}auto-salvage: {{ .Values.defaultSettings.autoSalvage }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}{{ end }}
