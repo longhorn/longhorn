@@ -33,7 +33,7 @@ Main changes and tasks for OCP are:
   - 4.12.0-0.okd-2023-01-21-055900 to 4.12.0-0.okd-2023-02-18-033438:
     - Workaround: [[BUG] Volumes Stuck in Attach/Detach Loop](https://github.com/longhorn/longhorn/issues/4988)
       - [MachineConfig Patch](https://github.com/longhorn/longhorn/issues/4988#issuecomment-1345676772)
-  - 4.12.0-0.okd-2023-03-05-022504
+  - 4.12.0-0.okd-2023-03-05-022504 - 4.12.0-0.okd-2023-04-16-041331:
     - Tested, No Known Issues
 
 ## Preparing nodes
