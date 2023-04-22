@@ -147,7 +147,7 @@ questions:
     description: "Specify CSI liveness probe image repository. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Liveness Probe Image Repository
-    group: "Longhorn CSI Liveness Probe Images"
+    group: "Longhorn CSI Driver Images"
   - variable: image.csi.livenessProbe.tag
     default: v2.8.0
     description: "Specify CSI liveness probe image tag. Leave blank to autodetect."
