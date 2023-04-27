@@ -9,10 +9,10 @@ spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-conversion-webhook
+    app: longhorn-manager
   ports:
   - name: conversion-webhook
-    port: 9443
+    port: 9501
     targetPort: conversion-wh
 ---
 apiVersion: v1
@@ -26,10 +26,10 @@ spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-admission-webhook
+    app: longhorn-manager
   ports:
   - name: admission-webhook
-    port: 9443
+    port: 9502
     targetPort: admission-wh
 ---
 apiVersion: v1
@@ -43,10 +43,10 @@ spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-recovery-backend
+    app: longhorn-manager
   ports:
   - name: recovery-backend
-    port: 9600
+    port: 9503
     targetPort: recov-backend
 ---
 apiVersion: v1

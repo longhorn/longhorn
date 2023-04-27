@@ -364,7 +364,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: {{ include "release_namespace" . }}
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -727,7 +727,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: {{ include "release_namespace" . }}
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -1067,7 +1067,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: {{ include "release_namespace" . }}
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -1766,7 +1766,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: {{ include "release_namespace" . }}
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1
@@ -3136,7 +3136,7 @@ spec:
           name: longhorn-conversion-webhook
           namespace: {{ include "release_namespace" . }}
           path: /v1/webhook/conversion
-          port: 9443
+          port: 9501
       conversionReviewVersions:
       - v1beta2
       - v1beta1

@@ -18,10 +18,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      initContainers:
-      - name: wait-longhorn-admission-webhook
-        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
-        command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-admission-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
       containers:
       - name: longhorn-manager
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
@@ -52,9 +48,17 @@ spec:
         ports:
         - containerPort: 9500
           name: manager
+        - containerPort: 9501
+          name: conversion-wh
+        - containerPort: 9502
+          name: admission-wh
+        - containerPort: 9503
+          name: recov-backend
         readinessProbe:
-          tcpSocket:
-            port: 9500
+          httpGet:
+            path: /v1/healthz
+            port: 9501
+            scheme: HTTPS
         volumeMounts:
         - name: dev
           mountPath: /host/dev/
