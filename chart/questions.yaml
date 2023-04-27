@@ -89,7 +89,7 @@ questions:
     label: Longhorn Support Bundle Kit Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.supportBundleKit.tag
-    default: v0.0.20
+    default: v0.0.24
     description: "Specify Longhorn Support Bundle Manager Image Tag"
     type: string
     label: Longhorn Support Bundle Kit Image Tag
@@ -101,7 +101,7 @@ questions:
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v3.4.0
+    default: v4.2.0
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
@@ -113,7 +113,7 @@ questions:
     label: Longhorn CSI Provisioner Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.tag
-    default: v2.1.2
+    default: v3.4.1
     description: "Specify CSI provisioner image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Provisioner Image Tag
@@ -125,7 +125,7 @@ questions:
     label: Longhorn CSI Node Driver Registrar Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.tag
-    default: v2.5.0
+    default: v2.7.0
     description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Tag
@@ -137,7 +137,7 @@ questions:
     label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.tag
-    default: v1.3.0
+    default: v1.7.0
     description: "Specify CSI Driver Resizer image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
@@ -149,7 +149,7 @@ questions:
     label: Longhorn CSI Driver Snapshotter Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.tag
-    default: v5.0.1
+    default: v6.2.1
     description: "Specify CSI Driver Snapshotter image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
@@ -161,7 +161,7 @@ questions:
     label: Longhorn CSI Liveness Probe Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.livenessProbe.tag
-    default: v2.8.0
+    default: v2.9.0
     description: "Specify CSI liveness probe image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Liveness Probe Image Tag

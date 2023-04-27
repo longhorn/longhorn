@@ -12,9 +12,9 @@
 
 </div>
 
-Longhorn is a distributed block storage system for Kubernetes. Longhorn is cloud native storage built using Kubernetes and container primitives.
+Longhorn is a distributed block storage system for Kubernetes. Longhorn is cloud-native storage built using Kubernetes and container primitives.
 
-Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply` command or using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
+Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply`command or by using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
 
 Longhorn implements distributed block storage using containers and microservices. Longhorn creates a dedicated storage controller for each block device volume and synchronously replicates the volume across multiple replicas stored on multiple nodes. The storage controller and replicas are themselves orchestrated using Kubernetes. Here are some notable features of Longhorn:
 
