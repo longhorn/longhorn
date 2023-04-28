@@ -459,11 +459,6 @@ If this setting is enabled, Longhorn will **not** block `kubectl drain` action o
       - "allow-if-replica-is-stopped"
       - "always-allow"
     default: "block-if-contains-last-replica"
-  - variable: defaultSettings.mkfsExt4Parameters
-    label: Custom mkfs.ext4 parameters
-    description: "Allows setting additional filesystem creation parameters for ext4. For older host kernels it might be necessary to disable the optional ext4 metadata_csum feature by specifying `-O ^64bit,^metadata_csum`."
-    group: "Longhorn Default Settings"
-    type: string
   - variable: defaultSettings.disableReplicaRebuild
     label: Disable Replica Rebuild
     description: "This setting disable replica rebuild cross the whole cluster, eviction and data locality feature won't work if this setting is true. But doesn't have any impact to any current replica rebuild and restore disaster recovery volume."

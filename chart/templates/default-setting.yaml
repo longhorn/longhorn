@@ -53,7 +53,6 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica) }}allow-node-drain-with-last-healthy-replica: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.mkfsExt4Parameters) }}mkfs-ext4-parameters: {{ .Values.defaultSettings.mkfsExt4Parameters }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.disableReplicaRebuild) }}disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}{{ end }}
