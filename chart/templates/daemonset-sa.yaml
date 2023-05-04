@@ -26,7 +26,6 @@ spec:
           privileged: true
         command:
         - longhorn-manager
-        - -d
         {{- if eq .Values.longhornManager.log.format "json" }}
         - -j
         {{- end }}
