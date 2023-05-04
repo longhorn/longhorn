@@ -24,7 +24,6 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
           - longhorn-manager
-          - -d
           - deploy-driver
           - --manager-image
           - "{{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
