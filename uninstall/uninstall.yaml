@@ -106,7 +106,7 @@ spec:
     spec:
       containers:
         - name: longhorn-uninstall
-          image: longhornio/longhorn-manager:v1.4.1
+          image: longhornio/longhorn-manager:v1.4.2-rc1
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
