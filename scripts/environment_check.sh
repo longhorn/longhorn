@@ -277,7 +277,7 @@ check_iscsid() {
     kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.socket" > /dev/null 2>&1
       if [ $? -ne 0 ]; then
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      error "Nither iscsid.service nor iscsid.socket is not running on ${node}"
+      error "Neither iscsid.service nor iscsid.socket is not running on ${node}"
       return 1
     fi
   fi
