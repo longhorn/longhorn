@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation,hook-failed
+  name: longhorn-pre-upgrade
+  namespace: {{ include "release_namespace" . }}
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+spec:
+  activeDeadlineSeconds: 900
+  backoffLimit: 1
+  template:
+    metadata:
+      name: longhorn-pre-upgrade
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: longhorn-post-upgrade
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+        - longhorn-manager
+        - pre-upgrade
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      restartPolicy: OnFailure
+      {{- if .Values.privateRegistry.registrySecret }}
+      imagePullSecrets:
+      - name: {{ .Values.privateRegistry.registrySecret }}
+      {{- end }}
+      {{- if .Values.longhornManager.priorityClass }}
+      priorityClassName: {{ .Values.longhornManager.priorityClass | quote }}
+      {{- end }}
+      serviceAccountName: longhorn-service-account
+      {{- if or .Values.longhornManager.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      tolerations:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+        {{- end }}
+        {{- if .Values.longhornManager.tolerations }}
+{{ toYaml .Values.longhornManager.tolerations | indent 6 }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.longhornManager.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      nodeSelector:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if .Values.longhornManager.nodeSelector }}
+{{ toYaml .Values.longhornManager.nodeSelector | indent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.longhornManager.affinity }}
+      affinitiy:
+{{ toYaml .Values.longhornManager.affinity | indent 8 }}
+      {{- end }}
