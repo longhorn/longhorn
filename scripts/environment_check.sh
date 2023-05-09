@@ -486,7 +486,7 @@ check_nodes "nfs client" check_nfs_client
 if [ "$enable_spdk" = "true" ]; then
   check_nodes "nvme-cli" check_nvme_cli
   check_nodes "kernel module nvme_tcp" check_kernel_module CONFIG_NVME_TCP nvme_tcp
-  check_nodes "kernel module uio" check_kernel_module CONFIG_UIO uio
+  check_nodes "kernel module uio_pci_generic" check_kernel_module CONFIG_UIO_PCI_GENERIC uio_pci_generic
   check_nodes "hugepage" check_hugepage ${expected_nr_hugepages}
 fi
 
