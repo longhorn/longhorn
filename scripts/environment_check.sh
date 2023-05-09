@@ -233,11 +233,13 @@ check_mount_propagation() {
 check_hostname_uniqueness() {
   hostnames=$(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="Hostname")].address}')
 
-  declare -A deduplicate_hostnames
+  deduplicate_hostnames=()
   num_nodes=0
   for hostname in ${hostnames}; do
     num_nodes=$((num_nodes+1))
-    deduplicate_hostnames["${hostname}"]="${hostname}"
+    if ! echo "${deduplicate_hostnames[@]}" | grep -q "\<${hostname}\>"; then
+      deduplicate_hostnames+=("${hostname}")
+    fi
   done
 
   if [ "${#deduplicate_hostnames[@]}" != "${num_nodes}" ]; then
@@ -245,7 +247,7 @@ check_hostname_uniqueness() {
     exit 2
   fi
 
-  info "Hostname uniqueness check is passed."
+  info "All nodes have unique hostnames."
 }
 
 check_nodes() {
