@@ -427,6 +427,35 @@ function check_nvme_cli() {
   return 1
 }
 
+function check_sse42_support() {
+  local pod=$1
+
+  node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+
+  machine=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -m' 2>/dev/null)
+  if [ $? -ne 0 ]; then
+    error "Failed to check machine on node ${node}"
+    return 1
+  fi
+
+  if [ "$machine" = "x86_64" ]; then
+    sse42_support=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -o sse4_2 /proc/cpuinfo | wc -l' 2>/dev/null)
+    if [ $? -ne 0 ]; then
+      error "Failed to check SSE4.2 instruction set on node ${node}"
+      return 1
+    fi
+
+    if [ "$sse42_support" -ge 1 ]; then
+      return 0
+    fi
+
+    error "CPU does not support SSE4.2"
+    return 1
+  else
+    warn "Skip SSE4.2 instruction set check on node ${node} because it is not x86_64"
+  fi
+}
+
 function show_help() {
     cat <<EOF
 Usage: $0 [OPTIONS]
@@ -484,6 +513,7 @@ check_nodes "packages" check_packages
 check_nodes "nfs client" check_nfs_client
 
 if [ "$enable_spdk" = "true" ]; then
+  check_nodes "x86-64 SSE4.2 instruction set" check_sse42_support
   check_nodes "nvme-cli" check_nvme_cli
   check_nodes "kernel module nvme_tcp" check_kernel_module CONFIG_NVME_TCP nvme_tcp
   check_nodes "kernel module uio_pci_generic" check_kernel_module CONFIG_UIO_PCI_GENERIC uio_pci_generic
