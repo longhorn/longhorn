@@ -459,12 +459,6 @@ If this setting is enabled, Longhorn will **not** block `kubectl drain` action o
       - "allow-if-replica-is-stopped"
       - "always-allow"
     default: "block-if-contains-last-replica"
-  - variable: defaultSettings.disableReplicaRebuild
-    label: Disable Replica Rebuild
-    description: "This setting disable replica rebuild cross the whole cluster, eviction and data locality feature won't work if this setting is true. But doesn't have any impact to any current replica rebuild and restore disaster recovery volume."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
   - variable: defaultSettings.replicaReplenishmentWaitInterval
     label: Replica Replenishment Wait Interval
     description: "In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume.
