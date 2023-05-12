@@ -485,7 +485,7 @@ https://longhorn.io/docs/1.4.1/snapshots-and-backups/csi-snapshot-support/enable
               driver: driver.longhorn.io
               deletionPolicy: Delete
               source:
-                snapshotHandle: bi://backing?backingImageDataSourceType=export-from-volume&backingImage=test-bi&volume-name=vol-export-src&export-type=qcow2
+                snapshotHandle: bi://backing?backingImageDataSourceType=export-from-volume&backingImage=test-bi&volume-name=test-vol&export-type=qcow2
               volumeSnapshotRef:
                 name: test-snapshot-on-demand-backing
                 namespace: default

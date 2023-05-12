@@ -29,14 +29,19 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 # Releases
 
+> **NOTE**:
+> - __\<version\>*__ means the release branch is under active support and will have periodic follow-up patch releases.
+> - __Latest__ release means the release version is the most recent release of the release branch.
+> - __Stable__ release means the release version is stable and has been widely adopted by users.
+
 https://github.com/longhorn/longhorn/releases
 
-| Release  | Version | Type   | Release Note (Changelog)                                       | Important Note                                              |
-|----------|---------|--------|----------------------------------------------------------------|-------------------------------------------------------------| 
-| **1.4**  | 1.4.1   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.1) | [🔗](https://longhorn.io/docs/1.4.1/deploy/important-notes) |
-| **1.3**  | 1.3.2   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.2) | [🔗](https://longhorn.io/docs/1.3.2/deploy/important-notes) |
-| 1.2      | 1.2.6   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.2.6) | [🔗](https://longhorn.io/docs/1.2.6/deploy/important-notes) |
-| 1.1      | 1.1.3   | Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.1.3) |                                                             |
+| Release   | Version | Type           | Release Note (Changelog)                                       | Important Note                                              |
+|-----------|---------|----------------|----------------------------------------------------------------|-------------------------------------------------------------| 
+| **1.4***  | 1.4.1   | Latest, Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.1) | [🔗](https://longhorn.io/docs/1.4.1/deploy/important-notes) |
+| **1.3***  | 1.3.3   | Latest, Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.2) | [🔗](https://longhorn.io/docs/1.3.2/deploy/important-notes) |
+| 1.2       | 1.2.6   | Latest, Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.2.6) | [🔗](https://longhorn.io/docs/1.2.6/deploy/important-notes) |
+| 1.1       | 1.1.3   | Latest, Stable | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.1.3) |                                                             |
 
 # Roadmap
 
@@ -72,7 +77,8 @@ For the installation requirements, refer to the [Longhorn documentation.](https:
 
 ## Installation
 
-> **NOTE**: Please note that the master branch is for the upcoming feature release development. 
+> **NOTE**: 
+> Please note that the master branch is for the upcoming feature release development. 
 > For an official release installation or upgrade, please refer to the below ways.
 
 Longhorn can be installed on a Kubernetes cluster in several ways:
