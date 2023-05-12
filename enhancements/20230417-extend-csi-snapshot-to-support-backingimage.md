@@ -267,7 +267,6 @@ spec:
 
 We do:
 - Get the name of the Volume
-- Check if the volume is in attached state. If not, return `codes.FailedPrecondition` since we can not export the Volume to a BackingImage.
 - The name of the BackingImage will be same as the VolumeSnapshot `test-snapshot-backing`.
 - Check if a BackingImage with the same name as the requested VolumeSnapshot already exists. Return success without creating a new BackingImage.
 - Create a BackingImage.
@@ -282,7 +281,7 @@ We do:
 - If BackingImage with the given name already exists, create the volume.
 - If BackingImage with the given name does not exists, we prepare it first. There are 2 kinds of types which are `export-from-volume` and `download`.
     - For `download`, it means we have to prepare the BackingImage before creating the Volume. We first decode other parameters from `snapshotId` and create the BackingImage. 
-    - For `export-from-volume`, it means we have to prepare the BackingImage before creating the Volume. We first decode other parameters from `snapshotId` and create the BackingImage. If the Volume we are snapshotting is not attached, return `codes.FailedPrecondition`.
+    - For `export-from-volume`, it means we have to prepare the BackingImage before creating the Volume. We first decode other parameters from `snapshotId` and create the BackingImage.
 
 NOTE: we already have related code for preparing the BackingImage with type `download` or `export-from-volume` before creating a Volume, [here](https://github.com/longhorn/longhorn-manager/blob/master/csi/controller_server.go#L195)
 
@@ -333,20 +332,6 @@ https://longhorn.io/docs/1.4.1/snapshots-and-backups/csi-snapshot-support/enable
             - `export-type` is `raw`
     5. Delete the VolumeSnapshot `test-snapshot-backing`
     6. Verify the BacingImage is deleted
-- Failed
-    1. Create a Volume `test-vol` of 5GB. Create PV/PVC for the Volume. And don't attach the Volume
-    2. Create a VolumeSnapshot with following yaml:
-        ```yaml
-        apiVersion: snapshot.storage.k8s.io/v1beta1
-        kind: VolumeSnapshot
-        metadata:
-          name: test-snapshot-backing
-        spec:
-          volumeSnapshotClassName: longhorn-snapshot-vsc
-          source:
-            persistentVolumeClaimName: test-vol
-        ```
-    3. Verify it failed since the Volume `test-vol` is not attached
 
 #### Scenerios 2: Create new Volume from CSI snapshot
 
@@ -536,54 +521,6 @@ https://longhorn.io/docs/1.4.1/snapshots-and-backups/csi-snapshot-support/enable
             ```
         4. Verify BackingImage `test-bi` is created
         5. Attach the PVC `test-restore-on-demand-backing` to a workload and verify the data
-    - Failed
-        1. Create a Volme `test-vol` and don't attached it.
-        2. Create a VolumeSnapshotContent with `snapshotHandle` providing the required parameters and BackingImage name `test-bi`
-            ```yaml
-            apiVersion: snapshot.storage.k8s.io/v1
-            kind: VolumeSnapshotContent
-            metadata:
-              name: test-on-demand-backing
-            spec:
-              volumeSnapshotClassName: longhorn-snapshot-vsc
-              driver: driver.longhorn.io
-              deletionPolicy: Delete
-              source:
-                snapshotHandle: bi://backing?backingImageDataSourceType=export-from-volume&backingImage=test-bi&volume-name=vol-export-src&export-type=qcow2
-              volumeSnapshotRef:
-                name: test-snapshot-on-demand-backing
-                namespace: default
-            ```
-        3. Create a VolumeSnapshot associated with the VolumeSnapshotContent
-            ```yaml
-            apiVersion: snapshot.storage.k8s.io/v1beta1
-            kind: VolumeSnapshot
-            metadata:
-              name: test-snapshot-on-demand-backing
-            spec:
-              volumeSnapshotClassName: longhorn-snapshot-vsc
-              source:
-                volumeSnapshotContentName: test-on-demand-backing
-            ```
-        4. Create a PVC with the following yaml
-            ```yaml
-            apiVersion: v1
-            kind: PersistentVolumeClaim
-            metadata:
-              name: test-restore-on-demand-backing
-            spec:
-              storageClassName: longhorn
-              dataSource:
-                name: test-snapshot-on-demand-backing
-                kind: VolumeSnapshot
-                apiGroup: snapshot.storage.k8s.io
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 5Gi
-            ```
-        5. Verify it failed since the volume is not attached.
 
 ### Upgrade strategy
 
