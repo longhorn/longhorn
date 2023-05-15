@@ -1130,6 +1130,9 @@ spec:
               size:
                 description: The backup volume size.
                 type: string
+              storageClassName:
+                description: the storage class name of pv/pvc binding with the volume.
+                type: string
             type: object
         type: object
     served: true
