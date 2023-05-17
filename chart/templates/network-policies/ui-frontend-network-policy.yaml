@@ -1,0 +1,46 @@
+{{- if and .Values.networkPolicies.enabled .Values.ingress.enabled (not (eq .Values.networkPolicies.type "")) }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: longhorn-ui-frontend
+  namespace: longhorn-system
+spec:
+  podSelector:
+    matchLabels:
+      app: longhorn-ui
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    {{- if eq .Values.networkPolicies.type "rke1"}}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: ingress-nginx
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/component: controller
+          app.kubernetes.io/instance: ingress-nginx
+          app.kubernetes.io/name: ingress-nginx
+    {{- else if eq .Values.networkPolicies.type "rke2" }}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/component: controller
+          app.kubernetes.io/instance: rke2-ingress-nginx
+          app.kubernetes.io/name: rke2-ingress-nginx
+    {{- else if eq .Values.networkPolicies.type "k3s" }}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: traefik
+    ports:
+      - port: 8000
+        protocol: TCP
+      - port: 80
+        protocol: TCP
+    {{- end }}
+{{- end }}

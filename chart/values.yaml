@@ -21,6 +21,11 @@ global:
         taintToleration: cattle.io/os=linux:NoSchedule
         systemManagedComponentsNodeSelector: kubernetes.io/os:linux
 
+networkPolicies:
+  enabled: false
+  # Available types: k3s, rke2, rke1
+  type: "k3s"
+
 image:
   longhorn:
     engine:

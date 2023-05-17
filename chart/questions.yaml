@@ -843,3 +843,21 @@ Set the value to **0** to disable backup restore."
   label: Rancher Windows Cluster
   type: boolean
   group: "Other Settings"
+- variable: networkPolicies.enabled
+  description: "Enable NetworkPolicies to limit access to the longhorn pods.
+  Warning: The Rancher Proxy will not work if this feature is enabled and a custom NetworkPolicy must be added."
+  group: "Other Settings"
+  label: Network Policies
+  default: "false"
+  type: boolean
+  subquestions:
+  - variable: networkPolicies.type
+    label: Network Policies for Ingress
+    description: "Create the policy to allow access for the ingress, select the distribution."
+    show_if: "networkPolicies.enabled=true&&ingress.enabled=true"
+    type: enum
+    default: "rke2"
+    options:
+      - "rke1"
+      - "rke2"
+      - "k3s"
