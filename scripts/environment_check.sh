@@ -1,5 +1,7 @@
 #!/bin/bash
 
+NVME_CLI_VERSION="1.12"
+
 ######################################################
 # Log
 ######################################################
@@ -73,8 +75,7 @@ error() {
 ######################################################
 # Check logics
 ######################################################
-set_packages_and_check_cmd()
-{
+set_packages_and_check_cmd() {
   case $OS in
   *"debian"* | *"ubuntu"* )
     CHECK_CMD='dpkg -l | grep -w'
@@ -105,16 +106,14 @@ set_packages_and_check_cmd()
    esac
 }
 
-detect_node_kernel_release()
-{
+detect_node_kernel_release() {
   local pod="$1"
 
   KERNEL_RELEASE=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -r')
   echo "$KERNEL_RELEASE"
 }
 
-detect_node_os()
-{
+detect_node_os() {
   local pod="$1"
 
   OS=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2')
@@ -130,13 +129,13 @@ check_local_dependencies() {
   local all_found=true
   for ((i=0; i<${#targets[@]}; i++)); do
     local target=${targets[$i]}
-    if [ "$(which $target)" == "" ]; then
+    if [ "$(which $target)" = "" ]; then
       all_found=false
       error "Not found: $target"
     fi
   done
 
-  if [ "$all_found" == "false" ]; then
+  if [ "$all_found" = "false" ]; then
     msg="Please install missing dependencies: ${targets[@]}."
     info "$msg"
     exit 2
@@ -195,7 +194,7 @@ wait_ds_ready() {
     local numberReady=$(echo $ds | jq .status.numberReady)
     local desiredNumberScheduled=$(echo $ds | jq .status.desiredNumberScheduled)
 
-    if [ "$desiredNumberScheduled" == "$numberReady" ] && [ "$desiredNumberScheduled" != "0" ]; then
+    if [ "$desiredNumberScheduled" = "$numberReady" ] && [ "$desiredNumberScheduled" != "0" ]; then
       info "All longhorn-environment-check pods are ready ($numberReady/$desiredNumberScheduled)."
       return
     fi
@@ -224,55 +223,23 @@ check_mount_propagation() {
   done
 
   if [ "$allSupported" != "true" ]; then
-    error "MountPropagation is disabled on at least one node. As a result, CSI driver and Base image cannot be supported."
+    error "MountPropagation is disabled on at least one node. As a result, CSI driver and Base image cannot be supported"
     exit 1
   else
-    info "MountPropagation is enabled."
+    info "MountPropagation is enabled"
   fi
-}
-
-check_package_installed() {
-  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
-
-  local all_found=true
-
-  for pod in ${pods}; do
-    OS=$(detect_node_os $pod)
-    if [ x"$OS" == x"" ]; then
-      error "Unable to detect OS on node $node."
-      exit 2
-    fi
-
-    set_packages_and_check_cmd "$OS"
-
-    for ((i=0; i<${#PACKAGES[@]}; i++)); do
-      local package=${PACKAGES[$i]}
-
-      kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
-      if [ $? != 0 ]; then
-        all_found=false
-        node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-        error "$package is not found in $node."
-      fi
-    done
-  done
-
-  if [ "$all_found" == "false" ]; then
-    error "Please install missing packages."
-    exit 2
-  fi
-
-  info "Required packages are installed."
 }
 
 check_hostname_uniqueness() {
   hostnames=$(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="Hostname")].address}')
 
-  declare -A deduplicate_hostnames
+  deduplicate_hostnames=()
   num_nodes=0
   for hostname in ${hostnames}; do
     num_nodes=$((num_nodes+1))
-    deduplicate_hostnames["${hostname}"]="${hostname}"
+    if ! echo "${deduplicate_hostnames[@]}" | grep -q "\<${hostname}\>"; then
+      deduplicate_hostnames+=("${hostname}")
+    fi
   done
 
   if [ "${#deduplicate_hostnames[@]}" != "${num_nodes}" ]; then
@@ -280,84 +247,248 @@ check_hostname_uniqueness() {
     exit 2
   fi
 
-  info "Hostname uniqueness check is passed."
+  info "All nodes have unique hostnames."
 }
 
-check_multipathd() {
-  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
-  local all_not_found=true
+check_nodes() {
+  local name=$1
+  local callback=$2
+  shift
+  shift
 
+  info "Checking $name..."
+
+  local all_passed=true
+
+  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
   for pod in ${pods}; do
-    kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
-    if [ $? = 0 ]; then
-      all_not_found=false
-      node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      warn "multipathd is running on $node."
+    eval "${callback} ${pod} $@"
+    if [ $? -ne 0 ]; then
+      all_passed=false
     fi
   done
 
-  if [ "$all_not_found" == "false" ]; then
-    warn "multipathd would probably result in the Longhorn volume mount failure. Please refer to https://longhorn.io/kb/troubleshooting-volume-with-multipath for more information."
+  if [ "$all_passed" = "false" ]; then
+    return 1
   fi
 }
 
 check_iscsid() {
-  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
-  local all_found=true
+  local pod=$1
 
-  for pod in ${pods}; do
-    kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.service" > /dev/null 2>&1
-
-    if [ $? != 0 ]; then
-      all_found=false
+  kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.service" > /dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.socket" > /dev/null 2>&1
+      if [ $? -ne 0 ]; then
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      error "iscsid is not running on $node."
+      error "Neither iscsid.service nor iscsid.socket is not running on ${node}"
+      return 1
     fi
-  done
-
-  if [ "$all_found" == "false" ]; then
-    exit 2
   fi
 }
 
-check_nfs_client_kernel_support() {
-  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
-  local all_found=true
-  local nfs_client_kernel_configs=("CONFIG_NFS_V4_1" "CONFIG_NFS_V4_2")
+check_multipathd() {
+  local pod=$1
 
-  for config in "${nfs_client_kernel_configs[@]}"; do
-    declare -A nodes=()
+  kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
+  if [ $? = 0 ]; then
+    node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+    warn "multipathd is running on ${node}"
+    return 1
+  fi
+}
 
-    for pod in ${pods}; do
-      local kernel_release=$(detect_node_kernel_release $pod)
-      if [ x"$kernel_release" == x"" ]; then
-        error "Unable to detect kernel release on node $node."
-        exit 2
-      fi
+check_packages() {
+  local pod=$1
 
-      node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-${kernel_release}" > /dev/null 2>&1)
-      if [[ $? == 0 ]]; then
-        all_found=false
-        nodes["${node}"]="${node}"
-      else
-        res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-${kernel_release}" > /dev/null 2>&1)
-        if [[ $? != 0 ]]; then
-          all_found=false
-          warn "Unable to check kernel config ${config} on node ${node}"
-        fi
-      fi
-    done
+  OS=$(detect_node_os ${pod})
+  if [ x"$OS" = x"" ]; then
+    error "Failed to detect OS on node ${node}"
+    return 1
+  fi
 
-    if [ ${#nodes[@]} != 0 ]; then
-      warn ""${config}" kernel config is not enabled on nodes ${nodes[*]}."
+  set_packages_and_check_cmd
+
+  for ((i=0; i<${#PACKAGES[@]}; i++)); do
+    check_package ${PACKAGES[$i]}
+    if [ $? -ne 0 ]; then
+      return 1
+    fi
+  done
+}
+
+check_package() {
+  local package=$1
+
+  kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+    error "$package is not found in $node."
+    return 1
+  fi
+}
+
+check_nfs_client() {
+  local pod=$1
+  local node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+
+  local options=("CONFIG_NFS_V4_2"  "CONFIG_NFS_V4_1" "CONFIG_NFS_V4")
+
+  local kernel=$(detect_node_kernel_release ${pod})
+  if [ "x${kernel}" = "x" ]; then
+    warn "Failed to check NFS client installation, because unable to detect kernel release on node ${node}"
+    return 1
+  fi
+
+  for option in "${options[@]}"; do
+    kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -f /boot/config-${kernel} ]" > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      warn "Failed to check $option on node ${node}, because /boot/config-${kernel} does not exist on node ${node}"
+      continue
+    fi
+
+    check_kernel_module ${pod} ${option} nfs
+    if [ $? = 0 ]; then
+      return 0
     fi
   done
 
-  if [[ ${all_found} == false ]]; then
-    warn "NFS client kernel support, ${nfs_client_kernel_configs[*]}, is not enabled on Longhorn nodes. Please refer to https://longhorn.io/docs/1.4.0/deploy/install/#installing-nfsv4-client for more information."
+  error "NFS clients ${options[*]} should be enabled at least one."
+  return 1
+}
+
+check_kernel_module() {
+  local pod=$1
+  local option=$2
+  local module=$3
+
+  local kernel=$(detect_node_kernel_release ${pod})
+  if [ "x${kernel}" = "x" ]; then
+    warn "Failed to check kernel config option ${option}, because unable to detect kernel release on node ${node}"
+    return 1
+  fi
+
+  kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -e /boot/config-${kernel} ]" > /dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    warn "Failed to check kernel config option ${option}, because /boot/config-${kernel} does not exist on node ${node}"
+    return 1
+  fi
+
+  value=$(kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep "^$option=" /boot/config-${kernel} | cut -d= -f2")
+  if [ -z "${value}" ]; then
+    error "Failed to find kernel config $option on node ${node}"
+    return 1
+  elif [ "${value}" = "m" ]; then
+    kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "lsmod | grep ${module}" > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+      error "kernel module ${module} is not enabled on ${node}"
+      return 1
+    fi
+  elif [ "${value}" = "y" ]; then
+    return 0
+  else
+    warn "Unknown value for $option: $value"
+    return 1
   fi
 }
+
+check_hugepage() {
+  local pod=$1
+  local expected_nr_hugepages=$2
+
+  nr_hugepages=$(kubectl exec -i ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'cat /proc/sys/vm/nr_hugepages')
+  if [ $? -ne 0 ]; then
+    error "Failed to check hugepage size on node ${node}"
+    return 1
+  fi
+
+  if [ $nr_hugepages -lt $expected_nr_hugepages ]; then
+    error "Hugepage size is not enough on node ${node}. Expected: ${expected_nr_hugepages}, Actual: ${nr_hugepages}"
+    return 1
+  fi
+}
+
+function check_nvme_cli() {
+  local pod=$1
+
+  value=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'nvme version' 2>/dev/null)
+  if [ $? -ne 0 ]; then
+    node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+    error "Failed to check nvme-cli version on node ${node}"
+    return 1
+  fi
+
+  local actual_version=$(echo "$value" | grep -o "[0-9]\+\.[0-9]\+")
+  if [[ "$(printf '%s\n' "${NVME_CLI_VERSION}" "$actual_version" | sort -V | tail -n1)" == "$actual_version" ]]; then
+    return 0
+  fi
+  error "nvme-cli version should be at least ${NVME_CLI_VERSION} on node ${node}. Actual: ${actual_version}"
+  return 1
+}
+
+function check_sse42_support() {
+  local pod=$1
+
+  node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+
+  machine=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -m' 2>/dev/null)
+  if [ $? -ne 0 ]; then
+    error "Failed to check machine on node ${node}"
+    return 1
+  fi
+
+  if [ "$machine" = "x86_64" ]; then
+    sse42_support=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -o sse4_2 /proc/cpuinfo | wc -l' 2>/dev/null)
+    if [ $? -ne 0 ]; then
+      error "Failed to check SSE4.2 instruction set on node ${node}"
+      return 1
+    fi
+
+    if [ "$sse42_support" -ge 1 ]; then
+      return 0
+    fi
+
+    error "CPU does not support SSE4.2"
+    return 1
+  else
+    warn "Skip SSE4.2 instruction set check on node ${node} because it is not x86_64"
+  fi
+}
+
+function show_help() {
+    cat <<EOF
+Usage: $0 [OPTIONS]
+
+Options:
+    -s, --enable-spdk           Enable checking SPDK prerequisites
+    -p, --expected-nr-hugepages Expected number of hugepages for SPDK. Default: 1024
+    -h, --help                  Show this help message and exit
+EOF
+    exit 0
+}
+
+enable_spdk=false
+expected_nr_hugepages=1024
+while [[ $# -gt 0 ]]; do
+    opt="$1"
+    case $opt in
+        -s|--enable-spdk)
+            enable_spdk=true
+            ;;
+        -p|--expected-nr-hugepages)
+            expected_nr_hugepages="$2"
+            shift
+            ;;
+        -h|--help)
+            show_help
+            ;;
+        *)
+            instance_manager_options+=("$1")
+            ;;
+    esac
+    shift
+done
 
 ######################################################
 # Main logics
@@ -375,10 +506,18 @@ trap cleanup EXIT
 create_ds
 wait_ds_ready
 
-check_nfs_client_kernel_support
-check_package_installed
-check_iscsid
-check_multipathd
 check_mount_propagation
+check_nodes "iscsid" check_iscsid
+check_nodes "multipathd" check_multipathd
+check_nodes "packages" check_packages
+check_nodes "nfs client" check_nfs_client
+
+if [ "$enable_spdk" = "true" ]; then
+  check_nodes "x86-64 SSE4.2 instruction set" check_sse42_support
+  check_nodes "nvme-cli" check_nvme_cli
+  check_nodes "kernel module nvme_tcp" check_kernel_module CONFIG_NVME_TCP nvme_tcp
+  check_nodes "kernel module uio_pci_generic" check_kernel_module CONFIG_UIO_PCI_GENERIC uio_pci_generic
+  check_nodes "hugepage" check_hugepage ${expected_nr_hugepages}
+fi
 
 exit 0

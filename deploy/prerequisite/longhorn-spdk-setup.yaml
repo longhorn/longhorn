@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: longhorn-spdk-setup
+  labels:
+    app: longhorn-spdk-setup
+  annotations:
+    command: &cmd rm -rf ${SPDK_DIR}; git clone -b longhorn https://github.com/longhorn/spdk.git ${SPDK_DIR} && bash ${SPDK_DIR}/scripts/setup.sh ${SPDK_OPTION}; if [ $? -eq 0 ]; then echo "SPDK environment is configured successfully"; else echo "Failed to configure SPDK environment error code $?"; fi; rm -rf ${SPDK_DIR}
+spec:
+  selector:
+    matchLabels:
+      app: longhorn-spdk-setup
+  template:
+    metadata:
+      labels:
+        app: longhorn-spdk-setup
+    spec:
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - name: longhorn-spdk-setup
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - bash
+          - -c
+          - *cmd
+        image: alpine:3.12
+        env:
+        - name: SPDK_DIR
+          value: "/tmp/spdk"
+        - name: SPDK_OPTION
+          value: ""
+        - name: HUGEMEM
+          value: "2048"
+        - name: PCI_ALLOWED
+          value: "none"
+        - name: DRIVER_OVERRIDE
+          value: "uio_pci_generic"
+        securityContext:
+          privileged: true
+      containers:
+      - name: sleep
+        image: registry.k8s.io/pause:3.1
+  updateStrategy:
+    type: RollingUpdate

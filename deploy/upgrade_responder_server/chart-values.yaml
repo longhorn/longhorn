@@ -21,15 +21,15 @@ configMap:
     {
       "Versions": [
         {
-          "Name": "v1.3.2",
-          "ReleaseDate": "2022-10-03T00:00:00Z",
+          "Name": "v1.3.3",
+          "ReleaseDate": "2023-04-19T00:00:00Z",
           "Tags": [
             "stable"
           ]
         },
         {
-          "Name": "v1.4.1",
-          "ReleaseDate": "2023-03-13T00:00:00Z",
+          "Name": "v1.4.2",
+          "ReleaseDate": "2023-05-12T00:00:00Z",
           "Tags": [
             "latest", 
             "stable"
