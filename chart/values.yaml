@@ -134,7 +134,6 @@ defaultSettings:
   nodeDownPodDeletionPolicy: ~
   allowNodeDrainWithLastHealthyReplica: ~
   nodeDrainPolicy : ~
-  disableReplicaRebuild: ~
   replicaReplenishmentWaitInterval: ~
   concurrentReplicaRebuildPerNodeLimit: ~
   concurrentVolumeBackupRestorePerNodeLimit: ~
@@ -158,6 +157,7 @@ defaultSettings:
   removeSnapshotsDuringFilesystemTrim: ~
   fastReplicaRebuildEnabled: ~
   replicaFileSyncHttpClientTimeout: ~
+  logLevel: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
