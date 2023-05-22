@@ -3470,14 +3470,14 @@ spec:
                 type: string
               backingImage:
                 type: string
-              baseImage:
-                description: Deprecated. Rename to BackingImage
-                type: string
               backupCompressionMethod:
                 enum:
                 - none
                 - lz4
                 - gzip
+                type: string
+              baseImage:
+                description: Deprecated. Rename to BackingImage
                 type: string
               dataLocality:
                 enum:
@@ -3498,12 +3498,6 @@ spec:
               engineImage:
                 type: string
               fromBackup:
-                type: string
-              restoreVolumeRecurringJob:
-                enum:
-                - ignored
-                - enabled
-                - disabled
                 type: string
               frontend:
                 enum:
@@ -3564,6 +3558,26 @@ spec:
                 - disabled
                 - least-effort
                 - best-effort
+                type: string
+              replicaSoftAntiAffinity:
+                description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node
+                enum:
+                - ignored
+                - enabled
+                - disabled
+                type: string
+              replicaZoneSoftAntiAffinity:
+                description: Replica zone soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same zone
+                enum:
+                - ignored
+                - enabled
+                - disabled
+                type: string
+              restoreVolumeRecurringJob:
+                enum:
+                - ignored
+                - enabled
+                - disabled
                 type: string
               revisionCounterDisabled:
                 type: boolean
@@ -3627,6 +3641,9 @@ spec:
                 type: array
               currentImage:
                 type: string
+              currentMigrationNodeID:
+                description: the node that this volume is currently migrating to
+                type: string
               currentNodeID:
                 type: string
               expansionRequired:
@@ -3675,6 +3692,7 @@ spec:
               ownerID:
                 type: string
               pendingNodeID:
+                description: Deprecated.
                 type: string
               remountRequestedAt:
                 type: string
@@ -3696,6 +3714,137 @@ spec:
     storage: true
     subresources:
       status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.4.0-dev
+    longhorn-manager: ""
+  name: volumeattachments.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: VolumeAttachment
+    listKind: VolumeAttachmentList
+    plural: volumeattachments
+    shortNames:
+      - lhva
+    singular: volumeattachment
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1beta2
+      schema:
+        openAPIV3Schema:
+          description: VolumeAttachment stores attachment information of a Longhorn volume
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: VolumeAttachmentSpec defines the desired state of Longhorn VolumeAttachment
+              properties:
+                attachmentTickets:
+                  additionalProperties:
+                    properties:
+                      generation:
+                        description: A sequence number representing a specific generation of the desired state. Populated by the system. Read-only.
+                        format: int64
+                        type: integer
+                      id:
+                        description: The unique ID of this attachment. Used to differentiate different attachments of the same volume.
+                        type: string
+                      nodeID:
+                        description: The node that this attachment is requesting
+                        type: string
+                      parameters:
+                        additionalProperties:
+                          type: string
+                        description: Optional additional parameter for this attachment
+                        type: object
+                      type:
+                        type: string
+                    type: object
+                  type: object
+                volume:
+                  description: The name of Longhorn volume of this VolumeAttachment
+                  type: string
+              required:
+                - volume
+              type: object
+            status:
+              description: VolumeAttachmentStatus defines the observed state of Longhorn VolumeAttachment
+              properties:
+                attachmentTicketStatuses:
+                  additionalProperties:
+                    properties:
+                      conditions:
+                        description: Record any error when trying to fulfill this attachment
+                        items:
+                          properties:
+                            lastProbeTime:
+                              description: Last time we probed the condition.
+                              type: string
+                            lastTransitionTime:
+                              description: Last time the condition transitioned from one status to another.
+                              type: string
+                            message:
+                              description: Human-readable message indicating details about last transition.
+                              type: string
+                            reason:
+                              description: Unique, one-word, CamelCase reason for the condition's last transition.
+                              type: string
+                            status:
+                              description: Status is the status of the condition. Can be True, False, Unknown.
+                              type: string
+                            type:
+                              description: Type is the type of the condition.
+                              type: string
+                          type: object
+                        nullable: true
+                        type: array
+                      generation:
+                        description: A sequence number representing a specific generation of the desired state. Populated by the system. Read-only.
+                        format: int64
+                        type: integer
+                      id:
+                        description: The unique ID of this attachment. Used to differentiate different attachments of the same volume.
+                        type: string
+                      satisfied:
+                        description: Indicate whether this attachment ticket has been satisfied
+                        type: boolean
+                    required:
+                      - conditions
+                      - satisfied
+                    type: object
+                  type: object
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
 status:
   acceptedNames:
     kind: ""
@@ -3750,7 +3899,8 @@ rules:
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
               "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status",
               "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
-              "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status"]
+              "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status",
+              "volumeattachments", "volumeattachments/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
