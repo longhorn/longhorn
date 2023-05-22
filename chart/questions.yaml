@@ -459,11 +459,6 @@ If this setting is enabled, Longhorn will **not** block `kubectl drain` action o
       - "allow-if-replica-is-stopped"
       - "always-allow"
     default: "block-if-contains-last-replica"
-  - variable: defaultSettings.mkfsExt4Parameters
-    label: Custom mkfs.ext4 parameters
-    description: "Allows setting additional filesystem creation parameters for ext4. For older host kernels it might be necessary to disable the optional ext4 metadata_csum feature by specifying `-O ^64bit,^metadata_csum`."
-    group: "Longhorn Default Settings"
-    type: string
   - variable: defaultSettings.disableReplicaRebuild
     label: Disable Replica Rebuild
     description: "This setting disable replica rebuild cross the whole cluster, eviction and data locality feature won't work if this setting is true. But doesn't have any impact to any current replica rebuild and restore disaster recovery volume."
@@ -587,6 +582,12 @@ Set the value to **0** to disable backup restore."
     min: 0
     max: 40
     default: 12
+  - variable: defaultSettings.logLevel
+    label: Log Level
+    description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Info."
+    group: "Longhorn Default Settings"
+    type: string
+    default: "Info"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.

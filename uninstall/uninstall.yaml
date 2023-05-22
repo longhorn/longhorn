@@ -108,8 +108,6 @@ spec:
         - name: longhorn-uninstall
           image: longhornio/longhorn-manager:master-head
           imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: true
           command:
             - longhorn-manager
             - uninstall
