@@ -4122,7 +4122,6 @@ spec:
           privileged: true
         command:
         - longhorn-manager
-        - -d
         - daemon
         - --engine-image
         - "longhornio/longhorn-engine:master-head"
@@ -4227,7 +4226,6 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
-          - -d
           - deploy-driver
           - --manager-image
           - "longhornio/longhorn-manager:master-head"
