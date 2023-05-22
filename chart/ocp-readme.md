@@ -35,6 +35,9 @@ Main changes and tasks for OCP are:
       - [MachineConfig Patch](https://github.com/longhorn/longhorn/issues/4988#issuecomment-1345676772)
   - 4.12.0-0.okd-2023-03-05-022504 - 4.12.0-0.okd-2023-04-16-041331:
     - Tested, No Known Issues
+- 4.13 / 1.26:
+  - 4.13.0-0.okd-2023-05-03-001308 - 4.13.0-0.okd-2023-05-22-052007:
+    - Tested, No Known Issues
 
 ## Preparing nodes
 
