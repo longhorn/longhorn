@@ -29,11 +29,13 @@ spec:
         image: alpine:3.12
         env:
         - name: SPDK_DIR
-          value: /tmp/spdk
+          value: "/tmp/spdk"
         - name: SPDK_OPTION
           value: ""
         - name: HUGEMEM
           value: "2048"
+        - name: PCI_ALLOWED
+          value: "none"
         - name: DRIVER_OVERRIDE
           value: "uio_pci_generic"
         securityContext:
