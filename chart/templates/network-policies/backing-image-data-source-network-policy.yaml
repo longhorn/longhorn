@@ -1,0 +1,27 @@
+{{- if .Values.networkPolicies.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backing-image-data-source
+  namespace: longhorn-system
+spec:
+  podSelector:
+    matchLabels:
+      longhorn.io/component: backing-image-data-source
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: longhorn-manager
+    - podSelector:
+        matchLabels:
+          longhorn.io/component: instance-manager
+    - podSelector:
+        matchLabels:
+          longhorn.io/component: backing-image-manager
+    - podSelector:
+        matchLabels:
+          longhorn.io/component: backing-image-data-source
+{{- end }}
