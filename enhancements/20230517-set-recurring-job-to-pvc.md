@@ -16,7 +16,8 @@ https://github.com/longhorn/longhorn/issues/5791
 
 ### Goals
 
-1. Support recurring job labeling on PVCs and reflect on the Volume.
+1. Introduce support for enabling/disabling PVCs as a recurring job label source for the corresponding Volume.
+1. The recurring job labels on PVCs are reflected on the associated Volume when the PVC is set as the recurring job label source.
 
 ### Non-goals [optional]
 
@@ -25,7 +26,7 @@ Sync Volume recurring job labels to PVC.
 ## Proposal
 
 1. The existing behavior of recurring jobs will remain unchanged, with the Volume's recurring job labeling as the source of truth.
-2. If the PVC has recurring job labels, they will override all recurring job labels of the associated Volume.
+2. When the PVC is enabled as the recurring job label source, its recurring job labels will override all recurring job labels of the associated Volume.
 
 ### User Stories
 
@@ -33,7 +34,9 @@ As a user, I want to be able to set the RecurringJob label on the PVC. I expect 
 
 ### User Experience In Detail
 
-Whenever a user adds or removes a recurring job label on the PVC, Longhorn synchronize with the associated Volume. This ensures that any changes made to the PVC recurring job labels are reflected in its Volume.
+To enable or disable the PVC as the recurring job label source, users can manage it by adding or removing the `recurring-job.longhorn.io/source: enable` label to the PVC.
+
+Once the PVC is set as the recurring job label source, any recurring job labels added or removed from the PVC will be automatically synchronized by Longhorn to the associated Volume.
 
 ### API changes
 
@@ -45,7 +48,11 @@ Whenever a user adds or removes a recurring job label on the PVC, Longhorn synch
 
 #### Sync Volume recurring job labels to PVC ####
 
-The volume controller checks and updates the Volume to ensure the recurring job labels stay synchronized with the PVC by detecting recurring job label differences.
+If the PVC is labeled with `recurring-job.longhorn.io/source: enable`, the volume controller checks and updates the Volume to ensure the recurring job labels stay synchronized with the PVC by detecting recurring job label differences.
+
+#### Remove PVC recurring job of the deleting RecurringJob ####
+
+As of now, Longhorn includes a feature that automatically removes the Volume recurring job label associated with a deleting RecurringJob. This is also applicable to the PVC.
 
 ### Test plan
 
