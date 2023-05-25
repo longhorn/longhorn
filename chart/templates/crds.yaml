@@ -1941,18 +1941,12 @@ spec:
                       type: array
                   type: object
                 type: object
-              engineManagerCPURequest:
-                description: 'Deprecated: Replaced by InstanceManagerCPURequest'
-                type: integer
               evictionRequested:
                 type: boolean
               instanceManagerCPURequest:
                 type: integer
               name:
                 type: string
-              replicaManagerCPURequest:
-                description: 'Deprecated: Replaced by InstanceManagerCPURequest'
-                type: integer
               tags:
                 items:
                   type: string
