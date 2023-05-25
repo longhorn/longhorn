@@ -1035,6 +1035,9 @@ spec:
               size:
                 description: The backup volume size.
                 type: string
+              storageClassName:
+                description: the storage class name of pv/pvc binding with the volume.
+                type: string
             type: object
         type: object
     served: true
@@ -1938,18 +1941,12 @@ spec:
                       type: array
                   type: object
                 type: object
-              engineManagerCPURequest:
-                description: 'Deprecated: Replaced by InstanceManagerCPURequest'
-                type: integer
               evictionRequested:
                 type: boolean
               instanceManagerCPURequest:
                 type: integer
               name:
                 type: string
-              replicaManagerCPURequest:
-                description: 'Deprecated: Replaced by InstanceManagerCPURequest'
-                type: integer
               tags:
                 items:
                   type: string
