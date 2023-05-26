@@ -79,7 +79,7 @@ After this proposal:
 
 As an administrator, after an intentional or unintentional node reboot, my volumes work as expected. If I choose to dig
 through logs, I may see some messages about refused requests to incorrect components, but this doesn't seem to
-negatively affected anything.
+negatively affect anything.
 
 #### Story 2
 
@@ -122,14 +122,14 @@ Add a `volume-name` flag and an `instance-name` flag to the `longhorn replica <d
 replica <directory> -volume-name <volume-name> -instance-name <instance-name>`). The longhorn-engine sync-agent server
 remembers its volume and instance name.
 
-Add a `volume-name` and `controller-instance-name` flag to every CLI command that launches an asynchronous task (e.g.
-`longhorn ls-replica -volume-name <volume-name> -controller-instance-name <controller-instance-name>`). All such
+Add a `volume-name` and `engine-instance-name` flag to every CLI command that launches an asynchronous task (e.g.
+`longhorn ls-replica -volume-name <volume-name> -engine-instance-name <engine-instance-name>`). All such
 commands create a controller client and these flags allow appropriate gRPC metadata to be injected into every client
 request. Requests that reach the wrong longhorn-engine controller server are rejected.
 
 Add an additional `replica-instance-name` flag to CLI commands that launch asynchronous tasks that communicate directly
 with the longhorn-engine replica server (e.g. `longhorn add-replica <address> -size <size> -current-size <current-size>
--volume-name <volume-name> -controller-instance-name <controller-instance-name> -replica-instance-name
+-volume-name <volume-name> -engine-instance-name <engine-instance-name> -replica-instance-name
 <replica-instance-name>`). All such commands create a replica client and these flags allow appropriate gRPC metadata to
 be injected into every client request. Requests that reach the wrong longhorn-engine replica server are rejected.
 
@@ -138,6 +138,12 @@ longhorn-engine component the caller was actually attempting to communicate with
 definitely open to discussion.)
 
 #### Longhorn-Instance-Manager
+
+Increment the longhorn-instance-manager InstanceManagerProxyAPIVersion by one. Do not increment the
+longhorn-instance-manager InstanceManagerProxyAPIMinVersion. The changes in this LEP are backwards compatible. No added
+fields are required and their omission is ignored. If a less sophisticated (not upgraded) client does not include them,
+no metadata is injected into engine or replica requests and no validation occurs (the behavior is the same as before the
+implementation of this LEP).
 
 Add `volume_name` and `instance_name` fields to the `ProxyEngineRequest` protocol buffer message. This message, which
 currently only contains an `address` field, is included in all `ProxyEngineService` RPCs. Updated clients can pass
@@ -182,7 +188,6 @@ func identityValidationInterceptor(volumeName, instanceName string) grpc.UnarySe
 				return nil, status.Errorf(codes.InvalidArgument, "Incorrect volume name; check controller address")
 			}
 		}
-
 		if ok {
 			incomingInstanceName, ok := md["instance-name"]
 			// Only refuse to serve if both client and server provide validation information.
@@ -279,7 +284,7 @@ func AddReplicaCmd() cli.Command {
 				Usage:    "Name of the volume (for validation purposes)",
 			},
 			cli.StringFlag{
-				Name:     "controller-instance-name",
+				Name:     "engine-instance-name",
 				Required: false,
 				Usage:    "Name of the controller instance (for validation purposes)",
 			},
