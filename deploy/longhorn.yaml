@@ -3516,39 +3516,6 @@ spec:
                 type: array
               numberOfReplicas:
                 type: integer
-              recurringJobs:
-                description: Deprecated. Replaced by a separate resource named "RecurringJob"
-                items:
-                  description: 'Deprecated: This field is useless and has been replaced by the RecurringJob CRD'
-                  properties:
-                    concurrency:
-                      type: integer
-                    cron:
-                      type: string
-                    groups:
-                      items:
-                        type: string
-                      type: array
-                    labels:
-                      additionalProperties:
-                        type: string
-                      type: object
-                    name:
-                      type: string
-                    retain:
-                      type: integer
-                    task:
-                      enum:
-                      - snapshot
-                      - snapshot-force-create
-                      - snapshot-cleanup
-                      - snapshot-delete
-                      - backup
-                      - backup-force-create
-                      - filesystem-trim
-                      type: string
-                  type: object
-                type: array
               replicaAutoBalance:
                 enum:
                 - ignored
