@@ -1,41 +1,50 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: longhorn-test-nfs
   namespace: default
   labels:
     app: longhorn-test-nfs
 spec:
-  volumes:
-  - name: nfs-volume
-    emptyDir: {}
-  containers:
-  - name: longhorn-test-nfs-container
-    image: longhornio/nfs-ganesha:latest
-    imagePullPolicy: Always
-    env:
-    - name: EXPORT_ID
-      value: "14"
-    - name: EXPORT_PATH
-      value: /opt/backupstore
-    - name: PSEUDO_PATH
-      value: /opt/backupstore
-    - name: NFS_DISK_IMAGE_SIZE_MB
-      value: "4096"
-    command: ["bash", "-c", "chmod 700 /opt/backupstore && /opt/start_nfs.sh | tee /var/log/ganesha.log"]
-    securityContext:
-      privileged: true
-      capabilities:
-        add: ["SYS_ADMIN", "DAC_READ_SEARCH"]
-    volumeMounts:
-    - name: nfs-volume
-      mountPath: "/opt/backupstore"
-    livenessProbe:
-      exec:
-        command: ["bash", "-c", "grep \"No export entries found\" /var/log/ganesha.log > /dev/null 2>&1 ; [ $? -ne 0 ]"]
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 4
+  spec:
+  selector:
+    matchLabels:
+      app: longhorn-test-nfs
+  template:
+    metadata:
+      labels:
+        app: longhorn-test-nfs
+    spec:
+      volumes:
+      - name: nfs-volume
+        emptyDir: {}
+      containers:
+      - name: longhorn-test-nfs-container
+        image: longhornio/nfs-ganesha:latest
+        imagePullPolicy: Always
+        env:
+        - name: EXPORT_ID
+          value: "14"
+        - name: EXPORT_PATH
+          value: /opt/backupstore
+        - name: PSEUDO_PATH
+          value: /opt/backupstore
+        - name: NFS_DISK_IMAGE_SIZE_MB
+          value: "4096"
+        command: ["bash", "-c", "chmod 700 /opt/backupstore && /opt/start_nfs.sh | tee /var/log/ganesha.log"]
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["SYS_ADMIN", "DAC_READ_SEARCH"]
+        volumeMounts:
+        - name: nfs-volume
+          mountPath: "/opt/backupstore"
+        livenessProbe:
+          exec:
+            command: ["bash", "-c", "grep \"No export entries found\" /var/log/ganesha.log > /dev/null 2>&1 ; [ $? -ne 0 ]"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 4
 ---
 kind: Service
 apiVersion: v1

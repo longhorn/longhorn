@@ -10,19 +10,28 @@ data:
   AZBLOB_ACCOUNT_KEY: RWJ5OHZkTTAyeE5PY3FGbHFVd0pQTGxtRXRsQ0RYSjFPVXpGVDUwdVNSWjZJRnN1RnEyVVZFckN6NEk2dHEvSzFTWkZQVE90ci9LQkhCZWtzb0dNR3c9PQ==
   AZBLOB_ENDPOINT: aHR0cDovL2F6YmxvYi1zZXJ2aWNlLmRlZmF1bHQ6MTAwMDAv
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: longhorn-test-azblob
   namespace: default
   labels:
     app: longhorn-test-azblob
 spec:
-  containers:
-  - name: azurite
-    image: mcr.microsoft.com/azure-storage/azurite:3.23.0
-    ports:
-    - containerPort: 10000
+  replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-test-azblob
+  template:
+    metadata:
+      labels:
+        app: longhorn-test-azblob
+    spec:
+      containers:
+      - name: azurite
+        image: mcr.microsoft.com/azure-storage/azurite:3.23.0
+        ports:
+        - containerPort: 10000
 ---
 apiVersion: v1
 kind: Service
