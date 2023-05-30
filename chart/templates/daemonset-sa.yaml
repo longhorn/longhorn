@@ -122,7 +122,7 @@ spec:
         {{- end }}
       {{- end }}
       {{- if .Values.longhornManager.affinity }}
-      affinitiy:
+      affinity:
 {{ toYaml .Values.longhornManager.affinity | indent 8 }}
       {{- end }}      
       serviceAccountName: longhorn-service-account
