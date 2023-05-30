@@ -16,6 +16,10 @@ spec:
         app: longhorn-ui
     spec:
       affinity:
+        {{- if .Values.longhornUI.nodeAffinity }}
+        nodeAffinity:
+{{ toYaml .Values.longhornUI.nodeAffinity | indent 10 }}
+        {{- end }}    
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1

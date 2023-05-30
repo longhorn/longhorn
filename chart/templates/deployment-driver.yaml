@@ -113,6 +113,11 @@ spec:
 {{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
         {{- end }}
       {{- end }}
+      {{- if .Values.longhornDriver.nodeAffinity }}
+      affinity:
+        nodeAffinity:
+{{ toYaml .Values.longhornDriver.nodeAffinity | indent 10 }}
+      {{- end }}   
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
