@@ -3580,6 +3580,8 @@ spec:
                 type: string
               expansionRequired:
                 type: boolean
+              forciblyActivating:
+                type: boolean
               frontendDisabled:
                 type: boolean
               isStandby:
