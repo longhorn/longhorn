@@ -375,12 +375,6 @@ spec:
                   properties:
                     currentChecksum:
                       type: string
-                    directory:
-                      description: 'Deprecated: This field is useless.'
-                      type: string
-                    downloadProgress:
-                      description: 'Deprecated: This field is renamed to `Progress`.'
-                      type: integer
                     message:
                       type: string
                     name:
@@ -395,9 +389,6 @@ spec:
                       format: int64
                       type: integer
                     state:
-                      type: string
-                    url:
-                      description: 'Deprecated: This field is useless now. The manager of backing image files doesn''t care if a file is downloaded and how.'
                       type: string
                     uuid:
                       type: string
@@ -529,9 +520,6 @@ spec:
                 additionalProperties:
                   type: string
                 type: object
-              imageURL:
-                description: 'Deprecated: This kind of info will be included in the related BackingImageDataSource.'
-                type: string
               sourceParameters:
                 additionalProperties:
                   type: string
@@ -548,19 +536,6 @@ spec:
             properties:
               checksum:
                 type: string
-              diskDownloadProgressMap:
-                additionalProperties:
-                  type: integer
-                description: 'Deprecated: Replaced by field `Progress` in `DiskFileStatusMap`.'
-                nullable: true
-                type: object
-              diskDownloadStateMap:
-                additionalProperties:
-                  description: BackingImageDownloadState is replaced by BackingImageState.
-                  type: string
-                description: 'Deprecated: Replaced by field `State` in `DiskFileStatusMap`.'
-                nullable: true
-                type: object
               diskFileStatusMap:
                 additionalProperties:
                   properties:
@@ -1781,9 +1756,6 @@ spec:
           spec:
             description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
             properties:
-              engineImage:
-                description: 'Deprecated: This field is useless.'
-                type: string
               image:
                 type: string
               nodeID:
@@ -2547,13 +2519,7 @@ spec:
                 type: boolean
               backingImage:
                 type: string
-              baseImage:
-                description: Deprecated. Rename to BackingImage
-                type: string
               dataDirectoryName:
-                type: string
-              dataPath:
-                description: Deprecated
                 type: string
               desireState:
                 type: string
@@ -3477,9 +3443,6 @@ spec:
                 - none
                 - lz4
                 - gzip
-                type: string
-              baseImage:
-                description: Deprecated. Rename to BackingImage
                 type: string
               dataLocality:
                 enum:
