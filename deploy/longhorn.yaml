@@ -4150,7 +4150,7 @@ spec:
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
-          optional: true      
+          optional: true
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
