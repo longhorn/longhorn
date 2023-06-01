@@ -439,13 +439,6 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     - "delete-deployment-pod"
     - "delete-both-statefulset-and-deployment-pod"
     default: "do-nothing"
-  - variable: defaultSettings.allowNodeDrainWithLastHealthyReplica
-    label: Allow Node Drain with the Last Healthy Replica
-    description: "By default, Longhorn will block `kubectl drain` action on a node if the node contains the last healthy replica of a volume.
-If this setting is enabled, Longhorn will **not** block `kubectl drain` action on a node even if the node contains the last healthy replica of a volume."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
   - variable: defaultSettings.nodeDrainPolicy
     label: Node Drain Policy
     description: "Define the policy to use when a node with the last healthy replica of a volume is drained.
