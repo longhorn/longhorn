@@ -661,6 +661,40 @@ Set the value to **0** to disable backup restore."
   group: "Longhorn Default Settings"
   type: int
   default: "30"
+- variable: defaultSettings.backupCompressionMethod
+  label: Backup Compression Method
+  description: "This setting allows users to specify backup compression method.
+  Available options are
+    - **none**: Disable the compression method. Suitable for multimedia data such as encoded images and videos.
+    - **lz4**: Fast compression method. Suitable for flat files.
+    - **gzip**: A bit of higher compression ratio but relatively slow."
+  group: "Longhorn Default Settings"
+  type: string
+  default: "lz4"
+- variable: defaultSettings.backupConcurrentLimit
+  label: Backup Concurrent Limit Per Backup
+  description: "This setting controls how many worker threads per backup concurrently."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 1
+  default: 5
+- variable: defaultSettings.restoreConcurrentLimit
+  label: Restore Concurrent Limit Per Backup
+  description: "This setting controls how many worker threads per restore concurrently."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 1
+  default: 5
+- variable: defaultSettings.spdk
+  label: Enable SPDK Data Engine (Preview Feature)
+  description: "This allows users to activate SPDK data engine. Currently, it is in the preview phase and should not be utilized in a production environment.
+	WARNING:
+	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
+	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
+	  - When applying the setting, Longhorn will restart all instance-manager pods."
+  group: "Longhorn SPDK Data Engine Settings"
+  type: boolean
+  default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
