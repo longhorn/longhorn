@@ -137,7 +137,6 @@ defaultSettings:
   disableSchedulingOnCordonedNode: ~
   replicaZoneSoftAntiAffinity: ~
   nodeDownPodDeletionPolicy: ~
-  allowNodeDrainWithLastHealthyReplica: ~
   nodeDrainPolicy : ~
   replicaReplenishmentWaitInterval: ~
   concurrentReplicaRebuildPerNodeLimit: ~
@@ -163,6 +162,10 @@ defaultSettings:
   fastReplicaRebuildEnabled: ~
   replicaFileSyncHttpClientTimeout: ~
   logLevel: ~
+  backupCompressionMethod: ~
+  backupConcurrentLimit: ~
+  restoreConcurrentLimit: ~
+  spdk: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
