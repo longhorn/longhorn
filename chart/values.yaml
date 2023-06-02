@@ -162,6 +162,10 @@ defaultSettings:
   fastReplicaRebuildEnabled: ~
   replicaFileSyncHttpClientTimeout: ~
   logLevel: ~
+  backupCompressionMethod: ~
+  backupConcurrentLimit: ~
+  restoreConcurrentLimit: ~
+  spdk: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
