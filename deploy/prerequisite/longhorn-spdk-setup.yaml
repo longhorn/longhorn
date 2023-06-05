@@ -33,7 +33,7 @@ spec:
         - name: SPDK_OPTION
           value: ""
         - name: HUGEMEM
-          value: "2048"
+          value: "1024"
         - name: PCI_ALLOWED
           value: "none"
         - name: DRIVER_OVERRIDE
