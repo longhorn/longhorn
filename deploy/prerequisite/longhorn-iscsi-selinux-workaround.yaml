@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: longhorn-iscsi-selinux-workaround
+  labels:
+    app: longhorn-iscsi-selinux-workaround
+  annotations:
+    command: &cmd if ! rpm -q policycoreutils > /dev/null 2>&1; then echo "failed to apply workaround; only applicable in Fedora based distros with SELinux enabled"; exit; elif cd /tmp && echo '(allow iscsid_t self (capability (dac_override)))' > local_longhorn.cil && semodule -vi local_longhorn.cil && rm -f local_longhorn.cil; then echo "applied workaround successfully"; else echo "failed to apply workaround; error code $?"; fi
+spec:
+  selector:
+    matchLabels:
+      app: longhorn-iscsi-selinux-workaround
+  template:
+    metadata:
+      labels:
+        app: longhorn-iscsi-selinux-workaround
+    spec:
+      hostPID: true
+      initContainers:
+      - name: iscsi-selinux-workaround
+        command:
+          - nsenter
+          - --mount=/proc/1/ns/mnt
+          - --
+          - bash
+          - -c
+          - *cmd
+        image: alpine:3.17
+        securityContext:
+          privileged: true
+      containers:
+      - name: sleep
+        image: registry.k8s.io/pause:3.1
+  updateStrategy:
+    type: RollingUpdate
