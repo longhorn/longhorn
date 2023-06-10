@@ -1,6 +1,7 @@
 #!/bin/bash
 
-NVME_CLI_VERSION="1.12"
+NVME_CLI_MIN_VERSION="1.12"
+NVME_CLI_MAX_VERSION="1.16"
 
 ######################################################
 # Log
@@ -420,10 +421,11 @@ function check_nvme_cli() {
   fi
 
   local actual_version=$(echo "$value" | grep -o "[0-9]\+\.[0-9]\+")
-  if [[ "$(printf '%s\n' "${NVME_CLI_VERSION}" "$actual_version" | sort -V | tail -n1)" == "$actual_version" ]]; then
+  if [[ "$(printf '%s\n' "${NVME_CLI_MIN_VERSION}" "$actual_version" | sort -V | tail -n1)" == "$actual_version" && \
+        "$(printf '%s\n' "$actual_version" "${NVME_CLI_MAX_VERSION}" | sort -V | head -n1)" == "$actual_version" ]]; then
     return 0
   fi
-  error "nvme-cli version should be at least ${NVME_CLI_VERSION} on node ${node}. Actual: ${actual_version}"
+  error "nvme-cli version should be between ${NVME_CLI_MIN_VERSION} and ${NVME_CLI_MAX_VERSION} on node ${node}. Actual: ${actual_version}"
   return 1
 }
 
@@ -462,14 +464,14 @@ Usage: $0 [OPTIONS]
 
 Options:
     -s, --enable-spdk           Enable checking SPDK prerequisites
-    -p, --expected-nr-hugepages Expected number of hugepages for SPDK. Default: 1024
+    -p, --expected-nr-hugepages Expected number of 2 MiB hugepages for SPDK. Default: 512
     -h, --help                  Show this help message and exit
 EOF
     exit 0
 }
 
 enable_spdk=false
-expected_nr_hugepages=1024
+expected_nr_hugepages=512
 while [[ $# -gt 0 ]]; do
     opt="$1"
     case $opt in

@@ -375,12 +375,6 @@ spec:
                   properties:
                     currentChecksum:
                       type: string
-                    directory:
-                      description: 'Deprecated: This field is useless.'
-                      type: string
-                    downloadProgress:
-                      description: 'Deprecated: This field is renamed to `Progress`.'
-                      type: integer
                     message:
                       type: string
                     name:
@@ -395,9 +389,6 @@ spec:
                       format: int64
                       type: integer
                     state:
-                      type: string
-                    url:
-                      description: 'Deprecated: This field is useless now. The manager of backing image files doesn''t care if a file is downloaded and how.'
                       type: string
                     uuid:
                       type: string
@@ -529,9 +520,6 @@ spec:
                 additionalProperties:
                   type: string
                 type: object
-              imageURL:
-                description: 'Deprecated: This kind of info will be included in the related BackingImageDataSource.'
-                type: string
               sourceParameters:
                 additionalProperties:
                   type: string
@@ -548,19 +536,6 @@ spec:
             properties:
               checksum:
                 type: string
-              diskDownloadProgressMap:
-                additionalProperties:
-                  type: integer
-                description: 'Deprecated: Replaced by field `Progress` in `DiskFileStatusMap`.'
-                nullable: true
-                type: object
-              diskDownloadStateMap:
-                additionalProperties:
-                  description: BackingImageDownloadState is replaced by BackingImageState.
-                  type: string
-                description: 'Deprecated: Replaced by field `State` in `DiskFileStatusMap`.'
-                nullable: true
-                type: object
               diskFileStatusMap:
                 additionalProperties:
                   properties:
@@ -1130,6 +1105,9 @@ spec:
               size:
                 description: The backup volume size.
                 type: string
+              storageClassName:
+                description: the storage class name of pv/pvc binding with the volume.
+                type: string
             type: object
         type: object
     served: true
@@ -1439,6 +1417,11 @@ spec:
             properties:
               active:
                 type: boolean
+              backendStoreDriver:
+                enum:
+                - longhorn
+                - spdk
+                type: string
               backupVolume:
                 type: string
               desireState:
@@ -1451,6 +1434,7 @@ spec:
                 enum:
                 - blockdev
                 - iscsi
+                - nvmf
                 - ""
                 type: string
               logRequested:
@@ -1778,9 +1762,6 @@ spec:
           spec:
             description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
             properties:
-              engineImage:
-                description: 'Deprecated: This field is useless.'
-                type: string
               image:
                 type: string
               nodeID:
@@ -1810,6 +1791,8 @@ spec:
                   properties:
                     spec:
                       properties:
+                        backendStoreDriver:
+                          type: string
                         name:
                           type: string
                       type: object
@@ -1843,6 +1826,8 @@ spec:
                   properties:
                     spec:
                       properties:
+                        backendStoreDriver:
+                          type: string
                         name:
                           type: string
                       type: object
@@ -1876,6 +1861,8 @@ spec:
                   properties:
                     spec:
                       properties:
+                        backendStoreDriver:
+                          type: string
                         name:
                           type: string
                       type: object
@@ -2047,6 +2034,11 @@ spec:
                       items:
                         type: string
                       type: array
+                    diskType:
+                      enum:
+                      - filesystem
+                      - block
+                      type: string
                   type: object
                 type: object
               evictionRequested:
@@ -2114,6 +2106,8 @@ spec:
                         type: object
                       nullable: true
                       type: array
+                    diskType:
+                      type: string
                     diskUUID:
                       type: string
                     scheduledReplica:
@@ -2542,15 +2536,14 @@ spec:
             properties:
               active:
                 type: boolean
+              backendStoreDriver:
+                enum:
+                - longhorn
+                - spdk
+                type: string
               backingImage:
                 type: string
-              baseImage:
-                description: Deprecated. Rename to BackingImage
-                type: string
               dataDirectoryName:
-                type: string
-              dataPath:
-                description: Deprecated
                 type: string
               desireState:
                 type: string
@@ -3163,6 +3156,11 @@ spec:
             type: object
           spec:
             description: SystemBackupSpec defines the desired state of the Longhorn SystemBackup
+            properties:
+              volumeBackupPolicy:
+                description: The create volume backup policy Can be "if-not-present", "always" or "disabled"
+                nullable: true
+                type: string
             type: object
           status:
             description: SystemBackupStatus defines the observed state of the Longhorn SystemBackup
@@ -3462,6 +3460,11 @@ spec:
                 - rwo
                 - rwx
                 type: string
+              backendStoreDriver:
+                enum:
+                - longhorn
+                - spdk
+                type: string
               backingImage:
                 type: string
               backupCompressionMethod:
@@ -3469,9 +3472,6 @@ spec:
                 - none
                 - lz4
                 - gzip
-                type: string
-              baseImage:
-                description: Deprecated. Rename to BackingImage
                 type: string
               dataLocality:
                 enum:
@@ -3497,6 +3497,7 @@ spec:
                 enum:
                 - blockdev
                 - iscsi
+                - nvmf
                 - ""
                 type: string
               lastAttachedBy:
@@ -3513,39 +3514,6 @@ spec:
                 type: array
               numberOfReplicas:
                 type: integer
-              recurringJobs:
-                description: Deprecated. Replaced by a separate resource named "RecurringJob"
-                items:
-                  description: 'Deprecated: This field is useless and has been replaced by the RecurringJob CRD'
-                  properties:
-                    concurrency:
-                      type: integer
-                    cron:
-                      type: string
-                    groups:
-                      items:
-                        type: string
-                      type: array
-                    labels:
-                      additionalProperties:
-                        type: string
-                      type: object
-                    name:
-                      type: string
-                    retain:
-                      type: integer
-                    task:
-                      enum:
-                      - snapshot
-                      - snapshot-force-create
-                      - snapshot-cleanup
-                      - snapshot-delete
-                      - backup
-                      - backup-force-create
-                      - filesystem-trim
-                      type: string
-                  type: object
-                type: array
               replicaAutoBalance:
                 enum:
                 - ignored
@@ -4182,7 +4150,7 @@ spec:
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
-          optional: true      
+          optional: true
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:

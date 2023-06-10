@@ -439,13 +439,6 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     - "delete-deployment-pod"
     - "delete-both-statefulset-and-deployment-pod"
     default: "do-nothing"
-  - variable: defaultSettings.allowNodeDrainWithLastHealthyReplica
-    label: Allow Node Drain with the Last Healthy Replica
-    description: "By default, Longhorn will block `kubectl drain` action on a node if the node contains the last healthy replica of a volume.
-If this setting is enabled, Longhorn will **not** block `kubectl drain` action on a node even if the node contains the last healthy replica of a volume."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
   - variable: defaultSettings.nodeDrainPolicy
     label: Node Drain Policy
     description: "Define the policy to use when a node with the last healthy replica of a volume is drained.
@@ -578,10 +571,10 @@ Set the value to **0** to disable backup restore."
     default: 12
   - variable: defaultSettings.logLevel
     label: Log Level
-    description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Info."
+    description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Debug."
     group: "Longhorn Default Settings"
     type: string
-    default: "Info"
+    default: "Debug"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
@@ -668,6 +661,40 @@ Set the value to **0** to disable backup restore."
   group: "Longhorn Default Settings"
   type: int
   default: "30"
+- variable: defaultSettings.backupCompressionMethod
+  label: Backup Compression Method
+  description: "This setting allows users to specify backup compression method.
+  Available options are
+    - **none**: Disable the compression method. Suitable for multimedia data such as encoded images and videos.
+    - **lz4**: Fast compression method. Suitable for flat files.
+    - **gzip**: A bit of higher compression ratio but relatively slow."
+  group: "Longhorn Default Settings"
+  type: string
+  default: "lz4"
+- variable: defaultSettings.backupConcurrentLimit
+  label: Backup Concurrent Limit Per Backup
+  description: "This setting controls how many worker threads per backup concurrently."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 1
+  default: 5
+- variable: defaultSettings.restoreConcurrentLimit
+  label: Restore Concurrent Limit Per Backup
+  description: "This setting controls how many worker threads per restore concurrently."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 1
+  default: 5
+- variable: defaultSettings.spdk
+  label: Enable SPDK Data Engine (Preview Feature)
+  description: "This allows users to activate SPDK data engine. Currently, it is in the preview phase and should not be utilized in a production environment.
+	WARNING:
+	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
+	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
+	  - When applying the setting, Longhorn will restart all instance-manager pods."
+  group: "Longhorn SPDK Data Engine Settings"
+  type: boolean
+  default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
