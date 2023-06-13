@@ -1,7 +1,6 @@
 #!/bin/bash
 
-NVME_CLI_MIN_VERSION="1.12"
-NVME_CLI_MAX_VERSION="1.16"
+NVME_CLI_VERSION="1.12"
 
 ######################################################
 # Log
@@ -421,11 +420,10 @@ function check_nvme_cli() {
   fi
 
   local actual_version=$(echo "$value" | grep -o "[0-9]\+\.[0-9]\+")
-  if [[ "$(printf '%s\n' "${NVME_CLI_MIN_VERSION}" "$actual_version" | sort -V | tail -n1)" == "$actual_version" && \
-        "$(printf '%s\n' "$actual_version" "${NVME_CLI_MAX_VERSION}" | sort -V | head -n1)" == "$actual_version" ]]; then
+  if [[ "$(printf '%s\n' "${NVME_CLI_VERSION}" "$actual_version" | sort -V | tail -n1)" == "$actual_version" ]]; then
     return 0
   fi
-  error "nvme-cli version should be between ${NVME_CLI_MIN_VERSION} and ${NVME_CLI_MAX_VERSION} on node ${node}. Actual: ${actual_version}"
+  error "nvme-cli version should be at least ${NVME_CLI_VERSION} on node ${node}. Actual: ${actual_version}"
   return 1
 }
 
