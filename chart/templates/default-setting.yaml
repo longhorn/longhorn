@@ -80,3 +80,4 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.backupConcurrentLimit) }}backup-concurrent-limit: {{ .Values.defaultSettings.backupConcurrentLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.spdk) }}spdk: {{ .Values.defaultSettings.spdk }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}{{ end }}

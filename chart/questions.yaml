@@ -686,15 +686,25 @@ Set the value to **0** to disable backup restore."
   min: 1
   default: 5
 - variable: defaultSettings.spdk
-  label: Enable SPDK Data Engine (Preview Feature)
+  label: SPDK Data Engine
   description: "This allows users to activate SPDK data engine. Currently, it is in the preview phase and should not be utilized in a production environment.
 	WARNING:
 	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
 	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
 	  - When applying the setting, Longhorn will restart all instance-manager pods."
-  group: "Longhorn SPDK Data Engine Settings"
+  group: "Longhorn SPDK Data Engine (Preview Feature) Settings"
   type: boolean
   default: false
+- variable: persistence.offlineReplicaRebuilding
+  label: Offline Replica Rebuilding
+  description: ""This setting allows users to enable the offline replica rebuilding for volumes using SPDK data engine."
+  group: "Longhorn SPDK Data Engine (Preview Feature) Settings"
+  required: true
+  type: enum
+  options:
+  - "enabled"
+  - "disabled"
+  default: "enabled"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"

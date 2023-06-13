@@ -166,6 +166,7 @@ defaultSettings:
   backupConcurrentLimit: ~
   restoreConcurrentLimit: ~
   spdk: ~
+  offlineReplicaRebuilding: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
