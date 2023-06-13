@@ -5,7 +5,7 @@ metadata:
   labels:
     app: longhorn-spdk-setup
   annotations:
-    command: &cmd rm -rf ${SPDK_DIR}; git clone -b longhorn https://github.com/longhorn/spdk.git ${SPDK_DIR} && bash ${SPDK_DIR}/scripts/setup.sh ${SPDK_OPTION}; if [ $? -eq 0 ]; then echo "SPDK environment is configured successfully"; else echo "Failed to configure SPDK environment error code $?"; fi; rm -rf ${SPDK_DIR}
+    command: &cmd rm -rf ${SPDK_DIR}; git clone -b longhorn https://github.com/longhorn/spdk.git ${SPDK_DIR} && bash ${SPDK_DIR}/scripts/setup.sh ${SPDK_OPTION}; if [ $? -eq 0 ]; then echo "vm.nr_hugepages=$((HUGEMEM/2))" >> /etc/sysctl.conf; echo "SPDK environment is configured successfully"; else echo "Failed to configure SPDK environment error code $?"; fi; rm -rf ${SPDK_DIR}
 spec:
   selector:
     matchLabels:
@@ -33,7 +33,7 @@ spec:
         - name: SPDK_OPTION
           value: ""
         - name: HUGEMEM
-          value: "2048"
+          value: "1024"
         - name: PCI_ALLOWED
           value: "none"
         - name: DRIVER_OVERRIDE

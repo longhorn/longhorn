@@ -1,0 +1,48 @@
+# same secret for longhorn-system namespace
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azblob-secret
+  namespace: longhorn-system
+type: Opaque
+data:
+  AZBLOB_ACCOUNT_NAME: ZGV2c3RvcmVhY2NvdW50MQ==
+  AZBLOB_ACCOUNT_KEY: RWJ5OHZkTTAyeE5PY3FGbHFVd0pQTGxtRXRsQ0RYSjFPVXpGVDUwdVNSWjZJRnN1RnEyVVZFckN6NEk2dHEvSzFTWkZQVE90ci9LQkhCZWtzb0dNR3c9PQ==
+  AZBLOB_ENDPOINT: aHR0cDovL2F6YmxvYi1zZXJ2aWNlLmRlZmF1bHQ6MTAwMDAv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-test-azblob
+  namespace: default
+  labels:
+    app: longhorn-test-azblob
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-test-azblob
+  template:
+    metadata:
+      labels:
+        app: longhorn-test-azblob
+    spec:
+      containers:
+      - name: azurite
+        image: mcr.microsoft.com/azure-storage/azurite:3.23.0
+        ports:
+        - containerPort: 10000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azblob-service
+  namespace: default
+spec:
+  selector:
+    app: longhorn-test-azblob
+  ports:
+    - port: 10000
+      targetPort: 10000
+      protocol: TCP
+  sessionAffinity: ClientIP

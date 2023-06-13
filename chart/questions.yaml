@@ -439,13 +439,6 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     - "delete-deployment-pod"
     - "delete-both-statefulset-and-deployment-pod"
     default: "do-nothing"
-  - variable: defaultSettings.allowNodeDrainWithLastHealthyReplica
-    label: Allow Node Drain with the Last Healthy Replica
-    description: "By default, Longhorn will block `kubectl drain` action on a node if the node contains the last healthy replica of a volume.
-If this setting is enabled, Longhorn will **not** block `kubectl drain` action on a node even if the node contains the last healthy replica of a volume."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
   - variable: defaultSettings.nodeDrainPolicy
     label: Node Drain Policy
     description: "Define the policy to use when a node with the last healthy replica of a volume is drained.
@@ -459,12 +452,6 @@ If this setting is enabled, Longhorn will **not** block `kubectl drain` action o
       - "allow-if-replica-is-stopped"
       - "always-allow"
     default: "block-if-contains-last-replica"
-  - variable: defaultSettings.disableReplicaRebuild
-    label: Disable Replica Rebuild
-    description: "This setting disable replica rebuild cross the whole cluster, eviction and data locality feature won't work if this setting is true. But doesn't have any impact to any current replica rebuild and restore disaster recovery volume."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
   - variable: defaultSettings.replicaReplenishmentWaitInterval
     label: Replica Replenishment Wait Interval
     description: "In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume.
@@ -584,10 +571,10 @@ Set the value to **0** to disable backup restore."
     default: 12
   - variable: defaultSettings.logLevel
     label: Log Level
-    description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Info."
+    description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Debug."
     group: "Longhorn Default Settings"
     type: string
-    default: "Info"
+    default: "Debug"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
@@ -674,6 +661,50 @@ Set the value to **0** to disable backup restore."
   group: "Longhorn Default Settings"
   type: int
   default: "30"
+- variable: defaultSettings.backupCompressionMethod
+  label: Backup Compression Method
+  description: "This setting allows users to specify backup compression method.
+  Available options are
+    - **none**: Disable the compression method. Suitable for multimedia data such as encoded images and videos.
+    - **lz4**: Fast compression method. Suitable for flat files.
+    - **gzip**: A bit of higher compression ratio but relatively slow."
+  group: "Longhorn Default Settings"
+  type: string
+  default: "lz4"
+- variable: defaultSettings.backupConcurrentLimit
+  label: Backup Concurrent Limit Per Backup
+  description: "This setting controls how many worker threads per backup concurrently."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 1
+  default: 5
+- variable: defaultSettings.restoreConcurrentLimit
+  label: Restore Concurrent Limit Per Backup
+  description: "This setting controls how many worker threads per restore concurrently."
+  group: "Longhorn Default Settings"
+  type: int
+  min: 1
+  default: 5
+- variable: defaultSettings.spdk
+  label: SPDK Data Engine
+  description: "This allows users to activate SPDK data engine. Currently, it is in the preview phase and should not be utilized in a production environment.
+	WARNING:
+	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
+	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
+	  - When applying the setting, Longhorn will restart all instance-manager pods."
+  group: "Longhorn SPDK Data Engine (Preview Feature) Settings"
+  type: boolean
+  default: false
+- variable: persistence.offlineReplicaRebuilding
+  label: Offline Replica Rebuilding
+  description: ""This setting allows users to enable the offline replica rebuilding for volumes using SPDK data engine."
+  group: "Longhorn SPDK Data Engine (Preview Feature) Settings"
+  required: true
+  type: enum
+  options:
+  - "enabled"
+  - "disabled"
+  default: "enabled"
 - variable: persistence.defaultClass
   default: "true"
   description: "Set as default StorageClass for Longhorn"
@@ -849,3 +880,21 @@ Set the value to **0** to disable backup restore."
   label: Rancher Windows Cluster
   type: boolean
   group: "Other Settings"
+- variable: networkPolicies.enabled
+  description: "Enable NetworkPolicies to limit access to the longhorn pods.
+  Warning: The Rancher Proxy will not work if this feature is enabled and a custom NetworkPolicy must be added."
+  group: "Other Settings"
+  label: Network Policies
+  default: "false"
+  type: boolean
+  subquestions:
+  - variable: networkPolicies.type
+    label: Network Policies for Ingress
+    description: "Create the policy to allow access for the ingress, select the distribution."
+    show_if: "networkPolicies.enabled=true&&ingress.enabled=true"
+    type: enum
+    default: "rke2"
+    options:
+      - "rke1"
+      - "rke2"
+      - "k3s"

@@ -51,9 +51,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica) }}allow-node-drain-with-last-healthy-replica: {{ .Values.defaultSettings.allowNodeDrainWithLastHealthyReplica }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.disableReplicaRebuild) }}disable-replica-rebuild: {{ .Values.defaultSettings.disableReplicaRebuild }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}{{ end }}
@@ -78,3 +76,8 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.fastReplicaRebuildEnabled) }}fast-replica-rebuild-enabled: {{ .Values.defaultSettings.fastReplicaRebuildEnabled }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaFileSyncHttpClientTimeout) }}replica-file-sync-http-client-timeout: {{ .Values.defaultSettings.replicaFileSyncHttpClientTimeout }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.logLevel) }}log-level: {{ .Values.defaultSettings.logLevel }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.backupCompressionMethod) }}backup-compression-method: {{ .Values.defaultSettings.backupCompressionMethod }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.backupConcurrentLimit) }}backup-concurrent-limit: {{ .Values.defaultSettings.backupConcurrentLimit }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.spdk) }}spdk: {{ .Values.defaultSettings.spdk }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}{{ end }}
