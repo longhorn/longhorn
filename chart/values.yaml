@@ -165,7 +165,7 @@ defaultSettings:
   backupCompressionMethod: ~
   backupConcurrentLimit: ~
   restoreConcurrentLimit: ~
-  spdk: ~
+  v2DataEngine: ~
   offlineReplicaRebuilding: ~
 privateRegistry:
   createSecret: ~
