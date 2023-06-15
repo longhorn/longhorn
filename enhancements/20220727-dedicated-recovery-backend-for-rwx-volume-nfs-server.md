@@ -68,7 +68,7 @@ While the node where the share-manager pod is running is down, the share-manager
                               │                          │
                           HTTP API         ┌─────────────┴──────────────┐
                               │            │                            │
-                              │            │ endpint 1                  │ endpoint N
+                              │            │ endpoint 1                 │ endpoint N
      ┌──────────────────────┐ │  ┌─────────▼────────┐          ┌────────▼─────────┐
      │  share-manager pod   │ │  │ recovery-backend │          │ recovery-backend │
      │                      │ │  │      pod         │          │      pod         │
