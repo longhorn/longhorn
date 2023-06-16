@@ -22,7 +22,6 @@ https://github.com/longhorn/longhorn/issues/6071
 
 ## User Stories
 
-
 In the event of abnormal power outages or network partitions, replicas of a volume may be lost, resulting in volume degradation. Unfortunately, volumes utilizing the v2 data engine do not currently have the capability for online replica rebuilding. As a solution to address this limitation, Longhorn has implemented an automatic offline replica rebuilding mechanism.
 
 When a degraded volume is detached, this mechanism places the volume in maintenance mode and initiates the rebuilding process. After the rebuilding is successfully completed, the volume is detached according to the user's specified expectations.
@@ -32,13 +31,14 @@ When a degraded volume is detached, this mechanism places the volume in maintena
 - If a volume using the v2 data engine is degraded, the online replica rebuilding process is currently unsupported.
 
 - If offline replica rebuilding feature is enabled when one of the conditions is met
-    - Global setting `offline-replica-rebuild` is `enabled` and `Volume.Spec.OfflineReplicaRebuilding` is  `ignored`
-    - `Volume.Spec.OfflineReplicaRebuilding` is `enabled`
+
+  - Global setting `offline-replica-rebuild` is `enabled` and `Volume.Spec.OfflineReplicaRebuilding` is `ignored`
+  - `Volume.Spec.OfflineReplicaRebuilding` is `enabled`
     The volume's `Spec.OfflineReplicaRebuildingRequired` is set to `true` if a volume is degraded.
 
 - When a degraded volume is detached, this mechanism places the volume in maintenance mode and initiates the rebuilding process. After the rebuilding is successfully completed, the volume is detached according to the user's specified expectations.
 
-- If a user attaches the volume without enabling maintenance mode while the replica rebuilding process is in progress, the ongoing replica rebuilding operation will be terminated. 
+- If a user attaches the volume without enabling maintenance mode while the replica rebuilding process is in progress, the ongoing replica rebuilding operation will be terminated.
 
 ## Design
 
@@ -53,6 +53,7 @@ When a degraded volume is detached, this mechanism places the volume in maintena
 **CRD**
 
 - Add `Volume.Spec.OfflineReplicaRebuilding`. The available options are:
+
   - ignored`: The volume's offline replica rebuilding behavior follows the settings defined by the global setting `offline-replica-rebuilding`.
   - `enabled`: Offline replica rebuilding of the volume is always enabled.
   - `disabled`: Offline replica rebuilding of the volume is always disabled.
