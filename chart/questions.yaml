@@ -677,14 +677,14 @@ Set the value to **0** to disable backup restore."
   group: "Longhorn Default Settings"
   type: int
   min: 1
-  default: 5
+  default: 2
 - variable: defaultSettings.restoreConcurrentLimit
   label: Restore Concurrent Limit Per Backup
   description: "This setting controls how many worker threads per restore concurrently."
   group: "Longhorn Default Settings"
   type: int
   min: 1
-  default: 5
+  default: 2
 - variable: defaultSettings.v2DataEngine
   label: V2 Data Engine
   description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment.
