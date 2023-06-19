@@ -29,7 +29,7 @@ When a degraded volume is detached, this mechanism places the volume in maintena
 
 ### User Experience In Details
 
-- If a volume using v2 data engine is degraded, the online replica rebuilding process is currently supported.
+- If a volume using the v2 data engine is degraded, the online replica rebuilding process is currently unsupported.
 
 - If offline replica rebuilding feature is enabled when one of the conditions is met
     - Global setting `offline-replica-rebuild` is `enabled` and `Volume.Spec.OfflineReplicaRebuilding` is  `ignored`
