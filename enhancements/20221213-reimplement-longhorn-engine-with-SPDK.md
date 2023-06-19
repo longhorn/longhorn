@@ -36,15 +36,15 @@ These are the reasons that have driven us:
 
 SPDK implements a JSON-RPC 2.0 server to allow external management tools to dynamically configure SPDK components ([documentation](https://spdk.io/doc/jsonrpc.html)).
 
-What we aim is to create an external orchestrator that, with JSON-RPC calls towards multiple instances of `spdk_tgt` app running in different machines, could manage the durability and reliability of data. Actually, not all needed functionalities to do that are already available in SPDK, so some new JSON-RPC commands will be developed over SPDK. The name of such an orchestrator could be `longhorn-spdk-agent`, taking as example [Storage Management Agent](https://spdk.io/doc/sma.html) that has some similar functionalities, but `longhorn-spdk-engine` is a best fit to make better understand its continuity with actual `longhorn-engine`.
+What we aim is to create an external orchestrator that, with JSON-RPC calls towards multiple instances of `spdk_tgt` app running in different machines, could manage the durability and reliability of data. Actually, not all needed functionalities to do that are already available in SPDK, so some new JSON-RPC commands will be developed over SPDK. This orchestrator is implemented in longhorn manager pods and will use a new process, called `longhorn-spdk-engine` in continuity with actual `longhorn-engine`, to talk with `spdk_tgt`.
 
 * The main purpose of `longhorn-spdk-engine` is to create and export via NVMe-oF logical volumes from multiple replica nodes (one of them likely local), attach to these volumes on a controller node, use resulting bdevs to create a RAID1 bdev and exporting it via NVMe-oF locally. At this point NVMe Kernel module can be used to connect to this NVMe-oF subsystem and so to create a block device `/dev/nvmeXnY` to be used by the Longhorn CSI driver. In this way we will have multiple replica of the same data written on this block device.
 * Below a diagram that shows the control plane of the proposal ![SPDK New Architecture](./image/spdk-control-plane.png)
 * In release 23.01, support for ublk will be added in SPDK: with this functionality we can directly create a block device without using the NVMe layer on Linux kernel versions >6.0. This will be a quite big enhancement over using NVMe-oF locally.
 
-The `longhorn-spdk-engine` will be responsible to make all others control operations, like for example creating snapshots over all replicas of the same volume. Other functionalities orchestrated by the engine will be the remote rebuild, a complete rebuild of the entire snapshot stack of a volume needed to add or repair a replica, the backup and restore, export/import of a SPDK logical volumes to/from sparse files stored on an external storage system via S3.
+The `longhorn-spdk-engine` will be responsible to make all others control operations, like for example creating snapshots over all replicas of the same volume. Other functionalities orchestrated through the engine will be the remote rebuild, a complete rebuild of the entire snapshot stack of a volume needed to add or repair a replica, the backup and restore, export/import of a SPDK logical volumes to/from sparse files stored on an external storage system via S3.
 
-The `longhorn-spdk-engine` will be developed in Go so maybe we can reuse some code from `instance-manager` and from `longhorn-engine`, for example gRPC handling to receive control commands and error handling during snapshot/backup/restore operations.
+The `longhorn-spdk-engine` will be developed in Go so maybe we can reuse some code from `longhorn-engine`, for example gRPC handling to receive control commands and error handling during snapshot/backup/restore operations.
 
 
 What about the data plane, below a comparison between actual architecture and new design:
@@ -69,7 +69,7 @@ To orchestrate SPDK instances running on different nodes in a way to make up a s
 When `longhorn-spdk-engine` receive a snapshot request from `instance-manager`, before to proceed all I/O operations over volume's block device `/dev/nvmeXnY` must be stopped to ensure that snapshots over all the replicas contains the same data.
 Actually there is no way to suspend the I/O operations over a block device, so we will have to implement this feature into SPDK. But in RAID bdev there are already some private functions to suspend I/O (they will be used for example in base bdev removing), maybe we can use and improve them. These functions actually enqueue all the I/O operations received during the suspend time.
 
-Once received a snapshot request, `longhorn-spdk-engine` will call the JSON-RPC to make a snapshot over all the replicas of the volume involved. The snapshot RPC command will ensure to freeze all I/O over the logical volume to be snapshotted, so all pending I/O will be executed before the snapshot.
+Once received a snapshot request, `longhorn-spdk-engine` will call the JSON-RPC to make a snapshot over the local replica of the volume involved. The snapshot RPC command will ensure to freeze all I/O over the logical volume to be snapshotted, so all pending I/O will be executed before the snapshot.
 
 SPDK logical volume have a couple of features that we will use:
 * clone, used to create new logical volume based on a snapshot. It can be used to revert a volume to a snapshot too, cloning a new volume, deleting the old one and then renaming the new one as the old one
