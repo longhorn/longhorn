@@ -6,7 +6,6 @@ metadata:
   labels:
     app: longhorn-test-nfs
 spec:
-  spec:
   selector:
     matchLabels:
       app: longhorn-test-nfs
