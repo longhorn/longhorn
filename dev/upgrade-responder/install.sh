@@ -1,6 +1,7 @@
 #!/bin/bash
 
 UPGRADE_RESPONDER_REPO="https://github.com/longhorn/upgrade-responder.git"
+UPGRADE_RESPONDER_REPO_BRANCH="master"
 UPGRADE_RESPONDER_VALUE_YAML="upgrade-responder-value.yaml"
 UPGRADE_RESPONDER_IMAGE_REPO="longhornio/upgrade-responder"
 UPGRADE_RESPONDER_IMAGE_TAG="master-head"
@@ -59,12 +60,331 @@ secret:
   influxDBUrl: "${INFLUXDB_URL}"
   influxDBUser: "root"
   influxDBPassword: "root"
+configMap:
+  responseConfig: |-
+    {
+      "versions": [{
+        "name": "v1.0.0",
+        "releaseDate": "2020-05-18T12:30:00Z",
+        "tags": ["latest"]
+      }]
+    }
+  requestSchema: |-
+    {
+      "appVersionSchema": {
+        "dataType": "string",
+        "maxLen": 200
+      },
+      "extraTagInfoSchema": {
+        "hostKernelRelease": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "hostOsDistro": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "kubernetesNodeProvider": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "kubernetesVersion": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingAllowRecurringJobWhileVolumeDetached": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingAllowVolumeCreationWithDegradedAvailability": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingAutoCleanupSystemGeneratedSnapshot": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingAutoDeletePodWhenVolumeDetachedUnexpectedly": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingAutoSalvage": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingBackupCompressionMethod": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingBackupTarget": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingCrdApiVersion": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingCreateDefaultDiskLabeledNodes": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingDefaultDataLocality": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingDisableRevisionCounter": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingDisableSchedulingOnCordonedNode": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingFastReplicaRebuildEnabled": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingKubernetesClusterAutoscalerEnabled": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingNodeDownPodDeletionPolicy": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingNodeDrainPolicy": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingOfflineReplicaRebuilding": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingOrphanAutoDeletion": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingPriorityClass": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingRegistrySecret": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingRemoveSnapshotsDuringFilesystemTrim": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingReplicaAutoBalance": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingReplicaSoftAntiAffinity": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingReplicaZoneSoftAntiAffinity": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingRestoreVolumeRecurringJobs": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingSnapshotDataIntegrity": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingSnapshotDataIntegrityCronjob": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingSnapshotDataIntegrityImmediateCheckAfterSnapshotCreation": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingStorageNetwork": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingSystemManagedComponentsNodeSelector": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingSystemManagedPodsImagePullPolicy": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingTaintToleration": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingV2DataEngine": {
+          "dataType": "string",
+          "maxLen": 200
+        }
+      },
+      "extraFieldInfoSchema": {
+        "longhornInstanceManagerAverageCpuUsageMilliCores": {
+          "dataType": "float"
+        },
+        "longhornInstanceManagerAverageMemoryUsageBytes": {
+          "dataType": "float"
+        },
+        "longhornManagerAverageCpuUsageMilliCores": {
+          "dataType": "float"
+        },
+        "longhornManagerAverageMemoryUsageBytes": {
+          "dataType": "float"
+        },
+        "longhornNamespaceUid": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornNodeCount": {
+          "dataType": "float"
+        },
+        "longhornNodeDiskHDDCount": {
+          "dataType": "float"
+        },
+        "longhornNodeDiskNVMeCount": {
+          "dataType": "float"
+        },
+        "longhornNodeDiskSSDCount": {
+          "dataType": "float"
+        },
+        "longhornSettingBackingImageCleanupWaitInterval": {
+          "dataType": "float"
+        },
+        "longhornSettingBackingImageRecoveryWaitInterval": {
+          "dataType": "float"
+        },
+        "longhornSettingBackupConcurrentLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingBackupstorePollInterval": {
+          "dataType": "float"
+        },
+        "longhornSettingConcurrentAutomaticEngineUpgradePerNodeLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingConcurrentReplicaRebuildPerNodeLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingConcurrentVolumeBackupRestorePerNodeLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingDefaultReplicaCount": {
+          "dataType": "float"
+        },
+        "longhornSettingEngineReplicaTimeout": {
+          "dataType": "float"
+        },
+        "longhornSettingFailedBackupTtl": {
+          "dataType": "float"
+        },
+        "longhornSettingGuaranteedInstanceManagerCpu": {
+          "dataType": "float"
+        },
+        "longhornSettingRecurringFailedJobsHistoryLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingRecurringSuccessfulJobsHistoryLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingReplicaFileSyncHttpClientTimeout": {
+          "dataType": "float"
+        },
+        "longhornSettingReplicaReplenishmentWaitInterval": {
+          "dataType": "float"
+        },
+        "longhornSettingRestoreConcurrentLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingStorageMinimalAvailablePercentage": {
+          "dataType": "float"
+        },
+        "longhornSettingStorageOverProvisioningPercentage": {
+          "dataType": "float"
+        },
+        "longhornSettingStorageReservedPercentageForDefaultDisk": {
+          "dataType": "float"
+        },
+        "longhornSettingSupportBundleFailedHistoryLimit": {
+          "dataType": "float"
+        },
+        "longhornVolumeAccessModeRwoCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeAccessModeRwxCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeAccessModeUnknownCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeAverageActualSizeBytes": {
+          "dataType": "float"
+        },
+        "longhornVolumeAverageNumberOfReplicas": {
+          "dataType": "float"
+        },
+        "longhornVolumeAverageSizeBytes": {
+          "dataType": "float"
+        },
+        "longhornVolumeAverageSnapshotCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeDataLocalityBestEffortCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeDataLocalityDisabledCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeDataLocalityStrictLocalCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeFrontendBlockdevCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeFrontendIscsiCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeOfflineReplicaRebuildingDisabledCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeOfflineReplicaRebuildingEnabledCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeReplicaAutoBalanceDisabledCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeReplicaSoftAntiAffinityFalseCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeReplicaZoneSoftAntiAffinityTrueCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeRestoreVolumeRecurringJobFalseCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSnapshotDataIntegrityDisabledCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSnapshotDataIntegrityFastCheckCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeUnmapMarkSnapChainRemovedFalseCount": {
+          "dataType": "float"
+        }
+      }
+    }
 image:
   repository: ${UPGRADE_RESPONDER_IMAGE_REPO}
   tag: ${UPGRADE_RESPONDER_IMAGE_TAG}
 EOF
 
-    git clone ${UPGRADE_RESPONDER_REPO}
+    git clone -b ${UPGRADE_RESPONDER_REPO_BRANCH} ${UPGRADE_RESPONDER_REPO}
     helm upgrade --install ${APP_NAME}-upgrade-responder upgrade-responder/chart -f ${UPGRADE_RESPONDER_VALUE_YAML}
     wait_for_deployment "${APP_NAME}-upgrade-responder"
 }
