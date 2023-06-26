@@ -30,22 +30,22 @@ image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.5.0-rc2
+      tag: v1.5.0-rc3
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.5.0-rc2
+      tag: v1.5.0-rc3
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.5.0-rc2
+      tag: v1.5.0-rc3
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1.5.0-rc2
+      tag: v1.5.0-rc3
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1.5.0-rc2
+      tag: v1.5.0-rc3
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v1.5.0-rc2
+      tag: v1.5.0-rc3
     supportBundleKit:
       repository: longhornio/support-bundle-kit
       tag: v0.0.24
