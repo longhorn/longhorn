@@ -20,14 +20,14 @@ remove_and_wait() {
 }
 
 remove_crd_instances() {
-  remove_and_wait volumes.longhorn.rancher.io
-  # TODO: remove engines and replicas once we fix https://github.com/rancher/longhorn/issues/273
-  remove_and_wait engines.longhorn.rancher.io
-  remove_and_wait replicas.longhorn.rancher.io
-  remove_and_wait engineimages.longhorn.rancher.io
-  remove_and_wait settings.longhorn.rancher.io
+  remove_and_wait volumes.longhorn.io
+  # engines and replicas should be no-ops, already done by volume delete.  See https://github.com/rancher/longhorn/issues/273
+  remove_and_wait engines.longhorn.io
+  remove_and_wait replicas.longhorn.io
+  remove_and_wait engineimages.longhorn.io
+  remove_and_wait settings.longhorn.io
   # do this one last; manager crashes
-  remove_and_wait nodes.longhorn.rancher.io
+  remove_and_wait nodes.longhorn.io
 }
 
 # Delete driver related workloads in specific order
@@ -51,9 +51,9 @@ remove_workloads() {
   kubectl -n ${NAMESPACE} get service -o yaml | kubectl delete -f -
 }
 
-# Delete CRD definitions with longhorn.rancher.io in the name
+# Delete CRD definitions with longhorn.io in the name
 remove_crds() {
-  for crd in $(kubectl get crd -o jsonpath={.items[*].metadata.name} | tr ' ' '\n' | grep longhorn.rancher.io); do
+  for crd in $(kubectl get crd -o jsonpath={.items[*].metadata.name} | tr ' ' '\n' | grep longhorn.io); do
     kubectl delete crd/$crd
   done
 }
@@ -62,3 +62,9 @@ remove_crd_instances
 remove_driver
 remove_workloads
 remove_crds
+
+# Last, remove the namespace itself (and implicitly some remaining resource types such as events.)
+# Note: this will still leave some items behind, such as persistentvolumeclaim (in default namespace)
+#       and storageclass (not namespaced).
+kubectl delete namespace ${NAMESPACE}
+
