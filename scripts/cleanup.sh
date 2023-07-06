@@ -38,7 +38,6 @@ remove_driver() {
   kubectl -n ${NAMESPACE} delete service/csi-attacher
   kubectl -n ${NAMESPACE} delete statefulset.apps/csi-provisioner
   kubectl -n ${NAMESPACE} delete service/csi-provisioner
-  kubectl -n ${NAMESPACE} delete daemonset.apps/longhorn-flexvolume-driver
 }
 
 # Delete all workloads in the namespace
@@ -58,13 +57,28 @@ remove_crds() {
   done
 }
 
+# Delete resources such as roles that are longhorn but not longhorn.io and not in longhorn-system
+remove_resource() {
+  for res in $(kubectl get $1 -o name | grep longhorn); do
+    # resource is a fully qualified name, so no resource type is needed.
+    kubectl delete $res
+  done
+}
+
+remove_unnamespaced_resources() {
+  remove_resource storageclass
+  remove_resource clusterrolebinding
+  remove_resource clusterrole
+}
+
 remove_crd_instances
 remove_driver
 remove_workloads
 remove_crds
+remove_unnamespaced_resources
 
-# Last, remove the namespace itself (and implicitly some remaining resource types such as events.)
+# Last, remove the namespace itself (and implicitly some remaining resource types such as events and leases.)
 # Note: this will still leave some items behind, such as persistentvolumeclaim (in default namespace)
-#       and storageclass (not namespaced).
+# TODO: ensure this does not toast backups.  See longhorn-manager/controller/uninstall_controller.go#L405-L407
 kubectl delete namespace ${NAMESPACE}
 
