@@ -259,7 +259,7 @@ func ReplicaCmd() cli.Command {
 				Usage: "Name of the volume (for validation purposes)",
 			},
 			cli.StringFlag{
-				Name:  "instance-name",
+				Name:  "replica-instance-name",
 				Value: "",
 				Usage: "Name of the instance (for validation purposes)",
 			},
@@ -318,8 +318,9 @@ validation.
 
 #### Longhorn-Manager Integration
 
-Ensure the engine and replica controllers launch engine and replica processes with `-volume-name` and `-instance-name`
-flags so that these processes can validate identifying gRPC metadata coming from requests.
+Ensure the engine and replica controllers launch engine and replica processes with `-volume-name` and
+`-engine-instance-name` or `-replica-instance-name` flags so that these processes can validate identifying gRPC metadata
+coming from requests.
 
 Ensure the engine controller supplies correct information to the ProxyEngineService client functions so that identity
 validation can occur in the lower layers.
@@ -342,7 +343,7 @@ situation described in this issue:
 After this improvement, the above scenario will be impossible:
 
 1. Both the engine and replica controllers will launch engine and replica processes with the `-volume-name` and
-   `-instance-name` flags.
+   `-engine-instance-name` or `replica-instance-name` flags.
 2. When the engine controller issues a ReplicaAdd command, it will do so using the expanded embedded
    `ProxyEngineRequest` message (with `volume_name` and `instance_name` fields) and an additional
    `replica_instance_name` field.
@@ -381,6 +382,10 @@ Rework test fixtures so that:
 
 Do not modify the behavior of existing tests. Since these tests were using clients with identity validation information,
 no identity validation is performed.
+
+- Modify functions/fixtures that create engine/replica processes to allow the new flags to be passed, but do not pass
+  them by default.
+- Modify engine/replica clients used by tests to allow for metadata injection, but do not enable it by default.
 
 Create new tests that:
 
