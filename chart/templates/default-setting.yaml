@@ -15,6 +15,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.storageReservedPercentageForDefaultDisk) }}storage-reserved-percentage-for-default-disk: {{ .Values.defaultSettings.storageReservedPercentageForDefaultDisk }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}{{ end }}

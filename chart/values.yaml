@@ -120,6 +120,7 @@ defaultSettings:
   replicaAutoBalance: ~
   storageOverProvisioningPercentage: ~
   storageMinimalAvailablePercentage: ~
+  storageReservedPercentageForDefaultDisk: ~
   upgradeChecker: ~
   defaultReplicaCount: ~
   defaultLonghornStaticStorageClass: ~

@@ -327,6 +327,14 @@ The available volume spec options are:
     min: 0
     max: 100
     default: 25
+  - variable: defaultSettings.storageReservedPercentageForDefaultDisk
+    label: Storage Reserved Percentage For Default Disk
+    description: "The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    max: 100
+    default: 30
   - variable: defaultSettings.upgradeChecker
     label: Enable Upgrade Checker
     description: 'Upgrade Checker will check for new Longhorn version periodically. When there is a new version available, a notification will appear in the UI. By default true.'
