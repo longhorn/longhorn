@@ -122,12 +122,12 @@ Please follow up on [here](https://github.com/longhorn/longhorn/wiki/Outstanding
   - [IMPROVEMENT] Remove the global setting `mkfs-ext4-parameters` ([4914](https://github.com/longhorn/longhorn/issues/4914)) - @ejweber @roger-ryao
   - [IMPROVEMENT] Move all snapshot related settings at one place. ([4930](https://github.com/longhorn/longhorn/issues/4930)) - @smallteeths @roger-ryao
   - [IMPROVEMENT] Remove system managed component image settings  ([5028](https://github.com/longhorn/longhorn/issues/5028)) - @mantissahz @chriscchien
-  - [IMPROVEMENT] Set default `engine-replica-timeout` vaule for engine controller start command ([5031](https://github.com/longhorn/longhorn/issues/5031)) - @derekbit @chriscchien
+  - [IMPROVEMENT] Set default `engine-replica-timeout` value for engine controller start command ([5031](https://github.com/longhorn/longhorn/issues/5031)) - @derekbit @chriscchien
   - [IMPROVEMENT] Support bundle collects dmesg, syslog and related information of longhorn nodes ([5073](https://github.com/longhorn/longhorn/issues/5073)) - @weizhe0422 @roger-ryao
   - [IMPROVEMENT] Collect volume, system, feature info for metrics for better usage awareness ([5235](https://github.com/longhorn/longhorn/issues/5235)) - @c3y1huang @chriscchien @roger-ryao
   - [IMPROVEMENT] Update uninstallation info to include the 'Deleting Confirmation Flag'  in chart ([5250](https://github.com/longhorn/longhorn/issues/5250)) - @PhanLe1010 @roger-ryao
   - [IMPROVEMENT] Disable Revision Counter for Strict-Local dataLocality ([5257](https://github.com/longhorn/longhorn/issues/5257)) - @derekbit @roger-ryao
-  - [IMPROVEMENT] Fix Guaranteed Engine Manager CPU recommendation forumula in UI ([5338](https://github.com/longhorn/longhorn/issues/5338)) - @c3y1huang @smallteeths @roger-ryao
+  - [IMPROVEMENT] Fix Guaranteed Engine Manager CPU recommendation formula in UI ([5338](https://github.com/longhorn/longhorn/issues/5338)) - @c3y1huang @smallteeths @roger-ryao
   - [IMPROVEMENT] Update PSP validation in the Longhorn upstream chart  ([5339](https://github.com/longhorn/longhorn/issues/5339)) - @yangchiu @PhanLe1010
   - [IMPROVEMENT] Update ganesha nfs to 4.2.3 ([5356](https://github.com/longhorn/longhorn/issues/5356)) - @derekbit @roger-ryao
   - [IMPROVEMENT] Set write-cache of longhorn block device to off explicitly ([5382](https://github.com/longhorn/longhorn/issues/5382)) - @derekbit @chriscchien
