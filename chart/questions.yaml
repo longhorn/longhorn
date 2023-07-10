@@ -574,7 +574,7 @@ Set the value to **0** to disable backup restore."
     description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Debug."
     group: "Longhorn Default Settings"
     type: string
-    default: "Debug"
+    default: "Info"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
