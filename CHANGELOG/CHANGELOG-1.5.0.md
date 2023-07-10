@@ -196,7 +196,7 @@ Please follow up on [here](https://github.com/longhorn/longhorn/wiki/Outstanding
   - [BUG] Incorrect router retry mechanism ([5259](https://github.com/longhorn/longhorn/issues/5259)) - @mantissahz @chriscchien
   - [BUG] System Backup is stuck at Uploading if there are PVs not provisioned by CSI driver ([5286](https://github.com/longhorn/longhorn/issues/5286)) - @c3y1huang @chriscchien
   - [BUG] Sync up with backup target during DR volume activation ([5292](https://github.com/longhorn/longhorn/issues/5292)) - @yangchiu @weizhe0422
-  - [BUG] environment_check.sh does not handle differnt kernel versions in cluster correctly ([5304](https://github.com/longhorn/longhorn/issues/5304)) - @achims311 @roger-ryao
+  - [BUG] environment_check.sh does not handle different kernel versions in cluster correctly ([5304](https://github.com/longhorn/longhorn/issues/5304)) - @achims311 @roger-ryao
   - [BUG] instance-manager-r high memory consumption ([5312](https://github.com/longhorn/longhorn/issues/5312)) - @derekbit @roger-ryao
   - [BUG] Unable to upgrade longhorn from v1.3.2 to master-head ([5368](https://github.com/longhorn/longhorn/issues/5368)) - @yangchiu @derekbit
   - [BUG] Modify engineManagerCPURequest and replicaManagerCPURequest won't raise resource request in instance-manager-e pod ([5419](https://github.com/longhorn/longhorn/issues/5419)) - @c3y1huang
