@@ -1430,8 +1430,8 @@ spec:
                 type: boolean
               backendStoreDriver:
                 enum:
-                - longhorn
-                - spdk
+                - v1
+                - v2
                 type: string
               backupVolume:
                 type: string
@@ -2549,8 +2549,8 @@ spec:
                 type: boolean
               backendStoreDriver:
                 enum:
-                - longhorn
-                - spdk
+                - v1
+                - v2
                 type: string
               backingImage:
                 type: string
@@ -3473,8 +3473,8 @@ spec:
                 type: string
               backendStoreDriver:
                 enum:
-                - longhorn
-                - spdk
+                - v1
+                - v2
                 type: string
               backingImage:
                 type: string
@@ -4115,7 +4115,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.24"
+        - "longhornio/support-bundle-kit:v0.0.25"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account

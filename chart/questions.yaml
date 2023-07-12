@@ -89,7 +89,7 @@ questions:
     label: Longhorn Support Bundle Kit Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.supportBundleKit.tag
-    default: v0.0.24
+    default: v0.0.25
     description: "Specify Longhorn Support Bundle Manager Image Tag"
     type: string
     label: Longhorn Support Bundle Kit Image Tag
@@ -574,7 +574,7 @@ Set the value to **0** to disable backup restore."
     description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Debug."
     group: "Longhorn Default Settings"
     type: string
-    default: "Debug"
+    default: "Info"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
@@ -677,28 +677,28 @@ Set the value to **0** to disable backup restore."
   group: "Longhorn Default Settings"
   type: int
   min: 1
-  default: 5
+  default: 2
 - variable: defaultSettings.restoreConcurrentLimit
   label: Restore Concurrent Limit Per Backup
   description: "This setting controls how many worker threads per restore concurrently."
   group: "Longhorn Default Settings"
   type: int
   min: 1
-  default: 5
-- variable: defaultSettings.spdk
-  label: SPDK Data Engine
-  description: "This allows users to activate SPDK data engine. Currently, it is in the preview phase and should not be utilized in a production environment.
+  default: 2
+- variable: defaultSettings.v2DataEngine
+  label: V2 Data Engine
+  description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment.
 	WARNING:
-	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
-	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
-	  - When applying the setting, Longhorn will restart all instance-manager pods."
-  group: "Longhorn SPDK Data Engine (Preview Feature) Settings"
+	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will block this setting update when there are attached volumes.
+	  - When applying the setting, Longhorn will restart all instance-manager pods.
+	  - When the V2 Data Engine is enabled, each instance-manager pod utilizes 1 CPU core. This high CPU usage is attributed to the spdk_tgt process running within each instance-manager pod. The spdk_tgt process is responsible for handling input/output (IO) operations and requires intensive polling. As a result, it consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
+  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: boolean
   default: false
-- variable: persistence.offlineReplicaRebuilding
+- variable: defaultSettings.offlineReplicaRebuilding
   label: Offline Replica Rebuilding
-  description: ""This setting allows users to enable the offline replica rebuilding for volumes using SPDK data engine."
-  group: "Longhorn SPDK Data Engine (Preview Feature) Settings"
+  description: ""This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine."
+  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   required: true
   type: enum
   options:

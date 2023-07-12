@@ -48,7 +48,7 @@ image:
       tag: master-head
     supportBundleKit:
       repository: longhornio/support-bundle-kit
-      tag: v0.0.24
+      tag: v0.0.25
   csi:
     attacher:
       repository: longhornio/csi-attacher
@@ -169,7 +169,7 @@ defaultSettings:
   backupCompressionMethod: ~
   backupConcurrentLimit: ~
   restoreConcurrentLimit: ~
-  spdk: ~
+  v2DataEngine: ~
   offlineReplicaRebuilding: ~
 privateRegistry:
   createSecret: ~
