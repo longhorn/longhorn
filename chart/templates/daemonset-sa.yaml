@@ -41,6 +41,10 @@ spec:
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.backingImageManager.repository }}:{{ .Values.image.longhorn.backingImageManager.tag }}"
         - --support-bundle-manager-image
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.supportBundleKit.repository }}:{{ .Values.image.longhorn.supportBundleKit.tag }}"
+        - --object-endpoint-image
+        - "{{ template "registry_url" . }}{{ .Values.image.longhorn.objectEndpoint.repository }}:{{ .Values.image.longhorn.objectEndpoint.tag }}"
+        - --object-endpoint-ui-image
+        - "{{ template "registry_url" . }}{{ .Values.image.longhorn.objectEndpointUi.repository }}:{{ .Values.image.longhorn.objectEndpointUi.tag }}"
         - --manager-image
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
         - --service-account
