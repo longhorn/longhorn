@@ -66,6 +66,9 @@ image:
       repository: longhornio/support-bundle-kit
       # -- Specify Longhorn support bundle manager image tag
       tag: v0.0.27
+    objectGateway:
+      repository: quay.io/s3gw/s3gw
+      tag: v0.18.0
   csi:
     attacher:
       # -- Specify CSI attacher image repository. Leave blank to autodetect
