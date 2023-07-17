@@ -37,10 +37,8 @@ image:
       # -- Specify Longhorn engine image tag
       tag: master-head
     manager:
-      # -- Specify Longhorn manager image repository
-      repository: longhornio/longhorn-manager
-      # -- Specify Longhorn manager image tag
-      tag: master-head
+      repository: docker.io/mrohrich/longhorn-manager
+      tag: object-endpoint
     ui:
       # -- Specify Longhorn ui image repository
       repository: longhornio/longhorn-ui
