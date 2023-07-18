@@ -4051,7 +4051,7 @@ rules:
               "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status",
               "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
               "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status",
-              "volumeattachments", "volumeattachments/status"]
+              "volumeattachments", "volumeattachments/status", "objectendpoints", "objectendpoints/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -4267,8 +4267,8 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:master-head
-        imagePullPolicy: IfNotPresent
+        image: docker.io/mrohrich/longhorn-manager:object-endpoint
+        imagePullPolicy: Always
         securityContext:
           privileged: true
         command:
@@ -4288,7 +4288,7 @@ spec:
         - --object-endpoint-image
         - "quay.io/s3gw/s3gw:v0.18.0"
         - --manager-image
-        - "longhornio/longhorn-manager:master-head"
+        - "docker.io/mrohrich/longhorn-manager:object-endpoint"
         - --service-account
         - longhorn-service-account
         ports:
@@ -4372,18 +4372,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:master-head
+          image: docker.io/mrohrich/longhorn-manager:object-endpoint
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:master-head
-          imagePullPolicy: IfNotPresent
+          image: docker.io/mrohrich/longhorn-manager:object-endpoint
+          imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - "longhornio/longhorn-manager:master-head"
+          - "docker.io/mrohrich/longhorn-manager:object-endpoint"
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -4455,7 +4455,7 @@ spec:
       containers:
       - name: longhorn-ui
         image: longhornio/longhorn-ui:master-head
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         volumeMounts:
         - name : nginx-cache
           mountPath: /var/cache/nginx/
