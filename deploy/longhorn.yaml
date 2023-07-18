@@ -2142,7 +2142,7 @@ spec:
   versions:
   - additionalPrinterColumns:
     - description: The state of object endpoint
-      jsonPath: .status.state
+      jsonPath: .status.currentState
       name: State
       type: string
     - jsonPath: .status.endpoint
@@ -2172,18 +2172,11 @@ spec:
                     type: string
                   secretKey:
                     type: string
-                required:
-                - accessKey
-                - secretKey
                 type: object
               image:
                 type: string
               volume:
                 type: string
-            required:
-            - credentials
-            - image
-            - volume
             type: object
           status:
             properties:
@@ -2191,9 +2184,6 @@ spec:
                 type: string
               state:
                 type: string
-            required:
-            - endpoint
-            - state
             type: object
         type: object
     served: true
