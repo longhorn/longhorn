@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a bug report
 title: "[BUG]"
-labels: kind/bug
+labels: ["kind/bug", "require/qa-review-coverage"]
 assignees: ''
 
 ---
