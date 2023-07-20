@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 Provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/advanced-resources/support-bundle/).
 
 ## Environment
-> Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/1.5.1/best-practices/#minimum-recommended-hardware)
+> Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/1.5.1/best-practices)
 
  - Longhorn version:
  - Installation method (e.g. Rancher Catalog App/Helm/Kubectl):
