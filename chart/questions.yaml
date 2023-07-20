@@ -89,7 +89,7 @@ questions:
     label: Longhorn Support Bundle Kit Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.supportBundleKit.tag
-    default: v0.0.24
+    default: v0.0.25
     description: "Specify Longhorn Support Bundle Manager Image Tag"
     type: string
     label: Longhorn Support Bundle Kit Image Tag
@@ -327,6 +327,14 @@ The available volume spec options are:
     min: 0
     max: 100
     default: 25
+  - variable: defaultSettings.storageReservedPercentageForDefaultDisk
+    label: Storage Reserved Percentage For Default Disk
+    description: "The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    max: 100
+    default: 30
   - variable: defaultSettings.upgradeChecker
     label: Enable Upgrade Checker
     description: 'Upgrade Checker will check for new Longhorn version periodically. When there is a new version available, a notification will appear in the UI. By default true.'
@@ -574,7 +582,7 @@ Set the value to **0** to disable backup restore."
     description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Debug."
     group: "Longhorn Default Settings"
     type: string
-    default: "Debug"
+    default: "Info"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
@@ -689,9 +697,9 @@ Set the value to **0** to disable backup restore."
   label: V2 Data Engine
   description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment.
 	WARNING:
-	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
 	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will block this setting update when there are attached volumes.
-	  - When applying the setting, Longhorn will restart all instance-manager pods."
+	  - When applying the setting, Longhorn will restart all instance-manager pods.
+	  - When the V2 Data Engine is enabled, each instance-manager pod utilizes 1 CPU core. This high CPU usage is attributed to the spdk_tgt process running within each instance-manager pod. The spdk_tgt process is responsible for handling input/output (IO) operations and requires intensive polling. As a result, it consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: boolean
   default: false

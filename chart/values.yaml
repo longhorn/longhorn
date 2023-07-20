@@ -48,7 +48,7 @@ image:
       tag: master-head
     supportBundleKit:
       repository: longhornio/support-bundle-kit
-      tag: v0.0.24
+      tag: v0.0.25
   csi:
     attacher:
       repository: longhornio/csi-attacher
@@ -120,6 +120,7 @@ defaultSettings:
   replicaAutoBalance: ~
   storageOverProvisioningPercentage: ~
   storageMinimalAvailablePercentage: ~
+  storageReservedPercentageForDefaultDisk: ~
   upgradeChecker: ~
   defaultReplicaCount: ~
   defaultLonghornStaticStorageClass: ~
@@ -224,54 +225,6 @@ longhornUI:
   #   effect: "NoSchedule"
   nodeSelector: {}
   ## If you want to set node selector for Longhorn UI Deployment, delete the `{}` in the line above
-  ## and uncomment this example block
-  #  label-key1: "label-value1"
-  #  label-key2: "label-value2"
-
-longhornConversionWebhook:
-  replicas: 2
-  priorityClass: ~
-  tolerations: []
-  ## If you want to set tolerations for Longhorn conversion webhook Deployment, delete the `[]` in the line above
-  ## and uncomment this example block
-  # - key: "key"
-  #   operator: "Equal"
-  #   value: "value"
-  #   effect: "NoSchedule"
-  nodeSelector: {}
-  ## If you want to set node selector for Longhorn conversion webhook Deployment, delete the `{}` in the line above
-  ## and uncomment this example block
-  #  label-key1: "label-value1"
-  #  label-key2: "label-value2"
-
-longhornAdmissionWebhook:
-  replicas: 2
-  priorityClass: ~
-  tolerations: []
-  ## If you want to set tolerations for Longhorn admission webhook Deployment, delete the `[]` in the line above
-  ## and uncomment this example block
-  # - key: "key"
-  #   operator: "Equal"
-  #   value: "value"
-  #   effect: "NoSchedule"
-  nodeSelector: {}
-  ## If you want to set node selector for Longhorn admission webhook Deployment, delete the `{}` in the line above
-  ## and uncomment this example block
-  #  label-key1: "label-value1"
-  #  label-key2: "label-value2"
-
-longhornRecoveryBackend:
-  replicas: 2
-  priorityClass: ~
-  tolerations: []
-  ## If you want to set tolerations for Longhorn recovery backend Deployment, delete the `[]` in the line above
-  ## and uncomment this example block
-  # - key: "key"
-  #   operator: "Equal"
-  #   value: "value"
-  #   effect: "NoSchedule"
-  nodeSelector: {}
-  ## If you want to set node selector for Longhorn recovery backend Deployment, delete the `{}` in the line above
   ## and uncomment this example block
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
