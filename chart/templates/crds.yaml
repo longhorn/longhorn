@@ -2055,9 +2055,12 @@ spec:
                     type: string
                 type: object
               size:
+                anyOf:
+                - type: integer
+                - type: string
                 description: The initial size of the volume to provision. This size together with the storage class will be used to automatically create a suitable volume where the objects will be stored.
-                format: int64
-                type: integer
+                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                x-kubernetes-int-or-string: true
               storageClassName:
                 description: The name of a storage class. The backing storage is going to be a new volume from that storage class.
                 type: string
