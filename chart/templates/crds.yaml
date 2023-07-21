@@ -2015,11 +2015,15 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
+    - jsonPath: .metadata.name
+      name: Name
+      type: string
     - description: The state of object endpoint
       jsonPath: .status.currentState
       name: State
       type: string
-    - jsonPath: .status.endpoint
+    - description: The endpoint address
+      jsonPath: .status.endpoint
       name: Endpoint
       type: string
     - jsonPath: .metadata.creationTimestamp
@@ -2041,22 +2045,30 @@ spec:
           spec:
             properties:
               credentials:
+                description: Credentials contain a pair of access and secret keys that are used to seed the object endpoint.
                 properties:
                   accessKey:
+                    description: An access key. This will be the initial access key for the administrative account.
                     type: string
                   secretKey:
+                    description: A secret key. This is the secret key corresponding to the access key above.
                     type: string
                 type: object
-              image:
-                type: string
-              volume:
+              size:
+                description: The initial size of the volume to provision. This size together with the storage class will be used to automatically create a suitable volume where the objects will be stored.
+                format: int32
+                type: integer
+              storageClassName:
+                description: The name of a storage class. The backing storage is going to be a new volume from that storage class.
                 type: string
             type: object
           status:
             properties:
               endpoint:
+                description: An address where the S3 endpoint is exposed.
                 type: string
               state:
+                description: The state of the object endpoint as observed by the object endpoint controller.
                 type: string
             type: object
         type: object
