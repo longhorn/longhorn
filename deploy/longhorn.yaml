@@ -2145,7 +2145,7 @@ spec:
       name: Name
       type: string
     - description: The state of object endpoint
-      jsonPath: .status.currentState
+      jsonPath: .status.state
       name: State
       type: string
     - description: The endpoint address
@@ -2182,7 +2182,7 @@ spec:
                 type: object
               size:
                 description: The initial size of the volume to provision. This size together with the storage class will be used to automatically create a suitable volume where the objects will be stored.
-                format: int32
+                format: int64
                 type: integer
               storageClassName:
                 description: The name of a storage class. The backing storage is going to be a new volume from that storage class.
@@ -2194,7 +2194,7 @@ spec:
                 description: An address where the S3 endpoint is exposed.
                 type: string
               state:
-                description: The state of the object endpoint as observed by the object endpoint controller.
+                description: "The state of the object endpoint as observed by the object endpoint controller. \n The object endpoint implemets a state machine with this, beginning at \"unknown\". Once the object endpoint controller detects the new object endpoint and begins resource creation the state is transformed to \"starting\". The object endpoint controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until a the object endpoint is deleted, at which point the controller will clean up the associated resources. \n object endpoint created │ │  ┌──────────┐    ┌──────────┐    ┌──────────┐ └─►│ unknown  ├─┬─►│ starting ├─┬─►│ running  ├──► object endpoint deleted,    └──────────┘ │  └──────────┘ │  └──────────┘    controller cleans up                 │               │                  resources controller creates resources    │                                 │                                 │ controller detects all resources ready"
                 type: string
             type: object
         type: object
