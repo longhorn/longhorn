@@ -14,6 +14,14 @@ secret:
   # Set this to false if you don't want to manage these secrets with helm
   managed: false
 
+resources:
+  limits:
+    cpu: 400m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
 # This configmap contains information about the latest release
 # of the application that is using this Upgrade Responder
 configMap:
