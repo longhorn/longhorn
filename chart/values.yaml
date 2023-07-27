@@ -40,10 +40,8 @@ image:
       repository: docker.io/mrohrich/longhorn-manager
       tag: object-endpoint
     ui:
-      # -- Specify Longhorn ui image repository
-      repository: longhornio/longhorn-ui
-      # -- Specify Longhorn ui image tag
-      tag: master-head
+      repository: docker.io/mrohrich/longhorn-ui
+      tag: object-endpoint
     instanceManager:
       # -- Specify Longhorn instance manager image repository
       repository: longhornio/longhorn-instance-manager
