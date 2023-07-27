@@ -141,6 +141,7 @@ defaultSettings:
   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
   disableSchedulingOnCordonedNode: ~
   replicaZoneSoftAntiAffinity: ~
+  replicaDiskSoftAntiAffinity: ~
   nodeDownPodDeletionPolicy: ~
   nodeDrainPolicy: ~
   replicaReplenishmentWaitInterval: ~
