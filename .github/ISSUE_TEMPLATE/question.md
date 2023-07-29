@@ -7,7 +7,8 @@ assignees: ''
 
 ---
 ## Question
-> Suggest to use https://github.com/longhorn/longhorn/discussions to ask questions.
+
+<!--Suggest to use https://github.com/longhorn/longhorn/discussions to ask questions.-->
 
 ## Environment
 
@@ -15,6 +16,7 @@ assignees: ''
  - Kubernetes version:
  - Node config
    - OS type and version
+   - Kernel version
    - CPU per node:
    - Memory per node:
    - Disk type
@@ -23,4 +25,4 @@ assignees: ''
 
 ## Additional context
 
-Add any other context about the problem here.
+<!--Add any other context about the problem here.-->
