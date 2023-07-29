@@ -1,5 +1,5 @@
 ---
-name: Refactoring request
+name: Refactor request
 about: Suggest a refactoring request for an existing implementation
 title: "[REFACTOR] "
 labels: kind/refactoring
