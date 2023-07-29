@@ -33,6 +33,7 @@ assignees: ''
    - Number of worker node in the cluster:
  - Node config
    - OS type and version:
+   - Kernel version:
    - CPU per node:
    - Memory per node:
    - Disk type(e.g. SSD/NVMe/HDD):
