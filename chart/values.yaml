@@ -158,6 +158,9 @@ persistence:
   # -- Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass. Options: `ignored`, `enabled`, `disabled`
   removeSnapshotsDuringFilesystemTrim: ignored
 
+helmPreUpgradeCheckerJob:
+  enabled: true
+
 csi:
   # -- Specify kubelet root-dir. Leave blank to autodetect
   kubeletRootDir: ~
