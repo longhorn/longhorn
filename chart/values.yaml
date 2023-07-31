@@ -102,6 +102,9 @@ persistence:
     selector: ""
   removeSnapshotsDuringFilesystemTrim: ignored # "enabled" or "disabled" otherwise
 
+helmPreUpgradeCheckerJob:
+  enabled: true
+
 csi:
   kubeletRootDir: ~
   attacherReplicaCount: ~
