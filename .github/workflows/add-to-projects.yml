@@ -14,7 +14,7 @@ jobs:
         organization: longhorn
         GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
     - name: Add To Community Project
-      if: steps.is-longhorn-member.outputs.isTeamMember == 'false'
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null
       uses: actions/add-to-project@v0.3.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
@@ -31,7 +31,7 @@ jobs:
         organization: longhorn
         GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
     - name: Add To QA & DevOps Project
-      if: steps.is-longhorn-member.outputs.isTeamMember == 'true'
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
       uses: actions/add-to-project@v0.3.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/4
