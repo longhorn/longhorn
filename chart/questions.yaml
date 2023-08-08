@@ -432,6 +432,18 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
+  - variable: defaultSettings.allowEmptyNodeSelectorVolume
+    label: Allow Empty Node Selector Volume
+    description: "Allow Scheduling Empty Node Selector Volumes To Any Node"
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
+  - variable: defaultSettings.allowEmptyDiskSelectorVolume
+    label: Allow Empty Disk Selector Volume
+    description: "Allow Scheduling Empty Disk Selector Volumes To Any Disk"
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
   - variable: defaultSettings.nodeDownPodDeletionPolicy
     label: Pod Deletion Policy When Node is Down
     description: "Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down.
