@@ -9,23 +9,23 @@ assignees: ''
 
 ## Describe the bug (🐛 if you encounter this issue)
 
-A clear and concise description of what the bug is.
+<!--A clear and concise description of what the bug is.-->
 
 ## To Reproduce
 
-Provide the steps to reproduce the behavior.
+<!--Provide the steps to reproduce the behavior.-->
 
 ## Expected behavior
 
-A clear and concise description of what you expected to happen.
+<!--A clear and concise description of what you expected to happen.-->
 
 ## Support bundle for troubleshooting
 
-Provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/advanced-resources/support-bundle/).
+<!--Provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/advanced-resources/support-bundle/).-->
 
 ## Environment
-> Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/1.5.1/best-practices)
 
+<!-- Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/1.5.1/best-practices)-->
  - Longhorn version:
  - Installation method (e.g. Rancher Catalog App/Helm/Kubectl):
  - Kubernetes distro (e.g. RKE/K3s/EKS/OpenShift) and version:
@@ -33,6 +33,7 @@ Provide a support bundle when the issue happens. You can generate a support bund
    - Number of worker node in the cluster:
  - Node config
    - OS type and version:
+   - Kernel version:
    - CPU per node:
    - Memory per node:
    - Disk type(e.g. SSD/NVMe/HDD):
@@ -42,4 +43,4 @@ Provide a support bundle when the issue happens. You can generate a support bund
 
 ## Additional context
 
-Add any other context about the problem here.
+<!--Add any other context about the problem here.-->
