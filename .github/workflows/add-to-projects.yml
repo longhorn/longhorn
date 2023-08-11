@@ -1,32 +1,40 @@
 name: Add-To-Projects
 on:
   issues:
-    types: [opened, labeled]
+    types: [ opened, labeled ]
 jobs:
   community:
     runs-on: ubuntu-latest
     steps:
-      - name: Is Longhorn Member
-        uses: tspascoal/get-user-teams-membership@v1.0.4
-        id: is-longhorn-member
-        with:
-          username: ${{ github.event.issue.user.login }}
-          organization: longhorn
-          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-      - name: Add To Community Project
-        if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null
-        uses: actions/add-to-project@v0.3.0
-        with:
-          project-url: https://github.com/orgs/longhorn/projects/5
-          github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+    - name: Is Longhorn Member
+      uses: tspascoal/get-user-teams-membership@v1.0.4
+      id: is-longhorn-member
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+    - name: Add To Community Project
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null
+      uses: actions/add-to-project@v0.3.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
   qa:
     runs-on: ubuntu-latest
     steps:
-      - name: Add To QA & Devops Project
-        uses: actions/add-to-project@v0.3.0
-        with:
-          project-url: https://github.com/orgs/longhorn/projects/4
-          github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-          labeled: kind/test, area/test-infra
-          label-operator: OR
+    - name: Is Longhorn Member
+      uses: tspascoal/get-user-teams-membership@v1.0.4
+      id: is-longhorn-member
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+    - name: Add To QA & DevOps Project
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: actions/add-to-project@v0.3.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/4
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        labeled: kind/test, area/test-infra
+        label-operator: OR

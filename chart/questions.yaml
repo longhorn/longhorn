@@ -89,7 +89,7 @@ questions:
     label: Longhorn Support Bundle Kit Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.supportBundleKit.tag
-    default: v0.0.24
+    default: v0.0.25
     description: "Specify Longhorn Support Bundle Manager Image Tag"
     type: string
     label: Longhorn Support Bundle Kit Image Tag
@@ -327,6 +327,14 @@ The available volume spec options are:
     min: 0
     max: 100
     default: 25
+  - variable: defaultSettings.storageReservedPercentageForDefaultDisk
+    label: Storage Reserved Percentage For Default Disk
+    description: "The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    max: 100
+    default: 30
   - variable: defaultSettings.upgradeChecker
     label: Enable Upgrade Checker
     description: 'Upgrade Checker will check for new Longhorn version periodically. When there is a new version available, a notification will appear in the UI. By default true.'
@@ -421,6 +429,18 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
   - variable: defaultSettings.replicaZoneSoftAntiAffinity
     label: Replica Zone Level Soft Anti-Affinity
     description: "Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas. Nodes don't belong to any Zone will be treated as in the same Zone. Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone. By default true."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
+  - variable: defaultSettings.allowEmptyNodeSelectorVolume
+    label: Allow Empty Node Selector Volume
+    description: "Allow Scheduling Empty Node Selector Volumes To Any Node"
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
+  - variable: defaultSettings.allowEmptyDiskSelectorVolume
+    label: Allow Empty Disk Selector Volume
+    description: "Allow Scheduling Empty Disk Selector Volumes To Any Disk"
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
@@ -533,37 +553,19 @@ Set the value to **0** to disable backup restore."
     type: int
     min: 0
     default: 300
-  - variable: defaultSettings.guaranteedEngineManagerCPU
-    label: Guaranteed Engine Manager CPU
-    description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each engine manager Pod. For example, 10 means 10% of the total CPU on a node will be allocated to each engine manager pod on this node. This will help maintain engine stability during high node workload.
-    In order to prevent unexpected volume engine crash as well as guarantee a relative acceptable IO performance, you can use the following formula to calculate a value for this setting:
-    Guaranteed Engine Manager CPU = The estimated max Longhorn volume engine count on a node * 0.1 / The total allocatable CPUs on the node * 100.
+  - variable: defaultSettings.guaranteedInstanceManagerCPU
+    label: Guaranteed Instance Manager CPU
+    description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each instance manager Pod. For example, 10 means 10% of the total CPU on a node will be allocated to each instance manager pod on this node. This will help maintain engine and replica stability during high node workload.
+    In order to prevent unexpected volume instance (engine/replica) crash as well as guarantee a relative acceptable IO performance, you can use the following formula to calculate a value for this setting:
+    `Guaranteed Instance Manager CPU = The estimated max Longhorn volume engine and replica count on a node * 0.1 / The total allocatable CPUs on the node * 100`
     The result of above calculation doesn't mean that's the maximum CPU resources the Longhorn workloads require. To fully exploit the Longhorn volume I/O performance, you can allocate/guarantee more CPU resources via this setting.
     If it's hard to estimate the usage now, you can leave it with the default value, which is 12%. Then you can tune it when there is no running workload using Longhorn volumes.
     WARNING:
-      - Value 0 means unsetting CPU requests for engine manager pods.
-      - Considering the possible new instance manager pods in the further system upgrade, this integer value is range from 0 to 40. And the sum with setting 'Guaranteed Engine Manager CPU' should not be greater than 40.
+      - Value 0 means unsetting CPU requests for instance manager pods.
+      - Considering the possible new instance manager pods in the further system upgrade, this integer value is range from 0 to 40. 
       - One more set of instance manager pods may need to be deployed when the Longhorn system is upgraded. If current available CPUs of the nodes are not enough for the new instance manager pods, you need to detach the volumes using the oldest instance manager pods so that Longhorn can clean up the old pods automatically and release the CPU resources. And the new pods with the latest instance manager image will be launched then.
-      - This global setting will be ignored for a node if the field \"EngineManagerCPURequest\" on the node is set.
-      - After this setting is changed, all engine manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    max: 40
-    default: 12
-  - variable: defaultSettings.guaranteedReplicaManagerCPU
-    label: Guaranteed Replica Manager CPU
-    description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each replica manager Pod. 10 means 10% of the total CPU on a node will be allocated to each replica manager pod on this node. This will help maintain replica stability during high node workload.
-    In order to prevent unexpected volume replica crash as well as guarantee a relative acceptable IO performance, you can use the following formula to calculate a value for this setting:
-    Guaranteed Replica Manager CPU = The estimated max Longhorn volume replica count on a node * 0.1 / The total allocatable CPUs on the node * 100.
-    The result of above calculation doesn't mean that's the maximum CPU resources the Longhorn workloads require. To fully exploit the Longhorn volume I/O performance, you can allocate/guarantee more CPU resources via this setting.
-    If it's hard to estimate the usage now, you can leave it with the default value, which is 12%. Then you can tune it when there is no running workload using Longhorn volumes.
-    WARNING:
-      - Value 0 means unsetting CPU requests for replica manager pods.
-      - Considering the possible new instance manager pods in the further system upgrade, this integer value is range from 0 to 40. And the sum with setting 'Guaranteed Replica Manager CPU' should not be greater than 40.
-      - One more set of instance manager pods may need to be deployed when the Longhorn system is upgraded. If current available CPUs of the nodes are not enough for the new instance manager pods, you need to detach the volumes using the oldest instance manager pods so that Longhorn can clean up the old pods automatically and release the CPU resources. And the new pods with the latest instance manager image will be launched then.
-      - This global setting will be ignored for a node if the field \"ReplicaManagerCPURequest\" on the node is set.
-      - After this setting is changed, all replica manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+      - This global setting will be ignored for a node if the field \"InstanceManagerCPURequest\" on the node is set.
+      - After this setting is changed, all instance manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -574,7 +576,7 @@ Set the value to **0** to disable backup restore."
     description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Debug."
     group: "Longhorn Default Settings"
     type: string
-    default: "Debug"
+    default: "Info"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
@@ -689,9 +691,9 @@ Set the value to **0** to disable backup restore."
   label: V2 Data Engine
   description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment.
 	WARNING:
-	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
 	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will block this setting update when there are attached volumes.
-	  - When applying the setting, Longhorn will restart all instance-manager pods."
+	  - When applying the setting, Longhorn will restart all instance-manager pods.
+	  - When the V2 Data Engine is enabled, each instance-manager pod utilizes 1 CPU core. This high CPU usage is attributed to the spdk_tgt process running within each instance-manager pod. The spdk_tgt process is responsible for handling input/output (IO) operations and requires intensive polling. As a result, it consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: boolean
   default: false
@@ -753,18 +755,18 @@ Set the value to **0** to disable backup restore."
     group: "Longhorn Storage Class Settings"
     type: string
     default:
-- variable: defaultSettings.defaultNodeSelector.enable
-  description: "Enable recurring Node selector for Longhorn StorageClass"
+- variable: persistence.defaultNodeSelector.enable
+  description: "Enable Node selector for Longhorn StorageClass"
   group: "Longhorn Storage Class Settings"
   label: Enable Storage Class Node Selector
   type: boolean
   default: false
   show_subquestion_if: true
   subquestions:
-  - variable: defaultSettings.defaultNodeSelector.selector
+  - variable: persistence.defaultNodeSelector.selector
     label: Storage Class Node Selector
-    description: 'We use NodeSelector when we want to bind PVC via StorageClass into desired mountpoint on the nodes tagged whith its value'
-    group: "Longhorn Default Settings"
+    description: 'We use NodeSelector when we want to bind PVC via StorageClass into desired mountpoint on the nodes tagged with its value'
+    group: "Longhorn Storage Class Settings"
     type: string
     default:
 - variable: persistence.backingImage.enable

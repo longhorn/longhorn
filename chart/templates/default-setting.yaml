@@ -15,6 +15,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.storageReservedPercentageForDefaultDisk) }}storage-reserved-percentage-for-default-disk: {{ .Values.defaultSettings.storageReservedPercentageForDefaultDisk }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}{{ end }}
@@ -62,8 +63,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.guaranteedEngineManagerCPU) }}guaranteed-engine-manager-cpu: {{ .Values.defaultSettings.guaranteedEngineManagerCPU }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.guaranteedReplicaManagerCPU) }}guaranteed-replica-manager-cpu: {{ .Values.defaultSettings.guaranteedReplicaManagerCPU }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.guaranteedInstanceManagerCPU) }}guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.guaranteedInstanceManagerCPU }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.orphanAutoDeletion) }}orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}storage-network: {{ .Values.defaultSettings.storageNetwork }}{{ end }}
@@ -81,3 +81,5 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.v2DataEngine) }}v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume }}{{ end }}

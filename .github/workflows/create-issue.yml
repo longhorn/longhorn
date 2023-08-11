@@ -1,97 +1,114 @@
 name: Create-Issue
 on:
   issues:
-    types: [labeled]
+    types: [ labeled ]
 jobs:
   backport:
     runs-on: ubuntu-latest
     if: contains(github.event.label.name, 'backport/')
     steps:
-      - name: Get Backport Version
-        uses: xom9ikk/split@v1
-        id: split
-        with:
-          string: ${{ github.event.label.name }}
-          separator: /
-      - name: Check if Backport Issue Exists
-        uses: actions-cool/issues-helper@v3
-        id: if-backport-issue-exists
-        with:
-          actions: 'find-issues'
-          token: ${{ github.token }}
-          issue-state: 'all'
-          title-includes: |
-            [BACKPORT][v${{ steps.split.outputs._1 }}]${{ github.event.issue.title }}
-      - name: Get Milestone Object
-        if: fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-        uses: longhorn/bot/milestone-action@master
-        id: milestone
-        with:
-          token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          milestone_name: v${{ steps.split.outputs._1 }}
-      - name: Get Labels
-        if: fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-        id: labels
-        run: |
-          RAW_LABELS="${{ join(github.event.issue.labels.*.name, ' ') }}"
-          RAW_LABELS="${RAW_LABELS} kind/backport"
-          echo "RAW LABELS: $RAW_LABELS"
-          LABELS=$(echo "$RAW_LABELS" | sed -r 's/\s*backport\S+//g' | sed -r 's/\s*require\/auto-e2e-test//g' | xargs | sed 's/ /, /g')
-          echo "LABELS: $LABELS"
-          echo "::set-output name=labels::$LABELS"
-      - name: Create Backport Issue
-        if: fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-        uses: dacbd/create-issue-action@v1
-        id: new-issue
-        with:
-          token: ${{ github.token }}
-          title: |
-            [BACKPORT][v${{ steps.split.outputs._1 }}]${{ github.event.issue.title }}
-          body: |
-            backport ${{ github.event.issue.html_url }}
-          labels: ${{ steps.labels.outputs.labels }}
-          milestone: ${{ fromJSON(steps.milestone.outputs.data).number }}
-          assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}
-      - name: Get Repo Id
-        if: fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-        uses: octokit/request-action@v2.x
-        id: repo
-        with:
-          route: GET /repos/${{ github.repository }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - name: Add Backport Issue To Release
-        if: fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-        uses: longhorn/bot/add-zenhub-release-action@master
-        with:
-          zenhub_token: ${{ secrets.ZENHUB_TOKEN }}
-          repo_id: ${{ fromJSON(steps.repo.outputs.data).id }}
-          issue_number: ${{ steps.new-issue.outputs.number }}
-          release_name: ${{ steps.split.outputs._1 }}
+    - name: Is Longhorn Member
+      uses: tspascoal/get-user-teams-membership@v1.0.4
+      id: is-longhorn-member
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+    - name: Get Backport Version
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: xom9ikk/split@v1
+      id: split
+      with:
+        string: ${{ github.event.label.name }}
+        separator: /
+    - name: Check if Backport Issue Exists
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: actions-cool/issues-helper@v3
+      id: if-backport-issue-exists
+      with:
+        actions: 'find-issues'
+        token: ${{ github.token }}
+        issue-state: 'all'
+        title-includes: |
+          [BACKPORT][v${{ steps.split.outputs._1 }}]${{ github.event.issue.title }}
+    - name: Get Milestone Object
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
+      uses: longhorn/bot/milestone-action@master
+      id: milestone
+      with:
+        token: ${{ github.token }}
+        repository: ${{ github.repository }}
+        milestone_name: v${{ steps.split.outputs._1 }}
+    - name: Get Labels
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
+      id: labels
+      run: |
+        RAW_LABELS="${{ join(github.event.issue.labels.*.name, ' ') }}"
+        RAW_LABELS="${RAW_LABELS} kind/backport"
+        echo "RAW LABELS: $RAW_LABELS"
+        LABELS=$(echo "$RAW_LABELS" | sed -r 's/\s*backport\S+//g' | sed -r 's/\s*require\/auto-e2e-test//g' | xargs | sed 's/ /, /g')
+        echo "LABELS: $LABELS"
+        echo "::set-output name=labels::$LABELS"
+    - name: Create Backport Issue
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
+      uses: dacbd/create-issue-action@v1
+      id: new-issue
+      with:
+        token: ${{ github.token }}
+        title: |
+          [BACKPORT][v${{ steps.split.outputs._1 }}]${{ github.event.issue.title }}
+        body: |
+          backport ${{ github.event.issue.html_url }}
+        labels: ${{ steps.labels.outputs.labels }}
+        milestone: ${{ fromJSON(steps.milestone.outputs.data).number }}
+        assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}
+    - name: Get Repo Id
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
+      uses: octokit/request-action@v2.x
+      id: repo
+      with:
+        route: GET /repos/${{ github.repository }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: Add Backport Issue To Release
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
+      uses: longhorn/bot/add-zenhub-release-action@master
+      with:
+        zenhub_token: ${{ secrets.ZENHUB_TOKEN }}
+        repo_id: ${{ fromJSON(steps.repo.outputs.data).id }}
+        issue_number: ${{ steps.new-issue.outputs.number }}
+        release_name: ${{ steps.split.outputs._1 }}
 
   automation:
     runs-on: ubuntu-latest
     if: contains(github.event.label.name, 'require/auto-e2e-test')
     steps:
-      - name: Check if Automation Issue Exists
-        uses: actions-cool/issues-helper@v3
-        id: if-automation-issue-exists
-        with:
-          actions: 'find-issues'
-          token: ${{ github.token }}
-          issue-state: 'all'
-          title-includes: |
-            [TEST]${{ github.event.issue.title }}
-      - name: Create Automation Test Issue
-        if: fromJSON(steps.if-automation-issue-exists.outputs.issues)[0] == null
-        uses: dacbd/create-issue-action@v1
-        with:
-          token: ${{ github.token }}
-          title: |
-            [TEST]${{ github.event.issue.title }}
-          body: |
-            adding/updating auto e2e test cases for ${{ github.event.issue.html_url }} if they can be automated
-            
-            cc @longhorn/qa
-          labels: kind/test
+    - name: Is Longhorn Member
+      uses: tspascoal/get-user-teams-membership@v1.0.4
+      id: is-longhorn-member
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+    - name: Check if Automation Issue Exists
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: actions-cool/issues-helper@v3
+      id: if-automation-issue-exists
+      with:
+        actions: 'find-issues'
+        token: ${{ github.token }}
+        issue-state: 'all'
+        title-includes: |
+          [TEST]${{ github.event.issue.title }}
+    - name: Create Automation Test Issue
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-automation-issue-exists.outputs.issues)[0] == null
+      uses: dacbd/create-issue-action@v1
+      with:
+        token: ${{ github.token }}
+        title: |
+          [TEST]${{ github.event.issue.title }}
+        body: |
+          adding/updating auto e2e test cases for ${{ github.event.issue.html_url }} if they can be automated
+          
+          cc @longhorn/qa
+        labels: kind/test
