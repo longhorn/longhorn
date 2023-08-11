@@ -149,8 +149,7 @@ defaultSettings:
   concurrentAutomaticEngineUpgradePerNodeLimit: ~
   backingImageCleanupWaitInterval: ~
   backingImageRecoveryWaitInterval: ~
-  guaranteedEngineManagerCPU: ~
-  guaranteedReplicaManagerCPU: ~
+  guaranteedInstanceManagerCPU: ~
   kubernetesClusterAutoscalerEnabled: ~
   orphanAutoDeletion: ~
   storageNetwork: ~
