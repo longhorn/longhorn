@@ -1,5 +1,5 @@
 ---
-name: Rlease task
+name: Release task
 about: Create a release task
 title: "[RELEASE]"
 labels: release/task
@@ -8,15 +8,15 @@ assignees: ''
 ---
 
 **What's the task? Please describe.**
-Action items for releasing vx.y.z
+Action items for releasing v<x.y.z>
 
-**Describe the items of the task (DoD, definition of done) you'd like.**
+**Describe the sub-tasks.**
   - Pre-Release
     - [ ] Regression test plan (manual) - @khushboo-rancher 
     - [ ] Run e2e regression for pre-GA milestones (`install`, `upgrade`) - @yangchiu 
     - [ ] Run security testing of container images for pre-GA milestones - @yangchiu 
     - [ ] Verify longhorn chart PR to ensure all artifacts are ready for GA (`install`, `upgrade`)  @chriscchien 
-    - [ ] Run core testing (install, upgrade) for GA build from the previous patch and the last patch of the previous feature release (1.4.2). - @yangchiu 
+    - [ ] Run core testing (install, upgrade) for the GA build from the previous patch and the last patch of the previous feature release (1.4.2). - @yangchiu 
   - Release
     - [ ] Release longhorn/chart from the release branch to publish to ArtifactHub
     - [ ] Release note
