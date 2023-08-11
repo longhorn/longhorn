@@ -1,6 +1,6 @@
 ---
-name: Refactoring request
-about: Suggest a refactoring request of an existing feature or design
+name: Refactor request
+about: Suggest a refactoring request for an existing implementation
 title: "[REFACTOR] "
 labels: kind/refactoring
 assignees: ''
@@ -9,16 +9,16 @@ assignees: ''
 
 ## Is your improvement request related to a feature? Please describe
 
-A clear and concise description of what the problem is.
+<!--A clear and concise description of what the problem is.-->
 
 ## Describe the solution you'd like
 
-A clear and concise description of what you want to happen.
+<!--A clear and concise description of what you want to happen.-->
 
 ## Describe alternatives you've considered
 
-A clear and concise description of any alternative solutions or features you've considered.
+<!--A clear and concise description of any alternative solutions or features you've considered.-->
 
 ## Additional context
 
-Add any other context or screenshots about the refactoring request here.
+<!--Add any other context or screenshots about the refactoring request here.-->
