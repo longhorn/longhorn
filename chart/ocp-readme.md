@@ -1,5 +1,20 @@
 # OpenShift / OKD Extra Configuration Steps
 
+- [OpenShift / OKD Extra Configuration Steps](#openshift--okd-extra-configuration-steps)
+  - [Notes](#notes)
+  - [Known Issues](#known-issues)
+  - [Preparing Nodes (Optional)](#preparing-nodes-optional)
+    - [Default /var/lib/longhorn setup](#default-varliblonghorn-setup)
+    - [Separate /var/mnt/longhorn setup](#separate-varmntlonghorn-setup)
+      - [Create Filesystem](#create-filesystem)
+      - [Mounting Disk On Boot](#mounting-disk-on-boot)
+      - [Label and Annotate Nodes](#label-and-annotate-nodes)
+  - [Example values.yaml](#example-valuesyaml)
+  - [Installation](#installation)
+  - [Refs](#refs)
+
+## Notes
+
 Main changes and tasks for OCP are:
 
 - On OCP / OKD, the Operating System is Managed by the Cluster
@@ -36,10 +51,15 @@ Main changes and tasks for OCP are:
   - 4.12.0-0.okd-2023-03-05-022504 - 4.12.0-0.okd-2023-04-16-041331:
     - Tested, No Known Issues
 - 4.13 / 1.26:
-  - 4.13.0-0.okd-2023-05-03-001308 - 4.13.0-0.okd-2023-07-09-062029:
+  - 4.13.0-0.okd-2023-05-03-001308 - 4.13.0-0.okd-2023-08-04-164726:
+    - Tested, No Known Issues
+- 4.14 / 1.27:
+  - 4.14.0-0.okd-2023-08-12-022330 - 4.14.0-0.okd-2023-08-12-022330:
     - Tested, No Known Issues
 
-## Preparing nodes
+## Preparing Nodes (Optional)
+
+Only required if you require additional customizations, such as storage-less nodes, or secondary disks.
 
 ### Default /var/lib/longhorn setup
 
@@ -127,8 +147,8 @@ openshift:
     repository: quay.io/openshift/origin-oauth-proxy
     tag: latest # Pin to OCP/OKD 4.X Version
 
-defaultSettings:
-  createDefaultDiskLabeledNodes: true
+# defaultSettings: # Preparing nodes (Optional)
+  # createDefaultDiskLabeledNodes: true
 
 openshift:
   enabled: true
@@ -136,22 +156,22 @@ openshift:
     route: "longhorn-ui"
     port: 443
     proxy: 8443
-  finalizers: true
-  privileged: true
 ```
 
 ## Installation
 
 ```bash
+# helm template ./chart/ --namespace longhorn-system --values ./chart/values.yaml --no-hooks > longhorn.yaml # Local Testing
 helm template longhorn --namespace longhorn-system --values values.yaml --no-hooks  > longhorn.yaml
 oc create namespace longhorn-system -o yaml --dry-run=client | oc apply -f -
 oc apply -f longhorn.yaml -n longhorn-system
 ```
 
-## REFS
+## Refs
 
 - <https://docs.openshift.com/container-platform/4.11/storage/persistent_storage/persistent-storage-iscsi.html>
 - <https://docs.okd.io/4.11/storage/persistent_storage/persistent-storage-iscsi.html>
 - okd 4.5: <https://github.com/longhorn/longhorn/issues/1831#issuecomment-702690613>
 - okd 4.6: <https://github.com/longhorn/longhorn/issues/1831#issuecomment-765884631>
 - oauth-proxy: <https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml>
+- <https://github.com/longhorn/longhorn/issues/1831>

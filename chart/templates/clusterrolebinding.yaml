@@ -26,7 +26,6 @@ subjects:
   name: longhorn-support-bundle
   namespace: {{ include "release_namespace" . }}
 {{- if .Values.openshift.enabled }}
-{{- if .Values.openshift.privileged }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -47,5 +46,4 @@ subjects:
 - kind: ServiceAccount
   name: default # supportbundle-agent-support-bundle uses default sa
   namespace: {{ include "release_namespace" . }}
-{{- end }}
 {{- end }}

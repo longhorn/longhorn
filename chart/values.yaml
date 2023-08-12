@@ -300,10 +300,8 @@ serviceAccount:
 
 ## openshift settings
 openshift:
-  enabled: false
-  # ui:
-  #   route: "longhorn-ui"
-  #   port: 443
-  #   proxy: 8443
-  # finalizers: true
-  # privileged: true
+  enabled: false # true
+  ui:
+    route: "longhorn-ui"
+    port: 443
+    proxy: 8443
