@@ -434,7 +434,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -442,6 +441,18 @@ metadata:
     longhorn-manager: ""
   name: backingimages.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: BackingImage
@@ -777,7 +788,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -785,6 +795,18 @@ metadata:
     longhorn-manager: ""
   name: backuptargets.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: BackupTarget
@@ -1115,7 +1137,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1123,6 +1144,18 @@ metadata:
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: EngineImage
@@ -1131,6 +1164,7 @@ spec:
     shortNames:
     - lhei
     singular: engineimage
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1893,7 +1927,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1901,6 +1934,18 @@ metadata:
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: Node
@@ -1909,6 +1954,7 @@ spec:
     shortNames:
     - lhn
     singular: node
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2197,7 +2243,7 @@ spec:
                 description: An address where the S3 endpoint is exposed.
                 type: string
               state:
-                description: "The state of the object endpoint as observed by the object endpoint controller. \n The object endpoint implemets a state machine with this, beginning at \"unknown\". Once the object endpoint controller detects the new object endpoint and begins resource creation the state is transformed to \"starting\". The object endpoint controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until a the object endpoint is deleted, at which point the controller will clean up the associated resources. \n  │ object endpoint created  │  └──►┌───────────┐      │ unknown   │  ┌── └───────────┘  │  │ controller creates resources  │  └──►┌───────────┐      │ starting  │  ┌── └───────────┘  │  │ controller detects all resources ready  │  └──►┌───────────┐      │ running   │  ┌── └───────────┘  │  │ object endpoint is marked for deletion  │  └──►┌───────────┐      │ stopping  │  ┌── └───────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object endpoint be deleted"
+                description: "The state of the object endpoint as observed by the object endpoint controller. \n The object endpoint implemets a state machine with this, beginning at \"unknown\". Once the object endpoint controller detects the new object endpoint and begins resource creation the state is transformed to \"starting\". The object endpoint controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until the object endpoint is deleted, at which point the controller will clean up the associated resources. \n  │ object endpoint created  │  └──►┌───────────┐      │ unknown   │  ┌── └───────────┘  │  │ controller creates resources  │  └──►┌───────────┐      │ starting  │  ┌── └───────────┘  │  │ controller detects all resources ready  │  └──►┌───────────┐      │ running   │  ┌── └───────────┘  │  │ object endpoint is marked for deletion  │  └──►┌───────────┐      │ stopping  │  ┌── └───────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object endpoint be deleted"
                 type: string
             type: object
         type: object
@@ -3524,7 +3570,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -3532,6 +3577,18 @@ metadata:
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: Volume
@@ -3540,6 +3597,7 @@ spec:
     shortNames:
     - lhv
     singular: volume
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -4459,7 +4517,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:master-head
+        image: docker.io/mrohrich/longhorn-ui:object-endpoint
         imagePullPolicy: Always
         volumeMounts:
         - name : nginx-cache
