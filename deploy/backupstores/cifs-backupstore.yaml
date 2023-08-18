@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cifs-secret
+  namespace: longhorn-system
+type: Opaque
+data:
+  CIFS_USERNAME: bG9uZ2hvcm4tY2lmcy11c2VybmFtZQ== # longhorn-cifs-username
+  CIFS_PASSWORD: bG9uZ2hvcm4tY2lmcy1wYXNzd29yZA== # longhorn-cifs-password
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cifs-secret
+  namespace: default
+type: Opaque
+data:
+  CIFS_USERNAME: bG9uZ2hvcm4tY2lmcy11c2VybmFtZQ== # longhorn-cifs-username
+  CIFS_PASSWORD: bG9uZ2hvcm4tY2lmcy1wYXNzd29yZA== # longhorn-cifs-password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-test-cifs
+  namespace: default
+  labels:
+    app: longhorn-test-cifs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-test-cifs
+  template:
+    metadata:
+      labels:
+        app: longhorn-test-cifs
+    spec:
+      volumes:
+      - name: cifs-volume
+        emptyDir: {}
+      containers:
+      - name: longhorn-test-cifs-container
+        image: derekbit/samba:latest
+        ports:
+        - containerPort: 139
+        - containerPort: 445
+        imagePullPolicy: Always
+        env:
+        - name: EXPORT_PATH
+          value: /opt/backupstore
+        - name: CIFS_DISK_IMAGE_SIZE_MB
+          value: "4096"
+        - name: CIFS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: cifs-secret
+              key: CIFS_USERNAME
+        - name: CIFS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cifs-secret
+              key: CIFS_PASSWORD
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["SYS_ADMIN", "DAC_READ_SEARCH"]
+        volumeMounts:
+        - name: cifs-volume
+          mountPath: "/opt/backupstore"
+        args: ["-u", "$(CIFS_USERNAME);$(CIFS_PASSWORD)", "-s", "backupstore;$(EXPORT_PATH);yes;no;no;all;none"]
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: longhorn-test-cifs-svc
+  namespace: default
+spec:
+  selector:
+    app: longhorn-test-cifs
+  clusterIP: None
+  ports:
+  - name: netbios-port
+    port: 139
+    targetPort: 139
+  - name: microsoft-port
+    port: 445
+    targetPort: 445
