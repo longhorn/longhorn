@@ -36,5 +36,5 @@ jobs:
       with:
         project-url: https://github.com/orgs/longhorn/projects/4
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-        labeled: kind/test, area/test-infra
+        labeled: kind/test, area/infra
         label-operator: OR
