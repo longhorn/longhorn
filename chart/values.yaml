@@ -9,10 +9,10 @@ global:
       enabled: false
       # Tolerate Linux node taint
       tolerations:
-        - key: "cattle.io/os"
-          value: "linux"
-          effect: "NoSchedule"
-          operator: "Equal"
+      - key: "cattle.io/os"
+        value: "linux"
+        effect: "NoSchedule"
+        operator: "Equal"
       # Select Linux nodes
       nodeSelector:
         kubernetes.io/os: "linux"
@@ -71,7 +71,7 @@ image:
   openshift:
     oauthProxy:
       repository: quay.io/openshift/origin-oauth-proxy
-      tag: latest  # Pin to OCP/OKD 4.X Version
+      tag: 4.13  # Use Your OCP/OKD 4.X Version, Current Stable is 4.13
   pullPolicy: IfNotPresent
 
 service:

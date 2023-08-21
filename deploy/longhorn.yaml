@@ -25,7 +25,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.4.0-dev
+    app.kubernetes.io/version: v1.6.0-dev
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
