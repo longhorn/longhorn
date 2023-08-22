@@ -167,6 +167,8 @@ defaultSettings:
   restoreConcurrentLimit: ~
   v2DataEngine: ~
   offlineReplicaRebuilding: ~
+  allowEmptyNodeSelectorVolume: ~
+  allowEmptyDiskSelectorVolume: ~
 privateRegistry:
   createSecret: ~
   registryUrl: ~
