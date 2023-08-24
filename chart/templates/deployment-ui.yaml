@@ -1,3 +1,41 @@
+{{- if .Values.openshift.enabled }}
+{{- if .Values.openshift.ui.route }}
+# https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml
+# Create a proxy service account and ensure it will use the route "proxy"
+# Create a secure connection to the proxy via a route
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-ui
+  name: {{ .Values.openshift.ui.route }}
+  namespace: {{ include "release_namespace" . }}
+spec:
+  to:
+    kind: Service
+    name: longhorn-ui
+  tls:
+    termination: reencrypt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-ui
+  name: longhorn-ui
+  namespace: {{ include "release_namespace" . }}
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: longhorn-ui-tls
+spec:
+  ports:
+  - name: longhorn-ui
+    port: {{ .Values.openshift.ui.port | default 443 }}
+    targetPort: {{ .Values.openshift.ui.proxy | default 8443 }}
+  selector:
+    app: longhorn-ui
+---
+{{- end }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,6 +53,7 @@ spec:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-ui
     spec:
+      serviceAccountName: longhorn-ui-service-account
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -28,6 +67,28 @@ spec:
                   - longhorn-ui
               topologyKey: kubernetes.io/hostname
       containers:
+      {{- if .Values.openshift.enabled }}
+      {{- if .Values.openshift.ui.route }}
+      - name: oauth-proxy
+        image: {{ template "registry_url" . }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: {{ .Values.openshift.ui.proxy | default 8443 }}
+          name: public
+        args:
+        - --https-address=:{{ .Values.openshift.ui.proxy | default 8443 }}
+        - --provider=openshift
+        - --openshift-service-account=longhorn-ui-service-account
+        - --upstream=http://localhost:8000
+        - --tls-cert=/etc/tls/private/tls.crt
+        - --tls-key=/etc/tls/private/tls.key
+        - --cookie-secret=SECRET
+        - --openshift-sar={"namespace":"{{ include "release_namespace" . }}","group":"longhorn.io","resource":"setting","verb":"delete"}
+        volumeMounts:
+          - mountPath: /etc/tls/private
+            name: longhorn-ui-tls
+      {{- end }}
+      {{- end }}
       - name: longhorn-ui
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -47,6 +108,13 @@ spec:
           - name: LONGHORN_UI_PORT
             value: "8000"
       volumes:
+      {{- if .Values.openshift.enabled }}
+      {{- if .Values.openshift.ui.route }}
+      - name: longhorn-ui-tls
+        secret:
+          secretName: longhorn-ui-tls
+      {{- end }}
+      {{- end }}
       - emptyDir: {}
         name: nginx-cache
       - emptyDir: {}

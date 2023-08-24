@@ -68,6 +68,10 @@ image:
     livenessProbe:
       repository: longhornio/livenessprobe
       tag: v2.9.0
+  openshift:
+    oauthProxy:
+      repository: quay.io/openshift/origin-oauth-proxy
+      tag: 4.13  # Use Your OCP/OKD 4.X Version, Current Stable is 4.13
   pullPolicy: IfNotPresent
 
 service:
@@ -293,3 +297,11 @@ annotations: {}
 serviceAccount:
   # Annotations to add to the service account
   annotations: {}
+
+## openshift settings
+openshift:
+  enabled: false # true
+  ui:
+    route: "longhorn-ui"
+    port: 443
+    proxy: 8443
