@@ -110,32 +110,32 @@ in this LEP are backwards compatible. All gRPC metadata validation is by demand 
 upgraded) client only injects some metadata (e.g. `volume-name` but not `instance-name`), the server only validates the
 metadata provided.
 
-Add an `instance-name` flag to the `longhorn controller <volume-name>` command (e.g. `longhorn controller <volume-name>
---instance-name <instance-name>`). This command already accepts the volume name, so an additional `volume-name` flag
-would be redundant. The longhorn-engine controller server remembers its volume and instance name.
+Add a global `volume-name` flag and a global `engine-instance-name` flag to the engine CLI (e.g. `longhorn -volume-name
+<volume-name> -engine-instance-name <engine-instance-name> <command> <args>`). Virtually all CLI commands create a
+controller client and these flags allow appropriate gRPC metadata to be injected into every client request. Requests
+that reach the wrong longhorn-engine controller server are rejected.
 
-Add a `volume-name` flag and an `instance-name` flag to the `longhorn replica <directory>` command (e.g. `longhorn
-replica <directory> -volume-name <volume-name> -instance-name <instance-name>`). The longhorn-engine replica server
-remembers its volume and instance name.
+Use the global `engine-instance-name` flag and the pre-existing `volume-name` positional argument to allow the
+longhorn-engine controller server to remember its volume and instance name (e.g. `longhorn -engine-instance-name
+<instance-name> controller <volume-name>`). Ignore the global `volume-name` flag, as it is redundant.
 
-Add a `volume-name` flag and an `instance-name` flag to the `longhorn replica <directory>` command (e.g. `longhorn
-replica <directory> -volume-name <volume-name> -instance-name <instance-name>`). The longhorn-engine sync-agent server
-remembers its volume and instance name.
+Use the global `volume-name` flag or the pre-existing local `volume-name` flag and a new `replica-instance-name` flag to
+allow the longhorn-engine replica server to remember its volume and instance name (e.g. `longhorn -volume-name
+<volume-name> replica <directory> -replica-instance-name <replica-instance-name>`).
 
-Add a `volume-name` and `engine-instance-name` flag to every CLI command that launches an asynchronous task (e.g.
-`longhorn ls-replica -volume-name <volume-name> -engine-instance-name <engine-instance-name>`). All such
-commands create a controller client and these flags allow appropriate gRPC metadata to be injected into every client
-request. Requests that reach the wrong longhorn-engine controller server are rejected.
+Use the global `volume-name` flag and a new `replica-instance-name` flag to allow the longhorn-engine sync-agent server
+to remember its volume and instance name (e.g. `longhorn -volume-name <volume-name> sync-agent -replica-instance-name
+<replica-instance-name>`).
 
 Add an additional `replica-instance-name` flag to CLI commands that launch asynchronous tasks that communicate directly
-with the longhorn-engine replica server (e.g. `longhorn add-replica <address> -size <size> -current-size <current-size>
--volume-name <volume-name> -engine-instance-name <engine-instance-name> -replica-instance-name
-<replica-instance-name>`). All such commands create a replica client and these flags allow appropriate gRPC metadata to
-be injected into every client request. Requests that reach the wrong longhorn-engine replica server are rejected.
+with the longhorn-engine replica server (e.g. `longhorn -volume-name <volume-name> add-replica <address> -size <size>
+ -current-size <current-size> -replica-instance-name <replica-instance-name>`). All such commands create a replica
+client and these flags allow appropriate gRPC metadata to be injected into every client request. Requests that reach the
+wrong longhorn-engine replica server are rejected.
 
-Return 5 NOT FOUND with an appropriate message when metadata validation fails. In this case, the NOT_FOUND refers to the
-longhorn-engine component the caller was actually attempting to communicate with. (The particular return code is
-definitely open to discussion.)
+Return 9 FAILED_PRECONDITION with an appropriate message when metadata validation fails. This code is chosen in
+accordance with the [RPC API](https://grpc.github.io/grpc/core/md_doc_statuscodes.html), which instructs developers to
+use FAILED_PRECONDITION if the client should not retry until the system system has been explicitly fixed.
 
 #### Longhorn-Instance-Manager
 
@@ -259,7 +259,7 @@ func ReplicaCmd() cli.Command {
 				Usage: "Name of the volume (for validation purposes)",
 			},
 			cli.StringFlag{
-				Name:  "instance-name",
+				Name:  "replica-instance-name",
 				Value: "",
 				Usage: "Name of the instance (for validation purposes)",
 			},
@@ -318,8 +318,9 @@ validation.
 
 #### Longhorn-Manager Integration
 
-Ensure the engine and replica controllers launch engine and replica processes with `--volume-name` and `--instance-name`
-flags so that these processes can validate identifying gRPC metadata coming from requests.
+Ensure the engine and replica controllers launch engine and replica processes with `-volume-name` and
+`-engine-instance-name` or `-replica-instance-name` flags so that these processes can validate identifying gRPC metadata
+coming from requests.
 
 Ensure the engine controller supplies correct information to the ProxyEngineService client functions so that identity
 validation can occur in the lower layers.
@@ -328,6 +329,7 @@ validation can occur in the lower layers.
 
 This issue/LEP was inspired by [longhorn/longhorn#5709](https://github.com/longhorn/longhorn/issues/5709). In the
 situation described in this issue:
+
 1. An engine controller with out-of-date information (including a replica address the associated volume does not own)
    [issues a ReplicaAdd
    command](https://github.com/longhorn/longhorn-manager/blob/a7dd20cdbdb1a3cea4eb7490f14d94d2b0ef273a/controller/engine_controller.go#L1819)
@@ -339,8 +341,9 @@ situation described in this issue:
    is used to expand the replica before a followup failure to actually add the replica to the controller's backend.
 
 After this improvement, the above scenario will be impossible:
-1. Both the engine and replica controllers will launch engine and replica processes with the `--volume-name` and
-   `--instance-name` flags.
+
+1. Both the engine and replica controllers will launch engine and replica processes with the `-volume-name` and
+   `-engine-instance-name` or `replica-instance-name` flags.
 2. When the engine controller issues a ReplicaAdd command, it will do so using the expanded embedded
    `ProxyEngineRequest` message (with `volume_name` and `instance_name` fields) and an additional
    `replica_instance_name` field.
@@ -353,9 +356,10 @@ After this improvement, the above scenario will be impossible:
 
 ### Test plan
 
-TODO: Integration test plan. 
+#### TODO: Integration Test Plan
 
 In my test environment, I have experimented with:
+
 - Running new versions of all components, making gRPC calls to the longhorn-engine controller and replica processes with
   wrong gRPC metadata, and verifying that these calls fail.
 - Running new versions of all components, making gRPC calls to instance-manager with an incorrect volume-name or
@@ -367,10 +371,30 @@ This is really a better fit for a negative testing scenario (do something that w
 communication, then verify that communication fails), but we have already eliminated the only known recreate for
 [longhorn/longhorn#5709](https://github.com/longhorn/longhorn/issues/5709).
 
-TODO: Engine integration test plan.
+#### Engine Integration Test Plan
 
-I'm unfamiliar with our engine integration tests, but it should be fairly easy to create negative tests that verify the
-expected behavior.
+Rework test fixtures so that:
+
+- All controller and replica processes are created with the information needed for identity validation.
+- It is convenient to create controller and replica clients with the information needed for identity validation.
+- gRPC metadata is automatically injected into controller and replica client requests when clients have the necessary
+  information.
+
+Do not modify the behavior of existing tests. Since these tests were using clients with identity validation information,
+no identity validation is performed.
+
+- Modify functions/fixtures that create engine/replica processes to allow the new flags to be passed, but do not pass
+  them by default.
+- Modify engine/replica clients used by tests to allow for metadata injection, but do not enable it by default.
+
+Create new tests that:
+
+- Ensure validation fails when a directly created client attempts to communicate with a controller or replica server
+  using the wrong identity validation information.
+- Ensure validation fails when an indirectly created client (by the engine) tries to communicate with a replica server
+  using the wrong identity validation information.
+- Ensure validation fails when an indirectly created client (by a CLI command) tries to communicate with a controller or
+  replica server using the wrong identity validation information.
 
 ### Upgrade strategy
 
@@ -382,7 +406,8 @@ supported version (as governed by the `CLIAPIVersion`). Even if other components
 metadata to non-upgraded processes, it will be ignored.
 
 We will only populate extra ProxyEngineService fields when longhorn-manager is running with an update ProxyEngineService
-client. 
+client.
+
 - RPCs from an old client to a new ProxyEngineService server will succeed, but without the extra fields,
   instance-manager will have no useful gRPC metadata to inject into its longhorn-engine requests.
 - RPCs from a new client to an old ProxyEngineService will succeed, but instance-manager will ignore the new fields and
