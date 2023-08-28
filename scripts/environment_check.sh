@@ -189,6 +189,11 @@ cleanup() {
   info "Cleaning up longhorn-environment-check pods..."
   kubectl delete -f $TEMP_DIR/environment_check.yaml > /dev/null
   rm -rf $TEMP_DIR
+  if [ -n "${ns_clean+set}" ]; then
+    info "Deleting longhorn-system namespace..."
+    #kubectl config set-context --current --namespace=default || true
+    kubectl delete namespace longhorn-system > /dev/null
+  fi
   info "Cleanup completed."
 }
 
@@ -501,8 +506,11 @@ DEPENDENCIES=("kubectl" "jq" "mktemp")
 check_local_dependencies "${DEPENDENCIES[@]}"
 
 # Run inside of longhorn-system. This ensures workarounds for non standard PATH systems function correctly.
-kubectl get namespace | grep -q "^longhorn-system" || kubectl create namespace longhorn-system
-kubectl config set-context --current --namespace=longhorn-system
+kubectl get namespace | grep "longhorn-system" > /dev/null || ns_clean=1 && kubectl create namespace longhorn-system > /dev/null 2>&1 && info "Created temporary namespace longhorn-system..."
+kubectl config set-context --current --namespace=longhorn-system > /dev/null
+
+# Check if correct PATH workarounds have been applied.
+#check_path
 
 # Check the each host has a unique hostname (for RWX volume)
 check_hostname_uniqueness
