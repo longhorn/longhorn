@@ -1,0 +1,36 @@
+# Modified version of: https://github.com/longhorn/longhorn/issues/2166
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-host-path-to-longhon
+  annotations:
+    policies.kyverno.io/title: Add Environment Variables from corresponding ConfigMap
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/category: Other
+    policies.kyverno.io/description: >-
+      Longhorn invokes executables on the host system, and needs
+      to be aware of the host systems PATH. This modifies all
+      deployments such that the PATH is explicitly set to support
+      the required system.
+spec:
+  rules:
+    - name: add-env-vars
+      match:
+        resources:
+          kinds:
+            - Pod
+          namespaces:
+            - longhorn-system
+      mutate:
+        patchStrategicMerge:
+          spec:
+            initContainers:
+              - (name): "*"
+                envFrom:
+                  - configMapRef:
+                      name: exec-path
+            containers:
+              - (name): "*"
+                envFrom:
+                  - configMapRef:
+                      name: exec-path

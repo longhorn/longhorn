@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: exec-path
+  namespace: longhorn-system
+data:
+  PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/run/wrappers/bin:/run/current-system/sw/bin 
+    # Taken by combining the output of 'echo $PATH' from NixOS 23.05 and Ubuntu 22.04 LTS
+    # Ubuntu: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    # NixOS 23.05 (system ones only): /run/wrappers/bin:/run/current-system/sw/bin
