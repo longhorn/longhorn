@@ -93,6 +93,10 @@ set_packages_and_check_cmd() {
     CHECK_CMD='pacman -Q'
     PACKAGES=(nfs-utils open-iscsi)
     ;;
+  *"nixos"* )
+    CHECK_CMD="nix-store -q --references /run/current-system/sw | grep " # Awaiting a better solution to this.
+    PACKAGES=(nfs-utils open-iscsi)
+    ;;
   *"gentoo"* )
     CHECK_CMD='qlist -I'
     PACKAGES=(net-fs/nfs-utils sys-block/open-iscsi)
@@ -495,6 +499,10 @@ done
 ######################################################
 DEPENDENCIES=("kubectl" "jq" "mktemp")
 check_local_dependencies "${DEPENDENCIES[@]}"
+
+# Run inside of longhorn-system. This ensures workarounds for non standard PATH systems function correctly.
+kubectl get namespace | grep -q "^longhorn-system" || kubectl create namespace longhorn-system
+kubectl config set-context --current --namespace=longhorn-system
 
 # Check the each host has a unique hostname (for RWX volume)
 check_hostname_uniqueness
