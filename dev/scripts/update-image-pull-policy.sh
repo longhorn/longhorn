@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 NS=longhorn-system
 KINDS="daemonset deployments"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 requested=${1:-0}
 node_count=${2:-1}
