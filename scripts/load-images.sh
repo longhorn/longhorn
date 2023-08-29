@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 list="longhorn-images.txt"
 
 POSITIONAL=()

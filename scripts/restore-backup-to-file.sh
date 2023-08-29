@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export RED='\x1b[0;31m'
 export NO_COLOR='\x1b[0m'
