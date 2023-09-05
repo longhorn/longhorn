@@ -2022,10 +2022,6 @@ spec:
       jsonPath: .status.state
       name: State
       type: string
-    - description: A list of endpoints
-      jsonPath: .status.endpoints
-      name: Endpoints
-      type: list
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
