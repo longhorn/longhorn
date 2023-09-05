@@ -343,22 +343,11 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: backingimages.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: longhorn-system
-          path: /v1/webhook/conversion
-          port: 9443
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: BackingImage
@@ -689,22 +678,11 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: backuptargets.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: longhorn-system
-          path: /v1/webhook/conversion
-          port: 9443
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: BackupTarget
@@ -1030,22 +1008,11 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: longhorn-system
-          path: /v1/webhook/conversion
-          port: 9443
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: EngineImage
@@ -1054,7 +1021,6 @@ spec:
     shortNames:
     - lhei
     singular: engineimage
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1808,22 +1774,11 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: longhorn-system
-          path: /v1/webhook/conversion
-          port: 9443
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: Node
@@ -1832,7 +1787,6 @@ spec:
     shortNames:
     - lhn
     singular: node
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2048,30 +2002,30 @@ metadata:
   creationTimestamp: null
   labels:
     longhorn-manager: ""
-  name: objectendpoints.longhorn.io
+  name: objectstores.longhorn.io
 spec:
   group: longhorn.io
   names:
-    kind: ObjectEndpoint
-    listKind: ObjectEndpointList
-    plural: objectendpoints
+    kind: ObjectStore
+    listKind: ObjectStoreList
+    plural: objectstores
     shortNames:
-    - lhoe
-    singular: objectendpoint
+    - lhos
+    singular: objectstore
   scope: Cluster
   versions:
   - additionalPrinterColumns:
     - jsonPath: .metadata.name
       name: Name
       type: string
-    - description: The state of object endpoint
+    - description: The state of object store
       jsonPath: .status.state
       name: State
       type: string
-    - description: The endpoint address
-      jsonPath: .status.endpoint
-      name: Endpoint
-      type: string
+    - description: A list of endpoints
+      jsonPath: .status.endpoints
+      name: Endpoints
+      type: list
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -2091,7 +2045,7 @@ spec:
           spec:
             properties:
               credentials:
-                description: Credentials contain a pair of access and secret keys that are used to seed the object endpoint.
+                description: Credentials contain a pair of access and secret keys that are used to seed the object store.
                 properties:
                   accessKey:
                     description: An access key. This will be the initial access key for the administrative account.
@@ -2100,24 +2054,69 @@ spec:
                     description: A secret key. This is the secret key corresponding to the access key above.
                     type: string
                 type: object
-              size:
-                anyOf:
-                - type: integer
-                - type: string
-                description: The initial size of the volume to provision. This size together with the storage class will be used to automatically create a suitable volume where the objects will be stored.
-                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                x-kubernetes-int-or-string: true
-              storageClassName:
-                description: The name of a storage class. The backing storage is going to be a new volume from that storage class.
-                type: string
+              endpoints:
+                description: A list of endpoint configurations to make the object store available at.
+                items:
+                  properties:
+                    domainName:
+                      type: string
+                    name:
+                      type: string
+                  type: object
+                type: array
+              storage:
+                description: The configuration of the longhorn volume providing storage for the object store.
+                properties:
+                  diskSelector:
+                    items:
+                      type: string
+                    type: array
+                  fromBackup:
+                    type: string
+                  nodeSelector:
+                    items:
+                      type: string
+                    type: array
+                  numberOfReplicas:
+                    default: 3
+                    minimum: 1
+                    type: integer
+                  replicaSoftAntiAffinity:
+                    description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node
+                    enum:
+                    - ignored
+                    - enabled
+                    - disabled
+                    type: string
+                  replicaZoneSoftAntiAffinity:
+                    description: Replica zone soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same zone
+                    enum:
+                    - ignored
+                    - enabled
+                    - disabled
+                    type: string
+                  size:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    description: The initial size of the volume to provision. The volume will be created such that it can be expanded if resources are available
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  staleReplicaTimeout:
+                    default: 2880
+                    minimum: 1
+                    type: integer
+                type: object
             type: object
           status:
             properties:
-              endpoint:
-                description: An address where the S3 endpoint is exposed.
-                type: string
+              endpoints:
+                description: A list of addresses where the S3 store is exposed.
+                items:
+                  type: string
+                type: array
               state:
-                description: "The state of the object endpoint as observed by the object endpoint controller. \n The object endpoint implemets a state machine with this, beginning at \"unknown\". Once the object endpoint controller detects the new object endpoint and begins resource creation the state is transformed to \"starting\". The object endpoint controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until the object endpoint is deleted, at which point the controller will clean up the associated resources. \n  │ object endpoint created  │  └──►┌───────────┐      │ unknown   │  ┌── └───────────┘  │  │ controller creates resources  │  └──►┌───────────┐      │ starting  │  ┌── └───────────┘  │  │ controller detects all resources ready  │  └──►┌───────────┐      │ running   │  ┌── └───────────┘  │  │ object endpoint is marked for deletion  │  └──►┌───────────┐      │ stopping  │  ┌── └───────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object endpoint be deleted"
+                description: "The state of the object store as observed by the object store controller. \n The object store implemets a state machine with this, beginning at \"unknown\". Once the object store controller detects the new object store and begins resource creation the state is transformed to \"starting\". The object store controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until the object store is deleted, at which point the controller will clean up the associated resources. \n  │ object store created  │  └──►┌───────────┐      │ unknown   │  ┌── └───────────┘  │  │ controller creates resources  │  └──►┌───────────┐      │ starting  │  ┌── └───────────┘  │  │ controller detects all resources ready  │  └──►┌───────────┐      │ running   │  ┌── └───────────┘  │  │ object endpoint is marked for deletion  │  └──►┌───────────┐      │ stopping  │  ┌── └───────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object store be deleted"
                 type: string
             type: object
         type: object
@@ -3412,22 +3411,11 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: longhorn-system
-          path: /v1/webhook/conversion
-          port: 9443
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: Volume
@@ -3436,7 +3424,6 @@ spec:
     shortNames:
     - lhv
     singular: volume
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:

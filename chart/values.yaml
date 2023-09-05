@@ -64,7 +64,10 @@ image:
       tag: v0.0.27
     objectGateway:
       repository: quay.io/s3gw/s3gw
-      tag: v0.19.0
+      tag: v0.20.0
+    objectGatewayUI:
+      repository: quay.io/s3gw/s3gw-ui
+      tag: v0.20.0
   csi:
     attacher:
       # -- Specify CSI attacher image repository. Leave blank to autodetect
