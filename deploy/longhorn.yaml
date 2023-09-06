@@ -2069,6 +2069,8 @@ spec:
           status:
             description: NodeStatus defines the observed state of the Longhorn node
             properties:
+              autoEvicting:
+                type: boolean
               conditions:
                 items:
                   properties:
