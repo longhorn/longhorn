@@ -282,6 +282,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.recurringSuccessfulJobsHistoryLimit | This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0. |
 | defaultSettings.removeSnapshotsDuringFilesystemTrim | This setting allows Longhorn filesystem trim feature to automatically mark the latest snapshot and its ancestors as removed and stops at the snapshot containing multiple children. |
 | defaultSettings.replicaAutoBalance | Enable this setting automatically rebalances replicas when discovered an available node. |
+| defaultSettings.replicaDiskSoftAntiAffinity | Allow scheduling on disks with existing healthy replicas of the same volume. By default true. |
 | defaultSettings.replicaFileSyncHttpClientTimeout | In seconds. The setting specifies the HTTP client timeout to the file sync server. |
 | defaultSettings.replicaReplenishmentWaitInterval | In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume. |
 | defaultSettings.replicaSoftAntiAffinity | Allow scheduling on nodes with existing healthy replicas of the same volume. By default false. |

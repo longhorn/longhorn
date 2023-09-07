@@ -225,6 +225,8 @@ defaultSettings:
   disableSchedulingOnCordonedNode: ~
   # -- Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas. Nodes don't belong to any Zone will be treated as in the same Zone. Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone. By default true.
   replicaZoneSoftAntiAffinity: ~
+  # -- Allow scheduling on disks with existing healthy replicas of the same volume. By default true.
+  replicaDiskSoftAntiAffinity: ~
   # -- Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down.
   nodeDownPodDeletionPolicy: ~
   # -- Define the policy to use when a node with the last healthy replica of a volume is drained.

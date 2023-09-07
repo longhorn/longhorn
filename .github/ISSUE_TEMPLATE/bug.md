@@ -40,6 +40,8 @@ assignees: ''
    - Network bandwidth between the nodes:
  - Underlying Infrastructure (e.g. on AWS/GCE, EKS/GKE, VMWare/KVM, Baremetal):
  - Number of Longhorn volumes in the cluster:
+ - Impacted Longhorn resources:
+   - Volume names:
 
 ## Additional context
 

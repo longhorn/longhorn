@@ -405,6 +405,12 @@ questions:
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
+  - variable: defaultSettings.replicaDiskSoftAntiAffinity
+    label: Replica Disk Level Soft Anti-Affinity
+    description: 'Allow scheduling on disks with existing healthy replicas of the same volume. By default true.'
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
   - variable: defaultSettings.allowEmptyNodeSelectorVolume
     label: Allow Empty Node Selector Volume
     description: "Allow Scheduling Empty Node Selector Volumes To Any Node"

@@ -3380,15 +3380,22 @@ spec:
                 - least-effort
                 - best-effort
                 type: string
+              replicaDiskSoftAntiAffinity:
+                description: Replica disk soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same disk.
+                enum:
+                - ignored
+                - enabled
+                - disabled
+                type: string
               replicaSoftAntiAffinity:
-                description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node
+                description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node.
                 enum:
                 - ignored
                 - enabled
                 - disabled
                 type: string
               replicaZoneSoftAntiAffinity:
-                description: Replica zone soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same zone
+                description: Replica zone soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same zone.
                 enum:
                 - ignored
                 - enabled
