@@ -89,9 +89,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: backingimagedatasources.longhorn.io
 spec:
@@ -260,9 +257,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: backingimagemanagers.longhorn.io
 spec:
@@ -436,9 +430,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: backingimages.longhorn.io
 spec:
@@ -583,9 +574,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: backups.longhorn.io
 spec:
@@ -779,9 +767,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: backuptargets.longhorn.io
 spec:
@@ -950,9 +935,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: backupvolumes.longhorn.io
 spec:
@@ -1117,9 +1099,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
@@ -1296,9 +1275,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: engines.longhorn.io
 spec:
@@ -1654,9 +1630,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: instancemanagers.longhorn.io
 spec:
@@ -1895,9 +1868,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
@@ -2124,9 +2094,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: objectstores.longhorn.io
 spec:
@@ -2138,15 +2105,16 @@ spec:
     shortNames:
     - lhos
     singular: objectstore
-  scope: Cluster
+  scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .metadata.name
-      name: Name
-      type: string
     - description: The state of object store
       jsonPath: .status.state
       name: State
+      type: string
+    - description: Endpoint addresses
+      jsonPath: .status.endpoints[*]
+      name: Endpoints
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -2184,11 +2152,30 @@ spec:
                       type: string
                     name:
                       type: string
+                  required:
+                  - name
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - name
+                x-kubernetes-list-type: map
+              image:
+                description: Desired images for the gateway and UI containers.
+                type: string
               storage:
                 description: The configuration of the longhorn volume providing storage for the object store.
                 properties:
+                  backendStoreDriver:
+                    enum:
+                    - v1
+                    - v2
+                    type: string
+                  dataLocality:
+                    enum:
+                    - disabled
+                    - best-effort
+                    - strict-local
+                    type: string
                   diskSelector:
                     items:
                       type: string
@@ -2203,6 +2190,32 @@ spec:
                     default: 3
                     minimum: 1
                     type: integer
+                  recurringJobSelector:
+                    items:
+                      properties:
+                        isGroup:
+                          type: boolean
+                        name:
+                          type: string
+                      required:
+                      - isGroup
+                      - name
+                      type: object
+                    type: array
+                  replicaAutoBalance:
+                    enum:
+                    - ignored
+                    - disabled
+                    - least-effort
+                    - best-effort
+                    type: string
+                  replicaDiskSoftAntiAffinity:
+                    description: Replica disk soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same disk.
+                    enum:
+                    - ignored
+                    - enabled
+                    - disabled
+                    type: string
                   replicaSoftAntiAffinity:
                     description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node
                     enum:
@@ -2217,6 +2230,8 @@ spec:
                     - enabled
                     - disabled
                     type: string
+                  revisionCounterDisabled:
+                    type: boolean
                   size:
                     anyOf:
                     - type: integer
@@ -2228,7 +2243,22 @@ spec:
                     default: 2880
                     minimum: 1
                     type: integer
+                  unmapMarkSnapChainRemoved:
+                    enum:
+                    - ignored
+                    - disabled
+                    - enabled
+                    type: string
                 type: object
+              targetState:
+                default: running
+                description: A target state. Can be used to volutarily stop the gateway for offline volume operations
+                enum:
+                - running
+                - stopped
+                type: string
+              uiImage:
+                type: string
             type: object
           status:
             properties:
@@ -2238,7 +2268,15 @@ spec:
                   type: string
                 type: array
               state:
-                description: "The state of the object store as observed by the object store controller. \n The object store implemets a state machine with this, beginning at \"unknown\". Once the object store controller detects the new object store and begins resource creation the state is transformed to \"starting\". The object store controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until the object store is deleted, at which point the controller will clean up the associated resources. \n  │ object store created  │  └──►┌───────────┐      │ unknown   │  ┌── └───────────┘  │  │ controller creates resources  │  └──►┌───────────┐      │ starting  │  ┌── └───────────┘  │  │ controller detects all resources ready  │  └──►┌───────────┐      │ running   │  ┌── └───────────┘  │  │ object endpoint is marked for deletion  │  └──►┌───────────┐      │ stopping  │  ┌── └───────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object store be deleted"
+                description: "The state of the object store as observed by the object store controller. \n The object store implemets a state machine with this, beginning at \"unknown\". Once the object store controller detects the new object store and begins resource creation the state is transformed to \"starting\". The object store controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until the object store is deleted, at which point the controller will clean up the associated resources. \n  │ object store created  │  └──►┌─────────────┐      │ unknown     │  ┌── └─────────────┘  │  │ controller creates resources  │  └──►┌─────────────┐      │ starting    │◄─────────────────────────────┐  ┌── └─────────────┘                              │  │                                                │  │ controller detects all resources ready         │ target state  │                                                │ is set to `running`  └──►┌─────────────┐                              │      │ running     │                              │  ┌── └─────────────┘                              │  │     │                                          │  │     │ target state is set to `stopped`         │  │     │                                          │  │     └──►┌─────────────┐                        │  │         │ stopping    │                        │  │     ┌── └─────────────┘                        │  │     │                                          │  │     │ deployment is scaled down and volume     │  │     │ is detached                              │  │     │                                          │  │     └──►┌─────────────┐                        │  │         │ stopped     │                        │  │         └─────────────┘────────────────────────┘  │  │ object endpoint is marked for deletion  │  └──►┌─────────────┐      │ terminating │  ┌── └─────────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object store be deleted \n The \"stopped\" state is used in cases where a user may need to stop the s3gw workload on the volume but wants to restart it with the same configuration and data afterwards. E.g. maintenance work, moving the longhorn volume to a new instance manager etc. \n Any state can transition to the \"error\" state. At which point probably user intervention is necessary to recover."
+                enum:
+                - unknown
+                - starting
+                - running
+                - stopping
+                - stopped
+                - terminating
+                - error
                 type: string
             type: object
         type: object
@@ -2529,9 +2567,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: replicas.longhorn.io
 spec:
@@ -2749,9 +2784,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: settings.longhorn.io
 spec:
@@ -2840,9 +2872,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: sharemanagers.longhorn.io
 spec:
@@ -2955,9 +2984,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: snapshots.longhorn.io
 spec:
@@ -3082,9 +3108,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: supportbundles.longhorn.io
 spec:
@@ -3208,9 +3231,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: systembackups.longhorn.io
 spec:
@@ -3336,9 +3356,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: systemrestores.longhorn.io
 spec:
@@ -3567,9 +3584,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.7.0
   creationTimestamp: null
   labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
@@ -3918,137 +3932,6 @@ status:
   conditions: []
   storedVersions: []
 ---
-# Source: longhorn/templates/crds.yaml
-apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
-    longhorn-manager: ""
-  name: volumeattachments.longhorn.io
-spec:
-  group: longhorn.io
-  names:
-    kind: VolumeAttachment
-    listKind: VolumeAttachmentList
-    plural: volumeattachments
-    shortNames:
-      - lhva
-    singular: volumeattachment
-  scope: Namespaced
-  versions:
-    - additionalPrinterColumns:
-        - jsonPath: .metadata.creationTimestamp
-          name: Age
-          type: date
-      name: v1beta2
-      schema:
-        openAPIV3Schema:
-          description: VolumeAttachment stores attachment information of a Longhorn volume
-          properties:
-            apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-              type: string
-            kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: VolumeAttachmentSpec defines the desired state of Longhorn VolumeAttachment
-              properties:
-                attachmentTickets:
-                  additionalProperties:
-                    properties:
-                      generation:
-                        description: A sequence number representing a specific generation of the desired state. Populated by the system. Read-only.
-                        format: int64
-                        type: integer
-                      id:
-                        description: The unique ID of this attachment. Used to differentiate different attachments of the same volume.
-                        type: string
-                      nodeID:
-                        description: The node that this attachment is requesting
-                        type: string
-                      parameters:
-                        additionalProperties:
-                          type: string
-                        description: Optional additional parameter for this attachment
-                        type: object
-                      type:
-                        type: string
-                    type: object
-                  type: object
-                volume:
-                  description: The name of Longhorn volume of this VolumeAttachment
-                  type: string
-              required:
-                - volume
-              type: object
-            status:
-              description: VolumeAttachmentStatus defines the observed state of Longhorn VolumeAttachment
-              properties:
-                attachmentTicketStatuses:
-                  additionalProperties:
-                    properties:
-                      conditions:
-                        description: Record any error when trying to fulfill this attachment
-                        items:
-                          properties:
-                            lastProbeTime:
-                              description: Last time we probed the condition.
-                              type: string
-                            lastTransitionTime:
-                              description: Last time the condition transitioned from one status to another.
-                              type: string
-                            message:
-                              description: Human-readable message indicating details about last transition.
-                              type: string
-                            reason:
-                              description: Unique, one-word, CamelCase reason for the condition's last transition.
-                              type: string
-                            status:
-                              description: Status is the status of the condition. Can be True, False, Unknown.
-                              type: string
-                            type:
-                              description: Type is the type of the condition.
-                              type: string
-                          type: object
-                        nullable: true
-                        type: array
-                      generation:
-                        description: A sequence number representing a specific generation of the desired state. Populated by the system. Read-only.
-                        format: int64
-                        type: integer
-                      id:
-                        description: The unique ID of this attachment. Used to differentiate different attachments of the same volume.
-                        type: string
-                      satisfied:
-                        description: Indicate whether this attachment ticket has been satisfied
-                        type: boolean
-                    required:
-                      - conditions
-                      - satisfied
-                    type: object
-                  type: object
-              type: object
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
----
 # Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -4314,7 +4197,7 @@ spec:
       containers:
       - name: longhorn-manager
         image: docker.io/mrohrich/longhorn-manager:object-endpoint
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
         command:
@@ -4425,7 +4308,7 @@ spec:
       containers:
         - name: longhorn-driver-deployer
           image: docker.io/mrohrich/longhorn-manager:object-endpoint
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
@@ -4503,7 +4386,7 @@ spec:
       containers:
       - name: longhorn-ui
         image: docker.io/mrohrich/longhorn-ui:object-endpoint
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         volumeMounts:
         - name : nginx-cache
           mountPath: /var/cache/nginx/

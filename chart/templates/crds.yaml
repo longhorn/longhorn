@@ -2012,15 +2012,16 @@ spec:
     shortNames:
     - lhos
     singular: objectstore
-  scope: Cluster
+  scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .metadata.name
-      name: Name
-      type: string
     - description: The state of object store
       jsonPath: .status.state
       name: State
+      type: string
+    - description: Endpoint addresses
+      jsonPath: .status.endpoints[*]
+      name: Endpoints
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
@@ -2058,11 +2059,30 @@ spec:
                       type: string
                     name:
                       type: string
+                  required:
+                  - name
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - name
+                x-kubernetes-list-type: map
+              image:
+                description: Desired images for the gateway and UI containers.
+                type: string
               storage:
                 description: The configuration of the longhorn volume providing storage for the object store.
                 properties:
+                  backendStoreDriver:
+                    enum:
+                    - v1
+                    - v2
+                    type: string
+                  dataLocality:
+                    enum:
+                    - disabled
+                    - best-effort
+                    - strict-local
+                    type: string
                   diskSelector:
                     items:
                       type: string
@@ -2077,6 +2097,32 @@ spec:
                     default: 3
                     minimum: 1
                     type: integer
+                  recurringJobSelector:
+                    items:
+                      properties:
+                        isGroup:
+                          type: boolean
+                        name:
+                          type: string
+                      required:
+                      - isGroup
+                      - name
+                      type: object
+                    type: array
+                  replicaAutoBalance:
+                    enum:
+                    - ignored
+                    - disabled
+                    - least-effort
+                    - best-effort
+                    type: string
+                  replicaDiskSoftAntiAffinity:
+                    description: Replica disk soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same disk.
+                    enum:
+                    - ignored
+                    - enabled
+                    - disabled
+                    type: string
                   replicaSoftAntiAffinity:
                     description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node
                     enum:
@@ -2091,6 +2137,8 @@ spec:
                     - enabled
                     - disabled
                     type: string
+                  revisionCounterDisabled:
+                    type: boolean
                   size:
                     anyOf:
                     - type: integer
@@ -2102,7 +2150,22 @@ spec:
                     default: 2880
                     minimum: 1
                     type: integer
+                  unmapMarkSnapChainRemoved:
+                    enum:
+                    - ignored
+                    - disabled
+                    - enabled
+                    type: string
                 type: object
+              targetState:
+                default: running
+                description: A target state. Can be used to volutarily stop the gateway for offline volume operations
+                enum:
+                - running
+                - stopped
+                type: string
+              uiImage:
+                type: string
             type: object
           status:
             properties:
@@ -2112,7 +2175,15 @@ spec:
                   type: string
                 type: array
               state:
-                description: "The state of the object store as observed by the object store controller. \n The object store implemets a state machine with this, beginning at \"unknown\". Once the object store controller detects the new object store and begins resource creation the state is transformed to \"starting\". The object store controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until the object store is deleted, at which point the controller will clean up the associated resources. \n  │ object store created  │  └──►┌───────────┐      │ unknown   │  ┌── └───────────┘  │  │ controller creates resources  │  └──►┌───────────┐      │ starting  │  ┌── └───────────┘  │  │ controller detects all resources ready  │  └──►┌───────────┐      │ running   │  ┌── └───────────┘  │  │ object endpoint is marked for deletion  │  └──►┌───────────┐      │ stopping  │  ┌── └───────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object store be deleted"
+                description: "The state of the object store as observed by the object store controller. \n The object store implemets a state machine with this, beginning at \"unknown\". Once the object store controller detects the new object store and begins resource creation the state is transformed to \"starting\". The object store controller observes the resources and once all resources are up and ready the state transitions to \"running\". The state remains in \"running\" until the object store is deleted, at which point the controller will clean up the associated resources. \n  │ object store created  │  └──►┌─────────────┐      │ unknown     │  ┌── └─────────────┘  │  │ controller creates resources  │  └──►┌─────────────┐      │ starting    │◄─────────────────────────────┐  ┌── └─────────────┘                              │  │                                                │  │ controller detects all resources ready         │ target state  │                                                │ is set to `running`  └──►┌─────────────┐                              │      │ running     │                              │  ┌── └─────────────┘                              │  │     │                                          │  │     │ target state is set to `stopped`         │  │     │                                          │  │     └──►┌─────────────┐                        │  │         │ stopping    │                        │  │     ┌── └─────────────┘                        │  │     │                                          │  │     │ deployment is scaled down and volume     │  │     │ is detached                              │  │     │                                          │  │     └──►┌─────────────┐                        │  │         │ stopped     │                        │  │         └─────────────┘────────────────────────┘  │  │ object endpoint is marked for deletion  │  └──►┌─────────────┐      │ terminating │  ┌── └─────────────┘  │  │ controller waits for dependent resources to disappear before removing  │ the finalizer, thereby letting the object store be deleted \n The \"stopped\" state is used in cases where a user may need to stop the s3gw workload on the volume but wants to restart it with the same configuration and data afterwards. E.g. maintenance work, moving the longhorn volume to a new instance manager etc. \n Any state can transition to the \"error\" state. At which point probably user intervention is necessary to recover."
+                enum:
+                - unknown
+                - starting
+                - running
+                - stopping
+                - stopped
+                - terminating
+                - error
                 type: string
             type: object
         type: object
