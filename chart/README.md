@@ -82,19 +82,19 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| global.cattle.systemDefaultRegistry | string | `""` | system default registry |
-| global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector | string | `"kubernetes.io/os:linux"` | node selector for Longhorn run-time created components |
-| global.cattle.windowsCluster.defaultSetting.taintToleration | string | `"cattle.io/os=linux:NoSchedule"` | toleration for Longhorn run-time created components |
+| global.cattle.systemDefaultRegistry | string | `""` | System default registry |
+| global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector | string | `"kubernetes.io/os:linux"` | Node selector for Longhorn system managed components |
+| global.cattle.windowsCluster.defaultSetting.taintToleration | string | `"cattle.io/os=linux:NoSchedule"` | Toleration for Longhorn system managed components |
 | global.cattle.windowsCluster.enabled | bool | `false` | Enable this to allow Longhorn to run on the Rancher deployed Windows cluster |
-| global.cattle.windowsCluster.nodeSelector | object | `{"kubernetes.io/os":"linux"}` | Select Linux nodes |
-| global.cattle.windowsCluster.tolerations | list | `[{"effect":"NoSchedule","key":"cattle.io/os","operator":"Equal","value":"linux"}]` | Tolerate Linux node taint |
+| global.cattle.windowsCluster.nodeSelector | object | `{"kubernetes.io/os":"linux"}` | Select Linux nodes to run Longhorn user deployed components |
+| global.cattle.windowsCluster.tolerations | list | `[{"effect":"NoSchedule","key":"cattle.io/os","operator":"Equal","value":"linux"}]` | Tolerate Linux nodes to run Longhorn user deployed components |
 
 ### Network Policies
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | networkPolicies.enabled | bool | `false` | Enable NetworkPolicies to limit access to the Longhorn pods |
-| networkPolicies.type | string | `"k3s"` | Create the policy based on your distribution to allow access for the ingress. Available types: `k3s`, `rke2`, `rke1` |
+| networkPolicies.type | string | `"k3s"` | Create the policy based on your distribution to allow access for the ingress. Options: `k3s`, `rke2`, `rke1` |
 
 ### Image Settings
 
@@ -128,16 +128,16 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.ui.tag | string | `"master-head"` | Specify Longhorn ui image tag |
 | image.openshift.oauthProxy.repository | string | `"quay.io/openshift/origin-oauth-proxy"` | For openshift user. Specify oauth proxy image repository |
 | image.openshift.oauthProxy.tag | float | `4.13` | For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.13 |
-| image.pullPolicy | string | `"IfNotPresent"` | `imagePullPolicy` to apply to all containers |
+| image.pullPolicy | string | `"IfNotPresent"` | Image pull policy which applies to all user deployed Longhorn Components. e.g, Longhorn manager, Longhorn driver, Longhorn UI |
 
 ### Service Settings
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| service.manager.nodePort | string | `""` | NodePort port number (to set explicitly, choose port between 30000-32767) |
-| service.manager.type | string | `"ClusterIP"` | Define Longhorn manager service type. |
-| service.ui.nodePort | string | `nil` | NodePort port number (to set explicitly, choose port between 30000-32767) |
-| service.ui.type | string | `"ClusterIP"` | Define Longhorn UI service type. Available types: `ClusterIP`, `NodePort`, `LoadBalancer`, `Rancher-Proxy` |
+| Key | Description |
+|-----|-------------|
+| service.manager.nodePort | NodePort port number (to set explicitly, choose port between 30000-32767) |
+| service.manager.type | Define Longhorn manager service type. |
+| service.ui.nodePort | NodePort port number (to set explicitly, choose port between 30000-32767) |
+| service.ui.type | Define Longhorn UI service type. Options: `ClusterIP`, `NodePort`, `LoadBalancer`, `Rancher-Proxy` |
 
 ### StorageClass Settings
 
@@ -150,53 +150,62 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.backingImage.name | string | `nil` | Specify a backing image that will be used by Longhorn volumes in Longhorn StorageClass. If not exists, the backing image data source type and backing image data source parameters should be specified so that Longhorn will create the backing image before using it |
 | persistence.defaultClass | bool | `true` | Set Longhorn StorageClass as default |
 | persistence.defaultClassReplicaCount | int | `3` | Set replica count for Longhorn StorageClass |
-| persistence.defaultDataLocality | string | `"disabled"` | Set data locality for Longhorn StorageClass (`disabled` or `best-effort`) |
+| persistence.defaultDataLocality | string | `"disabled"` | Set data locality for Longhorn StorageClass. Options: `disabled`, `best-effort` |
 | persistence.defaultFsType | string | `"ext4"` | Set filesystem type for Longhorn StorageClass |
 | persistence.defaultMkfsParams | string | `""` | Set mkfs options for Longhorn StorageClass |
 | persistence.defaultNodeSelector.enable | bool | `false` | Enable Node selector for Longhorn StorageClass |
-| persistence.defaultNodeSelector.selector | string | `""` | We use NodeSelector when we want to bind PVC via StorageClass into desired mountpoint on the nodes tagged with its value |
+| persistence.defaultNodeSelector.selector | string | `""` | This selector enables only certain nodes having these tags to be used for the volume. e.g. `"storage,fast"` |
 | persistence.migratable | bool | `false` | Set volume migratable for Longhorn StorageClass |
-| persistence.reclaimPolicy | string | `"Delete"` | Define reclaim policy (`Retain` or `Delete`) |
+| persistence.reclaimPolicy | string | `"Delete"` | Define reclaim policy. Options: `Retain`, `Delete` |
 | persistence.recurringJobSelector.enable | bool | `false` | Enable recurring job selector for Longhorn StorageClass |
 | persistence.recurringJobSelector.jobList | list | `[]` | Recurring job selector list for Longhorn StorageClass. Please be careful of quotes of input. e.g., `[{"name":"backup", "isGroup":true}]` |
-| persistence.removeSnapshotsDuringFilesystemTrim | string | `"ignored"` | Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass (`ignored`, `enabled` or `disabled`) |
+| persistence.removeSnapshotsDuringFilesystemTrim | string | `"ignored"` | Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass. Options: `ignored`, `enabled`, `disabled` |
 
 ### CSI Settings
 
-| Key |Default | Description |
-|-----|---------|-------------|
-| csi.attacherReplicaCount | `nil` | Specify replica count of CSI Attacher. Leave blank to use default count: 3 |
-| csi.kubeletRootDir | `nil` | Specify kubelet root-dir. Leave blank to autodetect |
-| csi.provisionerReplicaCount | `nil` | Specify replica count of CSI Provisioner. Leave blank to use default count: 3 |
-| csi.resizerReplicaCount | `nil` | Specify replica count of CSI Resizer. Leave blank to use default count: 3 |
-| csi.snapshotterReplicaCount | `nil` | Specify replica count of CSI Snapshotter. Leave blank to use default count: 3 |
+| Key | Description |
+|-----|-------------|
+| csi.attacherReplicaCount | Specify replica count of CSI Attacher. Leave blank to use default count: 3 |
+| csi.kubeletRootDir | Specify kubelet root-dir. Leave blank to autodetect |
+| csi.provisionerReplicaCount | Specify replica count of CSI Provisioner. Leave blank to use default count: 3 |
+| csi.resizerReplicaCount | Specify replica count of CSI Resizer. Leave blank to use default count: 3 |
+| csi.snapshotterReplicaCount | Specify replica count of CSI Snapshotter. Leave blank to use default count: 3 |
 
 ### Longhorn Manager Settings
 
+Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
+These settings only apply to Longhorn manager component.
+
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| longhornManager.log.format | string | `"plain"` | Allowed values are `plain` or `json`. |
-| longhornManager.nodeSelector | object | `{}` | nodeSelector for longhorn manager |
-| longhornManager.priorityClass | string | `nil` | priorityClass for longhorn manager |
-| longhornManager.serviceAnnotations | object | `{}` | nodeSelector for longhorn manager |
-| longhornManager.tolerations | list | `[]` | tolerations for longhorn manager |
+| longhornManager.log.format | string | `"plain"` | Options: `plain`, `json` |
+| longhornManager.nodeSelector | object | `{}` | Select nodes to run Longhorn manager |
+| longhornManager.priorityClass | string | `nil` | Priority class for longhorn manager |
+| longhornManager.serviceAnnotations | object | `{}` | Annotation used in Longhorn manager service |
+| longhornManager.tolerations | list | `[]` | Tolerate nodes to run Longhorn manager |
 
 ### Longhorn Driver Settings
 
+Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
+These settings only apply to Longhorn driver component.
+
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| longhornDriver.nodeSelector | object | `{}` | nodeSelector for longhorn driver |
-| longhornDriver.priorityClass | string | `nil` | priorityClass for longhorn driver |
-| longhornDriver.tolerations | list | `[]` | tolerations for longhorn driver |
+| longhornDriver.nodeSelector | object | `{}` | Select nodes to run Longhorn driver |
+| longhornDriver.priorityClass | string | `nil` | Priority class for longhorn driver |
+| longhornDriver.tolerations | list | `[]` | Tolerate nodes to run Longhorn driver |
 
 ### Longhorn UI Settings
 
+Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
+These settings only apply to Longhorn UI component.
+
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| longhornUI.nodeSelector | object | `{}` | nodeSelector count for longhorn ui |
-| longhornUI.priorityClass | string | `nil` | priorityClass count for longhorn ui |
-| longhornUI.replicas | int | `2` | replica count for longhorn ui |
-| longhornUI.tolerations | list | `[]` | tolerations count for longhorn ui |
+| longhornUI.nodeSelector | object | `{}` | Select nodes to run Longhorn UI |
+| longhornUI.priorityClass | string | `nil` | Priority class count for longhorn ui |
+| longhornUI.replicas | int | `2` | Replica count for longhorn ui |
+| longhornUI.tolerations | list | `[]` | Tolerate nodes to run Longhorn UI |
 
 ### Ingress Settings
 
@@ -204,7 +213,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 |-----|------|---------|-------------|
 | ingress.annotations | string | `nil` | Ingress annotations done as key:value pairs |
 | ingress.enabled | bool | `false` | Set to true to enable ingress record generation |
-| ingress.host | string | `"sslip.io"` |  |
+| ingress.host | string | `"sslip.io"` | Layer 7 Load Balancer hostname |
 | ingress.ingressClassName | string | `nil` | Add ingressClassName to the Ingress Can replace the kubernetes.io/ingress.class annotation on v1.18+ |
 | ingress.path | string | `"/"` | If ingress is enabled you can set the default ingress path then you can access the UI by using the following full path {{host}}+{{path}} |
 | ingress.secrets | string | `nil` | If you're providing your own certificates, please use this to add the certificates as secrets |
@@ -212,14 +221,30 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | ingress.tls | bool | `false` | Set this to true in order to enable TLS on the ingress record |
 | ingress.tlsSecret | string | `"longhorn.local-tls"` | If TLS is set to true, you must declare what secret will store the key/certificate for TLS |
 
-### Openshift Settings
+### Private Registry Settings
+
+Longhorn can be installed in an air gapped environment with private registry settings. Please refer to **Air Gap Installation** in our official site [link](https://longhorn.io/docs)
+
+| Key | Description |
+|-----|-------------|
+| privateRegistry.createSecret | Set `true` to create a new private registry secret |
+| privateRegistry.registryPasswd | Password used to authenticate to private registry |
+| privateRegistry.registrySecret | If create a new private registry secret is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry |
+| privateRegistry.registryUrl | URL of private registry. Leave blank to apply system default registry |
+| privateRegistry.registryUser | User used to authenticate to private registry |
+
+### OS/Kubernetes Distro Settings
+
+#### Opensift Settings
+
+Please also refer to this document [ocp-readme](https://github.com/longhorn/longhorn/blob/master/chart/ocp-readme.md) for more details
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| openshift.enabled | bool | `false` | enable when using openshift |
-| openshift.ui.port | int | `443` | ui port in openshift environment |
-| openshift.ui.proxy | int | `8443` | ui proxy in openshift environment |
-| openshift.ui.route | string | `"longhorn-ui"` | ui route in openshift environment |
+| openshift.enabled | bool | `false` | Enable when using openshift |
+| openshift.ui.port | int | `443` | UI port in openshift environment |
+| openshift.ui.proxy | int | `8443` | UI proxy in openshift environment |
+| openshift.ui.route | string | `"longhorn-ui"` | UI route in openshift environment |
 
 ### Other Settings
 
@@ -227,12 +252,6 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 |-----|---------|-------------|
 | annotations | `{}` | Annotations to add to the Longhorn Manager DaemonSet Pods. Optional. |
 | enablePSP | `false` | For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller, set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start |
-| namespaceOverride | `""` | Specify override namespace, specifically this is useful for using longhorn as sub-chart and its release namespace is not the `longhorn-system` |
-| privateRegistry.createSecret | `nil` | Set `true` to create a new private registry secret |
-| privateRegistry.registryPasswd | `nil` | Password used to authenticate to private registry |
-| privateRegistry.registrySecret | `nil` | If create a new private registry secret is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry |
-| privateRegistry.registryUrl | `nil` | URL of private registry. Leave blank to apply system default registry |
-| privateRegistry.registryUser | `nil` | User used to authenticate to private registry |
 
 ### System Default Settings
 
@@ -244,16 +263,16 @@ For more details like types or options, you can refer to **Settings Reference** 
 |-----|-------------|
 | defaultSettings.allowEmptyDiskSelectorVolume | Allow Scheduling Empty Disk Selector Volumes To Any Disk |
 | defaultSettings.allowEmptyNodeSelectorVolume | Allow Scheduling Empty Node Selector Volumes To Any Node |
-| defaultSettings.allowRecurringJobWhileVolumeDetached | If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup when it is the time to do recurring snapshot/backup. |
+| defaultSettings.allowRecurringJobWhileVolumeDetached | If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup  when it is the time to do recurring snapshot/backup. |
 | defaultSettings.allowVolumeCreationWithDegradedAvailability | This setting allows user to create and attach a volume that doesn't have all the replicas scheduled at the time of creation. |
 | defaultSettings.autoCleanupSystemGeneratedSnapshot | This setting enables Longhorn to automatically cleanup the system generated snapshot after replica rebuild is done. |
-| defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly | If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...) when Longhorn volume is detached unexpectedly (e.g. during Kubernetes upgrade, Docker reboot, or network disconnect). By deleting the pod, its controller restarts the pod and Kubernetes handles volume reattachment and remount. |
-| defaultSettings.autoSalvage | If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection. Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true. |
+| defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly | If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...)  when Longhorn volume is detached unexpectedly (e.g. during Kubernetes upgrade, Docker reboot, or network disconnect). By deleting the pod, its controller restarts the pod and Kubernetes handles volume reattachment and remount. |
+| defaultSettings.autoSalvage | If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection. Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true. |
 | defaultSettings.backingImageCleanupWaitInterval | This interval in minutes determines how long Longhorn will wait before cleaning up the backing image file when there is no replica in the disk using it. |
 | defaultSettings.backingImageRecoveryWaitInterval | This interval in seconds determines how long Longhorn will wait before re-downloading the backing image file when all disk files of this backing image become failed or unknown. |
 | defaultSettings.backupCompressionMethod | This setting allows users to specify backup compression method. |
 | defaultSettings.backupConcurrentLimit | This setting controls how many worker threads per backup concurrently. |
-| defaultSettings.backupTarget | The endpoint used to access the backupstore. NFS and S3 are supported. |
+| defaultSettings.backupTarget | The endpoint used to access the backupstore. Available: NFS, CIFS, AWS, GCP, AZURE. |
 | defaultSettings.backupTargetCredentialSecret | The name of the Kubernetes secret associated with the backup target. |
 | defaultSettings.backupstorePollInterval | In seconds. The backupstore poll interval determines how often Longhorn checks the backupstore for new backups. Set to 0 to disable the polling. By default 300. |
 | defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit | This setting controls how Longhorn automatically upgrades volumes' engines to the new default engine image after upgrading Longhorn manager. The value of this setting specifies the maximum number of engines per node that are allowed to upgrade to the default engine image at the same time. If the value is 0, Longhorn will not automatically upgrade volumes' engines to default version. |
@@ -298,7 +317,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.storageReservedPercentageForDefaultDisk | The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node. |
 | defaultSettings.supportBundleFailedHistoryLimit | This setting specifies how many failed support bundles can exist in the cluster. Set this value to **0** to have Longhorn automatically purge all failed support bundles. |
 | defaultSettings.systemManagedComponentsNodeSelector | nodeSelector for longhorn system components |
-| defaultSettings.systemManagedPodsImagePullPolicy | This setting defines the Image Pull Policy of Longhorn system managed pods, e.g. instance manager, engine image, CSI driver, etc. The new Image Pull Policy will only apply after the system managed pods restart. |
+| defaultSettings.systemManagedPodsImagePullPolicy | This setting defines the Image Pull Policy of Longhorn system managed pod. e.g. instance manager, engine image, CSI driver, etc. The new Image Pull Policy will only apply after the system managed pods restart. |
 | defaultSettings.taintToleration | taintToleration for longhorn system components |
 | defaultSettings.upgradeChecker | Upgrade Checker will check for new Longhorn version periodically. When there is a new version available, a notification will appear in the UI. By default true. |
 | defaultSettings.v2DataEngine | This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment. |

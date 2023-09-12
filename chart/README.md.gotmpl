@@ -98,7 +98,6 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
   {{- end }}
 {{- end }}
 
-
 ### Image Settings
 
 | Key | Type | Default | Description |
@@ -109,17 +108,15 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
   {{- end }}
 {{- end }}
 
-
 ### Service Settings
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
+| Key | Description |
+|-----|-------------|
 {{- range .Values }}
   {{- if (and (hasPrefix "service" .Key) (not (contains "Account" .Key))) }}
-| {{ .Key }} | {{ .Type }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+| {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
   {{- end }}
 {{- end }}
-
 
 ### StorageClass Settings
 
@@ -131,18 +128,20 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
   {{- end }}
 {{- end }}
 
-
 ### CSI Settings
 
-| Key |Default | Description |
-|-----|---------|-------------|
+| Key | Description |
+|-----|-------------|
 {{- range .Values }}
   {{- if hasPrefix "csi" .Key }}
-| {{ .Key }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+| {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
   {{- end }}
 {{- end }}
 
 ### Longhorn Manager Settings
+
+Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
+These settings only apply to Longhorn manager component.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -154,6 +153,9 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 
 ### Longhorn Driver Settings
 
+Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
+These settings only apply to Longhorn driver component.
+
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 {{- range .Values }}
@@ -163,6 +165,9 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 {{- end }}
 
 ### Longhorn UI Settings
+
+Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
+These settings only apply to Longhorn UI component.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -182,8 +187,23 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
   {{- end }}
 {{- end }}
 
+### Private Registry Settings
 
-### Openshift Settings
+Longhorn can be installed in an air gapped environment with private registry settings. Please refer to **Air Gap Installation** in our official site [link](https://longhorn.io/docs)
+
+| Key | Description |
+|-----|-------------|
+{{- range .Values }}
+  {{- if hasPrefix "privateRegistry" .Key }}
+| {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+  {{- end }}
+{{- end }}
+
+### OS/Kubernetes Distro Settings
+
+#### Opensift Settings
+
+Please also refer to this document [ocp-readme](https://github.com/longhorn/longhorn/blob/master/chart/ocp-readme.md) for more details
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -207,6 +227,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
   (hasPrefix "longhornManager" .Key)
   (hasPrefix "longhornDriver" .Key)
   (hasPrefix "longhornUI" .Key)
+  (hasPrefix "privateRegistry" .Key)
   (hasPrefix "ingress" .Key)
   (hasPrefix "openshift" .Key)
   (hasPrefix "global" .Key)) }}
@@ -227,7 +248,6 @@ For more details like types or options, you can refer to **Settings Reference** 
 | {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
   {{- end }}
 {{- end }}
-
 
 ---
 Please see [link](https://github.com/longhorn/longhorn) for more information.

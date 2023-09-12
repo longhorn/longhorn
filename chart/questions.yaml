@@ -244,7 +244,7 @@ questions:
     group: "Longhorn CSI Driver Settings"
   - variable: defaultSettings.backupTarget
     label: Backup Target
-    description: "The endpoint used to access the backupstore. NFS and S3 are supported."
+    description: "The endpoint used to access the backupstore. Available: NFS, CIFS, AWS, GCP, AZURE"
     group: "Longhorn Default Settings"
     type: string
     default:
@@ -639,7 +639,7 @@ questions:
   type: boolean
 - variable: persistence.reclaimPolicy
   label: Storage Class Retain Policy
-  description: "Define reclaim policy (Retain or Delete)"
+  description: "Define reclaim policy. Options: `Retain`, `Delete`"
   group: "Longhorn Storage Class Settings"
   required: true
   type: enum
@@ -656,7 +656,7 @@ questions:
   max: 10
   default: 3
 - variable: persistence.defaultDataLocality
-  description: "Set data locality for Longhorn StorageClass"
+  description: "Set data locality for Longhorn StorageClass. Options: `disabled`, `best-effort`"
   label: Default Storage Class Data Locality
   group: "Longhorn Storage Class Settings"
   type: enum
@@ -688,7 +688,7 @@ questions:
   subquestions:
   - variable: persistence.defaultNodeSelector.selector
     label: Storage Class Node Selector
-    description: 'We use NodeSelector when we want to bind PVC via StorageClass into desired mountpoint on the nodes tagged with its value'
+    description: 'This selector enables only certain nodes having these tags to be used for the volume. e.g. `"storage,fast"`'
     group: "Longhorn Storage Class Settings"
     type: string
     default:
@@ -742,7 +742,7 @@ questions:
     type: string
     default:
 - variable: persistence.removeSnapshotsDuringFilesystemTrim
-  description: "Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass"
+  description: "Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass. Options: `ignored`, `enabled`, `disabled`"
   label: Default Storage Class Remove Snapshots During Filesystem Trim
   group: "Longhorn Storage Class Settings"
   type: enum
@@ -773,7 +773,7 @@ questions:
     label: Ingress Path
 - variable: service.ui.type
   default: "Rancher-Proxy"
-  description: "Define Longhorn UI service type"
+  description: "Define Longhorn UI service type. Options: `ClusterIP`, `NodePort`, `LoadBalancer`, `Rancher-Proxy`"
   type: enum
   options:
     - "ClusterIP"
@@ -815,7 +815,7 @@ questions:
   subquestions:
   - variable: networkPolicies.type
     label: Network Policies for Ingress
-    description: "Create the policy to allow access for the ingress, select the distribution."
+    description: "Create the policy based on your distribution to allow access for the ingress. Options: `k3s`, `rke2`, `rke1`"
     show_if: "networkPolicies.enabled=true&&ingress.enabled=true"
     type: enum
     default: "rke2"
