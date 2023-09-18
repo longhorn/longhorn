@@ -171,6 +171,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingReplicaDiskSoftAntiAffinity": {
+          "dataType": "string",
+          "maxLen": 200
+        }
         "longhornSettingRestoreVolumeRecurringJobs": {
           "dataType": "string",
           "maxLen": 200
@@ -346,6 +350,9 @@ configMap:
           "dataType": "float"
         },
         "longhornVolumeReplicaZoneSoftAntiAffinityTrueCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeReplicaDiskSoftAntiAffinityTrueCount": {
           "dataType": "float"
         },
         "longhornVolumeRestoreVolumeRecurringJobFalseCount": {

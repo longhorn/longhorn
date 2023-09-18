@@ -14,7 +14,7 @@ DEPLOYMENT_TIMEOUT_SEC=300
 DEPLOYMENT_WAIT_INTERVAL_SEC=5
 
 temp_dir=$(mktemp -d)
-trap 'rm -r "${temp_dir}"' EXIT
+trap 'rm -rf "${temp_dir}"' EXIT # -f because packed Git files (.pack, .idx) are write protected.
 
 cp -a ./* ${temp_dir}
 cd ${temp_dir}
@@ -185,6 +185,10 @@ configMap:
           "maxLen": 200
         },
         "longhornSettingReplicaZoneSoftAntiAffinity": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingReplicaDiskSoftAntiAffinity": {
           "dataType": "string",
           "maxLen": 200
         },
@@ -363,6 +367,9 @@ configMap:
           "dataType": "float"
         },
         "longhornVolumeReplicaZoneSoftAntiAffinityTrueCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeReplicaDiskSoftAntiAffinityTrueCount": {
           "dataType": "float"
         },
         "longhornVolumeRestoreVolumeRecurringJobFalseCount": {
