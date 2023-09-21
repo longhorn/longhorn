@@ -32,10 +32,8 @@ networkPolicies:
 image:
   longhorn:
     engine:
-      # -- Specify Longhorn engine image repository
-      repository: longhornio/longhorn-engine
-      # -- Specify Longhorn engine image tag
-      tag: master-head
+      repository: docker.io/mrohrich/longhorn-engine
+      tag: object-store
     manager:
       repository: docker.io/mrohrich/longhorn-manager
       tag: object-endpoint

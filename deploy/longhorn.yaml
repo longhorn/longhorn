@@ -710,6 +710,8 @@ spec:
                 description: The error messages when calling longhorn engine on listing or inspecting backups.
                 nullable: true
                 type: object
+              objectStoreBackup:
+                type: string
               ownerID:
                 description: The node ID on which the controller is responsible to reconcile this backup CR.
                 type: string
@@ -2135,13 +2137,13 @@ spec:
           spec:
             properties:
               credentials:
-                description: Credentials contain a pair of access and secret keys that are used to seed the object store.
+                description: "Credentials contain a pair of access and secret keys that are used to seed the object store. \n This expects an opaque secret with the two keys `RGW_DEFAULT_USER_ACCESS_KEY` and `RGW_DEFAULT_USER_SECRET_KEY` to be provided by the user in the longhorn-system namespace."
                 properties:
-                  accessKey:
-                    description: An access key. This will be the initial access key for the administrative account.
+                  name:
+                    description: name is unique within a namespace to reference a secret resource.
                     type: string
-                  secretKey:
-                    description: A secret key. This is the secret key corresponding to the access key above.
+                  namespace:
+                    description: namespace defines the space within which the secret name must be unique.
                     type: string
                 type: object
               endpoints:
@@ -4205,9 +4207,9 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - "longhornio/longhorn-engine:master-head"
+        - "docker.io/mrohrich/longhorn-engine:object-store"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:master-head"
+        - "docker.io/mrohrich/longhorn-instance-manager:object-store"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:master-head"
         - --backing-image-manager-image
