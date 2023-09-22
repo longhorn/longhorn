@@ -1,24 +1,28 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: longhorn-test
+  name: longhorn-v2-data-engine
 provisioner: driver.longhorn.io
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 parameters:
-  numberOfReplicas: "2"
+  # backup, backingImage and snapshot related parameters are not supported in SPDK preview stage
+  numberOfReplicas: "3"
   staleReplicaTimeout: "2880"
-  fromBackup: ""
   fsType: "ext4"
+  backendStoreDriver: "v2"
 #  mkfsParams: "-I 256 -b 4096 -O ^metadata_csum,^64bit"
+#  nodeSelector: "storage,fast"
+#  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
+#                          {"name":"backup", "isGroup":false}]'
+#  fromBackup: ""
 #  backingImage: "bi-test"
 #  backingImageDataSourceType: "download"
 #  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
 #  backingImageChecksum: "SHA512 checksum of the backing image"
 #  unmapMarkSnapChainRemoved: "ignored"
 #  diskSelector: "ssd,fast"
-#  nodeSelector: "storage,fast"
-#  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
-#                          {"name":"backup", "isGroup":false}]'
 #  nfsOptions: "soft,timeo=150,retrans=3"
+
+
