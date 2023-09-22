@@ -21,3 +21,4 @@ parameters:
 #  nodeSelector: "storage,fast"
 #  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
 #                          {"name":"backup", "isGroup":false}]'
+#  nfsOptions: "soft,timeo=150,retrans=3"
