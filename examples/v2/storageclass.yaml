@@ -23,5 +23,5 @@ parameters:
 #  backingImageChecksum: "SHA512 checksum of the backing image"
 #  unmapMarkSnapChainRemoved: "ignored"
 #  diskSelector: "ssd,fast"
-
+#  nfsOptions: "soft,timeo=150,retrans=3"
 
