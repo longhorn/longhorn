@@ -235,6 +235,22 @@ longhornUI:
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
 
+longhornPreUpgradeJob:
+  command:
+  - longhorn-manager
+  - pre-upgrade
+
+longhornPostUpgradeJob:
+  command:
+  - longhorn-manager
+  - post-upgrade
+
+longhornUninstallJob:
+  command:
+  - longhorn-manager
+  - uninstall
+  - --force
+
 ingress:
   ## Set to true to enable ingress record generation
   enabled: false
@@ -292,7 +308,7 @@ enablePSP: false
 ## and its release namespace is not the `longhorn-system`
 namespaceOverride: ""
 
-# Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
+# Annotations to add to all Pods. Optional.
 annotations: {}
 
 serviceAccount:

@@ -14,15 +14,16 @@ spec:
     metadata:
       name: longhorn-uninstall
       labels: {{- include "longhorn.labels" . | nindent 8 }}
+      {{- with .Values.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       containers:
       - name: longhorn-uninstall
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command:
-        - longhorn-manager
-        - uninstall
-        - --force
+        command: {{ .Values.longhornUninstallJob.command }}
         env:
         - name: LONGHORN_NAMESPACE
           valueFrom:

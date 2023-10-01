@@ -13,6 +13,10 @@ spec:
     metadata:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-driver-deployer
+      {{- with .Values.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       initContainers:
         - name: wait-longhorn-manager

@@ -14,14 +14,16 @@ spec:
     metadata:
       name: longhorn-pre-upgrade
       labels: {{- include "longhorn.labels" . | nindent 8 }}
+      {{- with .Values.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       containers:
       - name: longhorn-pre-upgrade
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command:
-        - longhorn-manager
-        - pre-upgrade
+        command: {{ .Values.longhornPreUpgradeJob.command }}
         env:
         - name: POD_NAMESPACE
           valueFrom:
