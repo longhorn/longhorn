@@ -45,25 +45,62 @@ Currently, Longhorn does not support object storage. Should the user want to use
 their Longhorn cluster for object storage, they have to rely on third-party
 applications.
 
-Instead we propose to enhance the user experience by allowing a Longhorn volume
+Instead, we propose to enhance the user experience by allowing a Longhorn volume
 to be presented to the user as an object storage endpoint, without having the
 user to install additional dependencies or manage different applications.
 
 ### User Experience In Detail
 
-* A new page view exists specifically for "Object Endpoints"
-    * Within this page there is a "Create" button, and a list of existing
-      Object Endpoints.
-* The user clicks on "Create"
-* A modal dialog is shown, with the various Object Endpoint related fields
-* User specifies the endpoint name
-* User specifies their username and password combination for the administrator
-  user
-    * This can, potentially, be randomly generated as well.
-* For publicly accessible endpoints, the user must specify a domain name to be
-  used
-* The user must provide SSL certificates to be used by the endpoint
-* Then the user clicks "Ok"
+* A new page view exists specifically for *Object Storage* with the following specifications that match the existing UI behaviour:
+    * There is a *Create Object Store* to create new *Object Store*
+    * A table that lists the existing Object Endpoints. This table contains a "Delete" action button and a search field on the right side in the table header section.
+
+#### Creating a new *Object Store*
+
+* The user clicks on *Create*
+* A modal dialog is shown, with the various Object Endpoint related fields:
+  * An endpoint name.
+  * The size of the volume to be created. Defaults to `1 GiB`.
+  * The access and secret key for the administrator user. This can, potentially, be randomly generated as well.
+  * The number of replicas. Defaults to `3`.
+  * Replica Soft Anti Affinity. Defaults to global settings.
+  * Replica Zone Soft Anti Affinity. Defaults to global settings.
+  * Replica Disk Soft Anti Affinity. Defaults to global settings.
+  * Disk Selector
+  * Node Selector
+  * Data Locality. Defaults to `Disabled`.
+  * From Backup
+  * Stale Replica Timeout
+  * Recurring Job Selector
+  * Replica Auto Balance. Defaults to global settings.
+  * Revision Counter Disabled. Defaults to `False`.
+  * Unmap Mark Snap Chain Removed
+  * Backend Store Driver
+  * Target State
+  * Name of the s3gw container image.
+  * Name of the s3gw-ui container image.
+* Finally, the user clicks *Ok* to deploy the *Object Store*.
+
+#### Deleting an *Object Store*
+
+The *Object Stores* to be deleted, one or several, can be checked in the table of existing *Object Stores*.
+This is only possible for *Object Stores* whose status is not `Terminating`. After pressing the
+*Delete* button a confirmation dialog is displayed to the user before the deletion is executed.
+
+#### Administration of buckets and objects
+
+The administration of the buckets and objects is done via the standalone *s3gw*
+UI. To access that UI easily there will be a menu entry `Administration` in the
+action dropdown of each *Object Store* table row.
+
+#### Theming of standalone *s3gw* UI
+
+The standalone *s3gw* UI will use a Longhorn theme to match the look of the
+Longhorn UI.
+
+```bash
+npm run build:prod:longhorn
+```
 
 ### API changes
 
