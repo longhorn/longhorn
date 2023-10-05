@@ -1,7 +1,7 @@
 # BackingImage Backup Support
 
 ## Summary
-This feature enables Longhorn to backup the BackingImage to backup store and restore it. 
+This feature enables Longhorn to backup the BackingImage to backup store and restore it.
 
 ### Related Issues
 
@@ -44,7 +44,7 @@ This improve the user experience and reduce the operation overhead.
 #### Backup BackingImage - BackupStore
 
 - Backup `BackingImage` is not the same as backup `Volume` which consists of a series of `Snapshots`. Instead, a `BackingImage` already has all the blocks we need to backup. Therefore, we don't need to find the delta between two `BackingImages` like what we do for`Snapshots` which delta might exist in other `Snapshots` between the current `Snapshot` and the last backup `Snapshot`.
-- All the `BackingImages` share the same block pools in backup store, so we can reuse the blocks to increase the backup speed and save the space. This can happen when user create v1 `BackingImage`, use the image to add more data and then export another v2 `BackingImage`. 
+- All the `BackingImages` share the same block pools in backup store, so we can reuse the blocks to increase the backup speed and save the space. This can happen when user create v1 `BackingImage`, use the image to add more data and then export another v2 `BackingImage`.
 - For restoration, we still restore fully on one of the ready disk.
 - Different from `Volume` backup, `BackingImage` does not have any size limit. It can be less than 2MB or not a multiple of 2MB. Thus, the last block might not be 2MB.
 
@@ -58,7 +58,7 @@ This improve the user experience and reduce the operation overhead.
 
 - When restoring `BackingImage`
     - `loadBackupBacking()`: load the metadata of the `BackupBackingImage` from the backup store
-    - `populateBlocksForFullRestore() + restoreBlocks()`: based on the mapping, write the block data to the correct offset. 
+    - `populateBlocksForFullRestore() + restoreBlocks()`: based on the mapping, write the block data to the correct offset.
 
 - We backup the blocks in async way to increase the backup speed.
 - For qcow2 `BackingImage`, the format is not the same as raw file, we can't detect the hole and the data sector. So we back up all the blocks.
@@ -111,7 +111,7 @@ This improve the user experience and reduce the operation overhead.
         - Check and update the ownership.
         - Do cleanup if the deletion timestamp is set.
             - Cleanup the backup `BackingImage` on backup store
-            - Stop the monitoring 
+            - Stop the monitoring
         - If `Status.LastSyncedAt.IsZero() && Spec.BackingImageName != ""` means **it is created by the User/API layer**, we need to do the backup
             - Start the monitor
             - Pick one `BackingImageManager`
@@ -181,7 +181,7 @@ This improve the user experience and reduce the operation overhead.
 5. In `BackingImageDataSourceController`
     - No need to change, it will create the `BackingImageDataSourcePod` to do the restore.
 6. In `BackingImageManager - data_source`
-    - When init the service, if the type is `restore`, then restore from `backup-url` by resquesting sync service in the same pod.
+    - When init the service, if the type is `restore`, then restore from `backup-url` by requesting sync service in the same pod.
         ```go
         requestURL := fmt.Sprintf("http://%s/v1/files", client.Remote)
         req, err := http.NewRequest("POST", requestURL, nil)
@@ -212,7 +212,7 @@ This improve the user experience and reduce the operation overhead.
 
 #### API and UI changes In Summary
 
-1. `longhorn-ui`: 
+1. `longhorn-ui`:
     - Add a new page of `BackupBackingImage` like `Backup`
         - The columns on `BackupBackingImage` list page should be: `Name`, `Size`, `State`, `Created At`, `Operation`.
         - `Name` can be clicked and will show `Checksum` of the `BackupBackingImage`
@@ -254,7 +254,7 @@ Integration tests
     - Restore the Volume with same `BackingImage`
     - `BackingImage` should be restored and the `Volume` should also be restored successfully
     - `Volume` checksum is the same
-    
+
 Manual tests
 
 1. `BackupBackingImage` reuse blocks
