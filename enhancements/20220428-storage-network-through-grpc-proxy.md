@@ -51,7 +51,7 @@ https://github.com/longhorn/longhorn/issues/3546
 
 - Introduce a new gRPC server in Instance Manager.
 
-- Keep re-usable connections between Manager and Instance Managers.
+- Keep reusable connections between Manager and Instance Managers.
 
 - Allow Manager to fall back to engine binary call when communicating with old Instance Manager.
 
@@ -101,7 +101,7 @@ So I can decide when to upgrade the Engine Image.
 1. When updating the setting I see engine/replica instance manager pod and backing image manager pods is restarted.
 1. I attach the volumes.
 1. I describe Engine, Replica, and BackingImageManager, and see the `storageIP` in CR status is in the range of the `NetworkAttachmentDefinition` subnet/CIDR. I also see the `storageIP` is different from the `ip` in CR status.
-1. I describe the Engine and see the `replicaAddressMap` in CR spec and status is using the storage IP. 
+1. I describe the Engine and see the `replicaAddressMap` in CR spec and status is using the storage IP.
 1. I see pod logs indicate the network directions.
 
 #### Story 2 - upgrade
