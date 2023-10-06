@@ -273,6 +273,28 @@ check_nodes() {
   fi
 }
 
+verlte() {
+    printf '%s\n' "$1" "$2" | sort -C -V
+}
+
+verlt() {
+    ! verlte "$2" "$1"
+}
+
+check_kernel_release() {
+  local pod=$1
+
+  recommended_kernel_release="5.8"
+
+  local kernel=$(detect_node_kernel_release ${pod})
+
+  if verlt "$kernel" "$recommended_kernel_release"  ; then
+    local node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+    warn "Node $node has outdated kernel release: $kernel. Recommending kernel release >= $recommended_kernel_release"
+    return 1
+  fi
+}
+
 check_iscsid() {
   local pod=$1
 
@@ -493,7 +515,7 @@ done
 ######################################################
 # Main logics
 ######################################################
-DEPENDENCIES=("kubectl" "jq" "mktemp")
+DEPENDENCIES=("kubectl" "jq" "mktemp" "sort" "printf")
 check_local_dependencies "${DEPENDENCIES[@]}"
 
 # Check the each host has a unique hostname (for RWX volume)
@@ -507,6 +529,7 @@ create_ds
 wait_ds_ready
 
 check_mount_propagation
+check_nodes "kernel release" check_kernel_release
 check_nodes "iscsid" check_iscsid
 check_nodes "multipathd" check_multipathd
 check_nodes "packages" check_packages
