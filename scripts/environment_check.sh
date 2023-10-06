@@ -301,6 +301,28 @@ check_multipathd() {
   fi
 }
 
+verlte() {
+    printf '%s\n' "$1" "$2" | sort -C -V
+}
+
+verlt() {
+    ! verlte "$2" "$1"
+}
+
+check_kernel_release() {
+  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
+
+  recommended_kernel_release="5.8"
+
+  for pod in ${pods}; do
+    local kernel=$(detect_node_kernel_release ${pod})
+    if verlt "$kernel" "$recommended_kernel_release"  ; then
+      local node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+      warn "Node $node has outdated kernel release: $kernel. Recommending kernel release >= $recommended_kernel_release"
+    fi
+  done
+}
+
 check_iscsid() {
   local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
   local all_found=true
@@ -362,7 +384,7 @@ check_nfs_client_kernel_support() {
 ######################################################
 # Main logics
 ######################################################
-DEPENDENCIES=("kubectl" "jq" "mktemp")
+DEPENDENCIES=("kubectl" "jq" "mktemp" "sort" "printf")
 check_local_dependencies "${DEPENDENCIES[@]}"
 
 # Check the each host has a unique hostname (for RWX volume)
@@ -380,5 +402,6 @@ check_package_installed
 check_iscsid
 check_multipathd
 check_mount_propagation
+check_kernel_release
 
 exit 0
