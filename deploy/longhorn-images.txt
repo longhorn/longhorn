@@ -4,10 +4,10 @@ longhornio/csi-resizer:v1.3.0
 longhornio/csi-snapshotter:v5.0.1
 longhornio/csi-node-driver-registrar:v2.5.0
 longhornio/livenessprobe:v2.8.0
-longhornio/backing-image-manager:v1.4.x-head
-longhornio/longhorn-engine:v1.4.x-head
-longhornio/longhorn-instance-manager:v1.4.x-head
-longhornio/longhorn-manager:v1.4.x-head
-longhornio/longhorn-share-manager:v1.4.x-head
-longhornio/longhorn-ui:v1.4.x-head
+longhornio/backing-image-manager:v1.4.4-rc1
+longhornio/longhorn-engine:v1.4.4-rc1
+longhornio/longhorn-instance-manager:v1.4.4-rc1
+longhornio/longhorn-manager:v1.4.4-rc1
+longhornio/longhorn-share-manager:v1.4.4-rc1
+longhornio/longhorn-ui:v1.4.4-rc1
 longhornio/support-bundle-kit:v0.0.27
