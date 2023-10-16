@@ -109,7 +109,7 @@ detect_node_kernel_release()
 {
   local pod="$1"
 
-  KERNEL_RELEASE=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -r')
+  KERNEL_RELEASE=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -r')
   echo "$KERNEL_RELEASE"
 }
 
@@ -117,9 +117,9 @@ detect_node_os()
 {
   local pod="$1"
 
-  OS=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2')
+  OS=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2')
   if [[ -z "${OS}" ]]; then
-    OS=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2')
+    OS=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2')
   fi
   echo "$OS"
 }
@@ -248,7 +248,7 @@ check_package_installed() {
     for ((i=0; i<${#PACKAGES[@]}; i++)); do
       local package=${PACKAGES[$i]}
 
-      kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
+      kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
       if [ $? != 0 ]; then
         all_found=false
         node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
@@ -288,7 +288,7 @@ check_multipathd() {
   local all_not_found=true
 
   for pod in ${pods}; do
-    kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
+    kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
     if [ $? = 0 ]; then
       all_not_found=false
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
@@ -328,7 +328,7 @@ check_iscsid() {
   local all_found=true
 
   for pod in ${pods}; do
-    kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.service" > /dev/null 2>&1
+    kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.service" > /dev/null 2>&1
 
     if [ $? != 0 ]; then
       all_found=false
@@ -358,12 +358,12 @@ check_nfs_client_kernel_support() {
       fi
 
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-${kernel_release}" > /dev/null 2>&1)
+      res=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^# ${config} is not set\" /boot/config-${kernel_release}" > /dev/null 2>&1)
       if [[ $? == 0 ]]; then
         all_found=false
         nodes["${node}"]="${node}"
       else
-        res=$(kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-${kernel_release}" > /dev/null 2>&1)
+        res=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep -E \"^${config}=\" /boot/config-${kernel_release}" > /dev/null 2>&1)
         if [[ $? != 0 ]]; then
           all_found=false
           warn "Unable to check kernel config ${config} on node ${node}"
