@@ -109,16 +109,16 @@ set_packages_and_check_cmd() {
 detect_node_kernel_release() {
   local pod="$1"
 
-  KERNEL_RELEASE=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -r')
+  KERNEL_RELEASE=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -r')
   echo "$KERNEL_RELEASE"
 }
 
 detect_node_os() {
   local pod="$1"
 
-  OS=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2')
+  OS=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID_LIKE=" /etc/os-release | cut -d= -f2')
   if [[ -z "${OS}" ]]; then
-    OS=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2')
+    OS=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -E "^ID=" /etc/os-release | cut -d= -f2')
   fi
   echo "$OS"
 }
@@ -298,9 +298,9 @@ check_kernel_release() {
 check_iscsid() {
   local pod=$1
 
-  kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.service" > /dev/null 2>&1
+  kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.service" > /dev/null 2>&1
   if [ $? -ne 0 ]; then
-    kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.socket" > /dev/null 2>&1
+    kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.socket" > /dev/null 2>&1
       if [ $? -ne 0 ]; then
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
       error "Neither iscsid.service nor iscsid.socket is not running on ${node}"
@@ -312,7 +312,7 @@ check_iscsid() {
 check_multipathd() {
   local pod=$1
 
-  kubectl exec -t $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
+  kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
   if [ $? = 0 ]; then
     node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
     warn "multipathd is running on ${node}"
@@ -342,7 +342,7 @@ check_packages() {
 check_package() {
   local package=$1
 
-  kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
+  kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
   if [ $? -ne 0 ]; then
     node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
     error "$package is not found in $node."
@@ -363,7 +363,7 @@ check_nfs_client() {
   fi
 
   for option in "${options[@]}"; do
-    kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -f /boot/config-${kernel} ]" > /dev/null 2>&1
+    kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -f /boot/config-${kernel} ]" > /dev/null 2>&1
     if [ $? -ne 0 ]; then
       warn "Failed to check $option on node ${node}, because /boot/config-${kernel} does not exist on node ${node}"
       continue
@@ -390,18 +390,18 @@ check_kernel_module() {
     return 1
   fi
 
-  kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -e /boot/config-${kernel} ]" > /dev/null 2>&1
+  kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -e /boot/config-${kernel} ]" > /dev/null 2>&1
   if [ $? -ne 0 ]; then
     warn "Failed to check kernel config option ${option}, because /boot/config-${kernel} does not exist on node ${node}"
     return 1
   fi
 
-  value=$(kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep "^$option=" /boot/config-${kernel} | cut -d= -f2")
+  value=$(kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep "^$option=" /boot/config-${kernel} | cut -d= -f2")
   if [ -z "${value}" ]; then
     error "Failed to find kernel config $option on node ${node}"
     return 1
   elif [ "${value}" = "m" ]; then
-    kubectl exec -t ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "lsmod | grep ${module}" > /dev/null 2>&1
+    kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "lsmod | grep ${module}" > /dev/null 2>&1
     if [ $? -ne 0 ]; then
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
       error "kernel module ${module} is not enabled on ${node}"
@@ -419,7 +419,7 @@ check_hugepage() {
   local pod=$1
   local expected_nr_hugepages=$2
 
-  nr_hugepages=$(kubectl exec -i ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'cat /proc/sys/vm/nr_hugepages')
+  nr_hugepages=$(kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'cat /proc/sys/vm/nr_hugepages')
   if [ $? -ne 0 ]; then
     error "Failed to check hugepage size on node ${node}"
     return 1
@@ -434,7 +434,7 @@ check_hugepage() {
 function check_nvme_cli() {
   local pod=$1
 
-  value=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'nvme version' 2>/dev/null)
+  value=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'nvme version' 2>/dev/null)
   if [ $? -ne 0 ]; then
     node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
     error "Failed to check nvme-cli version on node ${node}"
@@ -454,14 +454,14 @@ function check_sse42_support() {
 
   node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
 
-  machine=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -m' 2>/dev/null)
+  machine=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'uname -m' 2>/dev/null)
   if [ $? -ne 0 ]; then
     error "Failed to check machine on node ${node}"
     return 1
   fi
 
   if [ "$machine" = "x86_64" ]; then
-    sse42_support=$(kubectl exec -i $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -o sse4_2 /proc/cpuinfo | wc -l' 2>/dev/null)
+    sse42_support=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'grep -o sse4_2 /proc/cpuinfo | wc -l' 2>/dev/null)
     if [ $? -ne 0 ]; then
       error "Failed to check SSE4.2 instruction set on node ${node}"
       return 1
