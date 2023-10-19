@@ -103,7 +103,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.attacher.repository | string | `"longhornio/csi-attacher"` | Specify CSI attacher image repository. Leave blank to autodetect |
 | image.csi.attacher.tag | string | `"v4.4.0"` | Specify CSI attacher image tag. Leave blank to autodetect |
 | image.csi.livenessProbe.repository | string | `"longhornio/livenessprobe"` | Specify CSI liveness probe image repository. Leave blank to autodetect  |
-| image.csi.livenessProbe.tag | string | `"v2.9.0"` | Specify CSI liveness probe image tag. Leave blank to autodetect |
+| image.csi.livenessProbe.tag | string | `"v2.11.0"` | Specify CSI liveness probe image tag. Leave blank to autodetect |
 | image.csi.nodeDriverRegistrar.repository | string | `"longhornio/csi-node-driver-registrar"` | Specify CSI node driver registrar image repository. Leave blank to autodetect |
 | image.csi.nodeDriverRegistrar.tag | string | `"v2.9.0"` | Specify CSI node driver registrar image tag. Leave blank to autodetect |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Specify CSI provisioner image repository. Leave blank to autodetect |

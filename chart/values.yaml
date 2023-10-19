@@ -96,7 +96,7 @@ image:
       # -- Specify CSI liveness probe image repository. Leave blank to autodetect 
       repository: longhornio/livenessprobe
       # -- Specify CSI liveness probe image tag. Leave blank to autodetect
-      tag: v2.9.0
+      tag: v2.11.0
   openshift:
     oauthProxy:
       # -- For openshift user. Specify oauth proxy image repository
