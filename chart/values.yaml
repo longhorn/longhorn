@@ -71,7 +71,7 @@ image:
       # -- Specify CSI attacher image repository. Leave blank to autodetect
       repository: longhornio/csi-attacher
       # -- Specify CSI attacher image tag. Leave blank to autodetect
-      tag: v4.2.0
+      tag: v4.4.0
     provisioner:
       # -- Specify CSI provisioner image repository. Leave blank to autodetect
       repository: longhornio/csi-provisioner
