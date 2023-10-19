@@ -76,7 +76,7 @@ image:
       # -- Specify CSI provisioner image repository. Leave blank to autodetect
       repository: longhornio/csi-provisioner
       # -- Specify CSI provisioner image tag. Leave blank to autodetect
-      tag: v3.4.1
+      tag: v3.6.0
     nodeDriverRegistrar:
       # -- Specify CSI node driver registrar image repository. Leave blank to autodetect
       repository: longhornio/csi-node-driver-registrar
