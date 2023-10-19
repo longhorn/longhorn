@@ -67,7 +67,7 @@ image:
       tag: v6.3.0
     livenessProbe:
       repository: longhornio/livenessprobe
-      tag: v2.9.0
+      tag: v2.11.0
   pullPolicy: IfNotPresent
 
 service:
