@@ -4228,7 +4228,7 @@ spec:
           - name: CSI_SNAPSHOTTER_IMAGE
             value: "longhornio/csi-snapshotter:v6.3.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "longhornio/livenessprobe:v2.9.0"
+            value: "longhornio/livenessprobe:v2.11.0"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
