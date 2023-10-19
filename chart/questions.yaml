@@ -101,7 +101,7 @@ questions:
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v4.2.0
+    default: v4.4.0
     description: "Specify CSI attacher image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Attacher Image Tag
