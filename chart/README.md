@@ -111,7 +111,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Specify CSI driver resizer image repository. Leave blank to autodetect |
 | image.csi.resizer.tag | string | `"v1.9.0"` | Specify CSI driver resizer image tag. Leave blank to autodetect |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Specify CSI driver snapshotter image repository. Leave blank to autodetect |
-| image.csi.snapshotter.tag | string | `"v6.2.1"` | Specify CSI driver snapshotter image tag. Leave blank to autodetect. |
+| image.csi.snapshotter.tag | string | `"v6.3.0"` | Specify CSI driver snapshotter image tag. Leave blank to autodetect. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Specify Longhorn backing image manager image repository |
 | image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag  |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Specify Longhorn engine image repository |

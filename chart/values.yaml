@@ -91,7 +91,7 @@ image:
       # -- Specify CSI driver snapshotter image repository. Leave blank to autodetect
       repository: longhornio/csi-snapshotter
       # -- Specify CSI driver snapshotter image tag. Leave blank to autodetect.
-      tag: v6.2.1
+      tag: v6.3.0
     livenessProbe:
       # -- Specify CSI liveness probe image repository. Leave blank to autodetect 
       repository: longhornio/livenessprobe
