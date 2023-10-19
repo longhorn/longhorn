@@ -125,7 +125,7 @@ questions:
     label: Longhorn CSI Node Driver Registrar Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.nodeDriverRegistrar.tag
-    default: v2.7.0
+    default: v2.9.0
     description: "Specify CSI Node Driver Registrar image tag. Leave blank to autodetect."
     type: string
     label: Longhorn CSI Node Driver Registrar Image Tag
