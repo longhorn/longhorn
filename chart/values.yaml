@@ -64,7 +64,7 @@ image:
       tag: v1.9.0
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v6.2.1
+      tag: v6.3.0
     livenessProbe:
       repository: longhornio/livenessprobe
       tag: v2.9.0
