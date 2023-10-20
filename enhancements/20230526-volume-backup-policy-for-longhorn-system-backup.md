@@ -4,7 +4,7 @@ The current implementation of the Longhorn system backup lacks integration with 
 
 ## Summary
 
-This document proposed to include the volume backup feature in the Longhorn system backup by introducing volume backup policies. 
+This document proposed to include the volume backup feature in the Longhorn system backup by introducing volume backup policies.
 
 By implementing the volume backup policies, users will gain the ability to define how volume data should be backed up during the Longhorn system backup.
 
@@ -30,7 +30,7 @@ Overall, the proposed volume backup policies aim to improve the Longhorn system 
 
 1. When volume backup policy is specified:
    - `if-not-present`: Longhorn will create a backup for volumes that do not have an existing backup.
-   - `alway`: Longhorn will create a backup for all volumes, regardless of their existing backups.
+   - `always`: Longhorn will create a backup for all volumes, regardless of their existing backups.
    - `disabled`: Longhorn will not create any backups for volumes.
 1. If a volume backup policy is not specified, the policy will be automatically set to `if-not-present`. This ensures that volumes without any existing backups will be backed up during the Longhorn system backup.
 
@@ -50,7 +50,7 @@ In cases where I don't explicitly specify the volume backup policy during the sy
 
 To set the volume backup policy, users can set the volume backup policy when creating the system backup through the UI. Alternatively, users can specify it in the manifest when creating the SystemBackup custom resource using the kubectl command.
 
-In scenarios where no specific volume backup policy is provided, Longhorn will automatically set the policy as `if-not-present`. 
+In scenarios where no specific volume backup policy is provided, Longhorn will automatically set the policy as `if-not-present`.
 
 ### API changes
 
@@ -75,7 +75,7 @@ Add a new `volumeBackupPolicy` field to the HTTP request and response payload.
 
 #### Mutate empty volume backup policy
 
-When the volume backup policy is not provided in the SystemBackup custom resource, automatically set the policy to `if-not-present`. 
+When the volume backup policy is not provided in the SystemBackup custom resource, automatically set the policy to `if-not-present`.
 
 ### Test plan
 

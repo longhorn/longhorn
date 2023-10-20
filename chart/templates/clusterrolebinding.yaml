@@ -25,3 +25,25 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-support-bundle
   namespace: {{ include "release_namespace" . }}
+{{- if .Values.openshift.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: longhorn-ocp-privileged-bind
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: longhorn-ocp-privileged-role
+subjects:
+- kind: ServiceAccount
+  name: longhorn-service-account
+  namespace: {{ include "release_namespace" . }}
+- kind: ServiceAccount
+  name: longhorn-ui-service-account
+  namespace: {{ include "release_namespace" . }}
+- kind: ServiceAccount
+  name: default # supportbundle-agent-support-bundle uses default sa
+  namespace: {{ include "release_namespace" . }}
+{{- end }}

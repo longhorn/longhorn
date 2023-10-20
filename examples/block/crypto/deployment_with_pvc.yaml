@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-block-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Block
+  storageClassName: longhorn-crypto-global
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volume-test
+  labels:
+    app: volume-test
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: volume-test
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: volume-test
+    spec:
+      restartPolicy: Always
+      containers:
+      - image: nginx:stable-alpine
+        name: volume-test
+        volumeDevices:
+          - devicePath: /dev/longhorn/testblk
+            name: block-vol
+      volumes:
+      - name: block-vol
+        persistentVolumeClaim:
+          claimName: longhorn-block-pvc

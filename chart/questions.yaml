@@ -244,7 +244,7 @@ questions:
     group: "Longhorn CSI Driver Settings"
   - variable: defaultSettings.backupTarget
     label: Backup Target
-    description: "The endpoint used to access the backupstore. NFS and S3 are supported."
+    description: "The endpoint used to access the backupstore. Available: NFS, CIFS, AWS, GCP, AZURE"
     group: "Longhorn Default Settings"
     type: string
     default:
@@ -256,8 +256,7 @@ questions:
     default:
   - variable: defaultSettings.allowRecurringJobWhileVolumeDetached
     label: Allow Recurring Job While Volume Is Detached
-    description: 'If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup when it is the time to do recurring snapshot/backup.
-Note that the volume is not ready for workload during the period when the volume was automatically attached. Workload will have to wait until the recurring job finishes.'
+    description: 'If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup when it is the time to do recurring snapshot/backup.'
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
@@ -275,11 +274,7 @@ Note that the volume is not ready for workload during the period when the volume
     default: "/var/lib/longhorn/"
   - variable: defaultSettings.defaultDataLocality
     label: Default Data Locality
-    description: 'We say a Longhorn volume has data locality if there is a local replica of the volume on the same node as the pod which is using the volume.
-This setting specifies the default data locality when a volume is created from the Longhorn UI. For Kubernetes configuration, update the `dataLocality` in the StorageClass
-The available modes are:
-- **disabled**. This is the default option. There may or may not be a replica on the same node as the attached volume (workload)
-- **best-effort**. This option instructs Longhorn to try to keep a replica on the same node as the attached volume (workload). Longhorn will not stop the volume, even if it cannot keep a replica local to the attached volume (workload) due to environment limitation, e.g. not enough disk space, incompatible disk tags, etc.'
+    description: 'Longhorn volume has data locality if there is a local replica of the volume on the same node as the pod which is using the volume.'
     group: "Longhorn Default Settings"
     type: enum
     options:
@@ -294,17 +289,7 @@ The available modes are:
     default: "false"
   - variable: defaultSettings.replicaAutoBalance
     label: Replica Auto Balance
-    description: 'Enable this setting automatically rebalances replicas when discovered an available node.
-The available global options are:
-- **disabled**. This is the default option. No replica auto-balance will be done.
-- **least-effort**. This option instructs Longhorn to balance replicas for minimal redundancy.
-- **best-effort**. This option instructs Longhorn to balance replicas for even redundancy.
-Longhorn also support individual volume setting. The setting can be specified in volume.spec.replicaAutoBalance, this overrules the global setting.
-The available volume spec options are:
-- **ignored**. This is the default option that instructs Longhorn to inherit from the global setting.
-- **disabled**. This option instructs Longhorn no replica auto-balance should be done.
-- **least-effort**. This option instructs Longhorn to balance replicas for minimal redundancy.
-- **best-effort**. This option instructs Longhorn to balance replicas for even redundancy.'
+    description: 'Enable this setting automatically rebalances replicas when discovered an available node.'
     group: "Longhorn Default Settings"
     type: enum
     options:
@@ -364,22 +349,14 @@ The available volume spec options are:
     default: 300
   - variable: defaultSettings.failedBackupTTL
     label: Failed Backup Time to Live
-    description: "In minutes. This setting determines how long Longhorn will keep the backup resource that was failed. Set to 0 to disable the auto-deletion.
-Failed backups will be checked and cleaned up during backupstore polling which is controlled by **Backupstore Poll Interval** setting.
-Hence this value determines the minimal wait interval of the cleanup. And the actual cleanup interval is multiple of **Backupstore Poll Interval**.
-Disabling **Backupstore Poll Interval** also means to disable failed backup auto-deletion."
+    description: "In minutes. This setting determines how long Longhorn will keep the backup resource that was failed. Set to 0 to disable the auto-deletion."
     group: "Longhorn Default Settings"
     type: int
     min: 0
     default: 1440
   - variable: defaultSettings.restoreVolumeRecurringJobs
     label: Restore Volume Recurring Jobs
-    description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration.
-Longhorn also supports individual volume setting. The setting can be specified on Backup page when making a backup restoration, this overrules the global setting.
-The available volume setting options are:
-- **ignored**. This is the default option that instructs Longhorn to inherit from the global setting.
-- **enabled**. This option instructs Longhorn to restore recurring jobs/groups from the backup target forcibly.
-- **disabled**. This option instructs Longhorn no restoring recurring jobs/groups should be done."
+    description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration."
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
@@ -399,9 +376,7 @@ The available volume setting options are:
     default: 1
   - variable: defaultSettings.supportBundleFailedHistoryLimit
     label: SupportBundle Failed History Limit
-    description: "This setting specifies how many failed support bundles can exist in the cluster.
-The retained failed support bundle is for analysis purposes and needs to clean up manually.
-Set this value to **0** to have Longhorn automatically purge all failed support bundles."
+    description: "This setting specifies how many failed support bundles can exist in the cluster. Set this value to **0** to have Longhorn automatically purge all failed support bundles."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -414,9 +389,7 @@ Set this value to **0** to have Longhorn automatically purge all failed support 
     default: "true"
   - variable: defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly
     label: Automatically Delete Workload Pod when The Volume Is Detached Unexpectedly
-    description: 'If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...) when Longhorn volume is detached unexpectedly (e.g. during Kubernetes upgrade, Docker reboot, or network disconnect). By deleting the pod, its controller restarts the pod and Kubernetes handles volume reattachment and remount.
-If disabled, Longhorn will not delete the workload pod that is managed by a controller. You will have to manually restart the pod to reattach and remount the volume.
-**Note:** This setting does not apply to the workload pods that do not have a controller. Longhorn never deletes them.'
+    description: 'If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...) when Longhorn volume is detached unexpectedly (e.g. during Kubernetes upgrade, Docker reboot, or network disconnect). By deleting the pod, its controller restarts the pod and Kubernetes handles volume reattachment and remount.'
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
@@ -429,6 +402,12 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
   - variable: defaultSettings.replicaZoneSoftAntiAffinity
     label: Replica Zone Level Soft Anti-Affinity
     description: "Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas. Nodes don't belong to any Zone will be treated as in the same Zone. Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone. By default true."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
+  - variable: defaultSettings.replicaDiskSoftAntiAffinity
+    label: Replica Disk Level Soft Anti-Affinity
+    description: 'Allow scheduling on disks with existing healthy replicas of the same volume. By default true.'
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
@@ -446,11 +425,7 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     default: "true"
   - variable: defaultSettings.nodeDownPodDeletionPolicy
     label: Pod Deletion Policy When Node is Down
-    description: "Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down.
-- **do-nothing** is the default Kubernetes behavior of never force deleting StatefulSet/Deployment terminating pods. Since the pod on the node that is down isn't removed, Longhorn volumes are stuck on nodes that are down.
-- **delete-statefulset-pod** Longhorn will force delete StatefulSet terminating pods on nodes that are down to release Longhorn volumes so that Kubernetes can spin up replacement pods.
-- **delete-deployment-pod** Longhorn will force delete Deployment terminating pods on nodes that are down to release Longhorn volumes so that Kubernetes can spin up replacement pods.
-- **delete-both-statefulset-and-deployment-pod** Longhorn will force delete StatefulSet/Deployment terminating pods on nodes that are down to release Longhorn volumes so that Kubernetes can spin up replacement pods."
+    description: "Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down."
     group: "Longhorn Default Settings"
     type: enum
     options:
@@ -461,10 +436,7 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     default: "do-nothing"
   - variable: defaultSettings.nodeDrainPolicy
     label: Node Drain Policy
-    description: "Define the policy to use when a node with the last healthy replica of a volume is drained.
-- **block-if-contains-last-replica** Longhorn will block the drain when the node contains the last healthy replica of a volume.
-- **allow-if-replica-is-stopped** Longhorn will allow the drain when the node contains the last healthy replica of a volume but the replica is stopped. WARNING: possible data loss if the node is removed after draining. Select this option if you want to drain the node and do in-place upgrade/maintenance.
-- **always-allow** Longhorn will allow the drain even though the node contains the last healthy replica of a volume. WARNING: possible data loss if the node is removed after draining. Also possible data corruption if the last replica was running during the draining."
+    description: "Define the policy to use when a node with the last healthy replica of a volume is drained."
     group: "Longhorn Default Settings"
     type: enum
     options:
@@ -474,29 +446,21 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     default: "block-if-contains-last-replica"
   - variable: defaultSettings.replicaReplenishmentWaitInterval
     label: Replica Replenishment Wait Interval
-    description: "In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume.
-Warning: This option works only when there is a failed replica in the volume. And this option may block the rebuilding for a while in the case."
+    description: "In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume."
     group: "Longhorn Default Settings"
     type: int
     min: 0
     default: 600
   - variable: defaultSettings.concurrentReplicaRebuildPerNodeLimit
     label: Concurrent Replica Rebuild Per Node Limit
-    description: "This setting controls how many replicas on a node can be rebuilt simultaneously.
-Typically, Longhorn can block the replica starting once the current rebuilding count on a node exceeds the limit. But when the value is 0, it means disabling the replica rebuilding.
-WARNING:
-- The old setting \"Disable Replica Rebuild\" is replaced by this setting.
-- Different from relying on replica starting delay to limit the concurrent rebuilding, if the rebuilding is disabled, replica object replenishment will be directly skipped.
-- When the value is 0, the eviction and data locality feature won't work. But this shouldn't have any impact to any current replica rebuild and backup restore."
+    description: "This setting controls how many replicas on a node can be rebuilt simultaneously."
     group: "Longhorn Default Settings"
     type: int
     min: 0
     default: 5
   - variable: defaultSettings.concurrentVolumeBackupRestorePerNodeLimit
     label: Concurrent Volume Backup Restore Per Node Limit
-    description: "This setting controls how many volumes on a node can restore the backup concurrently.
-Longhorn blocks the backup restore once the restoring volume count exceeds the limit.
-Set the value to **0** to disable backup restore."
+    description: "This setting controls how many volumes on a node can restore the backup concurrently. Set the value to **0** to disable backup restore."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -545,27 +509,14 @@ Set the value to **0** to disable backup restore."
     default: 60
   - variable: defaultSettings.backingImageRecoveryWaitInterval
     label: Backing Image Recovery Wait Interval
-    description: "This interval in seconds determines how long Longhorn will wait before re-downloading the backing image file when all disk files of this backing image become failed or unknown.
-    WARNING:
-      - This recovery only works for the backing image of which the creation type is \"download\".
-      - File state \"unknown\" means the related manager pods on the pod is not running or the node itself is down/disconnected."
+    description: "This interval in seconds determines how long Longhorn will wait before re-downloading the backing image file when all disk files of this backing image become failed or unknown."
     group: "Longhorn Default Settings"
     type: int
     min: 0
     default: 300
   - variable: defaultSettings.guaranteedInstanceManagerCPU
     label: Guaranteed Instance Manager CPU
-    description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each instance manager Pod. For example, 10 means 10% of the total CPU on a node will be allocated to each instance manager pod on this node. This will help maintain engine and replica stability during high node workload.
-    In order to prevent unexpected volume instance (engine/replica) crash as well as guarantee a relative acceptable IO performance, you can use the following formula to calculate a value for this setting:
-    `Guaranteed Instance Manager CPU = The estimated max Longhorn volume engine and replica count on a node * 0.1 / The total allocatable CPUs on the node * 100`
-    The result of above calculation doesn't mean that's the maximum CPU resources the Longhorn workloads require. To fully exploit the Longhorn volume I/O performance, you can allocate/guarantee more CPU resources via this setting.
-    If it's hard to estimate the usage now, you can leave it with the default value, which is 12%. Then you can tune it when there is no running workload using Longhorn volumes.
-    WARNING:
-      - Value 0 means unsetting CPU requests for instance manager pods.
-      - Considering the possible new instance manager pods in the further system upgrade, this integer value is range from 0 to 40. 
-      - One more set of instance manager pods may need to be deployed when the Longhorn system is upgraded. If current available CPUs of the nodes are not enough for the new instance manager pods, you need to detach the volumes using the oldest instance manager pods so that Longhorn can clean up the old pods automatically and release the CPU resources. And the new pods with the latest instance manager image will be launched then.
-      - This global setting will be ignored for a node if the field \"InstanceManagerCPURequest\" on the node is set.
-      - After this setting is changed, all instance manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+    description: "This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each instance manager Pod. You can leave it with the default value, which is 12%."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -573,18 +524,13 @@ Set the value to **0** to disable backup restore."
     default: 12
   - variable: defaultSettings.logLevel
     label: Log Level
-    description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. By default Debug."
+    description: "The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. Default to Info."
     group: "Longhorn Default Settings"
     type: string
     default: "Info"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
-  description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
-  Longhorn prevents data loss by only allowing the Cluster Autoscaler to scale down a node that met all conditions:
-    - No volume attached to the node.
-    - Is not the last node containing the replica of any volume.
-    - Is not running backing image components pod.
-    - Is not running share manager components pod."
+  description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler."
   group: "Longhorn Default Settings"
   type: boolean
   default: false
@@ -596,20 +542,13 @@ Set the value to **0** to disable backup restore."
   default: false
 - variable: defaultSettings.storageNetwork
   label: Storage Network
-  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network.
-	To segregate the storage network, input the pre-existing NetworkAttachmentDefinition in \"<namespace>/<name>\" format.
-	WARNING:
-	  - The cluster must have pre-existing Multus installed, and NetworkAttachmentDefinition IPs are reachable between nodes.
-	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will try to block this setting update when there are attached volumes.
-	  - When applying the setting, Longhorn will restart all manager, instance-manager, and backing-image-manager pods."
+  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network."
   group: "Longhorn Default Settings"
   type: string
   default:
 - variable: defaultSettings.deletingConfirmationFlag
   label: Deleting Confirmation Flag
-  description: "This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost.
-	Set this flag to **true** to allow Longhorn uninstallation.
-	If this flag **false**, Longhorn uninstallation job will fail. "
+  description: "This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost."
   group: "Longhorn Default Settings"
   type: boolean
   default: "false"
@@ -621,11 +560,7 @@ Set the value to **0** to disable backup restore."
   default: "8"
 - variable: defaultSettings.snapshotDataIntegrity
   label: Snapshot Data Integrity
-  description: "This setting allows users to enable or disable snapshot hashing and data integrity checking.
-  Available options are
-    - **disabled**: Disable snapshot disk file hashing and data integrity checking.
-    - **enabled**: Enables periodic snapshot disk file hashing and data integrity checking. To detect the filesystem-unaware corruption caused by bit rot or other issues in snapshot disk files, Longhorn system periodically hashes files and finds corrupted ones. Hence, the system performance will be impacted during the periodical checking.
-    - **fast-check**: Enable snapshot disk file hashing and fast data integrity checking. Longhorn system only hashes snapshot disk files if their are not hashed or the modification time are changed. In this mode, filesystem-unaware corruption cannot be detected, but the impact on system performance can be minimized."
+  description: "This setting allows users to enable or disable snapshot hashing and data integrity checking."
   group: "Longhorn Default Settings"
   type: string
   default: "disabled"
@@ -637,17 +572,13 @@ Set the value to **0** to disable backup restore."
   default: "false"
 - variable: defaultSettings.snapshotDataIntegrityCronjob
   label: Snapshot Data Integrity Check CronJob
-  description: "Unix-cron string format. The setting specifies when Longhorn checks the data integrity of snapshot disk files.
-  Warning: Hashing snapshot disk files impacts the performance of the system. It is recommended to run data integrity checks during off-peak times and to reduce the frequency of checks."
+  description: "Unix-cron string format. The setting specifies when Longhorn checks the data integrity of snapshot disk files."
   group: "Longhorn Default Settings"
   type: string
   default: "0 0 */7 * *"
 - variable: defaultSettings.removeSnapshotsDuringFilesystemTrim
   label: Remove Snapshots During Filesystem Trim
-  description: "This setting allows Longhorn filesystem trim feature to automatically mark the latest snapshot and its ancestors as removed and stops at the snapshot containing multiple children.\n\n
-    Since Longhorn filesystem trim feature can be applied to the volume head and the followed continuous removed or system snapshots only.\n\n
-    Notice that trying to trim a removed files from a valid snapshot will do nothing but the filesystem will discard this kind of in-memory trimmable file info.\n\n
-    Later on if you mark the snapshot as removed and want to retry the trim, you may need to unmount and remount the filesystem so that the filesystem can recollect the trimmable file info."
+  description: "This setting allows Longhorn filesystem trim feature to automatically mark the latest snapshot and its ancestors as removed and stops at the snapshot containing multiple children."
   group: "Longhorn Default Settings"
   type: boolean
   default: "false"
@@ -665,11 +596,7 @@ Set the value to **0** to disable backup restore."
   default: "30"
 - variable: defaultSettings.backupCompressionMethod
   label: Backup Compression Method
-  description: "This setting allows users to specify backup compression method.
-  Available options are
-    - **none**: Disable the compression method. Suitable for multimedia data such as encoded images and videos.
-    - **lz4**: Fast compression method. Suitable for flat files.
-    - **gzip**: A bit of higher compression ratio but relatively slow."
+  description: "This setting allows users to specify backup compression method."
   group: "Longhorn Default Settings"
   type: string
   default: "lz4"
@@ -689,17 +616,13 @@ Set the value to **0** to disable backup restore."
   default: 2
 - variable: defaultSettings.v2DataEngine
   label: V2 Data Engine
-  description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment.
-	WARNING:
-	  - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will block this setting update when there are attached volumes.
-	  - When applying the setting, Longhorn will restart all instance-manager pods.
-	  - When the V2 Data Engine is enabled, each instance-manager pod utilizes 1 CPU core. This high CPU usage is attributed to the spdk_tgt process running within each instance-manager pod. The spdk_tgt process is responsible for handling input/output (IO) operations and requires intensive polling. As a result, it consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
+  description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: boolean
   default: false
 - variable: defaultSettings.offlineReplicaRebuilding
   label: Offline Replica Rebuilding
-  description: ""This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine."
+  description: "This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   required: true
   type: enum
@@ -716,7 +639,7 @@ Set the value to **0** to disable backup restore."
   type: boolean
 - variable: persistence.reclaimPolicy
   label: Storage Class Retain Policy
-  description: "Define reclaim policy (Retain or Delete)"
+  description: "Define reclaim policy. Options: `Retain`, `Delete`"
   group: "Longhorn Storage Class Settings"
   required: true
   type: enum
@@ -733,7 +656,7 @@ Set the value to **0** to disable backup restore."
   max: 10
   default: 3
 - variable: persistence.defaultDataLocality
-  description: "Set data locality for Longhorn StorageClass"
+  description: "Set data locality for Longhorn StorageClass. Options: `disabled`, `best-effort`"
   label: Default Storage Class Data Locality
   group: "Longhorn Storage Class Settings"
   type: enum
@@ -765,7 +688,7 @@ Set the value to **0** to disable backup restore."
   subquestions:
   - variable: persistence.defaultNodeSelector.selector
     label: Storage Class Node Selector
-    description: 'We use NodeSelector when we want to bind PVC via StorageClass into desired mountpoint on the nodes tagged with its value'
+    description: 'This selector enables only certain nodes having these tags to be used for the volume. e.g. `"storage,fast"`'
     group: "Longhorn Storage Class Settings"
     type: string
     default:
@@ -819,7 +742,7 @@ Set the value to **0** to disable backup restore."
     type: string
     default:
 - variable: persistence.removeSnapshotsDuringFilesystemTrim
-  description: "Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass"
+  description: "Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass. Options: `ignored`, `enabled`, `disabled`"
   label: Default Storage Class Remove Snapshots During Filesystem Trim
   group: "Longhorn Storage Class Settings"
   type: enum
@@ -850,7 +773,7 @@ Set the value to **0** to disable backup restore."
     label: Ingress Path
 - variable: service.ui.type
   default: "Rancher-Proxy"
-  description: "Define Longhorn UI service type"
+  description: "Define Longhorn UI service type. Options: `ClusterIP`, `NodePort`, `LoadBalancer`, `Rancher-Proxy`"
   type: enum
   options:
     - "ClusterIP"
@@ -892,7 +815,7 @@ Set the value to **0** to disable backup restore."
   subquestions:
   - variable: networkPolicies.type
     label: Network Policies for Ingress
-    description: "Create the policy to allow access for the ingress, select the distribution."
+    description: "Create the policy based on your distribution to allow access for the ingress. Options: `k3s`, `rke2`, `rke1`"
     show_if: "networkPolicies.enabled=true&&ingress.enabled=true"
     type: enum
     default: "rke2"

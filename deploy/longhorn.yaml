@@ -20,6 +20,17 @@ metadata:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: longhorn-ui-service-account
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+---
+# Source: longhorn/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: longhorn-support-bundle
   namespace: longhorn-system
   labels:
@@ -1429,6 +1440,7 @@ spec:
               disableFrontend:
                 type: boolean
               engineImage:
+                description: 'Deprecated: Replaced by field `image`.'
                 type: string
               frontend:
                 enum:
@@ -1436,6 +1448,8 @@ spec:
                 - iscsi
                 - nvmf
                 - ""
+                type: string
+              image:
                 type: string
               logRequested:
                 type: boolean
@@ -2552,6 +2566,7 @@ spec:
               diskPath:
                 type: string
               engineImage:
+                description: 'Deprecated: Replaced by field `image`.'
                 type: string
               engineName:
                 type: string
@@ -2560,6 +2575,8 @@ spec:
               hardNodeAffinity:
                 type: string
               healthyAt:
+                type: string
+              image:
                 type: string
               logRequested:
                 type: boolean
@@ -3490,6 +3507,7 @@ spec:
               encrypted:
                 type: boolean
               engineImage:
+                description: 'Deprecated: Replaced by field `image`.'
                 type: string
               fromBackup:
                 type: string
@@ -3499,6 +3517,8 @@ spec:
                 - iscsi
                 - nvmf
                 - ""
+                type: string
+              image:
                 type: string
               lastAttachedBy:
                 type: string
@@ -3528,15 +3548,22 @@ spec:
                 - least-effort
                 - best-effort
                 type: string
+              replicaDiskSoftAntiAffinity:
+                description: Replica disk soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same disk.
+                enum:
+                - ignored
+                - enabled
+                - disabled
+                type: string
               replicaSoftAntiAffinity:
-                description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node
+                description: Replica soft anti affinity of the volume. Set enabled to allow replicas to be scheduled on the same node.
                 enum:
                 - ignored
                 - enabled
                 - disabled
                 type: string
               replicaZoneSoftAntiAffinity:
-                description: Replica zone soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same zone
+                description: Replica zone soft anti affinity of the volume. Set enabled to allow replicas to be scheduled in the same zone.
                 enum:
                 - ignored
                 - enabled
@@ -4257,6 +4284,7 @@ spec:
         app.kubernetes.io/version: v1.6.0-dev
         app: longhorn-ui
     spec:
+      serviceAccountName: longhorn-ui-service-account
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
