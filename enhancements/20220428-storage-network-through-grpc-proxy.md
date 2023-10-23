@@ -51,7 +51,7 @@ https://github.com/longhorn/longhorn/issues/3546
 
 - Introduce a new gRPC server in Instance Manager.
 
-- Keep re-usable connections between Manager and Instance Managers.
+- Keep reusable connections between Manager and Instance Managers.
 
 - Allow Manager to fall back to engine binary call when communicating with old Instance Manager.
 
