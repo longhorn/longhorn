@@ -30,7 +30,7 @@ Overall, the proposed volume backup policies aim to improve the Longhorn system 
 
 1. When volume backup policy is specified:
    - `if-not-present`: Longhorn will create a backup for volumes that do not have an existing backup.
-   - `alway`: Longhorn will create a backup for all volumes, regardless of their existing backups.
+   - `always`: Longhorn will create a backup for all volumes, regardless of their existing backups.
    - `disabled`: Longhorn will not create any backups for volumes.
 1. If a volume backup policy is not specified, the policy will be automatically set to `if-not-present`. This ensures that volumes without any existing backups will be backed up during the Longhorn system backup.
 
