@@ -14,7 +14,7 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          app: longhorn-manager
+          app.kubernetes.io/name: longhorn-manager
     - podSelector:
         matchLabels:
           longhorn.io/component: instance-manager

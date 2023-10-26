@@ -2,17 +2,17 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-manager
+    app.kubernetes.io/name: longhorn-manager
   name: longhorn-manager
   namespace: {{ include "release_namespace" . }}
 spec:
   selector:
     matchLabels:
-      app: longhorn-manager
+      app.kubernetes.io/name: longhorn-manager
   template:
     metadata:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
-        app: longhorn-manager
+        app.kubernetes.io/name: longhorn-manager
       {{- with .Values.annotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
@@ -130,7 +130,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-manager
+    app.kubernetes.io/name: longhorn-manager
   name: longhorn-backend
   namespace: {{ include "release_namespace" . }}
   {{- if .Values.longhornManager.serviceAnnotations }}
@@ -141,7 +141,7 @@ spec:
   type: {{ .Values.service.manager.type }}
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-manager
+    app.kubernetes.io/name: longhorn-manager
   ports:
   - name: manager
     port: 9500

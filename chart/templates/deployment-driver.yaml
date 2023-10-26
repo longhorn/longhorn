@@ -4,15 +4,16 @@ metadata:
   name: longhorn-driver-deployer
   namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app.kubernetes.io/name: longhorn-driver-deployer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: longhorn-driver-deployer
+      app.kubernetes.io/name: longhorn-driver-deployer
   template:
     metadata:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
-        app: longhorn-driver-deployer
+        app.kubernetes.io/name: longhorn-driver-deployer
     spec:
       initContainers:
         - name: wait-longhorn-manager

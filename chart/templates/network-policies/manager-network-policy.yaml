@@ -7,20 +7,20 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: longhorn-manager
+      app.kubernetes.io/name: longhorn-manager
   policyTypes:
   - Ingress
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: longhorn-manager
+          app.kubernetes.io/name: longhorn-manager
     - podSelector:
         matchLabels:
-          app: longhorn-ui
+          app.kubernetes.io/name: longhorn-ui
     - podSelector:
         matchLabels:
-          app: longhorn-csi-plugin
+          app.kubernetes.io/name: longhorn-csi-plugin
     - podSelector:
         matchLabels:
           longhorn.io/managed-by: longhorn-manager
@@ -31,5 +31,5 @@ spec:
           - { key: longhorn.io/job-task, operator: Exists }
     - podSelector:
         matchLabels:
-          app: longhorn-driver-deployer
+          app.kubernetes.io/name: longhorn-driver-deployer
 {{- end }}

@@ -7,7 +7,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: longhorn-ui
+      app.kubernetes.io/name: longhorn-ui
   policyTypes:
   - Ingress
   ingress:
