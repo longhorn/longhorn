@@ -9,7 +9,7 @@ metadata:
   name: longhorn-ingress
   namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-ingress
+    app.kubernetes.io/component: longhorn-ingress
   annotations:
     {{- if .Values.ingress.secureBackends }}
     ingress.kubernetes.io/secure-backends: "true"

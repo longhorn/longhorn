@@ -7,7 +7,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-ui
+    app.kubernetes.io/component: longhorn-ui
   name: {{ .Values.openshift.ui.route }}
   namespace: {{ include "release_namespace" . }}
 spec:
@@ -21,7 +21,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-ui
+    app.kubernetes.io/component: longhorn-ui
   name: longhorn-ui
   namespace: {{ include "release_namespace" . }}
   annotations:
@@ -32,7 +32,7 @@ spec:
     port: {{ .Values.openshift.ui.port | default 443 }}
     targetPort: {{ .Values.openshift.ui.proxy | default 8443 }}
   selector:
-    app: longhorn-ui
+    app.kubernetes.io/component: longhorn-ui
 ---
 {{- end }}
 {{- end }}
@@ -40,18 +40,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-ui
+    app.kubernetes.io/component: longhorn-ui
   name: longhorn-ui
   namespace: {{ include "release_namespace" . }}
 spec:
   replicas: {{ .Values.longhornUI.replicas }}
   selector:
     matchLabels:
-      app: longhorn-ui
+      app.kubernetes.io/component: longhorn-ui
   template:
     metadata:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
-        app: longhorn-ui
+        app.kubernetes.io/component: longhorn-ui
     spec:
       serviceAccountName: longhorn-ui-service-account
       affinity:
@@ -61,7 +61,7 @@ spec:
             podAffinityTerm:
               labelSelector:
                 matchExpressions:
-                - key: app
+                - key: app.kubernetes.io/component
                   operator: In
                   values:
                   - longhorn-ui
@@ -151,7 +151,7 @@ kind: Service
 apiVersion: v1
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-ui
+    app.kubernetes.io/component: longhorn-ui
     {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
     kubernetes.io/cluster-service: "true"
     {{- end }}
@@ -170,7 +170,7 @@ spec:
   loadBalancerSourceRanges: {{- toYaml .Values.service.ui.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
   selector:
-    app: longhorn-ui
+    app.kubernetes.io/component: longhorn-ui
   ports:
   - name: http
     port: 80

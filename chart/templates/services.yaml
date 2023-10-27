@@ -2,14 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-conversion-webhook
+    app.kubernetes.io/component: longhorn-conversion-webhook
   name: longhorn-conversion-webhook
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-manager
+    app.kubernetes.io/component: longhorn-manager
   ports:
   - name: conversion-webhook
     port: 9501
@@ -19,14 +19,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-admission-webhook
+    app.kubernetes.io/component: longhorn-admission-webhook
   name: longhorn-admission-webhook
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-manager
+    app.kubernetes.io/component: longhorn-manager
   ports:
   - name: admission-webhook
     port: 9502
@@ -36,14 +36,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-recovery-backend
+    app.kubernetes.io/component: longhorn-recovery-backend
   name: longhorn-recovery-backend
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
   sessionAffinity: ClientIP
   selector:
-    app: longhorn-manager
+    app.kubernetes.io/component: longhorn-manager
   ports:
   - name: recovery-backend
     port: 9503
