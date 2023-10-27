@@ -151,16 +151,16 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   labels:
-    app: longhorn-environment-check
+    app.kubernetes.io/name: longhorn-environment-check
   name: longhorn-environment-check
 spec:
   selector:
     matchLabels:
-      app: longhorn-environment-check
+      app.kubernetes.io/name: longhorn-environment-check
   template:
     metadata:
       labels:
-        app: longhorn-environment-check
+        app.kubernetes.io/name: longhorn-environment-check
     spec:
       hostPID: true
       containers:
@@ -206,7 +206,7 @@ wait_ds_ready() {
 
 check_mount_propagation() {
   local allSupported=true
-  local pods=$(kubectl -l app=longhorn-environment-check get po -o json)
+  local pods=$(kubectl -l app.kubernetes.io/name=longhorn-environment-check get po -o json)
 
   local ds=$(kubectl get ds/longhorn-environment-check -o json)
   local desiredNumberScheduled=$(echo $ds | jq .status.desiredNumberScheduled)
@@ -260,7 +260,7 @@ check_nodes() {
 
   local all_passed=true
 
-  local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
+  local pods=$(kubectl get pods -o name -l app.kubernetes.io/name=longhorn-environment-check)
   for pod in ${pods}; do
     eval "${callback} ${pod} $@"
     if [ $? -ne 0 ]; then
