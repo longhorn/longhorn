@@ -32,13 +32,19 @@ networkPolicies:
 image:
   longhorn:
     engine:
+      # -- Specify Longhorn engine image repository
       repository: longhornio/longhorn-engine
+      # -- Specify Longhorn engine image tag
       tag: master-head
     manager:
+      # -- Specify Longhorn manager image repository
       repository: docker.io/mrohrich/longhorn-manager
+      # -- Specify Longhorn manager image tag
       tag: object-endpoint
     ui:
+      # -- Specify Longhorn ui image repository
       repository: docker.io/mrohrich/longhorn-ui
+      # -- Specify Longhorn ui image tag
       tag: object-endpoint
     instanceManager:
       # -- Specify Longhorn instance manager image repository
@@ -61,10 +67,14 @@ image:
       # -- Specify Longhorn support bundle manager image tag
       tag: v0.0.27
     objectGateway:
+      # -- Specify Longhorn object gateway image repository
       repository: quay.io/s3gw/s3gw
+      # -- Specify Longhorn object gateway image tag
       tag: v0.22.0
     objectGatewayUI:
+      # -- Specify Longhorn object gateway UI image repository
       repository: docker.io/mrohrich/s3gw-ui
+      # -- Specify Longhorn object gateway UI image tag
       tag: latest
   csi:
     attacher:
@@ -404,24 +414,15 @@ longhornUI:
   #  label-key2: "label-value2"
 
 ingress:
-<<<<<<< HEAD
   # -- Set to true to enable ingress record generation
   enabled: false
-=======
-  ## Set to true to enable ingress record generation
-  enabled: true
->>>>>>> 0b02b8d (object store: ingresses)
 
   # -- Add ingressClassName to the Ingress
   # Can replace the kubernetes.io/ingress.class annotation on v1.18+
   ingressClassName: ~
 
-<<<<<<< HEAD
   # -- Layer 7 Load Balancer hostname
   host: sslip.io
-=======
-  host: zelus.qa.suse.cz
->>>>>>> 0b02b8d (object store: ingresses)
 
   # -- Set this to true in order to enable TLS on the ingress record
   tls: false
