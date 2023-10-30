@@ -2154,6 +2154,16 @@ spec:
                       type: string
                     name:
                       type: string
+                    tls:
+                      description: Reference to a secret containing TLS certificate and key for DomainName
+                      properties:
+                        name:
+                          description: name is unique within a namespace to reference a secret resource.
+                          type: string
+                        namespace:
+                          description: namespace defines the space within which the secret name must be unique.
+                          type: string
+                      type: object
                   required:
                   - name
                   type: object
@@ -3971,6 +3981,9 @@ rules:
 - apiGroups: ["storage.k8s.io"]
   resources: ["storageclasses", "volumeattachments", "volumeattachments/status", "csinodes", "csidrivers"]
   verbs: ["*"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["*"]
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
   verbs: ["*"]
@@ -4199,7 +4212,7 @@ spec:
       containers:
       - name: longhorn-manager
         image: docker.io/mrohrich/longhorn-manager:object-endpoint
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         securityContext:
           privileged: true
         command:
@@ -4207,7 +4220,7 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - "docker.io/mrohrich/longhorn-engine:object-store"
+        - "longhornio/longhorn-engine:master-head"
         - --instance-manager-image
         - "docker.io/mrohrich/longhorn-instance-manager:object-store"
         - --share-manager-image
@@ -4219,7 +4232,7 @@ spec:
         - --object-store-image
         - "quay.io/s3gw/s3gw:v0.20.0"
         - --object-store-ui-image
-        - "quay.io/s3gw/s3gw-ui:v0.20.0"
+        - "docker.io/mrohrich/s3gw-ui:latest"
         - --manager-image
         - "docker.io/mrohrich/longhorn-manager:object-endpoint"
         - --service-account
@@ -4310,7 +4323,7 @@ spec:
       containers:
         - name: longhorn-driver-deployer
           image: docker.io/mrohrich/longhorn-manager:object-endpoint
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command:
           - longhorn-manager
           - -d
@@ -4388,7 +4401,7 @@ spec:
       containers:
       - name: longhorn-ui
         image: docker.io/mrohrich/longhorn-ui:object-endpoint
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         volumeMounts:
         - name : nginx-cache
           mountPath: /var/cache/nginx/

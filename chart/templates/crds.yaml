@@ -2061,6 +2061,16 @@ spec:
                       type: string
                     name:
                       type: string
+                    tls:
+                      description: Reference to a secret containing TLS certificate and key for DomainName
+                      properties:
+                        name:
+                          description: name is unique within a namespace to reference a secret resource.
+                          type: string
+                        namespace:
+                          description: namespace defines the space within which the secret name must be unique.
+                          type: string
+                      type: object
                   required:
                   - name
                   type: object

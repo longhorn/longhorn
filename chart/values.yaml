@@ -32,8 +32,8 @@ networkPolicies:
 image:
   longhorn:
     engine:
-      repository: docker.io/mrohrich/longhorn-engine
-      tag: object-store
+      repository: longhornio/longhorn-engine
+      tag: master-head
     manager:
       repository: docker.io/mrohrich/longhorn-manager
       tag: object-endpoint
@@ -62,10 +62,10 @@ image:
       tag: v0.0.27
     objectGateway:
       repository: quay.io/s3gw/s3gw
-      tag: v0.20.0
+      tag: v0.22.0
     objectGatewayUI:
-      repository: quay.io/s3gw/s3gw-ui
-      tag: v0.20.0
+      repository: docker.io/mrohrich/s3gw-ui
+      tag: latest
   csi:
     attacher:
       # -- Specify CSI attacher image repository. Leave blank to autodetect
@@ -101,10 +101,8 @@ image:
     oauthProxy:
       # -- For openshift user. Specify oauth proxy image repository
       repository: quay.io/openshift/origin-oauth-proxy
-      # -- For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.13
-      tag: 4.13
-  # -- Image pull policy which applies to all user deployed Longhorn Components. e.g, Longhorn manager, Longhorn driver, Longhorn UI
-  pullPolicy: IfNotPresent
+      tag: 4.13  # Use Your OCP/OKD 4.X Version, Current Stable is 4.13
+  pullPolicy: Always
 
 service:
   ui:
@@ -406,15 +404,24 @@ longhornUI:
   #  label-key2: "label-value2"
 
 ingress:
+<<<<<<< HEAD
   # -- Set to true to enable ingress record generation
   enabled: false
+=======
+  ## Set to true to enable ingress record generation
+  enabled: true
+>>>>>>> 0b02b8d (object store: ingresses)
 
   # -- Add ingressClassName to the Ingress
   # Can replace the kubernetes.io/ingress.class annotation on v1.18+
   ingressClassName: ~
 
+<<<<<<< HEAD
   # -- Layer 7 Load Balancer hostname
   host: sslip.io
+=======
+  host: zelus.qa.suse.cz
+>>>>>>> 0b02b8d (object store: ingresses)
 
   # -- Set this to true in order to enable TLS on the ingress record
   tls: false
