@@ -54,7 +54,7 @@ Main changes and tasks for OCP are:
   - 4.13.0-0.okd-2023-05-03-001308 - 4.13.0-0.okd-2023-08-18-135805:
     - Tested, No Known Issues
 - 4.14 / 1.27:
-  - 4.14.0-0.okd-2023-08-12-022330 - 4.14.0-0.okd-2023-08-12-022330:
+  - 4.14.0-0.okd-2023-08-12-022330 - 4.14.0-0.okd-2023-10-28-073550:
     - Tested, No Known Issues
 
 ## Preparing Nodes (Optional)
@@ -145,7 +145,7 @@ Minimum Adjustments Required
 openshift:
   oauthProxy:
     repository: quay.io/openshift/origin-oauth-proxy
-    tag: 4.13  # Use Your OCP/OKD 4.X Version, Current Stable is 4.13
+    tag: 4.14  # Use Your OCP/OKD 4.X Version, Current Stable is 4.14
 
 # defaultSettings: # Preparing nodes (Optional)
   # createDefaultDiskLabeledNodes: true
