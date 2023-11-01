@@ -456,6 +456,8 @@ If disabled, Longhorn will not delete the workload pod that is managed by a cont
     group: "Longhorn Default Settings"
     type: enum
     options:
+      - "block-for-eviction"
+      - "block-for-eviction-if-contains-last-replica"
       - "block-if-contains-last-replica"
       - "allow-if-replica-is-stopped"
       - "always-allow"
