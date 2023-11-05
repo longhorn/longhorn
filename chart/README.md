@@ -252,6 +252,7 @@ Please also refer to this document [ocp-readme](https://github.com/longhorn/long
 |-----|---------|-------------|
 | annotations | `{}` | Annotations to add to the Longhorn Manager DaemonSet Pods. Optional. |
 | enablePSP | `false` | For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller, set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start |
+| enableServiceMonitor | `false` | Deploy a ServiceMonitor custom resource so that the Prometheus server can discover all Longhorn manager pods and their endpoints when using the Prometheus operator
 
 ### System Default Settings
 

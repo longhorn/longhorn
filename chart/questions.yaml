@@ -801,6 +801,12 @@ questions:
   label: Pod Security Policy
   type: boolean
   group: "Other Settings"
+- variable: enableServiceMonitor
+  default: "false"
+  description: "Deploy a ServiceMonitor custom resource so that the Prometheus server can discover all Longhorn manager pods and their endpoints when using the Prometheus operator."
+  label: Service Monitor
+  type: boolean
+  group: "Other Settings"
 - variable: global.cattle.windowsCluster.enabled
   default: "false"
   description: "Enable this to allow Longhorn to run on the Rancher deployed Windows cluster."

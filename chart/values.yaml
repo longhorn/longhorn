@@ -460,6 +460,10 @@ ingress:
 # set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start
 enablePSP: false
 
+# Deploy a ServiceMonitor custom resource so that the Prometheus server can discover all
+# Longhorn manager pods and their endpoints when using the Prometheus operator
+enableServiceMonitor: false
+
 # -- Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
 annotations: {}
 
