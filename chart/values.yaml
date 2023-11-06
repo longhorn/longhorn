@@ -171,6 +171,8 @@ defaultSettings:
   v2DataEngine: ~
   offlineReplicaRebuilding: ~
   disableSnapshotPurge: ~
+  allowCollectingLonghornUsageMetrics: ~
+
 
 privateRegistry:
   createSecret: ~
