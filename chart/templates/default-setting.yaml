@@ -84,3 +84,4 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}{{ end }}
