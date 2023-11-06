@@ -614,6 +614,12 @@ questions:
   type: int
   min: 1
   default: 2
+- variable: defaultSettings.allowCollectingLonghornUsageMetrics
+  label: Allow Collecting Longhorn Usage Metrics
+  description: "Enabling this setting will allow Longhorn to provide additional usage metrics to https://metrics.longhorn.io/. This information will help us better understand how Longhorn is being used, which will ultimately contribute to future improvements."
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: true
 - variable: defaultSettings.v2DataEngine
   label: V2 Data Engine
   description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment."

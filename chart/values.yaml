@@ -59,7 +59,7 @@ image:
     backingImageManager:
       # -- Specify Longhorn backing image manager image repository
       repository: longhornio/backing-image-manager
-      # -- Specify Longhorn backing image manager image tag 
+      # -- Specify Longhorn backing image manager image tag
       tag: master-head
     supportBundleKit:
       # -- Specify Longhorn support bundle manager image repository
@@ -327,6 +327,8 @@ defaultSettings:
   allowEmptyNodeSelectorVolume: ~
   # -- Allow Scheduling Empty Disk Selector Volumes To Any Disk
   allowEmptyDiskSelectorVolume: ~
+  # -- Enabling this setting will allow Longhorn to provide additional usage metrics to https://metrics.longhorn.io/. This information will help us better understand how Longhorn is being used, which will ultimately contribute to future improvements.
+  allowCollectingLonghornUsageMetrics: ~
 
 privateRegistry:
   # -- Set `true` to create a new private registry secret
