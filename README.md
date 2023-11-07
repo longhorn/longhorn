@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none">
-    <a href="https://longhorn.io/" target="_blank"><img alt="Longhorn" width="120px" src="https://github.com/longhorn/website/blob/master/static/img/icon-longhorn.svg"></a><br>Longhorn
+    <a href="https://longhorn.io/" target="_blank"><img alt="Longhorn" width="300px" src="https://github.com/longhorn/website/blob/master/static/img/logos/longhorn-stacked-color.png""></a>
 </h1>
 
 <p align="center">A CNCF Incubating Project. Visit <a href="https://longhorn.io/" target="_blank">longhorn.io</a> for the full documentation.</p>
