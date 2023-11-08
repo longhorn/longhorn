@@ -36,16 +36,15 @@ configMap:
           ]
         },
         {
-          "name": "v1.4.3",
-          "releaseDate": "2023-07-14T00:00:00Z",
+          "name": "v1.4.4",
+          "releaseDate": "2023-10-26T00:00:00Z",
           "tags": [
-            "latest", 
             "stable"
           ]
         },
         {
-          "name": "v1.5.1",
-          "releaseDate": "2023-07-19T00:00:00Z",
+          "name": "v1.5.2",
+          "releaseDate": "2023-11-03T00:00:00Z",
           "tags": [
             "latest"
           ]
@@ -174,7 +173,7 @@ configMap:
         "longhornSettingReplicaDiskSoftAntiAffinity": {
           "dataType": "string",
           "maxLen": 200
-        }
+        },
         "longhornSettingRestoreVolumeRecurringJobs": {
           "dataType": "string",
           "maxLen": 200
