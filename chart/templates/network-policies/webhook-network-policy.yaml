@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: longhorn-conversion-webhook
-  namespace: longhorn-system
+  namespace: {{ include "release_namespace" . }}
 spec:
   podSelector:
     matchLabels:
@@ -19,7 +19,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: longhorn-admission-webhook
-  namespace: longhorn-system
+  namespace: {{ include "release_namespace" . }}
 spec:
   podSelector:
     matchLabels:
