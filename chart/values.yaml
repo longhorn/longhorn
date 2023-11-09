@@ -101,8 +101,8 @@ image:
     oauthProxy:
       # -- For openshift user. Specify oauth proxy image repository
       repository: quay.io/openshift/origin-oauth-proxy
-      # -- For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.13
-      tag: 4.13
+      # -- For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.14
+      tag: 4.14
   # -- Image pull policy which applies to all user deployed Longhorn Components. e.g, Longhorn manager, Longhorn driver, Longhorn UI
   pullPolicy: IfNotPresent
 

@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none">
-    <a href="https://longhorn.io/" target="_blank"><img alt="Longhorn" width="120px" src="https://github.com/longhorn/website/blob/master/static/img/icon-longhorn.svg"></a><br>Longhorn
+    <a href="https://longhorn.io/" target="_blank"><img alt="Longhorn" width="300px" src="https://github.com/longhorn/website/blob/master/static/img/logos/longhorn-stacked-color.png""></a>
 </h1>
 
 <p align="center">A CNCF Incubating Project. Visit <a href="https://longhorn.io/" target="_blank">longhorn.io</a> for the full documentation.</p>
@@ -38,7 +38,7 @@ https://github.com/longhorn/longhorn/releases
 
 | Release   | Version | Type           | Release Note (Changelog)                                       | Important Note                                              |
 |-----------|---------|----------------|----------------------------------------------------------------|-------------------------------------------------------------|
-| **1.5***  | 1.5.1   | Latest         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.1) | [🔗](https://longhorn.io/docs/1.5.1/deploy/important-notes) |
+| **1.5***  | 1.5.2   | Latest         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.2) | [🔗](https://longhorn.io/docs/1.5.2/deploy/important-notes) |
 | **1.4***  | 1.4.4   | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.4) | [🔗](https://longhorn.io/docs/1.4.4/deploy/important-notes) |
 | 1.3       | 1.3.3   | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.3) | [🔗](https://longhorn.io/docs/1.3.3/deploy/important-notes) |
 | 1.2       | 1.2.6   | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.2.6) | [🔗](https://longhorn.io/docs/1.2.6/deploy/important-notes) |
