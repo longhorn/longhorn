@@ -55,6 +55,31 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: longhorn-objectstorage-storageclass
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+data:
+  storageclass.yaml: |
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: longhorn-objectstorage-static
+      labels:
+        app.kubernetes.io/name: longhorn
+        app.kubernetes.io/instance: longhorn
+        app.kubernetes.io/version: v1.6.0-dev
+      annotations:
+        storageclass.kubernetes.io/is-default-class: false
+    provisioner: driver.longhorn.io
+    allowVolumeExpansion: true
+---
+# Source: longhorn/templates/storageclass.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: longhorn-storageclass
   namespace: longhorn-system
   labels:
@@ -2174,6 +2199,13 @@ spec:
               image:
                 description: Desired images for the gateway and UI containers.
                 type: string
+              size:
+                anyOf:
+                - type: integer
+                - type: string
+                description: The initial size of the volume to provision. The volume will be created such that it can be expanded if resources are available
+                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                x-kubernetes-int-or-string: true
               storage:
                 description: The configuration of the longhorn volume providing storage for the object store.
                 properties:
@@ -2244,13 +2276,6 @@ spec:
                     type: string
                   revisionCounterDisabled:
                     type: boolean
-                  size:
-                    anyOf:
-                    - type: integer
-                    - type: string
-                    description: The initial size of the volume to provision. The volume will be created such that it can be expanded if resources are available
-                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                    x-kubernetes-int-or-string: true
                   staleReplicaTimeout:
                     default: 2880
                     minimum: 1
@@ -4222,7 +4247,7 @@ spec:
         - --engine-image
         - "longhornio/longhorn-engine:master-head"
         - --instance-manager-image
-        - "docker.io/mrohrich/longhorn-instance-manager:object-store"
+        - "longhornio/longhorn-instance-manager:master-head"
         - --share-manager-image
         - "longhornio/longhorn-share-manager:master-head"
         - --backing-image-manager-image
@@ -4230,7 +4255,7 @@ spec:
         - --support-bundle-manager-image
         - "longhornio/support-bundle-kit:v0.0.27"
         - --object-store-image
-        - "quay.io/s3gw/s3gw:v0.20.0"
+        - "quay.io/s3gw/s3gw:v0.22.0"
         - --object-store-ui-image
         - "docker.io/mrohrich/s3gw-ui:latest"
         - --manager-image

@@ -2081,6 +2081,13 @@ spec:
               image:
                 description: Desired images for the gateway and UI containers.
                 type: string
+              size:
+                anyOf:
+                - type: integer
+                - type: string
+                description: The initial size of the volume to provision. The volume will be created such that it can be expanded if resources are available
+                pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                x-kubernetes-int-or-string: true
               storage:
                 description: The configuration of the longhorn volume providing storage for the object store.
                 properties:
@@ -2151,13 +2158,6 @@ spec:
                     type: string
                   revisionCounterDisabled:
                     type: boolean
-                  size:
-                    anyOf:
-                    - type: integer
-                    - type: string
-                    description: The initial size of the volume to provision. The volume will be created such that it can be expanded if resources are available
-                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                    x-kubernetes-int-or-string: true
                   staleReplicaTimeout:
                     default: 2880
                     minimum: 1

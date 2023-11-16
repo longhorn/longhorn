@@ -1,17 +1,21 @@
 ---
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: longhorn-objectstorage
+  name: longhorn-objectstorage-storageclass
+  namespace: {{ include "release_namespace" . }}
   labels: {{- include "longhorn.labels" . | nindent 4 }}
-  annotations:
-    storageclass.kubernetes.io/is-default-class: false
-provisioner: driver.longhorn.io
-allowVolumeExpansion: true
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  fsType: xfs
+data:
+  storageclass.yaml: |
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: longhorn-objectstorage-static
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+      annotations:
+        storageclass.kubernetes.io/is-default-class: false
+    provisioner: driver.longhorn.io
+    allowVolumeExpansion: true
 ---
 apiVersion: v1
 kind: ConfigMap
