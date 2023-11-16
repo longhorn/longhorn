@@ -1753,6 +1753,10 @@ spec:
       jsonPath: .spec.type
       name: Type
       type: string
+    - description: The data engine of the instance manager
+      jsonPath: .spec.backendStoreDriver
+      name: Data Engine
+      type: string
     - description: The node that the instance manager is running on
       jsonPath: .spec.nodeID
       name: Node
