@@ -10,4 +10,4 @@ longhornio/longhorn-instance-manager:master-head
 longhornio/longhorn-manager:master-head
 longhornio/longhorn-share-manager:master-head
 longhornio/longhorn-ui:master-head
-longhornio/support-bundle-kit:v0.0.29
+longhornio/support-bundle-kit:v0.0.31
