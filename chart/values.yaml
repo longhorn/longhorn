@@ -65,7 +65,7 @@ image:
       # -- Specify Longhorn support bundle manager image repository
       repository: longhornio/support-bundle-kit
       # -- Specify Longhorn support bundle manager image tag
-      tag: v0.0.29
+      tag: v0.0.31
   csi:
     attacher:
       # -- Specify CSI attacher image repository. Leave blank to autodetect

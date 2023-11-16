@@ -123,7 +123,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.shareManager.repository | string | `"longhornio/longhorn-share-manager"` | Specify Longhorn share manager image repository |
 | image.longhorn.shareManager.tag | string | `"master-head"` | Specify Longhorn share manager image tag |
 | image.longhorn.supportBundleKit.repository | string | `"longhornio/support-bundle-kit"` | Specify Longhorn support bundle manager image repository |
-| image.longhorn.supportBundleKit.tag | string | `"v0.0.29"` | Specify Longhorn support bundle manager image tag |
+| image.longhorn.supportBundleKit.tag | string | `"v0.0.31"` | Specify Longhorn support bundle manager image tag |
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Specify Longhorn ui image repository |
 | image.longhorn.ui.tag | string | `"master-head"` | Specify Longhorn ui image tag |
 | image.openshift.oauthProxy.repository | string | `"quay.io/openshift/origin-oauth-proxy"` | For openshift user. Specify oauth proxy image repository |
