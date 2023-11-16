@@ -2088,7 +2088,16 @@ spec:
                 description: The initial size of the volume to provision. The volume will be created such that it can be expanded if resources are available
                 pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                 x-kubernetes-int-or-string: true
-              storage:
+              targetState:
+                default: running
+                description: A target state. Can be used to volutarily stop the gateway for offline volume operations
+                enum:
+                - running
+                - stopped
+                type: string
+              uiImage:
+                type: string
+              volumeParameters:
                 description: The configuration of the longhorn volume providing storage for the object store.
                 properties:
                   backendStoreDriver:
@@ -2169,15 +2178,6 @@ spec:
                     - enabled
                     type: string
                 type: object
-              targetState:
-                default: running
-                description: A target state. Can be used to volutarily stop the gateway for offline volume operations
-                enum:
-                - running
-                - stopped
-                type: string
-              uiImage:
-                type: string
             type: object
           status:
             properties:
