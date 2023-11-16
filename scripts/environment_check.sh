@@ -431,24 +431,6 @@ check_hugepage() {
   fi
 }
 
-function check_nvme_cli() {
-  local pod=$1
-
-  value=$(kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c 'nvme version' 2>/dev/null)
-  if [ $? -ne 0 ]; then
-    node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-    error "Failed to check nvme-cli version on node ${node}"
-    return 1
-  fi
-
-  local actual_version=$(echo "$value" | grep -o "[0-9]\+\.[0-9]\+")
-  if [[ "$(printf '%s\n' "${NVME_CLI_VERSION}" "$actual_version" | sort -V | tail -n1)" == "$actual_version" ]]; then
-    return 0
-  fi
-  error "nvme-cli version should be at least ${NVME_CLI_VERSION} on node ${node}. Actual: ${actual_version}"
-  return 1
-}
-
 function check_sse42_support() {
   local pod=$1
 
@@ -537,7 +519,6 @@ check_nodes "nfs client" check_nfs_client
 
 if [ "$enable_spdk" = "true" ]; then
   check_nodes "x86-64 SSE4.2 instruction set" check_sse42_support
-  check_nodes "nvme-cli" check_nvme_cli
   check_nodes "kernel module nvme_tcp" check_kernel_module CONFIG_NVME_TCP nvme_tcp
   check_nodes "kernel module uio_pci_generic" check_kernel_module CONFIG_UIO_PCI_GENERIC uio_pci_generic
   check_nodes "hugepage" check_hugepage ${expected_nr_hugepages}
