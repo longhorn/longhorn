@@ -101,17 +101,17 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.csi.attacher.repository | string | `"longhornio/csi-attacher"` | Specify CSI attacher image repository. Leave blank to autodetect |
-| image.csi.attacher.tag | string | `"v4.2.0"` | Specify CSI attacher image tag. Leave blank to autodetect |
+| image.csi.attacher.tag | string | `"v4.4.0"` | Specify CSI attacher image tag. Leave blank to autodetect |
 | image.csi.livenessProbe.repository | string | `"longhornio/livenessprobe"` | Specify CSI liveness probe image repository. Leave blank to autodetect  |
-| image.csi.livenessProbe.tag | string | `"v2.9.0"` | Specify CSI liveness probe image tag. Leave blank to autodetect |
+| image.csi.livenessProbe.tag | string | `"v2.11.0"` | Specify CSI liveness probe image tag. Leave blank to autodetect |
 | image.csi.nodeDriverRegistrar.repository | string | `"longhornio/csi-node-driver-registrar"` | Specify CSI node driver registrar image repository. Leave blank to autodetect |
-| image.csi.nodeDriverRegistrar.tag | string | `"v2.7.0"` | Specify CSI node driver registrar image tag. Leave blank to autodetect |
+| image.csi.nodeDriverRegistrar.tag | string | `"v2.9.0"` | Specify CSI node driver registrar image tag. Leave blank to autodetect |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Specify CSI provisioner image repository. Leave blank to autodetect |
-| image.csi.provisioner.tag | string | `"v3.4.1"` | Specify CSI provisioner image tag. Leave blank to autodetect |
+| image.csi.provisioner.tag | string | `"v3.6.0"` | Specify CSI provisioner image tag. Leave blank to autodetect |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Specify CSI driver resizer image repository. Leave blank to autodetect |
-| image.csi.resizer.tag | string | `"v1.7.0"` | Specify CSI driver resizer image tag. Leave blank to autodetect |
+| image.csi.resizer.tag | string | `"v1.9.0"` | Specify CSI driver resizer image tag. Leave blank to autodetect |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Specify CSI driver snapshotter image repository. Leave blank to autodetect |
-| image.csi.snapshotter.tag | string | `"v6.2.1"` | Specify CSI driver snapshotter image tag. Leave blank to autodetect. |
+| image.csi.snapshotter.tag | string | `"v6.3.0"` | Specify CSI driver snapshotter image tag. Leave blank to autodetect. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Specify Longhorn backing image manager image repository |
 | image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag  |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Specify Longhorn engine image repository |
@@ -123,7 +123,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.shareManager.repository | string | `"longhornio/longhorn-share-manager"` | Specify Longhorn share manager image repository |
 | image.longhorn.shareManager.tag | string | `"master-head"` | Specify Longhorn share manager image tag |
 | image.longhorn.supportBundleKit.repository | string | `"longhornio/support-bundle-kit"` | Specify Longhorn support bundle manager image repository |
-| image.longhorn.supportBundleKit.tag | string | `"v0.0.27"` | Specify Longhorn support bundle manager image tag |
+| image.longhorn.supportBundleKit.tag | string | `"v0.0.31"` | Specify Longhorn support bundle manager image tag |
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Specify Longhorn ui image repository |
 | image.longhorn.ui.tag | string | `"master-head"` | Specify Longhorn ui image tag |
 | image.openshift.oauthProxy.repository | string | `"quay.io/openshift/origin-oauth-proxy"` | For openshift user. Specify oauth proxy image repository |
