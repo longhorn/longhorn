@@ -49,6 +49,13 @@ jobs:
         LABELS=$(echo "$RAW_LABELS" | sed -r 's/\s*backport\S+//g' | sed -r 's/\s*require\/auto-e2e-test//g' | xargs | sed 's/ /, /g')
         echo "LABELS: $LABELS"
         echo "labels=$LABELS" >> $GITHUB_OUTPUT
+    - name: Get Longhorn Members
+      uses: longhorn/bot/filter-org-members-action@master
+      id: longhorn-members
+      with:
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        organization: longhorn
+        usernames: ${{ join(github.event.issue.assignees.*.login, ', ') }}
     - name: Create Backport Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
       uses: dacbd/create-issue-action@v1
@@ -61,7 +68,7 @@ jobs:
           backport ${{ github.event.issue.html_url }}
         labels: ${{ steps.labels.outputs.labels }}
         milestone: ${{ fromJSON(steps.milestone.outputs.data).number }}
-        assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}
+        assignees: ${{ join(fromJSON(steps.longhorn-members.outputs.members), ', ') }}
     - name: Get Repo Id
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
       uses: octokit/request-action@v2.x
