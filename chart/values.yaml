@@ -65,38 +65,38 @@ image:
       # -- Specify Longhorn support bundle manager image repository
       repository: longhornio/support-bundle-kit
       # -- Specify Longhorn support bundle manager image tag
-      tag: v0.0.27
+      tag: v0.0.31
   csi:
     attacher:
       # -- Specify CSI attacher image repository. Leave blank to autodetect
       repository: longhornio/csi-attacher
       # -- Specify CSI attacher image tag. Leave blank to autodetect
-      tag: v4.2.0
+      tag: v4.4.0
     provisioner:
       # -- Specify CSI provisioner image repository. Leave blank to autodetect
       repository: longhornio/csi-provisioner
       # -- Specify CSI provisioner image tag. Leave blank to autodetect
-      tag: v3.4.1
+      tag: v3.6.0
     nodeDriverRegistrar:
       # -- Specify CSI node driver registrar image repository. Leave blank to autodetect
       repository: longhornio/csi-node-driver-registrar
       # -- Specify CSI node driver registrar image tag. Leave blank to autodetect
-      tag: v2.7.0
+      tag: v2.9.0
     resizer:
       # -- Specify CSI driver resizer image repository. Leave blank to autodetect
       repository: longhornio/csi-resizer
       # -- Specify CSI driver resizer image tag. Leave blank to autodetect
-      tag: v1.7.0
+      tag: v1.9.0
     snapshotter:
       # -- Specify CSI driver snapshotter image repository. Leave blank to autodetect
       repository: longhornio/csi-snapshotter
       # -- Specify CSI driver snapshotter image tag. Leave blank to autodetect.
-      tag: v6.2.1
+      tag: v6.3.0
     livenessProbe:
       # -- Specify CSI liveness probe image repository. Leave blank to autodetect 
       repository: longhornio/livenessprobe
       # -- Specify CSI liveness probe image tag. Leave blank to autodetect
-      tag: v2.9.0
+      tag: v2.11.0
   openshift:
     oauthProxy:
       # -- For openshift user. Specify oauth proxy image repository
