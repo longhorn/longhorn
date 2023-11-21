@@ -87,6 +87,13 @@ spec:
           - name: CSI_SNAPSHOTTER_REPLICA_COUNT
             value: {{ .Values.csi.snapshotterReplicaCount | quote }}
           {{- end }}
+          {{- if .Values.enableGoCoverDir }}
+          - name: GOCOVERDIR
+            value: /go-cover-dir/
+          volumeMounts:
+          - name: go-cover-dir
+            mountPath: /go-cover-dir/
+          {{- end }}
 
       {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
@@ -116,3 +123,10 @@ spec:
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
+      {{- if .Values.enableGoCoverDir }}
+      volumes:
+      - name: go-cover-dir
+        hostPath:
+          path: /go-cover-dir/
+          type: DirectoryOrCreate
+      {{- end }}
