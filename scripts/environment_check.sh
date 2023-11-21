@@ -233,6 +233,16 @@ check_mount_propagation() {
 check_hostname_uniqueness() {
   hostnames=$(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="Hostname")].address}')
 
+  if [ $? -ne 0 ]; then
+    error "kubectl get nodes failed - check KUBECONFIG setup"
+    exit 1
+  fi
+
+  if [[ ! ${hostnames[@]} ]]; then
+    error "kubectl get nodes returned empty list - check KUBECONFIG setup"
+    exit 1
+  fi
+
   deduplicate_hostnames=()
   num_nodes=0
   for hostname in ${hostnames}; do
