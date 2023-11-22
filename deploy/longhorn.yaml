@@ -1819,6 +1819,10 @@ spec:
                       type: object
                     status:
                       properties:
+                        conditions:
+                          additionalProperties:
+                            type: boolean
+                          type: object
                         endpoint:
                           type: string
                         errorMsg:
@@ -1854,6 +1858,10 @@ spec:
                       type: object
                     status:
                       properties:
+                        conditions:
+                          additionalProperties:
+                            type: boolean
+                          type: object
                         endpoint:
                           type: string
                         errorMsg:
@@ -1889,6 +1897,10 @@ spec:
                       type: object
                     status:
                       properties:
+                        conditions:
+                          additionalProperties:
+                            type: boolean
+                          type: object
                         endpoint:
                           type: string
                         errorMsg:
