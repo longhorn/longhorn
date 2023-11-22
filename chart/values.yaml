@@ -483,3 +483,6 @@ openshift:
     port: 443
     # -- UI proxy in openshift environment
     proxy: 8443
+
+# -- Enable this to allow Longhorn to generate code coverage profiles
+enableGoCoverDir: false
