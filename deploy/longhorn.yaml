@@ -55,7 +55,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: longhorn-objectstorage-storageclass
+  name: longhorn-objectstorage-static-storageclass
   namespace: longhorn-system
   labels:
     app.kubernetes.io/name: longhorn
@@ -67,10 +67,6 @@ data:
     kind: StorageClass
     metadata:
       name: longhorn-objectstorage-static
-      labels:
-        app.kubernetes.io/name: longhorn
-        app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.6.0-dev
       annotations:
         storageclass.kubernetes.io/is-default-class: false
     provisioner: driver.longhorn.io
@@ -453,11 +449,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: backingimages.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: BackingImage
@@ -792,11 +799,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: backuptargets.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: BackupTarget
@@ -1124,11 +1142,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: EngineImage
@@ -1137,6 +1166,7 @@ spec:
     shortNames:
     - lhei
     singular: engineimage
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1893,11 +1923,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: Node
@@ -1906,6 +1947,7 @@ spec:
     shortNames:
     - lhn
     singular: node
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -3619,11 +3661,22 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: longhorn-conversion-webhook
+          namespace: longhorn-system
+          path: /v1/webhook/conversion
+          port: 9443
+      conversionReviewVersions:
+      - v1beta2
+      - v1beta1
   group: longhorn.io
   names:
     kind: Volume
@@ -3632,6 +3685,7 @@ spec:
     shortNames:
     - lhv
     singular: volume
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -4255,9 +4309,9 @@ spec:
         - --support-bundle-manager-image
         - "longhornio/support-bundle-kit:v0.0.27"
         - --object-store-image
-        - "quay.io/s3gw/s3gw:v0.22.0"
+        - "quay.io/s3gw/s3gw:v0.23.0-rc4"
         - --object-store-ui-image
-        - "docker.io/mrohrich/s3gw-ui:latest"
+        - "quay.io/s3gw/s3gw-ui:v0.23.0-rc4"
         - --manager-image
         - "docker.io/mrohrich/longhorn-manager:object-endpoint"
         - --service-account

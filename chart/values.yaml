@@ -70,12 +70,12 @@ image:
       # -- Specify Longhorn object gateway image repository
       repository: quay.io/s3gw/s3gw
       # -- Specify Longhorn object gateway image tag
-      tag: v0.22.0
+      tag: v0.23.0
     objectGatewayUI:
       # -- Specify Longhorn object gateway UI image repository
-      repository: docker.io/mrohrich/s3gw-ui
+      repository: quay.io/s3gw/s3gw-ui
       # -- Specify Longhorn object gateway UI image tag
-      tag: latest
+      tag: v0.23.0
   csi:
     attacher:
       # -- Specify CSI attacher image repository. Leave blank to autodetect
