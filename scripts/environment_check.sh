@@ -268,9 +268,6 @@ check_package_installed() {
 check_hostname_uniqueness() {
   hostnames=$(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="Hostname")].address}')
 
-<<<<<<< HEAD
-  declare -A deduplicate_hostnames
-=======
   if [ $? -ne 0 ]; then
     error "kubectl get nodes failed - check KUBECONFIG setup"
     exit 1
@@ -282,7 +279,6 @@ check_hostname_uniqueness() {
   fi
 
   deduplicate_hostnames=()
->>>>>>> bcd399a (Add checks for kubectl failure to query nodes.)
   num_nodes=0
   for hostname in ${hostnames}; do
     num_nodes=$((num_nodes+1))
