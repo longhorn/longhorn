@@ -103,6 +103,7 @@ jobs:
     - name: Create Automation Test Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-automation-issue-exists.outputs.issues)[0] == null
       uses: dacbd/create-issue-action@v1
+      id: create-automation-test-issue
       with:
         token: ${{ github.token }}
         title: |
@@ -112,3 +113,10 @@ jobs:
           
           cc @longhorn/qa
         labels: kind/test
+    - name: Add Issue to QA & Devops Project
+      if: steps.create-automation-test-issue.outcome == 'success'
+      uses: longhorn/bot/add-to-project-action@master
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/4
+        issue-node-id: ${{ fromJSON(steps.create-automation-test-issue.outputs.json).node_id }}
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
