@@ -99,7 +99,7 @@ spec:
           path: /proc/
       - name: longhorn
         hostPath:
-          path: /var/lib/longhorn/
+          path: {{ .Values.defaultSettings.defaultDataPath }}
       {{- if .Values.enableGoCoverDir }}
       - name: go-cover-dir
         hostPath:
