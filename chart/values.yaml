@@ -249,6 +249,8 @@ defaultSettings:
   nodeDownPodDeletionPolicy: ~
   # -- Define the policy to use when a node with the last healthy replica of a volume is drained.
   nodeDrainPolicy: ~
+  # -- Automatically detach volumes that are attached manually when the node is cordoned.
+  detachManuallyAttachedVolumesWhenCordoned: ~
   # -- In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica
   # rather than directly creating a new replica for a degraded volume.
   replicaReplenishmentWaitInterval: ~

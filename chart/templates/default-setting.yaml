@@ -54,6 +54,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaDiskSoftAntiAffinity) }}replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}{{ end }}

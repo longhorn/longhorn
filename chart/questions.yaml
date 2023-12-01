@@ -446,6 +446,12 @@ questions:
       - "allow-if-replica-is-stopped"
       - "always-allow"
     default: "block-if-contains-last-replica"
+  - variable: defaultSettings.detachManuallyAttachedVolumesWhenCordoned
+    label: Detach Manually Attached Volumes When Cordoned
+    description: "Automatically detach volumes that are attached manually when the node is cordoned."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
   - variable: defaultSettings.replicaReplenishmentWaitInterval
     label: Replica Replenishment Wait Interval
     description: "In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume."
