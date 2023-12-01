@@ -127,7 +127,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Specify Longhorn ui image repository |
 | image.longhorn.ui.tag | string | `"master-head"` | Specify Longhorn ui image tag |
 | image.openshift.oauthProxy.repository | string | `"quay.io/openshift/origin-oauth-proxy"` | For openshift user. Specify oauth proxy image repository |
-| image.openshift.oauthProxy.tag | float | `4.13` | For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.13 |
+| image.openshift.oauthProxy.tag | float | `4.14` | For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.14 |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy which applies to all user deployed Longhorn Components. e.g, Longhorn manager, Longhorn driver, Longhorn UI |
 
 ### Service Settings
@@ -251,7 +251,9 @@ Please also refer to this document [ocp-readme](https://github.com/longhorn/long
 | Key | Default | Description |
 |-----|---------|-------------|
 | annotations | `{}` | Annotations to add to the Longhorn Manager DaemonSet Pods. Optional. |
+| enableGoCoverDir | `false` | Enable this to allow Longhorn to generate code coverage profiles |
 | enablePSP | `false` | For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller, set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start |
+| helmPreUpgradeCheckerJob.enabled | `true` |  |
 
 ### System Default Settings
 
@@ -284,6 +286,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.defaultLonghornStaticStorageClass | The 'storageClassName' is given to PVs and PVCs that are created for an existing Longhorn volume. The StorageClass name can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. By default 'longhorn-static'. |
 | defaultSettings.defaultReplicaCount | The default number of replicas when a volume is created from the Longhorn UI. For Kubernetes configuration, update the `numberOfReplicas` in the StorageClass. By default 3. |
 | defaultSettings.deletingConfirmationFlag | This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost. |
+| defaultSettings.detachManuallyAttachedVolumesWhenCordoned | Automatically detach volumes that are attached manually when the node is cordoned. |
 | defaultSettings.disableRevisionCounter | This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the replica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume. |
 | defaultSettings.disableSchedulingOnCordonedNode | Disable Longhorn manager to schedule replica on Kubernetes cordoned node. By default true. |
 | defaultSettings.engineReplicaTimeout | In seconds. The setting specifies the timeout between the engine and replica(s), and the value should be between 8 to 30 seconds. The default value is 8 seconds. |
