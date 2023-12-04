@@ -587,6 +587,12 @@ Set the value to **0** to disable backup restore."
     min: 0
     max: 40
     default: 12
+  - variable: defaultSettings.disableSnapshotPurge
+    label: Disable Snapshot Purge
+    description: "Temporarily prevent all attempts to purge volume snapshots."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.

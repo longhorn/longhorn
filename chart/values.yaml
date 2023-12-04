@@ -159,6 +159,8 @@ defaultSettings:
   removeSnapshotsDuringFilesystemTrim: ~
   fastReplicaRebuildEnabled: ~
   replicaFileSyncHttpClientTimeout: ~
+  disableSnapshotPurge: ~
+
 privateRegistry:
   createSecret: ~
   registryUrl: ~
