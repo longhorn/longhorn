@@ -329,6 +329,8 @@ defaultSettings:
   allowEmptyDiskSelectorVolume: ~
   # -- Enabling this setting will allow Longhorn to provide additional usage metrics to https://metrics.longhorn.io/. This information will help us better understand how Longhorn is being used, which will ultimately contribute to future improvements.
   allowCollectingLonghornUsageMetrics: ~
+  # -- Temporarily prevent all attempts to purge volume snapshots.
+  disableSnapshotPurge: ~
 
 privateRegistry:
   # -- Set `true` to create a new private registry secret
