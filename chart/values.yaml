@@ -170,6 +170,8 @@ defaultSettings:
   restoreConcurrentLimit: ~
   v2DataEngine: ~
   offlineReplicaRebuilding: ~
+  disableSnapshotPurge: ~
+
 privateRegistry:
   createSecret: ~
   registryUrl: ~
