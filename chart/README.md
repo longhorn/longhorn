@@ -113,7 +113,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Specify CSI driver snapshotter image repository. Leave blank to autodetect |
 | image.csi.snapshotter.tag | string | `"v6.3.0"` | Specify CSI driver snapshotter image tag. Leave blank to autodetect. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Specify Longhorn backing image manager image repository |
-| image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag  |
+| image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Specify Longhorn engine image repository |
 | image.longhorn.engine.tag | string | `"master-head"` | Specify Longhorn engine image tag |
 | image.longhorn.instanceManager.repository | string | `"longhornio/longhorn-instance-manager"` | Specify Longhorn instance manager image repository |
@@ -127,7 +127,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Specify Longhorn ui image repository |
 | image.longhorn.ui.tag | string | `"master-head"` | Specify Longhorn ui image tag |
 | image.openshift.oauthProxy.repository | string | `"quay.io/openshift/origin-oauth-proxy"` | For openshift user. Specify oauth proxy image repository |
-| image.openshift.oauthProxy.tag | float | `4.13` | For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.13 |
+| image.openshift.oauthProxy.tag | float | `4.14` | For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.14 |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy which applies to all user deployed Longhorn Components. e.g, Longhorn manager, Longhorn driver, Longhorn UI |
 
 ### Service Settings
@@ -252,6 +252,7 @@ Please also refer to this document [ocp-readme](https://github.com/longhorn/long
 |-----|---------|-------------|
 | annotations | `{}` | Annotations to add to the Longhorn Manager DaemonSet Pods. Optional. |
 | enablePSP | `false` | For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller, set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start |
+| helmPreUpgradeCheckerJob.enabled | `true` |  |
 | enableServiceMonitor | `false` | Deploy a ServiceMonitor custom resource so that the Prometheus server can discover all Longhorn manager pods and their endpoints when using the Prometheus operator
 
 ### System Default Settings
@@ -262,6 +263,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 
 | Key | Description |
 |-----|-------------|
+| defaultSettings.allowCollectingLonghornUsageMetrics | Enabling this setting will allow Longhorn to provide additional usage metrics to https://metrics.longhorn.io/. This information will help us better understand how Longhorn is being used, which will ultimately contribute to future improvements. |
 | defaultSettings.allowEmptyDiskSelectorVolume | Allow Scheduling Empty Disk Selector Volumes To Any Disk |
 | defaultSettings.allowEmptyNodeSelectorVolume | Allow Scheduling Empty Node Selector Volumes To Any Node |
 | defaultSettings.allowRecurringJobWhileVolumeDetached | If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup  when it is the time to do recurring snapshot/backup. |
