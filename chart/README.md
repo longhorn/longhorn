@@ -113,7 +113,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Specify CSI driver snapshotter image repository. Leave blank to autodetect |
 | image.csi.snapshotter.tag | string | `"v6.3.0"` | Specify CSI driver snapshotter image tag. Leave blank to autodetect. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Specify Longhorn backing image manager image repository |
-| image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag  |
+| image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Specify Longhorn engine image repository |
 | image.longhorn.engine.tag | string | `"master-head"` | Specify Longhorn engine image tag |
 | image.longhorn.instanceManager.repository | string | `"longhornio/longhorn-instance-manager"` | Specify Longhorn instance manager image repository |
@@ -263,6 +263,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 
 | Key | Description |
 |-----|-------------|
+| defaultSettings.allowCollectingLonghornUsageMetrics | Enabling this setting will allow Longhorn to provide additional usage metrics to https://metrics.longhorn.io/. This information will help us better understand how Longhorn is being used, which will ultimately contribute to future improvements. |
 | defaultSettings.allowEmptyDiskSelectorVolume | Allow Scheduling Empty Disk Selector Volumes To Any Disk |
 | defaultSettings.allowEmptyNodeSelectorVolume | Allow Scheduling Empty Node Selector Volumes To Any Node |
 | defaultSettings.allowRecurringJobWhileVolumeDetached | If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup  when it is the time to do recurring snapshot/backup. |
@@ -289,6 +290,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.detachManuallyAttachedVolumesWhenCordoned | Automatically detach volumes that are attached manually when the node is cordoned. |
 | defaultSettings.disableRevisionCounter | This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the replica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume. |
 | defaultSettings.disableSchedulingOnCordonedNode | Disable Longhorn manager to schedule replica on Kubernetes cordoned node. By default true. |
+| defaultSettings.disableSnapshotPurge | Temporarily prevent all attempts to purge volume snapshots. |
 | defaultSettings.engineReplicaTimeout | In seconds. The setting specifies the timeout between the engine and replica(s), and the value should be between 8 to 30 seconds. The default value is 8 seconds. |
 | defaultSettings.failedBackupTTL | In minutes. This setting determines how long Longhorn will keep the backup resource that was failed. Set to 0 to disable the auto-deletion. |
 | defaultSettings.fastReplicaRebuildEnabled | This feature supports the fast replica rebuilding. It relies on the checksum of snapshot disk files, so setting the snapshot-data-integrity to **enable** or **fast-check** is a prerequisite. |
