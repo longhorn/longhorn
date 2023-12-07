@@ -119,3 +119,47 @@ jobs:
           
           cc @longhorn/qa
         labels: kind/test
+
+  ui:
+    runs-on: ubuntu-latest
+    if: contains(github.event.label.name, 'require/ui')
+    steps:
+    - name: Is Longhorn Member
+      uses: tspascoal/get-user-teams-membership@v1.0.4
+      id: is-longhorn-member
+      with:
+        username: ${{ github.actor }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+    - name: Check if UI Issue Exists
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: actions-cool/issues-helper@v3
+      id: if-ui-issue-exists
+      with:
+        actions: 'find-issues'
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        issue-state: 'all'
+        title-includes: |
+          [UI]${{ github.event.issue.title }}
+    - name: Get Labels
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-ui-issue-exists.outputs.issues)[0] == null
+      id: labels
+      run: |
+        RAW_LABELS="${{ join(github.event.issue.labels.*.name, ' ') }}"
+        echo "RAW LABELS: $RAW_LABELS"
+        LABELS=$(echo "$RAW_LABELS" | sed -r 's/\s*backport\S+//g' | sed -r 's/\s*require\/ui//g' | xargs | sed 's/ /, /g')
+        echo "LABELS: $LABELS"
+        echo "labels=$LABELS" >> $GITHUB_OUTPUT
+    - name: Create UI Test Issue
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-ui-issue-exists.outputs.issues)[0] == null
+      uses: dacbd/create-issue-action@v1
+      with:
+        token: ${{ github.token }}
+        title: |
+          [UI]${{ github.event.issue.title }}
+        body: |
+          make corresponding UI changes for ${{ github.event.issue.html_url }}
+
+          cc @longhorn/dev-ui
+        labels: ${{ steps.labels.outputs.labels }}, area/ui
+        milestone: ${{ github.event.issue.milestone.number }}
