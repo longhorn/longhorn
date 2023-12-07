@@ -227,8 +227,10 @@ defaultSettings:
   taintToleration: ~
   # -- nodeSelector for longhorn system components
   systemManagedComponentsNodeSelector: ~
-  # -- priorityClass for longhorn system componentss
-  priorityClass: ~
+  # -- The name of the Priority Class to set on the Longhorn components.
+  # This can help prevent Longhorn components from being evicted under Node Pressure.
+  # Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.)
+  priorityClass: &defaultPriorityClassNameRef "longhorn-critical"
   # -- If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection.
   # Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true.
   autoSalvage: ~
@@ -353,7 +355,7 @@ longhornManager:
     # -- Options: `plain`, `json`
     format: plain
   # -- Priority class for longhorn manager
-  priorityClass: ~
+  priorityClass: *defaultPriorityClassNameRef
   # -- Tolerate nodes to run Longhorn manager
   tolerations: []
   ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
@@ -377,7 +379,7 @@ longhornManager:
 
 longhornDriver:
   # -- Priority class for longhorn driver
-  priorityClass: ~
+  priorityClass: *defaultPriorityClassNameRef
   # -- Tolerate nodes to run Longhorn driver
   tolerations: []
   ## If you want to set tolerations for Longhorn Driver Deployer Deployment, delete the `[]` in the line above
@@ -397,7 +399,7 @@ longhornUI:
   # -- Replica count for longhorn ui
   replicas: 2
   # -- Priority class count for longhorn ui
-  priorityClass: ~
+  priorityClass: *defaultPriorityClassNameRef
   # -- Tolerate nodes to run Longhorn UI
   tolerations: []
   ## If you want to set tolerations for Longhorn UI Deployment, delete the `[]` in the line above
