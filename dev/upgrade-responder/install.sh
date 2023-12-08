@@ -230,6 +230,12 @@ configMap:
         }
       },
       "extraFieldInfoSchema": {
+        "longhornDiskBlockCount": {
+          "dataType": "float"
+        },
+        "longhornDiskFilesystemCount": {
+          "dataType": "float"
+        },
         "longhornInstanceManagerAverageCpuUsageMilliCores": {
           "dataType": "float"
         },
