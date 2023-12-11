@@ -345,6 +345,12 @@ configMap:
         "longhornVolumeAverageSnapshotCount": {
           "dataType": "float"
         },
+        "longhornVolumeBackendStoreDriverV1Count": {
+          "dataType": "float"
+        },
+        "longhornVolumeBackendStoreDriverV2Count": {
+          "dataType": "float"
+        },
         "longhornVolumeDataLocalityBestEffortCount": {
           "dataType": "float"
         },
