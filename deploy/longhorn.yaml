@@ -5,6 +5,21 @@ kind: Namespace
 metadata:
   name: longhorn-system
 ---
+# Source: longhorn/templates/priorityclass.yaml
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: "longhorn-critical"
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+value: 1000000000
+# ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -50,6 +65,7 @@ metadata:
     app.kubernetes.io/version: v1.6.0-dev
 data:
   default-setting.yaml: |-
+    priority-class: longhorn-critical
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
@@ -4192,6 +4208,7 @@ spec:
         secret:
           secretName: longhorn-grpc-tls
           optional: true
+      priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
@@ -4261,6 +4278,7 @@ spec:
             value: "longhornio/csi-snapshotter:v6.3.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
             value: "longhornio/livenessprobe:v2.11.0"
+      priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
@@ -4328,6 +4346,7 @@ spec:
         name: nginx-config
       - emptyDir: {}
         name: var-run
+      priorityClassName: "longhorn-critical"
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
