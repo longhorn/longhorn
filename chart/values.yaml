@@ -475,6 +475,11 @@ serviceAccount:
   # -- Annotations to add to the service account
   annotations: {}
 
+metrics:
+  serviceMonitor:
+    # Enable this to create the ServiceMonitor
+    enabled: false
+    
 ## openshift settings
 openshift:
   # -- Enable when using openshift
