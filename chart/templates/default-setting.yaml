@@ -54,6 +54,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaDiskSoftAntiAffinity) }}replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}{{ end }}
@@ -61,6 +62,7 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot) }}auto-cleanup-recurring-job-backup-snapshot: {{ .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}{{ end }}
@@ -84,3 +86,4 @@ data:
     {{ if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}{{ end }}
     {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume }}{{ end }}
+    {{ if not (kindIs "invalid" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}{{ end }}

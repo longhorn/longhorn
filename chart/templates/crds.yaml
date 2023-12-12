@@ -1947,6 +1947,8 @@ spec:
           status:
             description: NodeStatus defines the observed state of the Longhorn node
             properties:
+              autoEvicting:
+                type: boolean
               conditions:
                 items:
                   properties:
@@ -2439,6 +2441,8 @@ spec:
                 type: string
               engineName:
                 type: string
+              evictionRequested:
+                type: boolean
               failedAt:
                 type: string
               hardNodeAffinity:
@@ -2497,6 +2501,7 @@ spec:
               currentState:
                 type: string
               evictionRequested:
+                description: 'Deprecated: Replaced by field `spec.evictionRequested`.'
                 type: boolean
               instanceManagerName:
                 type: string

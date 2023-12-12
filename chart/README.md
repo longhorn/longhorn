@@ -113,7 +113,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Specify CSI driver snapshotter image repository. Leave blank to autodetect |
 | image.csi.snapshotter.tag | string | `"v6.3.0"` | Specify CSI driver snapshotter image tag. Leave blank to autodetect. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Specify Longhorn backing image manager image repository |
-| image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag  |
+| image.longhorn.backingImageManager.tag | string | `"master-head"` | Specify Longhorn backing image manager image tag |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Specify Longhorn engine image repository |
 | image.longhorn.engine.tag | string | `"master-head"` | Specify Longhorn engine image tag |
 | image.longhorn.instanceManager.repository | string | `"longhornio/longhorn-instance-manager"` | Specify Longhorn instance manager image repository |
@@ -123,11 +123,11 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.shareManager.repository | string | `"longhornio/longhorn-share-manager"` | Specify Longhorn share manager image repository |
 | image.longhorn.shareManager.tag | string | `"master-head"` | Specify Longhorn share manager image tag |
 | image.longhorn.supportBundleKit.repository | string | `"longhornio/support-bundle-kit"` | Specify Longhorn support bundle manager image repository |
-| image.longhorn.supportBundleKit.tag | string | `"v0.0.31"` | Specify Longhorn support bundle manager image tag |
+| image.longhorn.supportBundleKit.tag | string | `"v0.0.32"` | Specify Longhorn support bundle manager image tag |
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Specify Longhorn ui image repository |
 | image.longhorn.ui.tag | string | `"master-head"` | Specify Longhorn ui image tag |
 | image.openshift.oauthProxy.repository | string | `"quay.io/openshift/origin-oauth-proxy"` | For openshift user. Specify oauth proxy image repository |
-| image.openshift.oauthProxy.tag | float | `4.13` | For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.13 |
+| image.openshift.oauthProxy.tag | float | `4.14` | For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.14 |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy which applies to all user deployed Longhorn Components. e.g, Longhorn manager, Longhorn driver, Longhorn UI |
 
 ### Service Settings
@@ -251,7 +251,9 @@ Please also refer to this document [ocp-readme](https://github.com/longhorn/long
 | Key | Default | Description |
 |-----|---------|-------------|
 | annotations | `{}` | Annotations to add to the Longhorn Manager DaemonSet Pods. Optional. |
+| enableGoCoverDir | `false` | Enable this to allow Longhorn to generate code coverage profiles |
 | enablePSP | `false` | For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller, set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start |
+| helmPreUpgradeCheckerJob.enabled | `true` |  |
 
 ### System Default Settings
 
@@ -261,6 +263,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 
 | Key | Description |
 |-----|-------------|
+| defaultSettings.allowCollectingLonghornUsageMetrics | Enabling this setting will allow Longhorn to provide additional usage metrics to https://metrics.longhorn.io/. This information will help us better understand how Longhorn is being used, which will ultimately contribute to future improvements. |
 | defaultSettings.allowEmptyDiskSelectorVolume | Allow Scheduling Empty Disk Selector Volumes To Any Disk |
 | defaultSettings.allowEmptyNodeSelectorVolume | Allow Scheduling Empty Node Selector Volumes To Any Node |
 | defaultSettings.allowRecurringJobWhileVolumeDetached | If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup  when it is the time to do recurring snapshot/backup. |
@@ -284,8 +287,10 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.defaultLonghornStaticStorageClass | The 'storageClassName' is given to PVs and PVCs that are created for an existing Longhorn volume. The StorageClass name can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. By default 'longhorn-static'. |
 | defaultSettings.defaultReplicaCount | The default number of replicas when a volume is created from the Longhorn UI. For Kubernetes configuration, update the `numberOfReplicas` in the StorageClass. By default 3. |
 | defaultSettings.deletingConfirmationFlag | This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost. |
+| defaultSettings.detachManuallyAttachedVolumesWhenCordoned | Automatically detach volumes that are attached manually when the node is cordoned. |
 | defaultSettings.disableRevisionCounter | This setting is only for volumes created by UI. By default, this is false meaning there will be a reivision counter file to track every write to the volume. During salvage recovering Longhorn will pick the replica with largest reivision counter as candidate to recover the whole volume. If revision counter is disabled, Longhorn will not track every write to the volume. During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and file size to pick the replica candidate to recover the whole volume. |
 | defaultSettings.disableSchedulingOnCordonedNode | Disable Longhorn manager to schedule replica on Kubernetes cordoned node. By default true. |
+| defaultSettings.disableSnapshotPurge | Temporarily prevent all attempts to purge volume snapshots. |
 | defaultSettings.engineReplicaTimeout | In seconds. The setting specifies the timeout between the engine and replica(s), and the value should be between 8 to 30 seconds. The default value is 8 seconds. |
 | defaultSettings.failedBackupTTL | In minutes. This setting determines how long Longhorn will keep the backup resource that was failed. Set to 0 to disable the auto-deletion. |
 | defaultSettings.fastReplicaRebuildEnabled | This feature supports the fast replica rebuilding. It relies on the checksum of snapshot disk files, so setting the snapshot-data-integrity to **enable** or **fast-check** is a prerequisite. |
