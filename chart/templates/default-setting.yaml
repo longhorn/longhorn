@@ -6,26 +6,66 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-setting.yaml: |-
-    {{ if not (kindIs "invalid" .Values.defaultSettings.backupTarget) }}backup-target: {{ .Values.defaultSettings.backupTarget }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.backupTargetCredentialSecret) }}backup-target-credential-secret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}default-data-path: {{ .Values.defaultSettings.defaultDataPath }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.storageReservedPercentageForDefaultDisk) }}storage-reserved-percentage-for-default-disk: {{ .Values.defaultSettings.storageReservedPercentageForDefaultDisk }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.restoreVolumeRecurringJobs) }}restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}recurring-successful-jobs-history-limit: {{ .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.recurringFailedJobsHistoryLimit) }}recurring-failed-jobs-history-limit: {{ .Values.defaultSettings.recurringFailedJobsHistoryLimit }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.supportBundleFailedHistoryLimit) }}support-bundle-failed-history-limit: {{ .Values.defaultSettings.supportBundleFailedHistoryLimit }}{{ end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backupTarget) }}
+    backup-target: {{ .Values.defaultSettings.backupTarget }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backupTargetCredentialSecret) }}
+    backup-target-credential-secret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
+    allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}
+    create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
+    default-data-path: {{ .Values.defaultSettings.defaultDataPath }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
+    replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}
+    replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}
+    storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}
+    storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.storageReservedPercentageForDefaultDisk) }}
+    storage-reserved-percentage-for-default-disk: {{ .Values.defaultSettings.storageReservedPercentageForDefaultDisk }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}
+    upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}
+    default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}
+    default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}
+    default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}
+    backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}
+    failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.restoreVolumeRecurringJobs) }}
+    restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}
+    recurring-successful-jobs-history-limit: {{ .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.recurringFailedJobsHistoryLimit) }}
+    recurring-failed-jobs-history-limit: {{ .Values.defaultSettings.recurringFailedJobsHistoryLimit }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.supportBundleFailedHistoryLimit) }}
+    support-bundle-failed-history-limit: {{ .Values.defaultSettings.supportBundleFailedHistoryLimit }}
+    {{- end }}
     {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
     taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
@@ -46,44 +86,126 @@ data:
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
     {{- end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}priority-class: {{ .Values.defaultSettings.priorityClass }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}auto-salvage: {{ .Values.defaultSettings.autoSalvage }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaDiskSoftAntiAffinity) }}replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.disableRevisionCounter) }}disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot) }}auto-cleanup-recurring-job-backup-snapshot: {{ .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.guaranteedInstanceManagerCPU) }}guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.guaranteedInstanceManagerCPU }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.orphanAutoDeletion) }}orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}storage-network: {{ .Values.defaultSettings.storageNetwork }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.engineReplicaTimeout) }}engine-replica-timeout: {{ .Values.defaultSettings.engineReplicaTimeout }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrity) }}snapshot-data-integrity: {{ .Values.defaultSettings.snapshotDataIntegrity }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation) }}snapshot-data-integrity-immediate-check-after-snapshot-creation: {{ .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityCronjob) }}snapshot-data-integrity-cronjob: {{ .Values.defaultSettings.snapshotDataIntegrityCronjob }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim) }}remove-snapshots-during-filesystem-trim: {{ .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.fastReplicaRebuildEnabled) }}fast-replica-rebuild-enabled: {{ .Values.defaultSettings.fastReplicaRebuildEnabled }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.replicaFileSyncHttpClientTimeout) }}replica-file-sync-http-client-timeout: {{ .Values.defaultSettings.replicaFileSyncHttpClientTimeout }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.logLevel) }}log-level: {{ .Values.defaultSettings.logLevel }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.backupCompressionMethod) }}backup-compression-method: {{ .Values.defaultSettings.backupCompressionMethod }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.backupConcurrentLimit) }}backup-concurrent-limit: {{ .Values.defaultSettings.backupConcurrentLimit }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.v2DataEngine) }}v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume }}{{ end }}
-    {{ if not (kindIs "invalid" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}{{ end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
+    priority-class: {{ .Values.defaultSettings.priorityClass }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}
+    auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}
+    auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}
+    disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}
+    replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaDiskSoftAntiAffinity) }}
+    replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}
+    node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}
+    node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}
+    detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}
+    replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}
+    concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}
+    concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.disableRevisionCounter) }}
+    disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}
+    system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}
+    allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}
+    auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot) }}
+    auto-cleanup-recurring-job-backup-snapshot: {{ .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}
+    concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}
+    backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}
+    backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.guaranteedInstanceManagerCPU) }}
+    guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.guaranteedInstanceManagerCPU }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}
+    kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.orphanAutoDeletion) }}
+    orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}
+    storage-network: {{ .Values.defaultSettings.storageNetwork }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}
+    deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.engineReplicaTimeout) }}
+    engine-replica-timeout: {{ .Values.defaultSettings.engineReplicaTimeout }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrity) }}
+    snapshot-data-integrity: {{ .Values.defaultSettings.snapshotDataIntegrity }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation) }}
+    snapshot-data-integrity-immediate-check-after-snapshot-creation: {{ .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityCronjob) }}
+    snapshot-data-integrity-cronjob: {{ .Values.defaultSettings.snapshotDataIntegrityCronjob }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim) }}
+    remove-snapshots-during-filesystem-trim: {{ .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.fastReplicaRebuildEnabled) }}
+    fast-replica-rebuild-enabled: {{ .Values.defaultSettings.fastReplicaRebuildEnabled }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaFileSyncHttpClientTimeout) }}
+    replica-file-sync-http-client-timeout: {{ .Values.defaultSettings.replicaFileSyncHttpClientTimeout }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.logLevel) }}
+    log-level: {{ .Values.defaultSettings.logLevel }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backupCompressionMethod) }}
+    backup-compression-method: {{ .Values.defaultSettings.backupCompressionMethod }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backupConcurrentLimit) }}
+    backup-concurrent-limit: {{ .Values.defaultSettings.backupConcurrentLimit }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}
+    restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngine) }}
+    v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}
+    offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
+    allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}
+    allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}
+    allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}
+    {{- end }}
