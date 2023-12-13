@@ -7,4 +7,3 @@ description: "Ensure Longhorn pods have the highest priority to prevent any unex
 globalDefault: false
 preemptionPolicy: PreemptLowerPriority
 value: 1000000000
-# ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
