@@ -103,7 +103,7 @@ image:
       repository: quay.io/openshift/origin-oauth-proxy
       # -- For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.14
       tag: 4.14
-  # -- Image pull policy which applies to all user-deployed Longhorn Components. E.g., Longhorn manager, Longhorn driver, Longhorn UI
+  # -- Image pull policy which applies to all Longhorn user-deployed components. E.g., Longhorn manager, Longhorn driver, Longhorn UI
   pullPolicy: IfNotPresent
 
 service:
@@ -229,9 +229,9 @@ defaultSettings:
   taintToleration: ~
   # -- nodeSelector for Longhorn system-managed components
   systemManagedComponentsNodeSelector: ~
-  # -- The name of the Priority Class to set on the Longhorn components.
-  # This can help prevent Longhorn components from being evicted under Node Pressure.
-  # Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.)
+  # -- priorityClass for Longhorn system-managed components
+  # This setting can help prevent Longhorn components from being evicted under Node Pressure.
+  # Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`.
   priorityClass: &defaultPriorityClassNameRef "longhorn-critical"
   # -- If enabled, volumes will be automatically salvaged when all the replicas become faulty, e.g., due to network disconnection.
   # Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default, true.
