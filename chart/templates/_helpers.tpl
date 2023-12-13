@@ -58,9 +58,5 @@ app.kubernetes.io/version: {{ .Chart.AppVersion }}
  define the longhorn release namespace
 */ -}}
 {{- define "release_namespace" -}}
-{{- if .Values.namespaceOverride -}}
-{{- .Values.namespaceOverride -}}
-{{- else -}}
 {{- .Release.Namespace -}}
-{{- end -}}
 {{- end -}}

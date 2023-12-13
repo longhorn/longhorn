@@ -49,6 +49,13 @@ jobs:
         LABELS=$(echo "$RAW_LABELS" | sed -r 's/\s*backport\S+//g' | sed -r 's/\s*require\/auto-e2e-test//g' | xargs | sed 's/ /, /g')
         echo "LABELS: $LABELS"
         echo "labels=$LABELS" >> $GITHUB_OUTPUT
+    - name: Get Longhorn Members
+      uses: longhorn/bot/filter-org-members-action@master
+      id: longhorn-members
+      with:
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        organization: longhorn
+        usernames: ${{ join(github.event.issue.assignees.*.login, ', ') }}
     - name: Create Backport Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
       uses: dacbd/create-issue-action@v1
@@ -61,7 +68,7 @@ jobs:
           backport ${{ github.event.issue.html_url }}
         labels: ${{ steps.labels.outputs.labels }}
         milestone: ${{ fromJSON(steps.milestone.outputs.data).number }}
-        assignees: ${{ join(github.event.issue.assignees.*.login, ', ') }}
+        assignees: ${{ join(fromJSON(steps.longhorn-members.outputs.members), ', ') }}
     - name: Get Repo Id
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
       uses: octokit/request-action@v2.x
@@ -120,3 +127,47 @@ jobs:
         project-url: https://github.com/orgs/longhorn/projects/4
         issue-node-id: ${{ fromJSON(steps.create-automation-test-issue.outputs.json).node_id }}
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+  ui:
+    runs-on: ubuntu-latest
+    if: contains(github.event.label.name, 'require/ui')
+    steps:
+    - name: Is Longhorn Member
+      uses: tspascoal/get-user-teams-membership@v1.0.4
+      id: is-longhorn-member
+      with:
+        username: ${{ github.actor }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+    - name: Check if UI Issue Exists
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: actions-cool/issues-helper@v3
+      id: if-ui-issue-exists
+      with:
+        actions: 'find-issues'
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        issue-state: 'all'
+        title-includes: |
+          [UI]${{ github.event.issue.title }}
+    - name: Get Labels
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-ui-issue-exists.outputs.issues)[0] == null
+      id: labels
+      run: |
+        RAW_LABELS="${{ join(github.event.issue.labels.*.name, ' ') }}"
+        echo "RAW LABELS: $RAW_LABELS"
+        LABELS=$(echo "$RAW_LABELS" | sed -r 's/\s*backport\S+//g' | sed -r 's/\s*require\/ui//g' | xargs | sed 's/ /, /g')
+        echo "LABELS: $LABELS"
+        echo "labels=$LABELS" >> $GITHUB_OUTPUT
+    - name: Create UI Test Issue
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-ui-issue-exists.outputs.issues)[0] == null
+      uses: dacbd/create-issue-action@v1
+      with:
+        token: ${{ github.token }}
+        title: |
+          [UI]${{ github.event.issue.title }}
+        body: |
+          make corresponding UI changes for ${{ github.event.issue.html_url }}
+
+          cc @longhorn/dev-ui
+        labels: ${{ steps.labels.outputs.labels }}, area/ui
+        milestone: ${{ github.event.issue.milestone.number }}

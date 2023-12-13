@@ -1,5 +1,5 @@
 ---
-name: Refactor request
+name: Refactor task
 about: Suggest a refactoring request for an existing implementation
 title: "[REFACTOR] "
 labels: kind/refactoring
@@ -21,4 +21,4 @@ assignees: ''
 
 ## Additional context
 
-<!--Add any other context or screenshots about the refactoring request here.-->
+<!--Add any other context or screenshots about the request here.-->
