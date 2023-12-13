@@ -6,7 +6,7 @@ global:
     # -- System default registry
     systemDefaultRegistry: ""
     windowsCluster:
-      # -- Enable this to allow Longhorn to run on the Rancher deployed Windows cluster
+      # -- Enable this to allow Longhorn to run on the Rancher-deployed Windows cluster
       enabled: false
       # -- Tolerate Linux nodes to run Longhorn user deployed components
       tolerations:
@@ -103,19 +103,19 @@ image:
       repository: quay.io/openshift/origin-oauth-proxy
       # -- For openshift user. Specify oauth proxy image tag. Note: Use your OCP/OKD 4.X Version, Current Stable is 4.14
       tag: 4.14
-  # -- Image pull policy which applies to all user deployed Longhorn Components. e.g, Longhorn manager, Longhorn driver, Longhorn UI
+  # -- Image pull policy which applies to all user-deployed Longhorn Components. E.g., Longhorn manager, Longhorn driver, Longhorn UI
   pullPolicy: IfNotPresent
 
 service:
   ui:
-    # -- Define Longhorn UI service type. Options: `ClusterIP`, `NodePort`, `LoadBalancer`, `Rancher-Proxy`
+    # -- Define the Longhorn UI service type. Options: `ClusterIP`, `NodePort`, `LoadBalancer`, `Rancher-Proxy`
     type: ClusterIP
-    # -- NodePort port number (to set explicitly, choose port between 30000-32767)
+    # -- NodePort port number (to set explicitly, chooses port between 30000-32767)
     nodePort: null
   manager:
-    # -- Define Longhorn manager service type.
+    # -- Define the Longhorn manager service type.
     type: ClusterIP
-    # -- NodePort port number (to set explicitly, choose port between 30000-32767)
+    # -- NodePort port number (to set explicitly, chooses port between 30000-32767)
     nodePort: ""
 
 persistence:
@@ -136,7 +136,7 @@ persistence:
   recurringJobSelector:
     # -- Enable recurring job selector for Longhorn StorageClass
     enable: false
-    # -- Recurring job selector list for Longhorn StorageClass. Please be careful of quotes of input. e.g., `[{"name":"backup", "isGroup":true}]`
+    # -- Recurring job selector list for Longhorn StorageClass. Please be careful of quotes of input. E.g., `[{"name":"backup", "isGroup":true}]`
     jobList: []
   backingImage:
     # -- Set backing image for Longhorn StorageClass
@@ -144,16 +144,18 @@ persistence:
     # -- Specify a backing image that will be used by Longhorn volumes in Longhorn StorageClass. If not exists, the backing image data source type and backing image data source parameters should be specified so that Longhorn will create the backing image before using it
     name: ~
     # -- Specify the data source type for the backing image used in Longhorn StorageClass.
-    # If the backing image does not exists, Longhorn will use this field to create a backing image. Otherwise, Longhorn will use it to verify the selected backing image.
+    # If the backing image does not exist, Longhorn will use this field to create a backing image.
+    # Otherwise, Longhorn will use it to verify the selected backing image.
     dataSourceType: ~
-    # -- Specify the data source parameters for the backing image used in Longhorn StorageClass. This option accepts a json string of a map. e.g., `'{\"url\":\"https://backing-image-example.s3-region.amazonaws.com/test-backing-image\"}'`.
+    # -- Specify the data source parameters for the backing image used in Longhorn StorageClass.
+    # This option accepts a json string of a map. E.g., `'{\"url\":\"https://backing-image-example.s3-region.amazonaws.com/test-backing-image\"}'`.
     dataSourceParameters: ~
     # -- Specify the expected SHA512 checksum of the selected backing image in Longhorn StorageClass
     expectedChecksum: ~
   defaultNodeSelector:
     # -- Enable Node selector for Longhorn StorageClass
     enable: false
-    # -- This selector enables only certain nodes having these tags to be used for the volume. e.g. `"storage,fast"`
+    # -- This selector enables only certain nodes having these tags to be used for the volume. E.g. `"storage,fast"`
     selector: ""
   # -- Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass. Options: `ignored`, `enabled`, `disabled`
   removeSnapshotsDuringFilesystemTrim: ignored
@@ -178,39 +180,39 @@ defaultSettings:
   backupTarget: ~
   # -- The name of the Kubernetes secret associated with the backup target.
   backupTargetCredentialSecret: ~
-  # -- If this setting is enabled, Longhorn will automatically attaches the volume and takes snapshot/backup
+  # -- If this setting is enabled, Longhorn will automatically attach the volume and takes snapshot/backup
   # when it is the time to do recurring snapshot/backup.
   allowRecurringJobWhileVolumeDetached: ~
   # -- Create default Disk automatically only on Nodes with the label "node.longhorn.io/create-default-disk=true" if no other disks exist.
   # If disabled, the default disk will be created on all new nodes when each node is first added.
   createDefaultDiskLabeledNodes: ~
-  # -- Default path to use for storing data on a host. By default "/var/lib/longhorn/"
+  # -- Default path to use for storing data on a host. By default, "/var/lib/longhorn/"
   defaultDataPath: ~
   # -- Longhorn volume has data locality if there is a local replica of the volume on the same node as the pod which is using the volume.
   defaultDataLocality: ~
-  # -- Allow scheduling on nodes with existing healthy replicas of the same volume. By default false.
+  # -- Allow scheduling on nodes with existing healthy replicas of the same volume. By default, false.
   replicaSoftAntiAffinity: ~
-  # -- Enable this setting automatically rebalances replicas when discovered an available node.
+  # -- Enable this setting automatically re-balances replicas when discovered an available node.
   replicaAutoBalance: ~
-  # -- The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default 200.
+  # -- The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default, 200.
   storageOverProvisioningPercentage: ~
   # -- If the minimum available disk capacity exceeds the actual percentage of available disk capacity,
-  # the disk becomes unschedulable until more space is freed up. By default 25.
+  # the disk becomes unschedulable until more space is freed up. By default, 25.
   storageMinimalAvailablePercentage: ~
   # -- The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node.
   storageReservedPercentageForDefaultDisk: ~
-  # -- Upgrade Checker will check for new Longhorn version periodically.
-  # When there is a new version available, a notification will appear in the UI. By default true.
+  # -- Upgrade Checker will check for a new Longhorn version periodically.
+  # When there is a new version available, a notification will appear in the UI. By default, true.
   upgradeChecker: ~
   # -- The default number of replicas when a volume is created from the Longhorn UI.
-  # For Kubernetes configuration, update the `numberOfReplicas` in the StorageClass. By default 3.
+  # For Kubernetes configuration, update the `numberOfReplicas` in the StorageClass. By default, 3.
   defaultReplicaCount: ~
   # -- The 'storageClassName' is given to PVs and PVCs that are created for an existing Longhorn volume. The StorageClass name can also be used as a label,
   # so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object.
-  # By default 'longhorn-static'.
+  # By default, 'longhorn-static'.
   defaultLonghornStaticStorageClass: ~
-  # -- In seconds. The backupstore poll interval determines how often Longhorn checks the backupstore for new backups.
-  # Set to 0 to disable the polling. By default 300.
+  # -- In seconds. The backup store poll interval determines how often Longhorn checks the backup store for new backups.
+  # Set to 0 to disable the polling. By default, 300.
   backupstorePollInterval: ~
   # -- In minutes. This setting determines how long Longhorn will keep the backup resource that was failed. Set to 0 to disable the auto-deletion.
   failedBackupTTL: ~
@@ -223,29 +225,29 @@ defaultSettings:
   # -- This setting specifies how many failed support bundles can exist in the cluster.
   # Set this value to **0** to have Longhorn automatically purge all failed support bundles.
   supportBundleFailedHistoryLimit: ~
-  # -- taintToleration for longhorn system components
+  # -- taintToleration for Longhorn system-managed components
   taintToleration: ~
-  # -- nodeSelector for longhorn system components
+  # -- nodeSelector for Longhorn system-managed components
   systemManagedComponentsNodeSelector: ~
   # -- The name of the Priority Class to set on the Longhorn components.
   # This can help prevent Longhorn components from being evicted under Node Pressure.
   # Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.)
   priorityClass: &defaultPriorityClassNameRef "longhorn-critical"
-  # -- If enabled, volumes will be automatically salvaged when all the replicas become faulty e.g. due to network disconnection.
-  # Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default true.
+  # -- If enabled, volumes will be automatically salvaged when all the replicas become faulty, e.g., due to network disconnection.
+  # Longhorn will try to figure out which replica(s) are usable, then use them for the volume. By default, true.
   autoSalvage: ~
-  # -- If enabled, Longhorn will automatically delete the workload pod that is managed by a controller (e.g. deployment, statefulset, daemonset, etc...)
-  # when Longhorn volume is detached unexpectedly (e.g. during Kubernetes upgrade, Docker reboot, or network disconnect).
+  # -- If enabled, Longhorn will automatically delete the workload pod managed by a controller (e.g., Deployment, StatefulSet, DaemonSet, etc...)
+  # when Longhorn volume is detached unexpectedly (e.g., during Kubernetes upgrade, Docker reboot, or network disconnect).
   # By deleting the pod, its controller restarts the pod and Kubernetes handles volume reattachment and remount.
   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
-  # -- Disable Longhorn manager to schedule replica on Kubernetes cordoned node. By default true.
+  # -- Disable Longhorn manager to schedule replica on Kubernetes cordoned node. By default, true.
   disableSchedulingOnCordonedNode: ~
   # -- Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas.
   # Nodes don't belong to any Zone will be treated as in the same Zone.
   # Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone.
-  # By default true.
+  # By default, true.
   replicaZoneSoftAntiAffinity: ~
-  # -- Allow scheduling on disks with existing healthy replicas of the same volume. By default true.
+  # -- Allow scheduling on disks with existing healthy replicas of the same volume. By default, true.
   replicaDiskSoftAntiAffinity: ~
   # -- Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down.
   nodeDownPodDeletionPolicy: ~
@@ -253,7 +255,7 @@ defaultSettings:
   nodeDrainPolicy: ~
   # -- Automatically detach volumes that are attached manually when the node is cordoned.
   detachManuallyAttachedVolumesWhenCordoned: ~
-  # -- In seconds. The interval determines how long Longhorn will wait at least in order to reuse the existing data on a failed replica
+  # -- The interval in seconds determines how long Longhorn will at least wait to reuse the existing data on a failed replica
   # rather than directly creating a new replica for a degraded volume.
   replicaReplenishmentWaitInterval: ~
   # -- This setting controls how many replicas on a node can be rebuilt simultaneously.
@@ -261,32 +263,32 @@ defaultSettings:
   # -- This setting controls how many volumes on a node can restore the backup concurrently. Set the value to **0** to disable backup restore.
   concurrentVolumeBackupRestorePerNodeLimit: ~
   # -- This setting is only for volumes created by UI.
-  # By default, this is false meaning there will be a reivision counter file to track every write to the volume.
-  # During salvage recovering Longhorn will pick the replica with largest reivision counter as candidate to recover the whole volume.
-  # If revision counter is disabled, Longhorn will not track every write to the volume.
+  # By default, this is false, meaning there will be a revision counter file to track every write to the volume.
+  # During salvage-recovering, Longhorn will pick the replica with the largest revision counter as a candidate to recover the whole volume.
+  # If the revision counter is disabled, Longhorn will not track every write to the volume.
   # During the salvage recovering, Longhorn will use the 'volume-head-xxx.img' file last modification time and
   # file size to pick the replica candidate to recover the whole volume.
   disableRevisionCounter: ~
   # -- This setting defines the Image Pull Policy of Longhorn system managed pod.
-  # e.g. instance manager, engine image, CSI driver, etc.
-  # The new Image Pull Policy will only apply after the system managed pods restart.
+  # E.g. instance manager, engine image, CSI driver, etc.
+  # The new Image Pull Policy will only apply after the system-managed pods restart.
   systemManagedPodsImagePullPolicy: ~
   # -- This setting allows user to create and attach a volume that doesn't have all the replicas scheduled at the time of creation.
   allowVolumeCreationWithDegradedAvailability: ~
-  # -- This setting enables Longhorn to automatically cleanup the system generated snapshot after replica rebuild is done.
+  # -- This setting enables Longhorn to automatically clean up the system-generated snapshot after replica rebuild is done.
   autoCleanupSystemGeneratedSnapshot: ~
   # -- This setting enables Longhorn to automatically cleanup the snapshot generated by a recurring backup job.
   autoCleanupRecurringJobBackupSnapshot: ~
   # -- This setting controls how Longhorn automatically upgrades volumes' engines to the new default engine image after upgrading Longhorn manager.
   # The value of this setting specifies the maximum number of engines per node that are allowed to upgrade to the default engine image at the same time.
-  # If the value is 0, Longhorn will not automatically upgrade volumes' engines to default version.
+  # If the value is 0, Longhorn will not automatically upgrade volumes' engines to the default version of engine image.
   concurrentAutomaticEngineUpgradePerNodeLimit: ~
   # -- This interval in minutes determines how long Longhorn will wait before cleaning up the backing image file when there is no replica in the disk using it.
   backingImageCleanupWaitInterval: ~
   # -- This interval in seconds determines how long Longhorn will wait before re-downloading the backing image file
   # when all disk files of this backing image become failed or unknown.
   backingImageRecoveryWaitInterval: ~
-  # -- This integer value indicates how many percentage of the total allocatable CPU on each node will be reserved for each instance manager Pod.
+  # -- This integer value indicates how many percentages of the total allocatable CPU on each node will be reserved for each instance manager Pod.
   # You can leave it with the default value, which is 12%.
   guaranteedInstanceManagerCPU: ~
   # -- Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
@@ -298,7 +300,7 @@ defaultSettings:
   storageNetwork: ~
   # -- This flag is designed to prevent Longhorn from being accidentally uninstalled which will lead to data lost.
   deletingConfirmationFlag: ~
-  # -- In seconds. The setting specifies the timeout between the engine and replica(s), and the value should be between 8 to 30 seconds.
+  # -- In seconds. The setting specifies the timeout between the engine and replica(s), and the value should be between 8 and 30 seconds.
   # The default value is 8 seconds.
   engineReplicaTimeout: ~
   # -- This setting allows users to enable or disable snapshot hashing and data integrity checking.
@@ -378,9 +380,9 @@ longhornManager:
   #  annotation-key2: "annotation-value2"
 
 longhornDriver:
-  # -- Priority class for longhorn driver
+  # -- Priority class for the Longhorn CSI driver
   priorityClass: *defaultPriorityClassNameRef
-  # -- Tolerate nodes to run Longhorn driver
+  # -- Tolerate nodes to run the Longhorn CSI driver
   tolerations: []
   ## If you want to set tolerations for Longhorn Driver Deployer Deployment, delete the `[]` in the line above
   ## and uncomment this example block
@@ -388,7 +390,7 @@ longhornDriver:
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
-  # -- Select nodes to run Longhorn driver
+  # -- Select nodes to run the Longhorn CSI driver
   nodeSelector: {}
   ## If you want to set node selector for Longhorn Driver Deployer Deployment, delete the `{}` in the line above
   ## and uncomment this example block
@@ -396,9 +398,9 @@ longhornDriver:
   #  label-key2: "label-value2"
 
 longhornUI:
-  # -- Replica count for longhorn ui
+  # -- Replica count for longhorn UI
   replicas: 2
-  # -- Priority class count for longhorn ui
+  # -- Priority class count for Longhorn UI
   priorityClass: *defaultPriorityClassNameRef
   # -- Tolerate nodes to run Longhorn UI
   tolerations: []
@@ -426,16 +428,16 @@ ingress:
   # -- Layer 7 Load Balancer hostname
   host: sslip.io
 
-  # -- Set this to true in order to enable TLS on the ingress record
+  # -- Set this to true to enable TLS on the ingress record
   tls: false
 
-  # -- Enable this in order to enable that the backend service will be connected at port 443
+  # -- Enable this to enable that the backend service will be connected at port 443
   secureBackends: false
 
   # -- If TLS is set to true, you must declare what secret will store the key/certificate for TLS
   tlsSecret: longhorn.local-tls
 
-  # -- If ingress is enabled you can set the default ingress path
+  # -- If ingress is enabled, you can set the default ingress path
   # then you can access the UI by using the following full path {{host}}+{{path}}
   path: /
 
@@ -467,7 +469,7 @@ ingress:
   #   certificate:
 
 # -- For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller,
-# set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start
+# set this to `true` to ship a built-in longhorn-psp PodSecurityPolicy which allow privileged Longhorn pods to start
 enablePSP: false
 
 # -- Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
