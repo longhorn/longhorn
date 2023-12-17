@@ -5,20 +5,6 @@ kind: Namespace
 metadata:
   name: longhorn-system
 ---
-# Source: longhorn/templates/priorityclass.yaml
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: "longhorn-critical"
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
-description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
-globalDefault: false
-preemptionPolicy: PreemptLowerPriority
-value: 1000000000
----
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -1768,6 +1754,10 @@ spec:
       jsonPath: .spec.type
       name: Type
       type: string
+    - description: The data engine of the instance manager
+      jsonPath: .spec.backendStoreDriver
+      name: Data Engine
+      type: string
     - description: The node that the instance manager is running on
       jsonPath: .spec.nodeID
       name: Node
@@ -1791,6 +1781,8 @@ spec:
           spec:
             description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
             properties:
+              backendStoreDriver:
+                type: string
               image:
                 type: string
               nodeID:
@@ -2046,12 +2038,18 @@ spec:
             description: NodeSpec defines the desired state of the Longhorn node
             properties:
               allowScheduling:
+                description: Allow scheduling replicas on the node.
                 type: boolean
               disks:
                 additionalProperties:
                   properties:
                     allowScheduling:
                       type: boolean
+                    diskType:
+                      enum:
+                      - filesystem
+                      - block
+                      type: string
                     evictionRequested:
                       type: boolean
                     path:
@@ -2063,11 +2061,6 @@ spec:
                       items:
                         type: string
                       type: array
-                    diskType:
-                      enum:
-                      - filesystem
-                      - block
-                      type: string
                   type: object
                 type: object
               evictionRequested:
@@ -2157,19 +2150,21 @@ spec:
                       format: int64
                       type: integer
                   type: object
+                description: The status of the disks on the node.
                 nullable: true
                 type: object
               region:
+                description: The Region of the node.
                 type: string
               snapshotCheckStatus:
+                description: The status of the snapshot integrity check.
                 properties:
                   lastPeriodicCheckedAt:
                     format: date-time
                     type: string
-                  snapshotCheckState:
-                    type: string
                 type: object
               zone:
+                description: The Zone of the node.
                 type: string
             type: object
         type: object
@@ -4349,3 +4344,17 @@ spec:
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
+---
+# Source: longhorn/templates/priorityclass.yaml
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: "longhorn-critical"
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+value: 1000000000
