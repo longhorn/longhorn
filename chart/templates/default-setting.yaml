@@ -209,3 +209,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}
     allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.disableSnapshotPurge) }}
+    disable-snapshot-purge: {{ .Values.defaultSettings.disableSnapshotPurge }}
+    {{- end }}
