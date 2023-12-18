@@ -4180,6 +4180,8 @@ spec:
           mountPropagation: Bidirectional
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
+        - name: go-cover-dir
+          mountPath: /go-cover-dir/
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -4193,6 +4195,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+        - name: GOCOVERDIR
+          value: /go-cover-dir/
       volumes:
       - name: dev
         hostPath:
@@ -4203,6 +4207,10 @@ spec:
       - name: longhorn
         hostPath:
           path: /var/lib/longhorn/
+      - name: go-cover-dir
+        hostPath:
+          path: /go-cover-dir/
+          type: DirectoryOrCreate
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
@@ -4277,10 +4285,20 @@ spec:
             value: "longhornio/csi-snapshotter:v6.3.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
             value: "longhornio/livenessprobe:v2.11.0"
+          - name: GOCOVERDIR
+            value: /go-cover-dir/
+          volumeMounts:
+          - name: go-cover-dir
+            mountPath: /go-cover-dir/
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
+      volumes:
+      - name: go-cover-dir
+        hostPath:
+          path: /go-cover-dir/
+          type: DirectoryOrCreate
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: apps/v1

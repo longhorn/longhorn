@@ -23,7 +23,7 @@ metadata:
   name: $NAMESPACE
 EOD
 
-helm template longhorn "$CHART_DIR" --namespace "$NAMESPACE" --create-namespace --no-hooks >>"$DEPLOY_YAML"
+helm template longhorn "$CHART_DIR" --namespace "$NAMESPACE" --create-namespace --no-hooks --set enableGoCoverDir=true >>"$DEPLOY_YAML"
 < "$DEPLOY_YAML" grep -v 'helm.sh\|app.kubernetes.io/managed-by: Helm' | grep -v "helm.sh/chart:" > "$DEPLOY_YAML_TMP"
 mv "$DEPLOY_YAML_TMP" "$DEPLOY_YAML"
 
