@@ -299,11 +299,11 @@ questions:
     default: "disabled"
   - variable: defaultSettings.storageOverProvisioningPercentage
     label: Storage Over Provisioning Percentage
-    description: "The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default, 200."
+    description: "Percentage of storage that can be allocated relative to hard drive capacity. The default value is 100."
     group: "Longhorn Default Settings"
     type: int
     min: 0
-    default: 200
+    default: 100
   - variable: defaultSettings.storageMinimalAvailablePercentage
     label: Storage Minimal Available Percentage
     description: "If the minimum available disk capacity exceeds the actual percentage of available disk capacity, the disk becomes unschedulable until more space is freed up. By default, 25."

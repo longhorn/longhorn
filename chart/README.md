@@ -320,7 +320,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation | Hashing snapshot disk files impacts the performance of the system. The immediate snapshot hashing and checking can be disabled to minimize the impact after creating a snapshot. |
 | defaultSettings.storageMinimalAvailablePercentage | If the minimum available disk capacity exceeds the actual percentage of available disk capacity, the disk becomes unschedulable until more space is freed up. By default, 25. |
 | defaultSettings.storageNetwork | Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network. |
-| defaultSettings.storageOverProvisioningPercentage | The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default, 200. |
+| defaultSettings.storageOverProvisioningPercentage | Percentage of storage that can be allocated relative to hard drive capacity. The default is 100. |
 | defaultSettings.storageReservedPercentageForDefaultDisk | The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node. |
 | defaultSettings.supportBundleFailedHistoryLimit | This setting specifies how many failed support bundles can exist in the cluster. Set this value to **0** to have Longhorn automatically purge all failed support bundles. |
 | defaultSettings.systemManagedComponentsNodeSelector | nodeSelector for Longhorn system-managed components |
