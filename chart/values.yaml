@@ -194,7 +194,7 @@ defaultSettings:
   replicaSoftAntiAffinity: ~
   # -- Enable this setting automatically re-balances replicas when discovered an available node.
   replicaAutoBalance: ~
-  # -- The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default, 200.
+  # -- Percentage of storage that can be allocated relative to hard drive capacity. The default value is 100.
   storageOverProvisioningPercentage: ~
   # -- If the minimum available disk capacity exceeds the actual percentage of available disk capacity,
   # the disk becomes unschedulable until more space is freed up. By default, 25.
