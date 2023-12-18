@@ -10,10 +10,10 @@ global:
       enabled: false
       # -- Tolerate Linux nodes to run Longhorn user deployed components
       tolerations:
-      - key: "cattle.io/os"
-        value: "linux"
-        effect: "NoSchedule"
-        operator: "Equal"
+        - key: "cattle.io/os"
+          value: "linux"
+          effect: "NoSchedule"
+          operator: "Equal"
       # -- Select Linux nodes to run Longhorn user deployed components
       nodeSelector:
         kubernetes.io/os: "linux"
@@ -335,6 +335,96 @@ defaultSettings:
   allowCollectingLonghornUsageMetrics: ~
   # -- Temporarily prevent all attempts to purge volume snapshots.
   disableSnapshotPurge: ~
+
+# Create volume groups with related RecurringJob tasks that will be run
+# for volumes assigned to the group, such as periodic snapshots and backups.
+# Optionally, you can create a StorageClass that adds the group automatically.
+volumeGroups:
+  recurringJobDefaults:
+    concurrency: 4
+    retain: 1
+    # Whether or not to spread the jobs so that the start times are spread out.
+    # If this is false, minutes and hours in generated cron expressions will be 0.
+    # Examples if true:
+    # "15/30 * * * *"
+    # "5/15 4 * * *"
+    # Examples if false:
+    # "0 * * * *"
+    # "0 0/2 * * *"
+    spreadCronStartTimes: true
+    # How far spread out should the minutes and hours be on the generated cron expressions.
+    # Example: if minuteStep: 5, then the cron expressions will be like "0/10 * * * *", "5/10 * * * *"
+    minuteStep: 5
+    hourStep: 2
+
+  storageClassDefaults:
+    # This is just a StorageClass resource definition without metadata -- that is
+    # added automatically.
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    provisioner: driver.longhorn.io
+    allowVolumeExpansion: true
+    parameters:
+      numberOfReplicas: "3"
+      staleReplicaTimeout: "2880" # 48 hours in minutes.
+      fsType: "ext4"
+
+  # Create a StorageClass for each group by default
+  # It will be named longhorn-{{ .name }}, and the name will be lowercase.
+  createStorageClass: false
+
+  groups:
+    []
+    # # Simple example with snapshots and backups
+    # - name: Database
+    #   recurringJobs:
+    #     snapshot:
+    #       - interval: 10m
+    #         retain: 6
+    #     backup:
+    #       - interval: 12h
+    #         retain: 2
+
+    # # Fully customized example
+    # # Group names can have alphanumeric, dashes, underscores and periods.
+    # # If a StorageClass will be created, only alphanumeric and dashes are allowed.
+    # - name: Webapp
+    #   storageClass:
+    #     # Defaults to volumeGroups.createStorageClass
+    #     create: true
+    #     properties:
+    #       # Like with volumeGroups.storageClassDefaults, these are added directly
+    #       # onto the generated StorageClass. All settings are supported.
+    #       provisioner: driver.longhorn.io
+    #       allowVolumeExpansion: false
+    #       parameters:
+    #         numberOfReplicas: "2"
+    #         staleReplicaTimeout: "60"
+    #         fromBackup: ""
+    #         fsType: "ext4"
+    #   recurringJobs:
+    #     # At least one task type must be specified such as
+    #     # snapshot, backup, snapshot-cleanup, or snapshot-purge
+    #     snapshot:
+    #       - interval: 10m
+    #         # Everything in volumeGroups.recurringJobDefaults can be overridden
+    #         # here.
+    #         retain: 6
+    #         concurrency: 2
+    #         spreadCronStartTimes: false
+    #         minuteStep: 30
+    #         hourStep: 1
+    #         # `interval` is the only required parameter, everything else
+    #         # will use defaults (defined above).
+    #       - interval: 12h
+    #       - interval: 36h
+    #     backup:
+    #       - interval: 12h
+    #         retain: 2
+    #     snapshot-cleanup:
+    #       - interval: 24h
+    #     snapshot-purge:
+    #       - interval: 7d
 
 privateRegistry:
   # -- Set `true` to create a new private registry secret
