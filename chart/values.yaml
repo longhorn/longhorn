@@ -121,6 +121,10 @@ defaultSettings:
   defaultDataLocality: ~
   replicaSoftAntiAffinity: ~
   replicaAutoBalance: ~
+<<<<<<< HEAD
+=======
+  # -- Percentage of storage that can be allocated relative to hard drive capacity. The default value is 100.
+>>>>>>> a879c2b (Revise default over-provisioning percentage to 100.)
   storageOverProvisioningPercentage: ~
   storageMinimalAvailablePercentage: ~
   storageReservedPercentageForDefaultDisk: ~
