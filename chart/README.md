@@ -305,6 +305,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.orphanAutoDeletion | This setting allows Longhorn to delete the orphan resource and its corresponding orphaned data automatically like stale replicas. Orphan resources on down or unknown nodes will not be cleaned up automatically. |
 | defaultSettings.priorityClass | priorityClass for Longhorn system-managed components This setting can help prevent Longhorn components from being evicted under Node Pressure. Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`. |
 | defaultSettings.recurringFailedJobsHistoryLimit | This setting specifies how many failed backup or snapshot job histories should be retained. History will not be retained if the value is 0. |
+| defaultSettings.recurringJobMaxRetention | Maximum number of snapshots or backups to be retained. |
 | defaultSettings.recurringSuccessfulJobsHistoryLimit | This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0. |
 | defaultSettings.removeSnapshotsDuringFilesystemTrim | This setting allows Longhorn filesystem trim feature to automatically mark the latest snapshot and its ancestors as removed and stops at the snapshot containing multiple children. |
 | defaultSettings.replicaAutoBalance | Enable this setting automatically re-balances replicas when discovered an available node. |
