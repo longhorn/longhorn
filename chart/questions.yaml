@@ -374,6 +374,12 @@ questions:
     type: int
     min: 0
     default: 1
+  - variable: defaultSettings.recurringJobMaxRetention
+    label: Maximum Retention Number for Recurring Job
+    description: "Maximum number of snapshots or backups to be retained."
+    group: "Longhorn Default Settings"
+    type: int
+    default: 100
   - variable: defaultSettings.supportBundleFailedHistoryLimit
     label: SupportBundle Failed History Limit
     description: "This setting specifies how many failed support bundles can exist in the cluster. Set this value to **0** to have Longhorn automatically purge all failed support bundles."
