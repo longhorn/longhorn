@@ -4222,7 +4222,7 @@ spec:
           - name: CSI_PROVISIONER_IMAGE
             value: "longhornio/csi-provisioner:v3.6.0"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "longhornio/csi-node-driver-registrar:v2.9.0"
+            value: "longhornio/csi-node-driver-registrar:v2.9.2"
           - name: CSI_RESIZER_IMAGE
             value: "longhornio/csi-resizer:v1.9.0"
           - name: CSI_SNAPSHOTTER_IMAGE
