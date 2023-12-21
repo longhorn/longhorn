@@ -107,7 +107,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.nodeDriverRegistrar.repository | string | `"longhornio/csi-node-driver-registrar"` | Specify CSI node driver registrar image repository. Leave blank to autodetect |
 | image.csi.nodeDriverRegistrar.tag | string | `"v2.9.2"` | Specify CSI node driver registrar image tag. Leave blank to autodetect |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Specify CSI provisioner image repository. Leave blank to autodetect |
-| image.csi.provisioner.tag | string | `"v3.6.0"` | Specify CSI provisioner image tag. Leave blank to autodetect |
+| image.csi.provisioner.tag | string | `"v3.6.2"` | Specify CSI provisioner image tag. Leave blank to autodetect |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Specify CSI driver resizer image repository. Leave blank to autodetect |
 | image.csi.resizer.tag | string | `"v1.9.0"` | Specify CSI driver resizer image tag. Leave blank to autodetect |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Specify CSI driver snapshotter image repository. Leave blank to autodetect |
