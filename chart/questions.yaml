@@ -541,8 +541,8 @@ questions:
     min: 0
     default: 300
   - variable: defaultSettings.guaranteedInstanceManagerCPU
-    label: Guaranteed Instance Manager CPU
-    description: "This integer value indicates how many percentages of the total allocatable CPU on each node will be reserved for each instance manager Pod. You can leave it with the default value, which is 12%."
+    label: Guaranteed Instance Manager CPU for V1 Data Engine
+    description: "This integer value indicates how many percentages of the total allocatable CPU on each node will be reserved for each instance manager Pod for v1 data engine. You can leave it with the default value, which is 12%."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -861,3 +861,11 @@ questions:
       - "rke1"
       - "rke2"
       - "k3s"
+  - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
+    label: Guaranteed Instance Manager CPU for V2 Data Engine
+    description: "This integer value indicates how many millicpus on each node will be reserved for each instance manager Pod for v2 data engine. By default, the SPDK target daemon within an instance manager Pod utilizes 1 CPU core. Ensuring a minimum CPU usage is essential for sustaining engine and replica stability, especially during periods of high node workload."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    max: 2000
+    default: 1250
