@@ -215,3 +215,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.disableSnapshotPurge) }}
     disable-snapshot-purge: {{ .Values.defaultSettings.disableSnapshotPurge }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU) }}
+    v2-data-engine-guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU }}
+    {{- end }}

@@ -287,12 +287,13 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.engineReplicaTimeout | In seconds. The setting specifies the timeout between the engine and replica(s), and the value should be between 8 and 30 seconds. The default value is 8 seconds. |
 | defaultSettings.failedBackupTTL | In minutes. This setting determines how long Longhorn will keep the backup resource that was failed. Set to 0 to disable the auto-deletion. |
 | defaultSettings.fastReplicaRebuildEnabled | This feature supports the fast replica rebuilding. It relies on the checksum of snapshot disk files, so setting the snapshot-data-integrity to **enable** or **fast-check** is a prerequisite. |
-| defaultSettings.guaranteedInstanceManagerCPU | This integer value indicates how many percentages of the total allocatable CPU on each node will be reserved for each instance manager Pod. You can leave it with the default value, which is 12%. |
-| defaultSettings.kubernetesClusterAutoscalerEnabled | Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler. |
+| defaultSettings.guaranteedInstanceManagerCPU | Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled. The default value is 12 percent. |
+| defaultSettings.kubernetesClusterAutoscalerEnabled | Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. |
 | defaultSettings.logLevel | The log level Panic, Fatal, Error, Warn, Info, Debug, Trace used in longhorn manager. Default to Info. |
 | defaultSettings.nodeDownPodDeletionPolicy | Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down. |
 | defaultSettings.nodeDrainPolicy | Define the policy to use when a node with the last healthy replica of a volume is drained. |
 | defaultSettings.offlineReplicaRebuilding | This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine. |
+| defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU | Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled. The default value is 1250 millicpus. |
 | defaultSettings.orphanAutoDeletion | This setting allows Longhorn to delete the orphan resource and its corresponding orphaned data automatically like stale replicas. Orphan resources on down or unknown nodes will not be cleaned up automatically. |
 | defaultSettings.priorityClass | priorityClass for Longhorn system-managed components This setting can help prevent Longhorn components from being evicted under Node Pressure. Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`. |
 | defaultSettings.recurringFailedJobsHistoryLimit | This setting specifies how many failed backup or snapshot job histories should be retained. History will not be retained if the value is 0. |
