@@ -52,7 +52,7 @@ image:
   csi:
     attacher:
       repository: longhornio/csi-attacher
-      tag: v4.4.0
+      tag: v4.4.2
     provisioner:
       repository: longhornio/csi-provisioner
       tag: v3.6.0
