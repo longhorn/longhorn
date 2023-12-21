@@ -81,7 +81,7 @@ image:
       # -- Specify CSI node driver registrar image repository. Leave blank to autodetect
       repository: longhornio/csi-node-driver-registrar
       # -- Specify CSI node driver registrar image tag. Leave blank to autodetect
-      tag: v2.9.0
+      tag: v2.9.2
     resizer:
       # -- Specify CSI driver resizer image repository. Leave blank to autodetect
       repository: longhornio/csi-resizer
