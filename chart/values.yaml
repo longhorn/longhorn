@@ -86,7 +86,7 @@ image:
       # -- Specify CSI driver resizer image repository. Leave blank to autodetect
       repository: longhornio/csi-resizer
       # -- Specify CSI driver resizer image tag. Leave blank to autodetect
-      tag: v1.9.0
+      tag: v1.9.2
     snapshotter:
       # -- Specify CSI driver snapshotter image repository. Leave blank to autodetect
       repository: longhornio/csi-snapshotter
