@@ -290,10 +290,10 @@ defaultSettings:
   # -- This interval in seconds determines how long Longhorn will wait before re-downloading the backing image file
   # when all disk files of this backing image become failed or unknown.
   backingImageRecoveryWaitInterval: ~
-  # -- This integer value indicates how many percentages of the total allocatable CPU on each node will be reserved for each instance manager Pod.
-  # You can leave it with the default value, which is 12%.
+  # -- Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled.
+  # The default value is 12 percent.
   guaranteedInstanceManagerCPU: ~
-  # -- Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler.
+  # -- Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler.
   kubernetesClusterAutoscalerEnabled: ~
   # -- This setting allows Longhorn to delete the orphan resource and its corresponding orphaned data automatically like stale replicas.
   # Orphan resources on down or unknown nodes will not be cleaned up automatically.
@@ -333,6 +333,9 @@ defaultSettings:
   v2DataEngine: ~
   # -- This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine.
   offlineReplicaRebuilding: ~
+  # -- Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled.
+  # The default value is 1250 millicpus.
+  v2DataEngineGuaranteedInstanceManagerCPU: ~
   # -- Allow Scheduling Empty Node Selector Volumes To Any Node
   allowEmptyNodeSelectorVolume: ~
   # -- Allow Scheduling Empty Disk Selector Volumes To Any Disk

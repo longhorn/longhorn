@@ -542,7 +542,7 @@ questions:
     default: 300
   - variable: defaultSettings.guaranteedInstanceManagerCPU
     label: Guaranteed Instance Manager CPU
-    description: "This integer value indicates how many percentages of the total allocatable CPU on each node will be reserved for each instance manager Pod. You can leave it with the default value, which is 12%."
+    description: "Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled. The default value is 12 percent."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -562,7 +562,7 @@ questions:
     default: "false"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
-  description: "Enabling this setting will notify Longhorn that the cluster is using Kubernetes Cluster Autoscaler."
+  description: "Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler."
   group: "Longhorn Default Settings"
   type: boolean
   default: false
@@ -861,3 +861,11 @@ questions:
       - "rke1"
       - "rke2"
       - "k3s"
+  - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
+    label: Guaranteed Instance Manager CPU for V2 Data Engine
+    description: "Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled. By default, the Storage Performance Development Kit (SPDK) target daemon within each instance manager pod uses 1 CPU core. Configuring a minimum CPU usage value is essential for maintaining engine and replica stability, especially during periods of high node workload. The default value is 1250 millicpus."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 1000
+    max: 8000
+    default: 1250

@@ -297,6 +297,9 @@ configMap:
         "longhornSettingGuaranteedInstanceManagerCpu": {
           "dataType": "float"
         },
+        "longhornSettingV2DataEngineGuaranteedInstanceManagerCpu": {
+          "dataType": "float"
+        },
         "longhornSettingRecurringFailedJobsHistoryLimit": {
           "dataType": "float"
         },
