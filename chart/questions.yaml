@@ -652,6 +652,12 @@ questions:
   group: "Longhorn Default Settings"
   type: boolean
   default: true
+- variable: defaultSettings.v1DataEngine
+  label: V1 Data Engine
+  description: "Setting that allows you to enable the V1 Data Engine."
+  group: "Longhorn V1 Data Engine Settings"
+  type: boolean
+  default: true
 - variable: defaultSettings.v2DataEngine
   label: V2 Data Engine
   description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment."

@@ -224,6 +224,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingV1DataEngine": {
+          "dataType": "string",
+          "maxLen": 200
+        }
         "longhornSettingV2DataEngine": {
           "dataType": "string",
           "maxLen": 200
