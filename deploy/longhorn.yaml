@@ -4266,7 +4266,7 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "longhornio/csi-attacher:v4.4.0"
+            value: "longhornio/csi-attacher:v4.4.2"
           - name: CSI_PROVISIONER_IMAGE
             value: "longhornio/csi-provisioner:v3.6.0"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
