@@ -314,11 +314,7 @@ The available volume spec options are:
     default: "disabled"
   - variable: defaultSettings.storageOverProvisioningPercentage
     label: Storage Over Provisioning Percentage
-<<<<<<< HEAD
-    description: "The over-provisioning percentage defines how much storage can be allocated relative to the hard drive's capacity. By default 200."
-=======
     description: "Percentage of storage that can be allocated relative to hard drive capacity. The default value is 100."
->>>>>>> a879c2b (Revise default over-provisioning percentage to 100.)
     group: "Longhorn Default Settings"
     type: int
     min: 0
