@@ -320,6 +320,7 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.systemManagedPodsImagePullPolicy | This setting defines the Image Pull Policy of Longhorn system managed pod. E.g. instance manager, engine image, CSI driver, etc. The new Image Pull Policy will only apply after the system-managed pods restart. |
 | defaultSettings.taintToleration | taintToleration for Longhorn system-managed components |
 | defaultSettings.upgradeChecker | Upgrade Checker will check for a new Longhorn version periodically. When there is a new version available, a notification will appear in the UI. By default, true. |
+| defaultSettings.v1DataEngine | Setting that allows you to enable the V1 Data Engine. |
 | defaultSettings.v2DataEngine | This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment. |
 
 ---

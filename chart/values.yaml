@@ -328,7 +328,9 @@ defaultSettings:
   backupConcurrentLimit: ~
   # -- This setting controls how many worker threads per restore concurrently.
   restoreConcurrentLimit: ~
-  # -- This allows users to activate v2 data engine based on SPDK.
+  # -- Setting that allows you to enable the V1 Data Engine. By default, true.
+  v1DataEngine: ~
+  # -- This allows users to activate v2 data engine based on SPDK. By default, false.
   # Currently, it is in the preview phase and should not be utilized in a production environment.
   v2DataEngine: ~
   # -- This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine.
