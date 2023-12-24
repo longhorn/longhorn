@@ -37,6 +37,11 @@ Upon setting `enablePSP` to false, the chart will remove any PSP resources deplo
 As a replacement for PSPs, [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) should be used. Please consult the Longhorn docs for more details on how to configure your chart release namespaces to work with the new Pod Security Admission and apply Pod Security Standards.
 
 ## Installation
+
+> **Note:**
+> Helm 2 is not supported, [ref](https://helm.sh/blog/helm-2-becomes-unsupported/).
+> Please use Helm 3 for Longhorn installation and upgrade.
+
 1. Add Longhorn chart repository.
 ```
 helm repo add longhorn https://charts.longhorn.io
@@ -47,12 +52,7 @@ helm repo add longhorn https://charts.longhorn.io
 helm repo update
 ```
 
-3. Install Longhorn chart.
-- With Helm 2, the following command will create the `longhorn-system` namespace and install the Longhorn chart together.
-```
-helm install longhorn/longhorn --name longhorn --namespace longhorn-system
-```
-- With Helm 3, the following commands will create the `longhorn-system` namespace first, then install the Longhorn chart.
+3. Use the following commands to create the `longhorn-system` namespace first, then install the Longhorn chart.
 
 ```
 kubectl create namespace longhorn-system
@@ -61,13 +61,6 @@ helm install longhorn longhorn/longhorn --namespace longhorn-system
 
 ## Uninstallation
 
-With Helm 2 to uninstall Longhorn.
-```
-kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
-helm delete longhorn --purge
-```
-
-With Helm 3 to uninstall Longhorn.
 ```
 kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
 helm uninstall longhorn -n longhorn-system
