@@ -4,6 +4,8 @@
 
 > **Warning**: Longhorn doesn't support downgrading from a higher version to a lower version.
 
+> **Note**: Use Helm 3 when installing and upgrading Longhorn. Helm 2 is [no longer supported](https://helm.sh/blog/helm-2-becomes-unsupported/).
+
 ## Source Code
 
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
@@ -37,10 +39,6 @@ Upon setting `enablePSP` to false, the chart will remove any PSP resources deplo
 As a replacement for PSPs, [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) should be used. Please consult the Longhorn docs for more details on how to configure your chart release namespaces to work with the new Pod Security Admission and apply Pod Security Standards.
 
 ## Installation
-
-> **Note:**
-> Helm 2 is not supported, [ref](https://helm.sh/blog/helm-2-becomes-unsupported/).
-> Please use Helm 3 for Longhorn installation and upgrade. 
 
 1. Add Longhorn chart repository.
 ```
