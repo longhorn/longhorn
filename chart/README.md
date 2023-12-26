@@ -50,10 +50,15 @@ helm repo add longhorn https://charts.longhorn.io
 helm repo update
 ```
 
-3. Use the following commands to create the `longhorn-system` namespace first, then install the Longhorn chart.
+3. Create the `longhorn-system` namespace.
 
 ```
 kubectl create namespace longhorn-system
+```
+
+4. Install the Longhorn chart.
+
+```
 helm install longhorn longhorn/longhorn --namespace longhorn-system
 ```
 
