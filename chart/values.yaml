@@ -173,7 +173,6 @@ defaultSettings:
   disableSnapshotPurge: ~
   allowCollectingLonghornUsageMetrics: ~
 
-
 privateRegistry:
   createSecret: ~
   registryUrl: ~
