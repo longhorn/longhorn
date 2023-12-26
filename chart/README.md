@@ -11,18 +11,18 @@
 Longhorn is 100% open source software. Project source code is spread across a number of repos:
 
 1. Longhorn Engine -- Core controller/replica logic https://github.com/longhorn/longhorn-engine
-2. Longhorn Instance Manager -- Controller/replica instance lifecycle management https://github.com/longhorn/longhorn-instance-manager
-3. Longhorn Share Manager -- NFS provisioner that exposes Longhorn volumes as ReadWriteMany volumes. https://github.com/longhorn/longhorn-share-manager
-4. Backing Image Manager -- Backing image file lifecycle management. https://github.com/longhorn/backing-image-manager
-5. Longhorn Manager -- Longhorn orchestration, includes CSI driver for Kubernetes https://github.com/longhorn/longhorn-manager
-6. Longhorn UI -- Dashboard https://github.com/longhorn/longhorn-ui
+1. Longhorn Instance Manager -- Controller/replica instance lifecycle management https://github.com/longhorn/longhorn-instance-manager
+1. Longhorn Share Manager -- NFS provisioner that exposes Longhorn volumes as ReadWriteMany volumes. https://github.com/longhorn/longhorn-share-manager
+1. Backing Image Manager -- Backing image file lifecycle management. https://github.com/longhorn/backing-image-manager
+1. Longhorn Manager -- Longhorn orchestration, includes CSI driver for Kubernetes https://github.com/longhorn/longhorn-manager
+1. Longhorn UI -- Dashboard https://github.com/longhorn/longhorn-ui
 
 ## Prerequisites
 
 1. A container runtime compatible with Kubernetes (Docker v1.13+, containerd v1.3.7+, etc.)
-2. Kubernetes >= v1.21
-3. Make sure `bash`, `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
-4. Make sure `open-iscsi` has been installed, and the `iscsid` daemon is running on all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
+1. Kubernetes >= v1.21
+1. Make sure `bash`, `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
+1. Make sure `open-iscsi` has been installed, and the `iscsid` daemon is running on all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
 
 ## Upgrading to Kubernetes v1.25+
 
@@ -41,21 +41,24 @@ As a replacement for PSPs, [Pod Security Admission](https://kubernetes.io/docs/c
 ## Installation
 
 1. Add Longhorn chart repository.
-```
-helm repo add longhorn https://charts.longhorn.io
-```
+    ```
+    helm repo add longhorn https://charts.longhorn.io
+    ```
 
-2. Update local Longhorn chart information from chart repository.
-```
-helm repo update
-```
+1. Update local Longhorn chart information from chart repository.
+    ```
+    helm repo update
+    ```
 
-3. Use the following commands to create the `longhorn-system` namespace first, then install the Longhorn chart.
+1. Create the `longhorn-system` namespace.
+    ```
+    kubectl create namespace longhorn-system
+    ```
 
-```
-kubectl create namespace longhorn-system
-helm install longhorn longhorn/longhorn --namespace longhorn-system
-```
+1. Install the Longhorn chart.
+    ```
+    helm install longhorn longhorn/longhorn --namespace longhorn-system
+    ```
 
 ## Uninstallation
 
