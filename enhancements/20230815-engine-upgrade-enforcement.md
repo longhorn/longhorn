@@ -7,9 +7,10 @@ The current Longhorn upgrade process lacks enforcement of the engine version, po
 ### Related Issues
 
 https://github.com/longhorn/longhorn/issues/5842
+
 ## Motivation
 
-Longhorn needs to be able to safely deprecated and remove the certain fields, such as [[TASK] Remove deprecated instances field and instance type from instance manager CR #5844](https://github.com/longhorn/longhorn/issues/5844)
+Longhorn needs to be able to upgrade safely without risking compatibility issue with older version engine images. Without this enhancement, we are facing various challenges like dealing with potential operation failures and increased maintenance overhead.
 
 ### Goals
 
