@@ -5,20 +5,6 @@ kind: Namespace
 metadata:
   name: longhorn-system
 ---
-# Source: longhorn/templates/priorityclass.yaml
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: "longhorn-critical"
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
-description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
-globalDefault: false
-preemptionPolicy: PreemptLowerPriority
-value: 1000000000
----
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -1406,6 +1392,10 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
+    - description: The data engine of the engine
+      jsonPath: .spec.dataEngine
+      name: Data Engine
+      type: string
     - description: The current state of the engine
       jsonPath: .status.currentState
       name: State
@@ -1444,11 +1434,14 @@ spec:
               active:
                 type: boolean
               backendStoreDriver:
+                description: Deprecated.
+                type: string
+              backupVolume:
+                type: string
+              dataEngine:
                 enum:
                 - v1
                 - v2
-                type: string
-              backupVolume:
                 type: string
               desireState:
                 type: string
@@ -1760,6 +1753,10 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
+    - description: The data engine of the instance manager
+      jsonPath: .spec.dataEngine
+      name: Data Engine
+      type: string
     - description: The state of the instance manager
       jsonPath: .status.currentState
       name: State
@@ -1767,10 +1764,6 @@ spec:
     - description: The type of the instance manager (engine or replica)
       jsonPath: .spec.type
       name: Type
-      type: string
-    - description: The data engine of the instance manager
-      jsonPath: .spec.backendStoreDriver
-      name: Data Engine
       type: string
     - description: The node that the instance manager is running on
       jsonPath: .spec.nodeID
@@ -1796,6 +1789,9 @@ spec:
             description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
             properties:
               backendStoreDriver:
+                description: Deprecated.
+                type: string
+              dataEngine:
                 type: string
               image:
                 type: string
@@ -1827,6 +1823,9 @@ spec:
                     spec:
                       properties:
                         backendStoreDriver:
+                          description: Deprecated.
+                          type: string
+                        dataEngine:
                           type: string
                         name:
                           type: string
@@ -1866,6 +1865,9 @@ spec:
                     spec:
                       properties:
                         backendStoreDriver:
+                          description: Deprecated.
+                          type: string
+                        dataEngine:
                           type: string
                         name:
                           type: string
@@ -2549,6 +2551,10 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
+    - description: The data engine of the replica
+      jsonPath: .spec.dataEngine
+      name: Data Engine
+      type: string
     - description: The current state of the replica
       jsonPath: .status.currentState
       name: State
@@ -2591,13 +2597,16 @@ spec:
               active:
                 type: boolean
               backendStoreDriver:
-                enum:
-                - v1
-                - v2
+                description: Deprecated.
                 type: string
               backingImage:
                 type: string
               dataDirectoryName:
+                type: string
+              dataEngine:
+                enum:
+                - v1
+                - v2
                 type: string
               desireState:
                 type: string
@@ -3474,6 +3483,10 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
+    - description: The data engine of the volume
+      jsonPath: .spec.dataEngine
+      name: Data Engine
+      type: string
     - description: The state of the volume
       jsonPath: .status.state
       name: State
@@ -3521,9 +3534,7 @@ spec:
                 - rwx
                 type: string
               backendStoreDriver:
-                enum:
-                - v1
-                - v2
+                description: Deprecated.
                 type: string
               backingImage:
                 type: string
@@ -3532,6 +3543,11 @@ spec:
                 - none
                 - lz4
                 - gzip
+                type: string
+              dataEngine:
+                enum:
+                - v1
+                - v2
                 type: string
               dataLocality:
                 enum:
@@ -4372,3 +4388,17 @@ spec:
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
+---
+# Source: longhorn/templates/priorityclass.yaml
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: "longhorn-critical"
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+value: 1000000000

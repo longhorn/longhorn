@@ -93,7 +93,7 @@ By incorporating SPDK, Longhorn leverages its capabilities to significantly impr
       staleReplicaTimeout: "2880"
       fromBackup: ""
       fsType: "ext4"
-      backendStoreDriver: "v2"
+      dataEngine: "v2"
     ```
     
 - Create workloads that use Longhorn volumes provisioning based on the storage class.
