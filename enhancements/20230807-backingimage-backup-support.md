@@ -69,9 +69,9 @@ This improve the user experience and reduce the operation overhead.
 1. Add a new CRD `backupbackingimage.longhorn.io`
     ```go
     type BackupBackingImageSpec struct {
-        Labels           map[string]string `json:"labels"`
-        BackingImageName string            `json:"backingImageName"`
-        SyncRequestedAt  metav1.Time       `json:"syncRequestedAt"`
+        SyncRequestedAt metav1.Time `json:"syncRequestedAt"`
+        UserCreated bool `json:"userCreated"`
+        Labels map[string]string `json:"labels"`
     }
 
     type BackupBackingImageStatus struct {
@@ -102,7 +102,8 @@ This improve the user experience and reduce the operation overhead.
         BackupBackingImageStateUnknown    = BackupBackingImageState("Unknown")
     )
     ```
-    - Field `Spec.ManagerAddress` indicates the address of the backing-image-manager running BackingImage backup.
+    - Field `Spec.UserCreated` indicates whether this Backup is created by user to create the backup in backupstore or it is synced from backupstrore.
+    - Field `Status.ManagerAddress` indicates the address of the backing-image-manager running BackingImage backup.
     - Field `Status.Checksum` records the checksum of the BackingImage. Users may create a new BackingImage with the same name but different content after deleting an old one or there is another BackingImage with the same name in another cluster. To avoid the confliction, we use checksum to check if they are the same.
     - If cluster already has the `BackingImage` with the same name as in the backup store, we still create the `BackupBackingImage` CR. User can use the checksum to check if they are the same. Therefore we don't use `UUID` across cluster since user might already prepare the same BackingImage with the same name and content in another cluster.
 
@@ -236,11 +237,52 @@ Integration tests
 1. `BackupBackingImage` Basic Operation
     - Setup
         - Create a `BackingImage`
+            ```
+            apiVersion: longhorn.io/v1beta2
+            kind: BackingImage
+            metadata:
+            name: parrot
+            namespace: longhorn-system
+            spec:
+            sourceType: download
+            sourceParameters:
+                url: https://longhorn-backing-image.s3-us-west-1.amazonaws.com/parrot.raw
+            checksum: 304f3ed30ca6878e9056ee6f1b02b328239f0d0c2c1272840998212f9734b196371560b3b939037e4f4c2884ce457c2cbc9f0621f4f5d1ca983983c8cdf8cd9a
+            ```   
         - Setup the backup target
-    - Back up `BackingImage`
+    - Back up `BackingImage` by applying the yaml
+        - yaml
+            ```yaml
+            apiVersion: longhorn.io/v1beta2
+            kind: BackupBackingImage
+            metadata:
+            name: parrot
+            namespace: longhorn-system
+            spec:
+            userCreated: true
+            labels:
+                usecase: test
+                type: raw
+            ```
         - `BackupBackingImage` CR should be complete
+        - You can get the backup URL from `Status.URL`
     - Delete the `BackingImage` in the cluster
-    - Restore the `BackupBackingImage`
+    - Restore the `BackupBackingImage` by applying the yaml
+        ```yaml
+        apiVersion: longhorn.io/v1beta2
+        kind: BackingImage
+        metadata:
+        name: parrot-restore
+        namespace: longhorn-system
+        spec:
+        sourceType: restore
+        sourceParameters:
+            # change to your backup URL
+            # backup-url: nfs://longhorn-test-nfs-svc.default:/opt/backupstore?backingImage=parrot
+            backup-url: s3://backupbucket@us-east-1/?backingImage=parrot
+            concurrent-limit: "2"
+        checksum: 304f3ed30ca6878e9056ee6f1b02b328239f0d0c2c1272840998212f9734b196371560b3b939037e4f4c2884ce457c2cbc9f0621f4f5d1ca983983c8cdf8cd9a
+        ```
     - Checksum should be the same
 
 2. Back up `BackingImage` when backing up and restoring Volume
@@ -248,7 +290,7 @@ Integration tests
         - Create a `BackingImage`
         - Setup the backup target
         - Create a Volume with the `BackingImage`
-    - Backup the `Volume`
+    - Back up the `Volume`
     - `BackupBackingImage` CR should be created and complete
     - Delete the `BackingImage`
     - Restore the Volume with same `BackingImage`
