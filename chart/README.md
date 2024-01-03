@@ -244,8 +244,8 @@ Please also refer to this document [ocp-readme](https://github.com/longhorn/long
 | annotations | `{}` | Annotations to add to the Longhorn Manager DaemonSet Pods. Optional. |
 | enableGoCoverDir | `false` | Enable this to allow Longhorn to generate code coverage profiles |
 | enablePSP | `false` | For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller, set this to `true` to ship a built-in longhorn-psp PodSecurityPolicy which allow privileged Longhorn pods to start |
-| helmPreUpgradeCheckerJob.enabled | `true` |  |
-| metrics.serviceMonitor.enabled | `false` |  |
+| helmPreUpgradeCheckerJob.enabled | `true` | Setting that allows Longhorn to perform pre-upgrade checks. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions. |
+| metrics.serviceMonitor.enabled | `false` | Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components. |
 
 ### System Default Settings
 
@@ -293,7 +293,6 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.nodeDownPodDeletionPolicy | Defines the Longhorn action when a Volume is stuck with a StatefulSet/Deployment Pod on a node that is down. |
 | defaultSettings.nodeDrainPolicy | Define the policy to use when a node with the last healthy replica of a volume is drained. |
 | defaultSettings.offlineReplicaRebuilding | This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine. |
-| defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU | Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled. The default value is 1250 millicpus. |
 | defaultSettings.orphanAutoDeletion | This setting allows Longhorn to delete the orphan resource and its corresponding orphaned data automatically like stale replicas. Orphan resources on down or unknown nodes will not be cleaned up automatically. |
 | defaultSettings.priorityClass | priorityClass for Longhorn system-managed components This setting can help prevent Longhorn components from being evicted under Node Pressure. Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`. |
 | defaultSettings.recurringFailedJobsHistoryLimit | This setting specifies how many failed backup or snapshot job histories should be retained. History will not be retained if the value is 0. |
@@ -313,15 +312,16 @@ For more details like types or options, you can refer to **Settings Reference** 
 | defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation | Hashing snapshot disk files impacts the performance of the system. The immediate snapshot hashing and checking can be disabled to minimize the impact after creating a snapshot. |
 | defaultSettings.storageMinimalAvailablePercentage | If the minimum available disk capacity exceeds the actual percentage of available disk capacity, the disk becomes unschedulable until more space is freed up. By default, 25. |
 | defaultSettings.storageNetwork | Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network. |
-| defaultSettings.storageOverProvisioningPercentage | Percentage of storage that can be allocated relative to hard drive capacity. The default is 100. |
+| defaultSettings.storageOverProvisioningPercentage | Percentage of storage that can be allocated relative to hard drive capacity. The default value is 100. |
 | defaultSettings.storageReservedPercentageForDefaultDisk | The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node. |
 | defaultSettings.supportBundleFailedHistoryLimit | This setting specifies how many failed support bundles can exist in the cluster. Set this value to **0** to have Longhorn automatically purge all failed support bundles. |
 | defaultSettings.systemManagedComponentsNodeSelector | nodeSelector for Longhorn system-managed components |
 | defaultSettings.systemManagedPodsImagePullPolicy | This setting defines the Image Pull Policy of Longhorn system managed pod. E.g. instance manager, engine image, CSI driver, etc. The new Image Pull Policy will only apply after the system-managed pods restart. |
 | defaultSettings.taintToleration | taintToleration for Longhorn system-managed components |
 | defaultSettings.upgradeChecker | Upgrade Checker will check for a new Longhorn version periodically. When there is a new version available, a notification will appear in the UI. By default, true. |
-| defaultSettings.v1DataEngine | Setting that allows you to enable the V1 Data Engine. |
-| defaultSettings.v2DataEngine | This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment. |
+| defaultSettings.v1DataEngine | Setting that allows you to enable the V1 Data Engine. This setting is enabled by default. |
+| defaultSettings.v2DataEngine | Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is a preview feature and should not be used in production environments. |
+| defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU | Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled. The default value is 1250 millicpus. |
 
 ---
 Please see [link](https://github.com/longhorn/longhorn) for more information.
