@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-## Describe the bug (🐛 if you encounter this issue)
+## Describe the bug
 
 <!--A clear and concise description of the bug.-->
 
