@@ -25,7 +25,8 @@ assignees: ''
 
 ## Environment
 
-<!-- Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/1.5.1/best-practices)-->
+<!-- Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/latest/best-practices)-->
+
  - Longhorn version: 
  - Impacted volume (PV): <!-- PLEASE specify the volume name to better identify the cause -->
  - Installation method (e.g. Rancher Catalog App/Helm/Kubectl):
