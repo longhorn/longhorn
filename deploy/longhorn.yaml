@@ -5,6 +5,20 @@ kind: Namespace
 metadata:
   name: longhorn-system
 ---
+# Source: longhorn/templates/priorityclass.yaml
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: "longhorn-critical"
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+value: 1000000000
+---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -1577,7 +1591,7 @@ spec:
               active:
                 type: boolean
               backendStoreDriver:
-                description: Deprecated.
+                description: 'Deprecated: Replaced by field `dataEngine`.'
                 type: string
               backupVolume:
                 type: string
@@ -1618,6 +1632,11 @@ spec:
                 type: boolean
               salvageRequested:
                 type: boolean
+              snapshotMaxCount:
+                type: integer
+              snapshotMaxSize:
+                format: int64
+                type: string
               unmapMarkSnapChainRemovedEnabled:
                 type: boolean
               upgradedReplicaAddressMap:
@@ -1929,11 +1948,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: InstanceManagerSpec defines the desired state of the Longhorn instancer manager
+            description: InstanceManagerSpec defines the desired state of the Longhorn instance manager
             properties:
-              backendStoreDriver:
-                description: Deprecated.
-                type: string
               dataEngine:
                 type: string
               image:
@@ -1966,7 +1982,7 @@ spec:
                     spec:
                       properties:
                         backendStoreDriver:
-                          description: Deprecated.
+                          description: 'Deprecated: Replaced by field `dataEngine`.'
                           type: string
                         dataEngine:
                           type: string
@@ -2008,7 +2024,7 @@ spec:
                     spec:
                       properties:
                         backendStoreDriver:
-                          description: Deprecated.
+                          description: 'Deprecated: Replaced by field `dataEngine`.'
                           type: string
                         dataEngine:
                           type: string
@@ -2050,6 +2066,9 @@ spec:
                     spec:
                       properties:
                         backendStoreDriver:
+                          description: 'Deprecated: Replaced by field `dataEngine`.'
+                          type: string
+                        dataEngine:
                           type: string
                         name:
                           type: string
@@ -2740,7 +2759,7 @@ spec:
               active:
                 type: boolean
               backendStoreDriver:
-                description: Deprecated.
+                description: 'Deprecated: Replaced by field `dataEngine`.'
                 type: string
               backingImage:
                 type: string
@@ -2782,6 +2801,11 @@ spec:
                 type: boolean
               salvageRequested:
                 type: boolean
+              snapshotMaxCount:
+                type: integer
+              snapshotMaxSize:
+                format: int64
+                type: string
               unmapMarkDiskChainRemovedEnabled:
                 type: boolean
               volumeName:
@@ -3677,7 +3701,7 @@ spec:
                 - rwx
                 type: string
               backendStoreDriver:
-                description: Deprecated.
+                description: 'Deprecated: Replaced by field `dataEngine`.'
                 type: string
               backingImage:
                 type: string
@@ -3788,6 +3812,11 @@ spec:
                 - disabled
                 - enabled
                 - fast-check
+                type: string
+              snapshotMaxCount:
+                type: integer
+              snapshotMaxSize:
+                format: int64
                 type: string
               staleReplicaTimeout:
                 type: integer
@@ -4531,17 +4560,3 @@ spec:
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
----
-# Source: longhorn/templates/priorityclass.yaml
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: "longhorn-critical"
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
-description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
-globalDefault: false
-preemptionPolicy: PreemptLowerPriority
-value: 1000000000
