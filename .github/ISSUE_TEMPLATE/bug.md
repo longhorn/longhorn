@@ -9,11 +9,11 @@ assignees: ''
 
 ## Describe the bug (🐛 if you encounter this issue)
 
-<!--A clear and concise description of what the bug is.-->
+<!--A clear and concise description of the bug.-->
 
 ## To Reproduce
 
-<!--Provide the steps to reproduce the behavior.-->
+<!--Please provide the steps to reproduce the case-->
 
 ## Expected behavior
 
@@ -21,28 +21,27 @@ assignees: ''
 
 ## Support bundle for troubleshooting
 
-<!--Provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/advanced-resources/support-bundle/).-->
+<!--PLEASE provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/advanced-resources/support-bundle/). Then, attach to the issue or send to longhorn-support-bundle@suse.com -->
 
 ## Environment
 
 <!-- Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/1.5.1/best-practices)-->
- - Longhorn version:
+ - Longhorn version: 
+ - Impacted volume (PV): <!-- PLEASE specify the volume name to better identify the cause -->
  - Installation method (e.g. Rancher Catalog App/Helm/Kubectl):
  - Kubernetes distro (e.g. RKE/K3s/EKS/OpenShift) and version:
-   - Number of management node in the cluster:
-   - Number of worker node in the cluster:
+   - Number of control plane nodes in the cluster:
+   - Number of worker nodes in the cluster:
  - Node config
    - OS type and version:
    - Kernel version:
    - CPU per node:
    - Memory per node:
-   - Disk type(e.g. SSD/NVMe/HDD):
-   - Network bandwidth between the nodes:
+   - Disk type (e.g. SSD/NVMe/HDD):
+   - Network bandwidth between the nodes (Gbps):
  - Underlying Infrastructure (e.g. on AWS/GCE, EKS/GKE, VMWare/KVM, Baremetal):
  - Number of Longhorn volumes in the cluster:
- - Impacted Longhorn resources:
-   - Volume names:
 
 ## Additional context
 
-<!--Add any other context about the problem here.-->
+<!-Please add any other context about the problem here.-->
