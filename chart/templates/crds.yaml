@@ -1502,6 +1502,11 @@ spec:
                 type: boolean
               salvageRequested:
                 type: boolean
+              snapshotMaxCount:
+                type: integer
+              snapshotMaxSize:
+                format: int64
+                type: string
               unmapMarkSnapChainRemovedEnabled:
                 type: boolean
               upgradedReplicaAddressMap:
@@ -2649,6 +2654,11 @@ spec:
                 type: boolean
               salvageRequested:
                 type: boolean
+              snapshotMaxCount:
+                type: integer
+              snapshotMaxSize:
+                format: int64
+                type: string
               unmapMarkDiskChainRemovedEnabled:
                 type: boolean
               volumeName:
@@ -3627,6 +3637,11 @@ spec:
                 - disabled
                 - enabled
                 - fast-check
+                type: string
+              snapshotMaxCount:
+                type: integer
+              snapshotMaxSize:
+                format: int64
                 type: string
               staleReplicaTimeout:
                 type: integer
