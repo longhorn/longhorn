@@ -1673,6 +1673,11 @@ spec:
                 type: object
               salvageExecuted:
                 type: boolean
+              snapshotMaxCount:
+                type: integer
+              snapshotMaxSize:
+                format: int64
+                type: string
               snapshots:
                 additionalProperties:
                   properties:
