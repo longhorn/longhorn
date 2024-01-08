@@ -147,6 +147,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.defaultNodeSelector.enable | bool | `false` | Enable Node selector for Longhorn StorageClass |
 | persistence.defaultNodeSelector.selector | string | `""` | This selector enables only certain nodes having these tags to be used for the volume. E.g. `"storage,fast"` |
 | persistence.migratable | bool | `false` | Set volume migratable for Longhorn StorageClass |
+| persistence.nfsOptions | string | `""` | Set NFS mount options for Longhorn StorageClass for RWX volumes |
 | persistence.reclaimPolicy | string | `"Delete"` | Define reclaim policy. Options: `Retain`, `Delete` |
 | persistence.recurringJobSelector.enable | bool | `false` | Enable recurring job selector for Longhorn StorageClass |
 | persistence.recurringJobSelector.jobList | list | `[]` | Recurring job selector list for Longhorn StorageClass. Please be careful of quotes of input. E.g., `[{"name":"backup", "isGroup":true}]` |
