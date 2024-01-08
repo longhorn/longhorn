@@ -29,6 +29,9 @@ data:
       {{- if .Values.persistence.migratable }}
       migratable: "{{ .Values.persistence.migratable }}"
       {{- end }}    
+      {{- if .Values.persistence.nfsOptions }}
+      nfsOptions: "{{ .Values.persistence.nfsOptions }}"
+      {{- end }}    
       {{- if .Values.persistence.backingImage.enable }}
       backingImage: {{ .Values.persistence.backingImage.name }}
       backingImageDataSourceType: {{ .Values.persistence.backingImage.dataSourceType }}
