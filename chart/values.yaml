@@ -133,6 +133,8 @@ persistence:
   reclaimPolicy: Delete
   # -- Set volume migratable for Longhorn StorageClass
   migratable: false
+  # -- Set NFS mount options for Longhorn StorageClass for RWX volumes
+  nfsOptions: ""
   recurringJobSelector:
     # -- Enable recurring job selector for Longhorn StorageClass
     enable: false
