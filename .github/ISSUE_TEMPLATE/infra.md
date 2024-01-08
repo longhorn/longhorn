@@ -1,6 +1,6 @@
 ---
 name: Infra
-about: Create an test/dev infra task
+about: Create a test/dev infra task
 title: "[INFRA] "
 labels: ["kind/task", "area/infra"]
 assignees: ''
