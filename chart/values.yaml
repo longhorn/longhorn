@@ -83,6 +83,8 @@ persistence:
   defaultDataLocality: disabled # best-effort otherwise
   reclaimPolicy: Delete
   migratable: false
+  # -- Set NFS mount options for Longhorn StorageClass for RWX volumes
+  nfsOptions: ""
   recurringJobSelector:
     enable: false
     jobList: []
