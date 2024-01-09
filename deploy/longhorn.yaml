@@ -4372,6 +4372,7 @@ spec:
         - "longhornio/longhorn-manager:master-head"
         - --service-account
         - longhorn-service-account
+        - --upgrade-version-check
         ports:
         - containerPort: 9500
           name: manager

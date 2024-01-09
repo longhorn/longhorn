@@ -245,8 +245,9 @@ Please also refer to this document [ocp-readme](https://github.com/longhorn/long
 | annotations | `{}` | Annotations to add to the Longhorn Manager DaemonSet Pods. Optional. |
 | enableGoCoverDir | `false` | Enable this to allow Longhorn to generate code coverage profiles |
 | enablePSP | `false` | For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller, set this to `true` to ship a built-in longhorn-psp PodSecurityPolicy which allow privileged Longhorn pods to start |
-| helmPreUpgradeCheckerJob.enabled | `true` | Setting that allows Longhorn to perform pre-upgrade checks. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions. |
 | metrics.serviceMonitor.enabled | `false` | Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components. |
+| preUpgradeChecker.jobEnabled | `true` | Setting that allows Longhorn to perform pre-upgrade checks before starting the Longhorn Manager DaemonSet Pods. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions. |
+| preUpgradeChecker.upgradeVersionCheck | `true` | Setting that allows Longhorn to perform upgrade version checks after starting the Longhorn Manager DaemonSet Pods. Disabling this setting also disables `preUpgradeChecker.jobEnabled`, but it's not recommended to disable it. |
 
 ### System Default Settings
 

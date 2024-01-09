@@ -45,6 +45,9 @@ spec:
         - "{{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
         - --service-account
         - longhorn-service-account
+        {{- if .Values.preUpgradeChecker.upgradeVersionCheck}}
+        - --upgrade-version-check
+        {{- end }}
         ports:
         - containerPort: 9500
           name: manager
