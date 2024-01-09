@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea/feature
 title: "[FEATURE] "
-labels: ["kind/feature", "require/lep", "require/doc", "require/auto-e2e-test"]
+labels: ["kind/feature", "require/lep", "require/doc", "require/auto-e2e-test", "require/manual-test-plan"]
 assignees: ''
 
 ---
