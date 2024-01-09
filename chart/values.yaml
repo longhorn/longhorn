@@ -162,9 +162,11 @@ persistence:
   # -- Allow automatically removing snapshots during filesystem trim for Longhorn StorageClass. Options: `ignored`, `enabled`, `disabled`
   removeSnapshotsDuringFilesystemTrim: ignored
 
-helmPreUpgradeCheckerJob:
-  # -- Setting that allows Longhorn to perform pre-upgrade checks. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions.
-  enabled: true
+preUpgradeChecker:
+  # -- Setting that allows Longhorn to perform pre-upgrade checks before starting the Longhorn Manager DaemonSet Pods. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions.
+  jobEnabled: true
+  # -- Setting that allows Longhorn to perform upgrade version checks after starting the Longhorn Manager DaemonSet Pods. Disabling this setting also disables `preUpgradeChecker.jobEnabled`, but it's not recommended to disable it.
+  upgradeVersionCheck: true
 
 csi:
   # -- Specify kubelet root-dir. Leave blank to autodetect
