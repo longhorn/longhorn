@@ -476,14 +476,14 @@ Usage: $0 [OPTIONS]
 
 Options:
     -s, --enable-spdk           Enable checking SPDK prerequisites
-    -p, --expected-nr-hugepages Expected number of 2 MiB hugepages for SPDK. Default: 512
+    -p, --expected-nr-hugepages Expected number of 2 MiB hugepages for SPDK. Default: 1024
     -h, --help                  Show this help message and exit
 EOF
     exit 0
 }
 
 enable_spdk=false
-expected_nr_hugepages=512
+expected_nr_hugepages=1024
 while [[ $# -gt 0 ]]; do
     opt="$1"
     case $opt in
