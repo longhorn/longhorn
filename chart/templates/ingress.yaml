@@ -1,9 +1,5 @@
 {{- if .Values.ingress.enabled }}
-{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
-{{- else -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- end }}
 kind: Ingress
 metadata:
   name: longhorn-ingress
@@ -18,7 +14,7 @@ metadata:
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
-  {{- if and .Values.ingress.ingressClassName (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   {{- end }}
   rules:
@@ -26,19 +22,12 @@ spec:
     http:
       paths:
         - path: {{ default "" .Values.ingress.path }}
-          {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
           pathType: ImplementationSpecific
-          {{- end }}
           backend:
-            {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
             service:
               name: longhorn-frontend
               port:
                 number: 80
-            {{- else }}
-            serviceName: longhorn-frontend
-            servicePort: 80
-            {{- end }}
 {{- if .Values.ingress.tls }}
   tls:
   - hosts:
