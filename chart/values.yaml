@@ -338,6 +338,8 @@ defaultSettings:
   # -- Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK).
   # The V2 Data Engine is a preview feature and should not be used in production environments.
   v2DataEngine: ~
+  # --  Setting that allows you to configure maximum huge page size (in MiB) for the V2 Data Engine.
+  v2DataEngineHugepageLimit: ~
   # -- This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine.
   offlineReplicaRebuilding: ~
   # -- Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled.

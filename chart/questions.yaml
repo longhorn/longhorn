@@ -664,6 +664,12 @@ questions:
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: boolean
   default: false
+- variable: defaultSettings.v2DataEngineHugepageLimit
+  label: V2 Data Engine
+  description: "This allows users to configure maximum huge page size (in MiB) for the V2 Data Engine."
+  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  type: int
+  default: "2048"
 - variable: defaultSettings.offlineReplicaRebuilding
   label: Offline Replica Rebuilding
   description: "This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine."
