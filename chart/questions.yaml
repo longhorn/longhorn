@@ -473,7 +473,11 @@ questions:
     default: 600
   - variable: defaultSettings.concurrentReplicaRebuildPerNodeLimit
     label: Concurrent Replica Rebuild Per Node Limit
-    description: "This setting controls how many replicas on a node can be rebuilt simultaneously."
+    description: "This setting controls how many replicas on a node can be rebuilt simultaneously.
+    WARNING:
+      - The old setting "Disable Replica Rebuild" is replaced by this setting.
+      - Different from relying on replica starting delay to limit the concurrent rebuilding, if the rebuilding is disabled, replica object replenishment will be directly skipped.
+      - When the value is 0, the eviction and data locality feature won't work. But this shouldn't have any impact to any current replica rebuild and backup restore."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -542,7 +546,13 @@ questions:
     default: 300
   - variable: defaultSettings.guaranteedInstanceManagerCPU
     label: Guaranteed Instance Manager CPU
-    description: "Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled. The default value is 12 percent."
+    description: "Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled. The default value is 12 percent.
+    WARNING:
+      - Value 0 means removing the CPU requests from spec of instance manager pods.
+      - Considering the possible number of new instance manager pods in a further system upgrade, this integer value ranges from 0 to 40.
+      - One more set of instance manager pods may need to be deployed when the Longhorn system is upgraded. If current available CPUs of the nodes are not enough for the new instance manager pods, you need to detach the volumes using the oldest instance manager pods so that Longhorn can clean up the old pods automatically and release the CPU resources. And the new pods with the latest instance manager image will be launched then.
+      - This global setting will be ignored for a node if the field "InstanceManagerCPURequest" on the node is set.
+      - After this setting is changed, all instance manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -562,7 +572,9 @@ questions:
     default: "false"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
-  description: "Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler."
+  description: "Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler.
+  WARNING:
+    - Replica rebuilding could be expensive because nodes with reusable replicas could get removed by the Kubernetes Cluster Autoscaler."
   group: "Longhorn Default Settings"
   type: boolean
   default: false
@@ -574,7 +586,9 @@ questions:
   default: false
 - variable: defaultSettings.storageNetwork
   label: Storage Network
-  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network."
+  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network.
+  WARNING:
+    - This setting should change after detaching all Longhorn volumes, as some of the Longhorn system component pods will get recreated to apply the setting. Longhorn will try to block this setting update when there are attached volumes."
   group: "Longhorn Default Settings"
   type: string
   default:
@@ -660,7 +674,10 @@ questions:
   default: true
 - variable: defaultSettings.v2DataEngine
   label: V2 Data Engine
-  description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment."
+  description: "This allows users to activate v2 data engine based on SPDK. Currently, it is in the preview phase and should not be utilized in a production environment.
+  WARNING:
+    - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will block this setting update when there are attached volumes.
+    - When the V2 Data Engine is enabled, each instance-manager pod utilizes 1 CPU core. This high CPU usage is attributed to the spdk_tgt process running within each instance-manager pod. The spdk_tgt process is responsible for handling input/output (IO) operations and requires intensive polling. As a result, it consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: boolean
   default: false
@@ -875,7 +892,10 @@ questions:
       - "k3s"
   - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
     label: Guaranteed Instance Manager CPU for V2 Data Engine
-    description: "Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled. By default, the Storage Performance Development Kit (SPDK) target daemon within each instance manager pod uses 1 CPU core. Configuring a minimum CPU usage value is essential for maintaining engine and replica stability, especially during periods of high node workload. The default value is 1250 millicpus."
+    description: "Number of millicpus on each node to be reserved for each instance manager pod when the V2 Data Engine is enabled. By default, the Storage Performance Development Kit (SPDK) target daemon within each instance manager pod uses 1 CPU core. Configuring a minimum CPU usage value is essential for maintaining engine and replica stability, especially during periods of high node workload. The default value is 1250 millicpus.
+    WARNING:
+    - Specifying a value of 0 disables CPU requests for instance manager pods. You must specify an integer between 1000 and 8000. 
+    - This is a global setting. Modifying the value triggers an automatic restart of the instance manager pods. Do not modify the value while volumes are still attached."
     group: "Longhorn Default Settings"
     type: int
     min: 1000
