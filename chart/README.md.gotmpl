@@ -131,8 +131,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 
 ### Longhorn Manager Settings
 
-Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
-These settings only apply to Longhorn manager component.
+Longhorn consists of user-deployed components (for example, Longhorn Manager, Longhorn Driver, and Longhorn UI) and system-managed components (for example, Instance Manager, Backing Image Manager, Share Manager, CSI Driver, and Engine Image). The following settings only apply to Longhorn Manager.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -144,8 +143,7 @@ These settings only apply to Longhorn manager component.
 
 ### Longhorn Driver Settings
 
-Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
-These settings only apply to Longhorn driver component.
+Longhorn consists of user-deployed components (for example, Longhorn Manager, Longhorn Driver, and Longhorn UI) and system-managed components (for example, Instance Manager, Backing Image Manager, Share Manager, CSI Driver, and Engine Image). The following settings only apply to Longhorn Driver.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -157,8 +155,7 @@ These settings only apply to Longhorn driver component.
 
 ### Longhorn UI Settings
 
-Longhorn system contains user deployed components (e.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (e.g, instance manager, engine image, CSI driver, etc.).
-These settings only apply to Longhorn UI component.
+Longhorn consists of user-deployed components (for example, Longhorn Manager, Longhorn Driver, and Longhorn UI) and system-managed components (for example, Instance Manager, Backing Image Manager, Share Manager, CSI Driver, and Engine Image). The following settings only apply to Longhorn UI.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -180,7 +177,7 @@ These settings only apply to Longhorn UI component.
 
 ### Private Registry Settings
 
-Longhorn can be installed in an air gapped environment with private registry settings. Please refer to **Air Gap Installation** in our official site [link](https://longhorn.io/docs)
+You can install Longhorn in an air-gapped environment with a private registry. For more information, see the **Air Gap Installation** section of the [documentation](https://longhorn.io/docs).
 
 | Key | Description |
 |-----|-------------|
@@ -192,9 +189,9 @@ Longhorn can be installed in an air gapped environment with private registry set
 
 ### OS/Kubernetes Distro Settings
 
-#### Opensift Settings
+#### OpenShift Settings
 
-Please also refer to this document [ocp-readme](https://github.com/longhorn/longhorn/blob/master/chart/ocp-readme.md) for more details
+For more details, see the [ocp-readme](https://github.com/longhorn/longhorn/blob/master/chart/ocp-readme.md).
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -228,9 +225,7 @@ Please also refer to this document [ocp-readme](https://github.com/longhorn/long
 
 ### System Default Settings
 
-For system default settings, you can first leave blank to use default values which will be applied when installing Longhorn.
-You can then change them through UI after installation.
-For more details like types or options, you can refer to **Settings Reference** in our official site [link](https://longhorn.io/docs)
+During installation, you can either allow Longhorn to use the default system settings or use specific flags to modify the default values. After installation, you can modify the settings using the Longhorn UI. For more information, see the **Settings Reference** section of the [documentation](https://longhorn.io/docs).
 
 | Key | Description |
 |-----|-------------|
