@@ -1370,6 +1370,10 @@ spec:
     subresources:
       status: {}
   - additionalPrinterColumns:
+    - description: Compatibility of the engine image
+      jsonPath: .status.incompatible
+      name: Incompatible
+      type: boolean
     - description: State of the engine image
       jsonPath: .status.state
       name: State
