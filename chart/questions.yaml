@@ -17,13 +17,8 @@ questions:
     label: Longhorn Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.manager.tag
-<<<<<<< HEAD
     default: v1.6.0-rc1
     description: "Specify Longhorn Manager Image Tag"
-=======
-    default: master-head
-    description: "Tag for the Longhorn Manager image."
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     type: string
     label: Longhorn Manager Image Tag
     group: "Longhorn Images Settings"
@@ -34,13 +29,8 @@ questions:
     label: Longhorn Engine Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.engine.tag
-<<<<<<< HEAD
     default: v1.6.0-rc1
     description: "Specify Longhorn Engine Image Tag"
-=======
-    default: master-head
-    description: "Tag for the Longhorn Engine image."
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     type: string
     label: Longhorn Engine Image Tag
     group: "Longhorn Images Settings"
@@ -51,13 +41,8 @@ questions:
     label: Longhorn UI Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.ui.tag
-<<<<<<< HEAD
     default: v1.6.0-rc1
     description: "Specify Longhorn UI Image Tag"
-=======
-    default: master-head
-    description: "Tag for the Longhorn UI image."
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     type: string
     label: Longhorn UI Image Tag
     group: "Longhorn Images Settings"
@@ -68,13 +53,8 @@ questions:
     label: Longhorn Instance Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.instanceManager.tag
-<<<<<<< HEAD
     default: v1.6.0-rc1
     description: "Specify Longhorn Instance Manager Image Tag"
-=======
-    default: v2_20221123
-    description: "Tag for the Longhorn Instance Manager image."
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     type: string
     label: Longhorn Instance Manager Image Tag
     group: "Longhorn Images Settings"
@@ -85,13 +65,8 @@ questions:
     label: Longhorn Share Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.shareManager.tag
-<<<<<<< HEAD
     default: v1.6.0-rc1
     description: "Specify Longhorn Share Manager Image Tag"
-=======
-    default: v1_20220914
-    description: "Tag for the Longhorn Share Manager image."
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     type: string
     label: Longhorn Share Manager Image Tag
     group: "Longhorn Images Settings"
@@ -102,13 +77,8 @@ questions:
     label: Longhorn Backing Image Manager Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.backingImageManager.tag
-<<<<<<< HEAD
     default: v1.6.0-rc1
     description: "Specify Longhorn Backing Image Manager Image Tag"
-=======
-    default: v3_20220808
-    description: "Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value."
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     type: string
     label: Longhorn Backing Image Manager Image Tag
     group: "Longhorn Images Settings"

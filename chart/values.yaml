@@ -34,63 +34,33 @@ image:
     engine:
       # -- Repository for the Longhorn Engine image.
       repository: longhornio/longhorn-engine
-<<<<<<< HEAD
       # -- Specify Longhorn engine image tag
       tag: v1.6.0-rc1
-=======
-      # -- Tag for the Longhorn Engine image.
-      tag: master-head
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     manager:
       # -- Repository for the Longhorn Manager image.
       repository: longhornio/longhorn-manager
-<<<<<<< HEAD
       # -- Specify Longhorn manager image tag
       tag: v1.6.0-rc1
-=======
-      # -- Tag for the Longhorn Manager image.
-      tag: master-head
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     ui:
       # -- Repository for the Longhorn UI image.
       repository: longhornio/longhorn-ui
-<<<<<<< HEAD
       # -- Specify Longhorn ui image tag
       tag: v1.6.0-rc1
-=======
-      # -- Tag for the Longhorn UI image.
-      tag: master-head
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     instanceManager:
       # -- Repository for the Longhorn Instance Manager image.
       repository: longhornio/longhorn-instance-manager
-<<<<<<< HEAD
       # -- Specify Longhorn instance manager image tag
       tag: v1.6.0-rc1
-=======
-      # -- Tag for the Longhorn Instance Manager image.
-      tag: master-head
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     shareManager:
       # -- Repository for the Longhorn Share Manager image.
       repository: longhornio/longhorn-share-manager
-<<<<<<< HEAD
       # -- Specify Longhorn share manager image tag
       tag: v1.6.0-rc1
-=======
-      # -- Tag for the Longhorn Share Manager image.
-      tag: master-head
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     backingImageManager:
       # -- Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value.
       repository: longhornio/backing-image-manager
-<<<<<<< HEAD
       # -- Specify Longhorn backing image manager image tag
       tag: v1.6.0-rc1
-=======
-      # -- Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value.
-      tag: master-head
->>>>>>> ea910b7 (fix(doc): update the description in helm values)
     supportBundleKit:
       # -- Repository for the Longhorn Support Bundle Manager image.
       repository: longhornio/support-bundle-kit
