@@ -7,7 +7,6 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
@@ -24,7 +23,6 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
@@ -41,7 +39,6 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:

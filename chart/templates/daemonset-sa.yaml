@@ -156,7 +156,6 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.manager.type }}
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
