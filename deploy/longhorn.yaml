@@ -3955,7 +3955,6 @@ metadata:
   namespace: longhorn-system
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
@@ -3997,7 +3996,6 @@ metadata:
   namespace: longhorn-system
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
@@ -4018,7 +4016,6 @@ metadata:
   namespace: longhorn-system
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
@@ -4039,7 +4036,6 @@ metadata:
   namespace: longhorn-system
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
   selector:
     app: longhorn-manager
   ports:
