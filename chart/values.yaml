@@ -450,6 +450,9 @@ ingress:
 # -- Setting that allows you to enable pod security policies (PSPs) that allow privileged Longhorn pods to start. This setting applies only to clusters running Kubernetes 1.25 and earlier, and with the built-in Pod Security admission controller enabled.
 enablePSP: false
 
+# -- Specify override namespace, specifically this is useful for using longhorn as sub-chart and its release namespace is not the `longhorn-system`.
+namespaceOverride: ""
+
 # -- Annotation for the Longhorn Manager DaemonSet pods. This setting is optional.
 annotations: {}
 
