@@ -2124,6 +2124,8 @@ spec:
                       type: string
                     diskUUID:
                       type: string
+                    filesystemType:
+                      type: string
                     scheduledReplica:
                       additionalProperties:
                         format: int64
