@@ -701,7 +701,7 @@ Set the value to **0** to disable backup restore."
   default: false
 - variable: defaultSettings.offlineReplicaRebuilding
   label: Offline Replica Rebuilding
-  description: ""This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine."
+  description: "This setting allows users to enable the offline replica rebuilding for volumes using v2 data engine."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   required: true
   type: enum
