@@ -2051,6 +2051,8 @@ spec:
                       type: array
                     diskUUID:
                       type: string
+                    filesystemType:
+                      type: string
                     scheduledReplica:
                       additionalProperties:
                         format: int64
