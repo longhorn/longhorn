@@ -260,6 +260,14 @@ check_hostname_uniqueness() {
   info "All nodes have unique hostnames."
 }
 
+check_default_priority_class() {
+  hasDefault=$(kubectl get priorityclass -o jsonpath='{.items[*].globalDefault}' | grep true)
+
+  if [ ! -z $hasDefault ]; then
+      warn "Cluster has a global default priority class. See potential issue and solution at https://longhorn.io/kb/troubleshooting-instance-manager-pods-are-restarted-every-hour/#reason"
+  fi
+}
+
 check_nodes() {
   local name=$1
   local callback=$2
@@ -511,7 +519,10 @@ DEPENDENCIES=("kubectl" "jq" "mktemp" "sort" "printf")
 check_local_dependencies "${DEPENDENCIES[@]}"
 
 # Check the each host has a unique hostname (for RWX volume)
+# Do this first, so we also verify we have a workable KUBECONFIG.
 check_hostname_uniqueness
+
+check_default_priority_class
 
 # Create a daemonset for checking the requirements in each node
 TEMP_DIR=$(mktemp -d)
