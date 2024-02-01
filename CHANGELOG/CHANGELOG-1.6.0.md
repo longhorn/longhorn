@@ -405,6 +405,7 @@ For information about issues identified after this release, see [Release-Known-I
 - @ejweber
 - @innobead
 - @james-munson
+- @jillian-maroket 
 - @m-ildefons
 - @mantissahz
 - @nitendra-suse
