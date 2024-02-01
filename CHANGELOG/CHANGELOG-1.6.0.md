@@ -69,9 +69,9 @@ Longhorn only allows upgrades from supported versions. For more information abou
 
 For information about important changes, including feature incompatibility, deprecation, and removal, see [Important Notes](https://longhorn.io/docs/1.6.0/deploy/important-notes/) in the Longhorn documentation.
 
-## Follow-Up Known Issues
+## Post-Release Known Issues
 
-Please follow up on [here](https://github.com/longhorn/longhorn/wiki/Release-Known-Issues) about any outstanding issues found after this release.
+For information about issues identified after this release, see [Release-Known-Issues](https://github.com/longhorn/longhorn/wiki/Release-Known-Issues).
 
 ## Resolved Issues
 
