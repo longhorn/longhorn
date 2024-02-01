@@ -38,6 +38,7 @@ https://github.com/longhorn/longhorn/releases
 
 | Release   | Current Version | First Stable Version | Status         | Release Note (Changelog)                                       | Important Note                                              | Active Maintenance |
 |-----------|-----------------|----------------------|----------------|----------------------------------------------------------------|-------------------------------------------------------------| -------------------|
+| **1.6***  | 1.6.0           | N/A                  | Latest         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.0) | [🔗](https://longhorn.io/docs/1.6.0/deploy/important-notes) | ✅                 |
 | **1.5***  | 1.5.3           | 1.5.3                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.3) | [🔗](https://longhorn.io/docs/1.5.3/deploy/important-notes) | ✅                 |
 | **1.4***  | 1.4.4           | 1.4.1                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.4) | [🔗](https://longhorn.io/docs/1.4.4/deploy/important-notes) | ✅                 |
 | 1.3       | 1.3.3           | 1.3.2                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.3) | [🔗](https://longhorn.io/docs/1.3.3/deploy/important-notes) |                    |
@@ -50,7 +51,7 @@ https://github.com/longhorn/longhorn/wiki/Roadmap
 
 # Components
 
-Longhorn is 100% open source software. Project source code is spread across a number of repos:
+Longhorn is 100% open-source software. Project source code is spread across several repositories:
 
 * Engine: [![Build Status](https://drone-publish.longhorn.io/api/badges/longhorn/longhorn-engine/status.svg)](https://drone-publish.longhorn.io/longhorn/longhorn-engine)[![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-engine)](https://goreportcard.com/report/github.com/longhorn/longhorn-engine)[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-engine.svg?type=shield)](https://app.fossa.com/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-engine?ref=badge_shield)
 * Manager: [![Build Status](https://drone-publish.longhorn.io/api/badges/longhorn/longhorn-manager/status.svg)](https://drone-publish.longhorn.io/longhorn/longhorn-manager)[![Go Report Card](https://goreportcard.com/badge/github.com/longhorn/longhorn-manager)](https://goreportcard.com/report/github.com/longhorn/longhorn-manager)[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-manager.svg?type=shield)](https://app.fossa.com/projects/custom%2B25850%2Fgithub.com%2Flonghorn%2Flonghorn-manager?ref=badge_shield)
@@ -62,11 +63,19 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 | Component                      | What it does                                                           | GitHub repo                                                                                 |
 | :----------------------------- | :--------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
 | Longhorn Backing Image Manager | Backing image download, sync, and deletion in a disk                   | [longhorn/backing-image-manager](https://github.com/longhorn/backing-image-manager)         |
-| Longhorn Engine                | Core controller/replica logic                                          | [longhorn/longhorn-engine](https://github.com/longhorn/longhorn-engine)                     |
 | Longhorn Instance Manager      | Controller/replica instance lifecycle management                       | [longhorn/longhorn-instance-manager](https://github.com/longhorn/longhorn-instance-manager) |
 | Longhorn Manager               | Longhorn orchestration, includes CSI driver for Kubernetes             | [longhorn/longhorn-manager](https://github.com/longhorn/longhorn-manager)                   |
 | Longhorn Share Manager         | NFS provisioner that exposes Longhorn volumes as ReadWriteMany volumes | [longhorn/longhorn-share-manager](https://github.com/longhorn/longhorn-share-manager)       |
 | Longhorn UI                    | The Longhorn dashboard                                                 | [longhorn/longhorn-ui](https://github.com/longhorn/longhorn-ui)                             |
+
+| Library                        | What it does                                                           | GitHub repo                                                                                 |
+| :----------------------------- | :--------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| Longhorn Engine                | V1 Core controller/replica logic                                       | [longhorn/longhorn-engine](https://github.com/longhorn/longhorn-engine)                     |
+| Longhorn SPDK Engine           | V2 Core controller/replica logic                                       | [longhorn/longhorn-spdk-engine](https://github.com/longhorn/longhorn-spdk-engine)           |
+| iSCSI Helper                   | V1 iSCSI client and server libraries                                   | [longhorn/longhorn-spdk-engine](https://github.com/longhorn/go-iscsi-helper)                |
+| SPDK Helper                    | V2 SPDK client and server libraries                                    | [longhorn/longhorn-spdk-engine](https://github.com/longhorn/go-spdk-helper)                 |
+| Backup Store                   | Backkup libraries                                                      | [longhorn/longhorn-spdk-engine](https://github.com/longhorn/backupstore)                    |
+| Common Libraries               |                                                                        | [longhorn/longhorn-spdk-engine](https://github.com/longhorn/go-common-libs)                 |
 
 ![Longhorn UI](./longhorn-ui.png)
 
