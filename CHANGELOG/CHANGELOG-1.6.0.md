@@ -18,7 +18,7 @@ Although the V2 Data Engine is still considered a preview feature in this releas
 - [Separate Data Plane for v1 and v2 Data Engines](https://github.com/longhorn/longhorn/issues/7015)
 - [ARM64 Support](https://github.com/longhorn/longhorn/issues/6021)
 
-We will continue developing more v1 features in the later versions soon, and look forwarding to making v2 as experimental in the next feature release.
+The Longhorn team will continue to develop features for the V1 Data Engine and to prepare the V2 Data Engine for use in all types of environments.
 
 ### Agnostic Platform Deployment
 
