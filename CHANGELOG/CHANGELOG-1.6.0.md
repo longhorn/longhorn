@@ -55,9 +55,9 @@ Longhorn now allows you to [create and restore backups of backing images](https:
 
 ## Installation
 
-> **Please ensure your Kubernetes cluster is at least v1.21 before installing Longhorn v1.6.0.**
+**Ensure that your cluster is running Kubernetes v1.21 or later before installing Longhorn v1.6.0.**
 
-Longhorn supports three installation ways including Rancher App Marketplace, Kubectl, and Helm. Follow the installation instructions [here](https://longhorn.io/docs/1.6.0/deploy/install/).
+You can install Longhorn using a variety of tools, including Rancher, Kubectl, and Helm. For more information about installation methods and requirements, see [Quick Installation](https://longhorn.io/docs/1.6.0/deploy/install/) in the Longhorn documentation.
 
 ## Upgrade
 
