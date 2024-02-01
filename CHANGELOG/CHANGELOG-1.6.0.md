@@ -1,10 +1,11 @@
-## **v1.6.0 released!** 🎆
+## Longhorn v1.6.0 Release Notes
 
-Longhorn v1.6.0 is the latest version of Longhorn 1.6.
+This latest version of Longhorn introduces several features, enhancements, and bug fixes that are intended to improve system quality and the overall user experience. Highlights include new V2 Data Engine features, platform-agnostic deployment, node maintenance, and improvements to stability, performance, and resilience.
 
-It introduces many enhancements, improvements, and bug fixes as described below, including new features of v2 data engine, stability, performance, resilience, agnostic platform installation, node maintenance, and so on. Please try it and feedback. Thanks for all the contributions!
+The Longhorn team appreciates your contributions and anticipates receiving feedback regarding this release.
 
-> For the definition of stable or latest release, please check [here](https://github.com/longhorn/longhorn#releases).
+> **Note:**
+> For more information about release-related terminology, see [Releases](https://github.com/longhorn/longhorn#releases).
 
 ## Primary Highlights
 
