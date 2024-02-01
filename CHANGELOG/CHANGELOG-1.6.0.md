@@ -31,7 +31,7 @@ The Longhorn team is committed to making Longhorn an adaptive storage solution a
 
 ### Space Efficiency
 
-In previous versions, users were unable to control or predict the number or size of volume snapshots. Starting from Longhorn v1.6.0, users can configure global settings or granular settings to control snapshots either globally or for each volume individually. This feature aids in space management, providing better space estimation.
+Starting with v1.6.0, Longhorn allows you to configure the maximum snapshot count and the maximum aggregate snapshot size for all volumes and for specific volumes. Both settings, whether applied globally or individually, aid in space estimation and management. Earlier Longhorn versions do not provide mechanisms for controlling or predicting the quantity and size of volume snapshots.
 
 - [Snapshot Space Management](https://github.com/longhorn/longhorn/issues/6563)
 
