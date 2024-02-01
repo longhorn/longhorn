@@ -49,9 +49,9 @@ v1.6.0 includes two new [node drain policy options](https://longhorn.io/docs/1.6
 
 The Longhorn team recommends enabling these options only during planned maintenance to minimize impact on data movement. For more information about the advantages and disavantages of all options, see [Node Drain Policy Recommendations](../../volumes-and-nodes/maintenance/#node-drain-policy-recommendations) in the Longhorn documentation.
 
-### Backup Image Management
+### Backing Image Management
 
-Longhorn now supports [Backing Image Backup and Restore](https://github.com/longhorn/longhorn/issues/4165), facilitating users in managing backing images across clusters, particularly beneficial in virtualization use cases such as Harvester or KubeVirt.
+Longhorn now allows you to [create and restore backups of backing images](https://github.com/longhorn/longhorn/issues/4165), which can streamline the management of backing images across clusters. This feature is particularly beneficial in virtualization use cases such as Harvester and KubeVirt.
 
 ## Installation
 
