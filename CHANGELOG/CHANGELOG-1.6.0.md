@@ -20,14 +20,14 @@ Although the V2 Data Engine is still considered a preview feature in this releas
 
 The Longhorn team will continue to develop features for the V1 Data Engine and to prepare the V2 Data Engine for use in all types of environments.
 
-### Agnostic Platform Deployment
+### Platform-Agnostic Deployment
 
-Longhorn is designed to operate seamlessly on any general-purpose Linux distributions, as well as certain container-optimized systems like SLE Micro. In this release, to enhance Longhorn's versatility, it can now be deployed on [Talos](https://www.talos.dev/), a secure, immutable, and minimal Kubernetes OS. Responding to numerous requests for this support, we believe this step will enable Longhorn to adapt and run effectively on diverse platforms. Additionally, the inclusion of OKD support is a noteworthy contribution from the community user, @ArthurVardevanyan.
+Longhorn is designed to seamlessly operate on general-purpose Linux distributions, and on certain container-optimized systems such as SLE Micro. In response to numerous requests, v1.6.0 was enhanced to allow installation of Longhorn components on [Talos](https://www.talos.dev/), which is a secure, immutable, and minimal Kubernetes OS. v1.6.0 also includes OKD support, which was contributed by community member @ArthurVardevanyan.
 
 - [Talos Support](https://github.com/longhorn/longhorn/issues/3161) 
-- [OKD (OpenShit Origin) Support](https://github.com/longhorn/longhorn/issues/1831)
+- [OKD (OpenShift Origin) Support](https://github.com/longhorn/longhorn/issues/1831)
 
-We eagerly anticipate receiving more feedback on the preferred platforms for running Longhorn and are committed to continued investment in making Longhorn an adaptive storage solution.
+The Longhorn team is committed to making Longhorn an adaptive storage solution and anticipates receiving feedback regarding your preferred platforms.
 
 ### Space Efficiency
 
