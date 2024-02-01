@@ -40,7 +40,7 @@ Longhorn has been validated with popular GitOps solutions, including [Flux](http
 
 ### Data Protection
 
-Longhorn now supports Block Volume Encryption](https://github.com/longhorn/longhorn/issues/4883), enabling users to encrypt volumes, particularly beneficial in virtualization use cases such as Harvester or KubeVirt.
+Longhorn now supports [Block Volume Encryption](https://github.com/longhorn/longhorn/issues/4883), enabling users to encrypt volumes, particularly beneficial in virtualization use cases such as Harvester or KubeVirt.
 
 ### Node Maintenance
 
