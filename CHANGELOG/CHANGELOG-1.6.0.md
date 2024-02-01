@@ -61,9 +61,9 @@ You can install Longhorn using a variety of tools, including Rancher, Kubectl, a
 
 ## Upgrade
 
-> **Please ensure your Kubernetes cluster is at least v1.21 before upgrading to Longhorn v1.6.0 from v1.5.x. Only support upgrading from 1.5.x.**
+**Ensure that your cluster is running Kubernetes v1.21 or later before upgrading from Longhorn v1.5.x to v1.6.0.**
 
-Follow the upgrade instructions [here](https://longhorn.io/docs/1.6.0/deploy/upgrade/).
+Longhorn only allows upgrades from supported versions. For more information about upgrade paths and procedures, see [Upgrade](https://longhorn.io/docs/1.6.0/deploy/upgrade/) in the Longhorn documentation.
 
 ## Deprecation & Incompatibilities
 
