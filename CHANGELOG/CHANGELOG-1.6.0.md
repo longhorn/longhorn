@@ -37,7 +37,7 @@ Starting with v1.6.0, Longhorn allows you to configure the maximum snapshot coun
 
 ### GitOps Friendly
 
-Longhorn has been validated with popular GitOps solutions, including [Flux](https://github.com/longhorn/longhorn/issues/6343), [ArgoCD](https://github.com/longhorn/longhorn/issues/6434) and [Fleet](https://github.com/longhorn/longhorn/issues/6935). In subsequent versions, we will continue enhancing Longhorn as a GitOps-aware storage solution.
+Longhorn has been validated with popular GitOps solutions, including [Flux](https://github.com/longhorn/longhorn/issues/6343), [Argo CD](https://github.com/longhorn/longhorn/issues/6434), and [Fleet](https://github.com/longhorn/longhorn/issues/6935). Future releases will include enhancements that further solidify Longhorn's status as a GitOps-aware storage solution.
 
 ### Data Protection
 
