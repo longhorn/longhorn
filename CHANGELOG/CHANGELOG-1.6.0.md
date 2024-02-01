@@ -45,7 +45,9 @@ Longhorn now supports [block volume encryption](https://github.com/longhorn/long
 
 ### Node Maintenance
 
-In addition to the existing [Node Drain Policies](https://longhorn.io/docs/1.6.0/maintenance/maintenance/#node-drain-policy-recommendations), two new policies, *__Block For Eviction__* and __*Block For Eviction If Contains Last Replica*__ , have been introduced to enhance the situation when draining a node. In scenarios where healthy replicas exist, they will be automatically evicted and relocated to other nodes before the node is cordoned. These policies strengthen data protection, but there will be additional costs for data movement. It is recommended not to leave this policy enabled under normal use and only enable it during planned maintenance. Please refer to the detailed documentation to understand the pros and cons.
+v1.6.0 includes two new [node drain policy options](https://longhorn.io/docs/1.6.0/references/settings/#node-drain-policy): *Block For Eviction* and *Block For Eviction If Contains Last Replica*. Both options allow automatic eviction and relocation of healthy replicas from draining nodes (before the nodes are cordoned).
+
+The Longhorn team recommends enabling these options only during planned maintenance to minimize impact on data movement. For more information about the advantages and disavantages of all options, see [Node Drain Policy Recommendations](../../volumes-and-nodes/maintenance/#node-drain-policy-recommendations) in the Longhorn documentation.
 
 ### Backup Image Management
 
