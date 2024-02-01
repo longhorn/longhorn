@@ -9,9 +9,9 @@ The Longhorn team appreciates your contributions and anticipates receiving feedb
 
 ## Primary Highlights
 
-### v2 Data Engine - New Features
+### New V2 Data Engine Features
 
-Following v1.5, the v2 Data Engine continues as a preview feature with enhanced core functions as outlined below. Users can now perform volume backup and restore operations seamlessly between v1 and v2 data engines, facilitating future volume migrations between data engines.
+Although the V2 Data Engine is still considered a preview feature in this release, the core functions have been significantly enhanced. For example, you can now seamlessly perform volume backup and restore operations between the V1 and V2 Data Engines, paving the way for volume migration between the two data engines in the future.
 
 - [Volume Snapshot and Revert](https://github.com/longhorn/longhorn/issues/6137)
 - [Volume Backup and Restore](https://github.com/longhorn/longhorn/issues/6138)
