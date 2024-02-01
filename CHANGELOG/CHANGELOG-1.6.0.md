@@ -67,7 +67,7 @@ Longhorn only allows upgrades from supported versions. For more information abou
 
 ## Deprecation & Incompatibilities
 
-Please check the [important notes](https://longhorn.io/docs/1.6.0/deploy/important-notes/) to know more about deprecated, removed, incompatible features and important changes.
+For information about important changes, including feature incompatibility, deprecation, and removal, see [Important Notes](https://longhorn.io/docs/1.6.0/deploy/important-notes/) in the Longhorn documentation.
 
 ## Follow-Up Known Issues
 
