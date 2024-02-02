@@ -321,7 +321,7 @@ check_iscsid() {
     kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager iscsid.socket" > /dev/null 2>&1
       if [ $? -ne 0 ]; then
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-      error "Neither iscsid.service nor iscsid.socket is not running on ${node}"
+      error "Neither iscsid.service nor iscsid.socket is running on ${node}"
       return 1
     fi
   fi
@@ -393,7 +393,7 @@ check_nfs_client() {
     fi
   done
 
-  error "NFS clients ${options[*]} should be enabled at least one."
+  error "NFS clients ${options[*]} not found. At least one should be enabled"
   return 1
 }
 
