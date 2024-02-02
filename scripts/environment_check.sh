@@ -343,6 +343,7 @@ check_iscsid() {
     if [ $? != 0 ]; then
       all_found=false
       node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+<<<<<<< HEAD
       error "iscsid is not running on $node."
     fi
   done
@@ -350,6 +351,82 @@ check_iscsid() {
   if [ "$all_found" == "false" ]; then
     exit 2
   fi
+=======
+      error "Neither iscsid.service nor iscsid.socket is running on ${node}"
+      return 1
+    fi
+  fi
+}
+
+check_multipathd() {
+  local pod=$1
+
+  kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
+  if [ $? = 0 ]; then
+    node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+    warn "multipathd is running on ${node}"
+    return 1
+  fi
+}
+
+check_packages() {
+  local pod=$1
+
+  OS=$(detect_node_os ${pod})
+  if [ x"$OS" = x"" ]; then
+    error "Failed to detect OS on node ${node}"
+    return 1
+  fi
+
+  set_packages_and_check_cmd
+
+  for ((i=0; i<${#PACKAGES[@]}; i++)); do
+    check_package ${PACKAGES[$i]}
+    if [ $? -ne 0 ]; then
+      return 1
+    fi
+  done
+}
+
+check_package() {
+  local package=$1
+
+  kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- timeout 30 bash -c "$CHECK_CMD $package" > /dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+    error "$package is not found in $node."
+    return 1
+  fi
+}
+
+check_nfs_client() {
+  local pod=$1
+  local node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+
+  local options=("CONFIG_NFS_V4_2"  "CONFIG_NFS_V4_1" "CONFIG_NFS_V4")
+
+  local kernel=$(detect_node_kernel_release ${pod})
+  if [ "x${kernel}" = "x" ]; then
+    warn "Failed to check NFS client installation, because unable to detect kernel release on node ${node}"
+    return 1
+  fi
+
+  for option in "${options[@]}"; do
+    kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -f /boot/config-${kernel} ]" > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      warn "Failed to check $option on node ${node}, because /boot/config-${kernel} does not exist on node ${node}"
+      continue
+    fi
+
+    check_kernel_module ${pod} ${option} nfs
+    if [ $? = 0 ]; then
+      return 0
+    fi
+  done
+
+  error "NFS clients ${options[*]} not found. At least one should be enabled"
+  return 1
+>>>>>>> 48c3137 (Fix grammatical errors making error messages confusing)
 }
 
 check_nfs_client_kernel_support() {
