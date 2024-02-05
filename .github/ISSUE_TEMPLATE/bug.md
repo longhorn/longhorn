@@ -21,7 +21,7 @@ assignees: ''
 
 ## Support bundle for troubleshooting
 
-<!--PLEASE provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/advanced-resources/support-bundle/). Then, attach to the issue or send to longhorn-support-bundle@suse.com -->
+<!--PLEASE provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/troubleshoot/support-bundle/). Then, attach to the issue or send to longhorn-support-bundle@suse.com -->
 
 ## Environment
 
