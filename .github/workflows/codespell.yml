@@ -1,7 +1,6 @@
 name: Codespell
 
 on:
-  push:
   pull_request:
     branches:
     - master
@@ -19,5 +18,4 @@ jobs:
       uses: codespell-project/actions-codespell@v2
       with:
         check_filenames: true
-        ignore_words_file: .codespellignore
         skip: "*/**.yaml,*/**.yml,./scripts,./vendor,MAINTAINERS,LICENSE,go.mod,go.sum"
