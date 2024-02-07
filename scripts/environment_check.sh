@@ -293,9 +293,6 @@ check_hostname_uniqueness() {
   info "Hostname uniqueness check is passed."
 }
 
-<<<<<<< HEAD
-check_multipathd() {
-=======
 check_default_priority_class() {
   hasDefault=$(kubectl get priorityclass -o jsonpath='{.items[*].globalDefault}' | grep true)
 
@@ -304,17 +301,7 @@ check_default_priority_class() {
   fi
 }
 
-check_nodes() {
-  local name=$1
-  local callback=$2
-  shift
-  shift
-
-  info "Checking $name..."
-
-  local all_passed=true
-
->>>>>>> 9c286a1 (fix(environment_check): add check for globalDefault priority class.)
+check_multipathd() {
   local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
   local all_not_found=true
 
