@@ -835,6 +835,16 @@ questions:
     type: string
     required: true
     label: Ingress Path
+  - variable: ingress.pathType
+    default: "ImplementationSpecific"
+    description: "Path type for the ingress. (Options: \"ImplementationSpecific\", \"Exact\", \"Prefix\")"
+    type: enum
+    options:
+      - "ImplementationSpecific"
+      - "Exact"
+      - "Prefix"
+    required: true
+    label: Ingress Path Type
 - variable: service.ui.type
   default: "Rancher-Proxy"
   description: "Service type for Longhorn UI. (Options: \"ClusterIP\", \"NodePort\", \"LoadBalancer\", \"Rancher-Proxy\")"
