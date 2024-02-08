@@ -1707,6 +1707,7 @@ spec:
                         conditions:
                           additionalProperties:
                             type: boolean
+                          nullable: true
                           type: object
                         endpoint:
                           type: string
