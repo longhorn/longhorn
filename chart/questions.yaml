@@ -260,6 +260,14 @@ questions:
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
+  - variable: defaultSettings.maxSnapshotNum
+    label: Snapshot Maximum Count
+    description: 'Maximum snapshot count for a volume. The value should be between 2 to 250.'
+    group: "Longhorn Default Settings"
+    type: int
+    min: 2
+    max: 250
+    default: 250
   - variable: defaultSettings.createDefaultDiskLabeledNodes
     label: Create Default Disk on Labeled Nodes
     description: 'Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster.'
