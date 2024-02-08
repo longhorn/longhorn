@@ -260,7 +260,7 @@ questions:
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
-  - variable: defaultSettings.maxSnapshotNum
+  - variable: defaultSettings.snapshotMaxCount
     label: Snapshot Maximum Count
     description: 'Maximum snapshot count for a volume. The value should be between 2 to 250.'
     group: "Longhorn Default Settings"
