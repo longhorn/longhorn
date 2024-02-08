@@ -320,7 +320,7 @@ defaultSettings:
   # -- Setting that temporarily prevents all attempts to purge volume snapshots.
   disableSnapshotPurge: ~
   # -- Maximum snapshot count for a volume. The value should be between 2 to 250
-  maxSnapshotNum: ~
+  snapshotMaxCount: ~
 
 privateRegistry:
   # -- Setting that allows you to create a private registry secret.
