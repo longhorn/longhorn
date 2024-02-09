@@ -119,7 +119,9 @@ service:
     nodePort: ""
 
 persistence:
-  # -- Setting that allows you to specify the default Longhorn StorageClass.
+  # -- Automatically create a default Longhorn StorageClass with the configured parameters.
+  enableDefaultStorageClass: true
+  # -- Configure the default Longhorn StorageClass to be the cluster default.
   defaultClass: true
   # -- Filesystem type of the default Longhorn StorageClass.
   defaultFsType: ext4

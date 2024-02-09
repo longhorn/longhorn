@@ -1,3 +1,4 @@
+{{- if .Values.persistence.enableDefaultStorageClass }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -45,3 +46,4 @@ data:
       {{- if .Values.persistence.defaultNodeSelector.enable }}
       nodeSelector: "{{ .Values.persistence.defaultNodeSelector.selector }}"
       {{- end }}
+{{- end }}

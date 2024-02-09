@@ -139,13 +139,14 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.backingImage.enable | bool | `false` | Setting that allows you to use a backing image in a Longhorn StorageClass. |
 | persistence.backingImage.expectedChecksum | string | `nil` | Expected SHA-512 checksum of a backing image used in a Longhorn StorageClass. |
 | persistence.backingImage.name | string | `nil` | Backing image to be used for creating and restoring volumes in a Longhorn StorageClass. When no backing images are available, specify the data source type and parameters that Longhorn can use to create a backing image. |
-| persistence.defaultClass | bool | `true` | Setting that allows you to specify the default Longhorn StorageClass. |
+| persistence.defaultClass | bool | `true` | Configure the default Longhorn StorageClass to be the cluster default. |
 | persistence.defaultClassReplicaCount | int | `3` | Replica count of the default Longhorn StorageClass. |
 | persistence.defaultDataLocality | string | `"disabled"` | Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort") |
 | persistence.defaultFsType | string | `"ext4"` | Filesystem type of the default Longhorn StorageClass. |
 | persistence.defaultMkfsParams | string | `""` | mkfs parameters of the default Longhorn StorageClass. |
 | persistence.defaultNodeSelector.enable | bool | `false` | Setting that allows you to enable the node selector for the default Longhorn StorageClass. |
 | persistence.defaultNodeSelector.selector | string | `""` | Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast") |
+| persistence.enableDefaultStorageClass | bool | `true` | Automatically create a default Longhorn StorageClass with the configured parameters. |
 | persistence.migratable | bool | `false` | Setting that allows you to enable live migration of a Longhorn volume from one node to another. |
 | persistence.nfsOptions | string | `""` | Set NFS mount options for Longhorn StorageClass for RWX volumes |
 | persistence.reclaimPolicy | string | `"Delete"` | Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete") |
