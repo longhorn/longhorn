@@ -1367,7 +1367,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: engines.longhorn.io
@@ -1380,6 +1379,7 @@ spec:
     shortNames:
     - lhe
     singular: engine
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1738,7 +1738,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: instancemanagers.longhorn.io
@@ -1751,6 +1750,7 @@ spec:
     shortNames:
     - lhim
     singular: instancemanager
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2518,7 +2518,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: replicas.longhorn.io
@@ -2531,6 +2530,7 @@ spec:
     shortNames:
     - lhr
     singular: replica
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2757,7 +2757,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: settings.longhorn.io
@@ -2770,6 +2769,7 @@ spec:
     shortNames:
     - lhs
     singular: setting
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
