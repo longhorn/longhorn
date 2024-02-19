@@ -319,7 +319,12 @@ verlt() {
     ! verlte "$2" "$1"
 }
 
+kernel_in_range() {
+    verlte "$2" "$1" && verlt "$1" "$3"
+}
+
 check_kernel_release() {
+<<<<<<< HEAD
   local pods=$(kubectl get pods -o name -l app=longhorn-environment-check)
 
   recommended_kernel_release="5.8"
@@ -331,6 +336,30 @@ check_kernel_release() {
       warn "Node $node has outdated kernel release: $kernel. Recommending kernel release >= $recommended_kernel_release"
     fi
   done
+=======
+  local pod=$1
+  local node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
+
+  recommended_kernel_release="5.8"
+
+  local kernel=$(detect_node_kernel_release ${pod})
+
+  if verlt "$kernel" "$recommended_kernel_release"  ; then
+    warn "Node $node has outdated kernel release: $kernel. Recommending kernel release >= $recommended_kernel_release"
+    return 1
+  fi
+
+  local broken_kernel=("5.15.0-94" "6.5.6")
+  local fixed_kernel=("5.15.0-100" "6.5.7")
+
+  for i in ${!broken_kernel[@]}; do
+      if kernel_in_range "$kernel" "${broken_kernel[$i]}" "${fixed_kernel[$i]}" ; then
+        warn "Node $node has a kernel version $kernel known to have a breakage that affects Longhorn.  See description and solution at https://longhorn.io/kb/troubleshooting-rwx-volume-fails-to-attached-caused-by-protocol-not-supported.md"
+        return 1
+      fi
+  done
+
+>>>>>>> 0ab860a (fix(env_check): Add check for kernel ranges known to have NFS issues.)
 }
 
 check_iscsid() {
