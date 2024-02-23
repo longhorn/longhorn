@@ -2255,6 +2255,12 @@ spec:
                       - filesystem
                       - block
                       type: string
+                    diskDriver:
+                      enum:
+                      - ""
+                      - auto
+                      - aio
+                      type: string
                     evictionRequested:
                       type: boolean
                     path:
@@ -2339,7 +2345,13 @@ spec:
                       type: string
                     diskUUID:
                       type: string
+                    diskDriver:
+                      type: string
+                    diskName:
+                      type: string
                     filesystemType:
+                      type: string
+                    diskPath:
                       type: string
                     scheduledReplica:
                       additionalProperties:
