@@ -37,7 +37,7 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 https://github.com/longhorn/longhorn/releases
 
-| Release   | Current Version | First Stable Version | Status         | Release Note (Changelog)                                       | Important Note                                              | Active Maintenance |
+| Release   | Current Version | First Stable Version | Status         | Release Note                                                   | Important Note                                              | Supported          |
 |-----------|-----------------|----------------------|----------------|----------------------------------------------------------------|-------------------------------------------------------------| -------------------|
 | **1.6***  | 1.6.0           | N/A                  | Latest         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.0) | [🔗](https://longhorn.io/docs/1.6.0/deploy/important-notes) | ✅                 |
 | **1.5***  | 1.5.4           | 1.5.3 (Nov 17, 2023) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.3) | [🔗](https://longhorn.io/docs/1.5.3/deploy/important-notes) | ✅                 |
