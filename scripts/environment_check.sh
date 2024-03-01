@@ -313,7 +313,7 @@ check_kernel_release() {
 
   for i in ${!broken_kernel[@]}; do
       if kernel_in_range "$kernel" "${broken_kernel[$i]}" "${fixed_kernel[$i]}" ; then
-        warn "Node $node has a kernel version $kernel known to have a breakage that affects Longhorn.  See description and solution at https://longhorn.io/kb/troubleshooting-rwx-volume-fails-to-attached-caused-by-protocol-not-supported.md"
+        warn "Node $node has a kernel version $kernel known to have a breakage that affects Longhorn.  See description and solution at https://longhorn.io/kb/troubleshooting-rwx-volume-fails-to-attached-caused-by-protocol-not-supported"
         return 1
       fi
   done
