@@ -340,7 +340,7 @@ check_multipathd() {
   kubectl exec $pod -- nsenter --mount=/proc/1/ns/mnt -- bash -c "systemctl status --no-pager multipathd.service" > /dev/null 2>&1
   if [ $? = 0 ]; then
     node=$(kubectl get ${pod} --no-headers -o=custom-columns=:.spec.nodeName)
-    warn "multipathd is running on ${node}"
+    warn "multipathd is running on ${node} known to have a breakage that affects Longhorn.  See description and solution at https://longhorn.io/kb/troubleshooting-volume-with-multipath"
     return 1
   fi
 }
