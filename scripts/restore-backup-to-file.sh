@@ -19,6 +19,8 @@ usage () {
    echo "  -v, --version                (Required) Longhorn version, e.g., v1.3.2"
    echo "      --aws-access-key         (Optional) AWS credentials access key"
    echo "      --aws-secret-access-key  (Optional) AWS credentials access secret key"
+   echo "      --cifs-username          (Optional) CIFS credentials username"
+   echo "      --cifs-password          (Optional) CIFS credentials password"
    echo "  -b, --backing-file           (Optional) backing image. e.g., /tmp/backingfile.qcow2"
    echo "  -h, --help                   Usage message"
 }
@@ -39,6 +41,16 @@ while [[ "$#" -gt 0 ]]; do
     ;;
     --aws-secret-access-key)
     aws_secret_access_key="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --cifs-username)
+    cifs_username="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    --cifs-password)
+    cifs_password="$2"
     shift # past argument
     shift # past value
     ;;
@@ -92,7 +104,10 @@ fi
 if [[ "${backup_url}" =~ ^[Ss]3 ]]; then
   CUSTOMIZED_ARGS="-e AWS_ACCESS_KEY_ID="${aws_access_key}" -e AWS_SECRET_ACCESS_KEY="${aws_secret_access_key}" "
 else
-  CUSTOMIZED_ARGS="--cap-add SYS_ADMIN --security-opt apparmor:unconfined"
+  CUSTOMIZED_ARGS="--cap-add SYS_ADMIN --security-opt apparmor:unconfined --cap-add DAC_READ_SEARCH"
+fi
+if [[ "${backup_url}" =~ ^cifs ]]; then
+  CUSTOMIZED_ARGS+=" -e CIFS_USERNAME=${cifs_username} -e CIFS_PASSWORD=${cifs_password} "
 fi
 
 # Start restoring a backup to an image file. 
