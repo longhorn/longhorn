@@ -34,15 +34,25 @@ Main changes and tasks for OCP are:
 - General Feature/Issue Thread
   - [[FEATURE] Deploying Longhorn on OKD/Openshift](https://github.com/longhorn/longhorn/issues/1831)
 - 4.10 / 1.23:
+  - Longhorn Versions Tested:
+    - 1.3.0  
   - 4.10.0-0.okd-2022-03-07-131213 to 4.10.0-0.okd-2022-07-09-073606
     - Tested, No Known Issues
 - 4.11 / 1.24:
+  - Longhorn Versions Tested:
+    - 1.3.0
+    - 1.3.1  
+    - 1.3.2  
+    - 1.4.0
   - 4.11.0-0.okd-2022-07-27-052000 to 4.11.0-0.okd-2022-11-19-050030
     - Tested, No Known Issues
   - 4.11.0-0.okd-2022-12-02-145640, 4.11.0-0.okd-2023-01-14-152430:
     - Workaround: [[BUG] Volumes Stuck in Attach/Detach Loop](https://github.com/longhorn/longhorn/issues/4988)
       - [MachineConfig Patch](https://github.com/longhorn/longhorn/issues/4988#issuecomment-1345676772)
 - 4.12 / 1.25:
+  - Longhorn Versions Tested:
+    - 1.4.0
+    - 1.4.1
   - 4.12.0-0.okd-2022-12-05-210624 to 4.12.0-0.okd-2023-01-20-101927
     - Tested, No Known Issues
   - 4.12.0-0.okd-2023-01-21-055900 to 4.12.0-0.okd-2023-02-18-033438:
@@ -51,11 +61,28 @@ Main changes and tasks for OCP are:
   - 4.12.0-0.okd-2023-03-05-022504 - 4.12.0-0.okd-2023-04-16-041331:
     - Tested, No Known Issues
 - 4.13 / 1.26:
-  - 4.13.0-0.okd-2023-05-03-001308 - 4.13.0-0.okd-2023-08-18-135805:
+  - Longhorn Versions Tested:
+    - 1.4.1
+    - 1.4.2
+    - 1.5.0
+    - 1.5.1
+  - 4.13.0-0.okd-2023-05-03-001308 - 4.13.0-0.okd-2023-09-30-084937:
     - Tested, No Known Issues
 - 4.14 / 1.27:
-  - 4.14.0-0.okd-2023-08-12-022330 - 4.14.0-0.okd-2023-10-28-073550:
+  - Longhorn Versions Tested:
+    - 1.5.1
+    - 1.5.3
+  - 4.14.0-0.okd-2023-08-12-022330 - 4.14.0-0.okd-2024-01-26-175629:
     - Tested, No Known Issues
+- 4.15 / 1.28:
+  - Longhorn Versions Tested:
+    - 1.5.3
+    - 1.6.0
+  - 4.15.0-0.okd-2024-01-27-070424 - 4.15.0-0.okd-2024-02-23-163410:
+    - Tested, No Known Issues
+      - Note: 4.15 requires an additional yaml for UI Login, provided under ```chart/templates/deployment-ui: secret/longhorn-ui-service-account```
+        - <https://issues.redhat.com/browse/OCPBUGS-30319>
+
 
 ## Preparing Nodes (Optional)
 
