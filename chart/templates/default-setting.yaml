@@ -227,3 +227,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotMaxCount) }}
     snapshot-max-count: {{ .Values.defaultSettings.snapshotMaxCount }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineLogLevel) }}
+    v2-data-engine-log-level: {{ .Values.defaultSettings.v2DataEngineLogLevel }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineLogFlags) }}
+    v2-data-engine-log-flags: {{ .Values.defaultSettings.v2DataEngineLogFlags }}
+    {{- end }}

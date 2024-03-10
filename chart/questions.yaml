@@ -695,6 +695,25 @@ questions:
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: int
   default: "2048"
+- variable: defaultSettings.v2DataEngineLogLevel
+  label: V2 Data Engine
+  description: "This allows users to configure the log level if SPDK target daemon (spdk_tgt) of V2 Data Engine."
+  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  type: enum
+  options:
+  - "Disabled"
+  - "Error"
+  - "Warn"
+  - "Notice"
+  - "Info"
+  - "Debug"
+  default: "Notice"
+- variable: defaultSettings.v2DataEngineLogFlags
+  label: V2 Data Engine
+  description: "This allows users to configure the log flags if SPDK target daemon (spdk_tgt) of V2 Data Engine."
+  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  type: string
+  default:
 - variable: defaultSettings.offlineReplicaRebuilding
   label: Offline Replica Rebuilding
   description: "Setting that allows rebuilding of offline replicas for volumes using the V2 Data Engine."
