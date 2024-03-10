@@ -321,6 +321,10 @@ defaultSettings:
   disableSnapshotPurge: ~
   # -- Maximum snapshot count for a volume. The value should be between 2 to 250
   snapshotMaxCount: ~
+  # -- This allows users to configure the log level if SPDK target daemon (spdk_tgt) of V2 Data Engine.
+  v2DataEngineLogLevel: ~
+  # This allows users to configure the log flags if SPDK target daemon (spdk_tgt) of V2 Data Engine.
+  v2DataEngineLogFlags: ~
 
 privateRegistry:
   # -- Setting that allows you to create a private registry secret.
