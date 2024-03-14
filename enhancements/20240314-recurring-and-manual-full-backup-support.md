@@ -16,11 +16,15 @@ There is a chance that the previous backup blocks on the backupstore are corrupt
 
 ### Goals
 
-- Add a new fields `Parameters` to `RecurringJob` and `Backup`
-  - `backup-mode`: used in `Backup` CR to trigger the full backup (Options: `"full"`, `"incremental"`, default to `"incremental"` for always incremental)
+- Add a new fields `Parameters` to `RecurringJob`
   - `full-backup-interval`: used in `RecurringJob - Backup Type` to execute full backup every N incremental backups (default to 0 for always incremental)
+    - For example, if N is 5, then after 5 regular incremental backups, the job will perform full backup for the 6th backup 
+- Add a new fields `BackupMode` to `Backup`
+  - `BackupMode`: used in `Backup` CR to trigger the full backup (Options: `"full"`, `"incremental"`, default to `"incremental"` for always incremental)
 - When doing full backup, Longhorn will backup **all the current blocks** of the volume and **overwrite them** on the backupstore even if those blocks already exists on the backupstore.
 - Collect metrics of `newly upload data size` and `overwritten data size` for user to better understand the cost.
+  - `newly upload data size`: the data size uploaded to the backupstore in this backup
+  - `overwritten data size`: the data size uploaded to the backupstore and overwritten the exists block on the backupstore.
 
 ## Proposal
 
