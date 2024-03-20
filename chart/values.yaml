@@ -2,6 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 global:
+  # -- Toleration for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.
+  tolerations: []
+  # -- Node selector for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.
+  nodeSelector: {}
   cattle:
     # -- Default system registry.
     systemDefaultRegistry: ""
@@ -341,7 +345,7 @@ longhornManager:
     format: plain
   # -- PriorityClass for Longhorn Manager.
   priorityClass: *defaultPriorityClassNameRef
-  # -- Toleration for Longhorn Manager on nodes allowed to run Longhorn Manager.
+  # -- Toleration for Longhorn Manager on nodes allowed to run Longhorn components.
   tolerations: []
   ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
   ## and uncomment this example block
