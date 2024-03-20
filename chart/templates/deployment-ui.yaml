@@ -60,22 +60,22 @@ spec:
       {{- if .Values.longhornUI.priorityClass }}
       priorityClassName: {{ .Values.longhornUI.priorityClass | quote }}
       {{- end }}
-      {{- if or .Values.longhornUI.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.global.tolerations .Values.longhornUI.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
 {{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
         {{- end }}
-        {{- if .Values.longhornUI.tolerations }}
-{{ toYaml .Values.longhornUI.tolerations | indent 6 }}
+        {{- if or .Values.global.tolerations .Values.longhornUI.tolerations }}
+{{ default .Values.global.tolerations .Values.longhornUI.tolerations | toYaml | indent 6 }}
         {{- end }}
       {{- end }}
-      {{- if or .Values.longhornUI.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.global.nodeSelector .Values.longhornUI.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
 {{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
         {{- end }}
-        {{- if .Values.longhornUI.nodeSelector }}
-{{ toYaml .Values.longhornUI.nodeSelector | indent 8 }}
+        {{- if or .Values.global.nodeSelector .Values.longhornUI.nodeSelector }}
+{{ default .Values.global.nodeSelector .Values.longhornUI.nodeSelector | toYaml | indent 8 }}
         {{- end }}
       {{- end }}
 ---

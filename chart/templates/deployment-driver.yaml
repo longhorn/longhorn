@@ -95,22 +95,22 @@ spec:
       {{- if .Values.longhornDriver.priorityClass }}
       priorityClassName: {{ .Values.longhornDriver.priorityClass | quote }}
       {{- end }}
-      {{- if or .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.global.tolerations .Values.longhornDriver.tolerations .Values.global.cattle.windowsCluster.enabled }}
       tolerations:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
 {{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
         {{- end }}
-        {{- if .Values.longhornDriver.tolerations }}
-{{ toYaml .Values.longhornDriver.tolerations | indent 6 }}
+        {{- if or .Values.global.tolerations .Values.longhornDriver.tolerations }}
+{{ default .Values.global.tolerations .Values.longhornDriver.tolerations | toYaml | indent 6 }}
         {{- end }}
       {{- end }}
-      {{- if or .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      {{- if or .Values.global.nodeSelector .Values.longhornDriver.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
       nodeSelector:
         {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
 {{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
         {{- end }}
-        {{- if .Values.longhornDriver.nodeSelector }}
-{{ toYaml .Values.longhornDriver.nodeSelector | indent 8 }}
+        {{- if or .Values.global.nodeSelector .Values.longhornDriver.nodeSelector }}
+{{ default .Values.global.nodeSelector .Values.longhornDriver.nodeSelector | toYaml | indent 8 }}
         {{- end }}
       {{- end }}
       serviceAccountName: longhorn-service-account
