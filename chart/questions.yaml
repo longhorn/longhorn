@@ -710,7 +710,7 @@ questions:
   default: "Notice"
 - variable: defaultSettings.v2DataEngineLogFlags
   label: V2 Data Engine
-  description: "This allows users to configure the log flags if SPDK target daemon (spdk_tgt) of V2 Data Engine."
+  description: "Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: string
   default:
