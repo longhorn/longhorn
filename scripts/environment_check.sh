@@ -79,23 +79,23 @@ set_packages_and_check_cmd() {
   case $OS in
   *"debian"* | *"ubuntu"* )
     CHECK_CMD='dpkg -l | grep -w'
-    PACKAGES=(nfs-common open-iscsi)
+    PACKAGES=(nfs-common open-iscsi cryptsetup dmsetup)
     ;;
   *"centos"* | *"fedora"* | *"rocky"* | *"ol"* )
     CHECK_CMD='rpm -q'
-    PACKAGES=(nfs-utils iscsi-initiator-utils)
+    PACKAGES=(nfs-utils iscsi-initiator-utils cryptsetup device-mapper)
     ;;
   *"suse"* )
     CHECK_CMD='rpm -q'
-    PACKAGES=(nfs-client open-iscsi)
+    PACKAGES=(nfs-client open-iscsi cryptsetup device-mapper)
     ;;
   *"arch"* )
     CHECK_CMD='pacman -Q'
-    PACKAGES=(nfs-utils open-iscsi)
+    PACKAGES=(nfs-utils open-iscsi cryptsetup device-mapper)
     ;;
   *"gentoo"* )
     CHECK_CMD='qlist -I'
-    PACKAGES=(net-fs/nfs-utils sys-block/open-iscsi)
+    PACKAGES=(net-fs/nfs-utils sys-block/open-iscsi sys-fs/cryptsetup sys-fs/lvm2)
     ;;
   *)
     CHECK_CMD=''
@@ -313,7 +313,7 @@ check_kernel_release() {
 
   for i in ${!broken_kernel[@]}; do
       if kernel_in_range "$kernel" "${broken_kernel[$i]}" "${fixed_kernel[$i]}" ; then
-        warn "Node $node has a kernel version $kernel known to have a breakage that affects Longhorn.  See description and solution at https://longhorn.io/kb/troubleshooting-rwx-volume-fails-to-attached-caused-by-protocol-not-supported"
+        warn "Node $node has a kernel version $kernel known to have a breakage that affects Longhorn. See description and solution at https://longhorn.io/kb/troubleshooting-rwx-volume-fails-to-attached-caused-by-protocol-not-supported"
         return 1
       fi
   done
