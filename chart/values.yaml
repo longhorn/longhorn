@@ -503,10 +503,6 @@ metrics:
     relabelings: []
     # -- Settings to change Prometheus MetricRelabelConfigs to apply to samples before ingestion.
     metricRelabelings: []
-    # -- Settings to change Prometheus ServiceMonitor tlsConfig.
-    tlsConfig: {}
-    # -- Settings to change Prometheus ServiceMonitor scheme.
-    scheme: ""
 
 ## openshift settings
 openshift:
