@@ -490,7 +490,7 @@ serviceAccount:
 metrics:
   serviceMonitor:
     # -- Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components.
-    enabled: true
+    enabled: false
     # -- Setting that add additional labels.
     additionalLabels: {}
     # -- Settings that allows to add annotations.
