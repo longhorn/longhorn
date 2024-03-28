@@ -393,6 +393,9 @@ spec:
                       type: string
                     uuid:
                       type: string
+                    virtualSize:
+                      format: int64
+                      type: integer
                   type: object
                 nullable: true
                 type: object
@@ -496,6 +499,10 @@ spec:
       jsonPath: .status.size
       name: Size
       type: string
+    - description: The virtual size of the image (may be larger than file size)
+      jsonPath: .status.virtualSize
+      name: VirtualSize
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -563,6 +570,10 @@ spec:
                 type: integer
               uuid:
                 type: string
+              virtualSize:
+                description: Virtual size of image, which may be larger than physical size. Will be zero until known (e.g. while a backing image is uploading)
+                format: int64
+                type: integer
             type: object
         type: object
     served: true
