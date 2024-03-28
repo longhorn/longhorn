@@ -158,6 +158,8 @@ metadata:
   name: longhorn-frontend
   namespace: {{ include "release_namespace" . }}
 spec:
+  ipFamilies:
+  - IPv4
   {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
   type: ClusterIP
   {{- else }}
