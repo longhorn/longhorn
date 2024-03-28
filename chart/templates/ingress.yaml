@@ -22,7 +22,7 @@ spec:
     http:
       paths:
         - path: {{ default "" .Values.ingress.path }}
-          pathType: ImplementationSpecific
+          pathType: {{ default "ImplementationSpecific" .Values.ingress.pathType }}
           backend:
             service:
               name: longhorn-frontend
