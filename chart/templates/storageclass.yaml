@@ -45,6 +45,9 @@ data:
       {{- if .Values.persistence.defaultNodeSelector.enable }}
       nodeSelector: "{{ .Values.persistence.defaultNodeSelector.selector }}"
       {{- end }}
+      {{- if .Values.persistence.defaultDiskSelector.enable }}
+      diskSelector: "{{ .Values.persistence.defaultDiskSelector.selector }}"
+      {{- end }}
       {{- if .Values.persistence.removeSnapshotsDuringFilesystemTrim }}
       unmapMarkSnapChainRemoved: "{{ .Values.persistence.removeSnapshotsDuringFilesystemTrim }}"
       {{- end }}

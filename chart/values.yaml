@@ -159,6 +159,11 @@ persistence:
     enable: false
     # -- Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast")
     selector: ""
+  defaultDiskSelector:
+    # -- Setting that allows you to enable the disk selector for the default Longhorn StorageClass.
+    enable: false
+    # -- Disk selector for the default Longhorn StorageClass. Longhorn uses only disks with the specified tags for storing volume data. (Examples: "sdd")
+    selector: ""
   # -- Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
   removeSnapshotsDuringFilesystemTrim: ignored
 

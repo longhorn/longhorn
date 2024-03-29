@@ -798,6 +798,20 @@ questions:
     group: "Longhorn Storage Class Settings"
     type: string
     default:
+- variable: persistence.defaultDiskSelector.enable
+  description: "Setting that allows you to enable the disk selector for the default Longhorn StorageClass."
+  group: "Longhorn Storage Class Settings"
+  label: Enable Storage Class Disk Selector
+  type: boolean
+  default: false
+  show_subquestion_if: true
+  subquestions:
+  - variable: persistence.defaultDiskSelector.selector
+    label: Storage Class Disk Selector
+    description: 'Disk selector for the default Longhorn StorageClass. Longhorn uses only disks with the specified tags for storing volume data. (Examples: "ssd")'
+    group: "Longhorn Storage Class Settings"
+    type: string
+    default:
 - variable: persistence.backingImage.enable
   description: "Setting that allows you to use a backing image in a Longhorn StorageClass."
   group: "Longhorn Storage Class Settings"
