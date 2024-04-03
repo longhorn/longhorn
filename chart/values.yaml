@@ -470,6 +470,8 @@ metrics:
   serviceMonitor:
     # -- Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components.
     enabled: false
+    # -- Setting that defines any metric relabelings
+    metricRelabelings: []
 
 ## openshift settings
 openshift:
