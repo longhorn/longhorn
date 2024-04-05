@@ -180,6 +180,18 @@ csi:
   # -- Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value ("3").
   snapshotterReplicaCount: ~
 
+## Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## delete the `{}` in the line and use, e.g.
+# resources:
+#   requests:
+#     cpu: 2
+#     memory: 512Mi
+#   limits:
+#     cpu: 3
+#     memory: 1024Mi
+resources:
+  manager: {}
+
 defaultSettings:
   # -- Endpoint used to access the backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")
   backupTarget: ~

@@ -87,6 +87,8 @@ spec:
         volumeMounts:
           - mountPath: /etc/tls/private
             name: longhorn-ui-tls
+        resources:
+          {{- toYaml .Values.resources.ui | nindent 12 }}
       {{- end }}
       {{- end }}
       - name: longhorn-ui
@@ -107,6 +109,8 @@ spec:
             value: "http://longhorn-backend:9500"
           - name: LONGHORN_UI_PORT
             value: "8000"
+        resources:
+          {{- toYaml .Values.resources.ui | nindent 12 }}
       volumes:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}

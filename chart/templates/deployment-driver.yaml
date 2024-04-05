@@ -18,6 +18,8 @@ spec:
         - name: wait-longhorn-manager
           image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
+          resources:
+            {{- toYaml .Values.resources.manager | nindent 12 }}
       containers:
         - name: longhorn-driver-deployer
           image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
@@ -94,6 +96,8 @@ spec:
           - name: go-cover-dir
             mountPath: /go-cover-dir/
           {{- end }}
+          resources:
+            {{- toYaml .Values.resources.manager | nindent 12 }}
 
       {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:
