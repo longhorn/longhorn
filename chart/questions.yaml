@@ -166,6 +166,18 @@ questions:
     type: string
     label: Longhorn CSI Liveness Probe Image Tag
     group: "Longhorn CSI Driver Images"
+  - variable: image.openshift.oauthProxy.repository
+    default: longhornio/openshift-origin-oauth-proxy
+    description: "Repository for the OAuth Proxy image. This setting applies only to OpenShift users"
+    type: string
+    label: OpenShift OAuth Proxy Image Repository
+    group: "OpenShift Images"
+  - variable: image.openshift.oauthProxy.tag
+    default: 4.14
+    description: "Tag for the OAuth Proxy image. This setting applies only to OpenShift users. Specify OCP/OKD version 4.1 or later."
+    type: string
+    label: OpenShift OAuth Proxy Image Tag
+    group: "OpenShift Images"
 - variable: privateRegistry.registryUrl
   label: Private registry URL
   description: "URL of a private registry. When unspecified, Longhorn uses the default system registry."
