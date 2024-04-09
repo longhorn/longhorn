@@ -4,7 +4,7 @@ UPGRADE_RESPONDER_REPO="https://github.com/longhorn/upgrade-responder.git"
 UPGRADE_RESPONDER_REPO_BRANCH="master"
 UPGRADE_RESPONDER_VALUE_YAML="upgrade-responder-value.yaml"
 UPGRADE_RESPONDER_IMAGE_REPO="longhornio/upgrade-responder"
-UPGRADE_RESPONDER_IMAGE_TAG="master-head"
+UPGRADE_RESPONDER_IMAGE_TAG="longhorn-head"
 
 INFLUXDB_URL="http://influxdb.default.svc.cluster.local:8086"
 
@@ -227,7 +227,7 @@ configMap:
         "longhornSettingV1DataEngine": {
           "dataType": "string",
           "maxLen": 200
-        }
+        },
         "longhornSettingV2DataEngine": {
           "dataType": "string",
           "maxLen": 200
