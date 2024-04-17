@@ -39,7 +39,7 @@ https://github.com/longhorn/longhorn/releases
 
 | Release   | Current Version | First Stable Version | Status         | Release Note                                                   | Important Note                                              | Supported          |
 |-----------|-----------------|----------------------|----------------|----------------------------------------------------------------|-------------------------------------------------------------| -------------------|
-| **1.6***  | 1.6.1           | 1.6.1 (Mar 29, 2023) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.1) | [🔗](https://longhorn.io/docs/1.6.0/deploy/important-notes) | ✅                 |
+| **1.6***  | 1.6.1           | 1.6.1 (Mar 29, 2024) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.1) | [🔗](https://longhorn.io/docs/1.6.0/deploy/important-notes) | ✅                 |
 | **1.5***  | 1.5.4           | 1.5.3 (Nov 17, 2023) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.3) | [🔗](https://longhorn.io/docs/1.5.3/deploy/important-notes) | ✅                 |
 | 1.4       | 1.4.4           | 1.4.1 (Mar 13, 2023) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.4) | [🔗](https://longhorn.io/docs/1.4.4/deploy/important-notes) |                    |
 | 1.3       | 1.3.3           | 1.3.2                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.3) | [🔗](https://longhorn.io/docs/1.3.3/deploy/important-notes) |                    |
