@@ -89,7 +89,7 @@ questions:
     label: Longhorn Support Bundle Kit Image Repository
     group: "Longhorn Images Settings"
   - variable: image.longhorn.supportBundleKit.tag
-    default: v0.0.33
+    default: v0.0.36
     description: "Tag for the Longhorn Support Bundle Manager image."
     type: string
     label: Longhorn Support Bundle Kit Image Tag
@@ -166,6 +166,18 @@ questions:
     type: string
     label: Longhorn CSI Liveness Probe Image Tag
     group: "Longhorn CSI Driver Images"
+  - variable: image.openshift.oauthProxy.repository
+    default: longhornio/openshift-origin-oauth-proxy
+    description: "Repository for the OAuth Proxy image. This setting applies only to OpenShift users"
+    type: string
+    label: OpenShift OAuth Proxy Image Repository
+    group: "OpenShift Images"
+  - variable: image.openshift.oauthProxy.tag
+    default: 4.14
+    description: "Tag for the OAuth Proxy image. This setting applies only to OpenShift users. Specify OCP/OKD version 4.1 or later."
+    type: string
+    label: OpenShift OAuth Proxy Image Tag
+    group: "OpenShift Images"
 - variable: privateRegistry.registryUrl
   label: Private registry URL
   description: "URL of a private registry. When unspecified, Longhorn uses the default system registry."
@@ -260,6 +272,14 @@ questions:
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
+  - variable: defaultSettings.snapshotMaxCount
+    label: Snapshot Maximum Count
+    description: 'Maximum snapshot count for a volume. The value should be between 2 to 250.'
+    group: "Longhorn Default Settings"
+    type: int
+    min: 2
+    max: 250
+    default: 250
   - variable: defaultSettings.createDefaultDiskLabeledNodes
     label: Create Default Disk on Labeled Nodes
     description: 'Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster.'
@@ -687,6 +707,25 @@ questions:
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: int
   default: "2048"
+- variable: defaultSettings.v2DataEngineLogLevel
+  label: V2 Data Engine
+  description: "Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine."
+  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  type: enum
+  options:
+  - "Disabled"
+  - "Error"
+  - "Warn"
+  - "Notice"
+  - "Info"
+  - "Debug"
+  default: "Notice"
+- variable: defaultSettings.v2DataEngineLogFlags
+  label: V2 Data Engine
+  description: "Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine."
+  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  type: string
+  default:
 - variable: defaultSettings.offlineReplicaRebuilding
   label: Offline Replica Rebuilding
   description: "Setting that allows rebuilding of offline replicas for volumes using the V2 Data Engine."

@@ -314,6 +314,9 @@ spec:
                       type: string
                     uuid:
                       type: string
+                    virtualSize:
+                      format: int64
+                      type: integer
                   type: object
                 nullable: true
                 type: object
@@ -413,6 +416,10 @@ spec:
       jsonPath: .status.size
       name: Size
       type: string
+    - description: The virtual size of the image (may be larger than file size)
+      jsonPath: .status.virtualSize
+      name: VirtualSize
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -481,6 +488,10 @@ spec:
                 type: integer
               uuid:
                 type: string
+              virtualSize:
+                description: Virtual size of image, which may be larger than physical size. Will be zero until known (e.g. while a backing image is uploading)
+                format: int64
+                type: integer
             type: object
         type: object
     served: true
@@ -1367,7 +1378,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: engines.longhorn.io
@@ -1380,6 +1390,7 @@ spec:
     shortNames:
     - lhe
     singular: engine
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1655,6 +1666,11 @@ spec:
                   type: string
                 nullable: true
                 type: object
+              replicaTransitionTimeMap:
+                additionalProperties:
+                  type: string
+                description: ReplicaTransitionTimeMap records the time a replica in ReplicaModeMap transitions from one mode to another (or from not being in the ReplicaModeMap to being in it). This information is sometimes required by other controllers (e.g. the volume controller uses it to determine the correct value for replica.Spec.lastHealthyAt).
+                type: object
               restoreStatus:
                 additionalProperties:
                   properties:
@@ -1738,7 +1754,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: instancemanagers.longhorn.io
@@ -1751,6 +1766,7 @@ spec:
     shortNames:
     - lhim
     singular: instancemanager
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2116,6 +2132,12 @@ spec:
                       - filesystem
                       - block
                       type: string
+                    diskDriver:
+                      enum:
+                      - ""
+                      - auto
+                      - aio
+                      type: string
                     evictionRequested:
                       type: boolean
                     path:
@@ -2200,7 +2222,13 @@ spec:
                       type: string
                     diskUUID:
                       type: string
+                    diskDriver:
+                      type: string
+                    diskName:
+                      type: string
                     filesystemType:
+                      type: string
+                    diskPath:
                       type: string
                     scheduledReplica:
                       additionalProperties:
@@ -2518,7 +2546,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: replicas.longhorn.io
@@ -2531,6 +2558,7 @@ spec:
     shortNames:
     - lhr
     singular: replica
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2651,20 +2679,20 @@ spec:
               evictionRequested:
                 type: boolean
               failedAt:
-                description: FailedAt is set when a running replica fails or when a running engine is unable to use a replica for any reason. FailedAt indicates the time the failure occurred. When FailedAt is set, a replica is likely to have useful (though possibly stale) data. A replica with FailedAt set must be rebuilt from a non-failed replica (or it can be used in a salvage if all replicas are failed). FailedAt is cleared before a rebuild or salvage.
+                description: FailedAt is set when a running replica fails or when a running engine is unable to use a replica for any reason. FailedAt indicates the time the failure occurred. When FailedAt is set, a replica is likely to have useful (though possibly stale) data. A replica with FailedAt set must be rebuilt from a non-failed replica (or it can be used in a salvage if all replicas are failed). FailedAt is cleared before a rebuild or salvage. FailedAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               hardNodeAffinity:
                 type: string
               healthyAt:
-                description: HealthyAt is set the first time a replica becomes read/write in an engine after creation or rebuild. HealthyAt indicates the time the last successful rebuild occurred. When HealthyAt is set, a replica is likely to have useful (though possibly stale) data. HealthyAt is cleared before a rebuild.
+                description: HealthyAt is set the first time a replica becomes read/write in an engine after creation or rebuild. HealthyAt indicates the time the last successful rebuild occurred. When HealthyAt is set, a replica is likely to have useful (though possibly stale) data. HealthyAt is cleared before a rebuild. HealthyAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               image:
                 type: string
               lastFailedAt:
-                description: LastFailedAt is always set at the same time as FailedAt. Unlike FailedAt, LastFailedAt is never cleared. LastFailedAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastFailedAt may already be healthy and in use again. However, because it is never cleared, it can be compared to LastHealthyAt to help prevent dangerous replica deletion in some corner cases.
+                description: LastFailedAt is always set at the same time as FailedAt. Unlike FailedAt, LastFailedAt is never cleared. LastFailedAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastFailedAt may already be healthy and in use again. However, because it is never cleared, it can be compared to LastHealthyAt to help prevent dangerous replica deletion in some corner cases. LastFailedAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               lastHealthyAt:
-                description: LastHealthyAt is set every time a replica becomes read/write in an engine. Unlike HealthyAt, LastHealthyAt is never cleared. LastHealthyAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastHealthyAt set may be in the middle of a rebuild. However, because it is never cleared, it can be compared to LastFailedAt to help prevent dangerous replica deletion in some corner cases.
+                description: LastHealthyAt is set every time a replica becomes read/write in an engine. Unlike HealthyAt, LastHealthyAt is never cleared. LastHealthyAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastHealthyAt set may be in the middle of a rebuild. However, because it is never cleared, it can be compared to LastFailedAt to help prevent dangerous replica deletion in some corner cases. LastHealthyAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               logRequested:
                 type: boolean
@@ -2757,7 +2785,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     longhorn-manager: ""
   name: settings.longhorn.io
@@ -2770,6 +2797,7 @@ spec:
     shortNames:
     - lhs
     singular: setting
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:

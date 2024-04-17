@@ -14,7 +14,7 @@
 
 Longhorn is a distributed block storage system for Kubernetes. Longhorn is cloud-native storage built using Kubernetes and container primitives.
 
-Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply`command or by using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
+Longhorn is lightweight, reliable, and powerful. You can install Longhorn on an existing Kubernetes cluster with one `kubectl apply` command or by using Helm charts. Once Longhorn is installed, it adds persistent volume support to the Kubernetes cluster.
 
 Longhorn implements distributed block storage using containers and microservices. Longhorn creates a dedicated storage controller for each block device volume and synchronously replicates the volume across multiple replicas stored on multiple nodes. The storage controller and replicas are themselves orchestrated using Kubernetes. Here are some notable features of Longhorn:
 
@@ -33,14 +33,15 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 > - __\<version\>*__ means the release branch is under active support and will have periodic follow-up patch releases.
 > - __Latest__ release means the version is the latest release of the newest release branch.
 > - __Stable__ release means the version is stable and has been widely adopted by users.
+> - Release EOL: One year after the first stable version. For the details, please refer to [Release Support](https://github.com/longhorn/longhorn/wiki/Release-Schedule-&-Support#release-support).
 
 https://github.com/longhorn/longhorn/releases
 
-| Release   | Current Version | First Stable Version | Status         | Release Note (Changelog)                                       | Important Note                                              | Active Maintenance |
+| Release   | Current Version | First Stable Version | Status         | Release Note                                                   | Important Note                                              | Supported          |
 |-----------|-----------------|----------------------|----------------|----------------------------------------------------------------|-------------------------------------------------------------| -------------------|
-| **1.6***  | 1.6.0           | N/A                  | Latest         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.0) | [🔗](https://longhorn.io/docs/1.6.0/deploy/important-notes) | ✅                 |
-| **1.5***  | 1.5.3           | 1.5.3                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.3) | [🔗](https://longhorn.io/docs/1.5.3/deploy/important-notes) | ✅                 |
-| **1.4***  | 1.4.4           | 1.4.1                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.4) | [🔗](https://longhorn.io/docs/1.4.4/deploy/important-notes) | ✅                 |
+| **1.6***  | 1.6.1           | 1.6.1 (Mar 29, 2024) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.1) | [🔗](https://longhorn.io/docs/1.6.0/deploy/important-notes) | ✅                 |
+| **1.5***  | 1.5.4           | 1.5.3 (Nov 17, 2023) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.3) | [🔗](https://longhorn.io/docs/1.5.3/deploy/important-notes) | ✅                 |
+| 1.4       | 1.4.4           | 1.4.1 (Mar 13, 2023) | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.4) | [🔗](https://longhorn.io/docs/1.4.4/deploy/important-notes) |                    |
 | 1.3       | 1.3.3           | 1.3.2                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.3) | [🔗](https://longhorn.io/docs/1.3.3/deploy/important-notes) |                    |
 | 1.2       | 1.2.6           | 1.2.3                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.2.6) | [🔗](https://longhorn.io/docs/1.2.6/deploy/important-notes) |                    |
 | 1.1       | 1.1.3           | 1.1.2                | Stable         | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.1.3) |                                                             |                    |
@@ -89,7 +90,7 @@ For the installation requirements, refer to the [Longhorn documentation.](https:
 
 > **NOTE**: 
 > Please note that the master branch is for the upcoming feature release development. 
-> For an official release installation or upgrade, please refer to the below ways.
+> For an official release installation or upgrade, please take a look at the ways below.
 
 Longhorn can be installed on a Kubernetes cluster in several ways:
 
@@ -105,33 +106,33 @@ The official Longhorn documentation is [here.](https://longhorn.io/docs)
 
 ## Discussion, Feedback
 
-If having any discussions or feedbacks, feel free to [file a discussion](https://github.com/longhorn/longhorn/discussions).
+If having any discussions or feedback, feel free to [file a discussion](https://github.com/longhorn/longhorn/discussions).
 
 ## Features Request, Bug Reporting
 
 If having any issues, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose).
 We have a weekly community issue review meeting to review all reported issues or enhancement requests.
 
-When creating a bug issue, please help upload the support bundle to the issue or send to
+When creating a bug issue, please help upload the support bundle to the issue or send it to
 [longhorn-support-bundle](mailto:longhorn-support-bundle@suse.com).
 
 ## Report Vulnerabilities
 
-If having any vulnerabilities found, please report to [longhorn-security](mailto:longhorn-security@suse.com).
+If any vulnerabilities are found, please report them to [longhorn-security](mailto:longhorn-security@suse.com).
 
 # Community
 
-Longhorn is open source software, so contributions are greatly welcome.
+Longhorn is open-source software, so contributions are greatly welcome.
 Please read [Code of Conduct](./CODE_OF_CONDUCT.md) and [Contributing Guideline](./CONTRIBUTING.md) before contributing.
 
-Contributing code is not the only way of contributing. We value feedbacks very much and many of the Longhorn features are originated from users' feedback.
-If you have any feedbacks, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose) and talk to the developers at the [CNCF](https://slack.cncf.io/) [#longhorn](https://cloud-native.slack.com/messages/longhorn) Slack channel.
+Contributing code is not the only way of contributing. We value feedback very much and many of the Longhorn features originated from users' feedback.
+If you have any feedback, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose) and talk to the developers at the [CNCF](https://slack.cncf.io/) [#longhorn](https://cloud-native.slack.com/messages/longhorn) Slack channel.
 
-If having any discussion, feedbacks, requests, issues or security reports, please follow below ways.
+If you are having any discussion, feedback, requests, issues, or security reports, please follow the below ways.
 We also have a [CNCF Slack channel: longhorn](https://cloud-native.slack.com/messages/longhorn) for discussion.
 
 ## Community Meeting and Office Hours
-Hosted by the core maintainers of Longhorn: 4th Friday of the every month at 09:00 (CET) or 16:00 (CST) at https://community.cncf.io/longhorn-community/.
+Hosted by the core maintainers of Longhorn: 4th Friday of every month at 09:00 (CET) or 16:00 (CST) at https://community.cncf.io/longhorn-community/.
 
 ## Longhorn Mailing List
 Stay up to date on the latest news and events: https://lists.cncf.io/g/cncf-longhorn
