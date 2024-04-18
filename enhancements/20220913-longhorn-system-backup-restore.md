@@ -44,7 +44,6 @@ https://github.com/longhorn/longhorn/issues/1455
   Instead, the user needs to run a system backup and restore it manually.
 - Delete resources none-existing in the system backup. We can probably enhance it later and make this an option for the
   users.
-- Support restore from `BackingImage`. **Dependent on https://github.com/longhorn/longhorn/issues/4165**
 
 ## Proposal
 ### System Backup
@@ -89,12 +88,13 @@ https://github.com/longhorn/longhorn/issues/1455
 
 ```
 
-                                            [ system-backup.zip ]   [ backups ]]]
+                                            [ system-backup.zip ]   [ backups ]
                                                             ^          ^
                                                             |          |
             [ system-backup.cfg ] <-- backupstore/system-backups/...   |
                                                             |          |
                                                             |       backupstore/volumes/
+                                                            |       backupstore/backing-images/
                                                             |          |
                                                             |          |
 [ SystemRestore ] ---> [[ longhorn-system-restore ]] ---> [ object-store ]
@@ -109,9 +109,9 @@ https://github.com/longhorn/longhorn/issues/1455
                                                             |          |
                                                             |          v               
                                                             | <--- [ Volume: from backup ]
-                                                            |
-                                                           V
-                                                    [ Resources ]]]]
+                                                            | <--- [ BackingImage: from backup]
+                                                            V
+                                                    [ Resources ]
 ```
 
 1. Introduce new [v1/systemrestores](#longhorn-manager-http-api) HTTP APIs.
@@ -380,6 +380,7 @@ system-backup.zip
     + recurringjobs.yaml
     + settings.yaml
     + volumes.yaml
+    + backingimages.yaml
 ```
 1. Create metadata file.
     ```golang
@@ -392,6 +393,8 @@ system-backup.zip
     	ManagerImage           string      `json:"managerImage"`
     }
     ```
+1. Backup the Volumes to the backup target.
+1. Backup the BackingImages to the backup target after the Volumes. We only backup those BackingImages not being used in this stage because we already backup the BackingImages used by the Volumes when backing up the Volumes automatically. 
 1. Generated the resource YAML files:
    <a name="system-backup-resources"></a>
    1. Generate the API extension resource YAML file.
@@ -415,6 +418,7 @@ system-backup.zip
       - Longhorn EngineImages.
       - Longhorn Volumes.
       - Longhorn RecurringJobs.
+      - Longhorn BackingImages.
 1. Archive the files to a zip file.
 1. Execute engine binary [system-backup upload](#engine-commands) to upload to the backup target
    `backupstore/system-backups/<longhorn-version>/<system-backup-name>`.
@@ -582,11 +586,12 @@ spec:
     - Deployments.
     - DaemonSets.
     - EngineImages.
-    - Volumes. Annotate with `longhorn.io/last-system-restore-backup` if the volume is restored from the backup.
+    - BackingImages
     - StorageClasses.
     - PersistentVolumes.
     - PersistentVolumeClaims.
     - RecurringJobs.
+1. Restore Volumes after all resources are restored because Volumes with BackingImages needs to wait until BackingImages are restored. Annotate with `longhorn.io/last-system-restore-backup` if the volume is restored from the backup.
 1. Update [SystemRestore](#manager-systemrestore-custom-resource) status and error.
 1. Shutdown longhorn-system-rollout controller.
 
