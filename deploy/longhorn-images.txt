@@ -10,4 +10,4 @@ longhornio/longhorn-instance-manager:v1.5.5-rc2
 longhornio/longhorn-manager:v1.5.5-rc2
 longhornio/longhorn-share-manager:v1.5.5-rc2
 longhornio/longhorn-ui:v1.5.5-rc2
-longhornio/support-bundle-kit:v0.0.36
+longhornio/support-bundle-kit:v0.0.37
