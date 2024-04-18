@@ -4410,7 +4410,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.36"
+        - "longhornio/support-bundle-kit:v0.0.37"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
