@@ -205,6 +205,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | ingress.host | string | `"sslip.io"` | Hostname of the Layer 7 load balancer. |
 | ingress.ingressClassName | string | `nil` | IngressClass resource that contains ingress configuration, including the name of the Ingress controller. ingressClassName can replace the kubernetes.io/ingress.class annotation used in earlier Kubernetes releases. |
 | ingress.path | string | `"/"` | Default ingress path. You can access the Longhorn UI by following the full ingress path {{host}}+{{path}}. |
+| ingress.pathType | string | `"ImplementationSpecific"` | Ingress path type. To maintain backward compatibility, the default value is "ImplementationSpecific". |
 | ingress.secrets | string | `nil` | Secret that contains a TLS private key and certificate. Use secrets if you want to use your own certificates to secure ingresses. |
 | ingress.secureBackends | bool | `false` | Setting that allows you to enable secure connections to the Longhorn UI service via port 443. |
 | ingress.tls | bool | `false` | Setting that allows you to enable TLS on ingress records. |
