@@ -426,7 +426,7 @@ ingress:
   # -- Default ingress path. You can access the Longhorn UI by following the full ingress path {{host}}+{{path}}.
   path: /
 
-  # -- Ingress path type. Defaults to "ImplementationSpecific" for backward-compatibility reasons.
+  # -- Ingress path type. To maintain backward compatibility, the default value is "ImplementationSpecific".
   pathType: ImplementationSpecific
 
   ## If you're using kube-lego, you will want to add:
