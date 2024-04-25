@@ -332,6 +332,8 @@ defaultSettings:
   v2DataEngineLogLevel: ~
   # -- Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.
   v2DataEngineLogFlags: ~
+  # -- Setting that freezes the filesystem on the root partition before a snapshot is created.
+  freezeFilesystemForSnapshot: ~
 
 privateRegistry:
   # -- Setting that allows you to create a private registry secret.

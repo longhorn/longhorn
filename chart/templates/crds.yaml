@@ -3626,6 +3626,13 @@ spec:
               engineImage:
                 description: 'Deprecated: Replaced by field `image`.'
                 type: string
+              freezeFilesystemForSnapshot:
+                description: Setting that freezes the filesystem on the root partition before a snapshot is created.
+                enum:
+                - ignored
+                - enabled
+                - disabled
+                type: string
               fromBackup:
                 type: string
               frontend:

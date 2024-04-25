@@ -590,6 +590,11 @@ questions:
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
+  - variable: defaultSettings.freezeFilesystemForSnapshot
+    description: "Setting that freezes the filesystem on the root partition before a snapshot is created."
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "false"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
   description: "Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler.

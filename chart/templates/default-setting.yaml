@@ -233,3 +233,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineLogFlags) }}
     v2-data-engine-log-flags: {{ .Values.defaultSettings.v2DataEngineLogFlags }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.freezeFilesystemForSnapshot) }}
+    freeze-filesystem-for-snapshot: {{ .Values.defaultSettings.freezeFilesystemForSnapshot }}
+    {{- end }}
