@@ -2228,6 +2228,8 @@ spec:
                       type: string
                     filesystemType:
                       type: string
+                    instanceManagerName:
+                      type: string
                     diskPath:
                       type: string
                     scheduledReplica:
