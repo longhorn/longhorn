@@ -101,7 +101,7 @@ questions:
     label: Longhorn CSI Attacher Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.attacher.tag
-    default: v4.4.2
+    default: v4.5.1
     description: "Tag for the CSI attacher image. When unspecified, Longhorn uses the default value."
     type: string
     label: Longhorn CSI Attacher Image Tag
@@ -113,7 +113,7 @@ questions:
     label: Longhorn CSI Provisioner Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.tag
-    default: v3.6.2
+    default: v3.6.4
     description: "Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value."
     type: string
     label: Longhorn CSI Provisioner Image Tag
@@ -137,7 +137,7 @@ questions:
     label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.tag
-    default: v1.9.2
+    default: v1.10.1
     description: "Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value."
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
@@ -149,7 +149,7 @@ questions:
     label: Longhorn CSI Driver Snapshotter Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.tag
-    default: v6.3.2
+    default: v6.3.4
     description: "Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
