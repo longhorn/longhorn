@@ -71,12 +71,12 @@ image:
       # -- Repository for the CSI attacher image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-attacher
       # -- Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
-      tag: v4.4.2
+      tag: v4.5.1
     provisioner:
       # -- Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-provisioner
       # -- Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
-      tag: v3.6.2
+      tag: v4.0.1
     nodeDriverRegistrar:
       # -- Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-node-driver-registrar
@@ -86,12 +86,12 @@ image:
       # -- Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-resizer
       # -- Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value.
-      tag: v1.9.2
+      tag: v1.10.1
     snapshotter:
       # -- Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-snapshotter
       # -- Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
-      tag: v6.3.2
+      tag: v7.0.2
     livenessProbe:
       # -- Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       repository: longhornio/livenessprobe
