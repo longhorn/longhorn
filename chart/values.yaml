@@ -52,19 +52,19 @@ image:
   csi:
     attacher:
       repository: longhornio/csi-attacher
-      tag: v4.4.2
+      tag: v4.5.1
     provisioner:
       repository: longhornio/csi-provisioner
-      tag: v3.6.2
+      tag: v3.6.4
     nodeDriverRegistrar:
       repository: longhornio/csi-node-driver-registrar
       tag: v2.9.2
     resizer:
       repository: longhornio/csi-resizer
-      tag: v1.9.2
+      tag: v1.10.1
     snapshotter:
       repository: longhornio/csi-snapshotter
-      tag: v6.3.2
+      tag: v6.3.4
     livenessProbe:
       repository: longhornio/livenessprobe
       tag: v2.12.0
