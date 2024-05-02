@@ -40,7 +40,7 @@ https://github.com/longhorn/longhorn/releases
 | Release   | Latest Version | Stable Versions       | Release Note                                                   | Important Note                                              | Supported          |
 |-----------|-----------------|----------------------|----------------------------------------------------------------|-------------------------------------------------------------| -------------------|
 | **1.6***  | 1.6.1           | 1.6.1 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.1) | [🔗](https://longhorn.io/docs/1.6.0/deploy/important-notes) | ✅                 |
-| **1.5***  | 1.5.5           | 1.5.4, 1.5.3 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.5) | [🔗](https://longhorn.io/docs/1.5.5/deploy/important-notes) | ✅                 |
+| **1.5***  | 1.5.5           | 1.5.5, 1.5.4, 1.5.3 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.5) | [🔗](https://longhorn.io/docs/1.5.5/deploy/important-notes) | ✅                 |
 | 1.4       | 1.4.4           | 1.4.4, 1.4.3, 1.4.2, 1.4.1 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.4) | [🔗](https://longhorn.io/docs/1.4.4/deploy/important-notes) |                    |
 | 1.3       | 1.3.3           | 1.3.3, 1.3.2 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.3) | [🔗](https://longhorn.io/docs/1.3.3/deploy/important-notes) |                    |
 | 1.2       | 1.2.6           | 1.2.6, 1.2.5, 1.2.4, 1.2.3, 1.2.2 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.2.6) | [🔗](https://longhorn.io/docs/1.2.6/deploy/important-notes) |                    |
