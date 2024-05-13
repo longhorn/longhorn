@@ -2835,6 +2835,10 @@ spec:
       jsonPath: .value
       name: Value
       type: string
+    - description: The setting is applied
+      jsonPath: .status.applied
+      name: Applied
+      type: boolean
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -2850,6 +2854,15 @@ spec:
             description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
+            type: object
+          status:
+            description: SettingStatus defines the observed state of the Longhorn setting
+            properties:
+              applied:
+                description: The setting is applied.
+                type: boolean
+            required:
+            - applied
             type: object
           value:
             description: The value of the setting.
