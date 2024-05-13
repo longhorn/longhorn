@@ -7,18 +7,22 @@ pull_request_rules:
   actions:
     merge:
       method: rebase
-      
-- name: Automatically merge Renovate PRs
+
+- name: Automatically merge Renovate/Mergify PRs
   conditions:
   - check-success=continuous-integration/drone/pr
-  - author = renovate[bot]
+  - or:
+    - author = renovate[bot]
+    - author = mergify[bot]
   actions:
     merge:
       method: rebase
 
-- name: Automatically approve Renovate PRs
+- name: Automatically approve Renovate/Mergify PRs
   conditions:
-  - author = renovate[bot]
+  - or:
+    - author = renovate[bot]
+    - author = mergify[bot]
   actions:
     review:
       type: APPROVE
