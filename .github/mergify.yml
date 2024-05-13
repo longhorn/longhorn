@@ -8,7 +8,7 @@ pull_request_rules:
     merge:
       method: rebase
 
-- name: Automatically merge Renovate/Mergify PRs
+- name: Automatically merge bot's PRs
   conditions:
   - check-success=continuous-integration/drone/pr
   - or:
@@ -18,11 +18,10 @@ pull_request_rules:
     merge:
       method: rebase
 
-- name: Automatically approve Renovate/Mergify PRs
+- name: Automatically approve bot's PRs
   conditions:
   - or:
     - author = renovate[bot]
-    - author = mergify[bot]
   actions:
     review:
       type: APPROVE
