@@ -190,13 +190,7 @@ longhornManager:
   log:
     ## Allowed values are `plain` or `json`.
     format: plain
-<<<<<<< HEAD
   priorityClass: ~
-=======
-  # -- PriorityClass for Longhorn Manager.
-  priorityClass: *defaultPriorityClassNameRef
-  # -- Toleration for Longhorn Manager on nodes allowed to run Longhorn components.
->>>>>>> 8aad95b (feat(chart): introduce global tolerations and nodeselectors for user deployed components)
   tolerations: []
   ## If you want to set tolerations for Longhorn Manager DaemonSet, delete the `[]` in the line above
   ## and uncomment this example block
