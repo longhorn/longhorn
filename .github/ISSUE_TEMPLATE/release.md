@@ -39,7 +39,7 @@ Action items for releasing v<x.y.z>
   - [ ] Upgrade notes including highlighted notes, deprecation, compatible changes, and others impacting the current users
 - [ ] Release longhorn/chart from the release branch to publish to [ArtifactHub](https://artifacthub.io/packages/helm/longhorn/longhorn) by [longhorn/charts Actions](https://github.com/longhorn/charts) - Release Captain
 - [ ] Marked the release as `latest` release in longhorn/longhorn [README.md](https://github.com/longhorn/longhorn) - Release Captain
-- [ ] Marked the release as `stable` release (For any patch release just after a stable patch, need to wait for 1-2 weeks for user feedback) - Release Captain
+- [ ] Marked the release as `stable` release (For the first stable release, we need to consider several factors and reach a consensus by maintainers before claiming it stable. For any patch release after a stable release, we need to wait 1-2 weeks for user feedback.) - Release Captain
 
 ### Post-Release
 
