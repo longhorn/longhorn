@@ -22,7 +22,7 @@ Action items for releasing v<x.y.z>
 
 - [ ] Trigger GA release build by [longhorn/longhorn Actions](https://github.com/longhorn/longhorn) - Release Captain
 
-**QA captain needs to coordinate the following efforts and finish these items after the GA images are generated**
+**The QA captain needs to coordinate the following efforts and finish these items before GA release**
 
 - [ ] Regression test plan (manual) - QA Captain
 - [ ] Run e2e regression for pre-GA milestones (`install`, `upgrade`) - @yangchiu 
