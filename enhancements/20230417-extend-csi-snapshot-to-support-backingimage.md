@@ -309,7 +309,7 @@ https://longhorn.io/docs/1.4.1/snapshots-and-backups/csi-snapshot-support/enable
       type: bi
     ```
 
-#### Scenerios 1: Create VolumeSnapshot from a Volume
+#### Scenarios 1: Create VolumeSnapshot from a Volume
 
 - Success
     1. Create a Volume `test-vol` of 5GB. Create PV/PVC for the Volume.
@@ -333,7 +333,7 @@ https://longhorn.io/docs/1.4.1/snapshots-and-backups/csi-snapshot-support/enable
     5. Delete the VolumeSnapshot `test-snapshot-backing`
     6. Verify the BacingImage is deleted
 
-#### Scenerios 2: Create new Volume from CSI snapshot
+#### Scenarios 2: Create new Volume from CSI snapshot
 
 1. Create a Volume `test-vol` of 5GB. Create PV/PVC for the Volume.
 2. Create a workload using the Volume. Write some data to the Volume.
@@ -370,7 +370,7 @@ https://longhorn.io/docs/1.4.1/snapshots-and-backups/csi-snapshot-support/enable
 5. Attach the PVC `test-restore-pvc` to a workload and verify the data
 6. Delete the PVC
 
-#### Scenerios 3: Restore pre-provisioned BackingImage
+#### Scenarios 3: Restore pre-provisioned BackingImage
 
 1. Create a BackingImage `test-bi` using longhorn test raw image `https://longhorn-backing-image.s3-us-west-1.amazonaws.com/parrot.qcow2`
 2. Create a VolumeSnapshotContent with `snapshotHandle` pointing to BackingImage `test-bi` and provide the parameters.
@@ -420,7 +420,7 @@ https://longhorn.io/docs/1.4.1/snapshots-and-backups/csi-snapshot-support/enable
     ```
 5. Attach the PVC `test-restore-existing-backing` to a workload and verify the data
 
-#### Scenerios 4: Restore on-demand provisioning BackingImage
+#### Scenarios 4: Restore on-demand provisioning BackingImage
 
 - Type `download`
     1. Create a VolumeSnapshotContent with `snapshotHandle` providing the required parameters and BackingImage name `test-bi`

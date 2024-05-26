@@ -16,11 +16,11 @@ secret:
 
 resources:
   limits:
-    cpu: 600m
-    memory: 1024Mi
-  requests:
-    cpu: 300m
+    cpu: 400m
     memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
 
 # This configmap contains information about the latest release
 # of the application that is using this Upgrade Responder
@@ -43,8 +43,15 @@ configMap:
           ]
         },
         {
-          "name": "v1.5.3",
-          "releaseDate": "2023-11-17T00:00:00Z",
+          "name": "v1.5.5",
+          "releaseDate": "2024-04-19T00:00:00Z",
+          "tags": [
+            "stable"
+          ]
+        },
+        {
+          "name": "v1.6.1",
+          "releaseDate": "2024-03-28T00:00:00Z",
           "tags": [
             "latest",
             "stable"
