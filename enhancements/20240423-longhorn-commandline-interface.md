@@ -1,8 +1,8 @@
-# Longhorn Toolbox Commandline Interface (CLI)
+# Longhorn Commandline Interface (longhornctl)
 
 ## Summary
 
-Navigating Longhorn's troubleshooting and manual operations documents can be challenging. This proposal introduces the Longhorn Toolbox Command-Line Interface (CLI) to enhance user experience. This CLI steamlines operations, making Longhorn's manual operations simpler and more intuitive for users.
+Navigating Longhorn's troubleshooting and manual operations documents can be challenging. This proposal introduces the `longhornctl` Longhorn Command-Line Interface (CLI) to enhance user experience. This CLI steamlines operations, making Longhorn's manual operations simpler and more intuitive for users.
 
 ### Related Issues
 
@@ -19,9 +19,9 @@ Currently, Longhorn users often face challenges when performing manual operation
 - Difficulty in gathering information for troubleshooting.
 - Manual processes for retrieving data and information during Longhorn failures.
 
-### Goals Of The Longhorn Toolbox CLI
+### Goals
 
-This proposal's primary goal is to introduce the Longhorn Toolbox CLI, laying the foundation for simplifying manual Longhorn operations. The specific objective include:
+This proposal's primary goal is to introduce a Longhorn CLI (`longhornctl`), laying the foundation for simplifying manual Longhorn operations. The specific objective include:
 
 - Providing a single, unified interface for common operations.
 - Reducing the time and effort required for one-time operations.
@@ -30,14 +30,14 @@ This proposal's primary goal is to introduce the Longhorn Toolbox CLI, laying th
 
 #### Initial Implementation
 
-To demonstrate the capabilities of this CLI, the initial Proof of Concept (PoC) will focus on the following operations:
+To demonstrate the capabilities of `longhornctl`, the initial Proof of Concept (PoC) will focus on the following operations:
 
 - Preflight installation/uninstallation
 - Preflight checking
 - Volume trimming
 - Replica exporting
 
-Additional operations will be developed on a case-by-case basis to further enhance the Longhorn Toolbox CLI.
+Additional operations will be developed on a case-by-case basis to further enhance the `longhornctl` CLI.
 
 ### Non-goals [optional]
 
@@ -49,36 +49,36 @@ While this proposal aims to address fundamental manual operations, it does not e
 
 #### Story 1: Preparation for Longhorn
 
-As a Longhorn user, I want to prepare my environment using the Toolbox CLI to easily set up my environment without the need for manual installations or searching through documents.
+As a Longhorn user, I want to prepare my environment using the `longhornctl` to easily set up my environment without the need for manual installations or searching through documents.
 
 - Before this enhancement: Users had to refer to documents to either prepare the environment using the Longhorn provided manifest or follow a detailed document to manually set up the environment for each cluster hosts.
 - After this enhancement: Users can simplify Longhorn prerequisites setup with a single command.
 
 #### Story 2: One-time operation
 
-As a Longhorn user, I want to perform one-time operations using the Toolbox CLI to execute tasks without navigating the Longhorn UI or remembering complex commands.
+As a Longhorn user, I want to perform one-time operations using the `longhornctl` to execute tasks without navigating the Longhorn UI or remembering complex commands.
 
 - Before this enhancement: User need to remember or lookup steps for one-time operations, a process that could be complex and time-consuming.
 - After this enhancement: One-time operations are consolidated into a uniflied CLI, removing the need to remember and following complex steps. This improves efficiency and reduce the likelihood of errors.
 
 #### Story 3: Troubleshoot
 
-As a Longhorn user, I want to troubleshoot Longhorn using the Toolbox CLI to quickly identify and resolve issues.
+As a Longhorn user, I want to troubleshoot Longhorn using the `longhornctl` to quickly identify and resolve issues.
 
 - Before this enhancement: Troubleshooting Longhorn requires manual information gathering from various sources, a time-consuming process.
 - After this enhancement: The troubleshooting process is streamlined, allowing user to quickly collect information and pinpoint issues. This enhancement improves efficiency and reduces the time needed to resolve Longhorn issues.
 
 #### Story 4: Data-retrival
 
-As a Longhorn user, I want to retrieve data from Longhorn volumes using the Toolbox CLI when Longhorn encounters failures.
+As a Longhorn user, I want to retrieve data from Longhorn volumes using the `longhornctl` when Longhorn encounters failures.
 
 - Before this enhancement: User had to navigate through complex steps to manually mount Longhorn volumes for data access, a time-consuming and error-prone process.
-- After this enhancement: User an easily export data to a specified targeting path using the Toolbox CLI, simplifying the process and enhancing the user experience during the Longhorn failures.
+- After this enhancement: User an easily export data to a specified targeting path using the `longhornctl`, simplifying the process and enhancing the user experience during the Longhorn failures.
 
 
 ### User Experience In Detail
 
-When a user execute the `longhorn-toolbox` CLI, they should encounter clear and informative output to enhance their understanding and usage. This includes:
+When a user execute the `longhornctl`, they should encounter clear and informative output to enhance their understanding and usage. This includes:
 - Detailed command descriptions: Each command is accompanied by a detailed description, providing users with a comprehensive overview of its purpose and usage.
 - Help menu at each command layer: User can find help menu at each layer of the command and subcommands that allows user to get detailed information without navigating through external documentation.
 - Clear messages and log control: User have the ability to change the log level, allowing them to control the verbolity of output. This ensures that user receive clear logs and results, making it easier to understand the CLI's action and responses.
@@ -86,8 +86,8 @@ When a user execute the `longhorn-toolbox` CLI, they should encounter clear and 
 Examples:
 - Showing help at root command:
     ```shell
-    > ./bin/longhorn-toolbox --help
-    Longhorn toolbox CLI for managing Longhorn
+    > ./bin/longhornctl --help
+    Commands for managing Longhorn
 
     Install And Uninstall Commands:
       install          Install Longhorn extensions
@@ -104,21 +104,21 @@ Examples:
     Other Commands:
       global-options   Print global options inherited by all scommands
 
-    Use "longhorn-toolbox <command> --help" for more information about a given
+    Use "longhornctl <command> --help" for more information about a given
     command.
     ```
 - Showing help at subcommand:
     ```shell
-    > ./bin/longhorn-toolbox trim --help
+    > ./bin/longhornctl trim --help
     Longhorn trim commands
 
     Available Commands:
       volume        Trim a Longhorn volume
 
-    Use "longhorn-toolbox trim <command> --help" for more information about a given
+    Use "longhornctl trim <command> --help" for more information about a given
     command.
 
-    > ./bin/longhorn-toolbox trim volume --help
+    > ./bin/longhornctl trim volume --help
     Trim a Longhorn volume
 
     Options:
@@ -129,9 +129,9 @@ Examples:
     	Longhorn volume name
 
     Usage:
-      longhorn-toolbox trim volume [flags] [options]
+      longhornctl trim volume [flags] [options]
 
-    Use "longhorn-toolbox trim options" for a list of global command-line options
+    Use "longhornctl trim options" for a list of global command-line options
     (applies to all commands).
     ```
 - Clean notification for missing command option flag:
@@ -146,7 +146,41 @@ Examples:
       - replicas:
         - node: gke-lh-c3y1huang-6lv-lh-c3y1huang-6lv-b30251b0-tq57
           exportedDirectory: /tmp/foo/pvc-65789149-430e-41a9-944a-c1f3dc2dc5db
-    INFO[2024-04-23T15:19:16+08:00] Run 'longhorn-toolbox export replica stop' to stop exporting the replica
+    INFO[2024-04-23T15:19:16+08:00] Run 'longhornctl export replica stop' to stop exporting the replica
+    ```
+    ```
+    INFO[2024-06-11T14:48:58+08:00] Retrieved preflight checker result:
+    ip-10-0-2-5:
+      info:
+      - Service iscsid is running
+      - NFS4 is supported
+      - Package nfs-client is installed
+      - Package open-iscsi is installed
+      - CPU instruction set sse4_2 is supported
+      - HugePages is enabled
+      - Module nvme_tcp is loaded
+      - Module uio_pci_generic is loaded
+    ip-10-0-2-71:
+      error:
+      - Neither iscsid.service nor iscsid.socket is running
+      info:
+      - NFS4 is supported
+      - Package nfs-client is installed
+      - Package open-iscsi is installed
+      - CPU instruction set sse4_2 is supported
+      - HugePages is enabled
+      - Module nvme_tcp is loaded
+      - Module uio_pci_generic is loaded
+    ip-10-0-2-248:
+      info:
+      - Service iscsid is running
+      - NFS4 is supported
+      - Package nfs-client is installed
+      - Package open-iscsi is installed
+      - CPU instruction set sse4_2 is supported
+      - HugePages is enabled
+      - Module nvme_tcp is loaded
+      - Module uio_pci_generic is loaded
     ```
 
 ### API changes
@@ -155,7 +189,7 @@ Not applicable in this context.
 
 ## Design
 
-The Longhorn Toolbox CLI will be based on the existing https://github.com/longhorn/cli, originally designed for Longhorn preflight operations.
+The `longhornctl` will be based on the existing https://github.com/longhorn/cli, originally designed for Longhorn preflight operations.
 
 ### Command
 
@@ -167,8 +201,8 @@ The command library will migrate from `urfave` to `cobra` for managing complex s
 
 Introduce command groupings to enhance user understandings:
 ```shell
-> ./bin/longhorn-toolbox help
-Longhorn toolbox CLI for managing Longhorn
+> ./bin/longhornctl help
+Longhorn commandline interface for managing Longhorn
 
 Install And Uninstall Commands:
   install          Install Longhorn extensions
@@ -185,7 +219,7 @@ Troubleshoot Commands:
 Other Commands:
   global-options   Print global options inherited by all scommands
 
-Use "longhorn-toolbox <command> --help" for more information about a given
+Use "longhornctl <command> --help" for more information about a given
 command.
 ```
 
@@ -217,9 +251,9 @@ With these conventions, each command is structured logically:
 
 ```
 Example usage:
-- longhorn-toolbox install preflight
-- longhorn-toolbox get replica
-- longhorn-toolbox export replica stop
+- longhornctl install preflight
+- longhornctl get replica
+- longhornctl export replica stop
 ```
 
 #### Example Command Implementation
@@ -293,18 +327,18 @@ You can optionally filter the results by providing:
 - Command Flags:
     - Defines flag for the command, allowing users to provide additional options and assign it to the `replicaGetter` instance.
 
-#### Remote (longhorn-toolbox)
+#### Remote (longhornctl)
 
-The `longhorn-toolbox` command is responsible for managing the required resources within the Kubernetes cluster for in-cluster operations, such as ConfigMap, DaemonSet, etc.
+The `longhornctl` command is responsible for managing the required resources within the Kubernetes cluster for in-cluster operations, such as ConfigMap, DaemonSet, etc.
 - Resource Management: This command handles the creation and deletion of the resources like ConfigMap and DaemonSet within the Kubernetes cluster. For instance, the DaemonSet that is responsible for running operations related to the command actions.
-- Monitoring: The `longhorn-toolbox` command monitors the status of the DaemonSet containers. This proactive monitoring block ensures that actions are completed and allows for error handling.
+- Monitoring: The `longhornctl` command monitors the status of the DaemonSet containers. This proactive monitoring block ensures that actions are completed and allows for error handling.
 - Error Handling and Log Retrieval: In case of an action failure, the command retrieves the logs of the specific container involved. These logs shall provide users with clear understandings of the failure.
 - Results Output: For actions that yields a collection of information, the command formats the presents the result in a user-friendly YAML formal. These ensures that users can easily interpret the output.
 
-#### Local (toolbox)
+#### Local (longhornctl-local)
 
-The `toolbox` command is designed to run within a DaemonSet pod inside the Kubernetes cluster, focusing on managing interactions within the cluster environment, including both in-cluster and host operations.
-- Host interactions: When executed within the Daemonset pod, the `tool-box` command can interact with the host system. This could involve tasks such as:
+The `longhornctl-local` command is designed to run within a DaemonSet pod inside the Kubernetes cluster, focusing on managing interactions within the cluster environment, including both in-cluster and host operations.
+- Host interactions: When executed within the Daemonset pod, the `longhornctl-local` command can interact with the host system. This could involve tasks such as:
     - Managing storage devices.
     - Interacting with the host filesystem.
     - Executing system-level commands.
@@ -314,18 +348,18 @@ The `toolbox` command is designed to run within a DaemonSet pod inside the Kuber
 - cmd: Contains the main command files for both local and remote binaries. Keep the directories separate for clarity.
   - /local
     - /subcmd
-    - toolbox.go
+    - longhornctl-local.go
   - /remote
     - /subcmd
-    - longhorn-toolbox.go
+    - longhornctl.go
 - /dapper: Houses the build script for creating local and remote binaries.
   - build:
     ```bash
     # Binary runs local to the Kubernetes cluster
-    build_app local toolbox
+    build_app local longhornctl-local
 
     # Binary runs remote to the Kubernetes cluster
-    build_app remote longhorn-toolbox
+    build_app remote longhornctl
     ```
 - /pkg
   - /consts: Centralized constants.
@@ -346,14 +380,14 @@ cli
 | | | +-- install.go
 | | | +-- trim.go
 | | +-- README.md
-| | +-- toolbox.go ................... Main command file for local operations.
+| | +-- longhornctl-local.go ......... Main command file for local operations.
 | +-- remote ......................... Commands for operations outside the Kubernetes cluster.
 |   +-- subcmd ....................... Subcommands specific to remote operations.
 |   | +-- check.go
 |   | +-- get.go
 |   | +-- install.go
 |   | +-- trim.go
-|   +-- longhorn-toolbox.go .......... Main command file for remote operations.
+|   +-- longhornctl.go ............... Main command file for remote operations.
 +-- dapper
 | +-- build .......................... Build file to create local/remote binaries.
 +-- pkg
@@ -364,7 +398,7 @@ cli
   | +-- prflight.go
   | +-- replica.go
   | +-- spdk.go
-  | +-- toolbox.go
+  | +-- longhornctl.go
   | +-- volume.go
   +-- local .......................... Package for local command operations.
   | +-- preflight
@@ -403,13 +437,13 @@ cli
 
 #### Install Preflight
 
-##### Remote Command (`longhorn-toolbox install preflight`)
+##### Remote Command (`longhornctl install preflight`)
 
 - Introduce command to prepare and create a `longhorn-preflight-installer` DaemonSet.
 - Include `--operating-system` command option to accommodate operating systems that do not include a package manager, such as container-optimized OS (COS).
 - When no operating system is specified, create a DaemonSet include:
-    - An init-container executing `toolbox install preflight`.
-    - A container running a pause image as an indicator to signal the completion of the `toolbox` command in the init-container.
+    - An init-container executing `longhornctl-local install preflight`.
+    - A container running a pause image as an indicator to signal the completion of the `longhornctl-local` command in the init-container.
 - When operating system is specified to `cos`, create:
     - a ConfigMap include:
         - The entrypoint.sh script.
@@ -419,7 +453,7 @@ cli
         - Readiness probe for successful installation indication.
         - Liveness probe for error detection.
 
-##### Local Command (`toolbox install preflight`)
+##### Local Command (`longhornctl-local install preflight`)
 
 - Transition commandline library from `urfave` to `cobra`.
 - Refactor command returns for error handling.
@@ -427,16 +461,16 @@ cli
 
 #### Check Preflight
 
-##### Remote (`longhorn-toolbox check preflight`)
+##### Remote (`longhornctl check preflight`)
 
 - Introduce command to prepare and create a `longhorn-preflight-checker` DaemonSet.
 - The DaemonSet include:
-    - An init-container executing `toolbox check preflight`.
-    - A container running a pause image as an indicator to signal the completion of the `toolbox` command in the init-container.
+    - An init-container executing `longhornctl-local check preflight`.
+    - A container running a pause image as an indicator to signal the completion of the `longhornctl-local` command in the init-container.
 - Post-command cleanup:
     - Upon command completion, cleanup the DaemonSet.
 
-##### Local (`toolbox check preflight`)
+##### Local (`longhornctl-local check preflight`)
 
 - Transition commandline library from `urfave` to `cobra`.
 - Refactor command returns for error handling.
@@ -444,33 +478,33 @@ cli
 
 #### Trim Volume
 
-##### Remote (`longhorn-toolbox trim volume`)
+##### Remote (`longhornctl trim volume`)
 
 - Introduce command to prepare and create a `longhorn-volume-trimmer` DaemonSet.
 - The DaemonSet include:
-    - An init-container executing `toolbox trim volume`.
-    - A container running a pause image as an indicator to signal the completion of the `toolbox` command in the init-container.
+    - An init-container executing `longhornctl-local trim volume`.
+    - A container running a pause image as an indicator to signal the completion of the `longhornctl-local` command in the init-container.
 - Post-command cleanup:
     - Upon command completion, cleanup the DaemonSet.
 
-##### Local (`toolbox trim volume`)
+##### Local (`longhornctl-local trim volume`)
 
 - Implement logic to detect and execute `fstrim` for `RWO` and `RWX` volumes.
 
 #### Get Replica
 
-##### Remote (`longhorn-toolbox get replica`)
+##### Remote (`longhornctl get replica`)
 
 - Introduce command to prepare and create a `longhorn-replica-getter` DaemonSet.
 - The DaemonSet include:
     - A shared volume mount for the result output to `replica.json`.
-    - An init-container executing `toolbox get replica`.
+    - An init-container executing `longhornctl-local get replica`.
     - A container running `cat "replica.json"`.
 - When the DaemonSet is running successfully, retrieve the log of the container outputting the `replica.json`, then unmarshal JSON to YAML and output to the users.
 - Post-command cleanup:
     - Upon command completion, cleanup the DaemonSet.
 
-##### Local (`toolbox get replica`)
+##### Local (`longhornctl-local get replica`)
 
 - Implement logic to collect replica information from host directories and `volume.meta` files:
     ```golang
@@ -493,7 +527,7 @@ cli
 
 #### Export Replica
 
-##### Remote (`longhorn-toolbox export replica`)
+##### Remote (`longhornctl export replica`)
 
 - Introduce command to prepare and create:
     - A `longhorn-replica-exporter` ConfigMap
@@ -507,7 +541,7 @@ cli
     - Mouting the device to the target host path.
 - The DaemonSet includes:
     - A shared volume mount for the result output to `replica.json`.
-    - An init-container executing `toolbox get replica` for collecting the replica information and output to the `replica.json` in the shared volume mount.
+    - An init-container executing `longhornctl-local get replica` for collecting the replica information and output to the `replica.json` in the shared volume mount.
     - A container running `entrypoint.sh` in the engine image.
     - A readiness probe to check for action completion.
     - A pre-stop hook to execute pre-stop script for the host mount point cleanup.
@@ -524,15 +558,15 @@ No local command for replica exporting, as the dependent `launch-simple-longhorn
     - Troubleshooting commands
     - Global options printing
 1. Command help testings:
-    - Run `longhorn-toolbox --help` and verify that all sub-commands are displayed
-    - Run `longhorn-toolbox <subcommand> --help` for each sub-command and verify detailed help information is provided.
+    - Run `longhornctl --help` and verify that all sub-commands are displayed
+    - Run `longhornctl <subcommand> --help` for each sub-command and verify detailed help information is provided.
 1. Error Handling Testing:
     - Execute commands with incorrect or missing options, and verify error message are displayed to guide users on correct usage.
 1. Functionality Testing:
     - Test each command with valid input to ensure they perform the intended operations.
     - Verify correct behavior and output for each command.
 1. Cross-platform testing:
-    - Test Longhorn Toolbox CLI on different operating systems to ensure compatibility.
+    - Test `longhornctl` on different operating systems to ensure compatibility.
 
 ### Upgrade strategy
 
