@@ -514,7 +514,7 @@ questions:
     description: "Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the \"volume-head-xxx.img\" file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. This setting applies only to volumes created using the Longhorn UI."
     group: "Longhorn Default Settings"
     type: boolean
-    default: "false"
+    default: "true"
   - variable: defaultSettings.systemManagedPodsImagePullPolicy
     label: System Managed Pod Image Pull Policy
     description: "Image pull policy for system-managed pods, such as Instance Manager, engine images, and CSI Driver. Changes to the image pull policy are applied only after the system-managed pods restart."
@@ -753,6 +753,16 @@ questions:
   - "Delete"
   - "Retain"
   default: "Delete"
+- variable: persistence.disableRevisionCounter
+  label: Default Storage Class Disable Revision Counter
+  description: "Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the volume-head-xxx.img file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. (Options: \"true\", \"false\")"
+  group: "Longhorn Storage Class Settings"
+  required: true
+  type: enum
+  options:
+    - "true"
+    - "false"
+  default: "true"
 - variable: persistence.defaultClassReplicaCount
   description: "Replica count of the default Longhorn StorageClass."
   label: Default Storage Class Replica Count
