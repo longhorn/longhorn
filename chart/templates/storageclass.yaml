@@ -48,3 +48,6 @@ data:
       {{- if .Values.persistence.removeSnapshotsDuringFilesystemTrim }}
       unmapMarkSnapChainRemoved: "{{ .Values.persistence.removeSnapshotsDuringFilesystemTrim }}"
       {{- end }}
+      {{- if .Values.persistence.disableRevisionCounter }}
+      disableRevisionCounter: "{{ .Values.persistence.disableRevisionCounter }}"
+      {{- end }}
