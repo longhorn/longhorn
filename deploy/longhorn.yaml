@@ -5,6 +5,20 @@ kind: Namespace
 metadata:
   name: longhorn-system
 ---
+# Source: longhorn/templates/priorityclass.yaml
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: "longhorn-critical"
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+value: 1000000000
+---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -80,6 +94,7 @@ data:
       fromBackup: ""
       fsType: "ext4"
       dataLocality: "disabled"
+      unmapMarkSnapChainRemoved: "ignored"
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -405,6 +420,9 @@ spec:
                       type: string
                     uuid:
                       type: string
+                    virtualSize:
+                      format: int64
+                      type: integer
                   type: object
                 nullable: true
                 type: object
@@ -508,6 +526,10 @@ spec:
       jsonPath: .status.size
       name: Size
       type: string
+    - description: The virtual size of the image (may be larger than file size)
+      jsonPath: .status.virtualSize
+      name: VirtualSize
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -576,6 +598,10 @@ spec:
                 type: integer
               uuid:
                 type: string
+              virtualSize:
+                description: Virtual size of image, which may be larger than physical size. Will be zero until known (e.g. while a backing image is uploading)
+                format: int64
+                type: integer
             type: object
         type: object
     served: true
@@ -1480,7 +1506,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1496,6 +1521,7 @@ spec:
     shortNames:
     - lhe
     singular: engine
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1771,6 +1797,11 @@ spec:
                   type: string
                 nullable: true
                 type: object
+              replicaTransitionTimeMap:
+                additionalProperties:
+                  type: string
+                description: ReplicaTransitionTimeMap records the time a replica in ReplicaModeMap transitions from one mode to another (or from not being in the ReplicaModeMap to being in it). This information is sometimes required by other controllers (e.g. the volume controller uses it to determine the correct value for replica.Spec.lastHealthyAt).
+                type: object
               restoreStatus:
                 additionalProperties:
                   properties:
@@ -1855,7 +1886,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1871,6 +1901,7 @@ spec:
     shortNames:
     - lhim
     singular: instancemanager
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2240,6 +2271,12 @@ spec:
                       - filesystem
                       - block
                       type: string
+                    diskDriver:
+                      enum:
+                      - ""
+                      - auto
+                      - aio
+                      type: string
                     evictionRequested:
                       type: boolean
                     path:
@@ -2324,7 +2361,15 @@ spec:
                       type: string
                     diskUUID:
                       type: string
+                    diskDriver:
+                      type: string
+                    diskName:
+                      type: string
                     filesystemType:
+                      type: string
+                    instanceManagerName:
+                      type: string
+                    diskPath:
                       type: string
                     scheduledReplica:
                       additionalProperties:
@@ -2648,7 +2693,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -2664,6 +2708,7 @@ spec:
     shortNames:
     - lhr
     singular: replica
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2784,20 +2829,20 @@ spec:
               evictionRequested:
                 type: boolean
               failedAt:
-                description: FailedAt is set when a running replica fails or when a running engine is unable to use a replica for any reason. FailedAt indicates the time the failure occurred. When FailedAt is set, a replica is likely to have useful (though possibly stale) data. A replica with FailedAt set must be rebuilt from a non-failed replica (or it can be used in a salvage if all replicas are failed). FailedAt is cleared before a rebuild or salvage.
+                description: FailedAt is set when a running replica fails or when a running engine is unable to use a replica for any reason. FailedAt indicates the time the failure occurred. When FailedAt is set, a replica is likely to have useful (though possibly stale) data. A replica with FailedAt set must be rebuilt from a non-failed replica (or it can be used in a salvage if all replicas are failed). FailedAt is cleared before a rebuild or salvage. FailedAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               hardNodeAffinity:
                 type: string
               healthyAt:
-                description: HealthyAt is set the first time a replica becomes read/write in an engine after creation or rebuild. HealthyAt indicates the time the last successful rebuild occurred. When HealthyAt is set, a replica is likely to have useful (though possibly stale) data. HealthyAt is cleared before a rebuild.
+                description: HealthyAt is set the first time a replica becomes read/write in an engine after creation or rebuild. HealthyAt indicates the time the last successful rebuild occurred. When HealthyAt is set, a replica is likely to have useful (though possibly stale) data. HealthyAt is cleared before a rebuild. HealthyAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               image:
                 type: string
               lastFailedAt:
-                description: LastFailedAt is always set at the same time as FailedAt. Unlike FailedAt, LastFailedAt is never cleared. LastFailedAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastFailedAt may already be healthy and in use again. However, because it is never cleared, it can be compared to LastHealthyAt to help prevent dangerous replica deletion in some corner cases.
+                description: LastFailedAt is always set at the same time as FailedAt. Unlike FailedAt, LastFailedAt is never cleared. LastFailedAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastFailedAt may already be healthy and in use again. However, because it is never cleared, it can be compared to LastHealthyAt to help prevent dangerous replica deletion in some corner cases. LastFailedAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               lastHealthyAt:
-                description: LastHealthyAt is set every time a replica becomes read/write in an engine. Unlike HealthyAt, LastHealthyAt is never cleared. LastHealthyAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastHealthyAt set may be in the middle of a rebuild. However, because it is never cleared, it can be compared to LastFailedAt to help prevent dangerous replica deletion in some corner cases.
+                description: LastHealthyAt is set every time a replica becomes read/write in an engine. Unlike HealthyAt, LastHealthyAt is never cleared. LastHealthyAt is not a reliable indicator of the state of a replica's data. For example, a replica with LastHealthyAt set may be in the middle of a rebuild. However, because it is never cleared, it can be compared to LastFailedAt to help prevent dangerous replica deletion in some corner cases. LastHealthyAt may be later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume controller acknowledges the change.
                 type: string
               logRequested:
                 type: boolean
@@ -2891,7 +2936,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -2907,6 +2951,7 @@ spec:
     shortNames:
     - lhs
     singular: setting
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2944,6 +2989,10 @@ spec:
       jsonPath: .value
       name: Value
       type: string
+    - description: The setting is applied
+      jsonPath: .status.applied
+      name: Applied
+      type: boolean
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -2959,6 +3008,15 @@ spec:
             description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
+            type: object
+          status:
+            description: SettingStatus defines the observed state of the Longhorn setting
+            properties:
+              applied:
+                description: The setting is applied.
+                type: boolean
+            required:
+            - applied
             type: object
           value:
             description: The value of the setting.
@@ -4131,7 +4189,7 @@ rules:
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
   verbs: ["*"]
 - apiGroups: ["longhorn.io"]
-  resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings",
+  resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings", "settings/status",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
               "backingimagemanagers", "backingimagemanagers/status", "backingimagedatasources", "backingimagedatasources/status",
@@ -4367,7 +4425,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.33"
+        - "longhornio/support-bundle-kit:v0.0.38"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
@@ -4483,17 +4541,17 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "longhornio/csi-attacher:v4.4.2"
+            value: "longhornio/csi-attacher:v4.5.1"
           - name: CSI_PROVISIONER_IMAGE
-            value: "longhornio/csi-provisioner:v3.6.2"
+            value: "longhornio/csi-provisioner:v4.0.1"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
             value: "longhornio/csi-node-driver-registrar:v2.9.2"
           - name: CSI_RESIZER_IMAGE
-            value: "longhornio/csi-resizer:v1.9.2"
+            value: "longhornio/csi-resizer:v1.10.1"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "longhornio/csi-snapshotter:v6.3.2"
+            value: "longhornio/csi-snapshotter:v7.0.2"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "longhornio/livenessprobe:v2.11.0"
+            value: "longhornio/livenessprobe:v2.12.0"
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
@@ -4566,17 +4624,3 @@ spec:
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
----
-# Source: longhorn/templates/priorityclass.yaml
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: "longhorn-critical"
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
-description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
-globalDefault: false
-preemptionPolicy: PreemptLowerPriority
-value: 1000000000

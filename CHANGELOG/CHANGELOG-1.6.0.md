@@ -356,7 +356,7 @@ For information about issues identified after this release, see [Release-Known-I
 - [TASK] Bump the versions of dependent libs or components [7001](https://github.com/longhorn/longhorn/issues/7001) - @c3y1huang @chriscchien
 - [DOC] Make `Troubleshooting` section as an individual chapter   [7706](https://github.com/longhorn/longhorn/issues/7706) - @derekbit
 - [TASK] Update the descriptions of setting variables in chart after doc review [7667](https://github.com/longhorn/longhorn/issues/7667) - @ChanYiLin
-- [REFACTOR] Remove unnecessary Kubernetes version check in chart manfests [7601](https://github.com/longhorn/longhorn/issues/7601) - @c3y1huang @roger-ryao
+- [REFACTOR] Remove unnecessary Kubernetes version check in chart manifests [7601](https://github.com/longhorn/longhorn/issues/7601) - @c3y1huang @roger-ryao
 - [TASK] Bump up the minimum supported Kubernetes version [7224](https://github.com/longhorn/longhorn/issues/7224) - @c3y1huang @roger-ryao
 - [TASK] Update CLIAPIVersion in longhorn-manager [7588](https://github.com/longhorn/longhorn/issues/7588) - @FrankYang0529 @roger-ryao
 - [TASK] Security vulnerabilities in docker images [7523](https://github.com/longhorn/longhorn/issues/7523) - @c3y1huang @roger-ryao

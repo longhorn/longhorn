@@ -1,17 +1,32 @@
 pull_request_rules:
-- name: automatic merge after review
+- name: Automatically merge PRs
   conditions:
   - check-success=continuous-integration/drone/pr
-  - check-success=DCO
-  - check-success=CodeFactor
-  - check-success=codespell
   - "#approved-reviews-by>=2"
   - approved-reviews-by=@longhorn/maintainer
   actions:
     merge:
       method: rebase
 
-- name: ask to resolve conflict
+- name: Automatically merge bot's PRs
+  conditions:
+  - check-success=continuous-integration/drone/pr
+  - or:
+    - author = renovate[bot]
+    - author = mergify[bot]
+  actions:
+    merge:
+      method: rebase
+
+- name: Automatically approve bot's PRs
+  conditions:
+  - or:
+    - author = renovate[bot]
+  actions:
+    review:
+      type: APPROVE
+
+- name: Ask to resolve conflict
   conditions:
   - conflict
   actions:

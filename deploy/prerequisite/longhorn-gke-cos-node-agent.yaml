@@ -1,0 +1,153 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-gke-cos-node-agent-entrypoint
+  labels:
+    app: longhorn-gke-cos-node
+data:
+  entrypoint.sh: |
+    #!/bin/bash
+
+    set -euo pipefail
+
+    # Define default directories
+    HOST_MOUNT_DIR="${HOST_MOUNT_DIR:-/host}"
+    KUBERNETES_ROOTFS="${KUBERNETES_ROOTFS:-/home/kubernetes/containerized_mounter/rootfs}"
+    KUBERNETES_MOUNT_DIR="${HOST_MOUNT_DIR}${KUBERNETES_ROOTFS}"
+    LONGHORN_DATA_PATHS="${LONGHORN_DATA_PATHS:-/var/lib/longhorn}"
+    IFS=',' read -ra LONGHORN_DATA_DIRS <<< "$LONGHORN_DATA_PATHS"  # Split comma-separated dirs
+
+    # Function to mount the Longhorn data directory on the host
+    mount_longhorn_data_dir_on_host() {
+      local _longhorn_data_dir="$1"
+
+      if is_mounted_on_host "${_longhorn_data_dir}"; then
+        echo "Longhorn data directory ${_longhorn_data_dir} is already mounted"
+      else
+        echo "Mounting Longhorn data directory ${_longhorn_data_dir} on the host"
+
+        chroot "${HOST_MOUNT_DIR}" mkdir -p "${_longhorn_data_dir}"
+        chroot "${KUBERNETES_MOUNT_DIR}" mkdir -p "${_longhorn_data_dir}"
+
+        nsenter --mount="${HOST_MOUNT_DIR}/proc/1/ns/mnt" mount --rbind "${_longhorn_data_dir}" "${KUBERNETES_ROOTFS}${_longhorn_data_dir}"
+        nsenter --mount="${HOST_MOUNT_DIR}/proc/1/ns/mnt" mount --make-shared "${KUBERNETES_ROOTFS}${_longhorn_data_dir}"
+        nsenter --mount="${HOST_MOUNT_DIR}/proc/1/ns/mnt" mount -o remount,exec "${_longhorn_data_dir}"
+      fi
+    }
+
+    # Function to check if a directory is already mounted
+    is_mounted_on_host() {
+      nsenter --mount="${HOST_MOUNT_DIR}/proc/1/ns/mnt" findmnt --noheadings --output TARGET "$1"
+    }
+
+    # Function to check if a kernel module is loaded
+    is_module_loaded_on_host() {
+      local _module="$1"
+      nsenter --mount="${HOST_MOUNT_DIR}/proc/1/ns/mnt" lsmod | grep -q "${_module}"
+    }
+
+    # Function to load the iscsi_tcp kernel module on the host
+    load_iscsi_tcp_module_on_host() {
+      if is_module_loaded_on_host "iscsi_tcp"; then
+        echo "iscsi_tcp kernel module is already loaded"
+      else
+        echo "Loading iscsi_tcp kernel module"
+        nsenter --mount="${HOST_MOUNT_DIR}/proc/1/ns/mnt" modprobe iscsi_tcp
+      fi
+    }
+
+    # Function to install and start open-iscsi
+    install_and_start_iscsid() {
+      echo "Installing and starting open-iscsi"
+      zypper install -y open-iscsi
+      /sbin/iscsid
+    }
+
+    # Mount the Longhorn data directories
+    for LONGHORN_DATA_DIR in "${LONGHORN_DATA_DIRS[@]}"; do
+      mount_longhorn_data_dir_on_host "${LONGHORN_DATA_DIR}"
+    done
+
+    install_and_start_iscsid
+    load_iscsi_tcp_module_on_host
+
+    echo "Complete!"
+    echo "Keep the container running for iSCSI daemon"
+    sleep infinity
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: longhorn-gke-cos-node-agent
+  labels:
+    app: longhorn-gke-cos-node
+spec:
+  selector:
+    matchLabels:
+      app: longhorn-gke-cos-node
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: longhorn-gke-cos-node-agent
+        app: longhorn-gke-cos-node
+    spec:
+      volumes:
+        - name: host-mount
+          hostPath:
+            path: /
+        - name: entrypoint
+          configMap:
+            name: longhorn-gke-cos-node-agent-entrypoint
+            defaultMode: 0744
+      hostNetwork: true
+      containers:
+        - image: registry.suse.com/bci/bci-base:15.5
+          name: node-agent
+          command: ["/scripts/entrypoint.sh"]
+          env:
+            - name: HOST_MOUNT_DIR
+              value: /host
+            - name: KUBERNETES_ROOTFS
+              value: /home/kubernetes/containerized_mounter/rootfs
+            - name: LONGHORN_DATA_PATHS
+              # Comma-separated list of Longhorn data paths
+              # For example: /var/lib/longhorn1,/var/lib/longhorn2
+              value: /var/lib/longhorn
+          securityContext:
+            capabilities:
+              add:
+                - SYS_MODULE
+            privileged: true
+          volumeMounts:
+            - name: host-mount
+              mountPath: /host
+            - name: entrypoint
+              mountPath: /scripts
+          readinessProbe:
+            exec:
+              command:
+                - "/bin/bash"
+                - "-c"
+                - |
+                  nsenter --mount=${HOST_MOUNT_DIR}/proc/1/ns/mnt pgrep -x iscsid && \
+                  nsenter --mount=${HOST_MOUNT_DIR}/proc/1/ns/mnt lsmod | grep -q iscsi_tcp
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - "/bin/bash"
+                - "-c"
+                - |
+                  nsenter --mount=${HOST_MOUNT_DIR}/proc/1/ns/mnt pgrep -x iscsid && \
+                  nsenter --mount=${HOST_MOUNT_DIR}/proc/1/ns/mnt lsmod | grep -q iscsi_tcp
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
