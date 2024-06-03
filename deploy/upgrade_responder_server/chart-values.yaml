@@ -221,6 +221,10 @@ configMap:
         "longhornSettingV2DataEngine": {
           "dataType": "string",
           "maxLen": 200
+        },
+        "longhornSettingFreezeFilesystemForSnapshot"
+          "dataType": "string",
+          "maxLen": 200
         }
       },
       "extraFieldInfoSchema": {
@@ -391,6 +395,9 @@ configMap:
           "dataType": "float"
         },
         "longhornVolumeUnmapMarkSnapChainRemovedFalseCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeFreezeFilesystemForSnapshotTrueCount": {
           "dataType": "float"
         }
       }
