@@ -33,18 +33,25 @@ As a Longhorn user, I want to use a dedicated network interface for RWX volume d
 
 As a Longhorn user, I have storage network configured, and existing RWX volume workload before the v1.7.0 upgrade.
 
-- Pre-existing Workloads: There will be no disruption to pre-existing RWX volume workload pods since NFS mount point remains accessible in the host network namespace.
-- New Workloads: Newley created RWX volume workloads will be applied with the storage network.
+- Existing workload will continue using the cluster network without disruption.
+- New RWX volumes also user the cluster network.
+- User can enable the `storage-network-for-rwx-volume-enabled` setting to apply the storage network to re-attached RWX volumes.
+- Once the storage network is applied to the RWX volumes, the workload pod need to be restart when the CSI plugin pod restarts. User can automate this by enabling the `auto-delete-pod-when-volume-detached-unexpectedly` setting.
+
+### Story 3: Using Storage Network For RWO Volume Workload Only
+
+As a Longhorn user, I want to use the storage network for only RWO volumes to avoid restarting my RWO volume workload pods when the CSI plugin pod restarts.
+- User can control the application of the storage network to RWX volues by using the `storage-network-for-rwx-volume-enabled` setting.
 
 ### User Experience In Detail
 
 Users will be able to create RWX volumes that uses the storage network for data traffic. Key user-facing changes include:
 
-- **CSI Annotations:** Share manager pods and CSI plugin pods will be annotated with the storage network for NFS client mounting. This annotation will only be applied once all volumes have been detached.
+- **CSI Annotations:** Share manager pods and CSI plugin pods will be annotated with the storage network for NFS client mounting when the `storage-network-for-rwx-volume-enabled` setting is enabled. This annotation will only be applied once all RWX volumes have been detached.
 - **Headless Service:** RWX volume will use a headless service and a custom endpoint, removing dependency on ClusterIP, which is not suitable for Multus networking.
 - **Custom Mounter Replacement:** The custom mounter uses `hostPID` and host `proc` namespace will be replaced with running the CSI plugin with `hostNetwork: true`.
 - **Workload Pod Restart:** When a CSI plugin pod restarts, the NFS share mountpoint becomes unavailable, rendering any attempt to access it unresponsive. User can manually restart the workload pod, or they can enable the `auto-delete-pod-when-volume-detached-unexpectedly` setting. This allows Longhorn to delete the associated workload pod when it is using the storage-network. If the pod is managed by a controller, the kubelet will create a new pod. This allows the CSI controller to handle volume remounting through the CSI node server.
-- **Upgrade to Longhorn v1.7.0:** If the storage network is configured before the upgrade, the CSI plugin pod will be annotated accordingly. The **Workload Pod Restart** does not apply to pre-existing RWX volume workload pods during the upgrade to Longhorn v1.7.0, as the NFS share mountpoint remains accessible in the host network namespace. This condition will persist until a node reboot, or its share manager pod restart.
+- **Upgrade to Longhorn v1.7.0:** Existing RWX volumes remain unchanged if the storage network is configured before the upgrade. To apply the storage network for RWX volumes, detach all RWX volumes, enable the `storage-network-for-rwx-volume-enabled` setting, and reattach the volumes.
 
 ### API changes
 
@@ -52,13 +59,37 @@ No API changes are required for this proposal.
 
 ## Design
 
+### Storage Network For RWX Volume Enabled Setting.
+
+A new setting, `storage-network-for-rwx-volume-enabled`, allows controlling the application of the storage network for RWX volumes.
+
+When the CSI plugin pod of a workload using the storage network and RWX volume restarts, the workload pod also needs a restart to re-establish the NFS client mount connection. This setting enabled user to manage whether the storage network should be applied to the RWX volumes. For RWX volumes using the cluster network, no restart is required during the CSI plugin pod restarts.
+
+```golang
+	SettingDefinitionStorageNetworkForRWXVolumeEnabled = SettingDefinition{
+		DisplayName: "Storage Network for RWX Volume Enabled",
+		Description: "This setting allows Longhorn to use the storage network for in-cluster data traffic for RWX (Read-Write-Many) volume. \n\n" +
+			"To apply this setting to existing RWX volumes, they need to be reattached. \n\n" +
+			"WARNING: \n\n" +
+			"  - Enabling this setting will allow the CSI plugin pod to restart with the storage network annotatation if all RWX volumes are detached. \n\n" +
+			"  - The RWX volumes will be mounted with the storage network within the CSI plugin pod container network namespace. \n\n" +
+			"  - Consequently, restarting the CSI plugin pod may lead to unresponsive RWX volume mounts. If this occurs, you will need to restart the workload pod to re-establish the mount connection. \n\n" +
+			"  - Alternatively, you can enable the 'Automatically Delete Workload Pod when The Volume Is Detached Unexpectedly' setting. \n\n",
+		Category: SettingCategoryDangerZone,
+		Type:     SettingTypeBool,
+		Required: false,
+		ReadOnly: false,
+		Default:  "false",
+	}
+```
+
 ### CNI Annotation
 
 Introduce CSI annotation for RWX volume pod stack to enable NFS client mounting over the storage network:
 	- Share manager pod
 	- CSI plugin pod
 
-The setting controller will apply these annotations once all volumes are detached.
+The setting controller will apply these annotations once `storage-network-for-rwx-volume-enabled` setting is enabled and all RWX volumes are detached.
 
 ### Service
 
@@ -129,12 +160,13 @@ A difference approach is required when the storage network is configured. Multus
 
 Introduce a new responsibility to the Kubernetes pod controller: deleting workload pods that use the RWX volume and storage network when the CSI plugin pod restarts (during *Delete* operations). When a workload pod is deleted, its owning controller should create a new pod, initiating the normal volume attachment process. This process involves the CSI controller requesting the node server to unmount and mount the mount points, re-establishing the connection of the dangling mount. However, this approach results in a temporary disruption to the workload pod. Therefore, users can control this behavior using the `auto-delete-pod-when-volume-detached-unexpectedly` setting.
 
-The controller will not trigger workload pod deletion in the following scenarios:
+The controller will not trigger RWX volume workload pod deletion in the following scenarios:
 - Storage network setting is not configured.
-- The workload RWX volume's share manager pod is missing the storage network CNI annotation.
+- Storage network for RWX volume setting is disabled.
 
 ### Test plan
 
+1. **Feature Testing:** Verify that the storage network supports RWX volumes and ensure the functionality of new settings.
 1. **Regression Testing:** Cover both cluster network and storage network scenarios to ensure all functionalities work as expected.
 1. **Resilience Testing:** Verify data accessibility after CSI plugin pod restarts for both cluster network and storage network scenarios.
 1. **Cross-platform Testing:** Ensure RWX volume functionality on non-traditional operating systems such as Talos Linux and Container-Optimized OS for compatibility.
@@ -142,19 +174,18 @@ The controller will not trigger workload pod deletion in the following scenarios
 
 ### Upgrade strategy
 
-- **CSI Plugin Pod:** If the storage network is configured before upgrading, the CSI plugin pod will be annotated accordingly after the upgrade.
+- **Existing RWX Volumes:** RWX volumes will not use the storage network unless the `storage-network-for-rwx-volume-enabled` setting is enable. Therefore, upgrading to Longhorn v1.7.0 will not affect existing RWX volume workloads even if the storage network was already configured before the upgrade. To enable the storage network for both pre-upgrade-existing and new RWX volumes after the upgrade, user needs to:
+	1. Detach all RWX volumes.
+	1. Enable the `storage-network-for-rwx-volume-enabled` setting.
+	1. Reattach the RWX volumes.
 
-- **Existing RWX Volumes:** Upgrading to Longhorn v1.7.0 won't disrupt existing RWX volume workloads if the storage network is configured before the upgrade. This is because the NFS client mount connection resides in the host network namespace, unaffected by the CSI plugin pod restart during the upgrade. The Kubelet will automatically reuse the existing connection when the workload pod restarts after the upgrade.
+- **Future Version Upgrades (v1.7.1, v1.7.2, etc.):** Given the storage network is enabled for RWX volumes, upgrading to a future version will cause the Longhorn NFS data mounts in associated workload pods to become unresponsive after the CSI plugin pod restarts.
 
-- **Node Reboot:** Rebooting a node after the upgrade can impact pre-existing workloads. Reboots remove existing NFS mount entries. When the workload pod restarts, the CSI plugin recreates the mount within its own container network namespace. This means the NFS client connection becomes tied to the CSI plugin pod's lifecycle from this point forward, and Longhorn or the user becomes responsible for handling remounting the volume is the CSI plugin pod namespace is gone.
+To resolve this issue, user have two options:
+1. Enable the `auto-delete-pod-when-volume-detached-unexpectedly` setting before the upgrade. This allows Longohrn automatically restart the workload pod after the CSI plugin pod restart, re-establish the NFS client mount connection.
+1. Manually restart the workload pods after the upgrade.
 
-- **Handling Remounts By Setting:** Two scenarios can cause the `auto-delete-pod-when-volume-detached-unexpectedly` setting to apply to a pre-existing workload, even though they are using the cluster network:
-	1. Node reboot: As mentioned above, a node reboot removed existing NFS client mount entries. The CSI plugin creates new connection in its own namespace when the workload pod restarts.
-	1. Share Manager Pod Restart (not due to a node reboot): While restarting the share manager pod doesn't disrupt existing NFS client connections, Longhorn cannot distinuish the cause of the restart. Therefore, Longhorn treats this scenario similarly to a node reboot.
-
-- **New RWX Volumes:** When the storage network is configured before upgrading, New RWX volumes created after the upgrade will be applied with the storage network.
-
-- **Future Version Upgrades:** The Longhorn Kubernetes pod controller will trigger the deletion of workload pods, causing Kubelet to restart the workload pod. This process will remount NFS entries when the workload uses RWX volumes with the storage network.
+> **Note:** Both options resolves the unresponsiveness issue, however, it will cause a brief interruption to the workload pod.
 
 ## Note [optional]
 
