@@ -332,6 +332,7 @@ check_iscsid() {
       return 1
     fi
   fi
+  check_kernel_module ${pod} CONFIG_ISCSI_TCP iscsi_tcp
 }
 
 check_multipathd() {
