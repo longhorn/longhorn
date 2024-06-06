@@ -64,7 +64,7 @@ rules:
     resources: ["csidrivers", "storageclasses", "volumeattachments"]
     verbs: ["*"]
   - apiGroups: ["longhorn.io"]
-    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers",
+    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "images", "nodes", "instancemanagers", "sharemanagers",
                 "backingimages", "backingimagemanagers", "backingimagedatasources", "backuptargets", "backupvolumes", "backups",
                 "recurringjobs", "orphans", "snapshots", "supportbundles", "systembackups", "systemrestores", "volumeattachments", "backupbackingimages"]
     verbs: ["*"]

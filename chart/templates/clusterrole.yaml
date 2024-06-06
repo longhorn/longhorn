@@ -36,7 +36,7 @@ rules:
   verbs: ["*"]
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings", "settings/status",
-              "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
+              "engineimages", "engineimages/status", "images", "images/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
   {{- if .Values.openshift.enabled }}
               "engineimages/finalizers", "nodes/finalizers", "instancemanagers/finalizers",
   {{- end }}
