@@ -326,6 +326,8 @@ defaultSettings:
   allowCollectingLonghornUsageMetrics: ~
   # -- Setting that temporarily prevents all attempts to purge volume snapshots.
   disableSnapshotPurge: ~
+  # -- Pre-pull Longhorn manager images on all worker nodes before starting the manager pods.
+  startPrePullManagerImages: ~
   # -- Maximum snapshot count for a volume. The value should be between 2 to 250
   snapshotMaxCount: ~
   # -- Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.

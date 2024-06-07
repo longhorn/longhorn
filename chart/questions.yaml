@@ -427,7 +427,7 @@ questions:
     default: "true"
   - variable: defaultSettings.replicaZoneSoftAntiAffinity
     label: Replica Zone Level Soft Anti-Affinity
-    description: "Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas. Nodes don't belong to any Zone will be treated as in the same Zone. Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone. By, default true."
+    description: "Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas. Nodes don't belong to any Zone will be treated as in the same Zone. Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone. By default, true."
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
@@ -590,6 +590,12 @@ questions:
     group: "Longhorn Default Settings"
     type: boolean
     default: "false"
+  - variable: defaultSettings.startPrePullManagerImages
+    label: Start Pre-Pull Manager Images
+    description: "Pre-pull Longhorn manager images on all worker nodes before starting the manager pods. By default, true"
+    group: "Longhorn Default Settings"
+    type: boolean
+    default: "true"
   - variable: defaultSettings.freezeFilesystemForSnapshot
     description: "Setting that freezes the filesystem on the root partition before a snapshot is created."
     group: "Longhorn Default Settings"
