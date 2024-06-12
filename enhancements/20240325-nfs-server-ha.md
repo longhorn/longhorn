@@ -60,7 +60,7 @@ If the lease is expired, we infer that the pod's node is dead and another contro
 
 3. Quick creation of a replacement  
 This is already a normal part of the Share Manager lifecycle.  But it does need an adjustment to avoid the former host, which Kubernetes will try to re-schedule to since Kubelet does not yet report it as down.
-    - Use the stored node identity, if found, to add a node anti-affinity into the existing set of selectors, tolerations, and affinities defined for share-manager pods.  Note that the node on which the pod is scheduled may not be the interim controller node, so oownership might change again.  
+    - Use the stored node identity, if found, to add a node anti-affinity into the existing set of selectors, tolerations, and affinities defined for share-manager pods.  Note that the node on which the pod is scheduled may not be the interim controller node, so ownership might change again.  
     - Including delinquency in the check for node status should allow the normal re-mount and new attachment creation to work as it does currently.
 
 4. Avoid client workload pod restart  
@@ -130,10 +130,10 @@ Although there is a lot of work to do for production-ready quality, that gives a
 For all code paths, the fallback is to resort to the normal "not ready" path.  So at worst, the failover time is the same as previous releases.  Every effort should be made to ensure that the logging is clear and sufficient to tell why an expedited failover was not accomplished in such cases.
 
 - **Global impact of Delinquent condition**
-Changing the meaning of `NodeDownOrDeleted` to use delinquency will have an effect on all volumes, not just RWX.  One expired lease could lead to the relocation of any resource owned by that node and the InstanceManager itself.  Even if that is accurate, that's a big step to take.  If it turns out not be accurate, that would be worse.  There would also be a potential race because the node_controller on the still-living node would promptly clear the `Delinquent` condition, leading to non-deterministic behavior.  
+Changing the meaning of `NodeDownOrDeleted` to use delinquency will have an effect on all volumes, not just RWX.  One expired lease would lead to the relocation of any resource owned by that node and the InstanceManager itself.  Even if that is accurate, that's a big step to take.  If it turns out not be accurate, that would be worse.  There would also be a potential race because the node_controller on the still-living node would promptly clear the `Delinquent` condition, leading to non-deterministic behavior.  
 It would be better to find a way to confine the effects of a stale lease to the volume it applies to.  How might that be done?
     - For resources that map one-one with RWX volumes, use the resource controller's `isResponsibleFor()` method to check first whether the related share manager ownership has moved, and if so, change to match it.  That can work for the volume, volume attachment, and engine controllers.
-    - For engine instances, we need to ... *(looking for help here.)*
+    - For engine and replica instances, the handling depends on the instance manager's state, which in turn is controlled by its node's `DownOrDeleted` status.  If the instance manager is allowed to remain in "running" state, then every piece of code that checks instance manager state would need to have an added check of node delinquent condition, at least for instances that belong to RWX volumes.
 
 - **Possible delay due to image pull on the successor node**
 The user should avoid a pull policy of `Always`.  If there are multiple RWX volumes, the failover node may already have the image.  There is also a ticket in development to pre-pull a variety of system-managed pod images: [[IMPROVEMENT] Pre-pull images (share-manager image and instance-manager image) on each Longhorn node](https://github.com/longhorn/longhorn/issues/8376).
@@ -147,6 +147,10 @@ One open question is whether delays in lease renewal and false positives are mor
 
 - **Experimental feature**
 If desired, the timeout setting can be set at a high value, such as 600 seconds, to guarantee that normal Kubernetes node-failure handling will take place first.  The (slight) overhead for Lease creation and update will still remain.  If RWX HA is released as an "experimental" feature, the high value can be the default.
+
+- **Webhook availability**
+Testing with the PoC uncovered a snag.  Occasionally, at the end of the sequence, the share manager controller will get a failure when it updates the volume attachment. The error is a timeout while trying to call the admission webhook.  That repeats until the failed node actually goes to "not ready", and then it succeeds, usually about 20-30 seconds later.  It doesn't break anything, but it means that the failover takes as long as it would without this feature.  
+In analysis with team members, we concluded that it is because the admission webhook is a service and one node of the cluster is picked to respond to the service IP address.  It can happen that it is the same node that hosted the share manager and has failed.  If so, calls to the webhook will time out until control is passed by Kubernetes to another node, which happens on its own timetable.  On the PoC test cluster of three worker nodes, that's about 1/3 of the time.  That means that failovers will intermittently and unpredictably take longer than they should.  No workaround is currently known.  
 
 ### Upgrade Strategy
 
