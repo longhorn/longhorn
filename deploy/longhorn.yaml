@@ -4485,6 +4485,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+      - name: pre-pull-share-manager-image
+        imagePullPolicy: IfNotPresent
+        image: longhornio/longhorn-share-manager:master-head
+        command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
       volumes:
       - name: dev
         hostPath:
