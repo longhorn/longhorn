@@ -343,6 +343,8 @@ defaultSettings:
   freezeFilesystemForSnapshot: ~
   # -- Setting that automatically cleans up the snapshot when the backup is deleted.
   autoCleanupSnapshotWhenDeleteBackup: ~
+  # -- Turn on logic to detect and move RWX volumes quickly on node failure.
+  enableShareManagerFastFailover: ~
 
 privateRegistry:
   # -- Setting that allows you to create a private registry secret.

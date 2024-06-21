@@ -8,7 +8,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: longhorn-manager
+    longhorn.io/conversion-webhook: longhorn-conversion-webhook
   ports:
   - name: conversion-webhook
     port: 9501
@@ -24,7 +24,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: longhorn-manager
+    longhorn.io/admission-webhook: longhorn-admission-webhook
   ports:
   - name: admission-webhook
     port: 9502
@@ -40,7 +40,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: longhorn-manager
+    longhorn.io/recovery-backend: longhorn-recovery-backend
   ports:
   - name: recovery-backend
     port: 9503
