@@ -6,7 +6,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: longhorn-manager
+      longhorn.io/recovery-backend: longhorn-recovery-backend
   policyTypes:
   - Ingress
   ingress:

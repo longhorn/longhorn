@@ -753,6 +753,12 @@ questions:
   group: "Longhorn Default Settings"
   type: boolean
   default: false
+- variable: defaultSettings.enableShareManagerFastFailover
+  label: Enable Share Manager Fast Failover (Experimental)
+  description: "Turn on logic to detect and move RWX volumes quickly on node failure."
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Setting that allows you to specify the default Longhorn StorageClass."
