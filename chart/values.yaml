@@ -336,6 +336,8 @@ defaultSettings:
   v2DataEngineLogFlags: ~
   # -- Setting that freezes the filesystem on the root partition before a snapshot is created.
   freezeFilesystemForSnapshot: ~
+  # -- Setting that automatically cleans up the snapshot when the backup is deleted.
+  autoCleanupSnapshotWhenDeleteBackup: ~
 
 privateRegistry:
   # -- Setting that allows you to create a private registry secret.
