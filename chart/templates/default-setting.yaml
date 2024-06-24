@@ -185,6 +185,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaFileSyncHttpClientTimeout) }}
     replica-file-sync-http-client-timeout: {{ .Values.defaultSettings.replicaFileSyncHttpClientTimeout }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.longGRPCTimeOut) }}
+    long-grpc-timeout: {{ .Values.defaultSettings.longGRPCTimeOut }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.logLevel) }}
     log-level: {{ .Values.defaultSettings.logLevel }}
     {{- end }}
