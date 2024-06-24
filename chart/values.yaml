@@ -300,6 +300,8 @@ defaultSettings:
   fastReplicaRebuildEnabled: ~
   # -- Number of seconds that an HTTP client waits for a response from a File Sync server before considering the connection to have failed.
   replicaFileSyncHttpClientTimeout: ~
+  # -- Number of seconds that Longhorn allows for the completion of replica rebuilding and snapshot cloning operations.
+  longGRPCTimeOut: ~
   # -- Log levels that indicate the type and severity of logs in Longhorn Manager. The default value is "Info". (Options: "Panic", "Fatal", "Error", "Warn", "Info", "Debug", "Trace")
   logLevel: ~
   # -- Setting that allows you to specify a backup compression method.
