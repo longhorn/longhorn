@@ -868,6 +868,13 @@ spec:
           spec:
             description: BackupSpec defines the desired state of the Longhorn backup
             properties:
+              backupTargetName:
+                description: The backup target name.
+                type: string
+              backupTargetURL:
+                description: The backup target url.
+                nullable: true
+                type: string
               labels:
                 additionalProperties:
                   type: string
@@ -1082,9 +1089,15 @@ spec:
               credentialSecret:
                 description: The backup target credential secret.
                 type: string
+              default:
+                description: Default indicates if the
+                type: boolean
               pollInterval:
                 description: The interval that the cluster needs to run sync with the backup target.
                 type: string
+              readOnly:
+                description: ReadOnly indicates if it
+                type: boolean
               syncRequestedAt:
                 description: The time to request run sync the remote backup target.
                 format: date-time
@@ -1122,6 +1135,9 @@ spec:
                   type: object
                 nullable: true
                 type: array
+              default:
+                description: Default indicates if the
+                type: boolean
               lastSyncedAt:
                 description: The last time that the controller synced with the remote backup target.
                 format: date-time
@@ -1239,10 +1255,21 @@ spec:
           spec:
             description: BackupVolumeSpec defines the desired state of the Longhorn backup volume
             properties:
+              backupTargetName:
+                description: The backup target name that the backup volume was synced.
+                nullable: true
+                type: string
+              backupTargetURL:
+                description: The backup target url that the backup volume was synced.
+                nullable: true
+                type: string
               syncRequestedAt:
                 description: The time to request run sync the remote backup volume.
                 format: date-time
                 nullable: true
+                type: string
+              volumeName:
+                description: The volume name that the backup volume was used to backup.
                 type: string
             type: object
           status:
@@ -1618,6 +1645,8 @@ spec:
                 type: boolean
               backendStoreDriver:
                 description: 'Deprecated: Replaced by field `dataEngine`.'
+                type: string
+              backupTargetName:
                 type: string
               backupVolume:
                 type: string
@@ -2642,6 +2671,9 @@ spec:
           spec:
             description: RecurringJobSpec defines the desired state of the Longhorn recurring job
             properties:
+              backupTargetName:
+                description: The backup target name for backup job task.
+                type: string
               concurrency:
                 description: The concurrency of taking the snapshot/backup.
                 type: integer
