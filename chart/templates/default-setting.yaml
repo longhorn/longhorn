@@ -239,3 +239,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.freezeFilesystemForSnapshot) }}
     freeze-filesystem-for-snapshot: {{ .Values.defaultSettings.freezeFilesystemForSnapshot }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup) }}
+    auto-cleanup-when-delete-backup: {{ .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup }}
+    {{- end }}

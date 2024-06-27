@@ -124,6 +124,7 @@ spec:
                 - upload
                 - export-from-volume
                 - restore
+                - clone
                 type: string
               uuid:
                 type: string
@@ -445,6 +446,10 @@ spec:
                 additionalProperties:
                   type: string
                 type: object
+              secret:
+                type: string
+              secretNamespace:
+                type: string
               sourceParameters:
                 additionalProperties:
                   type: string
@@ -455,6 +460,7 @@ spec:
                 - upload
                 - export-from-volume
                 - restore
+                - clone
                 type: string
             type: object
           status:
