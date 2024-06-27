@@ -665,6 +665,12 @@ questions:
   group: "Longhorn Default Settings"
   type: int
   default: "30"
+- variable: defaultSettings.longGRPCTimeOut
+  label: Long gRPC Timeout
+  description: "Number of seconds that Longhorn allows for the completion of replica rebuilding and snapshot cloning operations."
+  group: "Longhorn Default Settings"
+  type: int
+  default: "86400"
 - variable: defaultSettings.backupCompressionMethod
   label: Backup Compression Method
   description: "Setting that allows you to specify a backup compression method."
@@ -741,6 +747,12 @@ questions:
   - "enabled"
   - "disabled"
   default: "enabled"
+- variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
+  label: Auto Cleanup Snapshot When Delete Backup
+  description: "Setting that automatically cleans up the snapshot when the backup is deleted."
+  group: "Longhorn Default Settings"
+  type: boolean
+  default: false
 - variable: persistence.defaultClass
   default: "true"
   description: "Setting that allows you to specify the default Longhorn StorageClass."
@@ -955,7 +967,7 @@ questions:
     label: Guaranteed Instance Manager CPU for V2 Data Engine
     description: 'Number of millicpus on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is "1250".
     WARNING:
-    - Specifying a value of 0 disables CPU requests for instance manager pods. You must specify an integer between 1000 and 8000. 
+    - Specifying a value of 0 disables CPU requests for instance manager pods. You must specify an integer between 1000 and 8000.
     - This is a global setting. Modifying the value triggers an automatic restart of the instance manager pods. Do not modify the value while volumes are still attached."
     group: "Longhorn Default Settings'
     type: int
