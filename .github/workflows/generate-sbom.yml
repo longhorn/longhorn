@@ -1,0 +1,33 @@
+name: Generate-SBOM
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    - name: Install Syft
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+    - name: Install Cosign
+      uses: sigstore/cosign-installer@v3.5.0
+    - name: Generate SBOM
+      run: |
+        syft longhornio/longhorn-manager:v1.6.0 -o json --platform=linux/amd64 > longhorn-manager:v1.6.0-amd64.sbom
+    - name: Generate Key
+      run: |
+        cosign generate-key-pair github://$REPO_OWNER/$REPO_NAME
+      env:
+        COSIGN_PASSWORD: ""
+    - name: Sign SBOM
+      run: |
+        cosign sign-blob -y longhorn-manager:v1.6.0-amd64.sbom --key env://COSIGN_PRIVATE_KEY
+      env:
+        COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
