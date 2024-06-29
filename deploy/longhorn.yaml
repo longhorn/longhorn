@@ -4324,38 +4324,6 @@ spec:
     port: 9503
     targetPort: recov-backend
 ---
-# Source: longhorn/templates/services.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.2
-  name: longhorn-engine-manager
-  namespace: longhorn-system
-spec:
-  clusterIP: None
-  selector:
-    longhorn.io/component: instance-manager
-    longhorn.io/instance-manager-type: engine
----
-# Source: longhorn/templates/services.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.2
-  name: longhorn-replica-manager
-  namespace: longhorn-system
-spec:
-  clusterIP: None
-  selector:
-    longhorn.io/component: instance-manager
-    longhorn.io/instance-manager-type: replica
----
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: apps/v1
 kind: DaemonSet
