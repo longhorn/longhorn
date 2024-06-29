@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: longhorn-iscsi-selinux-workaround
+  namespace: longhorn-system
   labels:
     app: longhorn-iscsi-selinux-workaround
   annotations:
