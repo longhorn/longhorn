@@ -43,7 +43,9 @@ https://github.com/longhorn/longhorn/issues/4105
 	- Configure via Longhorn UI or Kubernetes CRD.
 		- Set `replica-auto-balance` to `best-effort`.
 		- Define the `replica-auto-balance-disk-pressure-percentage` (e.g., 90% used space triggers disk rebalancing).
-		- Set `replica-soft-anti-affinity` to `enabled` to allow replicas on the same node.
+
+	> **Note:** This feature is not affected by the `replica-soft-anti-affinity` setting. This means that even if the node soft anti-affinity prevents Longhorn from rebuilding a replica on the same node, this feature will still attempt to rebuild a replica on the same node but on a different disk for migration purpose.
+
 1. **Deploy Workload:** Deploy workload utilizing Longhorn volumes.
 1. **Replica Disk Reaches Pressured Threshold:**
 	- Longhorn automatically find another disk on the same node with more available disk space.
@@ -54,9 +56,7 @@ https://github.com/longhorn/longhorn/issues/4105
 
 ### New Setting: `replica-auto-balance-disk-pressure-percentage`
 
-This setting allows defining the disk pressure threshold (percentage of used space) that triggers automatic rebalancing. Its only functional when:
-- `replica-auto-balance` is set to `best-effort`.
-- `replica-soft-anti-affinity` is set to `enabled`.
+This setting allows defining the disk pressure threshold (percentage of used space) that triggers automatic rebalancing. Its only functional when `replica-auto-balance` is set to `best-effort`.
 ```go
 SettingDefinitionReplicaAutoBalanceDiskPressurePercentage = SettingDefinition{
 	DisplayName: "Replica Auto Balance Disk Pressure Threshold (%)",
@@ -64,7 +64,6 @@ SettingDefinitionReplicaAutoBalanceDiskPressurePercentage = SettingDefinition{
 		"When the threshold percentage is reached, Longhorn automatically rebuilds replicas under disk pressure onto another disk within the same node.\n\n" +
 		"**Note:** This setting is effective only under the following conditions:\n" +
 		"- **Replica Auto Balance** is set to **best-effort**.\n" +
-		"- **Replica Node Level Soft Anti-Affinity** is set to **enabled**.\n" +
 		"- There must be at least one other disk on the node with sufficient available space.\n\n" +
 		"To disable this feature for replica auto-balance (best-effort), set the value to 0.",
 	Category:    SettingCategoryScheduling,
@@ -173,7 +172,7 @@ localSync = &etypes.FileLocalSync{
 	```
 
 1. Identify Local Sync Request: The sync-agent received the `FileSyncRequest` containing the `FileLocalSync` message.
-1. Perform Local File Copy: If the `FileLocalSync` messaage is provided, the sync-agent uses the provided source and target paths to directly copy the replica data within the same node using [CopyFile](https://github.com/longhorn/go-common-libs/blob/2133a7e73771ecdd26494a9c1ed2b31495ffd4f2/io/file.go#L102) function in the go-common-libs repository. The `CopyFile` should work with sparse file, additional unit test should be added to verify the behavior of `CopyFile` with spare files.
+1. Perform Local File Copy: If the `FileLocalSync` messaage is provided, the sync-agent uses the provided source and target paths to directly copy the replica data within the same node. New functions will be implemented in https://github.com/longhorn/sparse-tools/ for synchronizing data contents using local files.
 1. Fallback to TCP Transfer (if needed): In case of errors during local file copy, the sync-agent removed file created to the target directory and falls back to the approach of transferring data using TCP.
 
 ### Test Plan
@@ -184,7 +183,7 @@ localSync = &etypes.FileLocalSync{
 
 ### Upgrade strategy
 
-This feature introduces a new setting and is non-disruptive to existing Longhorn system. User can continue using exiting volumes as before and the feature will automatically apply if the cluster have `replica-auto-balance` set to `best-effort` and `replica-soft-anti-affinity` is set to `enabled` during the upgrade process.
+This feature introduces a new setting and is non-disruptive to existing Longhorn system. User can continue using exiting volumes as before and the feature will automatically apply if the cluster have `replica-auto-balance` set to `best-effort` during the upgrade process.
 
 ### Limitations
 
