@@ -43,7 +43,9 @@ https://github.com/longhorn/longhorn/issues/4105
 	- Configure via Longhorn UI or Kubernetes CRD.
 		- Set `replica-auto-blance` to `best-effort`.
 		- Define the `replica-auto-balance-disk-pressure-percentage` (e.g., 90% used space triggers disk rebalancing).
-		- Set `replica-soft-anti-affinity` to `enabled` to allow replicas on the same node.
+
+	> **Note:** This feature will bypass the `replica-soft-anti-affinity` setting.
+
 1. **Deploy Workload:** Deploy workload utilizing Longhorn volumes.
 1. **Replica Disk Reaches Pressured Threshold:**
 	- Longhorn automatically find another disk on the same node with more available disk space.
@@ -54,9 +56,7 @@ https://github.com/longhorn/longhorn/issues/4105
 
 ### New Setting: `replica-auto-balance-disk-pressure-percentage`
 
-This setting allows defining the disk pressure threshold (percentage of used space) that triggers automatic rebalancing. Its only functional when:
-- `replica-auto-balance` is set to `best-effort`.
-- `replica-soft-anti-affinity` is set to `enabled`.
+This setting allows defining the disk pressure threshold (percentage of used space) that triggers automatic rebalancing. Its only functional when `replica-auto-balance` is set to `best-effort`.
 ```go
 SettingDefinitionReplicaAutoBalanceDiskPressurePercentage = SettingDefinition{
 	DisplayName: "Replica Auto Balance Disk Pressure Threshold (%)",
@@ -184,7 +184,7 @@ localSync = &etypes.FileLocalSync{
 
 ### Upgrade strategy
 
-This feature introduces a new setting and is non-disruptive to existing Longhorn system. User can continue using exiting volumes as before and the feature will automatically apply if the cluster have `replica-auto-blance` set to `best-effort` and `replica-soft-anti-affinity` is set to `enabled` during the upgrade process.
+This feature introduces a new setting and is non-disruptive to existing Longhorn system. User can continue using exiting volumes as before and the feature will automatically apply if the cluster have `replica-auto-blance` set to `best-effort` during the upgrade process.
 
 ### Limitations
 
