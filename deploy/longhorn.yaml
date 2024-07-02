@@ -3057,7 +3057,7 @@ spec:
           metadata:
             type: object
           status:
-            description: SettingStatus defines the observed state of the Longhorn setting
+            description: The status of the setting.
             properties:
               applied:
                 description: The setting is applied.
@@ -3956,6 +3956,10 @@ spec:
                 type: integer
               cloneStatus:
                 properties:
+                  attemptCount:
+                    type: integer
+                  nextAllowedAttemptAt:
+                    type: string
                   snapshot:
                     type: string
                   sourceVolume:
