@@ -4115,7 +4115,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:v1.5.5"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.38"
+        - "longhornio/support-bundle-kit:v0.0.39"
         - --manager-image
         - "longhornio/longhorn-manager:v1.5.5"
         - --service-account
