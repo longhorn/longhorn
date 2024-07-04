@@ -4025,8 +4025,6 @@ spec:
                       properties:
                         podName:
                           type: string
-                        podNamespace:
-                          type: string
                         podStatus:
                           type: string
                         workloadName:
