@@ -103,6 +103,11 @@ persistence:
     dataSourceType: ~
     dataSourceParameters: ~
     expectedChecksum: ~
+  defaultDiskSelector:
+    # -- Setting that allows you to enable the disk selector for the default Longhorn StorageClass.
+    enable: false
+    # -- Disk selector for the default Longhorn StorageClass. Longhorn uses only disks with the specified tags for storing volume data. (Examples: "nvme,sata")
+    selector: ""
   defaultNodeSelector:
     enable: false # disable by default
     selector: ""
