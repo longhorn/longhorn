@@ -146,6 +146,8 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.defaultDataLocality | string | `"disabled"` | Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort") |
 | persistence.defaultFsType | string | `"ext4"` | Filesystem type of the default Longhorn StorageClass. |
 | persistence.defaultMkfsParams | string | `""` | mkfs parameters of the default Longhorn StorageClass. |
+| persistence.defaultDiskSelector.enable | bool | `false` | Setting that allows you to enable the disk selector for the default Longhorn StorageClass. |
+| persistence.defaultDiskSelector.selector | string | `""` | Disk selector for the default Longhorn StorageClass. Longhorn uses only disks with the specified tags for storing volume data. (Examples: "nvme,sata") |
 | persistence.defaultNodeSelector.enable | bool | `false` | Setting that allows you to enable the node selector for the default Longhorn StorageClass. |
 | persistence.defaultNodeSelector.selector | string | `""` | Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast") |
 | persistence.migratable | bool | `false` | Setting that allows you to enable live migration of a Longhorn volume from one node to another. |
