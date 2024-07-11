@@ -306,5 +306,19 @@ serviceAccount:
 
 metrics:
   serviceMonitor:
-    # Enable this to create the ServiceMonitor
+    # Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components.
     enabled: false
+    # Setting that adds additional labels to the Prometheus ServiceMonitor.
+    additionalLabels: {}
+    # Setting that adds annotations to the Prometheus ServiceMonitor.
+    annotations: {}
+    # Interval at which Prometheus scrapes the metrics from the target.
+    interval: ""
+    # Timeout after which Prometheus considers the scrape to be failed.
+    scrapeTimeout: ""
+    # Configures the relabeling rules to apply the target’s metadata labels. See Prometheus operator documentation for
+    # format.
+    relabelings: []
+    # Configures the relabeling rules to apply to the samples before ingestion. See Prometheus operator documentation
+    # for format.
+    metricRelabelings: []
