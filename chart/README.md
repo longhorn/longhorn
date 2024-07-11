@@ -144,10 +144,10 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.defaultClass | bool | `true` | Setting that allows you to specify the default Longhorn StorageClass. |
 | persistence.defaultClassReplicaCount | int | `3` | Replica count of the default Longhorn StorageClass. |
 | persistence.defaultDataLocality | string | `"disabled"` | Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort") |
-| persistence.defaultFsType | string | `"ext4"` | Filesystem type of the default Longhorn StorageClass. |
-| persistence.defaultMkfsParams | string | `""` | mkfs parameters of the default Longhorn StorageClass. |
 | persistence.defaultDiskSelector.enable | bool | `false` | Setting that allows you to enable the disk selector for the default Longhorn StorageClass. |
 | persistence.defaultDiskSelector.selector | string | `""` | Disk selector for the default Longhorn StorageClass. Longhorn uses only disks with the specified tags for storing volume data. (Examples: "nvme,sata") |
+| persistence.defaultFsType | string | `"ext4"` | Filesystem type of the default Longhorn StorageClass. |
+| persistence.defaultMkfsParams | string | `""` | mkfs parameters of the default Longhorn StorageClass. |
 | persistence.defaultNodeSelector.enable | bool | `false` | Setting that allows you to enable the node selector for the default Longhorn StorageClass. |
 | persistence.defaultNodeSelector.selector | string | `""` | Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast") |
 | persistence.disableRevisionCounter | string | `"true"` | Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the volume-head-xxx.img file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. |
@@ -248,7 +248,13 @@ For more details, see the [ocp-readme](https://github.com/longhorn/longhorn/blob
 | annotations | `{}` | Annotation for the Longhorn Manager DaemonSet pods. This setting is optional. |
 | enableGoCoverDir | `false` | Setting that allows Longhorn to generate code coverage profiles. |
 | enablePSP | `false` | Setting that allows you to enable pod security policies (PSPs) that allow privileged Longhorn pods to start. This setting applies only to clusters running Kubernetes 1.25 and earlier, and with the built-in Pod Security admission controller enabled. |
+| metrics.serviceMonitor.additionalLabels | `{}` | Setting that adds additional labels to the Prometheus ServiceMonitor. |
+| metrics.serviceMonitor.annotations | `{}` | Setting that adds annotations to the Prometheus ServiceMonitor. |
 | metrics.serviceMonitor.enabled | `false` | Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components. |
+| metrics.serviceMonitor.interval | `""` | Interval at which Prometheus scrapes the metrics from the target. |
+| metrics.serviceMonitor.metricRelabelings | `[]` | Configures the relabeling rules to apply to the samples before ingestion. See Prometheus operator documentation for format. |
+| metrics.serviceMonitor.relabelings | `[]` | Configures the relabeling rules to apply the target’s metadata labels. See Prometheus operator documentation for format. |
+| metrics.serviceMonitor.scrapeTimeout | `""` | Timeout after which Prometheus considers the scrape to be failed. |
 | namespaceOverride | `""` | Specify override namespace, specifically this is useful for using longhorn as sub-chart and its release namespace is not the `longhorn-system`. |
 | preUpgradeChecker.jobEnabled | `true` | Setting that allows Longhorn to perform pre-upgrade checks. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions. |
 | preUpgradeChecker.upgradeVersionCheck | `true` | Setting that allows Longhorn to perform upgrade version checks after starting the Longhorn Manager DaemonSet Pods. Disabling this setting also disables `preUpgradeChecker.jobEnabled`. Longhorn recommends keeping this setting enabled. |
