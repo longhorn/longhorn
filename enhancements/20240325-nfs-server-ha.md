@@ -53,13 +53,13 @@ If the lease is expired, we infer that the pod's node is dead and another contro
         - Remember the old lease holder.  
         - Clear the lease.  
         - Delete the pod.  
-        - If the node is down *OR* expired, do a force delete of the share-manager pod as well.  If it truly is down, this is the same as current code.  If it is not, then the first delete should have succeeded, but either way, even if the pod is still running, this will ensure that Kubernetes does not route service traffic to it.  Also, deletion allows re-use of the same standard pod name, avoiding one potential upgrade complication.
+        - If the node is down *OR* expired, do a force delete of the share-manager pod as well.  If it truly is down, this is the same as current code.  If it is not, then the first delete should have succeeded, but either way, even if the pod is still running, this will ensure that Kubernetes does not route service traffic to it.  Also, deletion allows reuse of the same standard pod name, avoiding one potential upgrade complication.
     - Other resources need to change ownership similarly.  Modify the usual rules to capture our suspicion that the expired node is dead:
         - Add a Condition named "Delinquent" to longhorn.node.io, set to "False" by default.  A node is set to Delinquent=true when a share manager lease for a pod on that node expires.  It is cleared by the node itself in node_controller when it starts operation again.
         - Change controller_manager's `IsNodeDownOrDeleted` to check `IsNodeDownOrDeletedOrDelinquent` for other RWX volume-related resources, as well as any resource-specific `isResponsibleFor` calls that don't use the base implementation.  
 
 3. Quick creation of a replacement  
-This is already a normal part of the Share Manager lifecycle.  But it does need an adjustment to avoid the former host, which Kubernetes will try to re-schedule to since Kubelet does not yet report it as down.
+This is already a normal part of the Share Manager lifecycle.  But it does need an adjustment to avoid the former host, which Kubernetes will try to re-schedule to since Kubelet does not yet report it as down.  
     - Use the stored node identity, if found, to add a node anti-affinity into the existing set of selectors, tolerations, and affinities defined for share-manager pods.  Note that the node on which the pod is scheduled may not be the interim controller node, so ownership might change again.  
     - Including delinquency in the check for node status should allow the normal re-mount and new attachment creation to work as it does currently.
 
@@ -132,7 +132,7 @@ For all code paths, the fallback is to resort to the normal "not ready" path.  S
 
 - **Global impact of Delinquent condition**
 Changing the meaning of `NodeDownOrDeleted` to use delinquency will have an effect on all volumes, not just RWX.  One expired lease would lead to the relocation of any resource owned by that node and the InstanceManager itself.  Even if that is accurate, that's a big step to take.  Some recovery actions might have to time out until the Kubernetes node status catches up.  
-If it is not accurate, it would be short-lived.  The node_controller on the still-living node will promptly clear the `Delinquent` condition and restore the webhook selector labels.  But that has the potential to create a race with any cleanup actions that may have aleady started, leading to non-deterministic behavior.  
+If it is not accurate, it would be short-lived.  The node_controller on the still-living node will promptly clear the `Delinquent` condition and restore the webhook selector labels.  But that has the potential to create a race with any cleanup actions that may have already started, leading to non-deterministic behavior.  
 It would be better to find a way to confine the effects of a stale lease to the volume it applies to.  How might that be done?
     - For resources that map one-one with RWX volumes, use the resource controller's `isResponsibleFor()` method to check first whether the related share manager ownership has moved, and if so, change to match it.  That can work for the volume, volume attachment, and engine controllers.
     - For engine and replica instances, the handling depends on the instance manager's state, which in turn is controlled by its node's `DownOrDeleted` status.  If the instance manager is allowed to remain in "running" state, then every piece of code that checks instance manager state would need to have an added check of node delinquent condition, at least for instances that belong to RWX volumes, in situations where that can be determined.
