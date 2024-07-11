@@ -496,7 +496,7 @@ metrics:
     # -- Setting that adds annotations to the Prometheus ServiceMonitor.
     annotations: {}
     # -- Interval at which Prometheus scrapes the metrics from the target.
-    interval: 30s
+    interval: ""
     # -- Timeout after which Prometheus considers the scrape to be failed.
     scrapeTimeout: ""
     # -- Configures the relabeling rules to apply the target’s metadata labels. See Prometheus operator documentation
