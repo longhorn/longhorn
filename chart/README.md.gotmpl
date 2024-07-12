@@ -187,6 +187,16 @@ You can install Longhorn in an air-gapped environment with a private registry. F
   {{- end }}
 {{- end }}
 
+### Metrics Settings
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{- range .Values }}
+  {{- if hasPrefix "metrics" .Key }}
+| {{ .Key }} | {{ .Type }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+  {{- end }}
+{{- end }}
+
 ### OS/Kubernetes Distro Settings
 
 #### OpenShift Settings
@@ -217,6 +227,7 @@ For more details, see the [ocp-readme](https://github.com/longhorn/longhorn/blob
   (hasPrefix "longhornUI" .Key)
   (hasPrefix "privateRegistry" .Key)
   (hasPrefix "ingress" .Key)
+  (hasPrefix "metrics" .Key)
   (hasPrefix "openshift" .Key)
   (hasPrefix "global" .Key)) }}
 | {{ .Key }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
