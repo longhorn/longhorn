@@ -54,3 +54,9 @@ data:
       {{- if .Values.persistence.disableRevisionCounter }}
       disableRevisionCounter: "{{ .Values.persistence.disableRevisionCounter }}"
       {{- end }}
+      {{- if .Values.persistence.encrypted }}
+      encrypted: {{ .Values.persistence.encrypted | quote }}
+      {{- if .Values.persistence.encryptionParameters }}
+      {{ .Values.persistence.encryptionParameters | toYaml | nindent 6 }}
+      {{- end }}
+      {{- end }}
