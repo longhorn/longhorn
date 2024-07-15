@@ -172,6 +172,12 @@ persistence:
     selector: ""
   # -- Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
   removeSnapshotsDuringFilesystemTrim: ignored
+  # -- Setting that enables encryption for the default Longhorn StorageClass. (Options: "true", "false")
+  encrypted: ""
+  # -- Setting that allows you to specify extra parameters for the default Longhorn StorageClass.
+  # It must be a map of string to string. (Example: `{"encrypted": "true" }`)
+  extraParameters: {}
+
 
 preUpgradeChecker:
   # -- Setting that allows Longhorn to perform pre-upgrade checks. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions.
