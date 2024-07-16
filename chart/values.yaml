@@ -493,19 +493,21 @@ metrics:
   serviceMonitor:
     # -- Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components.
     enabled: false
-    # -- Setting that adds additional labels to the Prometheus ServiceMonitor.
+    # -- Additional labels for the Prometheus ServiceMonitor resource.
     additionalLabels: {}
-    # -- Setting that adds annotations to the Prometheus ServiceMonitor.
+    # -- Annotations for the Prometheus ServiceMonitor resource.
     annotations: {}
     # -- Interval at which Prometheus scrapes the metrics from the target.
     interval: ""
     # -- Timeout after which Prometheus considers the scrape to be failed.
     scrapeTimeout: ""
-    # -- Configures the relabeling rules to apply the target’s metadata labels. See Prometheus operator documentation
-    # for format.
+    # -- Configures the relabeling rules to apply the target’s metadata labels. See the [Prometheus Operator
+    # documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for
+    # formatting details.
     relabelings: []
-    # -- Configures the relabeling rules to apply to the samples before ingestion. See Prometheus operator documentation
-    # for format.
+    # -- Configures the relabeling rules to apply to the samples before ingestion. See the [Prometheus Operator
+    # documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for
+    # formatting details.
     metricRelabelings: []
 
 ## openshift settings
