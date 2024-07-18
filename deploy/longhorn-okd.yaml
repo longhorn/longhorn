@@ -4863,6 +4863,86 @@ spec:
     port: 9503
     targetPort: recov-backend
 ---
+# Source: longhorn/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+    app: longhorn-csi-attacher
+  name: longhorn-csi-attacher
+  namespace: longhorn-system
+spec:
+  type: ClusterIP
+  selector:
+    app: csi-attacher
+  ports:
+  - name: csi-attacher
+    port: 8000
+    targetPort: csi-attacher
+---
+# Source: longhorn/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+    app: longhorn-csi-provisioner
+  name: longhorn-csi-provisioner
+  namespace: longhorn-system
+spec:
+  type: ClusterIP
+  selector:
+    app: csi-provisioner
+  ports:
+  - name: csi-provisioner
+    port: 8000
+    targetPort: csi-provisioner
+---
+# Source: longhorn/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+    app: longhorn-csi-resizer
+  name: longhorn-csi-resizer
+  namespace: longhorn-system
+spec:
+  type: ClusterIP
+  selector:
+    app: csi-resizer
+  ports:
+  - name: csi-resizer
+    port: 8000
+    targetPort: csi-resizer
+---
+# Source: longhorn/templates/services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.6.0-dev
+    app: longhorn-csi-snapshotter
+  name: longhorn-csi-snapshotter
+  namespace: longhorn-system
+spec:
+  type: ClusterIP
+  selector:
+    app: csi-snapshotter
+  ports:
+  - name: csi-snapshotter
+    port: 8000
+    targetPort: csi-snapshotter
+---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: apps/v1
 kind: DaemonSet
