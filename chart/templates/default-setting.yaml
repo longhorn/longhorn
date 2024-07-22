@@ -242,6 +242,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup) }}
     auto-cleanup-when-delete-backup: {{ .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.enableShareManagerFastFailover) }}
-    enable-share-manager-fast-failover: {{ .Values.defaultSettings.enableShareManagerFastFailover}}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.rwxVolumeFastFailover) }}
+    rwx-volume-fast-failover: {{ .Values.defaultSettings.rwxVolumeFastFailover}}
     {{- end }}
