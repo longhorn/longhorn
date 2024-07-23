@@ -25,8 +25,7 @@ The big problem happens when the node with the share-manager pod fails or restar
 - Implement a fast failover mechanism that is not gated by Kubernetes' relatively slow detection and handling of node failure.  Recovery should be a matter of seconds rather than minutes.  
 - Depending on NFS mount options, it should not require a restart of workload pods.  Specifically, "soft" or "softerr" mounts should not need it, although "hard" mounts do.
 - Operation of the recovery backend will be unchanged.
-- After the failure of the share-manager pod, the application on the client side’s IO operations will be stuck until the share-manager and NFS are recreated, but the interruption will be brief, within a specified limit of 20 seconds regardless of the cause.
-- There will be only a single interruption for a failure.
+- After the failure of the share-manager pod, the application on the client side’s IO operations will be stuck until the share-manager and NFS are recreated, and the NFS server grace period has elapsed (if there was a workload pod on the failed node).  The interruption will be brief, with the NFS server back up within 20 seconds, and an overall outage of less than a minute.  
 - Changing Kubernetes behavior via `node-monitor-period` and `node-monitor-grace-period` values in the Kubelet should make no difference to RWX failover. The time to accomplish node NotReady processing and return to Ready state should be independent of RWX HA time.  
 
 ### Non-goals
@@ -56,12 +55,12 @@ If the lease is expired, we infer that the pod's node is dead and another contro
         - If the node is down *OR* expired, do a force delete of the share-manager pod as well.  If it truly is down, this is the same as current code.  If it is not, then the first delete should have succeeded, but either way, even if the pod is still running, this will ensure that Kubernetes does not route service traffic to it.  Also, deletion allows reuse of the same standard pod name, avoiding one potential upgrade complication.
     - Other resources need to change ownership similarly.  Modify the usual rules to capture our suspicion that the expired node is dead:
         - Keep track of the delinquent state in the volume's lease object.  The otherwise informational Spec.AcquireTime field can be used for that.
-        - Change `IsNodeDownOrDeleted` to check `IsNodeDownOrDeletedOrDelinquent` for other volume-related resources, as well as any resource-specific `isResponsibleFor` calls that don't use the base implementation.  
+        - Change `IsNodeDownOrDeleted` to check `IsNodeDownOrDeletedOrDelinquent` for other resources related to that volume, as well as any resource-specific `isResponsibleFor` calls.  
 
 3. Quick creation of a replacement  
 This is already a normal part of the Share Manager lifecycle.  But it does need an adjustment to avoid the former host, which Kubernetes will try to re-schedule to since Kubelet does not yet report it as down.  
-    - Use the cached node identity, if found, to add a node anti-affinity into the existing set of selectors, tolerations, and affinities defined for share-manager pods.  Note that the node on which the pod is scheduled might not be the interim controller node, so ownership might change again.
-    - Including delinquency in the check for node status should allow the normal re-mount and new attachment creation to work as it does currently.
+    - If the volume is delinquent, avoid its node (the current delinquent lease holder).  Create the pod with the existing set of selectors, tolerations, and affinities defined for share-manager pods, with an extra added one-time anti-affinity for the delinquent node.  Note that when the pod is scheduled, it might not be on the interim controller node, so ownership might change again.
+    - After the pod is created, it will not clear the delinquent condition until the lease is taken over.  That happens after the pod is running, so the deliquent state can still be checked for attachment actions, which must be satisfied for the NFS server to run.  
 
 4. Avoid client workload pod restart  
 Longhorn currently restarts the workload pods in volume controller when the share-manager pod restarts.  That may be necessary if the NFS mount is "hard", because the client can hang indefinitely if the server does not respond.  Clients will not hang if mounted as "soft" or "softerr".  (In either case, the client will retry I/O attempts to the unresponsive server and eventually return an error to the calling workload application.  The only difference is in the error returned: EIO or ETIMEDOUT.)  In that case, they will eventually reconnect to the new server and resume operation without having to restart the workload pod to kill the client process.  
@@ -69,15 +68,29 @@ Longhorn currently restarts the workload pods in volume controller when the shar
     - This would also be affected by the `node-down-pod-deletion-policy` handler in kubernetes_pod_controller.
 
 5. Shorten the recovery grace period  
-Speak for the dead node's client, if any.  Without this step, workers may still be blocked for an NFS grace period after re-connection is possible, waiting for other clients to re-establish state with the new server.  The grace period is usually configured to 90 seconds.  If all workload pods are alive, it does not take the full grace period, but if a workload pod was on the failed node, it will not be able to clear its state.  Knowing its node ID, Longhorn should be able to send a recovery message on its behalf, avoiding the grace period timeout.
+After a restart, the NFS server will wait for clients to re-establish connection and supply their state.  The recovery grace period is usually configured to 90 seconds.  If all workload pods are alive, they will attempt to restore a connection, and the recovery backend can terminate the wait for clients as soon as all are accounted for.  But if a workload pod was on the failed node, it will not be able to clear its state.  For the purposes of fast failover, Longhorn will configure the NFS server with a shorter grace period of only 30 seconds.  This is a trade-off between speed and probability of a legitimate client being delayed in re-connecting.  
 
 ### User Experience
 
 The changes should not alter the use of RWX volumes.  There will be no observable difference until a node failure occurs (for whatever reason - Kubernetes upgrade, eviction, injected error).
 
-    *TODO - Put a time diagram of durations and state here.*
+This is an `experimental` feature, and needs some soak time before it is the default.  There will be a setting to enable or disable it, and it will be off in the first release.
 
 ## Design
+
+This feature uses two close but separate notions of pod state, "stale" and "delinquent".  A pod is stale when its lease has expired - that is, not been renewed for some period longer than the renewal interval.  The inference is that its node has failed, and it needs a controller on another node to take over ownership and do the work of deleting and recreating the pod.  All nodes will monitor leases, and the first one to notice the stale state will modify the share-manager CR status to make itself the owner.  When that has happened, the stale state can be cleared by zeroing the `RenewalTime` field of the lease.  Other controllers will know that it is being handled.  
+
+After a new node has claimed the interim ownership, it marks the lease as "delinquent" and that state is used so that the controller can know how to do recovery, and in particular to avoid sending any commands to the dead node.  They would time out without having any effect.  There is not actually a "delinquent" field in the lease, so the `AcquireTime` field is overloaded and set to zero when the current holder is presumed dead.  
+
+The flow is laid out in this state diagram:  
+
+![state diagram](./assets/images/rwx-fast-failover/stale-delinquent-state-diagram.png)
+
+The "delinquent" state remains until the lease is acquired by a new lease-holder node, which can only happen when
+  - The old pod has been deleted,
+  - A new pod created and scheduled,
+  - The old pod's attachment is cleared and the new pod attached to its node,
+  - The exported filesystem is mounted and the NFS server is running.
 
 ### Implementation Overview
 
@@ -90,7 +103,7 @@ The changes should not alter the use of RWX volumes.  There will be no observabl
 - **longhorn-manager**
     
     - setting
-    Add a Boolean setting, `enable-share-manager-fast-failover`.  Because this is an experimental feature to begin with, default it to false.
+    Add a Boolean setting, `rwx-volume-fast-failover`.  Because this is an experimental feature to begin with, default it to false.
     
     - share_manager_controller  
     Add code to create a lease at the same time as the service.  Set `lease.spec.leaseDurationSeconds` to a little over two lease renewal periods.  
@@ -98,12 +111,12 @@ The changes should not alter the use of RWX volumes.  There will be no observabl
     Every sync, check the lease for each share-manager.  If acquireTime == renewTime, assume that the share-manager image does not know to update the lease, so take no action.  Otherwise, if status is StateRunning and renewTime + timeout is less than "now", mark the share-manager CR as `Error` to drive deletion and re-creation.  
     Add logic to `isResponsibleFor` to check for staleness first and take over ownership.
     Modify the lease to mark its status on the node as delinquent.
-    Remove the admission webhook selector label from the delinquent node's longhorn-manager pod.
+    Remove the selector labels for admission webhook and recovery backend from the delinquent node's longhorn-manager pod.
     Add delinquency check to `cleanupShareManagerPod()` when deciding to force-delete.
     Add an anti-affinity to pod manifest creation to avoid the previous owner node.
 
     - node_controller  
-    Add code to set `Delinquent` condition to `false` at startup.  Likewise, add back the admission webhook selector label.
+    Add code to set `Delinquent` condition to `false` at startup.  Likewise, add back the selector labels for any services.
 
     - datastore/longhorn  
     Revise `IsNodeDownOrDeleted` to add an `IsNodeDownOrDeletedOrDelinquent` function that also takes the volume as a parameter, and check the lease's state.
@@ -125,12 +138,6 @@ The workload pods themselves failed to be able to write for about 2 minutes, but
 - **Something goes not as expected**
 For all code paths, the fallback is to resort to the normal "not ready" path.  So at worst, the failover time is the same as previous releases.  Every effort should be made to ensure that the logging is clear and sufficient to tell why an expedited failover was not accomplished in such cases.
 
-- **Global impact of Delinquent condition**
-Changing the meaning of `NodeDownOrDeleted` to use an added attribute set on the node itself will have an effect on all volumes, not just RWX.  One expired lease would lead to the relocation of any resource owned by that node and the InstanceManager itself.  Even if that is accurate, that's a big step to take.  Some recovery actions might have to time out until the Kubernetes node status catches up.  
-It would be better to find a way to confine the effects of a stale lease to the volume it applies to.  How might that be done?
-    - For resources that map one-one with RWX volumes, use the resource controller's `isResponsibleFor()` method to check first whether the related share manager ownership has moved, and if so, change to match it.  That can work for the volume, volume attachment, and engine controllers.
-    - For engine and replica instances, the handling depends on the instance manager's state, which in turn is controlled by its node's `DownOrDeleted` status.  If the instance manager is allowed to remain in "running" state, then every piece of code that checks instance manager state would need to have an added check of node delinquent condition, at least for instances that belong to RWX volumes, in situations where that can be determined.
-
 - **Possible delay due to image pull on the successor node**
 This is taken care of by the added feature to pre-pull the share-manager pod image: [[IMPROVEMENT] Pre-pull images (share-manager image and instance-manager image) on each Longhorn node](https://github.com/longhorn/longhorn/issues/8376).
 
@@ -145,13 +152,13 @@ One open question is whether delays in lease renewal and false positives are mor
 Testing with the PoC uncovered a snag.  Often, the share manager controller will get a failure when it updates the volume attachment. The error is a timeout while trying to call the admission webhook.  That repeats until the failed node actually goes to "not ready", and then it succeeds, usually about 20-30 seconds later.  It doesn't break anything, but it means that the failover takes as long as it would without this feature.  
 In analysis with team members, we concluded that it is because the admission webhook is a service and one node of the cluster is picked to respond to the service IP address for any given request.  It can happen that it is the same node that hosted the share manager and has failed.  If so, calls to the webhook will time out until control is passed by Kubernetes to another node, which happens on its own timetable.  On the PoC test cluster of three worker nodes, that's about 1/3 of the time.  That means that failovers will intermittently and unpredictably take longer than they should.
 
-We can avoid this by making a label on the longhorn-manager pod specific to each webhook and using that label as the webhook's selector.  If the node goes delinquent, remove the label to take that node's IP address out of the webhook service's endpoint slice.  That will prevent the unresponsive node from being selected.
+We can avoid this by making a label on the longhorn-manager pod specific to each webhook and using that label as the webhook's selector.  If the node goes delinquent, remove the label to take that node's IP address out of the webhook service's endpoint slice.  That will prevent the unresponsive node from being selected.  The same applies to the recovery backend service as well.
 
 ### Upgrade Strategy
 
 There are two changes that need to be handled in an upgrade:
-- Creation of a new setting to define and default:  `enable-share-manager-fast-failover` (default, false).  
-- Revision of webhook services to use dedicated labels as selectors.
+- Creation of a new setting to define and default:  `rwx-volume-fast-failover` (default, false).  
+- Revision of webhook and recovery backend services to use dedicated labels as selectors.
 Both can be done in the upgrade manifest.
 
 After an upgrade, the share-manager pod would have to be restarted into the new share-manager image for lease management to work.  That could happen as part of the upgrade, or as nodes are restarted for other reasons.  The first restart would use the old, slow mechanism, but subsequent ones would use the new one.
@@ -164,14 +171,15 @@ The logic for creation and checking of Lease records ensures that all parties kn
 
 ### Test Plan
 
-The Test Plan is essentially identical to [Dedicated Recovery Backend for RWX Volume's NFS Server](https://github.com/longhorn/longhorn/blob/master/enhancements/20220727-dedicated-recovery-backend-for-rwx-volume-nfs-server.md).
+The Test Plan is similar to [Dedicated Recovery Backend for RWX Volume's NFS Server](https://github.com/longhorn/longhorn/blob/master/enhancements/20220727-dedicated-recovery-backend-for-rwx-volume-nfs-server.md).
 
 - Setup
     3 worker nodes for the Longhorn cluster.  
     For each test repeat once with default NFS mount options, including "soft" or "softerr", and once with custom options including "hard" mount.
 
 - Tests
-    1. Create 1 RWX volume and then run an app pod with the RWX volume on each worker node.  Execute the command in each app pod
+    1. Enable the feature.  
+       Create 1 RWX volume and then run an app pod with the RWX volume on each worker node.  Execute the command in each app pod
         
         `( exec 7<>/data/testfile-${i}; flock -x 7; while date | dd conv=fsync >&7 ; do sleep 1; done )`
         
@@ -182,9 +190,8 @@ The Test Plan is essentially identical to [Dedicated Recovery Backend for RWX Vo
         - Expect
             - In the client side, IO to the RWX volume will hang until a share-manager pod replacement is successfully created on another node.
             - During the outage, the server rejects READ and WRITE operations and non-reclaim locking requests (i.e., other LOCK and OPEN operations) with an error of NFS4ERR_GRACE.
-            - The clients can continue working without IO error.
-            - Lock reclaim process can be finished earlier than the 90-second configured grace period.
-            - Outage should be equivalent to simple pod failover, less than 20 seconds.
+            - New share-manager pod is created in under 20 seconds.
+            - Outage, including grace period, should be less than 60 seconds.
             - If locks cannot be reclaimed after a grace period, the locks are discarded and return IO errors to the client. The client reestablishes a new lock.
 
     2. Turn the deployment into a daemonset in [example]([https://github.com/longhorn/longhorn/blob/master/examples/rwx/rwx-nginx-deployment.yaml](https://github.com/longhorn/longhorn/blob/master/examples/rwx/rwx-nginx-deployment.yaml) ) and disable `Automatically Delete Workload Pod when The Volume Is Detached Unexpectedly`. Then, deploy the daemonset with a RWX volume.
@@ -192,20 +199,21 @@ The Test Plan is essentially identical to [Dedicated Recovery Backend for RWX Vo
         Turn off the node where share-manager is running. Once the share-manager pod is recreated on a different node, check
         
         - Expect
-            - The other active clients should not run into the stale handle errors after the failover.
-            - Lock reclaim process can be finished earlier than the 90-second configured grace period.
-            - Outage should be equivalent to simple pod failover, less than 20 seconds.
+            - The other active clients should not run into stale handle errors after the failover.
+            - New share-manager pod is created in under 20 seconds.
+            - Outage, including grace period, should be less than 60 seconds.
 
-    3. Multiple locks one single file tested by byte-range file locking
-
-        Each client using [range_locking.c](https://github.com/longhorn/longhorn/files/9208112/range_locking.txt) in each app pod locks a different range of the same file. Afterwards, it writes data repeatedly into the file.
+    3. Run a scale test.  Use the deployment in [example]([https://github.com/longhorn/longhorn/blob/master/examples/rwx/rwx-nginx-deployment.yaml](https://github.com/longhorn/longhorn/blob/master/examples/rwx/rwx-nginx-deployment.yaml) ).  Make as many instances of the deployment as possible, but at least 100.  They should be evenly distributed across the worker nodes.
         
-        Turn off the node where share-manager is running. Once the share-manager pod is recreated on a different node, check
+        Run once without the fast-failover feature enabled.  Note the CPU use of longhorn-manager pods.  
+
+        Re-run with the feature on, and verify that the CPU use is not significantly larger.  The load of lease-checking should be minimal.  
+        Turn off one of the nodes.  That should cause about 1/3 of the pods to relocate.  
         
         - Expect
-            - The clients continue the tasks after the server's failover without IO or stale handle errors.
-            - Lock reclaim process can be finished earlier than the 90-second configured grace period.
-            - Outage should be equivalent to simple pod failover, less than 20 seconds.
+            - All pods should be recreated within 20 seconds.
+            - Outage, including grace period, for all pods should be less than 60 seconds.
+            - RWX volumes not originally on the failed node should be unaffected.
 
 ## Alternatives
 
