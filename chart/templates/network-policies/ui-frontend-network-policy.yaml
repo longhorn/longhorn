@@ -37,8 +37,8 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: traefik
+    {{- end }}
     ports:
       - port: 8000
         protocol: TCP
-    {{- end }}
 {{- end }}
