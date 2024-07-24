@@ -10,6 +10,7 @@ spec:
       app: longhorn-ui
   policyTypes:
   - Ingress
+  - Egress
   ingress:
   - from:
     {{- if eq .Values.networkPolicies.type "rke1"}}
@@ -41,4 +42,12 @@ spec:
     ports:
       - port: 8000
         protocol: TCP
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: longhorn-manager
+      ports:
+        - port: 9500
+          protocol: TCP
 {{- end }}
