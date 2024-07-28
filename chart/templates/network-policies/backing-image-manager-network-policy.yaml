@@ -9,19 +9,52 @@ spec:
     matchLabels:
       longhorn.io/component: backing-image-manager
   policyTypes:
-  - Ingress
+    - Ingress
+    - Egress
   ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          app: longhorn-manager
-    - podSelector:
-        matchLabels:
-          longhorn.io/component: instance-manager
-    - podSelector:
-        matchLabels:
-          longhorn.io/component: backing-image-manager
-    - podSelector:
-        matchLabels:
-          longhorn.io/component: backing-image-data-source
+    - from:
+        - podSelector:
+            matchLabels:
+              app: longhorn-manager
+      ports:
+        - protocol: TCP
+          port: 8000
+    - from:
+        - podSelector:
+            matchLabels:
+              longhorn.io/component: backing-image-manager
+      {{- /* NOTE: this should allow only the port range 30001-31000 but many CNIs do not support endPort :-(
+      ports:
+        - protocol: TCP
+          port: 30001
+          endPort: 31000
+      */}}
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              longhorn.io/component: instance-manager
+      {{- /* NOTE: this should allow only the port range 10000-30000 but many CNIs do not support endPort :-(
+      ports:
+        - protocol: TCP
+          port: 10000
+          endPort: 30000
+      */}}
+    - to:
+        - podSelector:
+            matchLabels:
+              longhorn.io/component: backing-image-manager
+      {{- /* NOTE: this should allow only the port range 30001-31000 but many CNIs do not support endPort :-(
+      ports:
+        - protocol: TCP
+          port: 30001
+          endPort: 31000
+      */}}
+    - to:
+        - podSelector:
+            matchLabels:
+              longhorn.io/component: backing-image-data-source
+      ports:
+        - protocol: TCP
+          port: 8000
 {{- end }}
