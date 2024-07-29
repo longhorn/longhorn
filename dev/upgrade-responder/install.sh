@@ -156,10 +156,6 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
-        "longhornSettingOfflineReplicaRebuilding": {
-          "dataType": "string",
-          "maxLen": 200
-        },
         "longhornSettingOrphanAutoDeletion": {
           "dataType": "string",
           "maxLen": 200
@@ -371,12 +367,6 @@ configMap:
           "dataType": "float"
         },
         "longhornVolumeFrontendIscsiCount": {
-          "dataType": "float"
-        },
-        "longhornVolumeOfflineReplicaRebuildingDisabledCount": {
-          "dataType": "float"
-        },
-        "longhornVolumeOfflineReplicaRebuildingEnabledCount": {
           "dataType": "float"
         },
         "longhornVolumeReplicaAutoBalanceDisabledCount": {
