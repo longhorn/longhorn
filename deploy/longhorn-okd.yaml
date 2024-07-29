@@ -4402,14 +4402,6 @@ spec:
                 type: array
               numberOfReplicas:
                 type: integer
-              offlineReplicaRebuilding:
-                description: OfflineReplicaRebuilding is used to determine if the
-                  offline replica rebuilding feature is enabled or not
-                enum:
-                - ignored
-                - disabled
-                - enabled
-                type: string
               replicaAutoBalance:
                 enum:
                 - ignored
@@ -4571,8 +4563,6 @@ spec:
                 type: string
               lastDegradedAt:
                 type: string
-              offlineReplicaRebuildingRequired:
-                type: boolean
               ownerID:
                 type: string
               pendingNodeID:
@@ -4870,7 +4860,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
+    app.kubernetes.io/version: v1.8.0-dev
     app: longhorn-csi-attacher
   name: longhorn-csi-attacher
   namespace: longhorn-system
@@ -4890,7 +4880,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
+    app.kubernetes.io/version: v1.8.0-dev
     app: longhorn-csi-provisioner
   name: longhorn-csi-provisioner
   namespace: longhorn-system
@@ -4910,7 +4900,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
+    app.kubernetes.io/version: v1.8.0-dev
     app: longhorn-csi-resizer
   name: longhorn-csi-resizer
   namespace: longhorn-system
@@ -4930,7 +4920,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.6.0-dev
+    app.kubernetes.io/version: v1.8.0-dev
     app: longhorn-csi-snapshotter
   name: longhorn-csi-snapshotter
   namespace: longhorn-system

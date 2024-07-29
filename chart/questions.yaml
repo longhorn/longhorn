@@ -737,16 +737,6 @@ questions:
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: string
   default:
-- variable: defaultSettings.offlineReplicaRebuilding
-  label: Offline Replica Rebuilding
-  description: "Setting that allows rebuilding of offline replicas for volumes using the V2 Data Engine."
-  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
-  required: true
-  type: enum
-  options:
-  - "enabled"
-  - "disabled"
-  default: "enabled"
 - variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
   label: Auto Cleanup Snapshot When Delete Backup
   description: "Setting that automatically cleans up the snapshot when the backup is deleted."
