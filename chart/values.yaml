@@ -321,8 +321,6 @@ defaultSettings:
   v2DataEngine: ~
   # -- Setting that allows you to configure maximum huge page size (in MiB) for the V2 Data Engine.
   v2DataEngineHugepageLimit: ~
-  # -- Setting that allows rebuilding of offline replicas for volumes using the V2 Data Engine.
-  offlineReplicaRebuilding: ~
   # -- Number of millicpus on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is "1250".
   v2DataEngineGuaranteedInstanceManagerCPU: ~
   # -- Setting that allows scheduling of empty node selector volumes to any node.
