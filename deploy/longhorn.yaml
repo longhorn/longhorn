@@ -4790,89 +4790,6 @@ spec:
     port: 9503
     targetPort: recov-backend
 ---
-<<<<<<< HEAD
-=======
-# Source: longhorn/templates/services.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
-    app: longhorn-csi-attacher
-  name: longhorn-csi-attacher
-  namespace: longhorn-system
-spec:
-  type: ClusterIP
-  selector:
-    app: csi-attacher
-  ports:
-  - name: csi-attacher
-    port: 8000
-    targetPort: csi-attacher
----
-# Source: longhorn/templates/services.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
-    app: longhorn-csi-provisioner
-  name: longhorn-csi-provisioner
-  namespace: longhorn-system
-spec:
-  type: ClusterIP
-  selector:
-    app: csi-provisioner
-  ports:
-  - name: csi-provisioner
-    port: 8000
-    targetPort: csi-provisioner
----
-# Source: longhorn/templates/services.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
-    app: longhorn-csi-resizer
-  name: longhorn-csi-resizer
-  namespace: longhorn-system
-spec:
-  type: ClusterIP
-  selector:
-    app: csi-resizer
-  ports:
-  - name: csi-resizer
-    port: 8000
-    targetPort: csi-resizer
----
-# Source: longhorn/templates/services.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
-    app: longhorn-csi-snapshotter
-  name: longhorn-csi-snapshotter
-  namespace: longhorn-system
-spec:
-  type: ClusterIP
-  selector:
-    app: csi-snapshotter
-  ports:
-  - name: csi-snapshotter
-    port: 8000
-    targetPort: csi-snapshotter
----
->>>>>>> d3068c9 (chart: remove offlineReplicaRebuilding)
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: apps/v1
 kind: DaemonSet
@@ -5011,30 +4928,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-<<<<<<< HEAD
           image: longhornio/longhorn-manager:v1.7.0-rc2
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
           image: longhornio/longhorn-manager:v1.7.0-rc2
-=======
-          image: longhornio/longhorn-manager:master-head
-          command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
-      containers:
-        - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:master-head
->>>>>>> d3068c9 (chart: remove offlineReplicaRebuilding)
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-<<<<<<< HEAD
           - "longhornio/longhorn-manager:v1.7.0-rc2"
-=======
-          - "longhornio/longhorn-manager:master-head"
->>>>>>> d3068c9 (chart: remove offlineReplicaRebuilding)
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
