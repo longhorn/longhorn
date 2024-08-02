@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: longhorn-gke-cos-node-agent-entrypoint
+  namespace: longhorn-system
   labels:
     app: longhorn-gke-cos-node
 data:
@@ -79,6 +80,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: longhorn-gke-cos-node-agent
+  namespace: longhorn-system
   labels:
     app: longhorn-gke-cos-node
 spec:

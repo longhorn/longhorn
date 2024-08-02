@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: longhorn-nvme-cli-installation
+  namespace: longhorn-system
   labels:
     app: longhorn-nvme-cli-installation
   annotations:
