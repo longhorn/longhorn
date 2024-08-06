@@ -42,6 +42,9 @@ data:
       recurringJobSelector: '{{ .Values.persistence.recurringJobSelector.jobList }}'
       {{- end }}
       dataLocality: {{ .Values.persistence.defaultDataLocality | quote }}
+      {{- if .Values.persistence.defaultDiskSelector.enable }}
+      diskSelector: "{{ .Values.persistence.defaultDiskSelector.selector }}"
+      {{- end }}
       {{- if .Values.persistence.defaultNodeSelector.enable }}
       nodeSelector: "{{ .Values.persistence.defaultNodeSelector.selector }}"
       {{- end }}
