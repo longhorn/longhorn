@@ -6,7 +6,7 @@ metadata:
   labels:
     app: longhorn-spdk-setup
   annotations:
-    command: &cmd OS=$(grep -E "^ID_LIKE=" /etc/os-release | cut -d '=' -f 2); if [[ -z "${OS}" ]]; then OS=$(grep -E "^ID=" /etc/os-release | cut -d '=' -f 2); fi; if [[ "${OS}" == *"debian"* ]]; then sudo apt-get update -q -y && sudo apt-get install -q -y git; elif [[ "${OS}" == *"suse"* ]]; then sudo zypper --gpg-auto-import-keys -q refresh && sudo zypper --gpg-auto-import-keys -q install -y git; else sudo yum makecache -q -y && sudo yum --setopt=tsflags=noscripts install -q -y git; fi && if [ $? -eq 0 ]; then echo "git install successfully"; else echo "git install failed error code $?"; fi && rm -rf ${SPDK_DIR}; git clone -b longhorn-1.6 https://github.com/longhorn/spdk.git ${SPDK_DIR} && bash ${SPDK_DIR}/scripts/setup.sh ${SPDK_OPTION}; if [ $? -eq 0 ]; then echo "vm.nr_hugepages=$((HUGEMEM/2))" >> /etc/sysctl.conf; echo "SPDK environment is configured successfully"; else echo "Failed to configure SPDK environment error code $?"; fi; rm -rf ${SPDK_DIR}
+    command: &cmd OS=$(grep -E "^ID_LIKE=" /etc/os-release | cut -d '=' -f 2); if [[ -z "${OS}" ]]; then OS=$(grep -E "^ID=" /etc/os-release | cut -d '=' -f 2); fi; if [[ "${OS}" == *"debian"* ]]; then sudo apt-get update -q -y && sudo apt-get install -q -y git && sudo modprobe vfio_pci && sudo modprobe uio_pci_generic; elif [[ "${OS}" == *"suse"* ]]; then sudo zypper --gpg-auto-import-keys -q refresh && sudo zypper --gpg-auto-import-keys -q install -y git; else sudo yum makecache -q -y && sudo yum --setopt=tsflags=noscripts install -q -y git && sudo modprobe vfio_pci && sudo modprobe uio_pci_generic; fi && if [ $? -eq 0 ]; then echo "git install successfully"; else echo "git install failed error code $?"; fi && rm -rf ${SPDK_DIR}; git clone -b longhorn-1.6 https://github.com/longhorn/spdk.git ${SPDK_DIR} && bash ${SPDK_DIR}/scripts/setup.sh ${SPDK_OPTION}; if [ $? -eq 0 ]; then echo "vm.nr_hugepages=$((HUGEMEM/2))" >> /etc/sysctl.conf; echo "SPDK environment is configured successfully"; else echo "Failed to configure SPDK environment error code $?"; fi; rm -rf ${SPDK_DIR}
 spec:
   selector:
     matchLabels:
@@ -21,12 +21,12 @@ spec:
       initContainers:
       - name: longhorn-spdk-setup
         command:
-          - nsenter
-          - --mount=/proc/1/ns/mnt
-          - --
-          - bash
-          - -c
-          - *cmd
+        - nsenter
+        - --mount=/proc/1/ns/mnt
+        - --
+        - bash
+        - -c
+        - *cmd
         image: alpine:3.12
         env:
         - name: SPDK_DIR
@@ -38,7 +38,7 @@ spec:
         - name: PCI_ALLOWED
           value: "none"
         - name: DRIVER_OVERRIDE
-          value: "uio_pci_generic"
+          value: ""
         securityContext:
           privileged: true
       containers:
