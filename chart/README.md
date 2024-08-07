@@ -284,6 +284,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.backingImageRecoveryWaitInterval | Number of seconds that Longhorn waits before downloading a backing image file again when the status of all image disk files changes to "failed" or "unknown". |
 | defaultSettings.backupCompressionMethod | Setting that allows you to specify a backup compression method. |
 | defaultSettings.backupConcurrentLimit | Maximum number of worker threads that can concurrently run for each backup. |
+| defaultSettings.backupExecuteTimeout | Number of minutes that Longhorn sets the timeout for the backup engine execution. When the value is "0", automatic deletion is disabled. |
 | defaultSettings.backupTarget | Endpoint used to access the backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE") |
 | defaultSettings.backupTargetCredentialSecret | Name of the Kubernetes secret associated with the backup target. |
 | defaultSettings.backupstorePollInterval | Number of seconds that Longhorn waits before checking the backupstore for new backups. The default value is "300". When the value is "0", polling is disabled. |
@@ -300,7 +301,6 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.disableRevisionCounter | Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the "volume-head-xxx.img" file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. This setting applies only to volumes created using the Longhorn UI. |
 | defaultSettings.disableSchedulingOnCordonedNode | Setting that prevents Longhorn Manager from scheduling replicas on a cordoned Kubernetes node. This setting is enabled by default. |
 | defaultSettings.disableSnapshotPurge | Setting that temporarily prevents all attempts to purge volume snapshots. |
-| defaultSettings.rwxVolumeFastFailover | Turn on logic to detect and move RWX volumes quickly on node failure. |
 | defaultSettings.engineReplicaTimeout | Timeout between the Longhorn Engine and replicas. Specify a value between "8" and "30" seconds. The default value is "8". |
 | defaultSettings.failedBackupTTL | Number of minutes that Longhorn keeps a failed backup resource. When the value is "0", automatic deletion is disabled. |
 | defaultSettings.fastReplicaRebuildEnabled | Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check". |
@@ -325,6 +325,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.replicaZoneSoftAntiAffinity | Setting that allows Longhorn to schedule new replicas of a volume to nodes in the same zone as existing healthy replicas. Nodes that do not belong to any zone are treated as existing in the zone that contains healthy replicas. When identifying zones, Longhorn relies on the label "topology.kubernetes.io/zone=<Zone name of the node>" in the Kubernetes node object. |
 | defaultSettings.restoreConcurrentLimit | Maximum number of worker threads that can concurrently run for each restore operation. |
 | defaultSettings.restoreVolumeRecurringJobs | Setting that restores recurring jobs from a backup volume on a backup target and creates recurring jobs if none exist during backup restoration. |
+| defaultSettings.rwxVolumeFastFailover | Turn on logic to detect and move RWX volumes quickly on node failure. |
 | defaultSettings.snapshotDataIntegrity | Setting that allows you to enable and disable snapshot hashing and data integrity checks. |
 | defaultSettings.snapshotDataIntegrityCronjob | Setting that defines when Longhorn checks the integrity of data in snapshot disk files. You must use the Unix cron expression format. |
 | defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation | Setting that allows disabling of snapshot hashing after snapshot creation to minimize impact on system performance. |

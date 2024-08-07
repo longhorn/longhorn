@@ -374,6 +374,13 @@ questions:
     type: int
     min: 0
     default: 1440
+  - variable: defaultSettings.backupExecuteTimeout
+    label: Backup Execute Timeout
+    description: "Number of minutes that Longhorn sets the timeout for the backup engine execution. When the value is \"0\", automatic deletion is disabled."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 0
+    default: 1
   - variable: defaultSettings.restoreVolumeRecurringJobs
     label: Restore Volume Recurring Jobs
     description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration."
