@@ -151,6 +151,8 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.defaultNodeSelector.enable | bool | `false` | Setting that allows you to enable the node selector for the default Longhorn StorageClass. |
 | persistence.defaultNodeSelector.selector | string | `""` | Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast") |
 | persistence.disableRevisionCounter | string | `"true"` | Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the volume-head-xxx.img file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. |
+| persistence.encrypted | string | `""` | Setting that enables encryption for the default Longhorn StorageClass. (Options: "true", "false") |
+| persistence.extraParameters | object | `{}` | Setting that allows you to specify extra parameters for the default Longhorn StorageClass. It must be a map of string to string. (Example: `{"encrypted": "true" }`) |
 | persistence.migratable | bool | `false` | Setting that allows you to enable live migration of a Longhorn volume from one node to another. |
 | persistence.nfsOptions | string | `""` | Set NFS mount options for Longhorn StorageClass for RWX volumes |
 | persistence.reclaimPolicy | string | `"Delete"` | Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete") |
