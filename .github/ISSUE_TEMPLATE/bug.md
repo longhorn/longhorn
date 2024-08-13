@@ -46,3 +46,7 @@ assignees: ''
 ## Additional context
 
 <!-- Please add any other context about the problem here. -->
+
+## Workaround and Mitigation
+
+<!-- Please add any workaround or mitigation to the problem here. -->
