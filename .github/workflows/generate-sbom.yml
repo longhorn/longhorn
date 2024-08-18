@@ -2,17 +2,20 @@ name: Generate-SBOM
 on:
   release:
     types: [published]
+permissions:  # added using https://github.com/step-security/secure-repo
+  contents: read
+
 jobs:
   generate-sbom:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v4
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
     - name: Install Syft
       run: |
         curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
     - name: Install Cosign
-      uses: sigstore/cosign-installer@v3.5.0
+      uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
     - name: Generate Key
       run: |
         cosign generate-key-pair
@@ -49,7 +52,7 @@ jobs:
       run: |
         tar zcvf sbom.tar.gz sbom
     - name: Upload Release Assets
-      uses: AButler/upload-release-assets@v3.0
+      uses: AButler/upload-release-assets@3d6774fae0ed91407dc5ae29d576b166536d1777 # v3.0
       with:
         files: sbom.tar.gz
         repo-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}

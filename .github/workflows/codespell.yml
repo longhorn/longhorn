@@ -6,16 +6,19 @@ on:
     - master
     - "v*.*.*"
 
+permissions:  
+  contents: read
+
 jobs:
   codespell:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         fetch-depth: 1
     - name: Check code spell
-      uses: codespell-project/actions-codespell@v2
+      uses: codespell-project/actions-codespell@94259cd8be02ad2903ba34a22d9c13de21a74461 # v2.0
       with:
         check_filenames: true
         skip: "*/**.yaml,*/**.yml,./scripts,./vendor,MAINTAINERS,LICENSE,go.mod,go.sum"

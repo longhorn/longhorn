@@ -8,13 +8,13 @@ jobs:
     if: contains(github.event.label.name, 'backport/')
     steps:
     - name: Get Backport Version
-      uses: xom9ikk/split@v1
+      uses: xom9ikk/split@7792b7b07e6fd4891ead05fd7b9df31a698e7618 # v1
       id: split
       with:
         string: ${{ github.event.label.name }}
         separator: /
     - name: Check if Backport Issue Exists
-      uses: actions-cool/issues-helper@v3
+      uses: actions-cool/issues-helper@a610082f8ac0cf03e357eb8dd0d5e2ba075e017e # v3.6.0
       id: if-backport-issue-exists
       with:
         actions: 'find-issues'
@@ -23,7 +23,7 @@ jobs:
           [BACKPORT][v${{ steps.split.outputs._1 }}]${{ github.event.issue.title }}
     - name: Close Backport Issue
       if: fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] != null
-      uses: actions-cool/issues-helper@v3
+      uses: actions-cool/issues-helper@a610082f8ac0cf03e357eb8dd0d5e2ba075e017e # v3.6.0
       with:
         actions: 'close-issue'
         token: ${{ github.token }}
@@ -34,7 +34,7 @@ jobs:
     if: contains(github.event.label.name, 'require/automation-e2e')
     steps:
     - name: Check if Automation Issue Exists
-      uses: actions-cool/issues-helper@v3
+      uses: actions-cool/issues-helper@a610082f8ac0cf03e357eb8dd0d5e2ba075e017e # v3.6.0
       id: if-automation-issue-exists
       with:
         actions: 'find-issues'
@@ -43,7 +43,7 @@ jobs:
           [TEST]${{ github.event.issue.title }}
     - name: Close Automation Test Issue
       if: fromJSON(steps.if-automation-issue-exists.outputs.issues)[0] != null
-      uses: actions-cool/issues-helper@v3
+      uses: actions-cool/issues-helper@a610082f8ac0cf03e357eb8dd0d5e2ba075e017e # v3.6.0
       with:
         actions: 'close-issue'
         token: ${{ github.token }}
