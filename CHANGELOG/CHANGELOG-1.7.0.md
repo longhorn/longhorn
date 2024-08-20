@@ -7,9 +7,9 @@ The Longhorn team appreciates your contributions and anticipates receiving feedb
 > **Note:**
 > For more information about release-related terminology, see [Releases](https://github.com/longhorn/longhorn#releases).
 
-## Deprecation
+## Deprecation & Incompatibilities
 
-The functionality of the [environment check script](https://github.com/longhorn/longhorn/blob/v1.7.x/scripts/environment_check.sh) overlaps with that of the Longhorn CLI, which is available starting with v1.7.0. Because of this, the script is deprecated in v1.7.0 and is scheduled for removal in v1.8.0.
+For information about important changes, including feature incompatibility, deprecation, and removal, see [Important Notes](https://longhorn.io/docs/1.7.0/deploy/important-notes/) in the Longhorn documentation.
 
 ## Primary Highlights
 
@@ -62,10 +62,6 @@ You can install Longhorn using a variety of tools, including Rancher, Kubectl, a
 **Ensure that your cluster is running Kubernetes v1.21 or later before upgrading from Longhorn v1.6.x to v1.7.0.**
 
 Longhorn only allows upgrades from supported versions. For more information about upgrade paths and procedures, see [Upgrade](https://longhorn.io/docs/1.7.0/deploy/upgrade/) in the Longhorn documentation.
-
-## Deprecation & Incompatibilities
-
-For information about important changes, including feature incompatibility, deprecation, and removal, see [Important Notes](https://longhorn.io/docs/1.7.0/deploy/important-notes/) in the Longhorn documentation.
 
 ## Post-Release Known Issues
 
