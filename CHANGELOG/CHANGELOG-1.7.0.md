@@ -4,8 +4,17 @@ This latest version of Longhorn introduces several features, enhancements, and b
 
 The Longhorn team appreciates your contributions and anticipates receiving feedback regarding this release.
 
-> **Note:**
-> For more information about release-related terminology, see [Releases](https://github.com/longhorn/longhorn#releases).
+For more information about release-related terminology, see [Releases](https://github.com/longhorn/longhorn#releases).
+
+
+> [!WARNING]
+> The Longhorn team has identified [a critical issue](https://github.com/longhorn/longhorn/issues/9267) that affects volume attachment in Longhorn v1.7.0. We are currently working on releasing v1.7.1, which will be available soon. If your Longhorn cluster contains `engine` resources with names in the format `<volume name>-e-<8-char random id>` that are created before v1.5.2 and v1.4.4, please put v1.7.0 upgrade on hold until v1.7.1 is available.
+>
+> You can use the following command to check if it is safe to upgrade your Longhorn cluster to v1.7.0:
+>
+> ```
+> [ $(kubectl -n longhorn-system get engines.longhorn.io -o name | grep -E '\-e\-[a-z0-9]{8}$' | wc -l) -gt 0 ] && echo "Please hold off on upgrading to v1.7.0 until v1.7.1 is available." || echo "Safe to upgrade to v1.7.0."
+> ```
 
 ## Deprecation & Incompatibilities
 
@@ -55,12 +64,14 @@ The [Longhorn CLI](https://github.com/longhorn/longhorn/issues/7927), which is t
 
 ## Installation
 
+>  [!IMPORTANT]
 **Ensure that your cluster is running Kubernetes v1.21 or later before installing Longhorn v1.7.0.**
 
 You can install Longhorn using a variety of tools, including Rancher, Kubectl, and Helm. For more information about installation methods and requirements, see [Quick Installation](https://longhorn.io/docs/1.7.0/deploy/install/) in the Longhorn documentation.
 
 ## Upgrade
 
+>  [!IMPORTANT]
 **Ensure that your cluster is running Kubernetes v1.21 or later before upgrading from Longhorn v1.6.x to v1.7.0.**
 
 Longhorn only allows upgrades from supported versions. For more information about upgrade paths and procedures, see [Upgrade](https://longhorn.io/docs/1.7.0/deploy/upgrade/) in the Longhorn documentation.
