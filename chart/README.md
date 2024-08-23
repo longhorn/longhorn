@@ -120,7 +120,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Repository for the Longhorn UI image. |
 | image.longhorn.ui.tag | string | `"master-head"` | Tag for the Longhorn UI image. |
 | image.openshift.oauthProxy.repository | string | `"longhornio/openshift-origin-oauth-proxy"` | Repository for the OAuth Proxy image. This setting applies only to OpenShift users. |
-| image.openshift.oauthProxy.tag | float | `4.15` | Tag for the OAuth Proxy image. This setting applies only to OpenShift users. Specify OCP/OKD version 4.1 or later. The latest stable version is 4.15. |
+| image.openshift.oauthProxy.tag | float | `4.16` | Tag for the OAuth Proxy image. This setting applies only to OpenShift users. Specify OCP/OKD version 4.1 or later. The latest stable version is 4.16. |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy that applies to all user-deployed Longhorn components, such as Longhorn Manager, Longhorn driver, and Longhorn UI. |
 
 ### Service Settings

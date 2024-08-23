@@ -78,11 +78,32 @@ Main changes and tasks for OCP are:
   - Longhorn Versions Tested:
     - 1.5.3
     - 1.6.0
+    - 1.6.2
+      - 4.15.0-0.okd-2024-02-23-163410
+    - 1.7.0
+      - 4.15.0-0.okd-2024-02-23-163410
   - 4.15.0-0.okd-2024-01-27-070424 - 4.15.0-0.okd-2024-02-23-163410:
     - Tested, No Known Issues
-      - Note: 4.15 requires an additional yaml for UI Login, provided under ```chart/templates/deployment-ui: secret/longhorn-ui-service-account```
+      - Note: Only 4.15 requires long lived service account secret for UI Login
         - <https://issues.redhat.com/browse/OCPBUGS-30319>
-
+        - <https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#create-token>
+- 4.16 / 1.29:
+  - Longhorn Versions Tested:
+    - 1.6.2
+      - 4.16.0-0.okd-scos-2024-08-01-132038
+      - 4.16.0-0.okd-scos-2024-08-21-155613
+    - 1.7.0
+      - 4.16.0-0.okd-scos-2024-08-21-155613
+  - 4.16.0-0.okd-scos-2024-08-01-132038 - 4.16.0-0.okd-scos-2024-08-21-155613:
+    - Tested, No Known Issues for **New Builds**.
+      - Upgrading from OKD 4.15 to OKD 4.16 is **NOT** recommended/advised at this time.
+        - <https://github.com/okd-project/okd/discussions/1971#discussioncomment-10119718>
+        - <https://github.com/okd-project/okd/discussions/1971#discussioncomment-10120175>
+        - <https://github.com/okd-project/okd/discussions/1997>
+      - OKD 4.16 New Build Discussions:
+        - <https://amd64.origin.releases.ci.openshift.org/#4-scos-stable>
+        - <https://okd.io/blog/2024/07/30/okd-pre-release-testing>
+        - <https://github.com/okd-project/okd/discussions/1922>
 
 ## Preparing Nodes (Optional)
 
@@ -171,8 +192,8 @@ Minimum Adjustments Required
 ```yaml
 openshift:
   oauthProxy:
-    repository: quay.io/openshift/origin-oauth-proxy
-    tag: 4.15  # Use Your OCP/OKD 4.X Version, Current Stable is 4.15
+    repository: longhornio/openshift-origin-oauth-proxy # quay.io/openshift/origin-oauth-proxy
+    tag: 4.16  # Use Your OCP/OKD 4.X Version, Current Stable is 4.16
 
 # defaultSettings: # Preparing nodes (Optional)
   # createDefaultDiskLabeledNodes: true

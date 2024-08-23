@@ -104,9 +104,9 @@ image:
   openshift:
     oauthProxy:
       # -- Repository for the OAuth Proxy image. This setting applies only to OpenShift users.
-      repository: longhornio/openshift-origin-oauth-proxy
-      # -- Tag for the OAuth Proxy image. This setting applies only to OpenShift users. Specify OCP/OKD version 4.1 or later. The latest stable version is 4.15.
-      tag: 4.15
+      repository: longhornio/openshift-origin-oauth-proxy # quay.io/openshift/origin-oauth-proxy
+      # -- Tag for the OAuth Proxy image. This setting applies only to OpenShift users. Specify OCP/OKD version 4.1 or later. The latest stable version is 4.16.
+      tag: 4.16
   # -- Image pull policy that applies to all user-deployed Longhorn components, such as Longhorn Manager, Longhorn driver, and Longhorn UI.
   pullPolicy: IfNotPresent
 

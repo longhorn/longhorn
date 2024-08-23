@@ -5154,7 +5154,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: oauth-proxy
-        image: longhornio/openshift-origin-oauth-proxy:4.15
+        image: longhornio/openshift-origin-oauth-proxy:4.16
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8443

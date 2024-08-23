@@ -34,17 +34,6 @@ spec:
   selector:
     app: longhorn-ui
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  labels: {{- include "longhorn.labels" . | nindent 4 }}
-    app: longhorn-ui
-  name: longhorn-ui-service-account
-  namespace: {{ include "release_namespace" . }}
-  annotations:
-    kubernetes.io/service-account.name: longhorn-ui-service-account
-type: kubernetes.io/service-account-token
----
 {{- end }}
 {{- end }}
 apiVersion: apps/v1

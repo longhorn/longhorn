@@ -173,7 +173,7 @@ questions:
     label: OpenShift OAuth Proxy Image Repository
     group: "OpenShift Images"
   - variable: image.openshift.oauthProxy.tag
-    default: 4.15
+    default: 4.16
     description: "Tag for the OAuth Proxy image. This setting applies only to OpenShift users. Specify OCP/OKD version 4.1 or later."
     type: string
     label: OpenShift OAuth Proxy Image Tag
