@@ -12,4 +12,4 @@ longhornio/longhorn-manager:v1.7.1-rc2
 longhornio/longhorn-share-manager:v1.7.1-rc2
 longhornio/longhorn-ui:v1.7.1-rc2
 longhornio/longhorn-cli:v1.7.1-rc2
-longhornio/support-bundle-kit:v0.0.41
+longhornio/support-bundle-kit:v0.0.42
