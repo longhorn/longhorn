@@ -2217,6 +2217,14 @@ spec:
                 type: integer
               currentState:
                 type: string
+              dataEngineStatus:
+                properties:
+                  v2:
+                    properties:
+                      cpuMask:
+                        type: string
+                    type: object
+                type: object
               instanceEngines:
                 additionalProperties:
                   properties:
@@ -2508,6 +2516,14 @@ spec:
             properties:
               allowScheduling:
                 type: boolean
+              dataEngineSpec:
+                properties:
+                  v2:
+                    properties:
+                      cpuMask:
+                        type: string
+                    type: object
+                type: object
               disks:
                 additionalProperties:
                   properties:
