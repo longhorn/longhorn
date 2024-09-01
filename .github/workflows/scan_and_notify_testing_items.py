@@ -33,7 +33,8 @@ def get_github_project_info(github_token, github_org, github_project):
 
     response = requests.post(GITHUB_GRAPHQL_URL, headers=headers, json=payload)
     if response.status_code == 200:
-        # fine project by title
+        # Find project by title
+        print("Response: %s" % response.json())
         nodes = response.json().get("data").get("organization").get("projectsV2").get("nodes")
         for node in nodes:
             if node.get("title") == github_project:
@@ -74,7 +75,7 @@ def get_current_sprint(github_token, project_id):
 
     response = requests.post(GITHUB_GRAPHQL_URL, headers=headers, json=payload)
     if response.status_code == 200:
-        # fine project by title
+        # Find project by title
         result = response.json().get("data").get("node").get("fields").get("nodes")
         filtered_result = [node for node in result if 'configuration' in node]
         iterations = filtered_result[0].get("configuration").get("iterations")
