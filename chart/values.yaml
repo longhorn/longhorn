@@ -323,7 +323,7 @@ defaultSettings:
   v2DataEngineHugepageLimit: ~
   # -- Number of millicpus on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is "1250".
   v2DataEngineGuaranteedInstanceManagerCPU: ~
-  # --The setting is used to specify which CPU cores the Storage Performance Development Kit (SPDK) target daemon within each instance manager pod should run on. The default value is "0x1".
+  # -- CPU cores on which the Storage Performance Development Kit (SPDK) target daemon should run. The SPDK target daemon is located in each Instance Manager pod. Ensure that the number of cores is less than or equal to the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is "0x1".
   v2DataEngineCPUMask: ~
   # -- Setting that allows scheduling of empty node selector volumes to any node.
   allowEmptyNodeSelectorVolume: ~
