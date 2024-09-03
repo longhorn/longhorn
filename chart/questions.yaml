@@ -493,7 +493,7 @@ questions:
     default: 600
   - variable: defaultSettings.concurrentReplicaRebuildPerNodeLimit
     label: Concurrent Replica Rebuild Per Node Limit
-    description: "Maximum number of replicas that can be concurrently rebuilt on each node. WARNING: - The old setting \"Disable Replica Rebuild\" is replaced by this setting. - Different from relying on replica starting delay to limit the concurrent rebuilding, if the rebuilding is disabled, replica object replenishment will be directly skipped. - When the value is 0, the eviction and data locality feature won't work. But this shouldn't have any impact to any current replica rebuild and backup restore."
+    description: "Maximum number of replicas that can be concurrently rebuilt on each node. **Caution**: [1] This setting replaces \"Disable Replica Rebuild\". Instead of delaying replica startup, Longhorn skips replica object replenishment to limit the number of concurrently rebuilding replicas. [2] When the value is \"0\", the eviction and data locality features do not work, but ongoing replica rebuilding and backup/restoration operations should remain unaffected."
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -562,7 +562,7 @@ questions:
     default: 300
   - variable: defaultSettings.guaranteedInstanceManagerCPU
     label: Guaranteed Instance Manager CPU
-    description: "Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled. The default value is \"12\". WARNING: - Value 0 means removing the CPU requests from spec of instance manager pods. - Considering the possible number of new instance manager pods in a further system upgrade, this integer value ranges from 0 to 40. - One more set of instance manager pods may need to be deployed when the Longhorn system is upgraded. If current available CPUs of the nodes are not enough for the new instance manager pods, you need to detach the volumes using the oldest instance manager pods so that Longhorn can clean up the old pods automatically and release the CPU resources. And the new pods with the latest instance manager image will be launched then. - This global setting will be ignored for a node if the field \"InstanceManagerCPURequest\" on the node is set. - After this setting is changed, all instance manager pods using this global setting on all the nodes will be automatically restarted. In other words, DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
+    description: "Percentage of the total allocatable CPU resources on each node to be reserved for each Instance Manager pod when the V1 Data Engine is enabled. You can specify a value between \"0\" and \"40\" to accommodate the possible number of new Instance Manager pods during upgrades. The default value is \"12\". **Caution**: [1] When the value is \"0\", CPU requests are removed from the spec of Instance Manager pods. [2] A new set of Instance Manager pods must be deployed when Longhorn is upgraded. If the available CPUs are not sufficient for the new pods, you must detach the volumes using the oldest Instance Manager pods so that Longhorn can automatically clean up the old pods and release the CPU resources. Once completed, the new pods with the latest Instance Manager image are launched. [3] This global setting is not applied to nodes with a specified value for the \"InstanceManagerCPURequest\" field. [4] After this setting is configured, Instance Manager pods on all nodes that use this setting are automatically restarted. **Do not change this setting while volumes are still attached.**"
     group: "Longhorn Default Settings"
     type: int
     min: 0
@@ -587,7 +587,7 @@ questions:
     default: "false"
 - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
   label: Kubernetes Cluster Autoscaler Enabled (Experimental)
-  description: "Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. WARNING: - Replica rebuilding could be expensive because nodes with reusable replicas could get removed by the Kubernetes Cluster Autoscaler."
+  description: "Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. **Caution**: Replica rebuilding may consume significant resources if the Kubernetes Cluster Autoscaler removes nodes with reusable replicas."
   group: "Longhorn Default Settings"
   type: boolean
   default: false
@@ -599,7 +599,7 @@ questions:
   default: false
 - variable: defaultSettings.storageNetwork
   label: Storage Network
-  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network. WARNING: - This setting should change after detaching all Longhorn volumes, as some of the Longhorn system component pods will get recreated to apply the setting. Longhorn will try to block this setting update when there are attached volumes."
+  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network. **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached."
   group: "Longhorn Default Settings"
   type: string
   default:
@@ -691,7 +691,7 @@ questions:
   default: true
 - variable: defaultSettings.v2DataEngine
   label: V2 Data Engine
-  description: "Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is a preview feature and should not be used in production environments. WARNING: - DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. Longhorn will block this setting update when there are attached volumes. - When the V2 Data Engine is enabled, each instance-manager pod utilizes 1 CPU core. This high CPU usage is attributed to the spdk_tgt process running within each instance-manager pod. The spdk_tgt process is responsible for handling input/output (IO) operations and requires intensive polling. As a result, it consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
+  description: "Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is a preview feature and should not be used in production environments. **Caution**: [1] **Do not modify this setting while volumes are still attached.** [2] When the V2 Data Engine is enabled, each Instance Manager pod for the V2 Data Engine uses 1 CPU core. The high CPU usage is caused by `spdk_tgt`, a process running in each Instance Manager pod that handles input/output (IO) operations and requires intensive polling. `spdk_tgt` consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
   group: "Longhorn V2 Data Engine (Preview Feature) Settings"
   type: boolean
   default: false
@@ -833,13 +833,13 @@ questions:
     type: string
     default:
   - variable: persistence.backingImage.expectedChecksum
-    description: 'Expected SHA-512 checksum of a backing image used in a Longhorn StorageClass. WARNING: - If the backing image name is not specified, setting this field is meaningless. - It is not recommended to set this field if the data source type is \"export-from-volume\".'
+    description: 'Expected SHA-512 checksum of a backing image used in a Longhorn StorageClass. **Caution** [1] This field is useful only if the backing image name is specified. [2] Specifying a checksum is not recommended when the data source type is \"export-from-volume\".'
     label: Storage Class Backing Image Expected SHA512 Checksum
     group: "Longhorn Storage Class Settings"
     type: string
     default:
   - variable: persistence.backingImage.dataSourceType
-    description: 'Data source type of a backing image used in a Longhorn StorageClass. If the backing image exists in the cluster, Longhorn uses this setting to verify the image. If the backing image does not exist, Longhorn creates one using the specified data source type. WARNING: - If the backing image name is not specified, setting this field is meaningless. - As for backing image creation with data source type \"upload\", it is recommended to do it via UI rather than StorageClass here. Uploading requires file data sending to the Longhorn backend after the object creation, which is complicated if you want to handle it manually.'
+    description: 'Data source type of a backing image used in a Longhorn StorageClass. If the backing image exists in the cluster, Longhorn uses this setting to verify the image. If the backing image does not exist, Longhorn creates one using the specified data source type. **Caution** [1] This field is useful only if the backing image name is specified. [2] Backing images with data source type \"upload\" are best created using the Longhorn UI. Uploading requires sending file data to Longhorn after object creation, which can be complicated when performed manually.'
     label: Storage Class Backing Image Data Source Type
     group: "Longhorn Storage Class Settings"
     type: enum
@@ -850,7 +850,7 @@ questions:
     - "export-from-volume"
     default: ""
   - variable: persistence.backingImage.dataSourceParameters
-    description: "Data source parameters of a backing image used in a Longhorn StorageClass. You can specify a JSON string of a map. (Example: `'{\"url\":\"https://backing-image-example.s3-region.amazonaws.com/test-backing-image\"}'`) WARNING: - If the backing image name is not specified, setting this field is meaningless. - Be careful of the quotes here."
+    description: "Data source parameters of a backing image used in a Longhorn StorageClass. You can specify a JSON string of a map. (Example: `'{\"url\":\"https://backing-image-example.s3-region.amazonaws.com/test-backing-image\"}'`) **Caution** [1] This field is useful only if the backing image name is specified. [2] Ensure that quotes are used correctly when specifying parameters."
     label: Storage Class Backing Image Data Source Parameters
     group: "Longhorn Storage Class Settings"
     type: string
@@ -930,7 +930,7 @@ questions:
   type: boolean
   group: "Other Settings"
 - variable: networkPolicies.enabled
-  description: "Setting that allows you to enable network policies that control access to Longhorn pods. Warning: The Rancher Proxy will not work if this feature is enabled and a custom NetworkPolicy must be added."
+  description: "Setting that allows you to enable network policies that control access to Longhorn pods. **Caution** The Rancher Proxy will work only if this feature is enabled and a custom NetworkPolicy is added."
   group: "Other Settings"
   label: Network Policies
   default: "false"
@@ -948,13 +948,13 @@ questions:
     - "k3s"
   - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
     label: Guaranteed Instance Manager CPU for V2 Data Engine
-    description: 'Number of millicpus on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is "1250". WARNING: - Specifying a value of 0 disables CPU requests for instance manager pods. You must specify an integer between 1000 and 8000. - This is a global setting. Modifying the value triggers an automatic restart of the instance manager pods. Do not modify the value while volumes are still attached." group: "Longhorn Default Settings'
+    description: 'Number of millicpu on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is \"1250\". **Caution** [1] Specifying a value of \"0\" disables CPU requests for Instance Manager pods. You must specify an integer between \"1000\" and \"8000\". [2] This is a global setting. Modifying the value triggers an automatic restart of the Instance Manager pods. Do not modify the value while volumes are still attached.'
     type: int
     min: 1000
     max: 8000
     default: 1250
   - variable: defaultSettings.v2DataEngineCPUMask
     label: CPU Mask for V2 Data Engine
-    description: 'CPU cores on which the Storage Performance Development Kit (SPDK) target daemon should run. The SPDK target daemon is located in each Instance Manager pod. Ensure that the number of cores is less than or equal to the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is 0x1.'
+    description: 'CPU cores on which the Storage Performance Development Kit (SPDK) target daemon should run. The SPDK target daemon is located in each Instance Manager pod. Ensure that the number of cores is less than or equal to the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is \"0x1\".'
     type: string
     default: "0x1"
