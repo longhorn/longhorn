@@ -134,6 +134,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingFreezeFilesystemForSnapshot": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornSettingKubernetesClusterAutoscalerEnabled": {
           "dataType": "string",
           "maxLen": 200
@@ -182,6 +186,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingRwxVolumeFastFailover": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornSettingSnapshotDataIntegrity": {
           "dataType": "string",
           "maxLen": 200
@@ -215,10 +223,6 @@ configMap:
           "maxLen": 200
         },
         "longhornSettingV2DataEngine": {
-          "dataType": "string",
-          "maxLen": 200
-        },
-        "longhornSettingFreezeFilesystemForSnapshot"
           "dataType": "string",
           "maxLen": 200
         }
@@ -357,6 +361,9 @@ configMap:
         "longhornVolumeDataLocalityStrictLocalCount": {
           "dataType": "float"
         },
+        "longhornVolumeFreezeFilesystemForSnapshotTrueCount": {
+          "dataType": "float"
+        },
         "longhornVolumeFrontendBlockdevCount": {
           "dataType": "float"
         },
@@ -385,9 +392,6 @@ configMap:
           "dataType": "float"
         },
         "longhornVolumeUnmapMarkSnapChainRemovedFalseCount": {
-          "dataType": "float"
-        },
-        "longhornVolumeFreezeFilesystemForSnapshotTrueCount": {
           "dataType": "float"
         }
       }
