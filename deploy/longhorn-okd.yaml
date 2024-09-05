@@ -2198,6 +2198,14 @@ spec:
             properties:
               dataEngine:
                 type: string
+              dataEngineSpec:
+                properties:
+                  v2:
+                    properties:
+                      cpuMask:
+                        type: string
+                    type: object
+                type: object
               image:
                 type: string
               nodeID:
@@ -2518,14 +2526,6 @@ spec:
             properties:
               allowScheduling:
                 type: boolean
-              dataEngineSpec:
-                properties:
-                  v2:
-                    properties:
-                      cpuMask:
-                        type: string
-                    type: object
-                type: object
               disks:
                 additionalProperties:
                   properties:
