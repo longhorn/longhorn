@@ -2056,6 +2056,14 @@ spec:
             properties:
               dataEngine:
                 type: string
+              dataEngineSpec:
+                properties:
+                  v2:
+                    properties:
+                      cpuMask:
+                        type: string
+                    type: object
+                type: object
               image:
                 type: string
               nodeID:
@@ -2077,6 +2085,14 @@ spec:
                 type: integer
               currentState:
                 type: string
+              dataEngineStatus:
+                properties:
+                  v2:
+                    properties:
+                      cpuMask:
+                        type: string
+                    type: object
+                type: object
               instanceEngines:
                 additionalProperties:
                   properties:

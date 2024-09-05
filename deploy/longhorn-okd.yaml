@@ -2198,6 +2198,14 @@ spec:
             properties:
               dataEngine:
                 type: string
+              dataEngineSpec:
+                properties:
+                  v2:
+                    properties:
+                      cpuMask:
+                        type: string
+                    type: object
+                type: object
               image:
                 type: string
               nodeID:
@@ -2219,6 +2227,14 @@ spec:
                 type: integer
               currentState:
                 type: string
+              dataEngineStatus:
+                properties:
+                  v2:
+                    properties:
+                      cpuMask:
+                        type: string
+                    type: object
+                type: object
               instanceEngines:
                 additionalProperties:
                   properties:
@@ -4996,6 +5012,8 @@ spec:
             port: 9501
             scheme: HTTPS
         volumeMounts:
+        - name: boot
+          mountPath: /host/boot/
         - name: dev
           mountPath: /host/dev/
         - name: proc
@@ -5027,6 +5045,9 @@ spec:
         image: longhornio/longhorn-share-manager:master-head
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
       volumes:
+      - name: boot
+        hostPath:
+          path: /boot/
       - name: dev
         hostPath:
           path: /dev/
