@@ -374,6 +374,13 @@ questions:
     type: int
     min: 0
     default: 1440
+  - variable: defaultSettings.backupExecutionTimeout
+    label: Backup Execution Timeout
+    description: "Number of minutes that Longhorn allows for the backup execution. The default value is \"1\"."
+    group: "Longhorn Default Settings"
+    type: int
+    min: 1
+    default: 1
   - variable: defaultSettings.restoreVolumeRecurringJobs
     label: Restore Volume Recurring Jobs
     description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration."
@@ -728,7 +735,7 @@ questions:
   default: false
 - variable: defaultSettings.rwxVolumeFastFailover
   label: RWX Volume Fast Failover (Experimental)
-  description: "Turn on logic to detect and move RWX volumes quickly on node failure."
+  description: "Setting that allows Longhorn to detect node failure and immediately migrate affected RWX volumes."
   group: "Longhorn Default Settings"
   type: boolean
   default: false
