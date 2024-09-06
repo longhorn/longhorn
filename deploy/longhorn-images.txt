@@ -1,4 +1,4 @@
-longhornio/csi-attacher:v4.5.1
+longhornio/csi-attacher:v4.7.0
 longhornio/csi-provisioner:v3.6.4
 longhornio/csi-resizer:v1.10.1
 longhornio/csi-snapshotter:v6.3.4
