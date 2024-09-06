@@ -224,6 +224,8 @@ defaultSettings:
   backupstorePollInterval: ~
   # -- Number of minutes that Longhorn keeps a failed backup resource. When the value is "0", automatic deletion is disabled.
   failedBackupTTL: ~
+  # -- Number of minutes that Longhorn allows for the backup execution. The default value is "1".
+  backupExecutionTimeout: ~
   # -- Setting that restores recurring jobs from a backup volume on a backup target and creates recurring jobs if none exist during backup restoration.
   restoreVolumeRecurringJobs: ~
   # -- Maximum number of successful recurring backup and snapshot jobs to be retained. When the value is "0", a history of successful recurring jobs is not retained.
@@ -343,7 +345,7 @@ defaultSettings:
   freezeFilesystemForSnapshot: ~
   # -- Setting that automatically cleans up the snapshot when the backup is deleted.
   autoCleanupSnapshotWhenDeleteBackup: ~
-  # -- Turn on logic to detect and move RWX volumes quickly on node failure.
+  # -- Setting that allows Longhorn to detect node failure and immediately migrate affected RWX volumes.
   rwxVolumeFastFailover: ~
 
 privateRegistry:
