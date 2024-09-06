@@ -19,7 +19,15 @@ jobs:
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-
+      id: add-project
+    - name: Update Item Fields
+      uses: titoportas/update-project-fields@v0.1.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        item-id: ${{ steps.add-project.outputs.itemId }}
+        field-keys: Status,Sprint
+        field-values: New,[0]
   qa:
     runs-on: ubuntu-latest
     steps:
