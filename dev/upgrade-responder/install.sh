@@ -144,6 +144,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingFreezeFilesystemForSnapshot": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornSettingKubernetesClusterAutoscalerEnabled": {
           "dataType": "string",
           "maxLen": 200
@@ -189,6 +193,10 @@ configMap:
           "maxLen": 200
         },
         "longhornSettingRestoreVolumeRecurringJobs": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingRwxVolumeFastFailover": {
           "dataType": "string",
           "maxLen": 200
         },
@@ -361,6 +369,9 @@ configMap:
           "dataType": "float"
         },
         "longhornVolumeDataLocalityStrictLocalCount": {
+          "dataType": "float"
+        },
+        "longhornFreezeFilesystemForSnapshotTrueCount": {
           "dataType": "float"
         },
         "longhornVolumeFrontendBlockdevCount": {
