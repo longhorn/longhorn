@@ -711,6 +711,12 @@ spec:
               progress:
                 description: The backing image backup progress.
                 type: integer
+              secret:
+                description: Record the secret if this backup backing image is encrypted
+                type: string
+              secretNamespace:
+                description: Record the secret namespace if this backup backing image is encrypted
+                type: string
               size:
                 description: The backing image size.
                 format: int64
