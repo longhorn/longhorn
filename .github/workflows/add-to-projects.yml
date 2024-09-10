@@ -1,7 +1,10 @@
 name: Add-To-Projects
 on:
   issues:
-    types: [ opened, labeled ]
+    types: [opened, labeled, milestoned]
+  issue_comment:
+    types: [created, edited]
+
 jobs:
   community:
     runs-on: ubuntu-latest
@@ -14,23 +17,78 @@ jobs:
         organization: longhorn
         GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
+    - name: Get Issue
+      uses: octokit/request-action@v2.x
+      id: issue
+      with:
+        route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
     - name: Add Issue to Community Sprint Project
       id: add-project
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null
-      uses: actions/add-to-project@v1
+      uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
-    - name: Update Issue Status in Community Sprint Project
-      if: ${{ steps.add-project.outputs.itemId != '' }}
+    - name: Update Item To New
+      if: |
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
+        steps.add-project.outputs.itemId != '' &&
+        github.event_name == 'issues' && github.event.action == 'opened'
       uses: titoportas/update-project-fields@v0.1.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         item-id: ${{ steps.add-project.outputs.itemId }}
         field-keys: Status,Sprint
-        field-values: New,[0]
+        field-values: "New,[0]"
+
+    - name: Move Item To Resolved
+      if: |
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
+        steps.add-project.outputs.itemId != '' &&
+        github.event_name == 'issues' && github.event.action == 'milestoned'
+      uses: titoportas/update-project-fields@v0.1.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        item-id: ${{ steps.add-project.outputs.itemId }}
+        field-keys: Status,Sprint
+        field-values: "Resolved,[0]"
+
+    - name: Update Item To In Progress
+      if: |
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
+        steps.add-project.outputs.itemId != '' &&
+        github.event_name == 'issue_comment' && (github.event.action == 'created' || github.event.action == 'edited')
+      uses: titoportas/update-project-fields@v0.1.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        item-id: ${{ steps.add-project.outputs.itemId }}
+        field-keys: Status,Sprint
+        field-values: ${{ fromJSON(steps.issue.outputs.data).milestone == null && 'In Progress,[0]' || 'Resolved,[0]' }}
+
+    - name: Update Item To In Closed
+      if: |
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
+        steps.add-project.outputs.itemId != '' &&
+        github.event_name == 'issues' && github.event.action == 'labeled' && (github.event.label.name == 'invalid' || github.event.label.name == 'wontfix')
+      uses: titoportas/update-project-fields@v0.1.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        item-id: ${{ steps.add-project.outputs.itemId }}
+        field-keys: Status
+        field-values: Closed
+
   qa:
     runs-on: ubuntu-latest
     steps:
@@ -44,7 +102,7 @@ jobs:
 
     - name: Add Issue to QA Sprint Project
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
-      uses: actions/add-to-project@v1
+      uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/4
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
