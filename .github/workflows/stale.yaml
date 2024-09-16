@@ -12,8 +12,8 @@ jobs:
     steps:
     - uses: actions/stale@v4
       with:
-        stale-issue-message: 'This issue is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 5 days.'
-        stale-pr-message: 'This PR is stale because it has been open 45 days with no activity. Remove stale label or comment or this will be closed in 10 days.'
+        stale-issue-message: 'This issue is stale because it has been open for 30 days with no activity. Remove stale label or comment or this will be closed in 5 days.'
+        stale-pr-message: 'This PR is stale because it has been open for 45 days with no activity. Remove stale label or comment or this will be closed in 10 days.'
         close-issue-message: 'This issue was closed because it has been stalled for 5 days with no activity.'
         close-pr-message: 'This PR was closed because it has been stalled for 10 days with no activity.'
         days-before-stale: 60
@@ -23,6 +23,6 @@ jobs:
         stale-issue-label: 'stale'
         stale-pr-label: 'stale'
         exempt-all-assignees: true
-        exempt-issue-labels: 'kind/bug,kind/doc,kind/enhancement,kind/poc,kind/refactoring,kind/test,kind/task,kind/backport,kind/regression,kind/evaluation'
+        exempt-issue-labels: 'kind/improvement,kind/feature'
         exempt-draft-pr: true
         exempt-all-milestones: true
