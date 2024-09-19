@@ -1,0 +1,140 @@
+name: Update-Projects
+on:
+  issues:
+    types: [labeled, milestoned, reopened, closed]
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  community:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Is Longhorn Member
+      id: is-longhorn-member
+      uses: tspascoal/get-user-teams-membership@v3
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - run: |
+        echo "is-longhorn-member teams: ${{ steps.is-longhorn-member.outputs.teams }}"
+        echo "is-longhorn-member outcome: ${{ steps.is-longhorn-member.outcome }}"
+
+    - name: Get Issue
+      uses: octokit/request-action@v2.x
+      id: issue
+      with:
+        route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - uses: EndBug/project-fields@v2
+      id: fields
+      with:
+        operation: get
+        fields: Status
+        github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        project_url: https://github.com/orgs/longhorn/projects/5
+        resource_url: https://github.com/longhorn/longhorn/issues/${{ github.event.issue.number }}
+
+    - run: echo ${{ steps.fields.outputs.values }}
+
+    - name: Add Issue to Community Sprint Project
+      id: add-project
+      uses: actions/add-to-project@v1.0.2
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Update Project Item
+      if: ${{ 
+        steps.is-longhorn-member.outcome == 'success' &&
+        steps.add-project.outputs.itemId != '' 
+        }}
+      run: |
+        teams=${{ steps.is-longhorn-member.outputs.teams }}
+        teams=${teams:1:-1}
+        IFS=',' read -r -a team_array <<< "$teams"
+        team_count=${#team_array[@]}
+        echo "team_count: $team_count"
+
+        # If the issue is milestoned by longhorn member, update to Resolved
+        if [[ $team_count -gt 0 && 
+              "${{ github.event_name }}" == "issues" && 
+              "${{ github.event.action }}" == "milestoned" ]]; then
+
+          echo "Updating to Resolved since it's milestoned by longhorn member"
+          echo "field-values=Resolved,[0]" >> $GITHUB_ENV
+
+        # If the issue is closed by longhorn member, update to Resolved
+        elif [[ $team_count -gt 0 && 
+                "${{ github.event_name }}" == "issues" && 
+                "${{ github.event.action }}" == "closed" && 
+                "${{ fromJSON(steps.issue.outputs.data).state_reason }}" != "not_planned" ]]; then
+
+          echo "Updating to Resolved since it's closed by longhorn member"
+          echo "field-values=Resolved,[0]" >> $GITHUB_ENV
+
+        # If the issue is closed by longhorn member and not planned, update to Closed
+        elif [[ $team_count -gt 0 &&
+                "${{ github.event_name }}" == "issues" && 
+                "${{ github.event.action }}" == "closed" && 
+                "${{ fromJSON(steps.issue.outputs.data).state_reason }}" == "not_planned" ]]; then
+
+          echo "Updating to Closed since it's not planned"
+          echo "field-values=Closed" >> $GITHUB_ENV
+
+        # If the issue is closed by non-longhorn member, update to Closed
+        elif [[ $team_count -eq 0 && 
+                "${{ github.event_name }}" == "issues" && 
+                "${{ github.event.action }}" == "closed" &&
+                "${{ steps.fields.outputs.values }}" != "Resolved" ]]; then
+
+          echo "Updating to Closed since it's closed by non-longhorn member"
+          echo "field-values=Closed" >> $GITHUB_ENV
+
+        # If the issue is reopened with status Closed, update to In Progress
+        elif [[ "${{ github.event_name }}" == "issues" && 
+                "${{ github.event.action }}" == "reopened" && 
+                "${{ steps.fields.outputs.values }}" == "Closed" ]]; then
+
+          echo "Updating to In Progress"
+          echo "field-values=In Progress,[0]" >> $GITHUB_ENV
+
+        # If a comment is added or edited and the status is not Resolved or Closed by non-longhorn member, update to In Progress
+        elif [[ $team_count -eq 0 && 
+                "${{ github.event_name }}" == "issue_comment" && 
+                ( "${{ github.event.action }}" == "created" || "${{ github.event.action }}" == "edited" ) && 
+                ( "${{ steps.fields.outputs.values }}" != "Resolved" && "${{ steps.fields.outputs.values }}" != "Closed" ) ]]; then
+
+          echo "Updating to In Progress"
+          echo "field-values=In Progress,[0]" >> $GITHUB_ENV
+
+        # If the issue is labeled as invalid, wontfix or duplicated, update to Closed
+        elif [[ "${{ github.event_name }}" == "issues" && 
+                "${{ github.event.action }}" == "labeled" && 
+                ( "${{ github.event.label.name }}" == "invalid" || 
+                  "${{ github.event.label.name }}" == "wontfix" || 
+                  "${{ github.event.label.name }}" == "duplicated" ) ]]; then
+
+          echo "Updating to Closed"
+          echo "field-values=Closed" >> $GITHUB_ENV
+
+        else
+          echo "No matching conditions, skipping update."
+          exit 0
+        fi
+
+      env:
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Apply Project Update
+      if: ${{ env.field-values != '' }}
+      uses: titoportas/update-project-fields@v0.1.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        item-id: ${{ steps.add-project.outputs.itemId }}
+        field-keys: Status,Sprint
+        field-values: ${{ env.field-values }}

@@ -1,9 +1,7 @@
 name: Add-To-Projects
 on:
   issues:
-    types: [opened, labeled, milestoned]
-  issue_comment:
-    types: [created, edited]
+    types: [opened, labeled]
 
 jobs:
   community:
@@ -46,48 +44,6 @@ jobs:
         item-id: ${{ steps.add-project.outputs.itemId }}
         field-keys: Status,Sprint
         field-values: "New,[0]"
-
-    - name: Move Item To Resolved
-      if: |
-        steps.is-longhorn-member.outcome == 'success' &&
-        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
-        steps.add-project.outputs.itemId != '' &&
-        github.event_name == 'issues' && github.event.action == 'milestoned'
-      uses: titoportas/update-project-fields@v0.1.0
-      with:
-        project-url: https://github.com/orgs/longhorn/projects/5
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-        item-id: ${{ steps.add-project.outputs.itemId }}
-        field-keys: Status,Sprint
-        field-values: "Resolved,[0]"
-
-    - name: Update Item To In Progress
-      if: |
-        steps.is-longhorn-member.outcome == 'success' &&
-        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
-        steps.add-project.outputs.itemId != '' &&
-        github.event_name == 'issue_comment' && (github.event.action == 'created' || github.event.action == 'edited')
-      uses: titoportas/update-project-fields@v0.1.0
-      with:
-        project-url: https://github.com/orgs/longhorn/projects/5
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-        item-id: ${{ steps.add-project.outputs.itemId }}
-        field-keys: Status,Sprint
-        field-values: ${{ fromJSON(steps.issue.outputs.data).milestone == null && 'In Progress,[0]' || 'Resolved,[0]' }}
-
-    - name: Update Item To In Closed
-      if: |
-        steps.is-longhorn-member.outcome == 'success' &&
-        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
-        steps.add-project.outputs.itemId != '' &&
-        github.event_name == 'issues' && github.event.action == 'labeled' && (github.event.label.name == 'invalid' || github.event.label.name == 'wontfix')
-      uses: titoportas/update-project-fields@v0.1.0
-      with:
-        project-url: https://github.com/orgs/longhorn/projects/5
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-        item-id: ${{ steps.add-project.outputs.itemId }}
-        field-keys: Status
-        field-values: Closed
 
   qa:
     runs-on: ubuntu-latest
