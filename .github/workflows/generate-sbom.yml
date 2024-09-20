@@ -2,6 +2,11 @@ name: Generate-SBOM
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag that needs to generate sbom"
+        required: true
 jobs:
   generate-sbom:
     runs-on: ubuntu-latest
@@ -53,3 +58,4 @@ jobs:
       with:
         files: sbom.tar.gz
         repo-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        release-tag: ${{ inputs.tag || '' }}
