@@ -37,6 +37,7 @@ Action items for releasing v<x.y.z>
 - [ ] Regression test plan (manual)
 - [ ] Run e2e regression for pre-GA milestones (`install`, `upgrade`) 
 - [ ] Run security testing of container images for pre-GA milestones
+  - [] Create security issues at upstream for unresolved CVEs in CSI sidecar images
 - [ ] Verify longhorn chart PR to ensure all artifacts are ready for GA (`install`, `upgrade`)
 - [ ] Run core testing (install, upgrade) for the GA build
   - Upgrade from the previous patch of the same feature release. 
