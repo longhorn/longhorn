@@ -31,6 +31,7 @@ jobs:
 
     - uses: EndBug/project-fields@v2
       id: fields
+      continue-on-error: true
       with:
         operation: get
         fields: Status
@@ -43,6 +44,9 @@ jobs:
     - name: Add Issue to Community Sprint Project
       id: add-project
       uses: actions/add-to-project@v1.0.2
+      if: ${{
+        steps.fields.outcome == 'success'
+        }}
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
@@ -50,6 +54,7 @@ jobs:
     - name: Update Project Item
       if: ${{ 
         steps.is-longhorn-member.outcome == 'success' &&
+        steps.fields.outcome == 'success' &&
         steps.add-project.outputs.itemId != '' 
         }}
       run: |
@@ -130,7 +135,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
     - name: Apply Project Update
-      if: ${{ env.field-values != '' }}
+      if: ${{
+        steps.fields.outcome == 'success' &&
+        env.field-values != ''
+        }}
       uses: titoportas/update-project-fields@v0.1.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
