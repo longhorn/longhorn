@@ -53,10 +53,17 @@ configMap:
           "name": "v1.6.2",
           "releaseDate": "2024-05-22T00:00:00Z",
           "tags": [
+            "stable"
+          ]
+        },
+        {
+          "name": "v1.7.1",
+          "releaseDate": "2024-09-04T00:00:00Z",
+          "tags": [
             "latest",
             "stable"
           ]
-        }
+        }   
       ]
     }
   requestSchema: |-
