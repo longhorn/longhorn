@@ -56,13 +56,13 @@ Action items for releasing v<x.y.z>
 - [ ] Mark the release as `stable` release and update stable versions in https://github.com/longhorn/longhorn/blob/master/support-versions.txt
   - For the first stable release, we need to consider several factors and reach a consensus by maintainers before claiming it stable. 
   - For any patch release after a stable release, we need to wait 1-2 weeks for user feedback.
-
 ### Post-Release
 
 **After marking the release as a `stable` release, Release Captain needs to coordinate the following items**
 
 - [ ] Update https://github.com/longhorn/longhorn/blob/master/deploy/upgrade_responder_server/chart-values.yaml  - @PhanLe1010 
 - [ ] Add another request for the rancher charts for the next patch release - @rebeccazzzz  
+- [ ] Update the [support matrix](https://www.suse.com/suse-longhorn/support-matrix/) - @asettle
 
 ### Rancher Charts
 
