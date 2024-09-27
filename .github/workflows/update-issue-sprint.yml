@@ -1,4 +1,4 @@
-name: Update-Community-Issue-Sprint
+name: Update-Issue-Sprint
 
 on:
   schedule:
@@ -24,7 +24,20 @@ jobs:
       run: |
         python ./.github/workflows/check-sprint-last-day.py "longhorn" "longhorn" "Longhorn Sprint"
 
-    - uses: blombard/move-to-next-iteration@master
+    - name: Update Longhorn Sprint issues
+      uses: derekbit/move-to-next-iteration@master
+      if: steps.check_sprint_build_required.outcome == 'success'
+      with:
+        owner: longhorn
+        number: 8
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        iteration-field: Sprint
+        iteration: current
+        new-iteration: none
+        excluded-statuses: "Ready For Testing,Testing,Closed"
+
+    - name: Update Longhorn Community Sprint issues
+      uses: derekbit/move-to-next-iteration@master
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
         owner: longhorn
