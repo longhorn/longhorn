@@ -11,6 +11,7 @@ jobs:
     steps:
     - name: Is Longhorn Member
       id: is-longhorn-member
+      continue-on-error: true
       uses: tspascoal/get-user-teams-membership@v3
       with:
         username: ${{ github.event.issue.user.login }}
@@ -24,6 +25,7 @@ jobs:
     - name: Get Issue
       uses: octokit/request-action@v2.x
       id: issue
+      if: steps.is-longhorn-member.outcome == 'success'
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
       env:
@@ -32,6 +34,7 @@ jobs:
     - uses: EndBug/project-fields@v2
       id: fields
       continue-on-error: true
+      if: steps.is-longhorn-member.outcome == 'success'
       with:
         operation: get
         fields: Status
@@ -45,6 +48,7 @@ jobs:
       id: add-project
       uses: actions/add-to-project@v1.0.2
       if: ${{
+        steps.is-longhorn-member.outcome == 'success' &&
         steps.fields.outcome == 'success'
         }}
       with:
@@ -136,6 +140,7 @@ jobs:
 
     - name: Apply Project Update
       if: ${{
+        steps.is-longhorn-member.outcome == 'success' &&
         steps.fields.outcome == 'success' &&
         env.field-values != ''
         }}
