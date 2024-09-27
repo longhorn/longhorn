@@ -1,0 +1,36 @@
+name: Update-Community-Issue-Sprint
+
+on:
+  schedule:
+    # Trigger every Sunday at 20:00
+    - cron: '0 20 * * 0'
+  workflow_dispatch:
+
+jobs:
+  move-to-next-iteration:
+    name: Move to next iteration
+    runs-on: ubuntu-latest
+    
+    env:
+      GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Check sprint build is required
+      id: check_sprint_build_required
+      continue-on-error: true
+      run: |
+        python ./.github/workflows/check-sprint-last-day.py "longhorn" "longhorn" "Longhorn Sprint"
+
+    - uses: blombard/move-to-next-iteration@master
+      if: steps.check_sprint_build_required.outcome == 'success'
+      with:
+        owner: longhorn
+        number: 5
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        iteration-field: Sprint
+        iteration: current
+        new-iteration: next
+        statuses: 'New'
