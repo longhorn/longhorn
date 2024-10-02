@@ -137,7 +137,7 @@ questions:
     label: Longhorn CSI Driver Resizer Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.resizer.tag
-    default: v1.11.1
+    default: v1.12.0
     description: "Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value."
     type: string
     label: Longhorn CSI Driver Resizer Image Tag
