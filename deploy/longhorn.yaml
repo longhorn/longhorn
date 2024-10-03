@@ -4749,7 +4749,7 @@ spec:
           - name: CSI_ATTACHER_IMAGE
             value: "longhornio/csi-attacher:v4.7.0"
           - name: CSI_PROVISIONER_IMAGE
-            value: "longhornio/csi-provisioner:v3.6.4"
+            value: "longhornio/csi-provisioner:v5.1.0"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
             value: "longhornio/csi-node-driver-registrar:v2.12.0"
           - name: CSI_RESIZER_IMAGE
