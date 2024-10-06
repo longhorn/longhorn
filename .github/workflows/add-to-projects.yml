@@ -1,7 +1,7 @@
 name: Add-To-Projects
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened]
 
 jobs:
   community:
@@ -39,8 +39,7 @@ jobs:
       if: |
         steps.is-longhorn-member.outcome == 'success' &&
         fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
-        steps.add-project.outputs.itemId != '' &&
-        github.event_name == 'issues' && github.event.action == 'opened'
+        steps.add-project.outputs.itemId != ''
       uses: titoportas/update-project-fields@v0.1.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
