@@ -172,6 +172,8 @@ persistence:
     selector: ""
   # -- Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
   removeSnapshotsDuringFilesystemTrim: ignored
+  # -- Setting that allows you to specify the data engine version for the default Longhorn StorageClass. (Options: "v1", "v2")
+  dataEngine: v1
 
 preUpgradeChecker:
   # -- Setting that allows Longhorn to perform pre-upgrade checks. Disable this setting when installing Longhorn using Argo CD or other GitOps solutions.

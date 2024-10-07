@@ -53,4 +53,5 @@ data:
       {{- end }}
       {{- if .Values.persistence.disableRevisionCounter }}
       disableRevisionCounter: "{{ .Values.persistence.disableRevisionCounter }}"
+      dataEngine: "{{ .Values.persistence.dataEngine }}"
       {{- end }}
