@@ -94,17 +94,17 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | image.csi.attacher.repository | string | `"longhornio/csi-attacher"` | Repository for the CSI attacher image. When unspecified, Longhorn uses the default value. |
-| image.csi.attacher.tag | string | `"v4.6.1"` | Tag for the CSI attacher image. When unspecified, Longhorn uses the default value. |
+| image.csi.attacher.tag | string | `"v4.6.1-20241007"` | Tag for the CSI attacher image. When unspecified, Longhorn uses the default value. |
 | image.csi.livenessProbe.repository | string | `"longhornio/livenessprobe"` | Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value. |
 | image.csi.livenessProbe.tag | string | `"v2.14.0"` | Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value. |
 | image.csi.nodeDriverRegistrar.repository | string | `"longhornio/csi-node-driver-registrar"` | Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
 | image.csi.nodeDriverRegistrar.tag | string | `"v2.12.0"` | Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
-| image.csi.provisioner.tag | string | `"v4.0.1"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
+| image.csi.provisioner.tag | string | `"v4.0.1-20241007"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
-| image.csi.resizer.tag | string | `"v1.11.1"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
+| image.csi.resizer.tag | string | `"v1.11.2-20241007"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
-| image.csi.snapshotter.tag | string | `"v7.0.2"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
+| image.csi.snapshotter.tag | string | `"v7.0.2-20241007"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.tag | string | `"master-head"` | Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Repository for the Longhorn Engine image. |
