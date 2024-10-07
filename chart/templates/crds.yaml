@@ -342,6 +342,9 @@ spec:
                       type: string
                     progress:
                       type: integer
+                    realSize:
+                      format: int64
+                      type: integer
                     senderManagerAddress:
                       type: string
                     sendingReference:
@@ -559,13 +562,18 @@ spec:
                 type: object
               ownerID:
                 type: string
+              realSize:
+                description: Real size of image in bytes, which may be smaller than the size 
+                  when the file is a sparse file. Will be zero until known (e.g. while a backing image is uploading)
+                format: int64
+                type: integer
               size:
                 format: int64
                 type: integer
               uuid:
                 type: string
               virtualSize:
-                description: Virtual size of image, which may be larger than physical
+                description: Virtual size of image in bytes, which may be larger than physical
                   size. Will be zero until known (e.g. while a backing image is uploading)
                 format: int64
                 type: integer
@@ -2506,6 +2514,12 @@ spec:
                       type: string
                     instanceManagerName:
                       type: string
+                    scheduledBackingImage:
+                      additionalProperties:
+                        format: int64
+                        type: integer
+                      nullable: true
+                      type: object
                     scheduledReplica:
                       additionalProperties:
                         format: int64
