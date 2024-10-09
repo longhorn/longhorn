@@ -4,7 +4,6 @@ longhornio/csi-resizer:v1.12.0
 longhornio/csi-snapshotter:v6.3.4
 longhornio/csi-node-driver-registrar:v2.12.0
 longhornio/livenessprobe:v2.14.0
-longhornio/openshift-origin-oauth-proxy:4.15
 longhornio/backing-image-manager:v1.6.3
 longhornio/longhorn-engine:v1.6.3
 longhornio/longhorn-instance-manager:v1.6.3
