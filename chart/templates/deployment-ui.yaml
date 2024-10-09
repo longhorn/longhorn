@@ -70,7 +70,11 @@ spec:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
       - name: oauth-proxy
+        {{- if .Values.image.openshift.oauthProxy.repository }}
         image: {{ template "registry_url" . }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
+        {{- else }}
+        image: ""
+        {{- end }}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: {{ .Values.openshift.ui.proxy | default 8443 }}
