@@ -30,6 +30,7 @@ Action items for releasing v<x.y.z>
   - backing-image-manager
   - longhorn-spdk-engine (needed after GA)
 - [ ] Update `Best Practices>Operating System` in Longhorn official document.
+- [ ] Update image versions in https://github.com/longhorn/longhorn/tree/v<x.y>.x/chart/README.md.
 - [ ] Trigger the GA release build by [longhorn/longhorn Actions](https://github.com/longhorn/longhorn)
 
 **The QA captain needs to coordinate the following items before the GA release.**
@@ -51,6 +52,8 @@ Action items for releasing v<x.y.z>
   - [ ] Deprecation note
   - [ ] Upgrade notes including highlighted notes, deprecation, compatible changes, and others impacting the current users
 - [ ] Publish the new version of doc and add a next patch version of dev doc.
+  - [ ] Update image versions in https://longhorn.io `References > Helm Values` 
+  - [ ] Update image versions in https://longhorn.io `Snapshot and Backups > CSI Snapshot Support > Enable CSI Snapshot Support on a Cluster`
 - [ ] Release longhorn/chart from the release branch to publish to [ArtifactHub](https://artifacthub.io/packages/helm/longhorn/longhorn) by [longhorn/charts Actions](https://github.com/longhorn/charts)
 - [ ] Mark the release as `latest` release in longhorn/longhorn [README.md](https://github.com/longhorn/longhorn)
 - [ ] Mark the release as `stable` release and update stable versions in https://github.com/longhorn/longhorn/blob/master/support-versions.txt
