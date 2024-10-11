@@ -767,6 +767,14 @@ spec:
             description: BackupBackingImageSpec defines the desired state of the Longhorn
               backing image backup
             properties:
+              backingImage:
+                description: The backing image name..
+                nullable: true
+                type: string
+              backupTargetName:
+                description: The backup target name.
+                nullable: true
+                type: string
               labels:
                 additionalProperties:
                   type: string
@@ -989,6 +997,9 @@ spec:
                 - full
                 - incremental
                 - ""
+              backupTargetName:
+                description: The backup target name.
+                nullable: true
                 type: string
               labels:
                 additionalProperties:
@@ -1231,6 +1242,9 @@ spec:
                 description: The interval that the cluster needs to run sync with
                   the backup target.
                 type: string
+              readOnly:
+                description: ReadOnly indicates if it can create a backup on the remote backup target or not.
+                type: boolean
               syncRequestedAt:
                 description: The time to request run sync the remote backup target.
                 format: date-time
@@ -1406,10 +1420,17 @@ spec:
             description: BackupVolumeSpec defines the desired state of the Longhorn
               backup volume
             properties:
+              backupTargetName:
+                description: The backup target name that the backup volume was synced.
+                nullable: true
+                type: string
               syncRequestedAt:
                 description: The time to request run sync the remote backup volume.
                 format: date-time
                 nullable: true
+                type: string
+              volumeName:
+                description: The volume name that the backup volume was used to backup.
                 type: string
             type: object
           status:
@@ -4378,6 +4399,9 @@ spec:
                 - none
                 - lz4
                 - gzip
+                type: string
+              backupTargetName:
+                description: 'The backup target name that the volume will be backed up to or is synced.'
                 type: string
               dataEngine:
                 enum:
