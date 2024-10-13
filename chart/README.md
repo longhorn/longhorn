@@ -157,6 +157,9 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | persistence.recurringJobSelector.enable | bool | `false` | Setting that allows you to enable the recurring job selector for a Longhorn StorageClass. |
 | persistence.recurringJobSelector.jobList | list | `[]` | Recurring job selector for a Longhorn StorageClass. Ensure that quotes are used correctly when specifying job parameters. (Example: `[{"name":"backup", "isGroup":true}]`) |
 | persistence.removeSnapshotsDuringFilesystemTrim | string | `"ignored"` | Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled") |
+| persistence.encryption.enabled | bool | `false` | Enables volume encryption for persistent volumes. Requires `dm_crypt` kernel module and `cryptsetup` to be installed on nodes. |
+| persistence.encryption.secretName | string | `""` | (Optional) Name of the encryption secret. If not provided, a secret is automatically generated. |
+| persistence.encryption.secretNamespace | string | `""` | (Optional) Namespace where the encryption secret resides. Defaults to the release namespace. |
 
 ### CSI Settings
 

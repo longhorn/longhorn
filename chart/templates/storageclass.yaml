@@ -54,3 +54,12 @@ data:
       {{- if .Values.persistence.disableRevisionCounter }}
       disableRevisionCounter: "{{ .Values.persistence.disableRevisionCounter }}"
       {{- end }}
+      {{- if .Values.persistence.encryption.enabled }}
+      encrypted: "true"
+      csi.storage.k8s.io/provisioner-secret-name: {{ .Values.persistence.encryption.secretName | default "longhorn-crypto" | quote }}
+      csi.storage.k8s.io/provisioner-secret-namespace: {{ .Values.persistence.encryption.secretNamespace | default (include "release_namespace" .) | quote }}
+      csi.storage.k8s.io/node-publish-secret-name: {{ .Values.persistence.encryption.secretName | default "longhorn-crypto" | quote }}
+      csi.storage.k8s.io/node-publish-secret-namespace: {{ .Values.persistence.encryption.secretNamespace | default (include "release_namespace" .) | quote }}
+      csi.storage.k8s.io/node-stage-secret-name: {{ .Values.persistence.encryption.secretName | default "longhorn-crypto" | quote }}
+      csi.storage.k8s.io/node-stage-secret-namespace: {{ .Values.persistence.encryption.secretNamespace | default (include "release_namespace" .) | quote }}
+      {{- end }}
