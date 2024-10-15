@@ -377,7 +377,7 @@ def migrate_tickets(github_org, github_repo, github_project):
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
-        print('Usage: python migrate_zenhub_board_to_github_project.py <github_org> <github_repo> <github_project>')
+        print('Usage: python migrate-zenhub-board-to-github-project.py <github_org> <github_repo> <github_project>')
         sys.exit()
 
     migrate_tickets(sys.argv[1], sys.argv[2], sys.argv[3])
