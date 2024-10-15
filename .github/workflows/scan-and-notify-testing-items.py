@@ -303,6 +303,6 @@ def scan_and_notify(github_org, github_repo, github_project):
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
-        print('Usage: python scan_and_notify_testing_items.py <github_org> <github_repo> <github_project>')
+        print('Usage: python scan-and-notify-testing-items.py <github_org> <github_repo> <github_project>')
 
     scan_and_notify(sys.argv[1], sys.argv[2], sys.argv[3])

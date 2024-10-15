@@ -61,4 +61,4 @@ jobs:
           github_project="${{ github.event.inputs.github_project }}"
         fi
 
-        python ./.github/workflows/scan_and_notify_testing_items.py "${github_org}" "${github_repo}" "${github_project}"
+        python ./.github/workflows/scan-and-notify-testing-items.py "${github_org}" "${github_repo}" "${github_project}"
