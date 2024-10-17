@@ -4896,7 +4896,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:v1.7.2-rc2"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.43"
+        - "longhornio/support-bundle-kit:v0.0.45"
         - --manager-image
         - "longhornio/longhorn-manager:v1.7.2-rc2"
         - --service-account
