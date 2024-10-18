@@ -25,7 +25,7 @@ Longhorn only allows upgrades from supported versions. For more information abou
 
 The functionality of the [environment check script](https://github.com/longhorn/longhorn/blob/v1.7.x/scripts/environment_check.sh) overlaps with that of the Longhorn CLI, which is available starting with v1.7.0. Because of this, the script is deprecated in v1.7.0 and is scheduled for removal in v1.8.0.
 
-For information about important changes, including feature incompatibility, deprecation, and removal, see [Important Notes](https://longhorn.io/docs/1.7.0/deploy/important-notes/) in the Longhorn documentation.
+For information about important changes, including feature incompatibility, deprecation, and removal, see [Important Notes](https://longhorn.io/docs/1.7.1/important-notes/) in the Longhorn documentation.
 
 ## Post-Release Known Issues
 
