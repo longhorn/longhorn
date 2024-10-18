@@ -29,9 +29,8 @@ Action items for releasing v<x.y.z>
   - longhorn-share-manager
   - backing-image-manager
   - longhorn-spdk-engine (needed after GA)
-- [ ] Update `Best Practices>Operating System` in Longhorn official document.
 - [ ] Update image versions in https://github.com/longhorn/longhorn/tree/v<x.y>.x/chart/README.md.
-- [ ] Trigger the GA release build by [longhorn/longhorn Actions](https://github.com/longhorn/longhorn)
+- [ ] Trigger the GA release build by [longhorn/release Actions](https://github.com/longhorn/release/actions/workflows/release.yml)
 
 **The QA captain needs to coordinate the following items before the GA release.**
 
@@ -49,6 +48,7 @@ Action items for releasing v<x.y.z>
 **The Release Captain needs to finish the following items.**
 
 - [ ] Release note - Release Captain
+  - [ ] Update `Best Practices>Operating System` in Longhorn official document.
   - [ ] Deprecation note
   - [ ] Upgrade notes including highlighted notes, deprecation, compatible changes, and others impacting the current users
 - [ ] Publish the new version of doc and add a next patch version of dev doc.
