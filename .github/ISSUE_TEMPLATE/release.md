@@ -29,12 +29,12 @@ Action items for releasing v<x.y.z>
   - longhorn-share-manager
   - backing-image-manager
   - longhorn-spdk-engine (needed after GA)
-- [ ] Update `Best Practices>Operating System` in Longhorn official document.
 - [ ] Update image versions in https://github.com/longhorn/longhorn/tree/v<x.y>.x/chart/README.md.
-- [ ] Trigger the GA release build by [longhorn/longhorn Actions](https://github.com/longhorn/longhorn)
+- [ ] Trigger the GA release build by [longhorn/release Actions](https://github.com/longhorn/release/actions/workflows/release.yml)
 
 **The QA captain needs to coordinate the following items before the GA release.**
 
+- [ ] Update `Best Practices>Operating System` in Longhorn official document.
 - [ ] Regression test plan (manual)
 - [ ] Run e2e regression for pre-GA milestones (`install`, `upgrade`) 
 - [ ] Run security testing of container images for pre-GA milestones
@@ -56,10 +56,13 @@ Action items for releasing v<x.y.z>
   - [ ] Update image versions in https://longhorn.io `Snapshot and Backups > CSI Snapshot Support > Enable CSI Snapshot Support on a Cluster`
 - [ ] Release longhorn/chart from the release branch to publish to [ArtifactHub](https://artifacthub.io/packages/helm/longhorn/longhorn) by [longhorn/charts Actions](https://github.com/longhorn/charts)
 - [ ] Mark the release as `latest` release in longhorn/longhorn [README.md](https://github.com/longhorn/longhorn)
+
+
+### Post-Release
+
 - [ ] Mark the release as `stable` release and update stable versions in https://github.com/longhorn/longhorn/blob/master/support-versions.txt
   - For the first stable release, we need to consider several factors and reach a consensus by maintainers before claiming it stable. 
   - For any patch release after a stable release, we need to wait 1-2 weeks for user feedback.
-### Post-Release
 
 **After marking the release as a `stable` release, Release Captain needs to coordinate the following items**
 
