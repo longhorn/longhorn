@@ -3,10 +3,10 @@ language: "en-US"
 early_access: false
 reviews:
   request_changes_workflow: false
-  high_level_summary: true
+  high_level_summary: false
   poem: false
   review_status: true
-  collapse_walkthrough: true
+  collapse_walkthrough: false
   auto_review:
     enabled: true
     ignore_title_keywords:
