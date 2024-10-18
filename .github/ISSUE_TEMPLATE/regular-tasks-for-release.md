@@ -18,7 +18,7 @@ For OS distro updates for SLES and SLE Micro, need to update for each patch rele
   - [ ] Verify by ci.longhorn.io/job/public/job
   - [ ] Update `Best Practices>Operating System` in the official document and testing pipelines
 
-- [ ] K8s Distro Version Update for Testing Pipelines (QA captain)
+- [ ] K8s Distro Version Update (QA captain)
   - [ ] Update the testing pipelines to use the latest supported K8s version (RKE2, K3s)
 
 - [ ] BCI Image Update for Component Container Base Image
