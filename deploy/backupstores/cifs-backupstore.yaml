@@ -40,7 +40,7 @@ spec:
         emptyDir: {}
       containers:
       - name: longhorn-test-cifs-container
-        image: derekbit/samba:latest
+        image: chanow/samba:latest
         ports:
         - containerPort: 139
         - containerPort: 445
