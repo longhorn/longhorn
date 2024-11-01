@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: azurite
-        image: mcr.microsoft.com/azure-storage/azurite:3.30.0
+        image: mcr.microsoft.com/azure-storage/azurite:3.33.0
         ports:
         - containerPort: 10000
 ---
