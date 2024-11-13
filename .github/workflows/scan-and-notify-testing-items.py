@@ -255,10 +255,9 @@ def send_slack_notification(webhook_url, user_mapping,
         }
     })
 
-    # Flatten current issues and non-current issues    
-    blocks = flatten_issues("Current Issues",
+    blocks = flatten_issues("Ready for Testing Issues from the Previous Sprint",
                             blocks, current_issues, user_mapping)
-    blocks = flatten_issues("Non-Current Issues",
+    blocks = flatten_issues("Ready for Testing Issues from older Sprints",
                             blocks, non_current_issues, user_mapping)
 
     payload = {
