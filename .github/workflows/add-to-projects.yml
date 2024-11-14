@@ -5,5 +5,5 @@ on:
 
 jobs:
   call-add-to-projects-workflow:
-    uses: longhorn/gh-configs/.github/workflows/add-to-projects.yaml
+    uses: longhorn/gh-configs/.github/workflows/add-to-projects.yaml@5853d78f7f26dc6fce4c37ad70ae1e38b2896407
     secrets: inherit
