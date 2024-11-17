@@ -29,7 +29,7 @@ jobs:
       run: |
         python ./.github/workflows/check-sprint-last-day.py "longhorn" "longhorn" "Longhorn Sprint"
 
-    - name: Update Longhorn Sprint issues
+    - name: Longhorn Sprint Issues - Clear Sprint
       uses: derekbit/move-to-next-iteration@master
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
@@ -39,9 +39,45 @@ jobs:
         iteration-field: Sprint
         iteration: current
         new-iteration: none
-        excluded-statuses: "Ready For Testing,Testing,Closed"
+        excluded-statuses: "Review,Ready For Testing,Testing,Closed"
 
-    - name: Update Longhorn Community Sprint issues
+    - name: Longhorn Sprint Issues - Move to Next Sprint
+      uses: derekbit/move-to-next-iteration@master
+      if: steps.check_sprint_build_required.outcome == 'success'
+      with:
+        owner: longhorn
+        number: 8
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        iteration-field: Sprint
+        iteration: current
+        new-iteration: next
+        statuses: "Review"
+
+    - name: QA Sprint - Clear Sprint
+      uses: derekbit/move-to-next-iteration@master
+      if: steps.check_sprint_build_required.outcome == 'success'
+      with:
+        owner: longhorn
+        number: 4
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        iteration-field: Sprint
+        iteration: current
+        new-iteration: none
+        excluded-statuses: "Review,Testing,Closed"
+
+    - name: QA Sprint - Move to Next Sprint
+      uses: derekbit/move-to-next-iteration@master
+      if: steps.check_sprint_build_required.outcome == 'success'
+      with:
+        owner: longhorn
+        number: 4
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        iteration-field: Sprint
+        iteration: current
+        new-iteration: next
+        statuses: "Review"
+
+    - name: Longhorn Community Sprint issues - Move to Next Sprint
       uses: derekbit/move-to-next-iteration@master
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
