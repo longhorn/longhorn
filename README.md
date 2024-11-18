@@ -10,6 +10,7 @@
 [![Releases](https://img.shields.io/github/release/longhorn/longhorn/all.svg)](https://github.com/longhorn/longhorn/releases)
 [![GitHub](https://img.shields.io/github/license/longhorn/longhorn)](https://github.com/longhorn/longhorn/blob/master/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://longhorn.io/docs/latest/)
+[![Gurubase](https://img.shields.io/badge/Gurubase-Ask%20Longhorn%20Guru-006BFF)](https://gurubase.io/g/longhorn)
 
 </div>
 
@@ -30,7 +31,7 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 # Releases
 
-> **NOTE**:
+> - __<version>*__ means the release branch is under active support and will have periodic follow-up patch releases.
 > - __\<version\>*__ means the release branch is under active support and will have periodic follow-up patch releases.
 > - __Latest__ release means the version is the latest release of the newest release branch.
 > - __Stable__ release means the version is stable and has been widely adopted by users.
