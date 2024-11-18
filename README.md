@@ -31,7 +31,7 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 # Releases
 
-> - __<version>*__ means the release branch is under active support and will have periodic follow-up patch releases.
+> **NOTE**:
 > - __\<version\>*__ means the release branch is under active support and will have periodic follow-up patch releases.
 > - __Latest__ release means the version is the latest release of the newest release branch.
 > - __Stable__ release means the version is stable and has been widely adopted by users.
