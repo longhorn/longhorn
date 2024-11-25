@@ -25,3 +25,17 @@ jobs:
         with:
           labels: wontfix
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clear milestone
+        if: steps.check-closed-reason.outputs.result == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue_number = context.payload.issue.number;
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              milestone: null
+            });
+          github_token: ${{ secrets.GITHUB_TOKEN }}
