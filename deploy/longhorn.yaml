@@ -4896,6 +4896,9 @@ spec:
           mountPath: /host/dev/
         - name: proc
           mountPath: /host/proc/
+        - name: etc
+          mountPath: /host/etc/
+          readOnly: true
         - name: longhorn
           mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
@@ -4932,6 +4935,9 @@ spec:
       - name: proc
         hostPath:
           path: /proc/
+      - name: etc
+        hostPath:
+          path: /etc/
       - name: longhorn
         hostPath:
           path: /var/lib/longhorn/
