@@ -54,6 +54,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}
     failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.backupExecutionTimeout) }}
+    backup-execute-timeout: {{ .Values.defaultSettings.backupExecutionTimeout }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.restoreVolumeRecurringJobs) }}
     restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs }}
     {{- end }}
