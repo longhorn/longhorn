@@ -388,7 +388,6 @@ check_nfs_client() {
     return 1
   fi
 
-  local nfs_module_not_found=1
   for option in "${options[@]}"; do
     kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "[ -f /boot/config-${kernel} ]" > /dev/null 2>&1
     if [ $? -ne 0 ]; then
@@ -397,27 +396,13 @@ check_nfs_client() {
     fi
 
     check_kernel_module ${pod} ${option} nfs
-    nfs_module_not_found=$?
-    if [ $nfs_module_not_found = 0 ]; then
-      break
+    if [ $? = 0 ]; then
+      return 0
     fi
   done
 
-  if [ $nfs_module_not_found -ne 0 ]; then
-    error "NFS clients ${options[*]} not found. At least one should be enabled"
-    return 1
-  fi
-
-  local nfs_ver_overriden=$(kubectl exec ${pod} -- nsenter --mount=/proc/1/ns/mnt -- bash -c "grep '^\s*Defaultvers=' /etc/nfsmount.conf" 2> /dev/null)
-  if [ "$nfs_ver_overriden" ]; then
-    echo "$nfs_ver_overriden" | grep -x '.*Defaultvers=4\(\.[0-2]\?\)\?\s*'
-    if [ $? -ne 0 ]; then
-      error "NFS4 is supported, but default protocol version (${nfs_ver_overriden}) is not 4, 4.1, or 4.2. Please refer to the NFS mount configuration manual page for more information: man 5 nfsmount.conf"
-      return 1
-    fi
-  fi
-
-  return 0
+  error "NFS clients ${options[*]} not found. At least one should be enabled"
+  return 1
 }
 
 check_kernel_module() {
