@@ -3058,6 +3058,11 @@ spec:
                 type: string
               logRequested:
                 type: boolean
+              migrationEngineName:
+                description: |-
+                  MigrationEngineName is indicating the migrating engine which current connected to this replica. This is only
+                  used for live migration of v2 data engine
+                type: string
               nodeID:
                 type: string
               rebuildRetryCount:
