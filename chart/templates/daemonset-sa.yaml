@@ -106,6 +106,10 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
+      - name: pre-pull-instance-manager-image
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.instanceManager.repository }}:{{ .Values.image.longhorn.instanceManager.tag }}
+        command: ["sh", "-c", "echo instance-manager image pulled && sleep infinity"]
       volumes:
       - name: boot
         hostPath:
