@@ -5032,10 +5032,12 @@ spec:
         volumeMounts:
         - name: boot
           mountPath: /host/boot/
+          readOnly: true
         - name: dev
           mountPath: /host/dev/
         - name: proc
           mountPath: /host/proc/
+          readOnly: true
         - name: etc
           mountPath: /host/etc/
           readOnly: true
