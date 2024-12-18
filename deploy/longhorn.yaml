@@ -608,9 +608,20 @@ spec:
             properties:
               checksum:
                 type: string
+              dataEngine:
+                default: v1
+                enum:
+                - v1
+                - v2
+                type: string
               diskFileSpecMap:
                 additionalProperties:
                   properties:
+                    dataEngine:
+                      enum:
+                      - v1
+                      - v2
+                      type: string
                     evictionRequested:
                       type: boolean
                   type: object
@@ -657,6 +668,11 @@ spec:
               diskFileStatusMap:
                 additionalProperties:
                   properties:
+                    dataEngine:
+                      enum:
+                      - v1
+                      - v2
+                      type: string
                     lastStateTransitionTime:
                       type: string
                     message:
@@ -684,6 +700,11 @@ spec:
                 format: int64
                 type: integer
               uuid:
+                type: string
+              v2FirstCopyDisk:
+                type: string
+              v2FirstCopyStatus:
+                description: It is pending -> in-progress -> ready/failed
                 type: string
               virtualSize:
                 description: Virtual size of image in bytes, which may be larger than physical
@@ -2430,6 +2451,28 @@ spec:
                 type: integer
               proxyApiVersion:
                 type: integer
+              backingImages:
+                additionalProperties:
+                  properties:
+                    currentChecksum:
+                      type: string
+                    diskUUID:
+                      type: string
+                    message:
+                      type: string
+                    name:
+                      type: string
+                    progress:
+                      type: integer
+                    size:
+                      format: int64
+                      type: integer
+                    state:
+                      type: string
+                    uuid:
+                      type: string
+                  type: object
+                type: object
             type: object
         type: object
     served: true
