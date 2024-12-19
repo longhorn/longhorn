@@ -149,7 +149,7 @@ questions:
     label: Longhorn CSI Driver Snapshotter Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.snapshotter.tag
-    default: v6.3.4
+    default: v6.3.4-20241219
     description: "Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value."
     type: string
     label: Longhorn CSI Driver Snapshotter Image Tag
