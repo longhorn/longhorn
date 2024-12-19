@@ -29,7 +29,8 @@ Action items for releasing v<x.y.z>
   - longhorn-share-manager
   - backing-image-manager
   - longhorn-spdk-engine (needed after GA)
-- [ ] Update image versions in https://github.com/longhorn/longhorn/tree/v<x.y>.x/chart/README.md.
+  - cli
+- [ ] Update image versions in https://github.com/longhorn/longhorn/tree/v<x.y.z>/chart/README.md.
 - [ ] Trigger the GA release build by [longhorn/release Actions](https://github.com/longhorn/release/actions/workflows/release.yml)
 
 **The QA captain needs to coordinate the following items before the GA release.**
