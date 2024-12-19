@@ -102,7 +102,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.tag | string | `"v3.6.4"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
-| image.csi.resizer.tag | string | `"v1.12.0"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
+| image.csi.resizer.tag | string | `"v1.12.0-20241219"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.tag | string | `"v6.3.4-20241219"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
