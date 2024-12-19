@@ -172,6 +172,15 @@ persistence:
     selector: ""
   # -- Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
   removeSnapshotsDuringFilesystemTrim: ignored
+  # -- Setting that allows you to enable volume encryption with a global secret (Details: https://longhorn.io/docs/1.7.1/advanced-resources/security/volume-encryption/).
+  # -- Requirements: To use encrypted volumes, ensure that the dm_crypt kernel module is loaded and that cryptsetup is installed on your worker nodes.
+  encryption:
+    enabled: false
+    # -- Name of the encryption secret. When not provided, a secret is generated automatically.
+    # -- Note: As the secret generation uses helms lookup functions to check for existing secrets, there maybe some issues when using CD Tools like ArgoCD, relying on the templating engine and not supporting the lookup functions.
+    # secretName: ""
+    # -- Namespace of the encryption secret. Defaults to the release namespace.
+    # secretNamespace: ""
   # -- Setting that allows you to specify the data engine version for the default Longhorn StorageClass. (Options: "v1", "v2")
   dataEngine: v1
 
