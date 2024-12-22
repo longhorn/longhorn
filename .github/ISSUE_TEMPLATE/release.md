@@ -20,18 +20,21 @@ Action items for releasing v<x.y.z>
 
 **The Release Captain needs to finish the following items.**
 
-- [ ] Before creating RC1, create a new release branch for the following component repositories, and then create RC1 from the new branch. Leave the master branch for the next feature release development (This task is only needed when doing a feature release such as x.y.0).
-  - longhorn-manager
-  - longhorn-ui
-  - longhorn-tests
-  - longhorn-engine
-  - longhorn-instance-manager
-  - longhorn-share-manager
-  - backing-image-manager
-  - longhorn-spdk-engine (needed after GA)
-  - cli
+- [ ] This tasks are only needed when doing a feature release such as x.y.0)
+  - [ ] Before creating RC1, create a new release branch for the following component repositories, and then create RC1 from the new branch. Leave the master branch for the next feature release development.
+    - longhorn-manager
+    - longhorn-ui
+    - longhorn-tests
+    - longhorn-engine
+    - longhorn-instance-manager
+    - longhorn-share-manager
+    - backing-image-manager
+    - longhorn-spdk-engine (needed after GA)
+    - cli
+  - [ ] Add the new branch (x.y.0) to renovate configuration in https://github.com/longhorn/release/blob/main/renovate-default.json.
 - [ ] Update image versions in https://github.com/longhorn/longhorn/tree/v<x.y.z>/chart/README.md.
-- [ ] Trigger the GA release build by [longhorn/release Actions](https://github.com/longhorn/release/actions/workflows/release.yml)
+- [ ] Trigger the RC release build by [longhorn/release-preview Action](https://github.com/longhorn/release/actions/workflows/release-preview.yml)
+- [ ] Trigger the GA release build by [longhorn/release Action](https://github.com/longhorn/release/actions/workflows/release.yml)
 
 **The QA captain needs to coordinate the following items before the GA release.**
 
