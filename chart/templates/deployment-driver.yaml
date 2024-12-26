@@ -25,7 +25,7 @@ spec:
           command:
           - longhorn-manager
           - -d
-          {{- if eq .Values.longhornManager.log.format "json" }}
+          {{- if eq .Values.longhornDriver.log.format "json" }}
           - -j
           {{- end }}
           - deploy-driver
