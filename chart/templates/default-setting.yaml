@@ -6,12 +6,6 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-setting.yaml: |-
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backupTarget) }}
-    backup-target: {{ .Values.defaultSettings.backupTarget }}
-    {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backupTargetCredentialSecret) }}
-    backup-target-credential-secret: {{ .Values.defaultSettings.backupTargetCredentialSecret }}
-    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
     allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
     {{- end }}
@@ -47,9 +41,6 @@ data:
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
-    {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}
-    backupstore-poll-interval: {{ .Values.defaultSettings.backupstorePollInterval }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}
     failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL }}

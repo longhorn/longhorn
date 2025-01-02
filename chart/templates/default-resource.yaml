@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-default-resource
+  namespace: {{ include "release_namespace" . }}
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+data:
+  default-resource.yaml: |-
+    {{- if not (kindIs "invalid" .Values.defaultBackupStore.backupTarget) }}
+    backup-target: {{ .Values.defaultBackupStore.backupTarget }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultBackupStore.backupTargetCredentialSecret) }}
+    backup-target-credential-secret: {{ .Values.defaultBackupStore.backupTargetCredentialSecret }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultBackupStore.pollInterval) }}
+    backupstore-poll-interval: {{ .Values.defaultBackupStore.pollInterval }}
+    {{- end }}

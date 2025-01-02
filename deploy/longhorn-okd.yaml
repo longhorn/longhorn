@@ -54,6 +54,19 @@ metadata:
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.8.0-rc2
 ---
+# Source: longhorn/templates/default-resource.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-default-resource
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.8.0-rc2
+data:
+  default-resource.yaml: |-
+---
 # Source: longhorn/templates/default-setting.yaml
 apiVersion: v1
 kind: ConfigMap
