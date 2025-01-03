@@ -39,32 +39,32 @@ image:
       # -- Repository for the Longhorn Engine image.
       repository: longhornio/longhorn-engine
       # -- Specify Longhorn engine image tag
-      tag: v1.6.4-rc2
+      tag: v1.6.4
     manager:
       # -- Repository for the Longhorn Manager image.
       repository: longhornio/longhorn-manager
       # -- Specify Longhorn manager image tag
-      tag: v1.6.4-rc2
+      tag: v1.6.4
     ui:
       # -- Repository for the Longhorn UI image.
       repository: longhornio/longhorn-ui
       # -- Specify Longhorn ui image tag
-      tag: v1.6.4-rc2
+      tag: v1.6.4
     instanceManager:
       # -- Repository for the Longhorn Instance Manager image.
       repository: longhornio/longhorn-instance-manager
       # -- Specify Longhorn instance manager image tag
-      tag: v1.6.4-rc2
+      tag: v1.6.4
     shareManager:
       # -- Repository for the Longhorn Share Manager image.
       repository: longhornio/longhorn-share-manager
       # -- Specify Longhorn share manager image tag
-      tag: v1.6.4-rc2
+      tag: v1.6.4
     backingImageManager:
       # -- Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value.
       repository: longhornio/backing-image-manager
       # -- Specify Longhorn backing image manager image tag
-      tag: v1.6.4-rc2
+      tag: v1.6.4
     supportBundleKit:
       # -- Repository for the Longhorn Support Bundle Manager image.
       repository: longhornio/support-bundle-kit
