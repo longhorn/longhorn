@@ -3,7 +3,7 @@ longhornio/csi-provisioner:v5.1.0-20241220
 longhornio/csi-resizer:v1.12.0-20241219
 longhornio/csi-snapshotter:v8.2.0
 longhornio/csi-node-driver-registrar:v2.13.0
-longhornio/livenessprobe:v2.14.0-20241219
+longhornio/livenessprobe:v2.15.0
 longhornio/backing-image-manager:master-head
 longhornio/longhorn-engine:master-head
 longhornio/longhorn-instance-manager:master-head
