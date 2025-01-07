@@ -98,7 +98,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.livenessProbe.repository | string | `"longhornio/livenessprobe"` | Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value. |
 | image.csi.livenessProbe.tag | string | `"v2.14.0-20241219"` | Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value. |
 | image.csi.nodeDriverRegistrar.repository | string | `"longhornio/csi-node-driver-registrar"` | Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
-| image.csi.nodeDriverRegistrar.tag | string | `"v2.12.0-20241219"` | Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
+| image.csi.nodeDriverRegistrar.tag | string | `"v2.13.0"` | Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.tag | string | `"v5.1.0-20241220"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
