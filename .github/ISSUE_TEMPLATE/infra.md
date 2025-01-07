@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-## What's the test to develop? Please describe
+## What's the infra task? Please describe
 
-<!--A clear and concise description of what test/dev infra you want to develop.-->
+<!--A clear and concise description of what infra task you want to develop.-->
 
-## Describe the items of the test development (DoD, definition of done) you'd like
+## Describe the items of the infra task (DoD, definition of done) you'd like
 
 <!--
 Please use a task list for items on a separate line with a clickable checkbox https://docs.github.com/en/issues/tracking-your-work-with-issues/about-task-lists
