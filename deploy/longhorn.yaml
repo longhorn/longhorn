@@ -5100,7 +5100,7 @@ spec:
           - name: CSI_PROVISIONER_IMAGE
             value: "longhornio/csi-provisioner:v5.1.0-20241220"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "longhornio/csi-node-driver-registrar:v2.12.0-20241219"
+            value: "longhornio/csi-node-driver-registrar:v2.13.0"
           - name: CSI_RESIZER_IMAGE
             value: "longhornio/csi-resizer:v1.12.0-20241219"
           - name: CSI_SNAPSHOTTER_IMAGE

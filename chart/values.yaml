@@ -85,7 +85,7 @@ image:
       # -- Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-node-driver-registrar
       # -- Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
-      tag: v2.12.0-20241219
+      tag: v2.13.0
     resizer:
       # -- Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-resizer
