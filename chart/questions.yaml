@@ -686,20 +686,20 @@ questions:
   default: true
 - variable: defaultSettings.v2DataEngine
   label: V2 Data Engine
-  description: "Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is a preview feature and should not be used in production environments. **Caution**: [1] **Do not modify this setting while volumes are still attached.** [2] When the V2 Data Engine is enabled, each Instance Manager pod for the V2 Data Engine uses 1 CPU core. The high CPU usage is caused by `spdk_tgt`, a process running in each Instance Manager pod that handles input/output (IO) operations and requires intensive polling. `spdk_tgt` consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
-  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  description: "Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is an experimental feature and should not be used in production environments. **Caution**: [1] **Do not modify this setting while volumes are still attached.** [2] When the V2 Data Engine is enabled, each Instance Manager pod for the V2 Data Engine uses 1 CPU core. The high CPU usage is caused by `spdk_tgt`, a process running in each Instance Manager pod that handles input/output (IO) operations and requires intensive polling. `spdk_tgt` consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
+  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
   type: boolean
   default: false
 - variable: defaultSettings.v2DataEngineHugepageLimit
   label: V2 Data Engine
   description: "This allows users to configure maximum huge page size (in MiB) for the V2 Data Engine."
-  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
   type: int
   default: "2048"
 - variable: defaultSettings.v2DataEngineLogLevel
   label: V2 Data Engine
   description: "Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine."
-  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
   type: enum
   options:
   - "Disabled"
@@ -712,7 +712,7 @@ questions:
 - variable: defaultSettings.v2DataEngineLogFlags
   label: V2 Data Engine
   description: "Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine."
-  group: "Longhorn V2 Data Engine (Preview Feature) Settings"
+  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
   type: string
   default:
 - variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
