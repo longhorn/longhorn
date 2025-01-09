@@ -13,10 +13,10 @@ global:
       enabled: false
       # Tolerate Linux node taint
       tolerations:
-      - key: "cattle.io/os"
-        value: "linux"
-        effect: "NoSchedule"
-        operator: "Equal"
+        - key: "cattle.io/os"
+          value: "linux"
+          effect: "NoSchedule"
+          operator: "Equal"
       # Select Linux nodes
       nodeSelector:
         kubernetes.io/os: "linux"
@@ -24,32 +24,30 @@ global:
       defaultSetting:
         taintToleration: cattle.io/os=linux:NoSchedule
         systemManagedComponentsNodeSelector: kubernetes.io/os:linux
-
 networkPolicies:
   enabled: false
   # Available types: k3s, rke2, rke1
   type: "k3s"
-
 image:
   longhorn:
     engine:
       repository: longhornio/longhorn-engine
-      tag: v1.5.5
+      tag: v1.5.x-head
     manager:
       repository: longhornio/longhorn-manager
-      tag: v1.5.5
+      tag: v1.5.x-head
     ui:
       repository: longhornio/longhorn-ui
-      tag: v1.5.5
+      tag: v1.5.x-head
     instanceManager:
       repository: longhornio/longhorn-instance-manager
-      tag: v1.5.5
+      tag: v1.5.x-head
     shareManager:
       repository: longhornio/longhorn-share-manager
-      tag: v1.5.5
+      tag: v1.5.x-head
     backingImageManager:
       repository: longhornio/backing-image-manager
-      tag: v1.5.5
+      tag: v1.5.x-head
     supportBundleKit:
       repository: longhornio/support-bundle-kit
       tag: v0.0.40
@@ -73,7 +71,6 @@ image:
       repository: longhornio/livenessprobe
       tag: v2.12.0
   pullPolicy: IfNotPresent
-
 service:
   ui:
     type: ClusterIP
@@ -83,7 +80,6 @@ service:
     nodePort: ""
     loadBalancerIP: ""
     loadBalancerSourceRanges: ""
-
 persistence:
   defaultClass: true
   defaultFsType: ext4
@@ -107,17 +103,14 @@ persistence:
     enable: false # disable by default
     selector: ""
   removeSnapshotsDuringFilesystemTrim: ignored # "enabled" or "disabled" otherwise
-
 helmPreUpgradeCheckerJob:
   enabled: true
-
 csi:
   kubeletRootDir: ~
   attacherReplicaCount: ~
   provisionerReplicaCount: ~
   resizerReplicaCount: ~
   snapshotterReplicaCount: ~
-
 defaultSettings:
   backupTarget: ~
   backupTargetCredentialSecret: ~
@@ -178,14 +171,12 @@ defaultSettings:
   offlineReplicaRebuilding: ~
   disableSnapshotPurge: ~
   allowCollectingLonghornUsageMetrics: ~
-
 privateRegistry:
   createSecret: ~
   registryUrl: ~
   registryUser: ~
   registryPasswd: ~
   registrySecret: ~
-
 longhornManager:
   log:
     ## Allowed values are `plain` or `json`.
@@ -208,7 +199,6 @@ longhornManager:
   ## and uncomment this example block
   #  annotation-key1: "annotation-value1"
   #  annotation-key2: "annotation-value2"
-
 longhornDriver:
   priorityClass: ~
   tolerations: []
@@ -223,7 +213,6 @@ longhornDriver:
   ## and uncomment this example block
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
-
 longhornUI:
   replicas: 2
   priorityClass: ~
@@ -239,30 +228,22 @@ longhornUI:
   ## and uncomment this example block
   #  label-key1: "label-value1"
   #  label-key2: "label-value2"
-
 ingress:
   ## Set to true to enable ingress record generation
   enabled: false
-
   ## Add ingressClassName to the Ingress
   ## Can replace the kubernetes.io/ingress.class annotation on v1.18+
   ingressClassName: ~
-
   host: sslip.io
-
   ## Set this to true in order to enable TLS on the ingress record
   tls: false
-
   ## Enable this in order to enable that the backend service will be connected at port 443
   secureBackends: false
-
   ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
   tlsSecret: longhorn.local-tls
-
   ## If ingress is enabled you can set the default ingress path
   ## then you can access the UI by using the following full path {{host}}+{{path}}
   path: /
-
   ## Ingress annotations done as key:value pairs
   ## If you're using kube-lego, you will want to add:
   ## kubernetes.io/tls-acme: true
@@ -274,7 +255,6 @@ ingress:
   annotations:
   #  kubernetes.io/ingress.class: nginx
   #  kubernetes.io/tls-acme: true
-
   secrets:
   ## If you're providing your own certificates, please use this to add the certificates as secrets
   ## key and certificate should start with -----BEGIN CERTIFICATE----- or
@@ -288,22 +268,17 @@ ingress:
   # - name: longhorn.local-tls
   #   key:
   #   certificate:
-
 #  For Kubernetes < v1.25, if your cluster enables Pod Security Policy admission controller,
 #  set this to `true` to ship longhorn-psp which allow privileged Longhorn pods to start
 enablePSP: false
-
 ## Specify override namespace, specifically this is useful for using longhorn as sub-chart
 ## and its release namespace is not the `longhorn-system`
 namespaceOverride: ""
-
 # Annotations to add to the Longhorn Manager DaemonSet Pods. Optional.
 annotations: {}
-
 serviceAccount:
   # Annotations to add to the service account
   annotations: {}
-
 metrics:
   serviceMonitor:
     # Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components.
