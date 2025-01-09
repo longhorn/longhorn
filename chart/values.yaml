@@ -315,7 +315,7 @@ defaultSettings:
   restoreConcurrentLimit: ~
   # -- Setting that allows you to enable the V1 Data Engine.
   v1DataEngine: ~
-  # -- Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is a preview feature and should not be used in production environments.
+  # -- Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is an experimental feature and should not be used in production environments.
   v2DataEngine: ~
   # -- Setting that allows you to configure maximum huge page size (in MiB) for the V2 Data Engine.
   v2DataEngineHugepageLimit: ~
