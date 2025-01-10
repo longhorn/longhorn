@@ -97,6 +97,7 @@ jobs:
       with:
         token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         branch: "update-image-tags-${{ inputs.branch }}"
+        sign-commits: true
         commit-message: "chore: update image tags for branch ${{ inputs.branch }}"
         title: "chore: update image tags for branch ${{ inputs.branch }}"
         body: |
@@ -108,4 +109,4 @@ jobs:
       with:
         token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-        merge-method: squash
+        merge-method: rebase
