@@ -50,8 +50,8 @@ configMap:
           ]
         },
         {
-          "name": "v1.6.3",
-          "releaseDate": "2024-09-19T00:00:00Z",
+          "name": "v1.6.4",
+          "releaseDate": "2025-01-02T00:00:00Z",
           "tags": [
             "stable"
           ]
