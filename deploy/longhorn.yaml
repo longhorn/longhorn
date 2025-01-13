@@ -5,20 +5,6 @@ kind: Namespace
 metadata:
   name: longhorn-system
 ---
-# Source: longhorn/templates/priorityclass.yaml
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: "longhorn-critical"
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
-description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
-globalDefault: false
-preemptionPolicy: PreemptLowerPriority
-value: 1000000000
----
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -117,7 +103,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -307,7 +293,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -504,7 +490,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -738,7 +724,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -805,8 +791,7 @@ spec:
               backing image backup
             properties:
               backingImage:
-                description: |-
-                  The backing image name.
+                description: The backing image name.
                 type: string
               backupTargetName:
                 description: The backup target name.
@@ -824,8 +809,7 @@ spec:
                 nullable: true
                 type: string
               userCreated:
-                description: |-
-                  Is this CR created by user through API or UI.
+                description: Is this CR created by user through API or UI.
                 type: boolean
             required:
             - backingImage
@@ -911,7 +895,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1145,7 +1129,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1350,7 +1334,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1544,7 +1528,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -1760,7 +1744,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -2160,7 +2144,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -2502,7 +2486,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -2791,7 +2775,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -2906,7 +2890,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -2991,7 +2975,7 @@ spec:
       name: Groups
       type: string
     - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup",
-        "snapshot-delete", "backup", "backup-force-create" or "filesystem-trim"
+        "snapshot-delete", "backup", "backup-force-create", "filesystem-trim" or "system-backup"
       jsonPath: .spec.task
       name: Task
       type: string
@@ -3064,7 +3048,7 @@ spec:
                   type: string
                 description: |-
                   The parameters of the snapshot/backup.
-                  Support parameters: "full-backup-interval".
+                  Support parameters: "full-backup-interval", "volume-backup-policy".
                 type: object
               retain:
                 description: The retain count of the snapshot/backup.
@@ -3072,7 +3056,7 @@ spec:
               task:
                 description: |-
                   The recurring job task.
-                  Can be "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup", "backup-force-create" or "filesystem-trim"
+                  Can be "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup", "backup-force-create", "filesystem-trim" or "system-backup".
                 enum:
                 - snapshot
                 - snapshot-force-create
@@ -3081,6 +3065,7 @@ spec:
                 - backup
                 - backup-force-create
                 - filesystem-trim
+                - system-backup
                 type: string
             type: object
           status:
@@ -3106,7 +3091,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -3395,7 +3380,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -3512,7 +3497,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -3643,7 +3628,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -3776,7 +3761,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -3911,7 +3896,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -4052,7 +4037,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -4165,7 +4150,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -4313,7 +4298,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
@@ -5183,3 +5168,17 @@ spec:
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
+---
+# Source: longhorn/templates/priorityclass.yaml
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: "longhorn-critical"
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.8.0-dev
+description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+value: 1000000000
