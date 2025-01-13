@@ -705,8 +705,9 @@ spec:
               ownerID:
                 type: string
               realSize:
-                description: Real size of image in bytes, which may be smaller than the size 
-                  when the file is a sparse file. Will be zero until known (e.g. while a backing image is uploading)
+                description: Real size of image in bytes, which may be smaller than
+                  the size when the file is a sparse file. Will be zero until known
+                  (e.g. while a backing image is uploading)
                 format: int64
                 type: integer
               size:
@@ -720,8 +721,9 @@ spec:
                 description: It is pending -> in-progress -> ready/failed
                 type: string
               virtualSize:
-                description: Virtual size of image in bytes, which may be larger than physical
-                  size. Will be zero until known (e.g. while a backing image is uploading)
+                description: Virtual size of image in bytes, which may be larger than
+                  physical size. Will be zero until known (e.g. while a backing image
+                  is uploading)
                 format: int64
                 type: integer
             type: object
@@ -803,8 +805,8 @@ spec:
               backing image backup
             properties:
               backingImage:
-                description: The backing image name..
-                nullable: true
+                description: |-
+                  The backing image name.
                 type: string
               backupTargetName:
                 description: The backup target name.
@@ -824,9 +826,9 @@ spec:
               userCreated:
                 description: |-
                   Is this CR created by user through API or UI.
-                  Required
                 type: boolean
             required:
+            - backingImage
             - userCreated
             type: object
           status:
@@ -882,7 +884,8 @@ spec:
                 description: Record the secret if this backup backing image is encrypted
                 type: string
               secretNamespace:
-                description: Record the secret namespace if this backup backing image is encrypted
+                description: Record the secret namespace if this backup backing image
+                  is encrypted
                 type: string
               size:
                 description: The backing image size.
@@ -2298,6 +2301,29 @@ spec:
                 type: integer
               apiVersion:
                 type: integer
+              backingImages:
+                additionalProperties:
+                  properties:
+                    currentChecksum:
+                      type: string
+                    diskUUID:
+                      type: string
+                    message:
+                      type: string
+                    name:
+                      type: string
+                    progress:
+                      type: integer
+                    size:
+                      format: int64
+                      type: integer
+                    state:
+                      type: string
+                    uuid:
+                      type: string
+                  type: object
+                nullable: true
+                type: object
               currentState:
                 type: string
               dataEngineStatus:
@@ -2464,28 +2490,6 @@ spec:
                 type: integer
               proxyApiVersion:
                 type: integer
-              backingImages:
-                additionalProperties:
-                  properties:
-                    currentChecksum:
-                      type: string
-                    diskUUID:
-                      type: string
-                    message:
-                      type: string
-                    name:
-                      type: string
-                    progress:
-                      type: integer
-                    size:
-                      format: int64
-                      type: integer
-                    state:
-                      type: string
-                    uuid:
-                      type: string
-                  type: object
-                type: object
             type: object
         type: object
     served: true
@@ -3721,7 +3725,6 @@ spec:
                 description: |-
                   the volume that this snapshot belongs to.
                   This field is immutable after creation.
-                  Required
                 type: string
             required:
             - volume
@@ -4468,7 +4471,8 @@ spec:
                 - gzip
                 type: string
               backupTargetName:
-                description: 'The backup target name that the volume will be backed up to or is synced.'
+                description: The backup target name that the volume will be backed
+                  up to or is synced.
                 type: string
               dataEngine:
                 enum:
