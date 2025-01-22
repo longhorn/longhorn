@@ -905,6 +905,9 @@ spec:
                 - incremental
                 - ""
                 type: string
+              cleanupSnapshot:
+                description: Whether to cleanup the snapshot after the backup is done.
+                type: boolean
               labels:
                 additionalProperties:
                   type: string
@@ -2873,6 +2876,9 @@ spec:
             description: RecurringJobSpec defines the desired state of the Longhorn
               recurring job
             properties:
+              cleanupBackupSnapshot:
+                description: The flag of cleaning up the corresponding snapshot after the backup is completed.
+                type: boolean
               concurrency:
                 description: The concurrency of taking the snapshot/backup.
                 type: integer
