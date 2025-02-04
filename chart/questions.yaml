@@ -113,7 +113,7 @@ questions:
     label: Longhorn CSI Provisioner Image Repository
     group: "Longhorn CSI Driver Images"
   - variable: image.csi.provisioner.tag
-    default: v4.0.1-20241007
+    default: v4.0.1-20250204
     description: "Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value."
     type: string
     label: Longhorn CSI Provisioner Image Tag
