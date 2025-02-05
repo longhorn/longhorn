@@ -6,6 +6,17 @@ The Longhorn team appreciates your contributions and anticipates receiving feedb
 
 For more information about release-related terminology, see [Releases](https://github.com/longhorn/longhorn#releases).
 
+> [!WARNING]
+> An incorrect Longhorn image tag (`v1.8.x-head`) was used in the [deployment manifest](https://github.com/longhorn/longhorn/blob/v1.8.0/deploy/longhorn.yaml) and the [Helm chart](https://github.com/longhorn/longhorn/blob/v1.8.0/chart/values.yaml#L40-L65). The correct tag for Longhorn v1.8.0 images is `v1.8.0`. For more information, see [Issue #10336](https://github.com/longhorn/longhorn/issues/10336). 
+>
+> If you installed or upgraded Longhorn using the deployment manifest or the Helm chart from the [main Longhorn repository](https://github.com/longhorn/longhorn), perform the following actions to resolve the issue:
+>
+> - **New installations**: Replace `v1.8.x-head` with `v1.8.0` in the deployment manifest or the Helm chart before deploying Longhorn.
+>
+> - **Upgrades**: Replace `v1.8.x-head` with `v1.8.0` in the deployment manifest or Helm chart. Next, upgrade the Longhorn system and update the engine image for volumes that use `v1.8.x-head`.
+>
+> This issue does not affect installations and upgrades performed using the [Longhorn Helm repository](https://charts.longhorn.io). For more details, refer to the [Install with Helm](https://longhorn.io/docs/1.8.0/deploy/install/install-with-helm/) section of the official documentation.
+
 > [!IMPORTANT]
 The CSI external-snapshotter was upgraded to v8.2.0. Ensure that all clusters are running Kubernetes v1.25 or later before upgrading to Longhorn v1.8.0 or a later version.
 
