@@ -26,7 +26,7 @@ Action items for releasing {{ env.RELEASE_VERSION }}
 > The Release Captain needs to finish the following items
 
 - [ ] This tasks are only needed when doing a feature release such as {{ env.MAJOR_MINOR_VERSION }}.
-  - [ ] Before creating RC1, create a new release branch for the following component repositories by trigger the [▶️ Create Longhorn Repository Branches Action](https://github.com/longhorn/release/actions/workflows/create-repo-branches.yml), and then create RC1 from the new branch. Leave the master branch for the next feature release development.
+  - [ ] Before creating RC1, create a new release branch for the following component repositories by triggering [▶️ Create Longhorn Repository Branches Action](https://github.com/longhorn/release/actions/workflows/create-repo-branches.yml), and then create RC1 from the new branch. Leave the master branch for the next feature release development.
   - [ ] Add the new branch {{ env.BRANCH_NAME }} to [renovate configuration](https://github.com/longhorn/release/blob/main/renovate-default.json).
     - [ ] PR: <!--URL of the pull request-->
   - [ ] After creating the new release branch, update the version file in each repo by [▶️ Update Longhorn Repository Version File in Default Branch Action](https://github.com/longhorn/release/actions/workflows/update-repo-version-file.yml).
@@ -109,6 +109,7 @@ Action items for releasing {{ env.RELEASE_VERSION }}
 - [ ] Mark the release as `latest` release in longhorn/longhorn [README.md](https://github.com/longhorn/longhorn).
   - [ ] PR: <!--URL of the pull request-->
 - [ ] Update `jobs.release.strategy.matrix` in [sprint release](https://github.com/longhorn/release/blob/main/.github/workflows/release-sprint.yml).
+- [ ] Update Longhorn image tags in longhorn/longhorn/chart/values.yaml in the development branch by triggering [▶️ Update Longhorn Repository Branch Image Tags](https://github.com/longhorn/longhorn/actions/workflows/update-branch-image-tags.yaml).
 
 ---
 
