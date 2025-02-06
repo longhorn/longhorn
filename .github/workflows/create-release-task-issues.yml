@@ -75,3 +75,13 @@ jobs:
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
           FEATURE_RELEASE: ${{ env.FEATURE_RELEASE }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}
+
+      - name: Create an issue - performance benchmark task for feature release
+        if: ${{ env.FEATURE_RELEASE == 'true' }}
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/performance-benchmark.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          FEATURE_RELEASE: ${{ env.FEATURE_RELEASE }}
