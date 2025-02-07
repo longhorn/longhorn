@@ -974,6 +974,7 @@ spec:
                 description: The address of the replica that runs snapshot backup.
                 type: string
               size:
+                default: "0"
                 description: The snapshot size.
                 type: string
               snapshotCreatedAt:
@@ -1002,6 +1003,8 @@ spec:
               volumeSize:
                 description: The volume size.
                 type: string
+            required:
+            - size
             type: object
         type: object
     served: true
