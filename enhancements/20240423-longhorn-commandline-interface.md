@@ -414,11 +414,11 @@ cli
   | | +-- trimmer.go ................. Logic for trimming volume.
   +-- remote ......................... Package for remote command operations.
   | +-- preflight
-  | | +-- checker.go ................. Logic for Kubernets resource handling.
+  | | +-- checker.go ................. Logic for Kubernetes resource handling.
   | +-- replica
-  | | +-- getter.go .................. Logic for Kubernets resource handling.
+  | | +-- getter.go .................. Logic for Kubernetes resource handling.
   | +-- volume
-  |   +-- trimmer.go ................. Logic for Kubernets resource handling.
+  |   +-- trimmer.go ................. Logic for Kubernetes resource handling.
   +-- types
   | +-- cmd.go ....................... Definitions for command-related types.
   | +-- pod.go ....................... Definitions for Kubernetes Pod related types.
