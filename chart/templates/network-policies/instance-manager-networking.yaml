@@ -9,19 +9,36 @@ spec:
     matchLabels:
       longhorn.io/component: instance-manager
   policyTypes:
-  - Ingress
+    - Ingress
   ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          app: longhorn-manager
-    - podSelector:
-        matchLabels:
-          longhorn.io/component: instance-manager
-    - podSelector:
-        matchLabels:
-          longhorn.io/component: backing-image-manager
-    - podSelector:
-        matchLabels:
-          longhorn.io/component: backing-image-data-source
+    - from:
+        - podSelector:
+            matchLabels:
+              app: longhorn-manager
+      ports:
+        - protocol: TCP
+          port: 8500
+        - protocol: TCP
+          port: 8501
+        - protocol: TCP
+          port: 8502
+        - protocol: TCP
+          port: 8503
+        - protocol: TCP
+          port: 8504
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: longhorn.io/component
+                operator: In
+                values:
+                  - instance-manager
+                  - backing-image-manager
+                  - backing-image-data-source
+      {{- /* NOTE: this should allow only the port range 10000-30000 but many CNIs do not support endPort :-(
+      ports:
+        - protocol: TCP
+          port: 10000
+          endPort: 30000
+      */}}
 {{- end }}
