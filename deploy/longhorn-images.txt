@@ -11,4 +11,4 @@ longhornio/longhorn-manager:v1.7.x-head
 longhornio/longhorn-share-manager:v1.7.x-head
 longhornio/longhorn-ui:v1.7.x-head
 longhornio/longhorn-cli:v1.7.x-head
-longhornio/support-bundle-kit:v0.0.49
+longhornio/support-bundle-kit:v0.0.50
