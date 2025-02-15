@@ -1,14 +1,14 @@
 ---
 name: Regular Tasks for Feature Release
 about: Regular tasks for a feature release
-title: "[RELEASE] Regular Tasks for Feature Release v<x.y>.0"
-labels: release/task
+title: "[RELEASE] Regular Tasks for Feature Release {{ env.RELEASE_VERSION }}"
+labels: ["release/task", "area/install-uninstall-upgrade"]
 assignees: ''
 ---
 
 ## What's the task? Please describe
 
-Regular tasks for feature release v<x.y>.0 must be completed well before the release, during the development phase.
+Regular tasks for feature release {{ env.RELEASE_VERSION }} must be completed well before the release, during the development phase.
 
 For OS distro updates for SLES and SLE Micro, need to update for each patch release as well. 
 

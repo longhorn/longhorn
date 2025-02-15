@@ -13,7 +13,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 description: "Ensure Longhorn pods have the highest priority to prevent any unexpected eviction by the Kubernetes scheduler under node pressure"
 globalDefault: false
 preemptionPolicy: PreemptLowerPriority
@@ -28,7 +28,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -39,7 +39,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -50,7 +50,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 ---
 # Source: longhorn/templates/default-resource.yaml
 apiVersion: v1
@@ -61,7 +61,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 data:
   default-resource.yaml: |-
 ---
@@ -74,7 +74,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 data:
   default-setting.yaml: |-
     priority-class: longhorn-critical
@@ -89,7 +89,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 data:
   storageclass.yaml: |
     kind: StorageClass
@@ -113,15 +113,16 @@ data:
       dataEngine: "v1"
 ---
 # Source: longhorn/templates/crds.yaml
+# Generated crds.yaml from github.com/longhorn/longhorn-manager/k8s/pkg/apis and the crds.yaml will be copied to longhorn/longhorn chart/templates and cannot be directly used by kubectl apply.
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: backingimagedatasources.longhorn.io
 spec:
@@ -307,11 +308,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: backingimagemanagers.longhorn.io
 spec:
@@ -504,11 +505,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: backingimages.longhorn.io
 spec:
@@ -705,8 +706,9 @@ spec:
               ownerID:
                 type: string
               realSize:
-                description: Real size of image in bytes, which may be smaller than the size 
-                  when the file is a sparse file. Will be zero until known (e.g. while a backing image is uploading)
+                description: Real size of image in bytes, which may be smaller than
+                  the size when the file is a sparse file. Will be zero until known
+                  (e.g. while a backing image is uploading)
                 format: int64
                 type: integer
               size:
@@ -720,8 +722,9 @@ spec:
                 description: It is pending -> in-progress -> ready/failed
                 type: string
               virtualSize:
-                description: Virtual size of image in bytes, which may be larger than physical
-                  size. Will be zero until known (e.g. while a backing image is uploading)
+                description: Virtual size of image in bytes, which may be larger than
+                  physical size. Will be zero until known (e.g. while a backing image
+                  is uploading)
                 format: int64
                 type: integer
             type: object
@@ -736,11 +739,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: backupbackingimages.longhorn.io
 spec:
@@ -803,8 +806,7 @@ spec:
               backing image backup
             properties:
               backingImage:
-                description: The backing image name..
-                nullable: true
+                description: The backing image name.
                 type: string
               backupTargetName:
                 description: The backup target name.
@@ -822,11 +824,10 @@ spec:
                 nullable: true
                 type: string
               userCreated:
-                description: |-
-                  Is this CR created by user through API or UI.
-                  Required
+                description: Is this CR created by user through API or UI.
                 type: boolean
             required:
+            - backingImage
             - userCreated
             type: object
           status:
@@ -882,7 +883,8 @@ spec:
                 description: Record the secret if this backup backing image is encrypted
                 type: string
               secretNamespace:
-                description: Record the secret namespace if this backup backing image is encrypted
+                description: Record the secret namespace if this backup backing image
+                  is encrypted
                 type: string
               size:
                 description: The backing image size.
@@ -908,11 +910,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: backups.longhorn.io
 spec:
@@ -1142,11 +1144,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: backuptargets.longhorn.io
 spec:
@@ -1347,11 +1349,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: backupvolumes.longhorn.io
 spec:
@@ -1541,11 +1543,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
@@ -1757,11 +1759,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: engines.longhorn.io
 spec:
@@ -2157,11 +2159,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: instancemanagers.longhorn.io
 spec:
@@ -2298,6 +2300,29 @@ spec:
                 type: integer
               apiVersion:
                 type: integer
+              backingImages:
+                additionalProperties:
+                  properties:
+                    currentChecksum:
+                      type: string
+                    diskUUID:
+                      type: string
+                    message:
+                      type: string
+                    name:
+                      type: string
+                    progress:
+                      type: integer
+                    size:
+                      format: int64
+                      type: integer
+                    state:
+                      type: string
+                    uuid:
+                      type: string
+                  type: object
+                nullable: true
+                type: object
               currentState:
                 type: string
               dataEngineStatus:
@@ -2464,28 +2489,6 @@ spec:
                 type: integer
               proxyApiVersion:
                 type: integer
-              backingImages:
-                additionalProperties:
-                  properties:
-                    currentChecksum:
-                      type: string
-                    diskUUID:
-                      type: string
-                    message:
-                      type: string
-                    name:
-                      type: string
-                    progress:
-                      type: integer
-                    size:
-                      format: int64
-                      type: integer
-                    state:
-                      type: string
-                    uuid:
-                      type: string
-                  type: object
-                type: object
             type: object
         type: object
     served: true
@@ -2498,11 +2501,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
@@ -2787,11 +2790,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: orphans.longhorn.io
 spec:
@@ -2902,11 +2905,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: recurringjobs.longhorn.io
 spec:
@@ -2987,7 +2990,7 @@ spec:
       name: Groups
       type: string
     - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup",
-        "snapshot-delete", "backup", "backup-force-create" or "filesystem-trim"
+        "snapshot-delete", "backup", "backup-force-create", "filesystem-trim" or "system-backup"
       jsonPath: .spec.task
       name: Task
       type: string
@@ -3060,7 +3063,7 @@ spec:
                   type: string
                 description: |-
                   The parameters of the snapshot/backup.
-                  Support parameters: "full-backup-interval".
+                  Support parameters: "full-backup-interval", "volume-backup-policy".
                 type: object
               retain:
                 description: The retain count of the snapshot/backup.
@@ -3068,7 +3071,7 @@ spec:
               task:
                 description: |-
                   The recurring job task.
-                  Can be "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup", "backup-force-create" or "filesystem-trim"
+                  Can be "snapshot", "snapshot-force-create", "snapshot-cleanup", "snapshot-delete", "backup", "backup-force-create", "filesystem-trim" or "system-backup".
                 enum:
                 - snapshot
                 - snapshot-force-create
@@ -3077,6 +3080,7 @@ spec:
                 - backup
                 - backup-force-create
                 - filesystem-trim
+                - system-backup
                 type: string
             type: object
           status:
@@ -3102,11 +3106,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: replicas.longhorn.io
 spec:
@@ -3391,11 +3395,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: settings.longhorn.io
 spec:
@@ -3508,11 +3512,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: sharemanagers.longhorn.io
 spec:
@@ -3639,11 +3643,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: snapshots.longhorn.io
 spec:
@@ -3721,7 +3725,6 @@ spec:
                 description: |-
                   the volume that this snapshot belongs to.
                   This field is immutable after creation.
-                  Required
                 type: string
             required:
             - volume
@@ -3773,11 +3776,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: supportbundles.longhorn.io
 spec:
@@ -3908,11 +3911,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: systembackups.longhorn.io
 spec:
@@ -4049,11 +4052,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: systemrestores.longhorn.io
 spec:
@@ -4162,11 +4165,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: volumeattachments.longhorn.io
 spec:
@@ -4310,11 +4313,11 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.1
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
@@ -4468,7 +4471,8 @@ spec:
                 - gzip
                 type: string
               backupTargetName:
-                description: 'The backup target name that the volume will be backed up to or is synced.'
+                description: The backup target name that the volume will be backed
+                  up to or is synced.
                 type: string
               dataEngine:
                 enum:
@@ -4722,7 +4726,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 rules:
 - apiGroups:
   - apiextensions.k8s.io
@@ -4788,7 +4792,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -4806,7 +4810,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -4823,7 +4827,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-manager
   name: longhorn-backend
   namespace: longhorn-system
@@ -4843,7 +4847,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-ui
   name: longhorn-frontend
   namespace: longhorn-system
@@ -4864,7 +4868,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-conversion-webhook
   name: longhorn-conversion-webhook
   namespace: longhorn-system
@@ -4884,7 +4888,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-admission-webhook
   name: longhorn-admission-webhook
   namespace: longhorn-system
@@ -4904,7 +4908,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-recovery-backend
   name: longhorn-recovery-backend
   namespace: longhorn-system
@@ -4924,7 +4928,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-manager
   name: longhorn-manager
   namespace: longhorn-system
@@ -4937,7 +4941,7 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.8.0-dev
+        app.kubernetes.io/version: v1.9.0-dev
         app: longhorn-manager
     spec:
       containers:
@@ -4959,7 +4963,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.48"
+        - "longhornio/support-bundle-kit:v0.0.49"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
@@ -5052,7 +5056,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
 spec:
   replicas: 1
   selector:
@@ -5063,7 +5067,7 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.8.0-dev
+        app.kubernetes.io/version: v1.9.0-dev
         app: longhorn-driver-deployer
     spec:
       initContainers:
@@ -5102,7 +5106,7 @@ spec:
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
             value: "longhornio/csi-node-driver-registrar:v2.13.0"
           - name: CSI_RESIZER_IMAGE
-            value: "longhornio/csi-resizer:v1.12.0-20241219"
+            value: "longhornio/csi-resizer:v1.13.1"
           - name: CSI_SNAPSHOTTER_IMAGE
             value: "longhornio/csi-snapshotter:v8.2.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
@@ -5119,7 +5123,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.8.0-dev
+    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-ui
   name: longhorn-ui
   namespace: longhorn-system
@@ -5133,7 +5137,7 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.8.0-dev
+        app.kubernetes.io/version: v1.9.0-dev
         app: longhorn-ui
     spec:
       serviceAccountName: longhorn-ui-service-account

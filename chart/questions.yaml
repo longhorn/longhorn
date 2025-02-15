@@ -1,955 +1,1364 @@
 categories:
-- storage
+  - storage
 namespace: longhorn-system
 questions:
-- variable: image.defaultImage
-  default: "true"
-  description: "Use default Longhorn images"
-  label: Use Default Images
-  type: boolean
-  show_subquestion_if: false
-  group: "Longhorn Images"
-  subquestions:
-  - variable: image.longhorn.manager.repository
-    default: longhornio/longhorn-manager
-    description: "Repository for the Longhorn Manager image."
-    type: string
-    label: Longhorn Manager Image Repository
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.manager.tag
-    default: master-head
-    description: "Tag for the Longhorn Manager image."
-    type: string
-    label: Longhorn Manager Image Tag
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.engine.repository
-    default: longhornio/longhorn-engine
-    description: "Repository for the Longhorn Engine image."
-    type: string
-    label: Longhorn Engine Image Repository
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.engine.tag
-    default: master-head
-    description: "Tag for the Longhorn Engine image."
-    type: string
-    label: Longhorn Engine Image Tag
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.ui.repository
-    default: longhornio/longhorn-ui
-    description: "Repository for the Longhorn UI image."
-    type: string
-    label: Longhorn UI Image Repository
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.ui.tag
-    default: master-head
-    description: "Tag for the Longhorn UI image."
-    type: string
-    label: Longhorn UI Image Tag
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.instanceManager.repository
-    default: longhornio/longhorn-instance-manager
-    description: "Repository for the Longhorn Instance Manager image."
-    type: string
-    label: Longhorn Instance Manager Image Repository
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.instanceManager.tag
-    default: v2_20221123
-    description: "Tag for the Longhorn Instance Manager image."
-    type: string
-    label: Longhorn Instance Manager Image Tag
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.shareManager.repository
-    default: longhornio/longhorn-share-manager
-    description: "Repository for the Longhorn Share Manager image."
-    type: string
-    label: Longhorn Share Manager Image Repository
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.shareManager.tag
-    default: v1_20220914
-    description: "Tag for the Longhorn Share Manager image."
-    type: string
-    label: Longhorn Share Manager Image Tag
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.backingImageManager.repository
-    default: longhornio/backing-image-manager
-    description: "Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn Backing Image Manager Image Repository
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.backingImageManager.tag
-    default: v3_20220808
-    description: "Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn Backing Image Manager Image Tag
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.supportBundleKit.repository
-    default: longhornio/support-bundle-kit
-    description: "Repository for the Longhorn Support Bundle Manager image."
-    type: string
-    label: Longhorn Support Bundle Kit Image Repository
-    group: "Longhorn Images Settings"
-  - variable: image.longhorn.supportBundleKit.tag
-    default: v0.0.48
-    description: "Tag for the Longhorn Support Bundle Manager image."
-    type: string
-    label: Longhorn Support Bundle Kit Image Tag
-    group: "Longhorn Images Settings"
-  - variable: image.csi.attacher.repository
-    default: longhornio/csi-attacher
-    description: "Repository for the CSI attacher image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Attacher Image Repository
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.attacher.tag
-    default: v4.8.0
-    description: "Tag for the CSI attacher image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Attacher Image Tag
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.provisioner.repository
-    default: longhornio/csi-provisioner
-    description: "Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Provisioner Image Repository
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.provisioner.tag
-    default: v5.1.0-20241220
-    description: "Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Provisioner Image Tag
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.nodeDriverRegistrar.repository
-    default: longhornio/csi-node-driver-registrar
-    description: "Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Node Driver Registrar Image Repository
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.nodeDriverRegistrar.tag
-    default: v2.13.0
-    description: "Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Node Driver Registrar Image Tag
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.resizer.repository
-    default: longhornio/csi-resizer
-    description: "Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Driver Resizer Image Repository
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.resizer.tag
-    default: v1.12.0-20241219
-    description: "Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Driver Resizer Image Tag
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.snapshotter.repository
-    default: longhornio/csi-snapshotter
-    description: "Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Driver Snapshotter Image Repository
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.snapshotter.tag
-    default: v8.2.0
-    description: "Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Driver Snapshotter Image Tag
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.livenessProbe.repository
-    default: longhornio/livenessprobe
-    description: "Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Liveness Probe Image Repository
-    group: "Longhorn CSI Driver Images"
-  - variable: image.csi.livenessProbe.tag
-    default: v2.15.0
-    description: "Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Longhorn CSI Liveness Probe Image Tag
-    group: "Longhorn CSI Driver Images"
-- variable: privateRegistry.registryUrl
-  label: Private registry URL
-  description: "URL of a private registry. When unspecified, Longhorn uses the default system registry."
-  group: "Private Registry Settings"
-  type: string
-  default: ""
-- variable: privateRegistry.registrySecret
-  label: Private registry secret name
-  description: "Kubernetes secret that allows you to pull images from a private registry. This setting applies only when creation of private registry secrets is enabled. You must include the private registry name in the secret name."
-  group: "Private Registry Settings"
-  type: string
-  default: ""
-- variable: privateRegistry.createSecret
-  default: "true"
-  description: "Setting that allows you to create a private registry secret."
-  type: boolean
-  group: "Private Registry Settings"
-  label: Create Secret for Private Registry Settings
-  show_subquestion_if: true
-  subquestions:
-  - variable: privateRegistry.registryUser
-    label: Private registry user
-    description: "User account used for authenticating with a private registry."
-    type: string
-    default: ""
-  - variable: privateRegistry.registryPasswd
-    label: Private registry password
-    description: "Password for authenticating with a private registry."
-    type: password
-    default: ""
-- variable: longhorn.default_setting
-  default: "false"
-  description: "Customize the default settings before installing Longhorn for the first time. This option will only work if the cluster hasn't installed Longhorn."
-  label: "Customize Default Settings"
-  type: boolean
-  show_subquestion_if: true
-  group: "Longhorn Default Settings"
-  subquestions:
-  - variable: csi.kubeletRootDir
-    default:
-    description: "kubelet root directory. When unspecified, Longhorn uses the default value."
-    type: string
-    label: Kubelet Root Directory
-    group: "Longhorn CSI Driver Settings"
-  - variable: csi.attacherReplicaCount
-    type: int
-    default: 3
-    min: 1
-    max: 10
-    description: "Replica count of the CSI Attacher. When unspecified, Longhorn uses the default value (\"3\")."
-    label: Longhorn CSI Attacher replica count
-    group: "Longhorn CSI Driver Settings"
-  - variable: csi.provisionerReplicaCount
-    type: int
-    default: 3
-    min: 1
-    max: 10
-    description: "Replica count of the CSI Provisioner. When unspecified, Longhorn uses the default value (\"3\")."
-    label: Longhorn CSI Provisioner replica count
-    group: "Longhorn CSI Driver Settings"
-  - variable: csi.resizerReplicaCount
-    type: int
-    default: 3
-    min: 1
-    max: 10
-    description: "Replica count of the CSI Resizer. When unspecified, Longhorn uses the default value (\"3\")."
-    label: Longhorn CSI Resizer replica count
-    group: "Longhorn CSI Driver Settings"
-  - variable: csi.snapshotterReplicaCount
-    type: int
-    default: 3
-    min: 1
-    max: 10
-    description: "Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value (\"3\")."
-    label: Longhorn CSI Snapshotter replica count
-    group: "Longhorn CSI Driver Settings"
-  - variable: defaultSettings.backupTarget
-    label: Backup Target
-    description: "Endpoint used to access the backupstore. (Options: \"NFS\", \"CIFS\", \"AWS\", \"GCP\", \"AZURE\")"
-    group: "Longhorn Default Settings"
-    type: string
-    default:
-  - variable: defaultSettings.backupTargetCredentialSecret
-    label: Backup Target Credential Secret
-    description: "Name of the Kubernetes secret associated with the backup target."
-    group: "Longhorn Default Settings"
-    type: string
-    default:
-  - variable: defaultSettings.allowRecurringJobWhileVolumeDetached
-    label: Allow Recurring Job While Volume Is Detached
-    description: 'Setting that allows Longhorn to automatically attach a volume and create snapshots or backups when recurring jobs are run.'
-    group: "Longhorn Default Settings"
+  - variable: image.defaultImage
+    default: 'true'
+    description: Use default Longhorn images
+    label: Use Default Images
     type: boolean
-    default: "false"
-  - variable: defaultSettings.snapshotMaxCount
-    label: Snapshot Maximum Count
-    description: 'Maximum snapshot count for a volume. The value should be between 2 to 250.'
-    group: "Longhorn Default Settings"
-    type: int
-    min: 2
-    max: 250
-    default: 250
-  - variable: defaultSettings.createDefaultDiskLabeledNodes
-    label: Create Default Disk on Labeled Nodes
-    description: 'Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster.'
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
-  - variable: defaultSettings.defaultDataPath
-    label: Default Data Path
-    description: 'Default path for storing data on a host. The default value is "/var/lib/longhorn/".'
-    group: "Longhorn Default Settings"
+    show_subquestion_if: false
+    group: Longhorn Images
+    subquestions:
+      - variable: image.longhorn.manager.repository
+        default: longhornio/longhorn-manager
+        description: Repository for the Longhorn Manager image.
+        type: string
+        label: Longhorn Manager Image Repository
+        group: Longhorn Images Settings
+      - variable: image.longhorn.manager.tag
+        default: master-head
+        description: Tag for the Longhorn Manager image.
+        type: string
+        label: Longhorn Manager Image Tag
+        group: Longhorn Images Settings
+      - variable: image.longhorn.engine.repository
+        default: longhornio/longhorn-engine
+        description: Repository for the Longhorn Engine image.
+        type: string
+        label: Longhorn Engine Image Repository
+        group: Longhorn Images Settings
+      - variable: image.longhorn.engine.tag
+        default: master-head
+        description: Tag for the Longhorn Engine image.
+        type: string
+        label: Longhorn Engine Image Tag
+        group: Longhorn Images Settings
+      - variable: image.longhorn.ui.repository
+        default: longhornio/longhorn-ui
+        description: Repository for the Longhorn UI image.
+        type: string
+        label: Longhorn UI Image Repository
+        group: Longhorn Images Settings
+      - variable: image.longhorn.ui.tag
+        default: master-head
+        description: Tag for the Longhorn UI image.
+        type: string
+        label: Longhorn UI Image Tag
+        group: Longhorn Images Settings
+      - variable: image.longhorn.instanceManager.repository
+        default: longhornio/longhorn-instance-manager
+        description: Repository for the Longhorn Instance Manager image.
+        type: string
+        label: Longhorn Instance Manager Image Repository
+        group: Longhorn Images Settings
+      - variable: image.longhorn.instanceManager.tag
+        default: v2_20221123
+        description: Tag for the Longhorn Instance Manager image.
+        type: string
+        label: Longhorn Instance Manager Image Tag
+        group: Longhorn Images Settings
+      - variable: image.longhorn.shareManager.repository
+        default: longhornio/longhorn-share-manager
+        description: Repository for the Longhorn Share Manager image.
+        type: string
+        label: Longhorn Share Manager Image Repository
+        group: Longhorn Images Settings
+      - variable: image.longhorn.shareManager.tag
+        default: v1_20220914
+        description: Tag for the Longhorn Share Manager image.
+        type: string
+        label: Longhorn Share Manager Image Tag
+        group: Longhorn Images Settings
+      - variable: image.longhorn.backingImageManager.repository
+        default: longhornio/backing-image-manager
+        description: >-
+          Repository for the Backing Image Manager image. When unspecified,
+          Longhorn uses the default value.
+        type: string
+        label: Longhorn Backing Image Manager Image Repository
+        group: Longhorn Images Settings
+      - variable: image.longhorn.backingImageManager.tag
+        default: v3_20220808
+        description: >-
+          Tag for the Backing Image Manager image. When unspecified, Longhorn
+          uses the default value.
+        type: string
+        label: Longhorn Backing Image Manager Image Tag
+        group: Longhorn Images Settings
+      - variable: image.longhorn.supportBundleKit.repository
+        default: longhornio/support-bundle-kit
+        description: Repository for the Longhorn Support Bundle Manager image.
+        type: string
+        label: Longhorn Support Bundle Kit Image Repository
+        group: Longhorn Images Settings
+      - variable: image.longhorn.supportBundleKit.tag
+        default: v0.0.49
+        description: Tag for the Longhorn Support Bundle Manager image.
+        type: string
+        label: Longhorn Support Bundle Kit Image Tag
+        group: Longhorn Images Settings
+      - variable: image.csi.attacher.repository
+        default: longhornio/csi-attacher
+        description: >-
+          Repository for the CSI attacher image. When unspecified, Longhorn uses
+          the default value.
+        type: string
+        label: Longhorn CSI Attacher Image Repository
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.attacher.tag
+        default: v4.8.0
+        description: >-
+          Tag for the CSI attacher image. When unspecified, Longhorn uses the
+          default value.
+        type: string
+        label: Longhorn CSI Attacher Image Tag
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.provisioner.repository
+        default: longhornio/csi-provisioner
+        description: >-
+          Repository for the CSI Provisioner image. When unspecified, Longhorn
+          uses the default value.
+        type: string
+        label: Longhorn CSI Provisioner Image Repository
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.provisioner.tag
+        default: v5.1.0-20241220
+        description: >-
+          Tag for the CSI Provisioner image. When unspecified, Longhorn uses the
+          default value.
+        type: string
+        label: Longhorn CSI Provisioner Image Tag
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.nodeDriverRegistrar.repository
+        default: longhornio/csi-node-driver-registrar
+        description: >-
+          Repository for the CSI Node Driver Registrar image. When unspecified,
+          Longhorn uses the default value.
+        type: string
+        label: Longhorn CSI Node Driver Registrar Image Repository
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.nodeDriverRegistrar.tag
+        default: v2.13.0
+        description: >-
+          Tag for the CSI Node Driver Registrar image. When unspecified,
+          Longhorn uses the default value.
+        type: string
+        label: Longhorn CSI Node Driver Registrar Image Tag
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.resizer.repository
+        default: longhornio/csi-resizer
+        description: >-
+          Repository for the CSI Resizer image. When unspecified, Longhorn uses
+          the default value.
+        type: string
+        label: Longhorn CSI Driver Resizer Image Repository
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.resizer.tag
+        default: v1.13.1
+        description: >-
+          Tag for the CSI Resizer image. When unspecified, Longhorn uses the
+          default value.
+        type: string
+        label: Longhorn CSI Driver Resizer Image Tag
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.snapshotter.repository
+        default: longhornio/csi-snapshotter
+        description: >-
+          Repository for the CSI Snapshotter image. When unspecified, Longhorn
+          uses the default value.
+        type: string
+        label: Longhorn CSI Driver Snapshotter Image Repository
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.snapshotter.tag
+        default: v8.2.0
+        description: >-
+          Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the
+          default value.
+        type: string
+        label: Longhorn CSI Driver Snapshotter Image Tag
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.livenessProbe.repository
+        default: longhornio/livenessprobe
+        description: >-
+          Repository for the CSI liveness probe image. When unspecified,
+          Longhorn uses the default value.
+        type: string
+        label: Longhorn CSI Liveness Probe Image Repository
+        group: Longhorn CSI Driver Images
+      - variable: image.csi.livenessProbe.tag
+        default: v2.15.0
+        description: >-
+          Tag for the CSI liveness probe image. When unspecified, Longhorn uses
+          the default value.
+        type: string
+        label: Longhorn CSI Liveness Probe Image Tag
+        group: Longhorn CSI Driver Images
+  - variable: privateRegistry.registryUrl
+    label: Private registry URL
+    description: >-
+      URL of a private registry. When unspecified, Longhorn uses the default
+      system registry.
+    group: Private Registry Settings
     type: string
-    default: "/var/lib/longhorn/"
-  - variable: defaultSettings.defaultDataLocality
-    label: Default Data Locality
-    description: 'Default data locality. A Longhorn volume has data locality if a local replica of the volume exists on the same node as the pod that is using the volume.'
-    group: "Longhorn Default Settings"
-    type: enum
-    options:
-    - "disabled"
-    - "best-effort"
-    default: "disabled"
-  - variable: defaultSettings.replicaSoftAntiAffinity
-    label: Replica Node Level Soft Anti-Affinity
-    description: 'Allow scheduling on nodes with existing healthy replicas of the same volume. By default, false.'
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
-  - variable: defaultSettings.replicaAutoBalance
-    label: Replica Auto Balance
-    description: 'Enable this setting automatically re-balances replicas when discovered an available node.'
-    group: "Longhorn Default Settings"
-    type: enum
-    options:
-    - "disabled"
-    - "least-effort"
-    - "best-effort"
-    default: "disabled"
-  - variable: defaultSettings.storageOverProvisioningPercentage
-    label: Storage Over Provisioning Percentage
-    description: "Percentage of storage that can be allocated relative to hard drive capacity. The default value is 100."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 100
-  - variable: defaultSettings.storageMinimalAvailablePercentage
-    label: Storage Minimal Available Percentage
-    description: "If the minimum available disk capacity exceeds the actual percentage of available disk capacity, the disk becomes unschedulable until more space is freed up. By default, 25."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    max: 100
-    default: 25
-  - variable: defaultSettings.storageReservedPercentageForDefaultDisk
-    label: Storage Reserved Percentage For Default Disk
-    description: "The reserved percentage specifies the percentage of disk space that will not be allocated to the default disk on each new Longhorn node."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    max: 100
-    default: 30
-  - variable: defaultSettings.upgradeChecker
-    label: Enable Upgrade Checker
-    description: 'Upgrade Checker that periodically checks for new Longhorn versions. When a new version is available, a notification appears on the Longhorn UI. This setting is enabled by default.'
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.defaultReplicaCount
-    label: Default Replica Count
-    description: "Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is \"3\"."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 1
-    max: 20
-    default: 3
-  - variable: defaultSettings.defaultLonghornStaticStorageClass
-    label: Default Longhorn Static StorageClass Name
-    description: "Default name of Longhorn Static StorageClass. The \"storageClassName\" is assigned to PVs and PVCs that are created for an existing Longhorn volume. The \"storageClassName\" can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. The \"storageClassName\" needs to be an existing StorageClass. The default value is \"longhorn-static\"."
-    group: "Longhorn Default Settings"
+    default: ''
+  - variable: privateRegistry.registrySecret
+    label: Private registry secret name
+    description: >-
+      Kubernetes secret that allows you to pull images from a private registry.
+      This setting applies only when creation of private registry secrets is
+      enabled. You must include the private registry name in the secret name.
+    group: Private Registry Settings
     type: string
-    default: "longhorn-static"
-  - variable: defaultSettings.backupstorePollInterval
-    label: Backupstore Poll Interval
-    description: "Number of seconds that Longhorn waits before checking the backupstore for new backups. The default value is \"300\". When the value is \"0\", polling is disabled."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 300
-  - variable: defaultSettings.failedBackupTTL
-    label: Failed Backup Time to Live
-    description: "Number of minutes that Longhorn keeps a failed backup resource. When the value is \"0\", automatic deletion is disabled."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 1440
-  - variable: defaultSettings.backupExecutionTimeout
-    label: Backup Execution Timeout
-    description: "Number of minutes that Longhorn allows for the backup execution. The default value is \"1\"."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 1
-    default: 1
-  - variable: defaultSettings.restoreVolumeRecurringJobs
-    label: Restore Volume Recurring Jobs
-    description: "Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration."
-    group: "Longhorn Default Settings"
+    default: ''
+  - variable: privateRegistry.createSecret
+    default: 'true'
+    description: Setting that allows you to create a private registry secret.
     type: boolean
-    default: "false"
-  - variable: defaultSettings.recurringSuccessfulJobsHistoryLimit
-    label: Cronjob Successful Jobs History Limit
-    description: "This setting specifies how many successful backup or snapshot job histories should be retained. History will not be retained if the value is 0."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 1
-  - variable: defaultSettings.recurringFailedJobsHistoryLimit
-    label: Cronjob Failed Jobs History Limit
-    description: 'Maximum number of failed recurring backup and snapshot jobs to be retained. When the value is "0", a history of failed recurring jobs is not retained.'
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 1
-  - variable: defaultSettings.recurringJobMaxRetention
-    label: Maximum Retention Number for Recurring Job
-    description: "Maximum number of snapshots or backups to be retained."
-    group: "Longhorn Default Settings"
-    type: int
-    default: 100
-  - variable: defaultSettings.supportBundleFailedHistoryLimit
-    label: SupportBundle Failed History Limit
-    description: "This setting specifies how many failed support bundles can exist in the cluster. Set this value to **0** to have Longhorn automatically purge all failed support bundles."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 1
-  - variable: defaultSettings.autoSalvage
-    label: Automatic salvage
-    description: "Setting that allows Longhorn to automatically salvage volumes when all replicas become faulty (for example, when the network connection is interrupted). Longhorn determines which replicas are usable and then uses these replicas for the volume. This setting is enabled by default."
-    group: "Longhorn Default Settings"
+    group: Private Registry Settings
+    label: Create Secret for Private Registry Settings
+    show_subquestion_if: true
+    subquestions:
+      - variable: privateRegistry.registryUser
+        label: Private registry user
+        description: User account used for authenticating with a private registry.
+        type: string
+        default: ''
+      - variable: privateRegistry.registryPasswd
+        label: Private registry password
+        description: Password for authenticating with a private registry.
+        type: password
+        default: ''
+  - variable: longhorn.default_setting
+    default: 'false'
+    description: >-
+      Customize the default settings before installing Longhorn for the first
+      time. This option will only work if the cluster hasn't installed Longhorn.
+    label: Customize Default Settings
     type: boolean
-    default: "true"
-  - variable: defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly
-    label: Automatically Delete Workload Pod when The Volume Is Detached Unexpectedly
-    description: 'Setting that allows Longhorn to automatically delete a workload pod that is managed by a controller (for example, daemonset) whenever a Longhorn volume is detached unexpectedly (for example, during Kubernetes upgrades). After deletion, the controller restarts the pod and then Kubernetes handles volume reattachment and remounting.'
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.disableSchedulingOnCordonedNode
-    label: Disable Scheduling On Cordoned Node
-    description: "Setting that prevents Longhorn Manager from scheduling replicas on a cordoned Kubernetes node. This setting is enabled by default."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.replicaZoneSoftAntiAffinity
-    label: Replica Zone Level Soft Anti-Affinity
-    description: "Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas. Nodes don't belong to any Zone will be treated as in the same Zone. Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone. By, default true."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.replicaDiskSoftAntiAffinity
-    label: Replica Disk Level Soft Anti-Affinity
-    description: 'Allow scheduling on disks with existing healthy replicas of the same volume. By default, true.'
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.allowEmptyNodeSelectorVolume
-    label: Allow Empty Node Selector Volume
-    description: "Setting that allows scheduling of empty node selector volumes to any node."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.allowEmptyDiskSelectorVolume
-    label: Allow Empty Disk Selector Volume
-    description: "Setting that allows scheduling of empty disk selector volumes to any disk."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.nodeDownPodDeletionPolicy
-    label: Pod Deletion Policy When Node is Down
-    description: "Policy that defines the action Longhorn takes when a volume is stuck with a StatefulSet or Deployment pod on a node that failed."
-    group: "Longhorn Default Settings"
-    type: enum
-    options:
-    - "do-nothing"
-    - "delete-statefulset-pod"
-    - "delete-deployment-pod"
-    - "delete-both-statefulset-and-deployment-pod"
-    default: "do-nothing"
-  - variable: defaultSettings.nodeDrainPolicy
-    label: Node Drain Policy
-    description: "Policy that defines the action Longhorn takes when a node with the last healthy replica of a volume is drained."
-    group: "Longhorn Default Settings"
-    type: enum
-    options:
-    - "block-for-eviction"
-    - "block-for-eviction-if-contains-last-replica"
-    - "block-if-contains-last-replica"
-    - "allow-if-replica-is-stopped"
-    - "always-allow"
-    default: "block-if-contains-last-replica"
-  - variable: defaultSettings.detachManuallyAttachedVolumesWhenCordoned
-    label: Detach Manually Attached Volumes When Cordoned
-    description: "Setting that allows automatic detaching of manually-attached volumes when a node is cordoned."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
-  - variable: defaultSettings.priorityClass
-    label: Priority Class
-    description: "PriorityClass for system-managed Longhorn components. This setting can help prevent Longhorn components from being evicted under Node Pressure. Longhorn system contains user deployed components (E.g, Longhorn manager, Longhorn driver, Longhorn UI) and system managed components (E.g, instance manager, engine image, CSI driver, etc.) Note that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`. WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES."
-    group: "Longhorn Default Settings"
-    type: string
-    default: "longhorn-critical"
-  - variable: defaultSettings.replicaReplenishmentWaitInterval
-    label: Replica Replenishment Wait Interval
-    description: "The interval in seconds determines how long Longhorn will at least wait to reuse the existing data on a failed replica rather than directly creating a new replica for a degraded volume."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 600
-  - variable: defaultSettings.concurrentReplicaRebuildPerNodeLimit
-    label: Concurrent Replica Rebuild Per Node Limit
-    description: "Maximum number of replicas that can be concurrently rebuilt on each node. **Caution**: [1] This setting replaces \"Disable Replica Rebuild\". Instead of delaying replica startup, Longhorn skips replica object replenishment to limit the number of concurrently rebuilding replicas. [2] When the value is \"0\", the eviction and data locality features do not work, but ongoing replica rebuilding and backup/restoration operations should remain unaffected."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 5
-  - variable: defaultSettings.concurrentVolumeBackupRestorePerNodeLimit
-    label: Concurrent Volume Backup Restore Per Node Limit
-    description: "Maximum number of volumes that can be concurrently restored on each node using a backup. When the value is \"0\", restoration of volumes using a backup is disabled."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 5
-  - variable: defaultSettings.disableRevisionCounter
-    label: Disable Revision Counter
-    description: "Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the \"volume-head-xxx.img\" file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. This setting applies only to volumes created using the Longhorn UI."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.systemManagedPodsImagePullPolicy
-    label: System Managed Pod Image Pull Policy
-    description: "Image pull policy for system-managed pods, such as Instance Manager, engine images, and CSI Driver. Changes to the image pull policy are applied only after the system-managed pods restart."
-    group: "Longhorn Default Settings"
-    type: enum
-    options:
-    - "if-not-present"
-    - "always"
-    - "never"
-    default: "if-not-present"
-  - variable: defaultSettings.allowVolumeCreationWithDegradedAvailability
-    label: Allow Volume Creation with Degraded Availability
-    description: "Setting that allows you to create and attach a volume without having all replicas scheduled at the time of creation."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.autoCleanupSystemGeneratedSnapshot
-    label: Automatically Cleanup System Generated Snapshot
-    description: "Setting that allows Longhorn to automatically clean up the system-generated snapshot after replica rebuilding is completed."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.autoCleanupRecurringJobBackupSnapshot
-    label: Automatically Cleanup Recurring Job Backup Snapshot
-    description: "Setting that allows Longhorn to automatically clean up the snapshot generated by a recurring backup job."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "true"
-  - variable: defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit
-    label: Concurrent Automatic Engine Upgrade Per Node Limit
-    description: "Maximum number of engines that are allowed to concurrently upgrade on each node after Longhorn Manager is upgraded. When the value is \"0\", Longhorn does not automatically upgrade volume engines to the new default engine image version."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 0
-  - variable: defaultSettings.backingImageCleanupWaitInterval
-    label: Backing Image Cleanup Wait Interval
-    description: "Number of minutes that Longhorn waits before cleaning up the backing image file when no replicas in the disk are using it."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 60
-  - variable: defaultSettings.backingImageRecoveryWaitInterval
-    label: Backing Image Recovery Wait Interval
-    description: "Number of seconds that Longhorn waits before downloading a backing image file again when the status of all image disk files changes to \"failed\" or \"unknown\"."
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    default: 300
-  - variable: defaultSettings.guaranteedInstanceManagerCPU
-    label: Guaranteed Instance Manager CPU
-    description: "Percentage of the total allocatable CPU resources on each node to be reserved for each Instance Manager pod when the V1 Data Engine is enabled. You can specify a value between \"0\" and \"40\" to accommodate the possible number of new Instance Manager pods during upgrades. The default value is \"12\". **Caution**: [1] When the value is \"0\", CPU requests are removed from the spec of Instance Manager pods. [2] A new set of Instance Manager pods must be deployed when Longhorn is upgraded. If the available CPUs are not sufficient for the new pods, you must detach the volumes using the oldest Instance Manager pods so that Longhorn can automatically clean up the old pods and release the CPU resources. Once completed, the new pods with the latest Instance Manager image are launched. [3] This global setting is not applied to nodes with a specified value for the \"InstanceManagerCPURequest\" field. [4] After this setting is configured, Instance Manager pods on all nodes that use this setting are automatically restarted. **Do not change this setting while volumes are still attached.**"
-    group: "Longhorn Default Settings"
-    type: int
-    min: 0
-    max: 40
-    default: 12
-  - variable: defaultSettings.logLevel
-    label: Log Level
-    description: 'Log levels that indicate the type and severity of logs in Longhorn Manager. The default value is "Info". (Options: "Panic", "Fatal", "Error", "Warn", "Info", "Debug", "Trace")'
-    group: "Longhorn Default Settings"
-    type: string
-    default: "Info"
-  - variable: defaultSettings.disableSnapshotPurge
-    label: Disable Snapshot Purge
-    description: "Setting that temporarily prevents all attempts to purge volume snapshots."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
-  - variable: defaultSettings.freezeFilesystemForSnapshot
-    description: "Setting that freezes the filesystem on the root partition before a snapshot is created."
-    group: "Longhorn Default Settings"
-    type: boolean
-    default: "false"
-- variable: defaultSettings.kubernetesClusterAutoscalerEnabled
-  label: Kubernetes Cluster Autoscaler Enabled (Experimental)
-  description: "Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. **Caution**: Replica rebuilding may consume significant resources if the Kubernetes Cluster Autoscaler removes nodes with reusable replicas."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: false
-- variable: defaultSettings.orphanAutoDeletion
-  label: Orphaned Data Cleanup
-  description: "Setting that allows Longhorn to automatically delete an orphaned resource and the corresponding data (for example, stale replicas). Orphaned resources on failed or unknown nodes are not automatically cleaned up."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: false
-- variable: defaultSettings.storageNetwork
-  label: Storage Network
-  description: "Longhorn uses the storage network for in-cluster data traffic. Leave this blank to use the Kubernetes cluster network. **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached."
-  group: "Longhorn Default Settings"
-  type: string
-  default:
-- variable: defaultSettings.deletingConfirmationFlag
-  label: Deleting Confirmation Flag
-  description: "Flag that prevents accidental uninstallation of Longhorn."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: "false"
-- variable: defaultSettings.engineReplicaTimeout
-  label: Timeout between Engine and Replica
-  description: "Timeout between the Longhorn Engine and replicas. Specify a value between \"8\" and \"30\" seconds. The default value is \"8\"."
-  group: "Longhorn Default Settings"
-  type: int
-  default: "8"
-- variable: defaultSettings.snapshotDataIntegrity
-  label: Snapshot Data Integrity
-  description: "This setting allows users to enable or disable snapshot hashing and data integrity checking."
-  group: "Longhorn Default Settings"
-  type: string
-  default: "disabled"
-- variable: defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation
-  label: Immediate Snapshot Data Integrity Check After Creating a Snapshot
-  description: "Hashing snapshot disk files impacts the performance of the system. The immediate snapshot hashing and checking can be disabled to minimize the impact after creating a snapshot."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: "false"
-- variable: defaultSettings.snapshotDataIntegrityCronjob
-  label: Snapshot Data Integrity Check CronJob
-  description: "Unix-cron string format. The setting specifies when Longhorn checks the data integrity of snapshot disk files."
-  group: "Longhorn Default Settings"
-  type: string
-  default: "0 0 */7 * *"
-- variable: defaultSettings.removeSnapshotsDuringFilesystemTrim
-  label: Remove Snapshots During Filesystem Trim
-  description: "This setting allows Longhorn filesystem trim feature to automatically mark the latest snapshot and its ancestors as removed and stops at the snapshot containing multiple children."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: "false"
-- variable: defaultSettings.fastReplicaRebuildEnabled
-  label: Fast Replica Rebuild Enabled
-  description: "Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to \"enable\" or \"fast-check\"."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: false
-- variable: defaultSettings.replicaFileSyncHttpClientTimeout
-  label: Timeout of HTTP Client to Replica File Sync Server
-  description: "In seconds. The setting specifies the HTTP client timeout to the file sync server."
-  group: "Longhorn Default Settings"
-  type: int
-  default: "30"
-- variable: defaultSettings.longGRPCTimeOut
-  label: Long gRPC Timeout
-  description: "Number of seconds that Longhorn allows for the completion of replica rebuilding and snapshot cloning operations."
-  group: "Longhorn Default Settings"
-  type: int
-  default: "86400"
-- variable: defaultSettings.backupCompressionMethod
-  label: Backup Compression Method
-  description: "Setting that allows you to specify a backup compression method."
-  group: "Longhorn Default Settings"
-  type: string
-  default: "lz4"
-- variable: defaultSettings.backupConcurrentLimit
-  label: Backup Concurrent Limit Per Backup
-  description: "Maximum number of worker threads that can concurrently run for each backup."
-  group: "Longhorn Default Settings"
-  type: int
-  min: 1
-  default: 2
-- variable: defaultSettings.restoreConcurrentLimit
-  label: Restore Concurrent Limit Per Backup
-  description: "This setting controls how many worker threads per restore concurrently."
-  group: "Longhorn Default Settings"
-  type: int
-  min: 1
-  default: 2
-- variable: defaultSettings.allowCollectingLonghornUsageMetrics
-  label: Allow Collecting Longhorn Usage Metrics
-  description: "Setting that allows Longhorn to periodically collect anonymous usage data for product improvement purposes. Longhorn sends collected data to the [Upgrade Responder](https://github.com/longhorn/upgrade-responder) server, which is the data source of the Longhorn Public Metrics Dashboard (https://metrics.longhorn.io). The Upgrade Responder server does not store data that can be used to identify clients, including IP addresses."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: true
-- variable: defaultSettings.v1DataEngine
-  label: V1 Data Engine
-  description: "Setting that allows you to enable the V1 Data Engine."
-  group: "Longhorn V1 Data Engine Settings"
-  type: boolean
-  default: true
-- variable: defaultSettings.v2DataEngine
-  label: V2 Data Engine
-  description: "Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is an experimental feature and should not be used in production environments. **Caution**: [1] **Do not modify this setting while volumes are still attached.** [2] When the V2 Data Engine is enabled, each Instance Manager pod for the V2 Data Engine uses 1 CPU core. The high CPU usage is caused by `spdk_tgt`, a process running in each Instance Manager pod that handles input/output (IO) operations and requires intensive polling. `spdk_tgt` consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations."
-  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
-  type: boolean
-  default: false
-- variable: defaultSettings.v2DataEngineHugepageLimit
-  label: V2 Data Engine
-  description: "This allows users to configure maximum huge page size (in MiB) for the V2 Data Engine."
-  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
-  type: int
-  default: "2048"
-- variable: defaultSettings.v2DataEngineLogLevel
-  label: V2 Data Engine
-  description: "Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine."
-  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
-  type: enum
-  options:
-  - "Disabled"
-  - "Error"
-  - "Warn"
-  - "Notice"
-  - "Info"
-  - "Debug"
-  default: "Notice"
-- variable: defaultSettings.v2DataEngineLogFlags
-  label: V2 Data Engine
-  description: "Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine."
-  group: "Longhorn V2 Data Engine (Experimental Feature) Settings"
-  type: string
-  default:
-- variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
-  label: Auto Cleanup Snapshot When Delete Backup
-  description: "Setting that automatically cleans up the snapshot when the backup is deleted."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: false
-- variable: defaultSettings.rwxVolumeFastFailover
-  label: RWX Volume Fast Failover (Experimental)
-  description: "Setting that allows Longhorn to detect node failure and immediately migrate affected RWX volumes."
-  group: "Longhorn Default Settings"
-  type: boolean
-  default: false
-- variable: persistence.defaultClass
-  default: "true"
-  description: "Setting that allows you to specify the default Longhorn StorageClass."
-  label: Default Storage Class
-  group: "Longhorn Storage Class Settings"
-  required: true
-  type: boolean
-- variable: persistence.reclaimPolicy
-  label: Storage Class Retain Policy
-  description: "Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: \"Retain\", \"Delete\")"
-  group: "Longhorn Storage Class Settings"
-  required: true
-  type: enum
-  options:
-  - "Delete"
-  - "Retain"
-  default: "Delete"
-- variable: persistence.disableRevisionCounter
-  label: Default Storage Class Disable Revision Counter
-  description: "Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the volume-head-xxx.img file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. (Options: \"true\", \"false\")"
-  group: "Longhorn Storage Class Settings"
-  required: true
-  type: enum
-  options:
-  - "true"
-  - "false"
-  default: "true"
-- variable: persistence.defaultClassReplicaCount
-  description: "Replica count of the default Longhorn StorageClass."
-  label: Default Storage Class Replica Count
-  group: "Longhorn Storage Class Settings"
-  type: int
-  min: 1
-  max: 10
-  default: 3
-- variable: persistence.defaultDataLocality
-  description: "Data locality of the default Longhorn StorageClass. (Options: \"disabled\", \"best-effort\")"
-  label: Default Storage Class Data Locality
-  group: "Longhorn Storage Class Settings"
-  type: enum
-  options:
-  - "disabled"
-  - "best-effort"
-  default: "disabled"
-- variable: persistence.recurringJobSelector.enable
-  description: "Setting that allows you to enable the recurring job selector for a Longhorn StorageClass."
-  group: "Longhorn Storage Class Settings"
-  label: Enable Storage Class Recurring Job Selector
-  type: boolean
-  default: false
-  show_subquestion_if: true
-  subquestions:
-  - variable: persistence.recurringJobSelector.jobList
-    description: 'Recurring job selector for a Longhorn StorageClass. Ensure that quotes are used correctly when specifying job parameters. (Example: `[{"name":"backup", "isGroup":true}]`)'
-    label: Storage Class Recurring Job Selector List
-    group: "Longhorn Storage Class Settings"
-    type: string
-    default:
-- variable: persistence.defaultDiskSelector.enable
-  description: "Setting that allows you to enable the disk selector for the default Longhorn StorageClass."
-  group: "Longhorn Storage Class Settings"
-  label: Enable Storage Class Disk Selector
-  type: boolean
-  default: false
-  show_subquestion_if: true
-  subquestions:
-  - variable: persistence.defaultDiskSelector.selector
-    label: Storage Class Disk Selector
-    description: 'Disk selector for the default Longhorn StorageClass. Longhorn uses only disks with the specified tags for storing volume data. (Examples: "nvme,sata")'
-    group: "Longhorn Storage Class Settings"
-    type: string
-    default:
-- variable: persistence.defaultNodeSelector.enable
-  description: "Setting that allows you to enable the node selector for the default Longhorn StorageClass."
-  group: "Longhorn Storage Class Settings"
-  label: Enable Storage Class Node Selector
-  type: boolean
-  default: false
-  show_subquestion_if: true
-  subquestions:
-  - variable: persistence.defaultNodeSelector.selector
-    label: Storage Class Node Selector
-    description: 'Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast")'
-    group: "Longhorn Storage Class Settings"
-    type: string
-    default:
-- variable: persistence.backingImage.enable
-  description: "Setting that allows you to use a backing image in a Longhorn StorageClass."
-  group: "Longhorn Storage Class Settings"
-  label: Default Storage Class Backing Image
-  type: boolean
-  default: false
-  show_subquestion_if: true
-  subquestions:
-  - variable: persistence.backingImage.name
-    description: 'Backing image to be used for creating and restoring volumes in a Longhorn StorageClass. When no backing images are available, specify the data source type and parameters that Longhorn can use to create a backing image.'
-    label: Storage Class Backing Image Name
-    group: "Longhorn Storage Class Settings"
-    type: string
-    default:
-  - variable: persistence.backingImage.expectedChecksum
-    description: 'Expected SHA-512 checksum of a backing image used in a Longhorn StorageClass. **Caution** [1] This field is useful only if the backing image name is specified. [2] Specifying a checksum is not recommended when the data source type is \"export-from-volume\".'
-    label: Storage Class Backing Image Expected SHA512 Checksum
-    group: "Longhorn Storage Class Settings"
-    type: string
-    default:
-  - variable: persistence.backingImage.dataSourceType
-    description: 'Data source type of a backing image used in a Longhorn StorageClass. If the backing image exists in the cluster, Longhorn uses this setting to verify the image. If the backing image does not exist, Longhorn creates one using the specified data source type. **Caution** [1] This field is useful only if the backing image name is specified. [2] Backing images with data source type \"upload\" are best created using the Longhorn UI. Uploading requires sending file data to Longhorn after object creation, which can be complicated when performed manually.'
-    label: Storage Class Backing Image Data Source Type
-    group: "Longhorn Storage Class Settings"
-    type: enum
-    options:
-    - ""
-    - "download"
-    - "upload"
-    - "export-from-volume"
-    default: ""
-  - variable: persistence.backingImage.dataSourceParameters
-    description: "Data source parameters of a backing image used in a Longhorn StorageClass. You can specify a JSON string of a map. (Example: `'{\"url\":\"https://backing-image-example.s3-region.amazonaws.com/test-backing-image\"}'`) **Caution** [1] This field is useful only if the backing image name is specified. [2] Ensure that quotes are used correctly when specifying parameters."
-    label: Storage Class Backing Image Data Source Parameters
-    group: "Longhorn Storage Class Settings"
-    type: string
-    default:
-- variable: persistence.removeSnapshotsDuringFilesystemTrim
-  description: "Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: \"ignored\", \"enabled\", \"disabled\")"
-  label: Default Storage Class Remove Snapshots During Filesystem Trim
-  group: "Longhorn Storage Class Settings"
-  type: enum
-  options:
-  - "ignored"
-  - "enabled"
-  - "disabled"
-  default: "ignored"
-- variable: ingress.enabled
-  default: "false"
-  description: "Expose app using Layer 7 Load Balancer - ingress"
-  type: boolean
-  group: "Services and Load Balancing"
-  label: Expose app using Layer 7 Load Balancer
-  show_subquestion_if: true
-  subquestions:
-  - variable: ingress.host
-    default: "xip.io"
-    description: "Hostname of the Layer 7 load balancer."
-    type: hostname
+    show_subquestion_if: true
+    group: Longhorn Default Settings
+    subquestions:
+      - variable: csi.kubeletRootDir
+        default: null
+        description: >-
+          kubelet root directory. When unspecified, Longhorn uses the default
+          value.
+        type: string
+        label: Kubelet Root Directory
+        group: Longhorn CSI Driver Settings
+      - variable: csi.attacherReplicaCount
+        type: int
+        default: 3
+        min: 1
+        max: 10
+        description: >-
+          Replica count of the CSI Attacher. When unspecified, Longhorn uses the
+          default value ("3").
+        label: Longhorn CSI Attacher replica count
+        group: Longhorn CSI Driver Settings
+      - variable: csi.provisionerReplicaCount
+        type: int
+        default: 3
+        min: 1
+        max: 10
+        description: >-
+          Replica count of the CSI Provisioner. When unspecified, Longhorn uses
+          the default value ("3").
+        label: Longhorn CSI Provisioner replica count
+        group: Longhorn CSI Driver Settings
+      - variable: csi.resizerReplicaCount
+        type: int
+        default: 3
+        min: 1
+        max: 10
+        description: >-
+          Replica count of the CSI Resizer. When unspecified, Longhorn uses the
+          default value ("3").
+        label: Longhorn CSI Resizer replica count
+        group: Longhorn CSI Driver Settings
+      - variable: csi.snapshotterReplicaCount
+        type: int
+        default: 3
+        min: 1
+        max: 10
+        description: >-
+          Replica count of the CSI Snapshotter. When unspecified, Longhorn uses
+          the default value ("3").
+        label: Longhorn CSI Snapshotter replica count
+        group: Longhorn CSI Driver Settings
+      - variable: defaultSettings.allowRecurringJobWhileVolumeDetached
+        label: Allow Recurring Job While Volume Is Detached
+        description: >-
+          Setting that allows Longhorn to automatically attach a volume and
+          create snapshots or backups when recurring jobs are run.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.snapshotMaxCount
+        label: Snapshot Maximum Count
+        description: >-
+          Maximum snapshot count for a volume. The value should be between 2 to
+          250.
+        group: Longhorn Default Settings
+        type: int
+        min: 2
+        max: 250
+        default: 250
+      - variable: defaultSettings.createDefaultDiskLabeledNodes
+        label: Create Default Disk on Labeled Nodes
+        description: >-
+          Setting that allows Longhorn to automatically create a default disk
+          only on nodes with the label
+          "node.longhorn.io/create-default-disk=true" (if no other disks exist).
+          When this setting is disabled, Longhorn creates a default disk on each
+          node that is added to the cluster.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.defaultDataPath
+        label: Default Data Path
+        description: >-
+          Default path for storing data on a host. The default value is
+          "/var/lib/longhorn/".
+        group: Longhorn Default Settings
+        type: string
+        default: /var/lib/longhorn/
+      - variable: defaultSettings.defaultDataLocality
+        label: Default Data Locality
+        description: >-
+          Default data locality. A Longhorn volume has data locality if a local
+          replica of the volume exists on the same node as the pod that is using
+          the volume.
+        group: Longhorn Default Settings
+        type: enum
+        options:
+          - disabled
+          - best-effort
+        default: disabled
+      - variable: defaultSettings.replicaSoftAntiAffinity
+        label: Replica Node Level Soft Anti-Affinity
+        description: >-
+          Allow scheduling on nodes with existing healthy replicas of the same
+          volume. By default, false.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.replicaAutoBalance
+        label: Replica Auto Balance
+        description: >-
+          Enable this setting automatically re-balances replicas when discovered
+          an available node.
+        group: Longhorn Default Settings
+        type: enum
+        options:
+          - disabled
+          - least-effort
+          - best-effort
+        default: disabled
+      - variable: defaultSettings.storageOverProvisioningPercentage
+        label: Storage Over Provisioning Percentage
+        description: >-
+          Percentage of storage that can be allocated relative to hard drive
+          capacity. The default value is 100.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 100
+      - variable: defaultSettings.storageMinimalAvailablePercentage
+        label: Storage Minimal Available Percentage
+        description: >-
+          If the minimum available disk capacity exceeds the actual percentage
+          of available disk capacity, the disk becomes unschedulable until more
+          space is freed up. By default, 25.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        max: 100
+        default: 25
+      - variable: defaultSettings.storageReservedPercentageForDefaultDisk
+        label: Storage Reserved Percentage For Default Disk
+        description: >-
+          The reserved percentage specifies the percentage of disk space that
+          will not be allocated to the default disk on each new Longhorn node.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        max: 100
+        default: 30
+      - variable: defaultSettings.upgradeChecker
+        label: Enable Upgrade Checker
+        description: >-
+          Upgrade Checker that periodically checks for new Longhorn versions.
+          When a new version is available, a notification appears on the
+          Longhorn UI. This setting is enabled by default.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.defaultReplicaCount
+        label: Default Replica Count
+        description: >-
+          Default number of replicas for volumes created using the Longhorn UI.
+          For Kubernetes configuration, modify the `numberOfReplicas` field in
+          the StorageClass. The default value is "3".
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        max: 20
+        default: 3
+      - variable: defaultSettings.defaultLonghornStaticStorageClass
+        label: Default Longhorn Static StorageClass Name
+        description: >-
+          Default name of Longhorn Static StorageClass. The "storageClassName"
+          is assigned to PVs and PVCs that are created for an existing Longhorn
+          volume. The "storageClassName" can also be used as a label, so it is
+          possible to use a Longhorn StorageClass to bind a workload to an
+          existing PV without creating a Kubernetes StorageClass object. The
+          "storageClassName" needs to be an existing StorageClass. The default
+          value is "longhorn-static".
+        group: Longhorn Default Settings
+        type: string
+        default: longhorn-static
+      - variable: defaultSettings.failedBackupTTL
+        label: Failed Backup Time to Live
+        description: >-
+          Number of minutes that Longhorn keeps a failed backup resource. When
+          the value is "0", automatic deletion is disabled.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 1440
+      - variable: defaultSettings.backupExecutionTimeout
+        label: Backup Execution Timeout
+        description: >-
+          Number of minutes that Longhorn allows for the backup execution. The
+          default value is "1".
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        default: 1
+      - variable: defaultSettings.restoreVolumeRecurringJobs
+        label: Restore Volume Recurring Jobs
+        description: >-
+          Restore recurring jobs from the backup volume on the backup target and
+          create recurring jobs if not exist during a backup restoration.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.recurringSuccessfulJobsHistoryLimit
+        label: Cronjob Successful Jobs History Limit
+        description: >-
+          This setting specifies how many successful backup or snapshot job
+          histories should be retained. History will not be retained if the
+          value is 0.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 1
+      - variable: defaultSettings.recurringFailedJobsHistoryLimit
+        label: Cronjob Failed Jobs History Limit
+        description: >-
+          Maximum number of failed recurring backup and snapshot jobs to be
+          retained. When the value is "0", a history of failed recurring jobs is
+          not retained.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 1
+      - variable: defaultSettings.recurringJobMaxRetention
+        label: Maximum Retention Number for Recurring Job
+        description: Maximum number of snapshots or backups to be retained.
+        group: Longhorn Default Settings
+        type: int
+        default: 100
+      - variable: defaultSettings.supportBundleFailedHistoryLimit
+        label: SupportBundle Failed History Limit
+        description: >-
+          This setting specifies how many failed support bundles can exist in
+          the cluster. Set this value to **0** to have Longhorn automatically
+          purge all failed support bundles.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 1
+      - variable: defaultSettings.autoSalvage
+        label: Automatic salvage
+        description: >-
+          Setting that allows Longhorn to automatically salvage volumes when all
+          replicas become faulty (for example, when the network connection is
+          interrupted). Longhorn determines which replicas are usable and then
+          uses these replicas for the volume. This setting is enabled by
+          default.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly
+        label: >-
+          Automatically Delete Workload Pod when The Volume Is Detached
+          Unexpectedly
+        description: >-
+          Setting that allows Longhorn to automatically delete a workload pod
+          that is managed by a controller (for example, daemonset) whenever a
+          Longhorn volume is detached unexpectedly (for example, during
+          Kubernetes upgrades). After deletion, the controller restarts the pod
+          and then Kubernetes handles volume reattachment and remounting.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.disableSchedulingOnCordonedNode
+        label: Disable Scheduling On Cordoned Node
+        description: >-
+          Setting that prevents Longhorn Manager from scheduling replicas on a
+          cordoned Kubernetes node. This setting is enabled by default.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.replicaZoneSoftAntiAffinity
+        label: Replica Zone Level Soft Anti-Affinity
+        description: >-
+          Allow scheduling new Replicas of Volume to the Nodes in the same Zone
+          as existing healthy Replicas. Nodes don't belong to any Zone will be
+          treated as in the same Zone. Notice that Longhorn relies on label
+          `topology.kubernetes.io/zone=<Zone name of the node>` in the
+          Kubernetes node object to identify the zone. By, default true.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.replicaDiskSoftAntiAffinity
+        label: Replica Disk Level Soft Anti-Affinity
+        description: >-
+          Allow scheduling on disks with existing healthy replicas of the same
+          volume. By default, true.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.allowEmptyNodeSelectorVolume
+        label: Allow Empty Node Selector Volume
+        description: >-
+          Setting that allows scheduling of empty node selector volumes to any
+          node.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.allowEmptyDiskSelectorVolume
+        label: Allow Empty Disk Selector Volume
+        description: >-
+          Setting that allows scheduling of empty disk selector volumes to any
+          disk.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.nodeDownPodDeletionPolicy
+        label: Pod Deletion Policy When Node is Down
+        description: >-
+          Policy that defines the action Longhorn takes when a volume is stuck
+          with a StatefulSet or Deployment pod on a node that failed.
+        group: Longhorn Default Settings
+        type: enum
+        options:
+          - do-nothing
+          - delete-statefulset-pod
+          - delete-deployment-pod
+          - delete-both-statefulset-and-deployment-pod
+        default: do-nothing
+      - variable: defaultSettings.nodeDrainPolicy
+        label: Node Drain Policy
+        description: >-
+          Policy that defines the action Longhorn takes when a node with the
+          last healthy replica of a volume is drained.
+        group: Longhorn Default Settings
+        type: enum
+        options:
+          - block-for-eviction
+          - block-for-eviction-if-contains-last-replica
+          - block-if-contains-last-replica
+          - allow-if-replica-is-stopped
+          - always-allow
+        default: block-if-contains-last-replica
+      - variable: defaultSettings.detachManuallyAttachedVolumesWhenCordoned
+        label: Detach Manually Attached Volumes When Cordoned
+        description: >-
+          Setting that allows automatic detaching of manually-attached volumes
+          when a node is cordoned.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.priorityClass
+        label: Priority Class
+        description: >-
+          PriorityClass for system-managed Longhorn components. This setting can
+          help prevent Longhorn components from being evicted under Node
+          Pressure. Longhorn system contains user deployed components (E.g,
+          Longhorn manager, Longhorn driver, Longhorn UI) and system managed
+          components (E.g, instance manager, engine image, CSI driver, etc.)
+          Note that this will be applied to Longhorn user-deployed components by
+          default if there are no priority class values set yet, such as
+          `longhornManager.priorityClass`. WARNING: DO NOT CHANGE THIS SETTING
+          WITH ATTACHED VOLUMES.
+        group: Longhorn Default Settings
+        type: string
+        default: longhorn-critical
+      - variable: defaultSettings.replicaReplenishmentWaitInterval
+        label: Replica Replenishment Wait Interval
+        description: >-
+          The interval in seconds determines how long Longhorn will at least
+          wait to reuse the existing data on a failed replica rather than
+          directly creating a new replica for a degraded volume.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 600
+      - variable: defaultSettings.concurrentReplicaRebuildPerNodeLimit
+        label: Concurrent Replica Rebuild Per Node Limit
+        description: >-
+          Maximum number of replicas that can be concurrently rebuilt on each
+          node. **Caution**: [1] This setting replaces "Disable Replica
+          Rebuild". Instead of delaying replica startup, Longhorn skips replica
+          object replenishment to limit the number of concurrently rebuilding
+          replicas. [2] When the value is "0", the eviction and data locality
+          features do not work, but ongoing replica rebuilding and
+          backup/restoration operations should remain unaffected.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 5
+      - variable: defaultSettings.concurrentVolumeBackupRestorePerNodeLimit
+        label: Concurrent Volume Backup Restore Per Node Limit
+        description: >-
+          Maximum number of volumes that can be concurrently restored on each
+          node using a backup. When the value is "0", restoration of volumes
+          using a backup is disabled.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 5
+      - variable: defaultSettings.disableRevisionCounter
+        label: Disable Revision Counter
+        description: >-
+          Setting that disables the revision counter and thereby prevents
+          Longhorn from tracking all write operations to a volume. When
+          salvaging a volume, Longhorn uses properties of the
+          "volume-head-xxx.img" file (the last file size and the last time the
+          file was modified) to select the replica to be used for volume
+          recovery. This setting applies only to volumes created using the
+          Longhorn UI.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.systemManagedPodsImagePullPolicy
+        label: System Managed Pod Image Pull Policy
+        description: >-
+          Image pull policy for system-managed pods, such as Instance Manager,
+          engine images, and CSI Driver. Changes to the image pull policy are
+          applied only after the system-managed pods restart.
+        group: Longhorn Default Settings
+        type: enum
+        options:
+          - if-not-present
+          - always
+          - never
+        default: if-not-present
+      - variable: defaultSettings.allowVolumeCreationWithDegradedAvailability
+        label: Allow Volume Creation with Degraded Availability
+        description: >-
+          Setting that allows you to create and attach a volume without having
+          all replicas scheduled at the time of creation.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.autoCleanupSystemGeneratedSnapshot
+        label: Automatically Cleanup System Generated Snapshot
+        description: >-
+          Setting that allows Longhorn to automatically clean up the
+          system-generated snapshot after replica rebuilding is completed.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.autoCleanupRecurringJobBackupSnapshot
+        label: Automatically Cleanup Recurring Job Backup Snapshot
+        description: >-
+          Setting that allows Longhorn to automatically clean up the snapshot
+          generated by a recurring backup job.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'true'
+      - variable: defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit
+        label: Concurrent Automatic Engine Upgrade Per Node Limit
+        description: >-
+          Maximum number of engines that are allowed to concurrently upgrade on
+          each node after Longhorn Manager is upgraded. When the value is "0",
+          Longhorn does not automatically upgrade volume engines to the new
+          default engine image version.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 0
+      - variable: defaultSettings.backingImageCleanupWaitInterval
+        label: Backing Image Cleanup Wait Interval
+        description: >-
+          Number of minutes that Longhorn waits before cleaning up the backing
+          image file when no replicas in the disk are using it.
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 60
+      - variable: defaultSettings.backingImageRecoveryWaitInterval
+        label: Backing Image Recovery Wait Interval
+        description: >-
+          Number of seconds that Longhorn waits before downloading a backing
+          image file again when the status of all image disk files changes to
+          "failed" or "unknown".
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        default: 300
+      - variable: defaultSettings.guaranteedInstanceManagerCPU
+        label: Guaranteed Instance Manager CPU
+        description: >-
+          Percentage of the total allocatable CPU resources on each node to be
+          reserved for each Instance Manager pod when the V1 Data Engine is
+          enabled. You can specify a value between "0" and "40" to accommodate
+          the possible number of new Instance Manager pods during upgrades. The
+          default value is "12". **Caution**: [1] When the value is "0", CPU
+          requests are removed from the spec of Instance Manager pods. [2] A new
+          set of Instance Manager pods must be deployed when Longhorn is
+          upgraded. If the available CPUs are not sufficient for the new pods,
+          you must detach the volumes using the oldest Instance Manager pods so
+          that Longhorn can automatically clean up the old pods and release the
+          CPU resources. Once completed, the new pods with the latest Instance
+          Manager image are launched. [3] This global setting is not applied to
+          nodes with a specified value for the "InstanceManagerCPURequest"
+          field. [4] After this setting is configured, Instance Manager pods on
+          all nodes that use this setting are automatically restarted. **Do not
+          change this setting while volumes are still attached.**
+        group: Longhorn Default Settings
+        type: int
+        min: 0
+        max: 40
+        default: 12
+      - variable: defaultSettings.logLevel
+        label: Log Level
+        description: >-
+          Log levels that indicate the type and severity of logs in Longhorn
+          Manager. The default value is "Info". (Options: "Panic", "Fatal",
+          "Error", "Warn", "Info", "Debug", "Trace")
+        group: Longhorn Default Settings
+        type: string
+        default: Info
+      - variable: defaultSettings.disableSnapshotPurge
+        label: Disable Snapshot Purge
+        description: >-
+          Setting that temporarily prevents all attempts to purge volume
+          snapshots.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.freezeFilesystemForSnapshot
+        description: >-
+          Setting that freezes the filesystem on the root partition before a
+          snapshot is created.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
+        label: Kubernetes Cluster Autoscaler Enabled (Experimental)
+        description: >-
+          Setting that notifies Longhorn that the cluster is using the
+          Kubernetes Cluster Autoscaler. **Caution**: Replica rebuilding may
+          consume significant resources if the Kubernetes Cluster Autoscaler
+          removes nodes with reusable replicas.
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
+      - variable: defaultSettings.orphanAutoDeletion
+        label: Orphaned Data Cleanup
+        description: >-
+          Setting that allows Longhorn to automatically delete an orphaned
+          resource and the corresponding data (for example, stale replicas).
+          Orphaned resources on failed or unknown nodes are not automatically
+          cleaned up.
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
+      - variable: defaultSettings.storageNetwork
+        label: Storage Network
+        description: >-
+          Longhorn uses the storage network for in-cluster data traffic. Leave
+          this blank to use the Kubernetes cluster network. **Caution**: This
+          setting should change after all volumes are detached because some
+          Longhorn component pods must be recreated to apply the setting. You
+          cannot modify this setting while volumes are still attached.
+        group: Longhorn Default Settings
+        type: string
+        default: null
+      - variable: defaultSettings.taintToleration
+        label: Taint Toleration
+        description: >-
+          Taint or toleration for system-managed Longhorn components. Specify
+          values using a semicolon-separated list in `kubectl taint` syntax
+          (Example: key1=value1:effect; key2=value2:effect). **Caution**: This
+          setting should change after all volumes are detached because some
+          Longhorn component pods must be recreated to apply the setting. You
+          cannot modify this setting while volumes are still attached.
+        group: Longhorn Default Settings
+        type: string
+        default: null
+      - variable: defaultSettings.systemManagedComponentsNodeSelector
+        label: System Managed Components NodeSelector
+        description: >-
+          Node selector for system-managed Longhorn components.. **Caution**:
+          This setting should change after all volumes are detached because some
+          Longhorn component pods must be recreated to apply the setting. You
+          cannot modify this setting while volumes are still attached.
+        group: Longhorn Default Settings
+        type: string
+        default: null
+      - variable: defaultSettings.deletingConfirmationFlag
+        label: Deleting Confirmation Flag
+        description: Flag that prevents accidental uninstallation of Longhorn.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.engineReplicaTimeout
+        label: Timeout between Engine and Replica
+        description: >-
+          Timeout between the Longhorn Engine and replicas. Specify a value
+          between "8" and "30" seconds. The default value is "8".
+        group: Longhorn Default Settings
+        type: int
+        default: '8'
+      - variable: defaultSettings.snapshotDataIntegrity
+        label: Snapshot Data Integrity
+        description: >-
+          This setting allows users to enable or disable snapshot hashing and
+          data integrity checking.
+        group: Longhorn Default Settings
+        type: string
+        default: disabled
+      - variable: >-
+          defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation
+        label: Immediate Snapshot Data Integrity Check After Creating a Snapshot
+        description: >-
+          Hashing snapshot disk files impacts the performance of the system. The
+          immediate snapshot hashing and checking can be disabled to minimize
+          the impact after creating a snapshot.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.snapshotDataIntegrityCronjob
+        label: Snapshot Data Integrity Check CronJob
+        description: >-
+          Unix-cron string format. The setting specifies when Longhorn checks
+          the data integrity of snapshot disk files.
+        group: Longhorn Default Settings
+        type: string
+        default: 0 0 */7 * *
+      - variable: defaultSettings.removeSnapshotsDuringFilesystemTrim
+        label: Remove Snapshots During Filesystem Trim
+        description: >-
+          This setting allows Longhorn filesystem trim feature to automatically
+          mark the latest snapshot and its ancestors as removed and stops at the
+          snapshot containing multiple children.
+        group: Longhorn Default Settings
+        type: boolean
+        default: 'false'
+      - variable: defaultSettings.fastReplicaRebuildEnabled
+        label: Fast Replica Rebuild Enabled
+        description: >-
+          Setting that allows fast rebuilding of replicas using the checksum of
+          snapshot disk files. Before enabling this setting, you must set the
+          snapshot-data-integrity value to "enable" or "fast-check".
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
+      - variable: defaultSettings.replicaFileSyncHttpClientTimeout
+        label: Timeout of HTTP Client to Replica File Sync Server
+        description: >-
+          In seconds. The setting specifies the HTTP client timeout to the file
+          sync server.
+        group: Longhorn Default Settings
+        type: int
+        default: '30'
+      - variable: defaultSettings.longGRPCTimeOut
+        label: Long gRPC Timeout
+        description: >-
+          Number of seconds that Longhorn allows for the completion of replica
+          rebuilding and snapshot cloning operations.
+        group: Longhorn Default Settings
+        type: int
+        default: '86400'
+      - variable: defaultSettings.backupCompressionMethod
+        label: Backup Compression Method
+        description: Setting that allows you to specify a backup compression method.
+        group: Longhorn Default Settings
+        type: string
+        default: lz4
+      - variable: defaultSettings.backupConcurrentLimit
+        label: Backup Concurrent Limit Per Backup
+        description: >-
+          Maximum number of worker threads that can concurrently run for each
+          backup.
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        default: 2
+      - variable: defaultSettings.restoreConcurrentLimit
+        label: Restore Concurrent Limit Per Backup
+        description: >-
+          This setting controls how many worker threads per restore
+          concurrently.
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        default: 2
+      - variable: defaultSettings.allowCollectingLonghornUsageMetrics
+        label: Allow Collecting Longhorn Usage Metrics
+        description: >-
+          Setting that allows Longhorn to periodically collect anonymous usage
+          data for product improvement purposes. Longhorn sends collected data
+          to the [Upgrade
+          Responder](https://github.com/longhorn/upgrade-responder) server,
+          which is the data source of the Longhorn Public Metrics Dashboard
+          (https://metrics.longhorn.io). The Upgrade Responder server does not
+          store data that can be used to identify clients, including IP
+          addresses.
+        group: Longhorn Default Settings
+        type: boolean
+        default: true
+      - variable: defaultSettings.v1DataEngine
+        label: V1 Data Engine
+        description: Setting that allows you to enable the V1 Data Engine.
+        group: Longhorn V1 Data Engine Settings
+        type: boolean
+        default: true
+      - variable: defaultSettings.v2DataEngine
+        label: V2 Data Engine
+        description: >-
+          Setting that allows you to enable the V2 Data Engine, which is based
+          on the Storage Performance Development Kit (SPDK). The V2 Data Engine
+          is an experimental feature and should not be used in production
+          environments. **Caution**: [1] **Do not modify this setting while
+          volumes are still attached.** [2] When the V2 Data Engine is enabled,
+          each Instance Manager pod for the V2 Data Engine uses 1 CPU core. The
+          high CPU usage is caused by `spdk_tgt`, a process running in each
+          Instance Manager pod that handles input/output (IO) operations and
+          requires intensive polling. `spdk_tgt` consumes 100% of a dedicated
+          CPU core to efficiently manage and process the IO requests, ensuring
+          optimal performance and responsiveness for storage operations.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: boolean
+        default: false
+      - variable: defaultSettings.v2DataEngineHugepageLimit
+        label: V2 Data Engine
+        description: >-
+          This allows users to configure maximum huge page size (in MiB) for the
+          V2 Data Engine.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: int
+        default: '2048'
+      - variable: defaultSettings.v2DataEngineLogLevel
+        label: V2 Data Engine
+        description: >-
+          Setting that allows you to configure the log level of the SPDK target
+          daemon (spdk_tgt) of the V2 Data Engine.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: enum
+        options:
+          - Disabled
+          - Error
+          - Warn
+          - Notice
+          - Info
+          - Debug
+        default: Notice
+      - variable: defaultSettings.v2DataEngineLogFlags
+        label: V2 Data Engine
+        description: >-
+          Setting that allows you to configure the log flags of the SPDK target
+          daemon (spdk_tgt) of the V2 Data Engine.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: string
+        default: null
+      - variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
+        label: Auto Cleanup Snapshot When Delete Backup
+        description: >-
+          Setting that automatically cleans up the snapshot when the backup is
+          deleted.
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
+      - variable: defaultSettings.rwxVolumeFastFailover
+        label: RWX Volume Fast Failover (Experimental)
+        description: >-
+          Setting that allows Longhorn to detect node failure and immediately
+          migrate affected RWX volumes.
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
+  - variable: persistence.defaultClass
+    default: 'true'
+    description: Setting that allows you to specify the default Longhorn StorageClass.
+    label: Default Storage Class
+    group: Longhorn Storage Class Settings
     required: true
-    label: Layer 7 Load Balancer Hostname
-  - variable: ingress.path
-    default: "/"
-    description: "Default ingress path. You can access the Longhorn UI by following the full ingress path {{host}}+{{path}}."
-    type: string
+    type: boolean
+  - variable: persistence.reclaimPolicy
+    label: Storage Class Retain Policy
+    description: >-
+      Reclaim policy that provides instructions for handling of a volume after
+      its claim is released. (Options: "Retain", "Delete")
+    group: Longhorn Storage Class Settings
     required: true
-    label: Ingress Path
-  - variable: ingress.pathType
-    default: "ImplementationSpecific"
-    description: "Path type for the ingress. (Options: \"ImplementationSpecific\", \"Exact\", \"Prefix\")"
     type: enum
     options:
-    - "ImplementationSpecific"
-    - "Exact"
-    - "Prefix"
-    required: true
-    label: Ingress Path Type
-- variable: service.ui.type
-  default: "Rancher-Proxy"
-  description: "Service type for Longhorn UI. (Options: \"ClusterIP\", \"NodePort\", \"LoadBalancer\", \"Rancher-Proxy\")"
-  type: enum
-  options:
-  - "ClusterIP"
-  - "NodePort"
-  - "LoadBalancer"
-  - "Rancher-Proxy"
-  label: Longhorn UI Service
-  show_if: "ingress.enabled=false"
-  group: "Services and Load Balancing"
-  show_subquestion_if: "NodePort"
-  subquestions:
-  - variable: service.ui.nodePort
-    default: ""
-    description: "NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767."
-    type: int
-    min: 30000
-    max: 32767
-    show_if: "service.ui.type=NodePort||service.ui.type=LoadBalancer"
-    label: UI Service NodePort number
-- variable: enablePSP
-  default: "false"
-  description: "Setting that allows you to enable pod security policies (PSPs) that allow privileged Longhorn pods to start. This setting applies only to clusters running Kubernetes 1.25 and earlier, and with the built-in Pod Security admission controller enabled."
-  label: Pod Security Policy
-  type: boolean
-  group: "Other Settings"
-- variable: global.cattle.windowsCluster.enabled
-  default: "false"
-  description: "Setting that allows Longhorn to run on a Rancher Windows cluster."
-  label: Rancher Windows Cluster
-  type: boolean
-  group: "Other Settings"
-- variable: networkPolicies.enabled
-  description: "Setting that allows you to enable network policies that control access to Longhorn pods. **Caution** The Rancher Proxy will work only if this feature is enabled and a custom NetworkPolicy is added."
-  group: "Other Settings"
-  label: Network Policies
-  default: "false"
-  type: boolean
-  subquestions:
-  - variable: networkPolicies.type
-    label: Network Policies for Ingress
-    description: "Distribution that determines the policy for allowing access for an ingress. (Options: \"k3s\", \"rke2\", \"rke1\")"
-    show_if: "networkPolicies.enabled=true&&ingress.enabled=true"
+      - Delete
+      - Retain
+    default: Delete
+  - variable: persistence.defaultFsType
+    label: Storage Class Filesystem Type
+    description: Filesystem type of the default Longhorn StorageClass
+    group: Longhorn Storage Class Settings
     type: enum
-    default: "rke2"
     options:
-    - "rke1"
-    - "rke2"
-    - "k3s"
-  - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
-    label: Guaranteed Instance Manager CPU for V2 Data Engine
-    description: 'Number of millicpu on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is \"1250\". **Caution** [1] Specifying a value of \"0\" disables CPU requests for Instance Manager pods. You must specify an integer between \"1000\" and \"8000\". [2] This is a global setting. Modifying the value triggers an automatic restart of the Instance Manager pods. Do not modify the value while volumes are still attached.'
+      - xfs
+      - ext4
+    default: ext4
+  - variable: persistence.disableRevisionCounter
+    label: Default Storage Class Disable Revision Counter
+    description: >-
+      Setting that disables the revision counter and thereby prevents Longhorn
+      from tracking all write operations to a volume. When salvaging a volume,
+      Longhorn uses properties of the volume-head-xxx.img file (the last file
+      size and the last time the file was modified) to select the replica to be
+      used for volume recovery. (Options: "true", "false")
+    group: Longhorn Storage Class Settings
+    required: true
+    type: enum
+    options:
+      - 'true'
+      - 'false'
+    default: 'true'
+  - variable: persistence.defaultClassReplicaCount
+    description: Replica count of the default Longhorn StorageClass.
+    label: Default Storage Class Replica Count
+    group: Longhorn Storage Class Settings
     type: int
-    min: 1000
-    max: 8000
-    default: 1250
-  - variable: defaultSettings.v2DataEngineCPUMask
-    label: CPU Mask for V2 Data Engine
-    description: 'CPU cores on which the Storage Performance Development Kit (SPDK) target daemon should run. The SPDK target daemon is located in each Instance Manager pod. Ensure that the number of cores is less than or equal to the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is \"0x1\".'
+    min: 1
+    max: 10
+    default: 3
+  - variable: persistence.defaultDataLocality
+    description: >-
+      Data locality of the default Longhorn StorageClass. (Options: "disabled",
+      "best-effort")
+    label: Default Storage Class Data Locality
+    group: Longhorn Storage Class Settings
+    type: enum
+    options:
+      - disabled
+      - best-effort
+    default: disabled
+  - variable: persistence.recurringJobSelector.enable
+    description: >-
+      Setting that allows you to enable the recurring job selector for a
+      Longhorn StorageClass.
+    group: Longhorn Storage Class Settings
+    label: Enable Storage Class Recurring Job Selector
+    type: boolean
+    default: false
+    show_subquestion_if: true
+    subquestions:
+      - variable: persistence.recurringJobSelector.jobList
+        description: >-
+          Recurring job selector for a Longhorn StorageClass. Ensure that quotes
+          are used correctly when specifying job parameters. (Example:
+          `[{"name":"backup", "isGroup":true}]`)
+        label: Storage Class Recurring Job Selector List
+        group: Longhorn Storage Class Settings
+        type: string
+        default: null
+  - variable: persistence.defaultDiskSelector.enable
+    description: >-
+      Setting that allows you to enable the disk selector for the default
+      Longhorn StorageClass.
+    group: Longhorn Storage Class Settings
+    label: Enable Storage Class Disk Selector
+    type: boolean
+    default: false
+    show_subquestion_if: true
+    subquestions:
+      - variable: persistence.defaultDiskSelector.selector
+        label: Storage Class Disk Selector
+        description: >-
+          Disk selector for the default Longhorn StorageClass. Longhorn uses
+          only disks with the specified tags for storing volume data. (Examples:
+          "nvme,sata")
+        group: Longhorn Storage Class Settings
+        type: string
+        default: null
+  - variable: persistence.defaultNodeSelector.enable
+    description: >-
+      Setting that allows you to enable the node selector for the default
+      Longhorn StorageClass.
+    group: Longhorn Storage Class Settings
+    label: Enable Storage Class Node Selector
+    type: boolean
+    default: false
+    show_subquestion_if: true
+    subquestions:
+      - variable: persistence.defaultNodeSelector.selector
+        label: Storage Class Node Selector
+        description: >-
+          Node selector for the default Longhorn StorageClass. Longhorn uses
+          only nodes with the specified tags for storing volume data. (Examples:
+          "storage,fast")
+        group: Longhorn Storage Class Settings
+        type: string
+        default: null
+  - variable: persistence.backingImage.enable
+    description: Setting that allows you to use a backing image in a Longhorn StorageClass.
+    group: Longhorn Storage Class Settings
+    label: Default Storage Class Backing Image
+    type: boolean
+    default: false
+    show_subquestion_if: true
+    subquestions:
+      - variable: persistence.backingImage.name
+        description: >-
+          Backing image to be used for creating and restoring volumes in a
+          Longhorn StorageClass. When no backing images are available, specify
+          the data source type and parameters that Longhorn can use to create a
+          backing image.
+        label: Storage Class Backing Image Name
+        group: Longhorn Storage Class Settings
+        type: string
+        default: null
+      - variable: persistence.backingImage.expectedChecksum
+        description: >-
+          Expected SHA-512 checksum of a backing image used in a Longhorn
+          StorageClass. **Caution** [1] This field is useful only if the backing
+          image name is specified. [2] Specifying a checksum is not recommended
+          when the data source type is \"export-from-volume\".
+        label: Storage Class Backing Image Expected SHA512 Checksum
+        group: Longhorn Storage Class Settings
+        type: string
+        default: null
+      - variable: persistence.backingImage.dataSourceType
+        description: >-
+          Data source type of a backing image used in a Longhorn StorageClass.
+          If the backing image exists in the cluster, Longhorn uses this setting
+          to verify the image. If the backing image does not exist, Longhorn
+          creates one using the specified data source type. **Caution** [1] This
+          field is useful only if the backing image name is specified. [2]
+          Backing images with data source type \"upload\" are best created using
+          the Longhorn UI. Uploading requires sending file data to Longhorn
+          after object creation, which can be complicated when performed
+          manually.
+        label: Storage Class Backing Image Data Source Type
+        group: Longhorn Storage Class Settings
+        type: enum
+        options:
+          - ''
+          - download
+          - upload
+          - export-from-volume
+        default: ''
+      - variable: persistence.backingImage.dataSourceParameters
+        description: >-
+          Data source parameters of a backing image used in a Longhorn
+          StorageClass. You can specify a JSON string of a map. (Example:
+          `'{"url":"https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'`)
+          **Caution** [1] This field is useful only if the backing image name is
+          specified. [2] Ensure that quotes are used correctly when specifying
+          parameters.
+        label: Storage Class Backing Image Data Source Parameters
+        group: Longhorn Storage Class Settings
+        type: string
+        default: null
+  - variable: persistence.removeSnapshotsDuringFilesystemTrim
+    description: >-
+      Setting that allows you to enable automatic snapshot removal during
+      filesystem trim for a Longhorn StorageClass. (Options: "ignored",
+      "enabled", "disabled")
+    label: Default Storage Class Remove Snapshots During Filesystem Trim
+    group: Longhorn Storage Class Settings
+    type: enum
+    options:
+      - ignored
+      - enabled
+      - disabled
+    default: ignored
+  - variable: persistence.dataEngine
+    description: >-
+      Setting that allows you to specify the data engine version for the default
+      Longhorn StorageClass. (Options: "v1", "v2")
+    label: Default Storage Class Data Engine
+    group: Longhorn Storage Class Settings
+    type: enum
+    options:
+      - v1
+      - v2
+    default: v1
+  - variable: persistence.backupTargetName
+    description: >-
+      Setting that allows you to specify the backup target for the default
+      Longhorn StorageClass
+    label: Default Storage Class Backup Target Name
+    group: Longhorn Storage Class Settings
     type: string
-    default: "0x1"
+    default: default
+  - variable: ingress.enabled
+    default: 'false'
+    description: Expose app using Layer 7 Load Balancer - ingress
+    type: boolean
+    group: Services and Load Balancing
+    label: Expose app using Layer 7 Load Balancer
+    show_subquestion_if: true
+    subquestions:
+      - variable: ingress.host
+        default: xip.io
+        description: Hostname of the Layer 7 load balancer.
+        type: hostname
+        required: true
+        label: Layer 7 Load Balancer Hostname
+      - variable: ingress.path
+        default: /
+        description: >-
+          Default ingress path. You can access the Longhorn UI by following the
+          full ingress path {{host}}+{{path}}.
+        type: string
+        required: true
+        label: Ingress Path
+      - variable: ingress.pathType
+        default: ImplementationSpecific
+        description: >-
+          Path type for the ingress. (Options: "ImplementationSpecific",
+          "Exact", "Prefix")
+        type: enum
+        options:
+          - ImplementationSpecific
+          - Exact
+          - Prefix
+        required: true
+        label: Ingress Path Type
+  - variable: service.ui.type
+    default: Rancher-Proxy
+    description: >-
+      Service type for Longhorn UI. (Options: "ClusterIP", "NodePort",
+      "LoadBalancer", "Rancher-Proxy")
+    type: enum
+    options:
+      - ClusterIP
+      - NodePort
+      - LoadBalancer
+      - Rancher-Proxy
+    label: Longhorn UI Service
+    show_if: ingress.enabled=false
+    group: Services and Load Balancing
+    show_subquestion_if: NodePort
+    subquestions:
+      - variable: service.ui.nodePort
+        default: ''
+        description: >-
+          NodePort port number for Longhorn UI. When unspecified, Longhorn
+          selects a free port between 30000 and 32767.
+        type: int
+        min: 30000
+        max: 32767
+        show_if: service.ui.type=NodePort||service.ui.type=LoadBalancer
+        label: UI Service NodePort number
+  - variable: longhorn.default_resource
+    default: 'false'
+    description: >-
+      Customize the default resource before installing Longhorn for the first
+      time. This option will only work if the cluster hasn't installed Longhorn.
+    label: Customize Default Resources
+    type: boolean
+    show_subquestion_if: true
+    group: Longhorn Default Resources
+    subquestions:
+      - variable: defaultBackupStore.backupTarget
+        label: Backup Target
+        description: >-
+          Endpoint used to access the backupstore. (Options: "NFS", "CIFS",
+          "AWS", "GCP", "AZURE")
+        group: Longhorn Default Resources
+        type: string
+        default: null
+      - variable: defaultBackupStore.backupTargetCredentialSecret
+        label: Backup Target Credential Secret
+        description: Name of the Kubernetes secret associated with the backup target.
+        group: Longhorn Default Resources
+        type: string
+        default: null
+      - variable: defaultBackupStore.backupstorePollInterval
+        label: Backupstore Poll Interval
+        description: >-
+          Number of seconds that Longhorn waits before checking the backupstore
+          for new backups. The default value is "300". When the value is "0",
+          polling is disabled.
+        group: Longhorn Default Resources
+        type: int
+        min: 0
+        default: 300
+  - variable: enablePSP
+    default: 'false'
+    description: >-
+      Setting that allows you to enable pod security policies (PSPs) that allow
+      privileged Longhorn pods to start. This setting applies only to clusters
+      running Kubernetes 1.25 and earlier, and with the built-in Pod Security
+      admission controller enabled.
+    label: Pod Security Policy
+    type: boolean
+    group: Other Settings
+  - variable: global.cattle.windowsCluster.enabled
+    default: 'false'
+    description: Setting that allows Longhorn to run on a Rancher Windows cluster.
+    label: Rancher Windows Cluster
+    type: boolean
+    group: Other Settings
+  - variable: networkPolicies.enabled
+    description: >-
+      Setting that allows you to enable network policies that control access to
+      Longhorn pods. **Caution** The Rancher Proxy will work only if this
+      feature is enabled and a custom NetworkPolicy is added.
+    group: Other Settings
+    label: Network Policies
+    default: 'false'
+    type: boolean
+    subquestions:
+      - variable: networkPolicies.type
+        label: Network Policies for Ingress
+        description: >-
+          Distribution that determines the policy for allowing access for an
+          ingress. (Options: "k3s", "rke2", "rke1")
+        show_if: networkPolicies.enabled=true&&ingress.enabled=true
+        type: enum
+        default: rke2
+        options:
+          - rke1
+          - rke2
+          - k3s
+      - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
+        label: Guaranteed Instance Manager CPU for V2 Data Engine
+        description: >-
+          Number of millicpu on each node to be reserved for each Instance
+          Manager pod when the V2 Data Engine is enabled. The default value is
+          \"1250\". **Caution** [1] Specifying a value of \"0\" disables CPU
+          requests for Instance Manager pods. You must specify an integer
+          between \"1000\" and \"8000\". [2] This is a global setting. Modifying
+          the value triggers an automatic restart of the Instance Manager pods.
+          Do not modify the value while volumes are still attached.
+        type: int
+        min: 1000
+        max: 8000
+        default: 1250
+      - variable: defaultSettings.v2DataEngineCPUMask
+        label: CPU Mask for V2 Data Engine
+        description: >-
+          CPU cores on which the Storage Performance Development Kit (SPDK)
+          target daemon should run. The SPDK target daemon is located in each
+          Instance Manager pod. Ensure that the number of cores is less than or
+          equal to the guaranteed Instance Manager CPUs for the V2 Data Engine.
+          The default value is \"0x1\".
+        type: string
+        default: '0x1'

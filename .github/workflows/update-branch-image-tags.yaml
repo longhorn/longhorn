@@ -101,7 +101,7 @@ jobs:
         sign-commits: true
         signoff: true
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-        committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: Longhorn GitHub Bot <67932897+longhorn-io-github-bot@users.noreply.github.com>
         commit-message: "chore: update image tags for branch ${{ inputs.branch }}"
         title: "chore: update image tags for branch ${{ inputs.branch }}"
         body: |
