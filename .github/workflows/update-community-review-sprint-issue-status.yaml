@@ -1,4 +1,4 @@
-name: Update-Projects
+name: Update Community Review Sprint Issue Status
 on:
   issues:
     types: [labeled, milestoned, reopened, closed]

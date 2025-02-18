@@ -1,4 +1,4 @@
-name: Update-Issue-Sprint
+name: Periodic Issue Sprint Update
 
 on:
   schedule:
@@ -52,6 +52,18 @@ jobs:
         iteration: current
         new-iteration: next
         statuses: "Review"
+
+    - name: Longhorn Sprint Issues - Update None to Current Sprint
+      if: steps.check_sprint_build_required.outcome == 'success'
+      uses: derekbit/move-to-next-iteration@master
+      with:
+        owner: longhorn
+        number: 8
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        iteration-field: Sprint
+        iteration: none
+        new-iteration: current
+        statuses: "Ready For Testing"
 
     - name: QA Sprint - Clear Sprint
       uses: derekbit/move-to-next-iteration@master

@@ -1,4 +1,4 @@
-name: Add-To-Projects
+name: Add Issue To Projects
 on:
   issues:
     types: [opened]
