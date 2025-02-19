@@ -33,6 +33,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}
     upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeResponderURL) }}
+    upgrade-responder-url: {{ .Values.defaultSettings.upgradeResponderURL }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}
     default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
     {{- end }}

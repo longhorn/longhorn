@@ -395,6 +395,14 @@ questions:
         group: Longhorn Default Settings
         type: boolean
         default: 'true'
+      - variable: defaultSettings.upgradeResponderURL
+        label: Upgrade Responder URL
+        description: >-
+          Upgrade responder will notify users the available versions of 
+          Longhorn for upgrade.
+        group: Longhorn Default Settings
+        type: string
+        default: 'https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade'
       - variable: defaultSettings.defaultReplicaCount
         label: Default Replica Count
         description: >-
