@@ -322,6 +322,14 @@ questions:
     group: "Longhorn Default Settings"
     type: boolean
     default: "true"
+  - variable: defaultSettings.upgradeResponderURL
+    label: Upgrade Responder URL
+    description: >-
+      Upgrade responder will notify users the available versions of 
+      Longhorn for upgrade.
+    group: Longhorn Default Settings
+    type: string
+    default: 'https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade'
   - variable: defaultSettings.defaultReplicaCount
     label: Default Replica Count
     description: "Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is \"3\"."
