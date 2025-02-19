@@ -209,7 +209,7 @@ defaultSettings:
   storageReservedPercentageForDefaultDisk: ~
   # -- Upgrade Checker that periodically checks for new Longhorn versions. When a new version is available, a notification appears on the Longhorn UI. This setting is enabled by default
   upgradeChecker: ~
-  # -- Upgrade responder will notify users the available versions of Longhorn for upgrade. The default value is https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade.
+  # -- The Upgrade Responder sends a notification whenever a new Longhorn version that you can upgrade to becomes available. The default value is https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade.
   upgradeResponderURL: ~
   # -- Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is "3".
   defaultReplicaCount: ~
