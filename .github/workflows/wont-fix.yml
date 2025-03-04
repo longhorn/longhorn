@@ -1,4 +1,4 @@
-name: Add-Wontfix-Label-To-Not-Planned-Issue
+name: "[Issue Management] Add Wontfix Label To Not-Planned Issue"
 
 on:
   issues:

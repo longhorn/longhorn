@@ -1,4 +1,4 @@
-name: Update Community Review Sprint Issue Status
+name: "[Issue Management] Update Community Review Sprint Issue Status"
 on:
   issues:
     types: [labeled, milestoned, reopened, closed]
