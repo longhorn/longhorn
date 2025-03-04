@@ -1,4 +1,4 @@
-name: Conventional Commits
+name: "[PR Management] Conventional PR and Commits"
 
 on:
   pull_request_target:

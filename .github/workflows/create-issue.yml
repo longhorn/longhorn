@@ -1,4 +1,4 @@
-name: Create-Issue
+name: "[Issue Management] Create Issue"
 on:
   issues:
     types: [ labeled ]

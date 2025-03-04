@@ -1,4 +1,5 @@
-name: Add Issue To Projects
+name: "[Issue Management] Add Issue To Projects"
+
 on:
   issues:
     types: [opened]
