@@ -151,3 +151,15 @@ jobs:
         item-id: ${{ steps.add-project.outputs.itemId }}
         field-keys: Status,Sprint
         field-values: ${{ env.field-values }}
+
+    - name: Add Resolved Issue to Longhorn Sprint Project
+      if: ${{ 
+        steps.is-longhorn-member.outcome == 'success' &&
+        steps.fields.outcome == 'success' &&
+        env.field-values != '' &&
+        startsWith(env.field-values, 'Resolved')
+      }}
+      uses: actions/add-to-project@v1.0.2
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/8
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
