@@ -76,6 +76,10 @@ configMap:
         "maxLen": 200
       },
       "extraTagInfoSchema": {
+        "hostArch": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "hostKernelRelease": {
           "dataType": "string",
           "maxLen": 200
