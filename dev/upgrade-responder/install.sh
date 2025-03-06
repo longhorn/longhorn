@@ -375,6 +375,12 @@ configMap:
         "longhornVolumeDataLocalityStrictLocalCount": {
           "dataType": "float"
         },
+        "longhornVolumeEncryptedTrueCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeEncryptedFalseCount": {
+          "dataType": "float"
+        },
         "longhornFreezeFilesystemForSnapshotTrueCount": {
           "dataType": "float"
         },
