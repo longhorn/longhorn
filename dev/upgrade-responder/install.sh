@@ -390,6 +390,9 @@ configMap:
         "longhornVolumeFrontendIscsiCount": {
           "dataType": "float"
         },
+        "longhornVolumeNumberOfReplicas": {
+          "dataType": "float"
+        },
         "longhornVolumeReplicaAutoBalanceDisabledCount": {
           "dataType": "float"
         },
