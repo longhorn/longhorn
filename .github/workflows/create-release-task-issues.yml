@@ -1,4 +1,4 @@
-name: Create Release Task Issues
+name: "[Release] Create Release Task Issues"
 
 on:
   workflow_dispatch:

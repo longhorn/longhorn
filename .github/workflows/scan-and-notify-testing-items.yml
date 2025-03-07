@@ -1,4 +1,4 @@
-name: Scan and Notify Testing Items
+name: "[Notification] Scan and Notify Testing Items"
 
 on:
   schedule:
