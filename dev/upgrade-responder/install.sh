@@ -242,6 +242,9 @@ configMap:
         }
       },
       "extraFieldInfoSchema": {
+        "longhornBackingImageCount": {
+          "dataType": "float"
+        },
         "longhornDiskBlockCount": {
           "dataType": "float"
         },
