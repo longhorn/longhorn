@@ -393,6 +393,9 @@ configMap:
         "longhornVolumeNumberOfReplicas": {
           "dataType": "float"
         },
+        "longhornVolumeNumberOfSnapshots": {
+          "dataType": "float"
+        },
         "longhornVolumeReplicaAutoBalanceDisabledCount": {
           "dataType": "float"
         },
