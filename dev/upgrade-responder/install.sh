@@ -279,6 +279,9 @@ configMap:
         "longhornNodeDiskSSDCount": {
           "dataType": "float"
         },
+        "longhornOrphanCount": {
+          "dataType": "float"
+        },
         "longhornSettingBackingImageCleanupWaitInterval": {
           "dataType": "float"
         },
