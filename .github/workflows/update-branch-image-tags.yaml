@@ -1,4 +1,4 @@
-name: Update Longhorn Repository Branch Image Tags
+name: "[Release] Update Longhorn Repository Branch Image Tags"
 
 on:
   workflow_dispatch:
