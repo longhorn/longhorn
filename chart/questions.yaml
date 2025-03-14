@@ -1023,6 +1023,18 @@ questions:
       - Delete
       - Retain
     default: Delete
+  - variable: persistence.volumeBindingMode
+    label: Storage Class Volume Binding Mode
+    description: >-
+      VolumeBindingMode controls when volume binding and dynamic provisioning should
+      occur. (Options: "Immediate", "WaitForFirstConsumer") (Defaults to "Immediate")
+    group: Longhorn Storage Class Settings
+    required: true
+    type: enum
+    options:
+      - Immediate
+      - WaitForFirstConsumer
+    default: Immediate
   - variable: persistence.defaultFsType
     label: Storage Class Filesystem Type
     description: Filesystem type of the default Longhorn StorageClass
