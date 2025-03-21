@@ -135,6 +135,8 @@ persistence:
   defaultDataLocality: disabled
   # -- Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete")
   reclaimPolicy: Delete
+  # -- VolumeBindingMode controls when volume binding and dynamic provisioning should occur. (Options: "Immediate", "WaitForFirstConsumer") (Defaults to "Immediate")
+  volumeBindingMode: "Immediate"
   # -- Setting that allows you to enable live migration of a Longhorn volume from one node to another.
   migratable: false
   # -- Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the volume-head-xxx.img file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery.
