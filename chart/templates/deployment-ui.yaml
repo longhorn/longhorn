@@ -55,6 +55,9 @@ spec:
     spec:
       serviceAccountName: longhorn-ui-service-account
       affinity:
+      {{- if .Values.longhornUI.affinity }}
+      {{- toYaml .Values.longhornUI.affinity | nindent 8 }}
+      {{- else }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
@@ -66,6 +69,7 @@ spec:
                   values:
                   - longhorn-ui
               topologyKey: kubernetes.io/hostname
+      {{- end }}
       containers:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
