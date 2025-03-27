@@ -157,6 +157,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 BackingImageDataSource is deprecated;
+      use longhorn.io/v1beta2 BackingImageDataSource instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -185,7 +188,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -350,6 +353,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 BackingImageManager is deprecated; use
+      longhorn.io/v1beta2 BackingImageManager instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -378,7 +384,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -543,6 +549,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 BackingImage is deprecated; use longhorn.io/v1beta2
+      BackingImage instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -570,7 +579,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -949,6 +958,9 @@ spec:
       jsonPath: .status.lastSyncedAt
       name: LastSyncedAt
       type: string
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 Backup is deprecated; use longhorn.io/v1beta2
+      Backup instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -976,7 +988,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -1195,6 +1207,9 @@ spec:
       jsonPath: .status.lastSyncedAt
       name: LastSyncedAt
       type: string
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 BackupTarget is deprecated; use longhorn.io/v1beta2
+      BackupTarget instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -1222,7 +1237,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -1384,6 +1399,9 @@ spec:
       jsonPath: .status.lastSyncedAt
       name: LastSyncedAt
       type: string
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 BackupVolume is deprecated; use longhorn.io/v1beta2
+      BackupVolume instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -1411,7 +1429,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -1594,6 +1612,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 EngineImage is deprecated; use longhorn.io/v1beta2
+      EngineImage instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -1621,7 +1642,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -1798,6 +1819,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 Engine is deprecated; use longhorn.io/v1beta2
+      Engine instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -1825,7 +1849,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -2194,6 +2218,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 InstanceManager is deprecated; use longhorn.io/v1beta2
+      InstanceManager instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -2221,7 +2248,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -2549,6 +2576,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 Node is deprecated; use longhorn.io/v1beta2
+      Node instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -2576,7 +2606,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -2952,6 +2982,9 @@ spec:
       jsonPath: .spec.labels
       name: Labels
       type: string
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 RecurringJob is deprecated; use longhorn.io/v1beta2
+      RecurringJob instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -2979,7 +3012,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -3149,6 +3182,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 Replica is deprecated; use longhorn.io/v1beta2
+      Replica instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -3176,7 +3212,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -3422,6 +3458,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 Setting is deprecated; use longhorn.io/v1beta2
+      Setting instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -3449,7 +3488,7 @@ spec:
         required:
         - value
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -3542,6 +3581,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 ShareManager is deprecated; use longhorn.io/v1beta2
+      ShareManager instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -3569,7 +3611,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
@@ -4368,6 +4410,9 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: longhorn.io/v1beta1 Volume is deprecated; use longhorn.io/v1beta2
+      Volume instead
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -4395,7 +4440,7 @@ spec:
           status:
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
+    served: false
     storage: false
     subresources:
       status: {}
