@@ -820,6 +820,13 @@ questions:
         group: Longhorn Default Settings
         type: boolean
         default: false
+      - variable: defaultSettings.offlineRelicaRebuilding
+        label: Offline Replica Rebuilding
+        description: >-
+          Setting that allows Longhorn to trigger the offline replica rebuilding for all detached volumes if necessary.
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
   - variable: persistence.defaultClass
     default: 'true'
     description: Setting that allows you to specify the default Longhorn StorageClass.
