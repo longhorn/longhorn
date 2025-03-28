@@ -813,6 +813,13 @@ questions:
         group: Longhorn Default Settings
         type: boolean
         default: false
+      - variable: defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted
+        label: Auto Cleanup Snapshot After On-Demand Backup Completed
+        description: >-
+          Setting that automatically cleans up the snapshot after the on-demand backup is completed.
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
       - variable: defaultSettings.rwxVolumeFastFailover
         label: RWX Volume Fast Failover (Experimental)
         description: >-
