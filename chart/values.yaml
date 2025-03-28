@@ -427,20 +427,18 @@ longhornUI:
   # -- PriorityClass for Longhorn UI.
   priorityClass: *defaultPriorityClassNameRef
   # -- Affinity for Longhorn UI pods. Specify the affinity you want to use for Longhorn UI.
-  affinity: {}
-  ## If you want to specify affinity for Longhorn UI Deployment, delete the `{}` in the line above
-  ## and uncomment this example block. Otherwise these defaults will be used.
-    # podAntiAffinity:
-    #   preferredDuringSchedulingIgnoredDuringExecution:
-    #   - weight: 1
-    #     podAffinityTerm:
-    #       labelSelector:
-    #         matchExpressions:
-    #         - key: app
-    #           operator: In
-    #           values:
-    #           - longhorn-ui
-    #       topologyKey: kubernetes.io/hostname
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - longhorn-ui
+          topologyKey: kubernetes.io/hostname
   # -- Toleration for Longhorn UI on nodes allowed to run Longhorn components.
   tolerations: []
   ## If you want to set tolerations for Longhorn UI Deployment, delete the `[]` in the line above
