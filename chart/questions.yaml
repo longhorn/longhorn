@@ -1144,10 +1144,9 @@ questions:
       - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
         label: Guaranteed Instance Manager CPU for V2 Data Engine
         description: >-
-          Number of millicpu on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is \"1250\". **Caution** [1] Specifying a value of \"0\" disables CPU requests for Instance Manager pods. You must specify an integer between \"1000\" and \"8000\". [2] This is a global setting. Modifying the value triggers an automatic restart of the Instance Manager pods. Do not modify the value while volumes are still attached.
+          Number of millicpu on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is \"1250\". **Caution** [1] Specifying a value of \"0\" disables CPU requests for Instance Manager pods. You must specify an integer larger than \"1000\". [2] This is a global setting. Modifying the value triggers an automatic restart of the Instance Manager pods. Do not modify the value while volumes are still attached.
         type: int
         min: 1000
-        max: 8000
         default: 1250
       - variable: defaultSettings.v2DataEngineCPUMask
         label: CPU Mask for V2 Data Engine
