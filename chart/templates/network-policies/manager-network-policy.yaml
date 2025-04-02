@@ -9,27 +9,38 @@ spec:
     matchLabels:
       app: longhorn-manager
   policyTypes:
-  - Ingress
+    - Ingress
   ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          app: longhorn-manager
-    - podSelector:
-        matchLabels:
-          app: longhorn-ui
-    - podSelector:
-        matchLabels:
-          app: longhorn-csi-plugin
-    - podSelector:
-        matchLabels:
-          longhorn.io/managed-by: longhorn-manager
-        matchExpressions:
-          - { key: recurring-job.longhorn.io, operator: Exists }
-    - podSelector:
-        matchExpressions:
-          - { key: longhorn.io/job-task, operator: Exists }
-    - podSelector:
-        matchLabels:
-          app: longhorn-driver-deployer
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - longhorn-manager
+                  - longhorn-ui
+                  - longhorn-csi-plugin
+                  - longhorn-driver-deployer
+        - podSelector:
+            matchLabels:
+              longhorn.io/managed-by: longhorn-manager
+            matchExpressions:
+              - { key: recurring-job.longhorn.io, operator: Exists }
+        - podSelector:
+            matchExpressions:
+              - { key: longhorn.io/job-task, operator: Exists }
+      ports:
+        - port: 9500
+          protocol: TCP
+    - from:
+        - podSelector:
+            matchLabels:
+              app: longhorn-manager
+      ports:
+        - port: 9501
+          protocol: TCP
+        - port: 9502
+          protocol: TCP
+        - port: 9503
+          protocol: TCP
 {{- end }}
