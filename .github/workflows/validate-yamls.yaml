@@ -1,4 +1,4 @@
-name: Validate Longhorn YAMLs
+name: "[PR Management] Validate Longhorn YAMLs"
 
 on:
   pull_request_target:
