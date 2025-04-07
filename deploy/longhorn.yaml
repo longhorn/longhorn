@@ -4780,7 +4780,7 @@ rules:
   verbs:
   - "*"
 - apiGroups: [""]
-  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims","persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps", "serviceaccounts"]
+  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims", "persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps", "serviceaccounts"]
   verbs: ["*"]
 - apiGroups: [""]
   resources: ["namespaces"]
@@ -5203,9 +5203,9 @@ spec:
         image: longhornio/longhorn-ui:master-head
         imagePullPolicy: IfNotPresent
         volumeMounts:
-        - name : nginx-cache
+        - name: nginx-cache
           mountPath: /var/cache/nginx/
-        - name : nginx-config
+        - name: nginx-config
           mountPath: /var/config/nginx/
         - name: var-run
           mountPath: /var/run/
