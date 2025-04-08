@@ -8,7 +8,7 @@
 - Vendor: An organization that includes Longhorn as part of its packaged product.
 - Hosted-Service: An organization that operates Longhorn within its hosted service, offered as a product to customers.
 
-# Longhorn Adopters
+### Longhorn Adopters
 
 | Type | Name | Website | Use-Case |
 |:-|:-|:-|:-|
