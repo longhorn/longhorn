@@ -97,6 +97,9 @@ spec:
           - name: go-cover-dir
             mountPath: /go-cover-dir/
           {{- end }}
+          {{- if .Values.longhornDriver.resources }}
+          resources: {{toYaml .Values.longhornDriver.resources | nindent 12 }}
+          {{- end }}
 
       {{- if .Values.privateRegistry.registrySecret }}
       imagePullSecrets:

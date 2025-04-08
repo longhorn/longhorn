@@ -57,6 +57,9 @@ spec:
           name: admission-wh
         - containerPort: 9503
           name: recov-backend
+        {{- if .Values.longhornManager.resources }}
+        resources: {{toYaml .Values.longhornManager.resources | nindent 10 }}
+        {{- end }}
         readinessProbe:
           httpGet:
             path: /v1/healthz
