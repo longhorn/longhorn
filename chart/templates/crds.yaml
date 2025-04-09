@@ -4375,9 +4375,11 @@ spec:
               numberOfReplicas:
                 type: integer
               offlineRebuild:
-                description: The flag that trigger the offline replica rebuilding
-                  when volume is detached.
-                type: boolean
+                enum:
+                - ignored
+                - disabled
+                - enabled
+                type: string
               replicaAutoBalance:
                 enum:
                 - ignored
