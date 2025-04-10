@@ -30,7 +30,7 @@ jobs:
         python ./.github/workflows/check-sprint-last-day.py "longhorn" "longhorn" "Longhorn Sprint"
 
     - name: Longhorn Sprint Issues - Clear Sprint
-      uses: derekbit/move-to-next-iteration@master
+      uses: rancher/gh-issue-mgr/move-to-next-iteration@main
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
         owner: longhorn
@@ -42,7 +42,7 @@ jobs:
         excluded-statuses: "Review,Ready For Testing,Testing,Closed"
 
     - name: Longhorn Sprint Issues - Move to Next Sprint
-      uses: derekbit/move-to-next-iteration@master
+      uses: rancher/gh-issue-mgr/move-to-next-iteration@main
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
         owner: longhorn
@@ -55,7 +55,7 @@ jobs:
 
     - name: Longhorn Sprint Issues - Update None to Current Sprint
       if: steps.check_sprint_build_required.outcome == 'success'
-      uses: derekbit/move-to-next-iteration@master
+      uses: rancher/gh-issue-mgr/move-to-next-iteration@main
       with:
         owner: longhorn
         number: 8
@@ -66,7 +66,7 @@ jobs:
         statuses: "Ready For Testing"
 
     - name: QA Sprint - Clear Sprint
-      uses: derekbit/move-to-next-iteration@master
+      uses: rancher/gh-issue-mgr/move-to-next-iteration@main
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
         owner: longhorn
@@ -78,7 +78,7 @@ jobs:
         excluded-statuses: "Review,Testing,Closed"
 
     - name: QA Sprint - Move to Next Sprint
-      uses: derekbit/move-to-next-iteration@master
+      uses: rancher/gh-issue-mgr/move-to-next-iteration@main
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
         owner: longhorn
@@ -90,7 +90,7 @@ jobs:
         statuses: "Review"
 
     - name: Longhorn Community Sprint issues - Move to Next Sprint
-      uses: derekbit/move-to-next-iteration@master
+      uses: rancher/gh-issue-mgr/move-to-next-iteration@main
       if: steps.check_sprint_build_required.outcome == 'success'
       with:
         owner: longhorn
