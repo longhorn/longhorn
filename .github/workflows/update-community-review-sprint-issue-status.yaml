@@ -139,8 +139,21 @@ jobs:
         steps.fields.outcome == 'success' &&
         env.field-values != '' &&
         startsWith(env.field-values, 'Resolved')
-      }}
+        }}
       uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/8
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Set Milestone to Resolved Issue
+      if: ${{
+        steps.is-longhorn-member.outcome == 'success' &&
+        steps.fields.outcome == 'success' &&
+        env.field-values != '' &&
+        startsWith(env.field-values, 'Resolved') &&
+        steps.issue.outputs.data.milestone == ''
+        }}
+      uses: Julexar/Milestone-Assigner@v1.0
+      with:
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        milestone: "Backlog"
