@@ -76,31 +76,12 @@ jobs:
           echo "Updating to Resolved since it's milestoned by longhorn member"
           echo "field-values=Resolved,[0]" >> $GITHUB_ENV
 
-        # If the issue is closed by longhorn member, update to Resolved
-        elif [[ $team_count -gt 0 && 
-                "${{ github.event_name }}" == "issues" && 
-                "${{ github.event.action }}" == "closed" && 
-                "${{ fromJSON(steps.issue.outputs.data).state_reason }}" != "not_planned" ]]; then
-
-          echo "Updating to Resolved since it's closed by longhorn member"
-          echo "field-values=Resolved,[0]" >> $GITHUB_ENV
-
-        # If the issue is closed by longhorn member and not planned, update to Closed
-        elif [[ $team_count -gt 0 &&
-                "${{ github.event_name }}" == "issues" && 
-                "${{ github.event.action }}" == "closed" && 
-                "${{ fromJSON(steps.issue.outputs.data).state_reason }}" == "not_planned" ]]; then
-
-          echo "Updating to Closed since it's not planned"
-          echo "field-values=Closed" >> $GITHUB_ENV
-
-        # If the issue is closed by non-longhorn member, update to Closed
-        elif [[ $team_count -eq 0 && 
-                "${{ github.event_name }}" == "issues" && 
+        # If the issue is closed, update to Closed
+        elif [[ "${{ github.event_name }}" == "issues" && 
                 "${{ github.event.action }}" == "closed" &&
                 "${{ steps.fields.outputs.values }}" != "Resolved" ]]; then
 
-          echo "Updating to Closed since it's closed by non-longhorn member"
+          echo "Updating to Closed since it's closed"
           echo "field-values=Closed" >> $GITHUB_ENV
 
         # If the issue is reopened with status Closed, update to In Progress
