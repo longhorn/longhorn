@@ -1906,9 +1906,6 @@ spec:
             properties:
               active:
                 type: boolean
-              backendStoreDriver:
-                description: Deprecated:Replaced by field `dataEngine`.
-                type: string
               backupVolume:
                 type: string
               dataEngine:
@@ -1920,9 +1917,6 @@ spec:
                 type: string
               disableFrontend:
                 type: boolean
-              engineImage:
-                description: 'Deprecated: Replaced by field `image`.'
-                type: string
               frontend:
                 enum:
                 - blockdev
@@ -2367,9 +2361,6 @@ spec:
                   properties:
                     spec:
                       properties:
-                        backendStoreDriver:
-                          description: Deprecated:Replaced by field `dataEngine`.
-                          type: string
                         dataEngine:
                           type: string
                         name:
@@ -2416,9 +2407,6 @@ spec:
                   properties:
                     spec:
                       properties:
-                        backendStoreDriver:
-                          description: Deprecated:Replaced by field `dataEngine`.
-                          type: string
                         dataEngine:
                           type: string
                         name:
@@ -2465,9 +2453,6 @@ spec:
                   properties:
                     spec:
                       properties:
-                        backendStoreDriver:
-                          description: Deprecated:Replaced by field `dataEngine`.
-                          type: string
                         dataEngine:
                           type: string
                         name:
@@ -3273,9 +3258,6 @@ spec:
             properties:
               active:
                 type: boolean
-              backendStoreDriver:
-                description: Deprecated:Replaced by field `dataEngine`.
-                type: string
               backingImage:
                 type: string
               dataDirectoryName:
@@ -3290,9 +3272,6 @@ spec:
               diskID:
                 type: string
               diskPath:
-                type: string
-              engineImage:
-                description: 'Deprecated: Replaced by field `image`.'
                 type: string
               engineName:
                 type: string
@@ -4506,9 +4485,6 @@ spec:
                 - rwo
                 - rwx
                 type: string
-              backendStoreDriver:
-                description: Deprecated:Replaced by field `dataEngine`.'
-                type: string
               backingImage:
                 type: string
               backupCompressionMethod:
@@ -4542,9 +4518,6 @@ spec:
                 type: array
               encrypted:
                 type: boolean
-              engineImage:
-                description: 'Deprecated: Replaced by field `image`.'
-                type: string
               freezeFilesystemForSnapshot:
                 description: Setting that freezes the filesystem on the root partition
                   before a snapshot is created.
@@ -4740,9 +4713,6 @@ spec:
               lastDegradedAt:
                 type: string
               ownerID:
-                type: string
-              pendingNodeID:
-                description: Deprecated.
                 type: string
               remountRequestedAt:
                 type: string
@@ -5252,8 +5222,7 @@ spec:
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
+          - podAffinityTerm:
               labelSelector:
                 matchExpressions:
                 - key: app
@@ -5261,6 +5230,7 @@ spec:
                   values:
                   - longhorn-ui
               topologyKey: kubernetes.io/hostname
+            weight: 1
       containers:
       - name: oauth-proxy
         image: ""
