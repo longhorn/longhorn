@@ -1,4 +1,4 @@
-name: Update Community Review Sprint Issue Status
+name: "[Issue Management] Update Community Review Sprint Issue Status"
 on:
   issues:
     types: [labeled, milestoned, reopened, closed]
@@ -76,31 +76,12 @@ jobs:
           echo "Updating to Resolved since it's milestoned by longhorn member"
           echo "field-values=Resolved,[0]" >> $GITHUB_ENV
 
-        # If the issue is closed by longhorn member, update to Resolved
-        elif [[ $team_count -gt 0 && 
-                "${{ github.event_name }}" == "issues" && 
-                "${{ github.event.action }}" == "closed" && 
-                "${{ fromJSON(steps.issue.outputs.data).state_reason }}" != "not_planned" ]]; then
-
-          echo "Updating to Resolved since it's closed by longhorn member"
-          echo "field-values=Resolved,[0]" >> $GITHUB_ENV
-
-        # If the issue is closed by longhorn member and not planned, update to Closed
-        elif [[ $team_count -gt 0 &&
-                "${{ github.event_name }}" == "issues" && 
-                "${{ github.event.action }}" == "closed" && 
-                "${{ fromJSON(steps.issue.outputs.data).state_reason }}" == "not_planned" ]]; then
-
-          echo "Updating to Closed since it's not planned"
-          echo "field-values=Closed" >> $GITHUB_ENV
-
-        # If the issue is closed by non-longhorn member, update to Closed
-        elif [[ $team_count -eq 0 && 
-                "${{ github.event_name }}" == "issues" && 
+        # If the issue is closed, update to Closed
+        elif [[ "${{ github.event_name }}" == "issues" && 
                 "${{ github.event.action }}" == "closed" &&
                 "${{ steps.fields.outputs.values }}" != "Resolved" ]]; then
 
-          echo "Updating to Closed since it's closed by non-longhorn member"
+          echo "Updating to Closed since it's closed"
           echo "field-values=Closed" >> $GITHUB_ENV
 
         # If the issue is reopened with status Closed, update to In Progress
@@ -151,3 +132,28 @@ jobs:
         item-id: ${{ steps.add-project.outputs.itemId }}
         field-keys: Status,Sprint
         field-values: ${{ env.field-values }}
+
+    - name: Add Resolved Issue to Longhorn Sprint Project
+      if: ${{ 
+        steps.is-longhorn-member.outcome == 'success' &&
+        steps.fields.outcome == 'success' &&
+        env.field-values != '' &&
+        startsWith(env.field-values, 'Resolved')
+        }}
+      uses: actions/add-to-project@v1.0.2
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/8
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Set Milestone to Resolved Issue
+      if: ${{
+        steps.is-longhorn-member.outcome == 'success' &&
+        steps.fields.outcome == 'success' &&
+        env.field-values != '' &&
+        startsWith(env.field-values, 'Resolved') &&
+        steps.issue.outputs.data.milestone == ''
+        }}
+      uses: Julexar/Milestone-Assigner@v1.0
+      with:
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        milestone: "Backlog"
