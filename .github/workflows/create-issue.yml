@@ -29,6 +29,8 @@ jobs:
         actions: 'find-issues'
         token: ${{ github.token }}
         issue-state: 'all'
+        labels: 'kind/backport'
+        issue-creator: 'github-actions[bot]'
         title-includes: |
           [BACKPORT][v${{ steps.split.outputs._1 }}]${{ github.event.issue.title }}
     - name: Get Milestone Object
