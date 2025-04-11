@@ -4347,6 +4347,12 @@ spec:
                 type: array
               numberOfReplicas:
                 type: integer
+              offlineRebuild:
+                enum:
+                - ignored
+                - disabled
+                - enabled
+                type: string
               replicaAutoBalance:
                 enum:
                 - ignored
