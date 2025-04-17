@@ -10,6 +10,7 @@ spec:
       app: longhorn-ui
   policyTypes:
   - Ingress
+  - Egress
   ingress:
   - from:
     {{- if eq .Values.networkPolicies.type "rke1"}}
@@ -37,10 +38,16 @@ spec:
       podSelector:
         matchLabels:
           app.kubernetes.io/name: traefik
+    {{- end }}
     ports:
       - port: 8000
         protocol: TCP
-      - port: 80
-        protocol: TCP
-    {{- end }}
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: longhorn-manager
+      ports:
+        - port: 9500
+          protocol: TCP
 {{- end }}
