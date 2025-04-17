@@ -1920,6 +1920,7 @@ spec:
                 - blockdev
                 - iscsi
                 - nvmf
+                - ublk
                 - ""
                 type: string
               image:
@@ -2163,6 +2164,9 @@ spec:
                 type: boolean
               storageIP:
                 type: string
+              ublkID:
+                format: int32
+                type: integer
               unmapMarkSnapChainRemovedEnabled:
                 type: boolean
             type: object
@@ -2396,6 +2400,9 @@ spec:
                           type: integer
                         type:
                           type: string
+                        ublkID:
+                          format: int32
+                          type: integer
                       type: object
                   type: object
                 nullable: true
@@ -2442,6 +2449,9 @@ spec:
                           type: integer
                         type:
                           type: string
+                        ublkID:
+                          format: int32
+                          type: integer
                       type: object
                   type: object
                 nullable: true
@@ -2488,6 +2498,9 @@ spec:
                           type: integer
                         type:
                           type: string
+                        ublkID:
+                          format: int32
+                          type: integer
                       type: object
                   type: object
                 description: 'Deprecated: Replaced by InstanceEngines and InstanceReplicas'
@@ -3398,6 +3411,9 @@ spec:
                 type: boolean
               storageIP:
                 type: string
+              ublkID:
+                format: int32
+                type: integer
             type: object
         type: object
     served: true
@@ -4531,6 +4547,7 @@ spec:
                 - blockdev
                 - iscsi
                 - nvmf
+                - ublk
                 - ""
                 type: string
               image:
