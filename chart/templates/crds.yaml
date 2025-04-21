@@ -4364,6 +4364,17 @@ spec:
                 type: array
               numberOfReplicas:
                 type: integer
+              offlineRebuilding:
+                description: |-
+                  Specifies whether Longhorn should rebuild replicas while the detached volume is degraded.
+                  - ignored: Use the global setting for offline replica rebuilding.
+                  - enabled: Enable offline rebuilding for this volume, regardless of the global setting.
+                  - disabled: Disable offline rebuilding for this volume, regardless of the global setting
+                enum:
+                - ignored
+                - disabled
+                - enabled
+                type: string
               replicaAutoBalance:
                 enum:
                 - ignored
