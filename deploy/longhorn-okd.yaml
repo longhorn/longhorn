@@ -5058,7 +5058,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.53"
+        - "longhornio/support-bundle-kit:v0.0.54"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
@@ -5195,13 +5195,13 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "longhornio/csi-attacher:v4.8.0"
+            value: "longhornio/csi-attacher:v4.8.1"
           - name: CSI_PROVISIONER_IMAGE
-            value: "longhornio/csi-provisioner:v5.1.0"
+            value: "longhornio/csi-provisioner:v5.2.0"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
             value: "longhornio/csi-node-driver-registrar:v2.13.0"
           - name: CSI_RESIZER_IMAGE
-            value: "longhornio/csi-resizer:v1.13.1"
+            value: "longhornio/csi-resizer:v1.13.2"
           - name: CSI_SNAPSHOTTER_IMAGE
             value: "longhornio/csi-snapshotter:v8.2.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
