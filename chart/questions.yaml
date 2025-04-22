@@ -691,7 +691,11 @@ questions:
         description: >-
           This setting allows users to enable or disable snapshot hashing and data integrity checking.
         group: Longhorn Default Settings
-        type: string
+        type: enum
+        options:
+          - enabled
+          - fast-check
+          - disabled
         default: disabled
       - variable: >-
           defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation
@@ -786,7 +790,7 @@ questions:
         type: int
         default: '2048'
       - variable: defaultSettings.v2DataEngineLogLevel
-        label: V2 Data Engine
+        label: V2 Data Engine Log Level
         description: >-
           Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
@@ -800,12 +804,22 @@ questions:
           - Debug
         default: Notice
       - variable: defaultSettings.v2DataEngineLogFlags
-        label: V2 Data Engine
+        label: V2 Data Engine Log Flags
         description: >-
           Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: string
         default: null
+      - variable: defaultSettings.v2DataEngineSnapshotDataIntegrity
+        label: V2 Data Engine Snapshot Data Integrity
+        description: >-
+          Setting that allows you to enable or disable snapshot hashing and data integrity checking for the V2 Data Engine.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: enum
+        options:
+          - fast-check
+          - disabled
+        default: disabled
       - variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
         label: Auto Cleanup Snapshot When Delete Backup
         description: >-
