@@ -355,6 +355,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.v2DataEngineHugepageLimit | Setting that allows you to configure maximum huge page size (in MiB) for the V2 Data Engine. |
 | defaultSettings.v2DataEngineLogFlags | Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine. |
 | defaultSettings.v2DataEngineLogLevel | Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine. |
+| defaultSettings.v2DataEngineSnapshotDataIntegrity | Setting allows you to enable or disable snapshot hashing and data integrity checking for the V2 Data Engine. |
 
 ---
 Please see [link](https://github.com/longhorn/longhorn) for more information.
