@@ -2873,6 +2873,14 @@ spec:
             description: OrphanSpec defines the desired state of the Longhorn orphaned
               data
             properties:
+              dataEngine:
+                description: |-
+                  The type of data engine for instance orphan.
+                  Can be "v1", "v2".
+                enum:
+                - v1
+                - v2
+                type: string
               nodeID:
                 description: The node ID on which the controller is responsible to
                   reconcile this orphan CR.
