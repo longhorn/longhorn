@@ -125,6 +125,7 @@ Action items for releasing {{ env.RELEASE_VERSION }}
   - PR: <!--URL of the pull request-->
 - [ ] Add another request for the rancher charts for the next patch release - @rebeccazzzz  
 - [ ] Update the [support matrix](https://www.suse.com/suse-longhorn/support-matrix/all-supported-versions/) - @asettle @rebeccazzzz
+- [ ] Update the [lifecycle page](https://www.suse.com/lifecycle/#suse-storage) - @asettle @rebeccazzzz
 
 ### Rancher Charts
 
