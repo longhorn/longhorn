@@ -9,6 +9,9 @@ jobs:
   community:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
     - name: Is Longhorn Member
       id: is-longhorn-member
       continue-on-error: true
@@ -139,8 +142,22 @@ jobs:
         steps.fields.outcome == 'success' &&
         env.field-values != '' &&
         startsWith(env.field-values, 'Resolved')
-      }}
+        }}
       uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/8
         github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Set Milestone to Backlog
+      if: ${{
+        steps.is-longhorn-member.outcome == 'success' &&
+        steps.fields.outcome == 'success' &&
+        env.field-values != '' &&
+        startsWith(env.field-values, 'Resolved') &&
+        github.event.issue.milestone == null
+        }}
+      run: |
+        echo "Setting milestone $MILESTONE to Backlog"
+        gh issue edit "${{ github.event.issue.number }}" --milestone "Backlog"
+      env:
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
