@@ -31,7 +31,7 @@ jobs:
 
     - name: Set Milestone to Backlog
       if: ${{
-        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null  &&
         github.event.issue.milestone == null
         }}
       run: |
