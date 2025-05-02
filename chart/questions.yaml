@@ -645,13 +645,13 @@ questions:
         group: Longhorn Default Settings
         type: boolean
         default: false
-      - variable: defaultSettings.orphanAutoDeletion
+      - variable: defaultSettings.orphanResourceAutoDeletion
         label: Orphaned Data Cleanup
         description: >-
-          Setting that allows Longhorn to automatically delete an orphaned resource and the corresponding data (for example, stale replicas). Orphaned resources on failed or unknown nodes are not automatically cleaned up.
+          Setting that allows Longhorn to automatically delete an orphaned resource and the corresponding data or process (for example, stale replicas). Orphaned resources on failed or unknown nodes are not automatically cleaned up. Specify enabled resource types using a semicolon-separated list (Example: `replicaData;replicaInstance`). Available items are: `replicaData`, `engineInstance`, `replicaInstance`.
         group: Longhorn Default Settings
-        type: boolean
-        default: false
+        type: string
+        default: null
       - variable: defaultSettings.storageNetwork
         label: Storage Network
         description: >-
