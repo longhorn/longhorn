@@ -152,8 +152,8 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}
     kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.orphanAutoDeletion) }}
-    orphan-auto-deletion: {{ .Values.defaultSettings.orphanAutoDeletion }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.orphanResourceAutoDeletion) }}
+    orphan-resource-auto-deletion: {{ .Values.defaultSettings.orphanResourceAutoDeletion }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}
     storage-network: {{ .Values.defaultSettings.storageNetwork }}
