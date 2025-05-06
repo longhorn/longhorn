@@ -532,6 +532,5 @@ openshift:
     proxy: 8443
 # -- Setting that allows Longhorn to generate code coverage profiles.
 enableGoCoverDir: false
-
 # -- Add extra objects manifests
 extraObjects: []
