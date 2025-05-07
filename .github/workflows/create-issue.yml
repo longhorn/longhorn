@@ -107,6 +107,8 @@ jobs:
         actions: 'find-issues'
         token: ${{ github.token }}
         issue-state: 'all'
+        labels: 'kind/test'
+        issue-creator: 'github-actions[bot]'
         title-includes: |
           [TEST]${{ github.event.issue.title }}
     - name: Create Automation Test Issue
@@ -149,6 +151,8 @@ jobs:
         actions: 'find-issues'
         token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         issue-state: 'all'
+        labels: 'area/ui'
+        issue-creator: 'github-actions[bot]'
         title-includes: |
           [UI]${{ github.event.issue.title }}
     - name: Get Labels
