@@ -7,7 +7,7 @@ spec:
   driver: driver.longhorn.io
   deletionPolicy: Delete
   source:
-    # NOTE: change this to point to an existing backup on the backupstore
+    # NOTE: change this to point to an existing backup on the  backupstore
     snapshotHandle: bs://test-vol/backup-625159fb469e492e
   volumeSnapshotRef:
     name: test-snapshot-existing-backup
