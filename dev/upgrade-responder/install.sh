@@ -164,7 +164,7 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
-        "longhornSettingOrphanAutoDeletion": {
+        "longhornSettingOrphanResourceAutoDeletion": {
           "dataType": "string",
           "maxLen": 200
         },
