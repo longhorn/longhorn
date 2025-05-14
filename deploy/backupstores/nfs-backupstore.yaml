@@ -21,7 +21,7 @@ spec:
         emptyDir: {}
       containers:
       - name: longhorn-test-nfs-container
-        image: longhornio/nfs-ganesha:latest
+        image: longhornio/nfs-backupstore:latest
         imagePullPolicy: Always
         env:
         - name: EXPORT_ID
