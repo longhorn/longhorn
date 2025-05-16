@@ -283,7 +283,7 @@ defaultSettings:
   # -- Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler.
   kubernetesClusterAutoscalerEnabled: ~
   # -- Enables Longhorn to automatically delete orphaned resources and their associated data or processes (e.g., stale replicas). Orphaned resources on failed or unknown nodes are not automatically cleaned up. 
-  # You need to specify the resource types to be deleted using a semicolon-separated list (e.g., `replicaData;replicaInstance`). Available items are: `replicaData`, `engineInstance`, `replicaInstance`.
+  # You need to specify the resource types to be deleted using a semicolon-separated list (e.g., `replica-data;instance`). Available items are: `replica-data`, `instance`.
   orphanResourceAutoDeletion: ~
   # -- Storage network for in-cluster traffic. When unspecified, Longhorn uses the Kubernetes cluster network.
   storageNetwork: ~
