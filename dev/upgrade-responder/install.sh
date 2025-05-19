@@ -425,6 +425,9 @@ configMap:
         },
         "longhornVolumeUnmapMarkSnapChainRemovedFalseCount": {
           "dataType": "float"
+        },
+        "longhornSettingOrphanResourceAutoDeletionGracePeriod": {
+          "dataType": "float"
         }
       }
     }
