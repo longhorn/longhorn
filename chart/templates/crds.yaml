@@ -2019,6 +2019,8 @@ spec:
                 type: integer
               unmapMarkSnapChainRemovedEnabled:
                 type: boolean
+              uuid:
+                type: string
             type: object
         type: object
     served: true
@@ -2249,6 +2251,8 @@ spec:
                         ublkID:
                           format: int32
                           type: integer
+                        uuid:
+                          type: string
                       type: object
                   type: object
                 nullable: true
@@ -2298,6 +2302,8 @@ spec:
                         ublkID:
                           format: int32
                           type: integer
+                        uuid:
+                          type: string
                       type: object
                   type: object
                 nullable: true
@@ -2347,6 +2353,8 @@ spec:
                         ublkID:
                           format: int32
                           type: integer
+                        uuid:
+                          type: string
                       type: object
                   type: object
                 description: 'Deprecated: Replaced by InstanceEngines and InstanceReplicas'
@@ -3252,6 +3260,8 @@ spec:
               ublkID:
                 format: int32
                 type: integer
+              uuid:
+                type: string
             type: object
         type: object
     served: true
