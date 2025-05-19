@@ -652,6 +652,13 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: null
+      - variable: defaultSettings.orphanResourceAutoDeletionGracePeriod
+        label: Orphaned Data Cleanup
+        description: >-
+          Specifies the wait time, in seconds, before Longhorn automatically deletes an orphaned Custom Resource (CR) and its associated resources. Note that if a user manually deletes an orphaned CR, the deletion occurs immediately and does not respect this grace period.
+        group: Longhorn Default Settings
+        type: int
+        default: '300'
       - variable: defaultSettings.storageNetwork
         label: Storage Network
         description: >-
