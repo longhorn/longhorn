@@ -55,3 +55,6 @@ data:
       disableRevisionCounter: "{{ .Values.persistence.disableRevisionCounter }}"
       dataEngine: "{{ .Values.persistence.dataEngine }}"
       {{- end }}
+      {{- if .Values.persistence.backupTargetName }}
+      backupTargetName: "{{ .Values.persistence.backupTargetName }}"
+      {{- end }}
