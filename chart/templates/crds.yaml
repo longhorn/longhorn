@@ -19,62 +19,6 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: The current state of the pod used to provision the backing image
-        file from source
-      jsonPath: .status.currentState
-      name: State
-      type: string
-    - description: The data source type
-      jsonPath: .spec.sourceType
-      name: SourceType
-      type: string
-    - description: The node the backing image file will be prepared on
-      jsonPath: .spec.nodeID
-      name: Node
-      type: string
-    - description: The disk the backing image file will be prepared on
-      jsonPath: .spec.diskUUID
-      name: DiskUUID
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 BackingImageDataSource is deprecated;
-      use longhorn.io/v1beta2 BackingImageDataSource instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: BackingImageDataSource is where Longhorn stores backing image
-          data source object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
     - description: The system generated UUID of the provisioned backing image file
       jsonPath: .spec.uuid
       name: UUID
@@ -231,65 +175,6 @@ spec:
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 BackingImageManager is deprecated; use
-      longhorn.io/v1beta2 BackingImageManager instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: BackingImageManager is where Longhorn stores backing image manager
-          object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
-    - description: The current state of the manager
-      jsonPath: .status.currentState
-      name: State
-      type: string
-    - description: The image the manager pod will use
-      jsonPath: .spec.image
-      name: Image
-      type: string
-    - description: The node the manager is on
-      jsonPath: .spec.nodeID
-      name: Node
-      type: string
-    - description: The disk the manager is responsible for
-      jsonPath: .spec.diskUUID
-      name: DiskUUID
-      type: string
-    - description: The disk path the manager is using
-      jsonPath: .spec.diskPath
-      name: DiskPath
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
     name: v1beta2
     schema:
       openAPIV3Schema:
@@ -393,18 +278,6 @@ metadata:
     longhorn-manager: ""
   name: backingimages.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: {{ include "release_namespace" . }}
-          path: /v1/webhook/conversion
-          port: 9501
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: BackingImage
@@ -415,48 +288,6 @@ spec:
     singular: backingimage
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: The backing image name
-      jsonPath: .spec.image
-      name: Image
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 BackingImage is deprecated; use longhorn.io/v1beta2
-      BackingImage instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: BackingImage is where Longhorn stores backing image object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: The system generated UUID
       jsonPath: .status.uuid
@@ -816,61 +647,6 @@ spec:
       jsonPath: .status.snapshotCreatedAt
       name: SnapshotCreatedAt
       type: string
-    - description: The backup state
-      jsonPath: .status.state
-      name: State
-      type: string
-    - description: The backup last synced time
-      jsonPath: .status.lastSyncedAt
-      name: LastSyncedAt
-      type: string
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 Backup is deprecated; use longhorn.io/v1beta2
-      Backup instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: Backup is where Longhorn stores backup object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
-    - description: The snapshot name
-      jsonPath: .status.snapshotName
-      name: SnapshotName
-      type: string
-    - description: The snapshot size
-      jsonPath: .status.size
-      name: SnapshotSize
-      type: string
-    - description: The snapshot creation time
-      jsonPath: .status.snapshotCreatedAt
-      name: SnapshotCreatedAt
-      type: string
     - description: The backup target name
       jsonPath: .status.backupTargetName
       name: BackupTarget
@@ -1026,18 +802,6 @@ metadata:
     longhorn-manager: ""
   name: backuptargets.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: {{ include "release_namespace" . }}
-          path: /v1/webhook/conversion
-          port: 9501
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: BackupTarget
@@ -1048,61 +812,6 @@ spec:
     singular: backuptarget
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: The backup target URL
-      jsonPath: .spec.backupTargetURL
-      name: URL
-      type: string
-    - description: The backup target credential secret
-      jsonPath: .spec.credentialSecret
-      name: Credential
-      type: string
-    - description: The backup target poll interval
-      jsonPath: .spec.pollInterval
-      name: LastBackupAt
-      type: string
-    - description: Indicate whether the backup target is available or not
-      jsonPath: .status.available
-      name: Available
-      type: boolean
-    - description: The backup target last synced time
-      jsonPath: .status.lastSyncedAt
-      name: LastSyncedAt
-      type: string
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 BackupTarget is deprecated; use longhorn.io/v1beta2
-      BackupTarget instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: BackupTarget is where Longhorn stores backup target object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: The backup target URL
       jsonPath: .spec.backupTargetURL
@@ -1241,57 +950,6 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: The backup volume creation time
-      jsonPath: .status.createdAt
-      name: CreatedAt
-      type: string
-    - description: The backup volume last backup name
-      jsonPath: .status.lastBackupName
-      name: LastBackupName
-      type: string
-    - description: The backup volume last backup time
-      jsonPath: .status.lastBackupAt
-      name: LastBackupAt
-      type: string
-    - description: The backup volume last synced time
-      jsonPath: .status.lastSyncedAt
-      name: LastSyncedAt
-      type: string
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 BackupVolume is deprecated; use longhorn.io/v1beta2
-      BackupVolume instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: BackupVolume is where Longhorn stores backup volume object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
     - description: The backup target name
       jsonPath: .spec.backupTargetName
       name: BackupTarget
@@ -1423,18 +1081,6 @@ metadata:
     longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: {{ include "release_namespace" . }}
-          path: /v1/webhook/conversion
-          port: 9501
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: EngineImage
@@ -1446,60 +1092,6 @@ spec:
   preserveUnknownFields: false
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: State of the engine image
-      jsonPath: .status.state
-      name: State
-      type: string
-    - description: The Longhorn engine image
-      jsonPath: .spec.image
-      name: Image
-      type: string
-    - description: Number of resources using the engine image
-      jsonPath: .status.refCount
-      name: RefCount
-      type: integer
-    - description: The build date of the engine image
-      jsonPath: .status.buildDate
-      name: BuildDate
-      type: date
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 EngineImage is deprecated; use longhorn.io/v1beta2
-      EngineImage instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: EngineImage is where Longhorn stores engine image object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: Compatibility of the engine image
       jsonPath: .status.incompatible
@@ -1649,60 +1241,6 @@ spec:
   preserveUnknownFields: false
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: The current state of the engine
-      jsonPath: .status.currentState
-      name: State
-      type: string
-    - description: The node that the engine is on
-      jsonPath: .spec.nodeID
-      name: Node
-      type: string
-    - description: The instance manager of the engine
-      jsonPath: .status.instanceManagerName
-      name: InstanceManager
-      type: string
-    - description: The current image of the engine
-      jsonPath: .status.currentImage
-      name: Image
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 Engine is deprecated; use longhorn.io/v1beta2
-      Engine instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: Engine is where Longhorn stores engine object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: The data engine of the engine
       jsonPath: .spec.dataEngine
@@ -2049,56 +1587,6 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: The state of the instance manager
-      jsonPath: .status.currentState
-      name: State
-      type: string
-    - description: The type of the instance manager (engine or replica)
-      jsonPath: .spec.type
-      name: Type
-      type: string
-    - description: The node that the instance manager is running on
-      jsonPath: .spec.nodeID
-      name: Node
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 InstanceManager is deprecated; use longhorn.io/v1beta2
-      InstanceManager instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: InstanceManager is where Longhorn stores instance manager object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
     - description: The data engine of the instance manager
       jsonPath: .spec.dataEngine
       name: Data Engine
@@ -2384,18 +1872,6 @@ metadata:
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: {{ include "release_namespace" . }}
-          path: /v1/webhook/conversion
-          port: 9501
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: Node
@@ -2407,57 +1883,6 @@ spec:
   preserveUnknownFields: false
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: Indicate whether the node is ready
-      jsonPath: .status.conditions['Ready']['status']
-      name: Ready
-      type: string
-    - description: Indicate whether the user disabled/enabled replica scheduling for
-        the node
-      jsonPath: .spec.allowScheduling
-      name: AllowScheduling
-      type: boolean
-    - description: Indicate whether Longhorn can schedule replicas on the node
-      jsonPath: .status.conditions['Schedulable']['status']
-      name: Schedulable
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 Node is deprecated; use longhorn.io/v1beta2
-      Node instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: Node is where Longhorn stores Longhorn node object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: Indicate whether the node is ready
       jsonPath: .status.conditions[?(@.type=='Ready')].status
@@ -2807,69 +2232,6 @@ spec:
       jsonPath: .spec.groups
       name: Groups
       type: string
-    - description: Should be one of "backup" or "snapshot"
-      jsonPath: .spec.task
-      name: Task
-      type: string
-    - description: The cron expression represents recurring job scheduling
-      jsonPath: .spec.cron
-      name: Cron
-      type: string
-    - description: The number of snapshots/backups to keep for the volume
-      jsonPath: .spec.retain
-      name: Retain
-      type: integer
-    - description: The concurrent job to run by each cron job
-      jsonPath: .spec.concurrency
-      name: Concurrency
-      type: integer
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    - description: Specify the labels
-      jsonPath: .spec.labels
-      name: Labels
-      type: string
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 RecurringJob is deprecated; use longhorn.io/v1beta2
-      RecurringJob instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: RecurringJob is where Longhorn stores recurring job object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
-    - description: Sets groupings to the jobs. When set to "default" group will be
-        added to the volume label when no other job label exist in volume
-      jsonPath: .spec.groups
-      name: Groups
-      type: string
     - description: Should be one of "snapshot", "snapshot-force-create", "snapshot-cleanup",
         "snapshot-delete", "backup", "backup-force-create", "filesystem-trim" or "system-backup"
       jsonPath: .spec.task
@@ -3002,64 +2364,6 @@ spec:
   preserveUnknownFields: false
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: The current state of the replica
-      jsonPath: .status.currentState
-      name: State
-      type: string
-    - description: The node that the replica is on
-      jsonPath: .spec.nodeID
-      name: Node
-      type: string
-    - description: The disk that the replica is on
-      jsonPath: .spec.diskID
-      name: Disk
-      type: string
-    - description: The instance manager of the replica
-      jsonPath: .status.instanceManagerName
-      name: InstanceManager
-      type: string
-    - description: The current image of the replica
-      jsonPath: .status.currentImage
-      name: Image
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 Replica is deprecated; use longhorn.io/v1beta2
-      Replica instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: Replica is where Longhorn stores replica object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: The data engine of the replica
       jsonPath: .spec.dataEngine
@@ -3294,48 +2598,6 @@ spec:
       jsonPath: .value
       name: Value
       type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 Setting is deprecated; use longhorn.io/v1beta2
-      Setting instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: Setting is where Longhorn stores setting object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          value:
-            type: string
-        required:
-        - value
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
-  - additionalPrinterColumns:
-    - description: The value of the setting
-      jsonPath: .value
-      name: Value
-      type: string
     - description: The setting is applied
       jsonPath: .status.applied
       name: Applied
@@ -3404,52 +2666,6 @@ spec:
     singular: sharemanager
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: The state of the share manager
-      jsonPath: .status.state
-      name: State
-      type: string
-    - description: The node that the share manager is owned by
-      jsonPath: .status.ownerID
-      name: Node
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 ShareManager is deprecated; use longhorn.io/v1beta2
-      ShareManager instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: ShareManager is where Longhorn stores share manager object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: The state of the share manager
       jsonPath: .status.state
@@ -4174,18 +3390,6 @@ metadata:
     longhorn-manager: ""
   name: volumes.longhorn.io
 spec:
-  conversion:
-    strategy: Webhook
-    webhook:
-      clientConfig:
-        service:
-          name: longhorn-conversion-webhook
-          namespace: {{ include "release_namespace" . }}
-          path: /v1/webhook/conversion
-          port: 9501
-      conversionReviewVersions:
-      - v1beta2
-      - v1beta1
   group: longhorn.io
   names:
     kind: Volume
@@ -4197,64 +3401,6 @@ spec:
   preserveUnknownFields: false
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: The state of the volume
-      jsonPath: .status.state
-      name: State
-      type: string
-    - description: The robustness of the volume
-      jsonPath: .status.robustness
-      name: Robustness
-      type: string
-    - description: The scheduled condition of the volume
-      jsonPath: .status.conditions['scheduled']['status']
-      name: Scheduled
-      type: string
-    - description: The size of the volume
-      jsonPath: .spec.size
-      name: Size
-      type: string
-    - description: The node that the volume is currently attaching to
-      jsonPath: .status.currentNodeID
-      name: Node
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    deprecated: true
-    deprecationWarning: longhorn.io/v1beta1 Volume is deprecated; use longhorn.io/v1beta2
-      Volume instead
-    name: v1beta1
-    schema:
-      openAPIV3Schema:
-        description: Volume is where Longhorn stores volume object.
-        properties:
-          apiVersion:
-            description: |-
-              APIVersion defines the versioned schema of this representation of an object.
-              Servers should convert recognized schemas to the latest internal value, and
-              may reject unrecognized values.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
-            type: string
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
-            type: object
-          spec:
-            x-kubernetes-preserve-unknown-fields: true
-          status:
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: false
-    storage: false
-    subresources:
-      status: {}
   - additionalPrinterColumns:
     - description: The data engine of the volume
       jsonPath: .spec.dataEngine
