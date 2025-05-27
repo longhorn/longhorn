@@ -41,10 +41,6 @@ Action items for releasing {{ env.RELEASE_VERSION }}
     - cli
   - [ ] Update `jobs.release.strategy.matrix` in [sprint release](https://github.com/longhorn/release/blob/main/.github/workflows/release-sprint.yml).
     - [ ] PR: <!--URL of the pull request-->
-  - [ ] Create sub-issue `Regular Tasks for Feature Release` ticket in longhorn/longhorn.
-    - [ ] PR: <!--URL of the pull request-->
-- [ ] Create sub-issue `Fix CVE issues for {{ env.RELEASE_VERSION }}` ticket in longhorn/longhorn - @c3y1huang
-  - [ ] PR: <!--URL of the pull request-->
 - [ ] Trigger the RC release build by [▶️ Release-Preview Action](https://github.com/longhorn/release/actions/workflows/release-preview.yml).
 
 #### QA Captain Tasks
