@@ -101,6 +101,7 @@ Longhorn only allows upgrades from supported versions. For more information abou
 For information about issues identified after this release, see [Release-Known-Issues](https://github.com/longhorn/longhorn/wiki/Release-Known-Issues).
 
 ### Highlight
+
 - [FEATURE] Cleanup orphaned volume runtime resources if the v1 resources already deleted [6764](https://github.com/longhorn/longhorn/issues/6764) - @COLDTURNIP @chriscchien
 - [FEATURE] v2 volume supports UBLK frontend [9456](https://github.com/longhorn/longhorn/issues/9456) - @PhanLe1010 @chriscchien
 - [FEATURE] V1 and V2 volume offline replica rebuilding [8443](https://github.com/longhorn/longhorn/issues/8443) - @mantissahz @roger-ryao
@@ -109,6 +110,7 @@ For information about issues identified after this release, see [Release-Known-I
 - [FEATURE] Recurring system backup [6534](https://github.com/longhorn/longhorn/issues/6534) - @yangchiu @c3y1huang
 
 ### Feature
+
 - [FEATURE] Delta Replica Rebuilding using Delta Snapshot: SPDK API Development [10799](https://github.com/longhorn/longhorn/issues/10799) - @yangchiu @DamiaSan
 - [FEATURE] Running replicas field in volume table [10817](https://github.com/longhorn/longhorn/issues/10817) - @xelab04 @roger-ryao
 - [FEATURE] Longhorn UI supports orphaned instance CRs management [10760](https://github.com/longhorn/longhorn/issues/10760) - @yangchiu @houhoucoop
@@ -116,10 +118,11 @@ For information about issues identified after this release, see [Release-Known-I
 - [FEATURE] Add missing metrics of number of volumes/replicas by node/cluster [7599](https://github.com/longhorn/longhorn/issues/7599) - @c3y1huang @roger-ryao
 
 ### Improvement
-- [IMPROVEMENT] Prevent creating orphans while deleting the v1 instances [10888](https://github.com/longhorn/longhorn/issues/10888) - @COLDTURNIP @chriscchien
-- [IMPROVEMENT] Configurable wait interval for orphaned instance CR creation [10904](https://github.com/longhorn/longhorn/issues/10904) - @derekbit @chriscchien
-- [IMPROVEMENT] prevent false logs from deleting volume with offline rebuilding is disabled. [10889](https://github.com/longhorn/longhorn/issues/10889) - @mantissahz @chriscchien
+
 - [IMPROVEMENT] Remove unnecessary lasso dependency [10856](https://github.com/longhorn/longhorn/issues/10856) - @derekbit @chriscchien
+- [IMPROVEMENT] Configurable wait interval for orphaned instance CR creation [10904](https://github.com/longhorn/longhorn/issues/10904) - @derekbit @chriscchien
+- [IMPROVEMENT] Prevent creating orphans while deleting the v1 instances [10888](https://github.com/longhorn/longhorn/issues/10888) - @COLDTURNIP @chriscchien
+- [IMPROVEMENT] prevent false logs from deleting volume with offline rebuilding is disabled. [10889](https://github.com/longhorn/longhorn/issues/10889) - @mantissahz @chriscchien
 - [IMPROVEMENT] Add Prometheus metrics for Replica and Engine CRs [10722](https://github.com/longhorn/longhorn/issues/10722) - @hookak @chriscchien
 - [IMPROVEMENT]  Export longhorn engine rebuild status as prometheus metrics [10550](https://github.com/longhorn/longhorn/issues/10550) - @hookak @chriscchien
 - [IMPROVEMENT] Disable Snapshot Checksum Calculation for Single-Replica V1 Volume [10518](https://github.com/longhorn/longhorn/issues/10518) - @derekbit @chriscchien
@@ -151,15 +154,19 @@ For information about issues identified after this release, see [Release-Known-I
 - [IMPROVEMENT] CRD & API code generator decouple from Go conventional source path [10556](https://github.com/longhorn/longhorn/issues/10556) - @COLDTURNIP
 - [IMPROVEMENT] Support configurable upgrade-responder URL [10437](https://github.com/longhorn/longhorn/issues/10437) - @derekbit @roger-ryao
 - [IMPROVEMENT] Settings change validation should go back to using Volume state to determine "are all volumes detached" [10233](https://github.com/longhorn/longhorn/issues/10233) - @yangchiu @james-munson
-- [IMPROVEMENT] Code conventions in the Longhorn project with golangci-lint [8955](https://github.com/longhorn/longhorn/issues/8955) - 
 - [IMPROVEMENT] Improve the UX of updating danger zone settings [8070](https://github.com/longhorn/longhorn/issues/8070) - @yangchiu @mantissahz
 - [UI][FEATURE] V1 and V2 volume offline replica rebuilding [10581](https://github.com/longhorn/longhorn/issues/10581) - @houhoucoop @roger-ryao
 - [UI][FEATURE] Recurring system backup [10262](https://github.com/longhorn/longhorn/issues/10262) - @yangchiu @houhoucoop
 
 ### Bug
-- [BUG] v2 replica rebuilding will miss the backing image [10909](https://github.com/longhorn/longhorn/issues/10909) - @shuo-wu @chriscchien
+
+- [BUG] Error on git checkout in a container [10621](https://github.com/longhorn/longhorn/issues/10621) - @derekbit @chriscchien
 - [BUG] Test case `test_snapshot_prune_and_coalesce_simultaneously_with_backing_image` fails [10808](https://github.com/longhorn/longhorn/issues/10808) - @yangchiu @c3y1huang
+- [BUG] Failed to terminate namespace `longhorn-system` if there is a support bundle `ReadyForDownload` [10731](https://github.com/longhorn/longhorn/issues/10731) - @yangchiu @c3y1huang
+- [BUG] Helm persistence.backupTargetName not referenced in storageclass template [10961](https://github.com/longhorn/longhorn/issues/10961) - @yangchiu @mantissahz
+- [BUG] SPDK API lvol_get_snapshot_range_checksums cannot get the correct result [10950](https://github.com/longhorn/longhorn/issues/10950) - @shuo-wu @roger-ryao
 - [BUG] V2 Backing image not ready after upgrade from v1.8.1 to v1.9.x [10805](https://github.com/longhorn/longhorn/issues/10805) - @COLDTURNIP @chriscchien
+- [BUG] v2 replica rebuilding will miss the backing image [10909](https://github.com/longhorn/longhorn/issues/10909) - @shuo-wu @chriscchien
 - [BUG] minor spacing issues found with yamllint in the helm chart [10681](https://github.com/longhorn/longhorn/issues/10681) - @codekow
 - [BUG][UI] Snapshots of v2 volume with backing image aren't shown on the `Snapshots and Backups` graph [10526](https://github.com/longhorn/longhorn/issues/10526) - @derekbit @chriscchien
 - [BUG] Deleted orphan data still renders on the page until page refresh [10803](https://github.com/longhorn/longhorn/issues/10803) - @COLDTURNIP @chriscchien @houhoucoop
@@ -171,7 +178,6 @@ For information about issues identified after this release, see [Release-Known-I
 - [BUG] spdk emits `Device or resource busy` while registering lvol checksum calculation [10140](https://github.com/longhorn/longhorn/issues/10140) - @shuo-wu @roger-ryao
 - [BUG] v2 instance managers keep crashing on master-head arm64 environment [10768](https://github.com/longhorn/longhorn/issues/10768) - @yangchiu @PhanLe1010
 - [BUG] Wrong image name in `longhorn-images.txt` [10774](https://github.com/longhorn/longhorn/issues/10774) - @c3y1huang
-- [BUG] Failed to terminate namespace `longhorn-system` if there is a support bundle `ReadyForDownload` [10731](https://github.com/longhorn/longhorn/issues/10731) - @yangchiu @c3y1huang
 - [BUG] After node down and force delete the terminating deployment pod, volume can not attach success [10689](https://github.com/longhorn/longhorn/issues/10689) - @c3y1huang @chriscchien
 - [BUG] Deleting a replica of one v2 volume will also degrade the other v2 volume [10527](https://github.com/longhorn/longhorn/issues/10527) - @yangchiu @ChanYiLin
 - [BUG] Adding a non-existing disk to a node will cause the longhorn-manager to crash [10749](https://github.com/longhorn/longhorn/issues/10749) - @ChanYiLin @roger-ryao
@@ -234,6 +240,9 @@ For information about issues identified after this release, see [Release-Known-I
 - [BUG] Negative test case got stuck in waiting for longhorn-ui pods [8248](https://github.com/longhorn/longhorn/issues/8248) - @c3y1huang
 
 ### Misc
+
+- [DOC] Replica count behaviour is unclear. [10861](https://github.com/longhorn/longhorn/issues/10861) - @hoo29 @chriscchien
+- [DOC] Update "Upgrade Path Enforcement and Downgrade Prevention" [10945](https://github.com/longhorn/longhorn/issues/10945) - @derekbit @roger-ryao
 - [TASK] Update the longhornio/nfs-ganesha image [10878](https://github.com/longhorn/longhorn/issues/10878) - @derekbit @c3y1huang @chriscchien
 - [DOC] No `BackupTargetSecret` in `Settings/General` [10858](https://github.com/longhorn/longhorn/issues/10858) - @vnwnv @roger-ryao
 - [DOC] Create system backup first before upgrade system [10633](https://github.com/longhorn/longhorn/issues/10633) - @ChanYiLin @chriscchien
@@ -250,10 +259,10 @@ For information about issues identified after this release, see [Release-Known-I
 - [TASK] Remove environment check script since v1.9.0 [9239](https://github.com/longhorn/longhorn/issues/9239) - @yangchiu @derekbit
 - [TASK] Add platform architect and volume encryption info to metrics [7047](https://github.com/longhorn/longhorn/issues/7047) - @c3y1huang @roger-ryao
 - [DOC] Update the document and create a KB to address the limitation that BackingImage should be multiple of 512B [10536](https://github.com/longhorn/longhorn/issues/10536) - @ChanYiLin
-- [DOC] Clarifications on defaultSettings.defaultDataLocality and persistence.defaultDataLocality usage [10253](https://github.com/longhorn/longhorn/issues/10253) - @james-munson @roger-ryao
-- [DOC] Replica count behaviour is unclear [10861](https://github.com/longhorn/longhorn/issues/10861) - @hoo29 @chriscchien
+- [Doc] Clarifications on defaultSettings.defaultDataLocality and persistence.defaultDataLocality usage [10253](https://github.com/longhorn/longhorn/issues/10253) - @james-munson @roger-ryao
 
 ## New Contributors
+
 - @bachmanity1
 - @codekow
 - @DrummyFloyd
@@ -266,24 +275,25 @@ For information about issues identified after this release, see [Release-Known-I
 - @xelab04
 
 ## Contributors
-- @COLDTURNIP 
-- @ChanYiLin 
-- @DamiaSan 
-- @PhanLe1010 
-- @WebberHuang1118 
-- @a110605 
-- @c3y1huang 
-- @chriscchien 
-- @derekbit 
-- @houhoucoop 
-- @innobead 
-- @james-munson 
-- @mantissahz 
-- @roger-ryao 
-- @shuo-wu 
-- @yangchiu 
-- @sushant-suse 
-- @jillian-maroket 
+
+- @COLDTURNIP
+- @ChanYiLin
+- @DamiaSan
+- @PhanLe1010
+- @WebberHuang1118
+- @a110605
+- @c3y1huang
+- @chriscchien
+- @derekbit
+- @houhoucoop
+- @innobead
+- @james-munson
+- @mantissahz
+- @roger-ryao
+- @shuo-wu
+- @yangchiu
+- @sushant-suse
+- @jillian-maroket
 - @rebeccazzzz
 - @forbesguthrie
 - @asettle
