@@ -41,7 +41,7 @@ For information about issues identified after this release, see [Release-Known-I
 - [BACKPORT][v1.8.2][BUG] MultiUnmapper floods logs with warnings about size mismatch. [10565](https://github.com/longhorn/longhorn/issues/10565) - @shuo-wu @roger-ryao
 - [BACKPORT][v1.8.2][BUG] Test case `test_snapshot_prune_and_coalesce_simultaneously_with_backing_image` fails [10822](https://github.com/longhorn/longhorn/issues/10822) - @yangchiu @c3y1huang
 - [BACKPORT][v1.8.2][BUG] System backup could get stuck in `CreatingBackingImageBackups` indefinitely [10748](https://github.com/longhorn/longhorn/issues/10748) - @yangchiu @ChanYiLin
-- [BACKPORT][v1.8.2][BUG] Failed to terminate namesapce `longhorn-system` if there is a support bundle `ReadyForDownload` [10732](https://github.com/longhorn/longhorn/issues/10732) - @yangchiu @c3y1huang
+- [BACKPORT][v1.8.2][BUG] Failed to terminate namespace `longhorn-system` if there is a support bundle `ReadyForDownload` [10732](https://github.com/longhorn/longhorn/issues/10732) - @yangchiu @c3y1huang
 - [BACKPORT][v1.8.2][BUG] [v1.9.0-rc1] DR volume does not sync with latest backup when activation [10842](https://github.com/longhorn/longhorn/issues/10842) - @c3y1huang @chriscchien
 - [BACKPORT][v1.8.2][BUG] Can NOT delete an oversized Not Ready volume [10742](https://github.com/longhorn/longhorn/issues/10742) - @WebberHuang1118 @chriscchien
 - [BACKPORT][v1.8.2][BUG][UI] Bulk backup creation with a detached volume returns error 405 and error messages show in browser console [10725](https://github.com/longhorn/longhorn/issues/10725) - @yangchiu @a110605
