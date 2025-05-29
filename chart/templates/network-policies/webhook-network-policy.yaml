@@ -2,22 +2,6 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: longhorn-conversion-webhook
-  namespace: {{ include "release_namespace" . }}
-spec:
-  podSelector:
-    matchLabels:
-      longhorn.io/conversion-webhook: longhorn-conversion-webhook
-  policyTypes:
-  - Ingress
-  ingress:
-  - ports:
-    - protocol: TCP
-      port: 9501
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
   name: longhorn-admission-webhook
   namespace: {{ include "release_namespace" . }}
 spec:

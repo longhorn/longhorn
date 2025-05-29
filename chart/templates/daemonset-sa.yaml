@@ -51,17 +51,10 @@ spec:
         ports:
         - containerPort: 9500
           name: manager
-        - containerPort: 9501
-          name: conversion-wh
         - containerPort: 9502
           name: admission-wh
         - containerPort: 9503
           name: recov-backend
-        readinessProbe:
-          httpGet:
-            path: /v1/healthz
-            port: 9501
-            scheme: HTTPS
         volumeMounts:
         - name: boot
           mountPath: /host/boot/
