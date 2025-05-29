@@ -3517,6 +3517,10 @@ spec:
       jsonPath: .status.applied
       name: Applied
       type: boolean
+    - description: Last time the setting is applied at
+      jsonPath: .status.lastAppliedAt
+      name: LastAppliedAt
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -3548,6 +3552,9 @@ spec:
               applied:
                 description: The setting is applied.
                 type: boolean
+              lastAppliedAt:
+                description: Last time the setting is applied at.
+                type: string
             required:
             - applied
             type: object
