@@ -143,6 +143,12 @@ service:
     type: ClusterIP
     # -- NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: null
+    # -- Annotation for the Longhorn UI service.
+    annotations: {}
+    ## If you want to set annotations for the Longhorn UI service, delete the `{}` in the line above
+    ## and uncomment this example block
+    #  annotation-key1: "annotation-value1"
+    #  annotation-key2: "annotation-value2"
   manager:
     # -- Service type for Longhorn Manager.
     type: ClusterIP

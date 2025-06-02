@@ -151,6 +151,10 @@ metadata:
     {{- end }}
   name: longhorn-frontend
   namespace: {{ include "release_namespace" . }}
+  {{- with .Values.service.ui.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
   type: ClusterIP
