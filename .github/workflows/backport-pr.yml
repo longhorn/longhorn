@@ -3,9 +3,6 @@ name: "[Issue Management] Link Backport PR Issue"
 on:
   pull_request:
     types: [ opened ]
-    branches:
-    - master
-    - "v*"
 
 jobs:
   check-backport:
