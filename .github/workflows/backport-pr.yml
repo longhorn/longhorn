@@ -29,7 +29,7 @@ jobs:
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         
         # Extract issue number from the PR description
-        ORIGINAL_ISSUE_NUMBER=$(echo '${{ github.event.pull_request.body }}'' | grep -oE 'longhorn/longhorn#[0-9]+' | cut -d'#' -f2)
+        ORIGINAL_ISSUE_NUMBER=$(echo "${{ github.event.pull_request.body }}" | grep -oE 'longhorn/longhorn#[0-9]+' | cut -d'#' -f2)
         echo "ORIGINAL_ISSUE_NUMBER=$ORIGINAL_ISSUE_NUMBER" >> $GITHUB_ENV
 
     - name: Link the PR with the backport issue
