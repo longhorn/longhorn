@@ -6,6 +6,7 @@
 
 <div align="center">
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/longhorn/longhorn/badge)](https://scorecard.dev/viewer/?uri=github.com/longhorn/longhorn)
 [![Releases](https://img.shields.io/github/release/longhorn/longhorn/all.svg)](https://github.com/longhorn/longhorn/releases)
 [![GitHub](https://img.shields.io/github/license/longhorn/longhorn)](https://github.com/longhorn/longhorn/blob/master/LICENSE)
 [![Docs](https://img.shields.io/badge/docs-latest-green.svg)](https://longhorn.io/docs/latest/)
@@ -37,10 +38,13 @@ You can read more technical details of Longhorn [here](https://longhorn.io/).
 
 https://github.com/longhorn/longhorn/releases
 
-| Release   | Latest Version | Stable Versions       | Release Note                                                   | Important Note                                              | Supported          |
+| Release   | Latest Version | Stable Versions       | Release Note                                                   | Important Note                                              | Active          |
 |-----------|-----------------|----------------------|----------------------------------------------------------------|-------------------------------------------------------------| -------------------|
-| **1.6***  | 1.6.2           | 1.6.2, 1.6.1 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.2) | [🔗](https://longhorn.io/docs/1.6.2/deploy/important-notes) | ✅                 |
-| **1.5***  | 1.5.5           | 1.5.5, 1.5.4, 1.5.3 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.5) | [🔗](https://longhorn.io/docs/1.5.5/deploy/important-notes) | ✅                 |
+| **1.9***  | 1.9.0           |  | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.9.0) | [🔗](https://longhorn.io/docs/1.9.0/important-notes) | ✅                 |
+| **1.8***  | 1.8.1           | 1.8.1 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.8.1) | [🔗](https://longhorn.io/docs/1.8.1/important-notes) | ✅                 |
+| **1.7***  | 1.7.3           | 1.7.3, 1.7.2, 1.7.1 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.7.3) | [🔗](https://longhorn.io/docs/1.7.3/important-notes) | ✅                 |
+| **1.6***  | 1.6.4           | 1.6.4, 1.6.3, 1.6.2, 1.6.1 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.6.4) | [🔗](https://longhorn.io/docs/1.6.4/deploy/important-notes) | ✅                 |
+| 1.5       | 1.5.5           | 1.5.5, 1.5.4, 1.5.3 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.5.5) | [🔗](https://longhorn.io/docs/1.5.5/deploy/important-notes) |                  |
 | 1.4       | 1.4.4           | 1.4.4, 1.4.3, 1.4.2, 1.4.1 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.4.4) | [🔗](https://longhorn.io/docs/1.4.4/deploy/important-notes) |                    |
 | 1.3       | 1.3.3           | 1.3.3, 1.3.2 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.3.3) | [🔗](https://longhorn.io/docs/1.3.3/deploy/important-notes) |                    |
 | 1.2       | 1.2.6           | 1.2.6, 1.2.5, 1.2.4, 1.2.3, 1.2.2 | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.2.6) | [🔗](https://longhorn.io/docs/1.2.6/deploy/important-notes) |                    |
@@ -126,22 +130,28 @@ Longhorn is open-source software, so contributions are greatly welcome.
 Please read [Code of Conduct](./CODE_OF_CONDUCT.md) and [Contributing Guideline](./CONTRIBUTING.md) before contributing.
 
 Contributing code is not the only way of contributing. We value feedback very much and many of the Longhorn features originated from users' feedback.
-If you have any feedback, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose) and talk to the developers at the [CNCF](https://slack.cncf.io/) [#longhorn](https://cloud-native.slack.com/messages/longhorn) Slack channel.
+If you have any feedback, feel free to [file an issue](https://github.com/longhorn/longhorn/issues/new/choose).
 
-If you are having any discussion, feedback, requests, issues, or security reports, please follow the below ways.
-We also have a [CNCF Slack channel: longhorn](https://cloud-native.slack.com/messages/longhorn) for discussion.
+## Slack
+
+You can also provide feedback or join the conversation with other developers, users, and contributors on the [CNCF](https://slack.cncf.io/) [#longhorn](https://cloud-native.slack.com/messages/longhorn) Slack channel.
+This is a good place to learn about Longhorn, ask questions, and share your experiences.
 
 ## Community Meeting and Office Hours
-Hosted by the core maintainers of Longhorn: 4th Friday of every month at 09:00 (CET) or 16:00 (CST) at https://community.cncf.io/longhorn-community/.
+
+We host a monthly community meeting on the **3rd Thursday**, alternating between *AMER/EU-friendly* and *APAC-friendly times* - at **4 PM UTC** and **8 AM UTC** respectively. 
+
+Everyone is welcome to join us. You can find the calendar invite [here](https://zoom-lfx.platform.linuxfoundation.org/meetings/longhorn?view=list)
 
 ## Longhorn Mailing List
-Stay up to date on the latest news and events: https://lists.cncf.io/g/cncf-longhorn
 
-You can read more about the community and its events here: https://github.com/longhorn/community
+Subscribe to our [developer](https://lists.cncf.io/g/cncf-longhorn-dev) and [users](https://lists.cncf.io/g/cncf-longhorn-users) to stay updated with the latest news and events.
+
+You can read more about our community and its events here: https://github.com/longhorn/community
 
 # License
 
-Copyright (c) 2014-2022 The Longhorn Authors
+Copyright (c) 2014-2025 The Longhorn Authors
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

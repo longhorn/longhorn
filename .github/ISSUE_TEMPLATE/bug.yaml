@@ -1,0 +1,78 @@
+name: Bug report
+description: Create a bug report
+title: "[BUG] "
+labels: ["kind/bug", "require/qa-review-coverage", "require/backport"]
+assignees:
+  - 
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for stopping by to let us know something could be better!
+
+        For general questions or discussions, please use the [Discussions](https://github.com/longhorn/longhorn/discussions) tab.
+
+  - type: textarea
+    attributes:
+      label: Describe the Bug 
+      description: A clear and concise description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: To Reproduce
+      description: Please provide the steps to reproduce the case.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Support Bundle for Troubleshooting
+      description: Please provide a support bundle when the issue happens. You can generate a support bundle using the link at the footer of the Longhorn UI. Check [here](https://longhorn.io/docs/latest/troubleshoot/support-bundle/). Then, attach to the issue or send to longhorn-support-bundle@suse.com.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Environment
+      description: "Suggest checking the doc of the best practices of using Longhorn. [here](https://longhorn.io/docs/latest/best-practices)"
+      value: |
+       - Longhorn version: 
+       - Impacted volume (PV): <!-- PLEASE specify the volume name to better identify the cause -->
+       - Installation method (e.g. Rancher Catalog App/Helm/Kubectl):
+       - Kubernetes distro (e.g. RKE/K3s/EKS/OpenShift) and version:
+         - Number of control plane nodes in the cluster:
+         - Number of worker nodes in the cluster:
+       - Node config
+         - OS type and version:
+         - Kernel version:
+         - CPU per node:
+         - Memory per node:
+         - Disk type (e.g. SSD/NVMe/HDD):
+         - Network bandwidth between the nodes (Gbps):
+       - Underlying Infrastructure (e.g. on AWS/GCE, EKS/GKE, VMWare/KVM, Baremetal):
+       - Number of Longhorn volumes in the cluster:
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Please add any other context about the problem here.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Workaround and Mitigation
+      description: Please add any workaround or mitigation to the problem here.
+    validations:
+      required: false

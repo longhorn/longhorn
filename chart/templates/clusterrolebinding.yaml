@@ -44,6 +44,6 @@ subjects:
   name: longhorn-ui-service-account
   namespace: {{ include "release_namespace" . }}
 - kind: ServiceAccount
-  name: default # supportbundle-agent-support-bundle uses default sa
+  name: default  # supportbundle-agent-support-bundle uses default sa
   namespace: {{ include "release_namespace" . }}
 {{- end }}

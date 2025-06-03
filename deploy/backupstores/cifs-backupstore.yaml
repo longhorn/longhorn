@@ -40,7 +40,7 @@ spec:
         emptyDir: {}
       containers:
       - name: longhorn-test-cifs-container
-        image: derekbit/samba:latest
+        image: chanow/samba:latest
         ports:
         - containerPort: 139
         - containerPort: 445
@@ -49,7 +49,7 @@ spec:
         - name: EXPORT_PATH
           value: /opt/backupstore
         - name: CIFS_DISK_IMAGE_SIZE_MB
-          value: "4096"
+          value: "8192"
         - name: CIFS_USERNAME
           valueFrom:
             secretKeyRef:

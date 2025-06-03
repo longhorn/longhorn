@@ -1,0 +1,41 @@
+name: "[Issue Management] Add Wontfix Label To Not-Planned Issue"
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  add-wontfix-label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if the issue was closed with reason "not planned"
+        id: check-closed-reason
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if (context.payload.issue.state_reason === "not_planned") {
+              return true;
+            }
+            return false;
+
+      - name: Add wontfix label
+        if: steps.check-closed-reason.outputs.result == 'true'
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: wontfix
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clear milestone
+        if: steps.check-closed-reason.outputs.result == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue_number = context.payload.issue.number;
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              milestone: null
+            });
+          github_token: ${{ secrets.GITHUB_TOKEN }}

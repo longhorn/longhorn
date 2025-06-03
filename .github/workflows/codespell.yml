@@ -1,4 +1,4 @@
-name: Codespell
+name: "[PR Management] Codespell"
 
 on:
   pull_request:

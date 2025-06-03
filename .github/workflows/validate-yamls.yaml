@@ -1,0 +1,41 @@
+name: "[PR Management] Validate Longhorn YAMLs"
+
+on:
+  pull_request_target:
+    types:
+    - opened
+    - edited 
+    - synchronize
+    - reopened
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-yamls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          
+      - name: Install yamllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yamllint
+          
+      - name: Create yamllint config
+        run: |
+          cat > .yamllint <<EOF
+          extends: default
+          
+          rules:
+            line-length: disable
+            trailing-spaces: disable
+            document-start: disable
+            empty-lines: disable
+          EOF
+          
+      - name: Validate YAML file
+        run: yamllint -c .yamllint chart/questions.yaml

@@ -1,0 +1,41 @@
+name: "[PR Management] Conventional PR and Commits"
+
+on:
+  pull_request_target:
+    types:
+    - opened
+    - edited
+    - synchronize
+    - reopened
+
+permissions:
+  pull-requests: read
+
+jobs:
+  commit-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Lint Commits
+      uses: wagoid/commitlint-github-action@v6
+    - name: Lint Pull Request
+      uses: amannn/action-semantic-pull-request@v5.5.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        types: |
+          feat
+          fix
+          docs
+          style
+          refactor
+          perf
+          test
+          chore
+          vendor
+          build
+          ci
+          revert
+          BREAKING

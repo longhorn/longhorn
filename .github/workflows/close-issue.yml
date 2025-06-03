@@ -1,4 +1,4 @@
-name: Close-Issue
+name: "[Issue Management] Close Issue"
 on:
   issues:
     types: [ unlabeled ]

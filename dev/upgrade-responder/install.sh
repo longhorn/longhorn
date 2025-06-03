@@ -76,6 +76,10 @@ configMap:
         "maxLen": 200
       },
       "extraTagInfoSchema": {
+        "hostArch": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "hostKernelRelease": {
           "dataType": "string",
           "maxLen": 200
@@ -144,6 +148,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingFreezeFilesystemForSnapshot": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornSettingKubernetesClusterAutoscalerEnabled": {
           "dataType": "string",
           "maxLen": 200
@@ -156,11 +164,7 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
-        "longhornSettingOfflineReplicaRebuilding": {
-          "dataType": "string",
-          "maxLen": 200
-        },
-        "longhornSettingOrphanAutoDeletion": {
+        "longhornSettingOrphanResourceAutoDeletion": {
           "dataType": "string",
           "maxLen": 200
         },
@@ -193,6 +197,10 @@ configMap:
           "maxLen": 200
         },
         "longhornSettingRestoreVolumeRecurringJobs": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingRwxVolumeFastFailover": {
           "dataType": "string",
           "maxLen": 200
         },
@@ -234,6 +242,9 @@ configMap:
         }
       },
       "extraFieldInfoSchema": {
+        "longhornBackingImageCount": {
+          "dataType": "float"
+        },
         "longhornDiskBlockCount": {
           "dataType": "float"
         },
@@ -266,6 +277,9 @@ configMap:
           "dataType": "float"
         },
         "longhornNodeDiskSSDCount": {
+          "dataType": "float"
+        },
+        "longhornOrphanCount": {
           "dataType": "float"
         },
         "longhornSettingBackingImageCleanupWaitInterval": {
@@ -367,16 +381,25 @@ configMap:
         "longhornVolumeDataLocalityStrictLocalCount": {
           "dataType": "float"
         },
+        "longhornVolumeEncryptedTrueCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeEncryptedFalseCount": {
+          "dataType": "float"
+        },
+        "longhornFreezeFilesystemForSnapshotTrueCount": {
+          "dataType": "float"
+        },
         "longhornVolumeFrontendBlockdevCount": {
           "dataType": "float"
         },
         "longhornVolumeFrontendIscsiCount": {
           "dataType": "float"
         },
-        "longhornVolumeOfflineReplicaRebuildingDisabledCount": {
+        "longhornVolumeNumberOfReplicas": {
           "dataType": "float"
         },
-        "longhornVolumeOfflineReplicaRebuildingEnabledCount": {
+        "longhornVolumeNumberOfSnapshots": {
           "dataType": "float"
         },
         "longhornVolumeReplicaAutoBalanceDisabledCount": {
@@ -401,6 +424,9 @@ configMap:
           "dataType": "float"
         },
         "longhornVolumeUnmapMarkSnapChainRemovedFalseCount": {
+          "dataType": "float"
+        },
+        "longhornSettingOrphanResourceAutoDeletionGracePeriod": {
           "dataType": "float"
         }
       }

@@ -1,0 +1,87 @@
+name: "[Release] Create Release Task Issues"
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Release Version, e.g. v1.8.1"
+        required: true
+      release_captain:
+        description: "GitHub Username of the Release Captain, formatted as @<github-username>"
+        required: true
+      qa_captain:
+        description: "GitHub Username of the QA Captain, formatted as @<github-username>"
+        required: true
+
+jobs:
+  create-release-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Parse version information
+        id: parse_version
+        run: |
+          set -e
+          RELEASE_VERSION="${{ github.event.inputs.release_version }}"
+
+          # Validate version format
+          if ! echo "$RELEASE_VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Error: Invalid release version format. Expected format: v<major>.<minor>.<patch> (e.g., v1.8.1)." >&2
+            exit 1
+          fi
+
+          MAJOR_MINOR_VERSION=$(echo "$RELEASE_VERSION" | sed -E 's/(v[0-9]+\.[0-9]+)\.[0-9]+/\1.0/')
+          BRANCH_NAME=$(echo "$RELEASE_VERSION" | sed -E 's/(v[0-9]+\.[0-9]+)\.[0-9]+/\1.x/')
+          FEATURE_RELEASE="false"
+          if echo "$RELEASE_VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.0$'; then
+              FEATURE_RELEASE="true"
+          fi
+
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          echo "MAJOR_MINOR_VERSION=$MAJOR_MINOR_VERSION" >> $GITHUB_ENV
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "FEATURE_RELEASE=$FEATURE_RELEASE" >> $GITHUB_ENV
+
+      - name: Create an issue - release task
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/release.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          MAJOR_MINOR_VERSION: ${{ env.MAJOR_MINOR_VERSION }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+          FEATURE_RELEASE: ${{ env.FEATURE_RELEASE }}
+          RELEASE_CAPTAIN: ${{ github.event.inputs.release_captain }}
+          QA_CAPTAIN: ${{ github.event.inputs.qa_captain }}
+
+      - name: Create an issue - fix security issue for release
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/fix-cve-issues-for-release.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+
+      - name: Create an issue - regular tasks for feature release
+        if: ${{ env.FEATURE_RELEASE == 'true' }}
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/regular-tasks-for-feature-release.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          FEATURE_RELEASE: ${{ env.FEATURE_RELEASE }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+
+      - name: Create an issue - performance benchmark task for feature release
+        if: ${{ env.FEATURE_RELEASE == 'true' }}
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/performance-benchmark.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          FEATURE_RELEASE: ${{ env.FEATURE_RELEASE }}

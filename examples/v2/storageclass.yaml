@@ -7,7 +7,6 @@ allowVolumeExpansion: true
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 parameters:
-  # backup, backingImage and snapshot related parameters are not supported in SPDK preview stage
   numberOfReplicas: "3"
   staleReplicaTimeout: "2880"
   fsType: "ext4"

@@ -8,7 +8,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: longhorn-manager
+    longhorn.io/conversion-webhook: longhorn-conversion-webhook
   ports:
   - name: conversion-webhook
     port: 9501
@@ -24,7 +24,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: longhorn-manager
+    longhorn.io/admission-webhook: longhorn-admission-webhook
   ports:
   - name: admission-webhook
     port: 9502
@@ -40,32 +40,8 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: longhorn-manager
+    longhorn.io/recovery-backend: longhorn-recovery-backend
   ports:
   - name: recovery-backend
     port: 9503
     targetPort: recov-backend
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels: {{- include "longhorn.labels" . | nindent 4 }}
-  name: longhorn-engine-manager
-  namespace: {{ include "release_namespace" . }}
-spec:
-  clusterIP: None
-  selector:
-    longhorn.io/component: instance-manager
-    longhorn.io/instance-manager-type: engine
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels: {{- include "longhorn.labels" . | nindent 4 }}
-  name: longhorn-replica-manager
-  namespace: {{ include "release_namespace" . }}
-spec:
-  clusterIP: None
-  selector:
-    longhorn.io/component: instance-manager
-    longhorn.io/instance-manager-type: replica

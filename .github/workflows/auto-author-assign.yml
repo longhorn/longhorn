@@ -1,0 +1,12 @@
+name: "[PR Management] Auto Author Assign"
+
+on:
+  workflow_call:
+  pull_request_target:
+    types: [ opened, reopened ]
+
+jobs:
+  assign-author:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: toshimaru/auto-author-assign@v2.1.1

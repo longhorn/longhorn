@@ -1,0 +1,116 @@
+name: "[Release] Update Longhorn Repository Branch Image Tags"
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch, ex: v1.7.x"
+        required: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  update-repo-branch-image-tags:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.branch }}
+
+    - name: Prepare Packages
+      run: sudo apt update -y ; sudo apt install -y snapd; sudo snap install yq
+
+    - name: Update Repo Branch Image Tags in deploy/longhorn-images.txt
+      run: |
+        set -o errexit
+        set -o xtrace
+
+        tag=${{ inputs.branch }}-head
+
+        repos_dir=.repos
+
+        images=(
+          longhornio/backing-image-manager
+          longhornio/longhorn-engine
+          longhornio/longhorn-instance-manager
+          longhornio/longhorn-manager
+          longhornio/longhorn-share-manager
+          longhornio/longhorn-ui
+          longhornio/longhorn-cli
+        )
+
+        function replace_images_tags() {
+          local input_file="$1"
+          local tag="$2"
+
+          local output_file="${input_file}.new"
+
+          if [ -z "$input_file" ] || [ -z "$tag" ]; then
+            echo "Usage: replace_longhorn_images <input_file> <tag>"
+            return 1
+          fi
+
+          while IFS= read -r line; do
+            modified=false
+            for img in "${images[@]}"; do
+              if [[ "$line" == *"$img"* ]]; then
+                if [[ "$line" =~ $img(:[^ ]*)? ]]; then
+                  line=$(echo "$line" | sed -E "s|$img(:[^ ]*)?|$img:$tag|")
+                  modified=true
+                  break
+                fi
+              fi
+            done
+            echo "$line" >> "$output_file"
+          done < "$input_file"
+
+          if [ $? -eq 0 ]; then
+            mv "$output_file" "$input_file"
+            echo "Successfully replaced Longhorn image tags in '$input_file'."
+          else
+            rm -f "$output_file"
+            echo "Error: Failed to replace Longhorn image tags."
+            return 1
+          fi
+        }
+
+        replace_images_tags "deploy/longhorn-images.txt" "$tag"
+
+    - name: Update Repo Branch Image Tags in chart/values.yaml
+      run: |
+        yq eval '.image.longhorn.engine.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
+        yq eval '.image.longhorn.manager.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
+        yq eval '.image.longhorn.ui.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
+        yq eval '.image.longhorn.instanceManager.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
+        yq eval '.image.longhorn.shareManager.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
+        yq eval '.image.longhorn.backingImageManager.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
+
+    - name: Regenerate Manifests
+      run: bash ./scripts/generate-longhorn-yaml.sh
+
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v7
+      with:
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        branch: "update-image-tags-${{ inputs.branch }}"
+        delete-branch: true
+        sign-commits: true
+        signoff: true
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        committer: Longhorn GitHub Bot <67932897+longhorn-io-github-bot@users.noreply.github.com>
+        commit-message: "chore: update image tags for branch ${{ inputs.branch }}"
+        title: "chore: update image tags for branch ${{ inputs.branch }}"
+        body: |
+          This PR updates the image tags for branch ${{ inputs.branch }} to ${{ inputs.branch }}-head.
+
+    - name: Enable Pull Request Automerge
+      if: steps.cpr.outputs.pull-request-operation == 'created'
+      uses: peter-evans/enable-pull-request-automerge@v3
+      with:
+        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+        merge-method: rebase

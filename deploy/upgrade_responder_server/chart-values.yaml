@@ -50,13 +50,27 @@ configMap:
           ]
         },
         {
-          "name": "v1.6.2",
-          "releaseDate": "2024-05-22T00:00:00Z",
+          "name": "v1.6.4",
+          "releaseDate": "2025-01-02T00:00:00Z",
+          "tags": [
+            "stable"
+          ]
+        },
+        {
+          "name": "v1.7.3",
+          "releaseDate": "2025-02-19T00:00:00Z",
+          "tags": [
+            "stable"
+          ]
+        },
+        {
+          "name": "v1.8.1",
+          "releaseDate": "2025-03-05T00:00:00Z",
           "tags": [
             "latest",
             "stable"
           ]
-        }
+        } 
       ]
     }
   requestSchema: |-
@@ -66,6 +80,10 @@ configMap:
         "maxLen": 200
       },
       "extraTagInfoSchema": {
+        "hostArch": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "hostKernelRelease": {
           "dataType": "string",
           "maxLen": 200
@@ -134,6 +152,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingFreezeFilesystemForSnapshot": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornSettingKubernetesClusterAutoscalerEnabled": {
           "dataType": "string",
           "maxLen": 200
@@ -146,11 +168,11 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
-        "longhornSettingOfflineReplicaRebuilding": {
+        "longhornSettingOrphanAutoDeletion": {
           "dataType": "string",
           "maxLen": 200
         },
-        "longhornSettingOrphanAutoDeletion": {
+        "longhornSettingOrphanResourceAutoDeletion": {
           "dataType": "string",
           "maxLen": 200
         },
@@ -183,6 +205,10 @@ configMap:
           "maxLen": 200
         },
         "longhornSettingRestoreVolumeRecurringJobs": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingRwxVolumeFastFailover": {
           "dataType": "string",
           "maxLen": 200
         },
@@ -221,13 +247,12 @@ configMap:
         "longhornSettingV2DataEngine": {
           "dataType": "string",
           "maxLen": 200
-        },
-        "longhornSettingFreezeFilesystemForSnapshot"
-          "dataType": "string",
-          "maxLen": 200
         }
       },
       "extraFieldInfoSchema": {
+        "longhornBackingImageCount": {
+          "dataType": "float"
+        },
         "longhornDiskBlockCount": {
           "dataType": "float"
         },
@@ -260,6 +285,9 @@ configMap:
           "dataType": "float"
         },
         "longhornNodeDiskSSDCount": {
+          "dataType": "float"
+        },
+        "longhornOrphanCount": {
           "dataType": "float"
         },
         "longhornSettingBackingImageCleanupWaitInterval": {
@@ -361,16 +389,25 @@ configMap:
         "longhornVolumeDataLocalityStrictLocalCount": {
           "dataType": "float"
         },
+        "longhornVolumeEncryptedTrueCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeEncryptedFalseCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeFreezeFilesystemForSnapshotTrueCount": {
+          "dataType": "float"
+        },
         "longhornVolumeFrontendBlockdevCount": {
           "dataType": "float"
         },
         "longhornVolumeFrontendIscsiCount": {
           "dataType": "float"
         },
-        "longhornVolumeOfflineReplicaRebuildingDisabledCount": {
+        "longhornVolumeNumberOfReplicas": {
           "dataType": "float"
         },
-        "longhornVolumeOfflineReplicaRebuildingEnabledCount": {
+        "longhornVolumeNumberOfSnapshots": {
           "dataType": "float"
         },
         "longhornVolumeReplicaAutoBalanceDisabledCount": {
@@ -397,7 +434,7 @@ configMap:
         "longhornVolumeUnmapMarkSnapChainRemovedFalseCount": {
           "dataType": "float"
         },
-        "longhornVolumeFreezeFilesystemForSnapshotTrueCount": {
+        "longhornSettingOrphanResourceAutoDeletionGracePeriod": {
           "dataType": "float"
         }
       }

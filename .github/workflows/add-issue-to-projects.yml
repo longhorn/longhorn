@@ -1,0 +1,90 @@
+name: "[Issue Management] Add Issue To Projects"
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  longhorn:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Is Longhorn Member
+      id: is-longhorn-member
+      uses: tspascoal/get-user-teams-membership@v3
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Add Issue to Longhorn Sprint Project
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: actions/add-to-project@v1.0.2
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/8
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        labeled: kind/test
+        label-operator: NOT
+
+  community:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Is Longhorn Member
+      id: is-longhorn-member
+      continue-on-error: true
+      uses: tspascoal/get-user-teams-membership@v3
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Get Issue
+      if: steps.is-longhorn-member.outcome == 'success'
+      uses: octokit/request-action@v2.x
+      id: issue
+      with:
+        route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Add Issue to Community Sprint Project
+      id: add-project
+      if: |
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null
+      uses: actions/add-to-project@v1.0.2
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Update Item To New
+      if: |
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
+        steps.add-project.outputs.itemId != ''
+      uses: titoportas/update-project-fields@v0.1.0
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/5
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        item-id: ${{ steps.add-project.outputs.itemId }}
+        field-keys: Status,Sprint
+        field-values: "New,[0]"
+
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Is Longhorn Member
+      id: is-longhorn-member
+      uses: tspascoal/get-user-teams-membership@v3
+      with:
+        username: ${{ github.event.issue.user.login }}
+        organization: longhorn
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+    - name: Add Issue to QA Sprint Project
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      uses: actions/add-to-project@v1.0.2
+      with:
+        project-url: https://github.com/orgs/longhorn/projects/4
+        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        labeled: kind/test, area/infra
+        label-operator: OR

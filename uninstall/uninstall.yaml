@@ -1,33 +1,3 @@
-#apiVersion: policy/v1beta1
-#kind: PodSecurityPolicy
-#metadata:
-#  name: longhorn-uninstall-psp
-#spec:
-#  privileged: true
-#  allowPrivilegeEscalation: true
-#  requiredDropCapabilities:
-#  - NET_RAW
-#  allowedCapabilities:
-#  - SYS_ADMIN
-#  hostNetwork: false
-#  hostIPC: false
-#  hostPID: true
-#  runAsUser:
-#    rule: RunAsAny
-#  seLinux:
-#    rule: RunAsAny
-#  fsGroup:
-#    rule: RunAsAny
-#  supplementalGroups:
-#    rule: RunAsAny
-#  volumes:
-#  - configMap
-#  - downwardAPI
-#  - emptyDir
-#  - secret
-#  - projected
-#  - hostPath
-#---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -39,45 +9,102 @@ kind: ClusterRole
 metadata:
   name: longhorn-uninstall-role
 rules:
-  - apiGroups:
-      - apiextensions.k8s.io
-    resources:
-      - customresourcedefinitions
-    verbs:
-      - "*"
-  - apiGroups: [""]
-    resources: ["pods", "persistentvolumes", "persistentvolumeclaims", "nodes", "configmaps", "secrets", "services", "endpoints"]
-    verbs: ["*"]
-  - apiGroups: ["apps"]
-    resources: ["daemonsets", "statefulsets", "deployments"]
-    verbs: ["*"]
-  - apiGroups: ["batch"]
-    resources: ["jobs", "cronjobs"]
-    verbs: ["*"]
-  - apiGroups: ["policy"]
-    resources: ["poddisruptionbudgets"]
-    verbs: ["*"]
-  - apiGroups: ["scheduling.k8s.io"]
-    resources: ["priorityclasses"]
-    verbs: ["watch", "list"]
-  - apiGroups: ["storage.k8s.io"]
-    resources: ["csidrivers", "storageclasses", "volumeattachments"]
-    verbs: ["*"]
-  - apiGroups: ["longhorn.io"]
-    resources: ["volumes", "engines", "replicas", "settings", "engineimages", "nodes", "instancemanagers", "sharemanagers",
-                "backingimages", "backingimagemanagers", "backingimagedatasources", "backuptargets", "backupvolumes", "backups",
-                "recurringjobs", "orphans", "snapshots", "supportbundles", "systembackups", "systemrestores", "volumeattachments", "backupbackingimages"]
-    verbs: ["*"]
-  - apiGroups: ["coordination.k8s.io"]
-    resources: ["leases"]
-    verbs: ["*"]
-  #  - apiGroups: ["policy"]
-  #    resources: ["podsecuritypolicies"]
-  #    verbs: ["use"]
-  #    resourceNames: ["longhorn-uninstall-psp"]
-  - apiGroups: ["admissionregistration.k8s.io"]
-    resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
-    verbs: ["get", "delete"]
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - '*'
+- apiGroups:
+  - ''
+  resources:
+  - pods
+  - persistentvolumes
+  - persistentvolumeclaims
+  - nodes
+  - configmaps
+  - secrets
+  - services
+  - endpoints
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  - statefulsets
+  - deployments
+  verbs:
+  - '*'
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  - cronjobs
+  verbs:
+  - '*'
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - '*'
+- apiGroups:
+  - scheduling.k8s.io
+  resources:
+  - priorityclasses
+  verbs:
+  - watch
+  - list
+- apiGroups:
+  - storage.k8s.io
+  resources:
+  - csidrivers
+  - storageclasses
+  - volumeattachments
+  verbs:
+  - '*'
+- apiGroups:
+  - longhorn.io
+  resources:
+  - backingimagedatasources
+  - backingimagemanagers
+  - backingimages
+  - backupbackingimages
+  - backups
+  - backuptargets
+  - backupvolumes
+  - engineimages
+  - engines
+  - instancemanagers
+  - nodes
+  - orphans
+  - recurringjobs
+  - replicas
+  - settings
+  - sharemanagers
+  - snapshots
+  - supportbundles
+  - systembackups
+  - systemrestores
+  - volumeattachments
+  - volumes
+  verbs:
+  - '*'
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - '*'
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  - validatingwebhookconfigurations
+  verbs:
+  - get
+  - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -88,9 +115,9 @@ roleRef:
   kind: ClusterRole
   name: longhorn-uninstall-role
 subjects:
-  - kind: ServiceAccount
-    name: longhorn-uninstall-service-account
-    namespace: longhorn-system
+- kind: ServiceAccount
+  name: longhorn-uninstall-service-account
+  namespace: longhorn-system
 ---
 apiVersion: batch/v1
 kind: Job
@@ -105,26 +132,16 @@ spec:
       name: longhorn-uninstall
     spec:
       containers:
-        - name: longhorn-uninstall
-          image: longhornio/longhorn-manager:master-head
-          imagePullPolicy: IfNotPresent
-          command:
-            - longhorn-manager
-            - uninstall
-            - --force
-          env:
-            - name: LONGHORN_NAMESPACE
-              value: longhorn-system
+      - command:
+        - longhorn-manager
+        - uninstall
+        - --force
+        env:
+        - name: LONGHORN_NAMESPACE
+          value: longhorn-system
+        image: longhornio/longhorn-manager:master-head
+        imagePullPolicy: IfNotPresent
+        name: longhorn-uninstall
       restartPolicy: Never
       serviceAccountName: longhorn-uninstall-service-account
-#      imagePullSecrets:
-#      - name: ""
-#      priorityClassName:
-#      tolerations:
-#        - key: "key"
-#          operator: "Equal"
-#          value: "value"
-#          effect: "NoSchedule"
-#      nodeSelector:
-#        label-key1: "label-value1"
-#        label-key2: "label-value2"
+---

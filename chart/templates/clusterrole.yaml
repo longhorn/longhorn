@@ -11,7 +11,7 @@ rules:
   verbs:
   - "*"
 - apiGroups: [""]
-  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims","persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps", "serviceaccounts"]
+  resources: ["pods", "events", "persistentvolumes", "persistentvolumeclaims", "persistentvolumeclaims/status", "nodes", "proxy/nodes", "pods/log", "secrets", "services", "endpoints", "configmaps", "serviceaccounts"]
   verbs: ["*"]
 - apiGroups: [""]
   resources: ["namespaces"]

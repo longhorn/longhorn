@@ -63,10 +63,17 @@ spec:
             port: 9501
             scheme: HTTPS
         volumeMounts:
+        - name: boot
+          mountPath: /host/boot/
+          readOnly: true
         - name: dev
           mountPath: /host/dev/
         - name: proc
           mountPath: /host/proc/
+          readOnly: true
+        - name: etc
+          mountPath: /host/etc/
+          readOnly: true
         - name: longhorn
           mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
@@ -77,6 +84,10 @@ spec:
           mountPath: /go-cover-dir/
         {{- end }}
         env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
@@ -98,12 +109,18 @@ spec:
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
       volumes:
+      - name: boot
+        hostPath:
+          path: /boot/
       - name: dev
         hostPath:
           path: /dev/
       - name: proc
         hostPath:
           path: /proc/
+      - name: etc
+        hostPath:
+          path: /etc/
       - name: longhorn
         hostPath:
           path: /var/lib/longhorn/

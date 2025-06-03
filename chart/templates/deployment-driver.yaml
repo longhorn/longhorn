@@ -25,6 +25,9 @@ spec:
           command:
           - longhorn-manager
           - -d
+          {{- if eq .Values.longhornDriver.log.format "json" }}
+          - -j
+          {{- end }}
           - deploy-driver
           - --manager-image
           - "{{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"

@@ -55,22 +55,16 @@ spec:
     spec:
       serviceAccountName: longhorn-ui-service-account
       affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - longhorn-ui
-              topologyKey: kubernetes.io/hostname
+      {{- toYaml .Values.longhornUI.affinity | nindent 8 }}
       containers:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
       - name: oauth-proxy
+        {{- if .Values.image.openshift.oauthProxy.repository }}
         image: {{ template "registry_url" . }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
+        {{- else }}
+        image: ""
+        {{- end }}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: {{ .Values.openshift.ui.proxy | default 8443 }}
@@ -93,9 +87,9 @@ spec:
         image: {{ template "registry_url" . }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name : nginx-cache
+        - name: nginx-cache
           mountPath: /var/cache/nginx/
-        - name : nginx-config
+        - name: nginx-config
           mountPath: /var/config/nginx/
         - name: var-run
           mountPath: /var/run/
