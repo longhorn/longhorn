@@ -12,4 +12,4 @@
 
 | Type | Name | Website | Use-Case |
 |:-|:-|:-|:-|
-| End-User | Nemlig | https://www.nemlig.com/ | All encompassing persistent storage solution on Kubernemlig > An operations and developer friendly self-developed Platform As A Service offering inside Nemlig.
+| End-User | Nemlig | https://www.nemlig.com/ | A comprehensive, persistent storage solution on Kubernetes. Part of “Kubernemlig,” Nemlig’s internal, developer- and operations-friendly Platform-as-a-Service (PaaS).
