@@ -134,9 +134,21 @@ spec:
         secret:
           secretName: longhorn-grpc-tls
           optional: true
-      {{- if .Values.privateRegistry.registrySecret }}
+      {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
       imagePullSecrets:
-      - name: {{ .Values.privateRegistry.registrySecret }}
+        {{- $imagePullSecrets := list }}
+        {{- if kindIs "string" . }}
+          {{- $imagePullSecrets = append (dict "name" .) }}
+        {{- else }}
+          {{- range . }}
+            {{- if kindIs "string" . }}
+                {{- $imagePullSecrets = append $imagePullSecrets (dict "name" .) }}
+            {{- else }}
+                {{- $imagePullSecrets = append $imagePullSecrets . }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- toYaml $imagePullSecrets | nindent 8 }}
       {{- end }}
       {{- if .Values.longhornManager.priorityClass }}
       priorityClassName: {{ .Values.longhornManager.priorityClass | quote }}
