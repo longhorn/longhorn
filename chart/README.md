@@ -79,6 +79,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | global.cattle.windowsCluster.enabled | bool | `false` | Setting that allows Longhorn to run on a Rancher Windows cluster. |
 | global.cattle.windowsCluster.nodeSelector | object | `{"kubernetes.io/os":"linux"}` | Node selector for Linux nodes that can run user-deployed Longhorn components. |
 | global.cattle.windowsCluster.tolerations | list | `[{"effect":"NoSchedule","key":"cattle.io/os","operator":"Equal","value":"linux"}]` | Toleration for Linux nodes that can run user-deployed Longhorn components. |
+| global.imageRegistry | string | `""` | Global override for container image registry. |
 | global.nodeSelector | object | `{}` | Node selector for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer. |
 | global.tolerations | list | `[]` | Toleration for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer. |
 
@@ -93,32 +94,46 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| image.csi.attacher.registry | string | `""` | Registry for the CSI attacher image. When unspecified, Longhorn uses the default value. |
 | image.csi.attacher.repository | string | `"longhornio/csi-attacher"` | Repository for the CSI attacher image. When unspecified, Longhorn uses the default value. |
 | image.csi.attacher.tag | string | `"v4.8.1"` | Tag for the CSI attacher image. When unspecified, Longhorn uses the default value. |
+| image.csi.livenessProbe.registry | string | `""` | Registry for the CSI liveness probe image. When unspecified, Longhorn uses the default value. |
 | image.csi.livenessProbe.repository | string | `"longhornio/livenessprobe"` | Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value. |
 | image.csi.livenessProbe.tag | string | `"v2.15.0"` | Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value. |
+| image.csi.nodeDriverRegistrar.registry | string | `""` | Registry for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
 | image.csi.nodeDriverRegistrar.repository | string | `"longhornio/csi-node-driver-registrar"` | Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
 | image.csi.nodeDriverRegistrar.tag | string | `"v2.13.0"` | Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
+| image.csi.provisioner.registry | string | `""` | Registry for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.tag | string | `"v5.2.0"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
+| image.csi.resizer.registry | string | `""` | Registry for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.tag | string | `"v1.13.2"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
+| image.csi.snapshotter.registry | string | `""` | Registry for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.tag | string | `"v8.2.0"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
+| image.longhorn.backingImageManager.registry | string | `""` | Registry for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.tag | string | `"master-head"` | Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
+| image.longhorn.engine.registry | string | `""` | Registry for the Longhorn Engine image. |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Repository for the Longhorn Engine image. |
 | image.longhorn.engine.tag | string | `"master-head"` | Tag for the Longhorn Engine image. |
+| image.longhorn.instanceManager.registry | string | `""` | Registry for the Longhorn Instance Manager image. |
 | image.longhorn.instanceManager.repository | string | `"longhornio/longhorn-instance-manager"` | Repository for the Longhorn Instance Manager image. |
 | image.longhorn.instanceManager.tag | string | `"master-head"` | Tag for the Longhorn Instance Manager image. |
+| image.longhorn.manager.registry | string | `""` | Registry for the Longhorn Manager image. |
 | image.longhorn.manager.repository | string | `"longhornio/longhorn-manager"` | Repository for the Longhorn Manager image. |
 | image.longhorn.manager.tag | string | `"master-head"` | Tag for the Longhorn Manager image. |
+| image.longhorn.shareManager.registry | string | `""` | Registry for the Longhorn Share Manager image. |
 | image.longhorn.shareManager.repository | string | `"longhornio/longhorn-share-manager"` | Repository for the Longhorn Share Manager image. |
 | image.longhorn.shareManager.tag | string | `"master-head"` | Tag for the Longhorn Share Manager image. |
+| image.longhorn.supportBundleKit.registry | string | `""` | Registry for the Longhorn Support Bundle Manager image. |
 | image.longhorn.supportBundleKit.repository | string | `"longhornio/support-bundle-kit"` | Repository for the Longhorn Support Bundle Manager image. |
 | image.longhorn.supportBundleKit.tag | string | `"v0.0.55"` | Tag for the Longhorn Support Bundle Manager image. |
+| image.longhorn.ui.registry | string | `""` | Registry for the Longhorn UI image. |
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Repository for the Longhorn UI image. |
 | image.longhorn.ui.tag | string | `"master-head"` | Tag for the Longhorn UI image. |
+| image.openshift.oauthProxy.registry | string | `""` | Registry for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users. |
 | image.openshift.oauthProxy.repository | string | `""` | Repository for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users. |
 | image.openshift.oauthProxy.tag | string | `""` | Tag for the OAuth Proxy image. Specify OCP/OKD version 4.1 or later (including version 4.15, which is available at quay.io/openshift/origin-oauth-proxy:4.15). This setting applies only to OpenShift users. |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy that applies to all user-deployed Longhorn components, such as Longhorn Manager, Longhorn driver, and Longhorn UI. |
