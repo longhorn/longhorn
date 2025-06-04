@@ -4,6 +4,8 @@
 global:
   # -- Global override for container image registry.
   imageRegistry: ""
+  # -- Global override for image pull secrets for container registry.
+  imagePullSecrets: []
   # -- Toleration for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.
   tolerations: []
   # -- Node selector for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.
