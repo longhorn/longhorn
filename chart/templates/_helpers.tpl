@@ -40,7 +40,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion }}
 
 {{- define "system_default_registry" -}}
 {{- if .Values.global.cattle.systemDefaultRegistry -}}
-{{- printf "%s/" .Values.global.cattle.systemDefaultRegistry -}}
+{{- .Values.global.cattle.systemDefaultRegistry -}}
 {{- else -}}
 {{- "" -}}
 {{- end -}}
@@ -48,7 +48,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion }}
 
 {{- define "registry_url" -}}
 {{- if .Values.privateRegistry.registryUrl -}}
-{{- printf "%s/" .Values.privateRegistry.registryUrl -}}
+{{- .Values.privateRegistry.registryUrl -}}
 {{- else -}}
 {{ include "system_default_registry" . }}
 {{- end -}}
