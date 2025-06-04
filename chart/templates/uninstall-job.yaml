@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: longhorn-uninstall
-        image: {{ template "registry_url" . }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        image: {{ with (coalesce .Values.global.imageRegistry .Values.image.longhorn.manager.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command:
         - longhorn-manager
