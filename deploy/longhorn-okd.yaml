@@ -5174,7 +5174,7 @@ spec:
           - name: CSI_SNAPSHOTTER_IMAGE
             value: "longhornio/csi-snapshotter:v8.2.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "longhornio/livenessprobe:v2.15.0"
+            value: "longhornio/livenessprobe:v2.16.0"
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
