@@ -11,4 +11,4 @@ longhornio/longhorn-manager:v1.8.2-rc3
 longhornio/longhorn-share-manager:v1.8.2-rc3
 longhornio/longhorn-ui:v1.8.2-rc3
 longhornio/longhorn-cli:v1.8.2-rc3
-longhornio/support-bundle-kit:v0.0.55
+longhornio/support-bundle-kit:v0.0.56
