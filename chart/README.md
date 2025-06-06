@@ -144,6 +144,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 |-----|-------------|
 | service.manager.nodePort | NodePort port number for Longhorn Manager. When unspecified, Longhorn selects a free port between 30000 and 32767. |
 | service.manager.type | Service type for Longhorn Manager. |
+| service.ui.annotations | Annotation for the Longhorn UI service. |
 | service.ui.nodePort | NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767. |
 | service.ui.type | Service type for Longhorn UI. (Options: "ClusterIP", "NodePort", "LoadBalancer", "Rancher-Proxy") |
 
