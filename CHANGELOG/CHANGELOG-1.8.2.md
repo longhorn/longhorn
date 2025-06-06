@@ -29,13 +29,17 @@ For information about issues identified after this release, see [Release-Known-I
 
 ### Improvement
 
+- [BACKPORT][v1.8.2][IMPROVEMENT] Adding retry logic for longhorn-csi-plugin when it trying to contact the longhorn-manager pods [11027](https://github.com/longhorn/longhorn/issues/11027) - @PhanLe1010 @roger-ryao
 - [BACKPORT][v1.8.2][IMPROVEMENT] add strict field validation to the update option in upgrade path [10648](https://github.com/longhorn/longhorn/issues/10648) - @ChanYiLin
 - [BACKPORT][v1.8.2][IMPROVEMENT] Move `SettingNameV2DataEngineHugepageLimit` to danger zone settings [10568](https://github.com/longhorn/longhorn/issues/10568) - @derekbit @chriscchien
 - [BACKPORT][v1.8.2][IMPROVEMENT] Reduce auto balancing logging noise for detached volumes [10692](https://github.com/longhorn/longhorn/issues/10692) - @roger-ryao
 - [BACKPORT][v1.8.2][IMPROVEMENT] Improve the Warning Message When Failed to Remove `Block`-Type Disks [10576](https://github.com/longhorn/longhorn/issues/10576) - @yangchiu @ChanYiLin
 
 ### Bug
-- [BUG] V2 Backing image failed after upgrade from v1.8.1 to v1.8.2-rc1 [10969](https://github.com/longhorn/longhorn/issues/10969) - @COLDTURNIP
+
+- [BACKPORT][v1.8.2][BUG] unable to clean up the backing image volume replica after node eviction [11057](https://github.com/longhorn/longhorn/issues/11057) - @COLDTURNIP @roger-ryao
+- [BACKPORT][v1.8.2][BUG] backing image volume replica NPE crash during evicting node [11036](https://github.com/longhorn/longhorn/issues/11036) - @COLDTURNIP @chriscchien
+- [BUG] V2 Backing image failed after upgrade from v1.8.1 to v1.8.2-rc1 [10969](https://github.com/longhorn/longhorn/issues/10969) - @COLDTURNIP @roger-ryao
 - [BACKPORT][v1.8.2][BUG] Error on git checkout in a container [10975](https://github.com/longhorn/longhorn/issues/10975) - @derekbit @chriscchien
 - [BACKPORT][v1.8.2][BUG] Helm persistence.backupTargetName not referenced in storageclass template [10964](https://github.com/longhorn/longhorn/issues/10964) - @yangchiu @mantissahz
 - [BACKPORT][v1.8.2][BUG] MultiUnmapper floods logs with warnings about size mismatch. [10565](https://github.com/longhorn/longhorn/issues/10565) - @shuo-wu @roger-ryao
@@ -72,7 +76,7 @@ For information about issues identified after this release, see [Release-Known-I
 - @shuo-wu
 - @yangchiu
 - @sushant-suse
-- @jillian-maroket 
+- @jillian-maroket
 - @rebeccazzzz
 - @forbesguthrie
 - @asettle
