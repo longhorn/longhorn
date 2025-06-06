@@ -4140,26 +4140,6 @@ metadata:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.9.0-dev
-    app: longhorn-conversion-webhook
-  name: longhorn-conversion-webhook
-  namespace: longhorn-system
-spec:
-  type: ClusterIP
-  selector:
-    longhorn.io/conversion-webhook: longhorn-conversion-webhook
-  ports:
-  - name: conversion-webhook
-    port: 9501
-    targetPort: conversion-wh
----
-# Source: longhorn/templates/services.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app.kubernetes.io/name: longhorn
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.9.0-dev
     app: longhorn-admission-webhook
   name: longhorn-admission-webhook
   namespace: longhorn-system
@@ -4243,8 +4223,6 @@ spec:
         ports:
         - containerPort: 9500
           name: manager
-        - containerPort: 9501
-          name: conversion-wh
         - containerPort: 9502
           name: admission-wh
         - containerPort: 9503
@@ -4252,7 +4230,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /v1/healthz
-            port: 9501
+            port: 9502
             scheme: HTTPS
         volumeMounts:
         - name: boot
