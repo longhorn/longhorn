@@ -29,7 +29,7 @@ For information about issues identified after this release, see [Release-Known-I
 
 ### Improvement
 
-- [BACKPORT][v1.8.2][IMPROVEMENT] Adding retry logic for longhorn-csi-plugin when it trying to contact the longhorn-manager pods [11027](https://github.com/longhorn/longhorn/issues/11027) - @PhanLe1010 @roger-ryao
+- [BACKPORT][v1.8.2][IMPROVEMENT] Adding retry logic for longhorn-csi-plugin when it is trying to contact the longhorn-manager pods [11027](https://github.com/longhorn/longhorn/issues/11027) - @PhanLe1010 @roger-ryao
 - [BACKPORT][v1.8.2][IMPROVEMENT] add strict field validation to the update option in upgrade path [10648](https://github.com/longhorn/longhorn/issues/10648) - @ChanYiLin
 - [BACKPORT][v1.8.2][IMPROVEMENT] Move `SettingNameV2DataEngineHugepageLimit` to danger zone settings [10568](https://github.com/longhorn/longhorn/issues/10568) - @derekbit @chriscchien
 - [BACKPORT][v1.8.2][IMPROVEMENT] Reduce auto balancing logging noise for detached volumes [10692](https://github.com/longhorn/longhorn/issues/10692) - @roger-ryao
