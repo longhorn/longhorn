@@ -5010,7 +5010,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:v1.8.2
+        image: longhornio/longhorn-manager:v1.8.x-head
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -5019,17 +5019,17 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - "longhornio/longhorn-engine:v1.8.2"
+        - "longhornio/longhorn-engine:v1.8.x-head"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:v1.8.2"
+        - "longhornio/longhorn-instance-manager:v1.8.x-head"
         - --share-manager-image
-        - "longhornio/longhorn-share-manager:v1.8.2"
+        - "longhornio/longhorn-share-manager:v1.8.x-head"
         - --backing-image-manager-image
-        - "longhornio/backing-image-manager:v1.8.2"
+        - "longhornio/backing-image-manager:v1.8.x-head"
         - --support-bundle-manager-image
         - "longhornio/support-bundle-kit:v0.0.56"
         - --manager-image
-        - "longhornio/longhorn-manager:v1.8.2"
+        - "longhornio/longhorn-manager:v1.8.x-head"
         - --service-account
         - longhorn-service-account
         - --upgrade-version-check
@@ -5083,7 +5083,7 @@ spec:
               fieldPath: spec.nodeName
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
-        image: longhornio/longhorn-share-manager:v1.8.2
+        image: longhornio/longhorn-share-manager:v1.8.x-head
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
       volumes:
       - name: boot
@@ -5136,18 +5136,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:v1.8.2
+          image: longhornio/longhorn-manager:v1.8.x-head
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:v1.8.2
+          image: longhornio/longhorn-manager:v1.8.x-head
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - "longhornio/longhorn-manager:v1.8.2"
+          - "longhornio/longhorn-manager:v1.8.x-head"
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -5237,7 +5237,7 @@ spec:
           - mountPath: /etc/tls/private
             name: longhorn-ui-tls
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:v1.8.2
+        image: longhornio/longhorn-ui:v1.8.x-head
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name : nginx-cache
