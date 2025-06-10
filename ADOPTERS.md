@@ -12,4 +12,5 @@
 
 | Type | Name | Website | Use-Case |
 |:-|:-|:-|:-|
-| End-User | Nemlig | https://www.nemlig.com/ | A comprehensive, persistent storage solution on Kubernetes. Part of “Kubernemlig,” Nemlig’s internal, developer- and operations-friendly Platform-as-a-Service (PaaS).
+| End-User | Nemlig | https://www.nemlig.com/ | A comprehensive, persistent storage solution on Kubernetes. Part of “Kubernemlig,” Nemlig’s internal, developer- and operations-friendly Platform-as-a-Service (PaaS). |
+| End-User | Child Rescue Coalition | https://childrescuecoalition.org/ | Kubernetes persistent replicated storage with automated backups. |
