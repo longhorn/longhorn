@@ -17,7 +17,7 @@ REPOS = ["longhorn/longhorn-manager",
          "longhorn/types"]
 
 
-def flatten_issues(title, blocks, issues, user_mapping):
+def flatten_issues(repo, blocks, issues, user_mapping):
     # Append the title and divider only if there are issues to display
     print(issues)
     if issues:
@@ -26,7 +26,7 @@ def flatten_issues(title, blocks, issues, user_mapping):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"*{title}* - {len(issues)} prs"
+                    "text": f"*{repo}* - {len(issues)} prs"
                 }
             }
         )
@@ -37,7 +37,7 @@ def flatten_issues(title, blocks, issues, user_mapping):
         for i, issue in enumerate(issues):
             number = issue["number"]
             title = issue["title"]
-            issue_url = f"https://github.com/longhorn/longhorn/pull/{number}"
+            issue_url = f"https://github.com/{repo}/pull/{number}"
             reviewers = []
             for reviewer in issue["reviewers"]:
                 slack_id = user_mapping.get(reviewer)
