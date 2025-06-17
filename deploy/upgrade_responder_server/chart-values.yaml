@@ -64,13 +64,19 @@ configMap:
           ]
         },
         {
-          "name": "v1.8.1",
-          "releaseDate": "2025-03-05T00:00:00Z",
+          "name": "v1.8.2",
+          "releaseDate": "2025-06-08T00:00:00Z",
           "tags": [
-            "latest",
             "stable"
           ]
-        } 
+        },
+        {
+          "name": "v1.9.0",
+          "releaseDate": "2025-05-27T00:00:00Z",
+          "tags": [
+            "latest"
+          ]
+        }    
       ]
     }
   requestSchema: |-
