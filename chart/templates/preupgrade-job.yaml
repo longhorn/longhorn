@@ -38,11 +38,11 @@ spec:
         hostPath:
           path: /proc/
       restartPolicy: OnFailure
-      {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
+      {{- with (coalesce .Values.global.imagePullSecrets (ternary "" .Values.privateRegistry.registrySecret (empty .Values.privateRegistry.createSecret))) }}
       imagePullSecrets:
         {{- $imagePullSecrets := list }}
         {{- if kindIs "string" . }}
-          {{- $imagePullSecrets = append (dict "name" .) }}
+          {{- $imagePullSecrets = append $imagePullSecrets (dict "name" .) }}
         {{- else }}
           {{- range . }}
             {{- if kindIs "string" . }}
