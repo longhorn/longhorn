@@ -2715,9 +2715,6 @@ spec:
                 type: string
               currentState:
                 type: string
-              evictionRequested:
-                description: 'Deprecated: Replaced by field `spec.evictionRequested`.'
-                type: boolean
               instanceManagerName:
                 type: string
               ip:
