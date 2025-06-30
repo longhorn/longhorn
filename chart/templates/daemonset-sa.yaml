@@ -121,7 +121,7 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: /var/lib/longhorn/
+          path: {{ .Values.longhornManager.dataVolumeHostPath }}
       {{- if .Values.enableGoCoverDir }}
       - name: go-cover-dir
         hostPath:
