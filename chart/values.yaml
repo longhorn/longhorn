@@ -437,6 +437,22 @@ longhornManager:
   #  annotation-key2: "annotation-value2"
   # -- Host path on the nodes that will be mounted to `/var/lib/longhorn` inside the longhorn-manager pods. The default value is "/var/lib/longhorn/".
   dataVolumeHostPath: "/var/lib/longhorn/"
+  # -- Extra volume specs to add to the `longhorn-manager` pod. The values are directly inserted into the
+  # `volumes` key in the pod spec.
+  extraVolumes: []
+  ## To add extra volumes, delete the `[]` in the line above
+  ## and uncomment this example block:
+  # - name: longhorn
+  #   hostPath:
+  #     path: /var/mnt/my-bonus-data
+  # -- Extra volumeMount specs to add to the `longhorn-manager` container in the `longhorn-manager` pod.
+  # The values are directly inserted into the `volumes` key in the pod spec.
+  longhornManagerContainerVolumeMounts: []
+  ## To mount extra volumes defined above, delete the `[]` in the line above
+  ## and uncomment this example block:
+  # - name: my-bonus-data-volume
+  #   mountPath: /var/lib/longhorn-extra/my-bonus-data
+  #   mountPropagation: Bidirectional
 longhornDriver:
   log:
     # -- Format of longhorn-driver logs. (Options: "plain", "json")
