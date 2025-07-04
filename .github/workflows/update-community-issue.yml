@@ -1,4 +1,4 @@
-name: "[Issue Management] Update Community Review Sprint Issue Status"
+name: "[Issue Management] Update Community Issue Status, Sprint and Milestone"
 on:
   issues:
     types: [labeled, milestoned, reopened, closed]
@@ -10,36 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  longhorn:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Is Longhorn Member
-      id: is-longhorn-member
-      continue-on-error: true
-      uses: tspascoal/get-user-teams-membership@v3
-      with:
-        username: ${{ github.event.issue.user.login }}
-        organization: longhorn
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-
-    - run: |
-        echo "is-longhorn-member teams: ${{ steps.is-longhorn-member.outputs.teams }}"
-        echo "is-longhorn-member outcome: ${{ steps.is-longhorn-member.outcome }}"
-
-    - name: Set Milestone to Backlog
-      if: ${{
-        fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null  &&
-        github.event.issue.milestone == null
-        }}
-      run: |
-        echo "Setting milestone $MILESTONE to Backlog"
-        gh issue edit "${{ github.event.issue.number }}" --milestone "Backlog"
-      env:
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-
   community:
     runs-on: ubuntu-latest
     steps:
