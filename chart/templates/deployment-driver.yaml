@@ -16,11 +16,11 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: {{ with (coalesce .Values.global.imageRegistry .Values.image.longhorn.manager.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+          image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: {{ with (coalesce .Values.global.imageRegistry .Values.image.longhorn.manager.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+          image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
           - longhorn-manager
@@ -30,7 +30,7 @@ spec:
           {{- end }}
           - deploy-driver
           - --manager-image
-          - "{{ with (coalesce .Values.global.imageRegistry .Values.image.longhorn.manager.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
+          - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -52,27 +52,27 @@ spec:
           {{- end }}
           {{- if and .Values.image.csi.attacher.repository .Values.image.csi.attacher.tag }}
           - name: CSI_ATTACHER_IMAGE
-            value: "{{ with (coalesce .Values.global.imageRegistry .Values.image.csi.attacher.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.csi.attacher.repository }}:{{ .Values.image.csi.attacher.tag }}"
+            value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.attacher.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.attacher.repository }}:{{ .Values.image.csi.attacher.tag }}"
           {{- end }}
           {{- if and .Values.image.csi.provisioner.repository .Values.image.csi.provisioner.tag }}
           - name: CSI_PROVISIONER_IMAGE
-            value: "{{ with (coalesce .Values.global.imageRegistry .Values.image.csi.provisioner.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.csi.provisioner.repository }}:{{ .Values.image.csi.provisioner.tag }}"
+            value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.provisioner.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.provisioner.repository }}:{{ .Values.image.csi.provisioner.tag }}"
           {{- end }}
           {{- if and .Values.image.csi.nodeDriverRegistrar.repository .Values.image.csi.nodeDriverRegistrar.tag }}
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "{{ with (coalesce .Values.global.imageRegistry .Values.image.csi.nodeDriverRegistrar.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.csi.nodeDriverRegistrar.repository }}:{{ .Values.image.csi.nodeDriverRegistrar.tag }}"
+            value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.nodeDriverRegistrar.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.nodeDriverRegistrar.repository }}:{{ .Values.image.csi.nodeDriverRegistrar.tag }}"
           {{- end }}
           {{- if and .Values.image.csi.resizer.repository .Values.image.csi.resizer.tag }}
           - name: CSI_RESIZER_IMAGE
-            value: "{{ with (coalesce .Values.global.imageRegistry .Values.image.csi.resizer.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.csi.resizer.repository }}:{{ .Values.image.csi.resizer.tag }}"
+            value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.resizer.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.resizer.repository }}:{{ .Values.image.csi.resizer.tag }}"
           {{- end }}
           {{- if and .Values.image.csi.snapshotter.repository .Values.image.csi.snapshotter.tag }}
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "{{ with (coalesce .Values.global.imageRegistry .Values.image.csi.snapshotter.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.csi.snapshotter.repository }}:{{ .Values.image.csi.snapshotter.tag }}"
+            value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.snapshotter.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.snapshotter.repository }}:{{ .Values.image.csi.snapshotter.tag }}"
           {{- end }}
           {{- if and .Values.image.csi.livenessProbe.repository .Values.image.csi.livenessProbe.tag }}
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "{{ with (coalesce .Values.global.imageRegistry .Values.image.csi.livenessProbe.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.csi.livenessProbe.repository }}:{{ .Values.image.csi.livenessProbe.tag }}"
+            value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.livenessProbe.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.livenessProbe.repository }}:{{ .Values.image.csi.livenessProbe.tag }}"
           {{- end }}
           {{- if .Values.csi.attacherReplicaCount }}
           - name: CSI_ATTACHER_REPLICA_COUNT

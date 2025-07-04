@@ -61,7 +61,7 @@ spec:
       {{- if .Values.openshift.ui.route }}
       - name: oauth-proxy
         {{- if .Values.image.openshift.oauthProxy.repository }}
-        image: {{ with (coalesce .Values.global.imageRegistry .Values.image.openshift.oauthProxy.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.openshift.oauthProxy.registry) }}{{ . }}/{{ end }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
         {{- else }}
         image: ""
         {{- end }}
@@ -84,7 +84,7 @@ spec:
       {{- end }}
       {{- end }}
       - name: longhorn-ui
-        image: {{ with (coalesce .Values.global.imageRegistry .Values.image.longhorn.ui.registry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.ui.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
         - name: nginx-cache
