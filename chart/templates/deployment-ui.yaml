@@ -168,6 +168,8 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  ipFamilies:
+  - IPv4
   {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
   type: ClusterIP
   {{- else }}
