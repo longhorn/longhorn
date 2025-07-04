@@ -254,3 +254,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineCPUMask) }}
     v2-data-engine-cpu-mask: {{ .Values.defaultSettings.v2DataEngineCPUMask }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineRebuildingMbytesPerSecond) }}
+    v2-data-engine-rebuilding-mbytes-per-second: {{ .Values.defaultSettings.v2DataEngineRebuildingMbytesPerSecond }}
+    {{- end }}
