@@ -401,7 +401,7 @@ defaultBackupStore:
   # -- Number of seconds that Longhorn waits before checking the default backupstore for new backups. The default value is "300". When the value is "0", polling is disabled.
   pollInterval: ~
 privateRegistry:
-  # -- Setting that allows you to create a private registry secret.
+  # -- Set to `true` to automatically create a new private registry secret.
   createSecret: ~
   # -- URL of a private registry. When unspecified, Longhorn uses the default system registry.
   registryUrl: ~
@@ -409,7 +409,7 @@ privateRegistry:
   registryUser: ~
   # -- Password for authenticating with a private registry.
   registryPasswd: ~
-  # -- Kubernetes secret that allows you to pull images from a private registry. This setting applies only when creation of private registry secrets is enabled. You must include the private registry name in the secret name.
+  # -- If create a new private registry secret is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry.
   registrySecret: ~
 longhornManager:
   log:
