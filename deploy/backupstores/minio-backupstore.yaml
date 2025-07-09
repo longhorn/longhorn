@@ -69,6 +69,17 @@ spec:
               key: AWS_SECRET_ACCESS_KEY
         ports:
         - containerPort: 9000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        securityContext:
+          runAsUser: 1000
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
         volumeMounts:
         - name: minio-volume
           mountPath: "/storage"
