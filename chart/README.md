@@ -243,9 +243,9 @@ You can install Longhorn in an air-gapped environment with a private registry. F
 
 | Key | Description |
 |-----|-------------|
-| privateRegistry.createSecret | Setting that allows you to create a private registry secret. |
+| privateRegistry.createSecret | Set to `true` to automatically create a new private registry secret. |
 | privateRegistry.registryPasswd | Password for authenticating with a private registry. |
-| privateRegistry.registrySecret | Kubernetes secret that allows you to pull images from a private registry. This setting applies only when creation of private registry secrets is enabled. You must include the private registry name in the secret name. |
+| privateRegistry.registrySecret | If create a new private registry secret is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry. |
 | privateRegistry.registryUrl | URL of a private registry. When unspecified, Longhorn uses the default system registry. |
 | privateRegistry.registryUser | User account used for authenticating with a private registry. |
 
