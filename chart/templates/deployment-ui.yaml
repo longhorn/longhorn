@@ -115,7 +115,7 @@ spec:
         name: nginx-config
       - emptyDir: {}
         name: var-run
-      {{- with (coalesce .Values.global.imagePullSecrets (ternary "" .Values.privateRegistry.registrySecret (empty .Values.privateRegistry.createSecret))) }}
+      {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
       imagePullSecrets:
         {{- $imagePullSecrets := list }}
         {{- if kindIs "string" . }}
