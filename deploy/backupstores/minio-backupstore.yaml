@@ -79,7 +79,7 @@ spec:
         securityContext:
           runAsUser: 1000
           runAsNonRoot: true
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
         volumeMounts:
         - name: minio-volume
           mountPath: "/storage"
