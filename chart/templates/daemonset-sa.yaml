@@ -81,6 +81,7 @@ spec:
         - name: go-cover-dir
           mountPath: /go-cover-dir/
         {{- end }}
+        {{- toYaml .Values.longhornManager.longhornManagerContainerVolumeMounts | nindent 8 }}
         env:
         - name: POD_NAME
           valueFrom:
@@ -121,7 +122,7 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: /var/lib/longhorn/
+          path: {{ .Values.longhornManager.dataVolumeHostPath }}
       {{- if .Values.enableGoCoverDir }}
       - name: go-cover-dir
         hostPath:
@@ -132,6 +133,7 @@ spec:
         secret:
           secretName: longhorn-grpc-tls
           optional: true
+      {{- toYaml .Values.longhornManager.extraVolumes | nindent 6 }}
       {{- with (coalesce .Values.global.imagePullSecrets (ternary "" .Values.privateRegistry.registrySecret (empty .Values.privateRegistry.createSecret))) }}
       imagePullSecrets:
         {{- $imagePullSecrets := list }}
