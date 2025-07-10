@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+  namespace: default
+type: Opaque
+data: {}
+---
+# same secret for longhorn-system namespace
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-secret
+  namespace: longhorn-system
+type: Opaque
+data: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-test-minio
+  namespace: default
+  labels:
+    app: longhorn-test-minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-test-minio
+  template:
+    metadata:
+      labels:
+        app: longhorn-test-minio
+    spec:
+      volumes:
+      - name: minio-volume
+        emptyDir: {}
+      - name: minio-certificates
+        secret:
+          secretName: minio-secret
+          items:
+          - key: AWS_CERT
+            path: public.crt
+          - key: AWS_CERT_KEY
+            path: private.key
+      containers:
+      - name: minio
+        image: minio/minio:RELEASE.2022-02-01T18-00-14Z
+        command: ["sh", "-c", "mkdir -p /storage/backupbucket && mkdir -p /root/.minio/certs && ln -s /root/certs/private.key /root/.minio/certs/private.key && ln -s /root/certs/public.crt /root/.minio/certs/public.crt && exec minio server /storage"]
+        env:
+        - name: MINIO_ROOT_USER
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: AWS_ACCESS_KEY_ID
+        - name: MINIO_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: minio-secret
+              key: AWS_SECRET_ACCESS_KEY
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - name: minio-volume
+          mountPath: "/storage"
+        - name: minio-certificates
+          mountPath: "/root/certs"
+          readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-service
+  namespace: default
+spec:
+  selector:
+    app: longhorn-test-minio
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+  sessionAffinity: ClientIP
