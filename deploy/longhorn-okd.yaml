@@ -1238,7 +1238,6 @@ spec:
     shortNames:
     - lhei
     singular: engineimage
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1391,7 +1390,6 @@ spec:
     shortNames:
     - lhe
     singular: engine
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -1743,7 +1741,6 @@ spec:
     shortNames:
     - lhim
     singular: instancemanager
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2044,7 +2041,6 @@ spec:
     shortNames:
     - lhn
     singular: node
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2537,7 +2533,6 @@ spec:
     shortNames:
     - lhr
     singular: replica
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -2767,7 +2762,6 @@ spec:
     shortNames:
     - lhs
     singular: setting
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
@@ -3603,7 +3597,6 @@ spec:
     shortNames:
     - lhv
     singular: volume
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
