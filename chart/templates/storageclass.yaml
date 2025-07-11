@@ -48,8 +48,8 @@ data:
       {{- if .Values.persistence.defaultNodeSelector.enable }}
       nodeSelector: "{{ .Values.persistence.defaultNodeSelector.selector }}"
       {{- end }}
-      {{- if .Values.persistence.removeSnapshotsDuringFilesystemTrim }}
-      unmapMarkSnapChainRemoved: "{{ .Values.persistence.removeSnapshotsDuringFilesystemTrim }}"
+      {{- if .Values.persistence.unmapMarkSnapChainRemoved }}
+      unmapMarkSnapChainRemoved: "{{ .Values.persistence.unmapMarkSnapChainRemoved }}"
       {{- end }}
       {{- if .Values.persistence.disableRevisionCounter }}
       disableRevisionCounter: "{{ .Values.persistence.disableRevisionCounter }}"
