@@ -1018,7 +1018,7 @@ questions:
         group: Longhorn Storage Class Settings
         type: string
         default: null
-  - variable: persistence.removeSnapshotsDuringFilesystemTrim
+  - variable: persistence.unmapMarkSnapChainRemoved
     description: >-
       Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
     label: Default Storage Class Remove Snapshots During Filesystem Trim
