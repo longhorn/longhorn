@@ -207,7 +207,7 @@ persistence:
     # -- Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast")
     selector: ""
   # -- Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
-  removeSnapshotsDuringFilesystemTrim: ignored
+  unmapMarkSnapChainRemoved: ignored
   # -- Setting that allows you to specify the data engine version for the default Longhorn StorageClass. (Options: "v1", "v2")
   dataEngine: v1
   # -- Setting that allows you to specify the backup target for the default Longhorn StorageClass.
