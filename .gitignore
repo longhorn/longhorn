@@ -5,3 +5,6 @@
 
 # python venv for dev scripts
 .venv
+
+# Ignore all generated backupstore credential files (patches + overlays)
+deploy/backupstores/overlays/generated-credentials/*/*.yaml
