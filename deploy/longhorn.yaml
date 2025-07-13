@@ -2095,6 +2095,7 @@ spec:
                       - ""
                       - auto
                       - aio
+                      - nvme
                       type: string
                     diskType:
                       enum:
