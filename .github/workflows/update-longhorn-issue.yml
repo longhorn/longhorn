@@ -14,6 +14,15 @@ jobs:
   longhorn:
     runs-on: ubuntu-latest
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-pull-requests: write
+
     - name: Checkout Repository
       uses: actions/checkout@v4
 
@@ -24,7 +33,7 @@ jobs:
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - run: |
         echo "is-longhorn-member teams: ${{ steps.is-longhorn-member.outputs.teams }}"
@@ -37,7 +46,7 @@ jobs:
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
       env:
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - uses: rancher/gh-issue-mgr/project-fields@main
       id: get-status-field
@@ -46,7 +55,7 @@ jobs:
       with:
         operation: get
         fields: Status
-        github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        github_token: ${{ steps.app-token.outputs.token }}
         project_url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
         resource_url: https://github.com/longhorn/longhorn/issues/${{ github.event.issue.number }}
 
@@ -59,7 +68,7 @@ jobs:
         }}
       with:
         project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
 
     - name: Set Milestone Backlog to Issue
       if: ${{
@@ -68,7 +77,7 @@ jobs:
         steps.get-status-field.outcome == 'success'
         }}
       env:
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
         ISSUE_NUMBER="${{ github.event.issue.number }}"
 
@@ -112,7 +121,7 @@ jobs:
       uses: rancher/gh-issue-mgr/update-project-fields@main
       with:
         project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
         item-id: ${{ steps.add-project.outputs.itemId }}
         field-keys: Status
         field-values: ${{ env.field-values }}

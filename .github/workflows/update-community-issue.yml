@@ -13,6 +13,15 @@ jobs:
   community:
     runs-on: ubuntu-latest
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-pull-requests: write
+
     - name: Checkout Repository
       uses: actions/checkout@v4
 
@@ -23,7 +32,7 @@ jobs:
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
-        GITHUB_TOKEN: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - run: |
         echo "is-longhorn-member teams: ${{ steps.is-longhorn-member.outputs.teams }}"
@@ -36,7 +45,7 @@ jobs:
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
       env:
-        GITHUB_TOKEN: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - uses: EndBug/project-fields@v2
       id: fields
@@ -45,7 +54,7 @@ jobs:
       with:
         operation: get
         fields: Status
-        github_token: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        github_token: ${{ steps.app-token.outputs.token }}
         project_url: https://github.com/orgs/longhorn/projects/5
         resource_url: https://github.com/longhorn/longhorn/issues/${{ github.event.issue.number }}
 
@@ -60,7 +69,7 @@ jobs:
         }}
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
-        github-token: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
 
     - name: Update Project Item
       if: ${{ 
@@ -124,7 +133,7 @@ jobs:
         fi
 
       env:
-        GITHUB_TOKEN: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Apply Project Update
       if: ${{
@@ -135,7 +144,7 @@ jobs:
       uses: titoportas/update-project-fields@v0.1.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
-        github-token: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
         item-id: ${{ steps.add-project.outputs.itemId }}
         field-keys: Status,Sprint
         field-values: ${{ env.field-values }}
@@ -150,7 +159,7 @@ jobs:
       uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/8
-        github-token: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
 
     - name: Set Milestone to Backlog
       if: ${{
@@ -164,4 +173,4 @@ jobs:
         echo "Setting milestone $MILESTONE to Backlog"
         gh issue edit "${{ github.event.issue.number }}" --milestone "Backlog"
       env:
-        GITHUB_TOKEN: ${{ secrets.LONGHORN_GITHUB_BOT_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
