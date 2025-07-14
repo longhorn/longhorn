@@ -2035,28 +2035,6 @@ spec:
                       type: array
                     diskDriver:
                       type: string
-                    diskMetrics:
-                      nullable: true
-                      properties:
-                        readIOPS:
-                          format: int64
-                          type: integer
-                        readLatency:
-                          format: int64
-                          type: integer
-                        readThroughput:
-                          format: int64
-                          type: integer
-                        writeIOPS:
-                          format: int64
-                          type: integer
-                        writeLatency:
-                          format: int64
-                          type: integer
-                        writeThroughput:
-                          format: int64
-                          type: integer
-                      type: object
                     diskName:
                       type: string
                     diskPath:
