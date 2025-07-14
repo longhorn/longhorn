@@ -11,16 +11,6 @@ jobs:
   check-backport:
     runs-on: ubuntu-latest
     steps:
-    - id: app-token
-      uses: actions/create-github-app-token@v2
-      with:
-        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
-        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
-        owner: ${{ github.repository_owner }}
-        permission-contents: write
-        permission-issues: write
-        permission-pull-requests: write
-
     - name: Checkout repository
       uses: actions/checkout@v4
 
@@ -45,8 +35,27 @@ jobs:
         ORIGINAL_ISSUE_NUMBER=$(echo "${{ github.event.pull_request.body }}" | grep -oE 'longhorn/longhorn#[0-9]+' | cut -d'#' -f2)
         echo "ORIGINAL_ISSUE_NUMBER=$ORIGINAL_ISSUE_NUMBER" >> $GITHUB_ENV
 
+    - name: Check if PR is from a fork
+      run: |
+        if [[ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]]; then
+          echo "IS_FORK=true" >> $GITHUB_ENV
+        else
+          echo "IS_FORK=false" >> $GITHUB_ENV
+        fi
+
+    - id: app-token
+      if: ${{ env.BACKPORT == 'true' && env.IS_FORK == 'true' }}
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-issues: write
+        permission-pull-requests: write
+
     - name: Link the PR with the backport issue
-      if: ${{ env.BACKPORT == 'true' && env.ORIGINAL_ISSUE_NUMBER != '' }}
+      if: ${{ env.BACKPORT == 'true' && env.IS_FORK == 'true' && env.ORIGINAL_ISSUE_NUMBER != '' }}
       env:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
