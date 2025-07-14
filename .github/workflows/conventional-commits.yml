@@ -15,6 +15,15 @@ jobs:
   commit-lint:
     runs-on: ubuntu-latest
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: read
+        permission-pull-requests: read
+
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
@@ -23,7 +32,7 @@ jobs:
     - name: Lint Pull Request
       uses: amannn/action-semantic-pull-request@v5.5.3
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       with:
         types: |
           feat

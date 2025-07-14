@@ -11,6 +11,15 @@ jobs:
   check-backport:
     runs-on: ubuntu-latest
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-issues: write
+
     - name: Checkout repository
       uses: actions/checkout@v4
 
@@ -38,7 +47,7 @@ jobs:
     - name: Link the PR with the backport issue
       if: ${{ env.BACKPORT == 'true' && env.ORIGINAL_ISSUE_NUMBER != '' }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
         for issue_number in "${{ env.ORIGINAL_ISSUE_NUMBER }}"; do
           echo "Found source issue longhorn/longhorn#${issue_number}"

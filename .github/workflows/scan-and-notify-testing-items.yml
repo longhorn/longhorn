@@ -29,6 +29,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: read
+        permission-issues: read
+
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -43,7 +52,7 @@ jobs:
 
     - name: Scan and Notify Testing Items
       env:
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_LONGHORN_QA_WEBHOOK_URL }}
         USER_MAPPING: ${{ secrets.USER_MAPPING_FOR_GITHUB_SLACK }}
       run: |
