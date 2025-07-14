@@ -16,10 +16,17 @@ jobs:
     name: Move to next iteration
     runs-on: ubuntu-latest
     
-    env:
-      GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-pull-requests: write
+        permission-issues: write
+
     - name: Checkout repository
       uses: actions/checkout@v4
 
@@ -35,7 +42,7 @@ jobs:
       with:
         owner: longhorn
         number: 8
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        token: ${{ steps.app-token.outputs.token }}
         iteration-field: Sprint
         iteration: current
         new-iteration: none
@@ -47,7 +54,7 @@ jobs:
       with:
         owner: longhorn
         number: 8
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        token: ${{ steps.app-token.outputs.token }}
         iteration-field: Sprint
         iteration: current
         new-iteration: next
@@ -59,7 +66,7 @@ jobs:
       with:
         owner: longhorn
         number: 8
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        token: ${{ steps.app-token.outputs.token }}
         iteration-field: Sprint
         iteration: none
         new-iteration: current
@@ -71,7 +78,7 @@ jobs:
       with:
         owner: longhorn
         number: 4
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        token: ${{ steps.app-token.outputs.token }}
         iteration-field: Sprint
         iteration: current
         new-iteration: none
@@ -83,7 +90,7 @@ jobs:
       with:
         owner: longhorn
         number: 4
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        token: ${{ steps.app-token.outputs.token }}
         iteration-field: Sprint
         iteration: current
         new-iteration: next
@@ -95,7 +102,7 @@ jobs:
       with:
         owner: longhorn
         number: 5
-        token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        token: ${{ steps.app-token.outputs.token }}
         iteration-field: Sprint
         iteration: current
         new-iteration: next

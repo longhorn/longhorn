@@ -8,26 +8,46 @@ jobs:
   longhorn:
     runs-on: ubuntu-latest
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-pull-requests: write
+        permission-members: read
+
     - name: Is Longhorn Member
       id: is-longhorn-member
       uses: tspascoal/get-user-teams-membership@v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Add Issue to Longhorn Sprint Project
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
       uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/8
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
         labeled: kind/test
         label-operator: NOT
 
   community:
     runs-on: ubuntu-latest
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-pull-requests: write
+        permission-members: read
+
     - name: Is Longhorn Member
       id: is-longhorn-member
       continue-on-error: true
@@ -35,7 +55,7 @@ jobs:
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Get Issue
       if: steps.is-longhorn-member.outcome == 'success'
@@ -44,7 +64,7 @@ jobs:
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
       env:
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Add Issue to Community Sprint Project
       id: add-project
@@ -54,7 +74,7 @@ jobs:
       uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
 
     - name: Update Item To New
       if: |
@@ -64,7 +84,7 @@ jobs:
       uses: titoportas/update-project-fields@v0.1.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
         item-id: ${{ steps.add-project.outputs.itemId }}
         field-keys: Status,Sprint
         field-values: "New,[0]"
@@ -72,19 +92,29 @@ jobs:
   qa:
     runs-on: ubuntu-latest
     steps:
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-pull-requests: write
+        permission-members: read
+
     - name: Is Longhorn Member
       id: is-longhorn-member
       uses: tspascoal/get-user-teams-membership@v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Add Issue to QA Sprint Project
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
       uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/4
-        github-token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        github-token: ${{ steps.app-token.outputs.token }}
         labeled: kind/test, area/infra
         label-operator: OR

@@ -17,6 +17,15 @@ jobs:
   create-release-task:
     runs-on: ubuntu-latest
     steps:
+      - id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+          private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          permission-contents: write
+          permission-issues: write
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -49,7 +58,7 @@ jobs:
         with:
           filename: .github/ISSUE_TEMPLATE/release.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
           MAJOR_MINOR_VERSION: ${{ env.MAJOR_MINOR_VERSION }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}
@@ -62,7 +71,7 @@ jobs:
         with:
           filename: .github/ISSUE_TEMPLATE/fix-cve-issues-for-release.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
 
       - name: Create an issue - regular tasks for feature release
@@ -71,7 +80,7 @@ jobs:
         with:
           filename: .github/ISSUE_TEMPLATE/regular-tasks-for-feature-release.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
           FEATURE_RELEASE: ${{ env.FEATURE_RELEASE }}
           BRANCH_NAME: ${{ env.BRANCH_NAME }}
@@ -82,6 +91,6 @@ jobs:
         with:
           filename: .github/ISSUE_TEMPLATE/performance-benchmark.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
           FEATURE_RELEASE: ${{ env.FEATURE_RELEASE }}

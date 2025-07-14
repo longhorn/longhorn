@@ -11,9 +11,6 @@ jobs:
   pull-request-review-reminder:
     runs-on: ubuntu-latest
 
-    env:
-      GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_ACTION_TOKEN }}
-
     name: "Pull Request Review Reminder"
 
     steps:
@@ -30,11 +27,19 @@ jobs:
       run: |
         python -m pip install requests
 
+    - id: app-token
+      uses: actions/create-github-app-token@v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: read
+
     - uses: actions/checkout@v4
 
     - name: Pull Request Review Reminder
       env:
-        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_LONGHORN_QA_WEBHOOK_URL }}
         USER_MAPPING: ${{ secrets.USER_MAPPING_FOR_GITHUB_SLACK }}
       run: python .github/workflows/pr-review-reminder.py
