@@ -26,6 +26,7 @@ jobs:
         permission-contents: write
         permission-pull-requests: write
         permission-issues: write
+        permission-organization-projects: write
 
     - name: Checkout repository
       uses: actions/checkout@v4
