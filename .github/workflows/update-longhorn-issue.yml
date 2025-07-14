@@ -23,6 +23,7 @@ jobs:
         permission-contents: write
         permission-pull-requests: write
         permission-members: read
+        permission-organization-projects: write
 
     - name: Checkout Repository
       uses: actions/checkout@v4
