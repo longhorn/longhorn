@@ -14,10 +14,6 @@ jobs:
     name: "Pull Request Review Reminder"
 
     steps:
-    - name: Setup Git
-      run: |
-        gh auth setup-git
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -34,7 +30,14 @@ jobs:
         private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
         owner: ${{ github.repository_owner }}
         permission-contents: read
+        permission-issues: read
+        permission-pull-requests: read
         permission-organization-projects: read
+
+    - name: Authenticate GitHub CLI
+      run: echo "${{ steps.app-token.outputs.token }}" | gh auth login --with-token
+      env:
+        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - uses: actions/checkout@v4
 
