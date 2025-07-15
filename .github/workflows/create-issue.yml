@@ -78,7 +78,7 @@ jobs:
 
     - name: Create Backport Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-      uses: dacbd/create-issue-action@v1
+      uses: dacbd/create-issue-action@main
       id: new-issue
       with:
         token: ${{ github.token }}
@@ -90,23 +90,14 @@ jobs:
         milestone: ${{ fromJSON(steps.milestone.outputs.data).number }}
         assignees: ${{ join(fromJSON(steps.longhorn-members.outputs.members), ', ') }}
 
-    - name: Get Repo Id
-      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-      uses: octokit/request-action@v2.x
-      id: repo
+    - name: Reopen Backport Issue
+      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0].state == 'closed'
+      uses: actions-cool/issues-helper@v3
       with:
-        route: GET /repos/${{ github.repository }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-
-    - name: Add Backport Issue To Release
-      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
-      uses: longhorn/bot/add-zenhub-release-action@master
-      with:
-        zenhub_token: ${{ secrets.ZENHUB_TOKEN }}
-        repo_id: ${{ fromJSON(steps.repo.outputs.data).id }}
-        issue_number: ${{ steps.new-issue.outputs.number }}
-        release_name: ${{ steps.split.outputs._1 }}
+        actions: 'update-issue'
+        token: ${{ steps.app-token.outputs.token }}
+        issue-number: ${{ fromJSON(steps.if-backport-issue-exists.outputs.issues)[0].number }}
+        state: 'open'
 
   automation:
     runs-on: ubuntu-latest
@@ -147,7 +138,7 @@ jobs:
 
     - name: Create Automation Test Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-automation-issue-exists.outputs.issues)[0] == null
-      uses: dacbd/create-issue-action@v1
+      uses: dacbd/create-issue-action@main
       id: create-automation-test-issue
       with:
         token: ${{ github.token }}
@@ -216,7 +207,7 @@ jobs:
 
     - name: Create UI Test Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-ui-issue-exists.outputs.issues)[0] == null
-      uses: dacbd/create-issue-action@v1
+      uses: dacbd/create-issue-action@main
       with:
         token: ${{ github.token }}
         title: |
