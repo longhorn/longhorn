@@ -1,4 +1,5 @@
 name: "[Issue Management] Update Issue Status in Longhorn Sprint Project"
+
 on:
   issues:
     types: [labeled, milestoned, assigned, unassigned]
@@ -29,7 +30,17 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Is Longhorn Member
+    - name: Check Longhorn Membership (including bot)
+      id: check-membership
+      run: |
+        if [[ "${{ github.event.issue.user.login }}" == "github-actions[bot]" ]]; then
+          echo "is_longhorn_member=true" >> $GITHUB_ENV
+        else
+          echo "is_longhorn_member=false" >> $GITHUB_ENV
+        fi
+
+    - name: Real Membership Check (non-bot only)
+      if: env.is_longhorn_member == 'false'
       id: is-longhorn-member
       continue-on-error: true
       uses: tspascoal/get-user-teams-membership@v3
@@ -38,14 +49,23 @@ jobs:
         organization: longhorn
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
-    - run: |
-        echo "is-longhorn-member teams: ${{ steps.is-longhorn-member.outputs.teams }}"
-        echo "is-longhorn-member outcome: ${{ steps.is-longhorn-member.outcome }}"
+    - name: Set Final Membership Flag
+      if: env.is_longhorn_member == 'false'
+      run: |
+        if [[ "${{ steps.is-longhorn-member.outcome }}" == "success" ]]; then
+          echo "is_longhorn_member=true" >> $GITHUB_ENV
+        fi
+
+    - name: Debug Membership Status
+      run: |
+        echo "is_longhorn_member: ${{ env.is_longhorn_member }}"
+        echo "teams: ${{ steps.is-longhorn-member.outputs.teams || 'bot or N/A' }}"
+        echo "check outcome: ${{ steps.is-longhorn-member.outcome || 'bot or N/A' }}"
 
     - name: Get Issue
       uses: octokit/request-action@v2.x
       id: issue
-      if: steps.is-longhorn-member.outcome == 'success'
+      if: env.is_longhorn_member == 'true'
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
       env:
@@ -54,7 +74,7 @@ jobs:
     - uses: rancher/gh-issue-mgr/project-fields@main
       id: get-status-field
       continue-on-error: true
-      if: steps.is-longhorn-member.outcome == 'success'
+      if: env.is_longhorn_member == 'true'
       with:
         operation: get
         fields: Status
@@ -66,7 +86,7 @@ jobs:
       id: add-project
       uses: actions/add-to-project@v1.0.2
       if: ${{
-        steps.is-longhorn-member.outcome == 'success' &&
+        env.is_longhorn_member == 'true' &&
         steps.get-status-field.outcome == 'success'
         }}
       with:
@@ -75,7 +95,8 @@ jobs:
 
     - name: Set Milestone Backlog to Issue
       if: ${{
-        fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null  &&
+        env.is_longhorn_member == 'true' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams || '[]')[0] != null &&
         github.event.issue.milestone == null &&
         steps.get-status-field.outcome == 'success'
         }}
@@ -92,7 +113,7 @@ jobs:
 
     - name: Update Project Item
       if: ${{
-        steps.is-longhorn-member.outcome == 'success' &&
+        env.is_longhorn_member == 'true' &&
         steps.get-status-field.outcome == 'success' &&
         steps.add-project.outputs.itemId != ''
         }}
@@ -109,7 +130,6 @@ jobs:
           $ASSIGNEES != "[]" ]]; then
           echo "Updating to New Issues since it's assigned and status is New Issues or empty"
           echo "field-values=New Issues" >> $GITHUB_ENV
-
         elif [[ $ASSIGNEES == "[]" ]]; then
           echo "Updating to New Issues since it's unassigned"
           echo "field-values=New Issues" >> $GITHUB_ENV
@@ -117,7 +137,7 @@ jobs:
         
     - name: Apply Project Update
       if: ${{
-        steps.is-longhorn-member.outcome == 'success' &&
+        env.is_longhorn_member == 'true' &&
         steps.get-status-field.outcome == 'success' &&
         env.field-values != ''
         }}
