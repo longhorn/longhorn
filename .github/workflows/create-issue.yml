@@ -121,6 +121,8 @@ jobs:
         permission-contents: write
         permission-pull-requests: write
         permission-members: read
+        permission-organization-projects: write
+        permission-issues: write
 
     - name: Is Longhorn Member
       uses: tspascoal/get-user-teams-membership@v3
@@ -178,6 +180,8 @@ jobs:
         permission-contents: write
         permission-pull-requests: write
         permission-members: read
+        permission-organization-projects: write
+        permission-issues: write
 
     - name: Is Longhorn Member
       uses: tspascoal/get-user-teams-membership@v3
