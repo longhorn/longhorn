@@ -5,3 +5,4 @@
 
 # python venv for dev scripts
 .venv
+/deploy/backupstores/overlays/generated-credentials/

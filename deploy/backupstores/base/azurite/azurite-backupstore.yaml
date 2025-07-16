@@ -5,10 +5,7 @@ metadata:
   name: azblob-secret
   namespace: longhorn-system
 type: Opaque
-stringData:
-  AZBLOB_ACCOUNT_NAME: <AZBLOB_ACCOUNT_NAME>
-  AZBLOB_ACCOUNT_KEY: <AZBLOB_ACCOUNT_KEY>
-  AZBLOB_ENDPOINT: <AZBLOB_ENDPOINT>
+data: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
