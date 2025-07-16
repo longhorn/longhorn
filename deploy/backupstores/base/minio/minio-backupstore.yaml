@@ -4,12 +4,7 @@ metadata:
   name: minio-secret
   namespace: default
 type: Opaque
-stringData:
-  AWS_ACCESS_KEY_ID: <AWS_ACCESS_KEY_ID>
-  AWS_SECRET_ACCESS_KEY: <AWS_SECRET_ACCESS_KEY>
-  AWS_ENDPOINTS: <AWS_ENDPOINTS>
-  AWS_CERT: <AWS_CERT>
-  AWS_CERT_KEY: <AWS_CERT_KEY>
+data: {}
 ---
 # same secret for longhorn-system namespace
 apiVersion: v1

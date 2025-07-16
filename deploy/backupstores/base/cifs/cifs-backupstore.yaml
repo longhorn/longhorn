@@ -4,9 +4,7 @@ metadata:
   name: cifs-secret
   namespace: longhorn-system
 type: Opaque
-stringData:
-  CIFS_USERNAME: <CIFS_USERNAME>
-  CIFS_PASSWORD: <CIFS_PASSWORD>
+data: {}
 ---
 apiVersion: v1
 kind: Secret
@@ -14,9 +12,7 @@ metadata:
   name: cifs-secret
   namespace: default
 type: Opaque
-stringData:
-  CIFS_USERNAME: <CIFS_USERNAME>
-  CIFS_PASSWORD: <CIFS_PASSWORD>
+data: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
