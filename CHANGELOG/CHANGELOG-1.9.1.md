@@ -10,9 +10,9 @@ The Longhorn team appreciates your contributions and expects to receive feedback
 ## Installation
 
 >  [!IMPORTANT]
-**Ensure that your cluster is running Kubernetes v1.25 or later before installing Longhorn v1.8.2.**
+**Ensure that your cluster is running Kubernetes v1.25 or later before installing Longhorn v1.9.1.**
 
-You can install Longhorn using a variety of tools, including Rancher, Kubectl, and Helm. For more information about installation methods and requirements, see [Quick Installation](https://longhorn.io/docs/1.8.2/deploy/install/) in the Longhorn documentation.
+You can install Longhorn using a variety of tools, including Rancher, Kubectl, and Helm. For more information about installation methods and requirements, see [Quick Installation](https://longhorn.io/docs/1.9.1/deploy/install/) in the Longhorn documentation.
 
 ## Upgrade
 
