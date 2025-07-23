@@ -91,7 +91,7 @@ questions:
         label: Longhorn Support Bundle Kit Image Repository
         group: Longhorn Images Settings
       - variable: image.longhorn.supportBundleKit.tag
-        default: v0.0.60
+        default: v0.0.61
         description: Tag for the Longhorn Support Bundle Manager image.
         type: string
         label: Longhorn Support Bundle Kit Image Tag
