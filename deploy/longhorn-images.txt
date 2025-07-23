@@ -1,10 +1,10 @@
-longhornio/backing-image-manager:v1.9.1
-longhornio/longhorn-engine:v1.9.1
-longhornio/longhorn-instance-manager:v1.9.1
-longhornio/longhorn-manager:v1.9.1
-longhornio/longhorn-share-manager:v1.9.1
-longhornio/longhorn-ui:v1.9.1
-longhornio/longhorn-cli:v1.9.1
+longhornio/backing-image-manager:v1.9.x-head
+longhornio/longhorn-engine:v1.9.x-head
+longhornio/longhorn-instance-manager:v1.9.x-head
+longhornio/longhorn-manager:v1.9.x-head
+longhornio/longhorn-share-manager:v1.9.x-head
+longhornio/longhorn-ui:v1.9.x-head
+longhornio/longhorn-cli:v1.9.x-head
 longhornio/csi-attacher:v4.9.0-20250709
 longhornio/csi-provisioner:v5.3.0-20250709
 longhornio/csi-resizer:v1.14.0-20250709
