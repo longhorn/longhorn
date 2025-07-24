@@ -84,7 +84,7 @@ message ReplicaExpandRequest{
     - NVMe-oF allows a grace period during which the device can temporarily disappear without triggering a disconnect on the host side. （`--ctrl-loss-tmo` controller loss timeout, current 30 sec）
     - In practice, `bdev_lvol_resize` for thin-provisioned volumes is fast.
     - As a result, from the user's perspective, the device remains connected, and the expansion is transparent — they will not notice that the underlying bdev was recreated and reconnected.
-    - In the case of rebuilding frontend faild, the Longhorn manager will continue to retry the expansion process. During the next reconciliation loop, the engine service will attempt to re-establish the frontend connection again.
+    - In the case of rebuilding frontend failed, the Longhorn manager will continue to retry the expansion process. During the next reconciliation loop, the engine service will attempt to re-establish the frontend connection again.
 
 - Snapshot:
     - Currently, V2 clone volumes are not supported.
@@ -99,7 +99,7 @@ EngineExpand()
 ├── startExpansion(size) → Validate expansion size & Status
 |
 ├── Check Replicas
-│   ├── If no healty replica, return err
+│   ├── If no healthy replica, return err
 │   └── If at least one of replica is rebuilding, return err
 │
 ├── Check if RAID bdev exists
