@@ -848,7 +848,7 @@ questions:
         group: Longhorn Default Settings
         type: boolean
         default: false
-      - variable: defaultSettings.offlineRelicaRebuilding
+      - variable: defaultSettings.offlineReplicaRebuilding
         label: Offline Replica Rebuilding
         description: >-
           Enables automatic rebuilding of degraded replicas while the volume is detached. This setting only takes effect if the individual volume setting is set to `ignored` or `enabled`.
