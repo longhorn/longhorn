@@ -248,8 +248,8 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.rwxVolumeFastFailover) }}
     rwx-volume-fast-failover: {{ .Values.defaultSettings.rwxVolumeFastFailover}}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.offlineRelicaRebuilding) }}
-    offline-replica-rebuilding: {{ .Values.defaultSettings.offlineRelicaRebuilding}}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}
+    offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding}}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineCPUMask) }}
     v2-data-engine-cpu-mask: {{ .Values.defaultSettings.v2DataEngineCPUMask }}
