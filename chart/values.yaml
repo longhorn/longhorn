@@ -340,6 +340,11 @@ defaultSettings:
   autoCleanupSnapshotWhenDeleteBackup: ~
   # -- Setting that allows Longhorn to detect node failure and immediately migrate affected RWX volumes.
   rwxVolumeFastFailover: ~
+<<<<<<< HEAD
+=======
+  # -- Enables automatic rebuilding of degraded replicas while the volume is detached. This setting only takes effect if the individual volume setting is set to `ignored` or `enabled`.
+  offlineReplicaRebuilding: ~
+>>>>>>> 77e5ffc (fix: correct typo offlineRelicaRebuilding -> offlineReplicaRebuilding)
 # -- Setting that allows you to update the default backupstore.
 defaultBackupStore:
   # -- Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")

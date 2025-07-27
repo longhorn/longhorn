@@ -239,6 +239,12 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.rwxVolumeFastFailover) }}
     rwx-volume-fast-failover: {{ .Values.defaultSettings.rwxVolumeFastFailover}}
     {{- end }}
+<<<<<<< HEAD
+=======
+    {{- if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}
+    offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding}}
+    {{- end }}
+>>>>>>> 77e5ffc (fix: correct typo offlineRelicaRebuilding -> offlineReplicaRebuilding)
     {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineCPUMask) }}
     v2-data-engine-cpu-mask: {{ .Values.defaultSettings.v2DataEngineCPUMask }}
     {{- end }}
