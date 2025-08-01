@@ -3533,13 +3533,6 @@ spec:
                 - disabled
                 - enabled
                 type: string
-              rebuildingMbytesPerSecond:
-                description: RebuildingMBytesPerSecond limits the write bandwidth
-                  (in megabytes per second) on the destination replica during rebuilding.
-                  Set to 0 to disable bandwidth limiting.
-                format: int64
-                minimum: 0
-                type: integer
               replicaAutoBalance:
                 enum:
                 - ignored
@@ -3555,6 +3548,13 @@ spec:
                 - enabled
                 - disabled
                 type: string
+              replicaRebuildingBandwidthLimit:
+                description: ReplicaRebuildingBandwidthLimit limits the write bandwidth
+                  (in megabytes per second) on the destination replica during rebuilding.
+                  Set to 0 to disable bandwidth limiting.
+                format: int64
+                minimum: 0
+                type: integer
               replicaSoftAntiAffinity:
                 description: Replica soft anti affinity of the volume. Set enabled
                   to allow replicas to be scheduled on the same node.
