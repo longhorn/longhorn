@@ -16,10 +16,10 @@ jobs:
 
     - name: Check if PR is a backport
       run: |
-        if [[ "$(echo "${{ github.event.pull_request.title }}" | sed 's/"/\\"/g')" =~ "backport #" ]]; then
-          echo "BACKPORT=true" >> $GITHUB_ENV
+        if [[ "${{ contains(github.event.pull_request.title, 'backport #') }}" == "true" ]]; then
+          echo "BACKPORT=true" >> "$GITHUB_ENV"
         else
-          echo "BACKPORT=false" >> $GITHUB_ENV
+          echo "BACKPORT=false" >> "$GITHUB_ENV"
         fi
 
     - name: Extract backport branch and issue number
