@@ -71,9 +71,10 @@ configMap:
           ]
         },
         {
-          "name": "v1.9.0",
-          "releaseDate": "2025-05-27T00:00:00Z",
+          "name": "v1.9.1",
+          "releaseDate": "2025-07-23T00:00:00Z",
           "tags": [
+            "stable",
             "latest"
           ]
         }    
