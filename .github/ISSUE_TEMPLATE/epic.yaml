@@ -1,6 +1,7 @@
 name: Epic request
 description: Suggest an Epic for grouped features, enhancements or tasks
 title: "[EPIC] "
+type: "Epic"
 labels: [ "Epic" ]
 assignees:
 -

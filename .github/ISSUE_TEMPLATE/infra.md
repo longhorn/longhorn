@@ -2,6 +2,7 @@
 name: Infra
 about: Create a test/dev infra task
 title: "[INFRA] "
+type: "Task"
 labels: ["kind/task", "area/infra"]
 assignees: ''
 
