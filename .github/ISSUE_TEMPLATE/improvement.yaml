@@ -1,6 +1,7 @@
 name: Improvement request
 description: Suggest an improvement of an existing feature
 title: "[IMPROVEMENT] "
+type: "Improvement"
 labels: ["kind/improvement", "require/doc", "require/manual-test-plan", "require/backport"]
 assignees:
   - 

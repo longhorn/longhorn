@@ -2,6 +2,7 @@
 name: Refactor task
 about: Suggest a refactoring request for an existing implementation
 title: "[REFACTOR] "
+type: "Task"
 labels: kind/refactoring
 assignees: ''
 
