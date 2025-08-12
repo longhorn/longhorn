@@ -6,251 +6,251 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-setting.yaml: |-
-    {{- if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
+    {{- if (kindIs "string" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
     allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}
+    {{- if (kindIs "string" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}
     create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
+    {{- if (kindIs "string" .Values.defaultSettings.defaultDataPath) }}
     default-data-path: {{ .Values.defaultSettings.defaultDataPath }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
+    {{- if (kindIs "string" .Values.defaultSettings.replicaSoftAntiAffinity) }}
     replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}
+    {{- if (kindIs "string" .Values.defaultSettings.replicaAutoBalance) }}
     replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}
+    {{- if (kindIs "string" .Values.defaultSettings.storageOverProvisioningPercentage) }}
     storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}
+    {{- if (kindIs "string" .Values.defaultSettings.storageMinimalAvailablePercentage) }}
     storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.storageReservedPercentageForDefaultDisk) }}
+    {{- if (kindIs "string" .Values.defaultSettings.storageReservedPercentageForDefaultDisk) }}
     storage-reserved-percentage-for-default-disk: {{ .Values.defaultSettings.storageReservedPercentageForDefaultDisk }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}
+    {{- if (kindIs "string" .Values.defaultSettings.upgradeChecker) }}
     upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeResponderURL) }}
+    {{- if (kindIs "string" .Values.defaultSettings.upgradeResponderURL) }}
     upgrade-responder-url: {{ .Values.defaultSettings.upgradeResponderURL }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}
+    {{- if (kindIs "string" .Values.defaultSettings.defaultReplicaCount) }}
     default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}
+    {{- if (kindIs "string" .Values.defaultSettings.defaultDataLocality) }}
     default-data-locality: {{ .Values.defaultSettings.defaultDataLocality }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}
+    {{- if (kindIs "string" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}
+    {{- if (kindIs "string" .Values.defaultSettings.failedBackupTTL) }}
     failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backupExecutionTimeout) }}
+    {{- if (kindIs "string" .Values.defaultSettings.backupExecutionTimeout) }}
     backup-execution-timeout: {{ .Values.defaultSettings.backupExecutionTimeout }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.restoreVolumeRecurringJobs) }}
+    {{- if (kindIs "string" .Values.defaultSettings.restoreVolumeRecurringJobs) }}
     restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}
     recurring-successful-jobs-history-limit: {{ .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.recurringJobMaxRetention) }}
+    {{- if (kindIs "string" .Values.defaultSettings.recurringJobMaxRetention) }}
     recurring-job-max-retention: {{ .Values.defaultSettings.recurringJobMaxRetention }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.recurringFailedJobsHistoryLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.recurringFailedJobsHistoryLimit) }}
     recurring-failed-jobs-history-limit: {{ .Values.defaultSettings.recurringFailedJobsHistoryLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.supportBundleFailedHistoryLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.supportBundleFailedHistoryLimit) }}
     support-bundle-failed-history-limit: {{ .Values.defaultSettings.supportBundleFailedHistoryLimit }}
     {{- end }}
-    {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
+    {{- if or (not (kindIs "string" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
     taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
         {{- $windowsDefaultSettingTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
       {{- end -}}
-      {{- if not (kindIs "invalid" .Values.defaultSettings.taintToleration) -}}
+      {{- if (kindIs "string" .Values.defaultSettings.taintToleration) -}}
         {{- $defaultSettingTaintToleration = .Values.defaultSettings.taintToleration -}}
       {{- end -}}
       {{- $taintToleration := list $windowsDefaultSettingTaintToleration $defaultSettingTaintToleration }}{{ join ";" (compact $taintToleration) -}}
     {{- end }}
-    {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
+    {{- if or (not (kindIs "string" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
     system-managed-components-node-selector: {{ $windowsDefaultSettingNodeSelector := list }}{{ $defaultSettingNodeSelector := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
         {{ $windowsDefaultSettingNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
       {{- end -}}
-      {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector) -}}
+      {{- if (kindIs "string" .Values.defaultSettings.systemManagedComponentsNodeSelector) -}}
         {{- $defaultSettingNodeSelector = .Values.defaultSettings.systemManagedComponentsNodeSelector -}}
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
+    {{- if (kindIs "string" .Values.defaultSettings.priorityClass) }}
     priority-class: {{ .Values.defaultSettings.priorityClass }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}
+    {{- if (kindIs "string" .Values.defaultSettings.autoSalvage) }}
     auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}
+    {{- if (kindIs "string" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}
     auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}
+    {{- if (kindIs "string" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}
     disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}
+    {{- if (kindIs "string" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}
     replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaDiskSoftAntiAffinity) }}
+    {{- if (kindIs "string" .Values.defaultSettings.replicaDiskSoftAntiAffinity) }}
     replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}
+    {{- if (kindIs "string" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}
     node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}
+    {{- if (kindIs "string" .Values.defaultSettings.nodeDrainPolicy) }}
     node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}
+    {{- if (kindIs "string" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}
     detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}
+    {{- if (kindIs "string" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}
     replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}
     concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}
     concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.disableRevisionCounter) }}
+    {{- if (kindIs "string" .Values.defaultSettings.disableRevisionCounter) }}
     disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}
+    {{- if (kindIs "string" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}
     system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}
+    {{- if (kindIs "string" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}
     allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}
+    {{- if (kindIs "string" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}
     auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot) }}
+    {{- if (kindIs "string" .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot) }}
     auto-cleanup-recurring-job-backup-snapshot: {{ .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}
     concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}
+    {{- if (kindIs "string" .Values.defaultSettings.backingImageCleanupWaitInterval) }}
     backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}
+    {{- if (kindIs "string" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}
     backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.guaranteedInstanceManagerCPU) }}
+    {{- if (kindIs "string" .Values.defaultSettings.guaranteedInstanceManagerCPU) }}
     guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.guaranteedInstanceManagerCPU }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}
+    {{- if (kindIs "string" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}
     kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.orphanResourceAutoDeletion) }}
+    {{- if (kindIs "string" .Values.defaultSettings.orphanResourceAutoDeletion) }}
     orphan-resource-auto-deletion: {{ .Values.defaultSettings.orphanResourceAutoDeletion }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.orphanResourceAutoDeletionGracePeriod) }}
+    {{- if (kindIs "string" .Values.defaultSettings.orphanResourceAutoDeletionGracePeriod) }}
     orphan-resource-auto-deletion-grace-period: {{ .Values.defaultSettings.orphanResourceAutoDeletionGracePeriod }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}
+    {{- if (kindIs "string" .Values.defaultSettings.storageNetwork) }}
     storage-network: {{ .Values.defaultSettings.storageNetwork }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}
+    {{- if (kindIs "string" .Values.defaultSettings.deletingConfirmationFlag) }}
     deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.engineReplicaTimeout) }}
+    {{- if (kindIs "string" .Values.defaultSettings.engineReplicaTimeout) }}
     engine-replica-timeout: {{ .Values.defaultSettings.engineReplicaTimeout }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrity) }}
+    {{- if (kindIs "string" .Values.defaultSettings.snapshotDataIntegrity) }}
     snapshot-data-integrity: {{ .Values.defaultSettings.snapshotDataIntegrity }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation) }}
+    {{- if (kindIs "string" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation) }}
     snapshot-data-integrity-immediate-check-after-snapshot-creation: {{ .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityCronjob) }}
+    {{- if (kindIs "string" .Values.defaultSettings.snapshotDataIntegrityCronjob) }}
     snapshot-data-integrity-cronjob: {{ .Values.defaultSettings.snapshotDataIntegrityCronjob }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim) }}
+    {{- if (kindIs "string" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim) }}
     remove-snapshots-during-filesystem-trim: {{ .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.fastReplicaRebuildEnabled) }}
+    {{- if (kindIs "string" .Values.defaultSettings.fastReplicaRebuildEnabled) }}
     fast-replica-rebuild-enabled: {{ .Values.defaultSettings.fastReplicaRebuildEnabled }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaFileSyncHttpClientTimeout) }}
+    {{- if (kindIs "string" .Values.defaultSettings.replicaFileSyncHttpClientTimeout) }}
     replica-file-sync-http-client-timeout: {{ .Values.defaultSettings.replicaFileSyncHttpClientTimeout }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.longGRPCTimeOut) }}
+    {{- if (kindIs "string" .Values.defaultSettings.longGRPCTimeOut) }}
     long-grpc-timeout: {{ .Values.defaultSettings.longGRPCTimeOut }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.logLevel) }}
+    {{- if (kindIs "string" .Values.defaultSettings.logLevel) }}
     log-level: {{ .Values.defaultSettings.logLevel }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backupCompressionMethod) }}
+    {{- if (kindIs "string" .Values.defaultSettings.backupCompressionMethod) }}
     backup-compression-method: {{ .Values.defaultSettings.backupCompressionMethod }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.backupConcurrentLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.backupConcurrentLimit) }}
     backup-concurrent-limit: {{ .Values.defaultSettings.backupConcurrentLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.restoreConcurrentLimit) }}
     restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v1DataEngine) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v1DataEngine) }}
     v1-data-engine: {{ .Values.defaultSettings.v1DataEngine }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngine) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v2DataEngine) }}
     v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineHugepageLimit) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v2DataEngineHugepageLimit) }}
     v2-data-engine-hugepage-limit: {{ .Values.defaultSettings.v2DataEngineHugepageLimit }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
+    {{- if (kindIs "string" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
     allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}
+    {{- if (kindIs "string" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}
     allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}
+    {{- if (kindIs "string" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}
     allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.disableSnapshotPurge) }}
+    {{- if (kindIs "string" .Values.defaultSettings.disableSnapshotPurge) }}
     disable-snapshot-purge: {{ .Values.defaultSettings.disableSnapshotPurge }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU) }}
     v2-data-engine-guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotMaxCount) }}
+    {{- if (kindIs "string" .Values.defaultSettings.snapshotMaxCount) }}
     snapshot-max-count: {{ .Values.defaultSettings.snapshotMaxCount }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineLogLevel) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v2DataEngineLogLevel) }}
     v2-data-engine-log-level: {{ .Values.defaultSettings.v2DataEngineLogLevel }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineLogFlags) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v2DataEngineLogFlags) }}
     v2-data-engine-log-flags: {{ .Values.defaultSettings.v2DataEngineLogFlags }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineSnapshotDataIntegrity) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v2DataEngineSnapshotDataIntegrity) }}
     v2-data-engine-snapshot-data-integrity: {{ .Values.defaultSettings.v2DataEngineSnapshotDataIntegrity }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.freezeFilesystemForSnapshot) }}
+    {{- if (kindIs "string" .Values.defaultSettings.freezeFilesystemForSnapshot) }}
     freeze-filesystem-for-snapshot: {{ .Values.defaultSettings.freezeFilesystemForSnapshot }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup) }}
+    {{- if (kindIs "string" .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup) }}
     auto-cleanup-when-delete-backup: {{ .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted) }}
+    {{- if (kindIs "string" .Values.defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted) }}
     auto-cleanup-snapshot-after-on-demand-backup-completed: {{ .Values.defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.rwxVolumeFastFailover) }}
+    {{- if (kindIs "string" .Values.defaultSettings.rwxVolumeFastFailover) }}
     rwx-volume-fast-failover: {{ .Values.defaultSettings.rwxVolumeFastFailover}}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.offlineRelicaRebuilding) }}
-    offline-replica-rebuilding: {{ .Values.defaultSettings.offlineRelicaRebuilding}}
+    {{- if (kindIs "string" .Values.defaultSettings.offlineReplicaRebuilding) }}
+    offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineCPUMask) }}
+    {{- if (kindIs "string" .Values.defaultSettings.v2DataEngineCPUMask) }}
     v2-data-engine-cpu-mask: {{ .Values.defaultSettings.v2DataEngineCPUMask }}
     {{- end }}

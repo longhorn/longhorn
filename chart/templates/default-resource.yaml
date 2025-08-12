@@ -6,12 +6,12 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-resource.yaml: |-
-    {{- if not (kindIs "invalid" .Values.defaultBackupStore.backupTarget) }}
+    {{- if (kindIs "string" .Values.defaultBackupStore.backupTarget) }}
     backup-target: {{ .Values.defaultBackupStore.backupTarget }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultBackupStore.backupTargetCredentialSecret) }}
+    {{- if (kindIs "string" .Values.defaultBackupStore.backupTargetCredentialSecret) }}
     backup-target-credential-secret: {{ .Values.defaultBackupStore.backupTargetCredentialSecret }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultBackupStore.pollInterval) }}
+    {{- if (kindIs "string" .Values.defaultBackupStore.pollInterval) }}
     backupstore-poll-interval: {{ .Values.defaultBackupStore.pollInterval }}
     {{- end }}
