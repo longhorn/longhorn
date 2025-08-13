@@ -1702,6 +1702,8 @@ spec:
                 type: string
               started:
                 type: boolean
+              starting:
+                type: boolean
               storageIP:
                 type: string
               ublkID:
@@ -2725,6 +2727,8 @@ spec:
               salvageExecuted:
                 type: boolean
               started:
+                type: boolean
+              starting:
                 type: boolean
               storageIP:
                 type: string
