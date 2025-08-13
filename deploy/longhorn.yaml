@@ -2807,7 +2807,10 @@ spec:
             - applied
             type: object
           value:
-            description: The value of the setting.
+            description: |-
+              The value of the setting.
+              - It can be a non-JSON formatted string that is applied to all the applicable data engines listed in the setting definition.
+              - It can be a JSON formatted string that contains values for applicable data engines listed in the setting definition's Default.
             type: string
         required:
         - value
