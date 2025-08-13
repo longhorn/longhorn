@@ -292,7 +292,7 @@ questions:
       - variable: defaultSettings.defaultDataPath
         label: Default Data Path
         description: >-
-          Default path for storing data on a host. The default value is "/var/lib/longhorn/".
+          Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. The default value is "/var/lib/longhorn/".
         group: Longhorn Default Settings
         type: string
         default: /var/lib/longhorn/
@@ -612,7 +612,7 @@ questions:
       - variable: defaultSettings.guaranteedInstanceManagerCPU
         label: Guaranteed Instance Manager CPU
         description: >-
-          Percentage of the total allocatable CPU resources on each node to be reserved for each Instance Manager pod when the V1 Data Engine is enabled. You can specify a floating point value between "0" and "40" to accommodate the possible number of new Instance Manager pods during upgrades. The default value is "12". **Caution**: [1] When the value is "0", CPU requests are removed from the spec of Instance Manager pods. [2] A new set of Instance Manager pods must be deployed when Longhorn is upgraded. If the available CPUs are not sufficient for the new pods, you must detach the volumes using the oldest Instance Manager pods so that Longhorn can automatically clean up the old pods and release the CPU resources. Once completed, the new pods with the latest Instance Manager image are launched. [3] This global setting is not applied to nodes with a specified value for the "InstanceManagerCPURequest" field. [4] After this setting is configured, Instance Manager pods on all nodes that use this setting are automatically restarted. **Do not change this setting while volumes are still attached.**
+          Percentage of the total allocatable CPU resources on each node to be reserved for each Instance Manager pod when the V1 Data Engine is enabled. You can specify a floating point value between "0" and "40" to accommodate the possible number of new Instance Manager pods during upgrades. The default value is "12". **Caution**: [1] When the value is "0", CPU requests are removed from the spec of Instance Manager pods. [2] A new set of Instance Manager pods must be deployed when Longhorn is upgraded. If the available CPUs are not sufficient for the new pods, you must detach the volumes using the oldest Instance Manager pods so that Longhorn can automatically clean up the old pods and release the CPU resources. Once completed, the new pods with the latest Instance Manager image are launched. [3] This global setting is not applied to nodes with a specified value for the "InstanceManagerCPURequest" field. [4] After this setting is configured, Instance Manager pods on all nodes that use this setting are automatically restarted. **Do not change this setting while volumes are still attached. [5] or the v2 Data Engine, the spdk_tgt process inside each instance manager pod uses one or more dedicated CPU cores. Setting a minimum CPU usage is critical to maintaining stability during periods of high node load.**
         group: Longhorn Default Settings
         type: float
         min: 0
@@ -789,17 +789,17 @@ questions:
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: boolean
         default: false
-      - variable: defaultSettings.v2DataEngineHugepageLimit
+      - variable: defaultSettings.dataEngineHugepageLimit
         label: V2 Data Engine
         description: >-
-          This allows users to configure maximum huge page size (in MiB) for the V2 Data Engine.
+          Applies only to the V2 Data Engine. Specifies the hugepage size, in MiB, for the Storage Performance Development Kit (SPDK) target daemon. The default value is 2048 MiB.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: int
         default: '2048'
-      - variable: defaultSettings.v2DataEngineLogLevel
+      - variable: defaultSettings.dataEngineLogLevel
         label: V2 Data Engine Log Level
         description: >-
-          Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.
+          Applies only to the V2 Data Engine. Specifies the log level for the Storage Performance Development Kit (SPDK) target daemon. Supported values are: Error, Warning, Notice, Info, and Debug. The default is Notice.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: enum
         options:
@@ -810,23 +810,13 @@ questions:
           - Info
           - Debug
         default: Notice
-      - variable: defaultSettings.v2DataEngineLogFlags
+      - variable: defaultSettings.dataEngineLogFlags
         label: V2 Data Engine Log Flags
         description: >-
-          Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.
+          Applies only to the V2 Data Engine. Specifies the log flags for the Storage Performance Development Kit (SPDK) target daemon.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: string
         default: null
-      - variable: defaultSettings.v2DataEngineSnapshotDataIntegrity
-        label: V2 Data Engine Snapshot Data Integrity
-        description: >-
-          Setting that allows you to enable or disable snapshot hashing and data integrity checking for the V2 Data Engine.
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
-        type: enum
-        options:
-          - fast-check
-          - disabled
-        default: disabled
       - variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
         label: Auto Cleanup Snapshot When Delete Backup
         description: >-
@@ -1169,23 +1159,16 @@ questions:
           - rke1
           - rke2
           - k3s
-      - variable: defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU
-        label: Guaranteed Instance Manager CPU for V2 Data Engine
-        description: >-
-          Number of millicpu on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is \"1250\". **Caution** [1] Specifying a value of \"0\" disables CPU requests for Instance Manager pods. You must specify an integer larger than \"1000\". [2] This is a global setting. Modifying the value triggers an automatic restart of the Instance Manager pods. Do not modify the value while volumes are still attached.
-        type: int
-        min: 1000
-        default: 1250
-      - variable: defaultSettings.v2DataEngineCPUMask
+      - variable: defaultSettings.dataEngineCPUMask
         label: CPU Mask for V2 Data Engine
         description: >-
-          CPU cores on which the Storage Performance Development Kit (SPDK) target daemon should run. The SPDK target daemon is located in each Instance Manager pod. Ensure that the number of cores is less than or equal to the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is \"0x1\".
+          Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is \"0x1\".
         type: string
         default: '0x1'
       - variable: defaultSettings.replicaRebuildingBandwidthLimit
-        label: V2 Data Engine Rebuilding MBytes Per Second
+        label: Replica Rebuilding Bandwidth Limit
         description: >-
-          This setting specifies the default write bandwidth limit (in megabytes per second) for volume replica rebuilding when using the v2 data engine (SPDK). If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit.
+          Applies only to the V2 Data Engine. Specifies the default write bandwidth limit, in megabytes per second (MB/s), for volume replica rebuilding. If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit.
         type: int
         min: 0
         default: 0
