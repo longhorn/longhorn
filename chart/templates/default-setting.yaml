@@ -2,8 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: longhorn-default-setting
-  namespace: {{ include "release_namespace" . }}
-  labels: {{- include "longhorn.labels" . | nindent 4 }}
+  namespace: { { include "release_namespace" . } }
+  labels: { { - include "longhorn.labels" . | nindent 4 } }
 data:
   default-setting.yaml: |-
     {{- if (kindIs "string" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
@@ -66,7 +66,7 @@ data:
     {{- if (kindIs "string" .Values.defaultSettings.supportBundleFailedHistoryLimit) }}
     support-bundle-failed-history-limit: {{ .Values.defaultSettings.supportBundleFailedHistoryLimit }}
     {{- end }}
-    {{- if or (not (kindIs "string" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
+    {{- if or (kindIs "string" .Values.defaultSettings.taintToleration) (.Values.global.cattle.windowsCluster.enabled) }}
     taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
         {{- $windowsDefaultSettingTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.taintToleration -}}
@@ -76,7 +76,7 @@ data:
       {{- end -}}
       {{- $taintToleration := list $windowsDefaultSettingTaintToleration $defaultSettingTaintToleration }}{{ join ";" (compact $taintToleration) -}}
     {{- end }}
-    {{- if or (not (kindIs "string" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
+    {{- if or (kindIs "string" .Values.defaultSettings.systemManagedComponentsNodeSelector) (.Values.global.cattle.windowsCluster.enabled) }}
     system-managed-components-node-selector: {{ $windowsDefaultSettingNodeSelector := list }}{{ $defaultSettingNodeSelector := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
         {{ $windowsDefaultSettingNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
