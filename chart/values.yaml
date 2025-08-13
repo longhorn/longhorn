@@ -233,7 +233,7 @@ defaultSettings:
   allowRecurringJobWhileVolumeDetached: ~
   # -- Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster.
   createDefaultDiskLabeledNodes: ~
-  # -- Default path for storing data on a host. The default value is "/var/lib/longhorn/".
+  # -- Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. The default value is "/var/lib/longhorn/".
   defaultDataPath: ~
   # -- Default data locality. A Longhorn volume has data locality if a local replica of the volume exists on the same node as the pod that is using the volume.
   defaultDataLocality: ~
@@ -316,7 +316,7 @@ defaultSettings:
   backingImageCleanupWaitInterval: ~
   # -- Number of seconds that Longhorn waits before downloading a backing image file again when the status of all image disk files changes to "failed" or "unknown".
   backingImageRecoveryWaitInterval: ~
-  # -- Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled. The default value is "12".
+  # -- Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod. The default value is "12".
   guaranteedInstanceManagerCPU: ~
   # -- Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler.
   kubernetesClusterAutoscalerEnabled: ~
@@ -358,12 +358,10 @@ defaultSettings:
   v1DataEngine: ~
   # -- Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is an experimental feature and should not be used in production environments.
   v2DataEngine: ~
-  # -- Setting that allows you to configure maximum huge page size (in MiB) for the V2 Data Engine.
-  v2DataEngineHugepageLimit: ~
-  # -- Number of millicpus on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is "1250".
-  v2DataEngineGuaranteedInstanceManagerCPU: ~
-  # -- CPU cores on which the Storage Performance Development Kit (SPDK) target daemon should run. The SPDK target daemon is located in each Instance Manager pod. Ensure that the number of cores is less than or equal to the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is "0x1".
-  v2DataEngineCPUMask: ~
+  # -- Applies only to the V2 Data Engine. Specifies the hugepage size, in MiB, for the Storage Performance Development Kit (SPDK) target daemon. The default value is 2048 MiB.
+  dataEngineHugepageLimit: ~
+  # -- Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is "0x1".
+  dataEngineCPUMask: ~
   # -- This setting specifies the default write bandwidth limit (in megabytes per second) for volume replica rebuilding when using the v2 data engine (SPDK). If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit.
   replicaRebuildingBandwidthLimit: ~
   # -- Setting that allows scheduling of empty node selector volumes to any node.
@@ -376,12 +374,10 @@ defaultSettings:
   disableSnapshotPurge: ~
   # -- Maximum snapshot count for a volume. The value should be between 2 to 250
   snapshotMaxCount: ~
-  # -- Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.
-  v2DataEngineLogLevel: ~
-  # -- Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine.
-  v2DataEngineLogFlags: ~
-  # -- Setting allows you to enable or disable snapshot hashing and data integrity checking for the V2 Data Engine.
-  v2DataEngineSnapshotDataIntegrity: ~
+  # -- Applies only to the V2 Data Engine. Specifies the log level for the Storage Performance Development Kit (SPDK) target daemon. Supported values are: Error, Warning, Notice, Info, and Debug. The default is Notice.
+  dataEngineLogLevel: ~
+  # -- Applies only to the V2 Data Engine. Specifies the log flags for the Storage Performance Development Kit (SPDK) target daemon.
+  dataEngineLogFlags: ~
   # -- Setting that freezes the filesystem on the root partition before a snapshot is created.
   freezeFilesystemForSnapshot: ~
   # -- Setting that automatically cleans up the snapshot when the backup is deleted.

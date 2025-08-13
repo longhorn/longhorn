@@ -318,7 +318,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.concurrentVolumeBackupRestorePerNodeLimit | Maximum number of volumes that can be concurrently restored on each node using a backup. When the value is "0", restoration of volumes using a backup is disabled. |
 | defaultSettings.createDefaultDiskLabeledNodes | Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster. |
 | defaultSettings.defaultDataLocality | Default data locality. A Longhorn volume has data locality if a local replica of the volume exists on the same node as the pod that is using the volume. |
-| defaultSettings.defaultDataPath | Default path for storing data on a host. The default value is "/var/lib/longhorn/". |
+| defaultSettings.defaultDataPath | Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. The default value is "/var/lib/longhorn/". |
 | defaultSettings.defaultLonghornStaticStorageClass | Default name of Longhorn static StorageClass. "storageClassName" is assigned to PVs and PVCs that are created for an existing Longhorn volume. "storageClassName" can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. "storageClassName" needs to be an existing StorageClass. The default value is "longhorn-static". |
 | defaultSettings.defaultReplicaCount | Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is "3". |
 | defaultSettings.deletingConfirmationFlag | Flag that prevents accidental uninstallation of Longhorn. |
@@ -330,7 +330,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.failedBackupTTL | Number of minutes that Longhorn keeps a failed backup resource. When the value is "0", automatic deletion is disabled. |
 | defaultSettings.fastReplicaRebuildEnabled | Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check". |
 | defaultSettings.freezeFilesystemForSnapshot | Setting that freezes the filesystem on the root partition before a snapshot is created. |
-| defaultSettings.guaranteedInstanceManagerCPU | Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod when the V1 Data Engine is enabled. The default value is "12". |
+| defaultSettings.guaranteedInstanceManagerCPU | Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod. The default value is "12". |
 | defaultSettings.kubernetesClusterAutoscalerEnabled | Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. |
 | defaultSettings.logLevel | Log levels that indicate the type and severity of logs in Longhorn Manager. The default value is "Info". (Options: "Panic", "Fatal", "Error", "Warn", "Info", "Debug", "Trace") |
 | defaultSettings.longGRPCTimeOut | Number of seconds that Longhorn allows for the completion of replica rebuilding and snapshot cloning operations. |
@@ -347,7 +347,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.replicaAutoBalance | Setting that automatically rebalances replicas when an available node is discovered. |
 | defaultSettings.replicaDiskSoftAntiAffinity | Setting that allows scheduling on disks with existing healthy replicas of the same volume. This setting is enabled by default. |
 | defaultSettings.replicaFileSyncHttpClientTimeout | Number of seconds that an HTTP client waits for a response from a File Sync server before considering the connection to have failed. |
-| defaultSettings.replicaRebuildingBandwidthLimit | This setting specifies the default write bandwidth limit (in megabytes per second) for volume replica rebuilding when using the v2 data engine (SPDK). If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit. |
+| defaultSettings.replicaRebuildingBandwidthLimit | Applies only to the V2 Data Engine. Specifies the default write bandwidth limit, in megabytes per second (MB/s), for volume replica rebuilding. If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit. |
 | defaultSettings.replicaReplenishmentWaitInterval | Number of seconds that Longhorn waits before reusing existing data on a failed replica instead of creating a new replica of a degraded volume. |
 | defaultSettings.replicaSoftAntiAffinity | Setting that allows scheduling on nodes with healthy replicas of the same volume. This setting is disabled by default. |
 | defaultSettings.replicaZoneSoftAntiAffinity | Setting that allows Longhorn to schedule new replicas of a volume to nodes in the same zone as existing healthy replicas. Nodes that do not belong to any zone are treated as existing in the zone that contains healthy replicas. When identifying zones, Longhorn relies on the label "topology.kubernetes.io/zone=<Zone name of the node>" in the Kubernetes node object. |
@@ -370,12 +370,10 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.upgradeResponderURL | The Upgrade Responder sends a notification whenever a new Longhorn version that you can upgrade to becomes available. The default value is https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade. |
 | defaultSettings.v1DataEngine | Setting that allows you to enable the V1 Data Engine. |
 | defaultSettings.v2DataEngine | Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is an experimental feature and should not be used in production environments. |
-| defaultSettings.v2DataEngineCPUMask | CPU cores on which the Storage Performance Development Kit (SPDK) target daemon should run. The SPDK target daemon is located in each Instance Manager pod. Ensure that the number of cores is less than or equal to the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is "0x1". |
-| defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU | Number of millicpus on each node to be reserved for each Instance Manager pod when the V2 Data Engine is enabled. The default value is "1250". |
-| defaultSettings.v2DataEngineHugepageLimit | Setting that allows you to configure maximum huge page size (in MiB) for the V2 Data Engine. |
-| defaultSettings.v2DataEngineLogFlags | Setting that allows you to configure the log flags of the SPDK target daemon (spdk_tgt) of the V2 Data Engine. |
-| defaultSettings.v2DataEngineLogLevel | Setting that allows you to configure the log level of the SPDK target daemon (spdk_tgt) of the V2 Data Engine. |
-| defaultSettings.v2DataEngineSnapshotDataIntegrity | Setting allows you to enable or disable snapshot hashing and data integrity checking for the V2 Data Engine. |
+| defaultSettings.dataEngineCPUMask | Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is 0x1. |
+| defaultSettings.dataEngineHugepageLimit | Applies only to the V2 Data Engine. Specifies the hugepage size, in MiB, for the Storage Performance Development Kit (SPDK) target daemon. The default value is 2048 MiB. |
+| defaultSettings.dataEngineLogFlags | Applies only to the V2 Data Engine. Specifies the log flags for the Storage Performance Development Kit (SPDK) target daemon. |
+| defaultSettings.dataEngineLogLevel | Applies only to the V2 Data Engine. Specifies the log level for the Storage Performance Development Kit (SPDK) target daemon. Supported values are: Error, Warning, Notice, Info, and Debug. The default is Notice. |
 
 ---
 Please see [link](https://github.com/longhorn/longhorn) for more information.

@@ -206,8 +206,8 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngine) }}
     v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineHugepageLimit) }}
-    v2-data-engine-hugepage-limit: {{ .Values.defaultSettings.v2DataEngineHugepageLimit }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineHugepageLimit) }}
+    data-engine-hugepage-limit: {{ .Values.defaultSettings.dataEngineHugepageLimit }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
     allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
@@ -221,20 +221,14 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.disableSnapshotPurge) }}
     disable-snapshot-purge: {{ .Values.defaultSettings.disableSnapshotPurge }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU) }}
-    v2-data-engine-guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.v2DataEngineGuaranteedInstanceManagerCPU }}
-    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotMaxCount) }}
     snapshot-max-count: {{ .Values.defaultSettings.snapshotMaxCount }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineLogLevel) }}
-    v2-data-engine-log-level: {{ .Values.defaultSettings.v2DataEngineLogLevel }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineLogLevel) }}
+    data-engine-log-level: {{ .Values.defaultSettings.dataEngineLogLevel }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineLogFlags) }}
-    v2-data-engine-log-flags: {{ .Values.defaultSettings.v2DataEngineLogFlags }}
-    {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineSnapshotDataIntegrity) }}
-    v2-data-engine-snapshot-data-integrity: {{ .Values.defaultSettings.v2DataEngineSnapshotDataIntegrity }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineLogFlags) }}
+    data-engine-log-flags: {{ .Values.defaultSettings.dataEngineLogFlags }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.freezeFilesystemForSnapshot) }}
     freeze-filesystem-for-snapshot: {{ .Values.defaultSettings.freezeFilesystemForSnapshot }}
@@ -251,8 +245,8 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}
     offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding}}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineCPUMask) }}
-    v2-data-engine-cpu-mask: {{ .Values.defaultSettings.v2DataEngineCPUMask }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineCPUMask) }}
+    data-engine-cpu-mask: {{ .Values.defaultSettings.dataEngineCPUMask }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaRebuildingBandwidthLimit) }}
     replica-rebuilding-bandwidth-limit: {{ .Values.defaultSettings.replicaRebuildingBandwidthLimit }}
