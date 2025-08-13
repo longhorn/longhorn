@@ -819,6 +819,15 @@ spec:
           spec:
             description: BackupSpec defines the desired state of the Longhorn backup
             properties:
+              backupBlockSize:
+                description: The backup block size. 0 means the legacy default size
+                  2MiB, and -1 indicate the block size is invalid.
+                enum:
+                - "-1"
+                - "2097152"
+                - "16777216"
+                format: int64
+                type: string
               backupMode:
                 description: |-
                   The backup mode of this backup.
@@ -3666,6 +3675,14 @@ spec:
                 - rwx
                 type: string
               backingImage:
+                type: string
+              backupBlockSize:
+                description: BackupBlockSize indicate the block size to create backups.
+                  The block size is immutable.
+                enum:
+                - "2097152"
+                - "16777216"
+                format: int64
                 type: string
               backupCompressionMethod:
                 enum:
