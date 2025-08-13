@@ -294,6 +294,9 @@ configMap:
         "longhornSettingBackupstorePollInterval": {
           "dataType": "float"
         },
+        "longhornSettingBackupBlockSize": {
+          "dataType": "float",
+        },
         "longhornSettingConcurrentAutomaticEngineUpgradePerNodeLimit": {
           "dataType": "float"
         },

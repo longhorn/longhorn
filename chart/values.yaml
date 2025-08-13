@@ -353,6 +353,8 @@ defaultSettings:
   # -- Maximum number of worker threads that can concurrently run for each backup.
   backupConcurrentLimit: ~
   # -- Maximum number of worker threads that can concurrently run for each restore operation.
+  defaultBackupBlockSize: ~
+  # -- Specifies the default backup block size, in MiB, used when creating a new volume. Supported values are 2 or 16.
   restoreConcurrentLimit: ~
   # -- Setting that allows you to enable the V1 Data Engine.
   v1DataEngine: ~

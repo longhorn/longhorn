@@ -200,6 +200,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}
     restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultBackupBlockSize) }}
+    default-backup-block-size: {{ .Values.defaultSettings.defaultBackupBlockSize }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.v1DataEngine) }}
     v1-data-engine: {{ .Values.defaultSettings.v1DataEngine }}
     {{- end }}

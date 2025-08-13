@@ -761,6 +761,16 @@ questions:
         type: int
         min: 1
         default: 2
+      - variable: defaultSettings.backupBlockSize
+        label: Backup Block Size
+        description: >-
+          Specifies the default backup block size, in MiB, used when creating a new volume. Supported values are 2 or 16.
+        group: Longhorn Default Settings
+        type: enum
+        options:
+          - '2'
+          - '16'
+        default: '2'
       - variable: defaultSettings.restoreConcurrentLimit
         label: Restore Concurrent Limit Per Backup
         description: >-
