@@ -60,8 +60,11 @@ deploy/backupstores/
 
 ## Script: `generate-backupstore-credentials.sh`
 
-This script generates dummy secret patches for one or more backends.\
+This script generates dummy secret patches for one or more backends.
 It supports two namespaces: `default` and `longhorn-system`.
+
+⚠️ Be careful not to double-encode values.
+If using `--no-encode`, ensure your environment variables are already base64-encoded exactly once.
 
 ### Preconfigured credentials (edit as needed)
 
@@ -69,8 +72,8 @@ It supports two namespaces: `default` and `longhorn-system`.
 >
 > - Kubernetes secrets require base64-encoded values.
 > - The script supports both:
->   - **Plaintext input** - use the --base64-encode flag to have the script base64 encode values for you.
->   - **Already base64-encoded input** - omit the flag if your values are already encoded.
+>   - **Plaintext input (default)**: The script will automatically base64-encode values before writing them into Secret manifests.
+>   - **Base64-encoded input**: Use the `--no-encode` flag to use your values as-is without re-encoding.
 
 In `generate-backupstore-credentials.sh`:
 
@@ -95,25 +98,25 @@ export AWS_CERT_KEY="example-base64-cert-key"
 ### Options
 
 - `<backend>`: One of `azurite`, `cifs`, `minio`, `nfs` or `all`. Required.
-- `--base64-encode`: Optional flag. Indicates that the provided values are **plaintext** and should be base64-encoded by the script.
+- `--no-encode` (optional): Indicates that the provided values are already base64-encoded and should be used as-is without additional encoding.
 ### Usage
 
 **Generate credentials for a single backend**
 
 ```bash
-./scripts/generate-backupstore-credentials.sh minio
+./scripts/generate-backupstore-credentials.sh minio 
 ```
 
 **Generate credentials for all backends**
 
 ```bash
-./scripts/generate-backupstore-credentials.sh all --base64-encode
+./scripts/generate-backupstore-credentials.sh all
 ```
 
-**Optionally enable base64 encoding for secrets**
+**By default, secrets are base64-encoded. Use --no-encode if the input is already base64.**
 
 ```bash
-./scripts/generate-backupstore-credentials.sh minio --base64-encode
+./scripts/generate-backupstore-credentials.sh minio --no-encode
 ```
 
 ### Deploy / Delete

@@ -117,15 +117,12 @@ generate_minio_backend() {
     check_env_or_fail AWS_SECRET_ACCESS_KEY
     check_env_or_fail AWS_ENDPOINTS
 
-    # Conditionally required if endpoint is HTTPS
     if $BASE64_ENCODE; then
-        # input is plaintext
         if [[ "$AWS_ENDPOINTS" == https://* ]]; then
             check_env_or_fail AWS_CERT
             check_env_or_fail AWS_CERT_KEY
         fi
     else
-        # input is base64 encoded
         if ! decoded_endpoint=$(echo "$AWS_ENDPOINTS" | base64 --decode 2>/dev/null); then
             echo "ERROR: Failed to decode AWS_ENDPOINTS. Must be valid base64." >&2
             exit 1
@@ -136,7 +133,6 @@ generate_minio_backend() {
             check_env_or_fail AWS_CERT_KEY
         fi
     fi
-
 
     generate_patch_with_ns longhorn-system minio-secret minio-backupstore-secret \
         AWS_ACCESS_KEY_ID "$AWS_ACCESS_KEY_ID" \
@@ -170,12 +166,12 @@ resources:
 EOF
 }
 
-
 generate_patch_with_ns() {
     local ns=$1
     local name=$2
     local file=$3
     shift 3
+
     {
         echo "apiVersion: v1"
         echo "kind: Secret"
@@ -187,11 +183,13 @@ generate_patch_with_ns() {
         while [[ $# -gt 1 ]]; do
             key=$1
             val=$2
+            fail_if_base64_encoded "$key" "$val"
             echo "  $key: $(b64 "$val")"
             shift 2
         done
     } > "${TARGET_DIR}/${file}-patch-${ns}.yaml"
 }
+
 
 b64() {
     if $BASE64_ENCODE; then
@@ -201,21 +199,36 @@ b64() {
     fi
 }
 
+fail_if_base64_encoded() {
+    local key="$1"
+    local val="$2"
+
+    if $BASE64_ENCODE && is_base64 "$val"; then
+        echo "ERROR: Input for $key appears to be already base64-encoded. Refusing to double-encode." >&2
+        echo "Hint: Use --no-encode if your input is already base64." >&2
+        exit 1
+    fi
+}
+
+is_base64() {
+    echo "$1" | base64 --decode >/dev/null 2>&1
+}
+
 # Entry point
 BACKEND=""
-BASE64_ENCODE=false
+BASE64_ENCODE=true
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --base64-encode)
-            BASE64_ENCODE=true
+        --no-encode)
+            BASE64_ENCODE=false
             ;;
         azurite|cifs|minio|nfs|all)
             BACKEND=$1
             ;;
         *)
             echo "Unknown option or argument: $1"
-            echo "Usage: $0 [azurite|cifs|minio|nfs|all] [--base64-encode]"
+            echo "Usage: $0 [azurite|cifs|minio|nfs|all] [--no-encode]"
             exit 1
             ;;
     esac
@@ -224,7 +237,7 @@ done
 
 if [[ -z "$BACKEND" ]]; then
     echo "Error: Must specify one of: azurite, cifs, minio, nfs or all"
-    echo "Usage: $0 [azurite|cifs|minio|nfs|all] [--base64-encode]"
+    echo "Usage: $0 [azurite|cifs|minio|nfs|all] [--no-encode]"
     exit 1
 fi
 
