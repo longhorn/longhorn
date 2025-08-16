@@ -1172,3 +1172,11 @@ questions:
         type: int
         min: 0
         default: 0
+      - variable: defaultSettings.instanceManagerPodLivenessProbeTimeout
+        label: Instance Manager Pod Liveness Probe Timeout
+        description: >-
+          In seconds. The setting specifies the timeout for the instance manager pod liveness probe. The default value is 10 seconds.
+        type: int
+        min: 1
+        max: 60
+        default: 10

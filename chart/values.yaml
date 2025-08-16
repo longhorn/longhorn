@@ -364,6 +364,8 @@ defaultSettings:
   dataEngineCPUMask: ~
   # -- This setting specifies the default write bandwidth limit (in megabytes per second) for volume replica rebuilding when using the v2 data engine (SPDK). If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit.
   replicaRebuildingBandwidthLimit: ~
+  # -- In seconds. The setting specifies the timeout for the instance manager pod liveness probe. The default value is 10 seconds.
+  instanceManagerPodLivenessProbeTimeout: ~
   # -- Setting that allows scheduling of empty node selector volumes to any node.
   allowEmptyNodeSelectorVolume: ~
   # -- Setting that allows scheduling of empty disk selector volumes to any disk.
