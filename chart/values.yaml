@@ -348,6 +348,8 @@ defaultSettings:
   longGRPCTimeOut: ~
   # -- Log levels that indicate the type and severity of logs in Longhorn Manager. The default value is "Info". (Options: "Panic", "Fatal", "Error", "Warn", "Info", "Debug", "Trace")
   logLevel: ~
+  # -- Specifies the directory on the host where Longhorn stores log files for the instance manager pod. Currently, it is only used for instance manager pods in the v2 data engine.
+  logPath: ~
   # -- Setting that allows you to specify a backup compression method.
   backupCompressionMethod: ~
   # -- Maximum number of worker threads that can concurrently run for each backup.
