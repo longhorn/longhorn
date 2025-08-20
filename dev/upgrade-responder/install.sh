@@ -315,10 +315,10 @@ configMap:
         "longhornSettingFailedBackupTtl": {
           "dataType": "float"
         },
-        "longhornSettingGuaranteedInstanceManagerCpu": {
+        "longhornSettingReplicaRebuildingBandwidthLimit": {
           "dataType": "float"
         },
-        "longhornSettingV2DataEngineGuaranteedInstanceManagerCpu": {
+        "longhornSettingGuaranteedInstanceManagerCpu": {
           "dataType": "float"
         },
         "longhornSettingRecurringFailedJobsHistoryLimit": {
