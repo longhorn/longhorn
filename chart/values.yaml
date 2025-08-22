@@ -85,7 +85,7 @@ image:
       # -- Repository for the Longhorn Support Bundle Manager image.
       repository: longhornio/support-bundle-kit
       # -- Tag for the Longhorn Support Bundle Manager image.
-      tag: v0.0.58
+      tag: v0.0.62
   csi:
     attacher:
       # -- Registry for the CSI attacher image. When unspecified, Longhorn uses the default value.
