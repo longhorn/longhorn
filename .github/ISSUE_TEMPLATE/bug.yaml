@@ -1,7 +1,6 @@
 name: Bug report
 description: Create a bug report
 title: "[BUG] "
-type: "Bug"
 labels: ["kind/bug", "require/qa-review-coverage", "require/backport"]
 assignees:
   - 

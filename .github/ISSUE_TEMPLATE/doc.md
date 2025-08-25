@@ -2,7 +2,6 @@
 name: Document
 about: Create or update document
 title: "[DOC] "
-type: "Doc"
 labels: kind/doc
 assignees: ''
 

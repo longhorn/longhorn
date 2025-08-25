@@ -2,7 +2,6 @@
 name: Task
 about: Create a general task
 title: "[TASK] "
-type: "Task"
 labels: kind/task
 assignees: ''
 
