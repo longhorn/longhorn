@@ -2,7 +2,6 @@
 name: Release Task
 about: Create a release task
 title: "[RELEASE] Release {{ env.RELEASE_VERSION }}"
-type: "Task"
 labels: ["release/task", "area/install-uninstall-upgrade"]
 assignees: ''
 
