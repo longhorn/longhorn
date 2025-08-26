@@ -85,7 +85,7 @@ image:
       # -- Repository for the Longhorn Support Bundle Manager image.
       repository: longhornio/support-bundle-kit
       # -- Tag for the Longhorn Support Bundle Manager image.
-      tag: v0.0.62
+      tag: v0.0.63
   csi:
     attacher:
       # -- Registry for the CSI attacher image. When unspecified, Longhorn uses the default value.
@@ -93,42 +93,42 @@ image:
       # -- Repository for the CSI attacher image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-attacher
       # -- Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
-      tag: v4.8.1
+      tag: v4.9.0-20250826
     provisioner:
       # -- Registry for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-provisioner
       # -- Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
-      tag: v5.2.0
+      tag: v5.3.0-20250826
     nodeDriverRegistrar:
       # -- Registry for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-node-driver-registrar
       # -- Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
-      tag: v2.13.0
+      tag: v2.14.0-20250826
     resizer:
       # -- Registry for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-resizer
       # -- Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value.
-      tag: v1.13.2
+      tag: v1.14.0-20250826
     snapshotter:
       # -- Registry for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-snapshotter
       # -- Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
-      tag: v8.2.0
+      tag: v8.3.0-20250826
     livenessProbe:
       # -- Registry for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       repository: longhornio/livenessprobe
       # -- Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
-      tag: v2.15.0
+      tag: v2.16.0-20250826
   openshift:
     oauthProxy:
       # -- Registry for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users.
