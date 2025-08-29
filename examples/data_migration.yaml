@@ -16,7 +16,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: volume-migration
-          image: ubuntu:xenial
+          image: registry.suse.com/bci/golang:1.24
           tty: true
           command: [ "/bin/sh" ]
           args: [ "-c", "cp -r -v /mnt/old/. /mnt/new" ]
