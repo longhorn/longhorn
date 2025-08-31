@@ -31,9 +31,17 @@ jobs:
         BRANCH=$(echo "${BRANCH}" | sed 's/\./\\./g')   # Escape periods
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
         
-        # Extract issue number from the PR description
-        ORIGINAL_ISSUE_NUMBER=$(echo "${{ github.event.pull_request.body }}" | grep -oE 'longhorn/longhorn#[0-9]+' | cut -d'#' -f2)
-        echo "ORIGINAL_ISSUE_NUMBER=$ORIGINAL_ISSUE_NUMBER" >> $GITHUB_ENV
+        PR_BODY="${{ github.event.pull_request.body }}"
+        ORIGINAL_ISSUE_NUMBER=$(printf '%s\n' "$PR_BODY" \
+          | grep -oE 'longhorn/longhorn#[0-9]+' \
+          | head -1 \
+          | cut -d'#' -f2)
+
+        if [[ "$ORIGINAL_ISSUE_NUMBER" =~ ^[0-9]+$ ]]; then
+          echo "ORIGINAL_ISSUE_NUMBER=$ORIGINAL_ISSUE_NUMBER" >> $GITHUB_ENV
+        else
+          echo "ORIGINAL_ISSUE_NUMBER=" >> $GITHUB_ENV
+        fi
 
     - name: Check if PR is from a fork
       run: |
