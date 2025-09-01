@@ -367,12 +367,10 @@ questions:
       - variable: defaultSettings.defaultReplicaCount
         label: Default Replica Count
         description: >-
-          Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is "3".
+          Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass.
         group: Longhorn Default Settings
-        type: int
-        min: 1
-        max: 20
-        default: 3
+        type: string
+        default: '{"v1":"3","v2":"3"}'
       - variable: defaultSettings.defaultLonghornStaticStorageClass
         label: Default Longhorn Static StorageClass Name
         description: >-
@@ -551,8 +549,8 @@ questions:
         description: >-
           Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the "volume-head-xxx.img" file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. This setting applies only to volumes created using the Longhorn UI.
         group: Longhorn Default Settings
-        type: boolean
-        default: 'true'
+        type: string
+        default: '{"v1":"true"}'
       - variable: defaultSettings.systemManagedPodsImagePullPolicy
         label: System Managed Pod Image Pull Policy
         description: >-
@@ -614,10 +612,8 @@ questions:
         description: >-
           Percentage of the total allocatable CPU resources on each node to be reserved for each Instance Manager pod when the V1 Data Engine is enabled. You can specify a floating point value between "0" and "40" to accommodate the possible number of new Instance Manager pods during upgrades. The default value is "12". **Caution**: [1] When the value is "0", CPU requests are removed from the spec of Instance Manager pods. [2] A new set of Instance Manager pods must be deployed when Longhorn is upgraded. If the available CPUs are not sufficient for the new pods, you must detach the volumes using the oldest Instance Manager pods so that Longhorn can automatically clean up the old pods and release the CPU resources. Once completed, the new pods with the latest Instance Manager image are launched. [3] This global setting is not applied to nodes with a specified value for the "InstanceManagerCPURequest" field. [4] After this setting is configured, Instance Manager pods on all nodes that use this setting are automatically restarted. **Do not change this setting while volumes are still attached. [5] or the v2 Data Engine, the spdk_tgt process inside each instance manager pod uses one or more dedicated CPU cores. Setting a minimum CPU usage is critical to maintaining stability during periods of high node load.**
         group: Longhorn Default Settings
-        type: float
-        min: 0
-        max: 40
-        default: 12
+        type: string
+        default: '{"v1":"12","v2":"12"}'
       - variable: defaultSettings.logLevel
         label: Log Level
         description: >-
@@ -636,8 +632,8 @@ questions:
         description: >-
           Setting that freezes the filesystem on the root partition before a snapshot is created.
         group: Longhorn Default Settings
-        type: boolean
-        default: 'false'
+        type: string
+        default: '{"v1":"false"}'
       - variable: defaultSettings.kubernetesClusterAutoscalerEnabled
         label: Kubernetes Cluster Autoscaler Enabled (Experimental)
         description: >-
@@ -691,8 +687,8 @@ questions:
         description: >-
           Timeout between the Longhorn Engine and replicas. Specify a value between "8" and "30" seconds. The default value is "8".
         group: Longhorn Default Settings
-        type: int
-        default: '8'
+        type: string
+        default: '{"v1":"8","v2":"8"}'
       - variable: defaultSettings.snapshotDataIntegrity
         label: Snapshot Data Integrity
         description: >-
@@ -710,8 +706,8 @@ questions:
         description: >-
           Hashing snapshot disk files impacts the performance of the system. The immediate snapshot hashing and checking can be disabled to minimize the impact after creating a snapshot.
         group: Longhorn Default Settings
-        type: boolean
-        default: 'false'
+        type: string
+        default: '{"v1":"false","v2":"false"}'
       - variable: defaultSettings.snapshotDataIntegrityCronjob
         label: Snapshot Data Integrity Check CronJob
         description: >-
@@ -731,8 +727,8 @@ questions:
         description: >-
           Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check".
         group: Longhorn Default Settings
-        type: boolean
-        default: false
+        type: string
+        default: '{"v1":"true","v2":"true"}'
       - variable: defaultSettings.replicaFileSyncHttpClientTimeout
         label: Timeout of HTTP Client to Replica File Sync Server
         description: >-
@@ -802,31 +798,24 @@ questions:
       - variable: defaultSettings.dataEngineHugepageLimit
         label: V2 Data Engine
         description: >-
-          Applies only to the V2 Data Engine. Specifies the hugepage size, in MiB, for the Storage Performance Development Kit (SPDK) target daemon. The default value is 2048 MiB.
+          Applies only to the V2 Data Engine. Specifies the hugepage size, in MiB, for the Storage Performance Development Kit (SPDK) target daemon.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
-        type: int
-        default: '2048'
+        type: string
+        default: '{"v2":"2048"}'
       - variable: defaultSettings.dataEngineLogLevel
-        label: V2 Data Engine Log Level
+        label: Data Engine Log Level
         description: >-
           Applies only to the V2 Data Engine. Specifies the log level for the Storage Performance Development Kit (SPDK) target daemon. Supported values are: Error, Warning, Notice, Info, and Debug. The default is Notice.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
-        type: enum
-        options:
-          - Disabled
-          - Error
-          - Warn
-          - Notice
-          - Info
-          - Debug
-        default: Notice
+        type: string
+        default: '{"v2":"Notice"}'
       - variable: defaultSettings.dataEngineLogFlags
-        label: V2 Data Engine Log Flags
+        label: Data Engine Log Flags
         description: >-
           Applies only to the V2 Data Engine. Specifies the log flags for the Storage Performance Development Kit (SPDK) target daemon.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: string
-        default: null
+        default: '{"v2":""}'
       - variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
         label: Auto Cleanup Snapshot When Delete Backup
         description: >-
@@ -853,8 +842,8 @@ questions:
         description: >-
           Enables automatic rebuilding of degraded replicas while the volume is detached. This setting only takes effect if the individual volume setting is set to `ignored` or `enabled`.
         group: Longhorn Default Settings
-        type: boolean
-        default: false
+        type: string
+        default: '{"v1":"false","v2":"false"}'
   - variable: persistence.defaultClass
     default: 'true'
     description: Setting that allows you to specify the default Longhorn StorageClass.
@@ -1170,18 +1159,17 @@ questions:
           - rke2
           - k3s
       - variable: defaultSettings.dataEngineCPUMask
-        label: CPU Mask for V2 Data Engine
+        label: Data Engine CPU Mask
         description: >-
-          Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is \"0x1\".
+          Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine.
         type: string
-        default: '0x1'
+        default: '{"v2":"0x1"}'
       - variable: defaultSettings.replicaRebuildingBandwidthLimit
         label: Replica Rebuilding Bandwidth Limit
         description: >-
           Applies only to the V2 Data Engine. Specifies the default write bandwidth limit, in megabytes per second (MB/s), for volume replica rebuilding. If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit.
-        type: int
-        min: 0
-        default: 0
+        type: string
+        default: '{"v2":"0"}'
       - variable: defaultSettings.instanceManagerPodLivenessProbeTimeout
         label: Instance Manager Pod Liveness Probe Timeout
         description: >-
