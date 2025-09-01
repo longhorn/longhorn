@@ -4240,7 +4240,7 @@ spec:
         - --backing-image-manager-image
         - "longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.63"
+        - "longhornio/support-bundle-kit:v0.0.64"
         - --manager-image
         - "longhornio/longhorn-manager:master-head"
         - --service-account
