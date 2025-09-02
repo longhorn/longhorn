@@ -2,7 +2,7 @@ name: "[Issue Management] Add Issue To Projects"
 
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened, milestoned]
 
 jobs:
   longhorn:
