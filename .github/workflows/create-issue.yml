@@ -99,22 +99,6 @@ jobs:
         issue-number: ${{ fromJSON(steps.if-backport-issue-exists.outputs.issues)[0].number }}
         state: 'open'
 
-    - name: Add Issue to Longhorn Sprint Project
-      id: add-project
-      uses: actions/add-to-project@v1.0.2
-      with:
-        project-url: https://github.com/orgs/longhorn/projects/8
-        github-token: ${{ steps.app-token.outputs.token }}
-
-    - name: Update Item To New
-      uses: titoportas/update-project-fields@v0.1.0
-      with:
-        project-url: https://github.com/orgs/longhorn/projects/8
-        github-token: ${{ steps.app-token.outputs.token }}
-        item-id: ${{ steps.add-project.outputs.itemId }}
-        field-keys: Status,Sprint
-        field-values: "New,[0]"
-
   automation:
     runs-on: ubuntu-latest
     if: contains(github.event.label.name, 'require/auto-e2e-test')
