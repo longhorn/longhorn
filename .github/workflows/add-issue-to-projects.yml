@@ -20,16 +20,40 @@ jobs:
         permission-issues: write
         permission-organization-projects: write
 
-    - name: Is Longhorn Member
+    - name: Check Longhorn Membership (including bot)
+      id: check-membership
+      run: |
+        if [[ "${{ github.event.issue.user.login }}" == "github-actions[bot]" ]]; then
+          echo "is_longhorn_member=true" >> $GITHUB_ENV
+        else
+          echo "is_longhorn_member=false" >> $GITHUB_ENV
+        fi
+
+    - name: Real Membership Check (non-bot only)
+      if: env.is_longhorn_member == 'false'
       id: is-longhorn-member
+      continue-on-error: true
       uses: tspascoal/get-user-teams-membership@v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
+    - name: Set Final Membership Flag
+      if: env.is_longhorn_member == 'false'
+      run: |
+        if [[ "${{ steps.is-longhorn-member.outcome }}" == "success" ]]; then
+          echo "is_longhorn_member=true" >> $GITHUB_ENV
+        fi
+
+    - name: Debug Membership Status
+      run: |
+        echo "is_longhorn_member: ${{ env.is_longhorn_member }}"
+        echo "teams: ${{ steps.is-longhorn-member.outputs.teams || 'bot or N/A' }}"
+        echo "check outcome: ${{ steps.is-longhorn-member.outcome || 'bot or N/A' }}"
+
     - name: Add Issue to Longhorn Sprint Project
-      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      if: env.is_longhorn_member == 'true'
       uses: actions/add-to-project@v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/8
