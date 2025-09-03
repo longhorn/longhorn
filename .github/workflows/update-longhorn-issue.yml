@@ -93,6 +93,18 @@ jobs:
         project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
         github-token: ${{ steps.app-token.outputs.token }}
 
+    - name: Update Item To New
+      if: |
+        env.is_longhorn_member == 'true' &&
+        steps.add-project.outputs.itemId != ''
+      uses: titoportas/update-project-fields@v0.1.0
+      with:
+        project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
+        github-token: ${{ steps.app-token.outputs.token }}
+        item-id: ${{ steps.add-project.outputs.itemId }}
+        field-keys: Status,Sprint
+        field-values: "New,[0]"
+
     - name: Set Milestone Backlog to Issue
       if: ${{
         env.is_longhorn_member == 'true' &&
