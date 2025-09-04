@@ -40,11 +40,8 @@ jobs:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Set Final Membership Flag
-      if: env.is_longhorn_member == 'false'
-      run: |
-        if [[ "${{ steps.is-longhorn-member.outcome }}" == "success" ]]; then
-          echo "is_longhorn_member=true" >> $GITHUB_ENV
-        fi
+      if: env.is_longhorn_member == 'false' && fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      run: echo "is_longhorn_member=true" >> $GITHUB_ENV
 
     - name: Debug Membership Status
       run: |
