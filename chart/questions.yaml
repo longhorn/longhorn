@@ -795,10 +795,17 @@ questions:
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: boolean
         default: false
-      - variable: defaultSettings.dataEngineHugepageLimit
+      - variable: defaultSettings.dataEngineHugepageEnabled
         label: V2 Data Engine
         description: >-
-          Applies only to the V2 Data Engine. Specifies the hugepage size, in MiB, for the Storage Performance Development Kit (SPDK) target daemon.
+          Applies only to the V2 Data Engine. Enables hugepages for the Storage Performance Development Kit (SPDK) target daemon. If disabled, legacy memory is used. Allocation size is set via the Data Engine Memory Size setting.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: string
+        default: '{"v2":"true"}'
+      - variable: defaultSettings.dataEngineMemorySize
+        label: V2 Data Engine
+        description: >-
+          Applies only to the V2 Data Engine. Specifies the memory size, in MiB, allocated to the Storage Performance Development Kit (SPDK) target daemon. When hugepage is enabled, this defines the hugepage size; when legacy memory is used, hugepage is disabled.
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: string
         default: '{"v2":"2048"}'
