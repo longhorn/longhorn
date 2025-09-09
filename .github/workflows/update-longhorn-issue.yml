@@ -102,8 +102,8 @@ jobs:
         project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
         github-token: ${{ steps.app-token.outputs.token }}
         item-id: ${{ steps.add-project.outputs.itemId }}
-        field-keys: Status,Sprint
-        field-values: "New,[0]"
+        field-keys: Status
+        field-values: "New"
 
     - name: Set Milestone Backlog to Issue
       if: ${{
