@@ -714,7 +714,7 @@ questions:
           Unix-cron string format. The setting specifies when Longhorn checks the data integrity of snapshot disk files.
         group: Longhorn Default Settings
         type: string
-        default: 0 0 */7 * *
+        default: '{"v1":"0 0 */7 * *","v2":"0 0 */7 * *"}'
       - variable: defaultSettings.removeSnapshotsDuringFilesystemTrim
         label: Remove Snapshots During Filesystem Trim
         description: >-
