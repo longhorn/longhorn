@@ -1,0 +1,2 @@
+resources:
+  - minio-backupstore.yaml
