@@ -2,6 +2,7 @@
 name: Test
 about: Create or update test
 title: "[TEST] "
+type: "Test"
 labels: kind/test
 assignees: ''
 
