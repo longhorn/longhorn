@@ -107,6 +107,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornImageRegistry": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornSettingAllowRecurringJobWhileVolumeDetached": {
           "dataType": "string",
           "maxLen": 200
