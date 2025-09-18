@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 UPGRADE_RESPONDER_REPO="https://github.com/longhorn/upgrade-responder.git"
 UPGRADE_RESPONDER_REPO_BRANCH="master"
@@ -20,25 +20,25 @@ cp -a ./* ${temp_dir}
 cd ${temp_dir}
 
 wait_for_deployment() {
-  local deployment_name="$1"
-  local start_time=$(date +%s)
+    local deployment_name="$1"
+    local start_time=$(date +%s)
 
-  while true; do
-    status=$(kubectl rollout status deployment/${deployment_name})
-    if [[ ${status} == *"successfully rolled out"* ]]; then
-      echo "Deployment ${deployment_name} is running."
-      break
-    fi
+    while true; do
+        status=$(kubectl rollout status deployment/${deployment_name})
+        if [[ ${status} == *"successfully rolled out"* ]]; then
+            echo "Deployment ${deployment_name} is running."
+            break
+        fi
 
-    elapsed_secs=$(($(date +%s) - ${start_time}))
-    if [[ ${elapsed_secs} -ge ${timeout_secs} ]]; then
-      echo "Timed out waiting for deployment ${deployment_name} to be running."
-      exit 1
-    fi
+        elapsed_secs=$(($(date +%s) - ${start_time}))
+        if [[ ${elapsed_secs} -ge ${timeout_secs} ]]; then
+            echo "Timed out waiting for deployment ${deployment_name} to be running."
+            exit 1
+        fi
 
-    echo "Deployment ${deployment_name} is not running yet. Waiting..."
-    sleep ${DEPLOYMENT_WAIT_INTERVAL_SEC}
-  done
+        echo "Deployment ${deployment_name} is not running yet. Waiting..."
+        sleep ${DEPLOYMENT_WAIT_INTERVAL_SEC}
+    done
 }
 
 install_influxdb() {
@@ -52,7 +52,7 @@ install_grafana() {
 }
 
 install_upgrade_responder() {
-    cat << EOF > ${UPGRADE_RESPONDER_VALUE_YAML}
+    cat <<EOF >${UPGRADE_RESPONDER_VALUE_YAML}
 applicationName: ${APP_NAME}
 secret:
   name: upgrade-responder-secrets
@@ -451,7 +451,7 @@ EOF
 output() {
     local upgrade_responder_service_info=$(kubectl get svc/${APP_NAME}-upgrade-responder --no-headers)
     local upgrade_responder_service_port=$(echo "${upgrade_responder_service_info}" | awk '{print $5}' | cut -d'/' -f1)
-    echo  # a blank line to separate the installation outputs for better readability.
+    echo # a blank line to separate the installation outputs for better readability.
     printf "[Upgrade Checker]\n"
     printf "%-10s: http://${APP_NAME}-upgrade-responder.default.svc.cluster.local:${upgrade_responder_service_port}/v1/checkupgrade\n\n" "URL"
 
