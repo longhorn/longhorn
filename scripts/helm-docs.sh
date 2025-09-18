@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ## Reference: https://github.com/norwoodj/helm-docs
 
 set -o errexit
