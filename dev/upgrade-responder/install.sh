@@ -299,7 +299,7 @@ configMap:
           "dataType": "float"
         },
         "longhornSettingBackupBlockSize": {
-          "dataType": "float",
+          "dataType": "float"
         },
         "longhornSettingConcurrentAutomaticEngineUpgradePerNodeLimit": {
           "dataType": "float"
