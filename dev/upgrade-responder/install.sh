@@ -60,6 +60,8 @@ secret:
   influxDBUrl: "${INFLUXDB_URL}"
   influxDBUser: "root"
   influxDBPassword: "root"
+flags:
+  scarfEndpoint: "https://longhorn.gateway.scarf.sh/{version}"
 configMap:
   responseConfig: |-
     {
