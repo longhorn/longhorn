@@ -22,6 +22,9 @@ resources:
     cpu: 200m
     memory: 256Mi
 
+flags:
+  scarfEndpoint: "https://longhorn.gateway.scarf.sh/{version}"
+
 # This configmap contains information about the latest release
 # of the application that is using this Upgrade Responder
 configMap:

@@ -1,5 +1,5 @@
 url: https://github.com/longhorn/upgrade-responder.git
-commit: 116f807836c29185038cfb005708f0a8d41f4d35
+commit: e7097649c95359ccd0a97163a3b67fa2d7527c8e
 releaseName: longhorn-upgrade-responder
 namespace: longhorn-upgrade-responder
 
