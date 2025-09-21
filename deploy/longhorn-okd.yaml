@@ -79,8 +79,8 @@ metadata:
     app.kubernetes.io/version: v1.9.0-dev
 data:
   default-setting.yaml: |-
-    priority-class: longhorn-critical
-    disable-revision-counter: true
+    priority-class: "longhorn-critical"
+    disable-revision-counter: "true"
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
