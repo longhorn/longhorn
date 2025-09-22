@@ -80,7 +80,7 @@ metadata:
 data:
   default-setting.yaml: |-
     priority-class: "longhorn-critical"
-    disable-revision-counter: "true"
+    disable-revision-counter: "{\"v1\":\"true\"}"
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
