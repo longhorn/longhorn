@@ -58,7 +58,7 @@ type VolumeSpec struct {
 With:
 1. `CloneMode: fast`: Longhorn should perform fast clone 
 1. `CloneMode: full`: Longhorn should perform regular clone
-1. `CloneMode: decoupled`: If the user initially clone the volume by fast clone, the volume are dependent on the sorce volume's snapshot. 
+1. `CloneMode: decoupled`: If the user initially clone the volume by fast clone, the volume are dependent on the source volume's snapshot. 
     There are a few restriction for a volume in this mode (see below section for more detail).
     The user can change the mode to `decoupled` which will make the volume become independent of the source snapshot. 
 
@@ -133,7 +133,7 @@ See more details about the flow at [here](./assets/v2-volume-cloning/longhorn-v2
 Requirements and assumptions:
 1. A volume is create in fast clone mode
 1. It has [restrictions](#fast-v2-cloning) above 
-1. If wanted, user can remove the restriction by perfroming volume decouple
+1. If wanted, user can remove the restriction by performing volume decouple
 
 Flow:
 
