@@ -7,18 +7,10 @@ metadata:
 data:
   default-setting.yaml: |-
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
-    {{- if kindIs "string" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
-    allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.allowRecurringJobWhileVolumeDetached must be a string" }}
-    {{- end }}
+    allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}
-    {{- if kindIs "string" .Values.defaultSettings.createDefaultDiskLabeledNodes }}
-    create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.createDefaultDiskLabeledNodes must be a string" }}
-    {{- end }}
+    create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
     {{- if kindIs "string" .Values.defaultSettings.defaultDataPath }}
@@ -28,11 +20,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
-    {{- if kindIs "string" .Values.defaultSettings.replicaSoftAntiAffinity }}
-    replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.replicaSoftAntiAffinity must be a string" }}
-    {{- end }}
+    replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}
     {{- if kindIs "string" .Values.defaultSettings.replicaAutoBalance }}
@@ -63,11 +51,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}
-    {{- if kindIs "string" .Values.defaultSettings.upgradeChecker }}
-    upgrade-checker: {{ .Values.defaultSettings.upgradeChecker | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.upgradeChecker must be a string" }}
-    {{- end }}
+    upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeResponderURL) }}
     {{- if kindIs "string" .Values.defaultSettings.upgradeResponderURL }}
@@ -112,11 +96,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.restoreVolumeRecurringJobs) }}
-    {{- if kindIs "string" .Values.defaultSettings.restoreVolumeRecurringJobs }}
-    restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.restoreVolumeRecurringJobs must be a string" }}
-    {{- end }}
+    restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}
     {{- if kindIs "string" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit }}
@@ -174,39 +154,19 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}
-    {{- if kindIs "string" .Values.defaultSettings.autoSalvage }}
-    auto-salvage: {{ .Values.defaultSettings.autoSalvage | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.autoSalvage must be a string" }}
-    {{- end }}
+    auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}
-    {{- if kindIs "string" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
-    auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly must be a string" }}
-    {{- end }}
+    auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}
-    {{- if kindIs "string" .Values.defaultSettings.disableSchedulingOnCordonedNode }}
-    disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.disableSchedulingOnCordonedNode must be a string" }}
-    {{- end }}
+    disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaZoneSoftAntiAffinity) }}
-    {{- if kindIs "string" .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
-    replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.replicaZoneSoftAntiAffinity must be a string" }}
-    {{- end }}
+    replica-zone-soft-anti-affinity: {{ .Values.defaultSettings.replicaZoneSoftAntiAffinity }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaDiskSoftAntiAffinity) }}
-    {{- if kindIs "string" .Values.defaultSettings.replicaDiskSoftAntiAffinity }}
-    replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.replicaDiskSoftAntiAffinity must be a string" }}
-    {{- end }}
+    replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}
     {{- if kindIs "string" .Values.defaultSettings.nodeDownPodDeletionPolicy }}
@@ -223,11 +183,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}
-    {{- if kindIs "string" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}
-    detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.detachManuallyAttachedVolumesWhenCordoned must be a string" }}
-    {{- end }}
+    detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}
     {{- if kindIs "string" .Values.defaultSettings.replicaReplenishmentWaitInterval }}
@@ -265,25 +221,13 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}
-    {{- if kindIs "string" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
-    allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.allowVolumeCreationWithDegradedAvailability must be a string" }}
-    {{- end }}
+    allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot) }}
-    {{- if kindIs "string" .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
-    auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.autoCleanupSystemGeneratedSnapshot must be a string" }}
-    {{- end }}
+    auto-cleanup-system-generated-snapshot: {{ .Values.defaultSettings.autoCleanupSystemGeneratedSnapshot }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot) }}
-    {{- if kindIs "string" .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot }}
-    auto-cleanup-recurring-job-backup-snapshot: {{ .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.autoCleanupRecurringJobBackupSnapshot must be a string" }}
-    {{- end }}
+    auto-cleanup-recurring-job-backup-snapshot: {{ .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}
     {{- if kindIs "string" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
@@ -314,11 +258,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}
-    {{- if kindIs "string" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
-    kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.kubernetesClusterAutoscalerEnabled must be a string" }}
-    {{- end }}
+    kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.orphanResourceAutoDeletion) }}
     {{- if kindIs "string" .Values.defaultSettings.orphanResourceAutoDeletion }}
@@ -342,11 +282,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}
-    {{- if kindIs "string" .Values.defaultSettings.deletingConfirmationFlag }}
-    deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.deletingConfirmationFlag must be a string" }}
-    {{- end }}
+    deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.engineReplicaTimeout) }}
     {{- if kindIs "string" .Values.defaultSettings.engineReplicaTimeout }}
@@ -377,11 +313,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim) }}
-    {{- if kindIs "string" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim }}
-    remove-snapshots-during-filesystem-trim: {{ .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.removeSnapshotsDuringFilesystemTrim must be a string" }}
-    {{- end }}
+    remove-snapshots-during-filesystem-trim: {{ .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.fastReplicaRebuildEnabled) }}
     {{- if kindIs "string" .Values.defaultSettings.fastReplicaRebuildEnabled }}
@@ -447,18 +379,10 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.v1DataEngine) }}
-    {{- if kindIs "string" .Values.defaultSettings.v1DataEngine }}
-    v1-data-engine: {{ .Values.defaultSettings.v1DataEngine | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.v1DataEngine must be a string" }}
-    {{- end }}
+    v1-data-engine: {{ .Values.defaultSettings.v1DataEngine }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngine) }}
-    {{- if kindIs "string" .Values.defaultSettings.v2DataEngine }}
-    v2-data-engine: {{ .Values.defaultSettings.v2DataEngine | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.v2DataEngine must be a string" }}
-    {{- end }}
+    v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineHugepageEnabled) }}
     {{- if kindIs "string" .Values.defaultSettings.dataEngineHugepageEnabled }}
@@ -475,32 +399,16 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
-    {{- if kindIs "string" .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
-    allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.allowEmptyNodeSelectorVolume must be a string" }}
-    {{- end }}
+    allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyDiskSelectorVolume) }}
-    {{- if kindIs "string" .Values.defaultSettings.allowEmptyDiskSelectorVolume }}
-    allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.allowEmptyDiskSelectorVolume must be a string" }}
-    {{- end }}
+    allow-empty-disk-selector-volume: {{ .Values.defaultSettings.allowEmptyDiskSelectorVolume }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowCollectingLonghornUsageMetrics) }}
-    {{- if kindIs "string" .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}
-    allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.allowCollectingLonghornUsageMetrics must be a string" }}
-    {{- end }}
+    allow-collecting-longhorn-usage-metrics: {{ .Values.defaultSettings.allowCollectingLonghornUsageMetrics }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.disableSnapshotPurge) }}
-    {{- if kindIs "string" .Values.defaultSettings.disableSnapshotPurge }}
-    disable-snapshot-purge: {{ .Values.defaultSettings.disableSnapshotPurge | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.disableSnapshotPurge must be a string" }}
-    {{- end }}
+    disable-snapshot-purge: {{ .Values.defaultSettings.disableSnapshotPurge }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotMaxCount) }}
     {{- if kindIs "string" .Values.defaultSettings.snapshotMaxCount }}
@@ -531,25 +439,13 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup) }}
-    {{- if kindIs "string" .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup }}
-    auto-cleanup-when-delete-backup: {{ .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.autoCleanupSnapshotWhenDeleteBackup must be a string" }}
-    {{- end }}
+    auto-cleanup-when-delete-backup: {{ .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted) }}
-    {{- if kindIs "string" .Values.defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted }}
-    auto-cleanup-snapshot-after-on-demand-backup-completed: {{ .Values.defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted must be a string" }}
-    {{- end }}
+    auto-cleanup-snapshot-after-on-demand-backup-completed: {{ .Values.defaultSettings.autoCleanupSnapshotAfterOnDemandBackupCompleted }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.rwxVolumeFastFailover) }}
-    {{- if kindIs "string" .Values.defaultSettings.rwxVolumeFastFailover }}
-    rwx-volume-fast-failover: {{ .Values.defaultSettings.rwxVolumeFastFailover | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.rwxVolumeFastFailover must be a string" }}
-    {{- end }}
+    rwx-volume-fast-failover: {{ .Values.defaultSettings.rwxVolumeFastFailover}}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}
     {{- if kindIs "string" .Values.defaultSettings.offlineReplicaRebuilding }}
