@@ -4353,6 +4353,8 @@ spec:
             value: "longhornio/csi-snapshotter:v8.3.0-20250826"
           - name: CSI_LIVENESS_PROBE_IMAGE
             value: "longhornio/livenessprobe:v2.16.0-20250826"
+          - name: CSI_POD_ANTI_AFFINITY_PRESET
+            value: "soft"
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:

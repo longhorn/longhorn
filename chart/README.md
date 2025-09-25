@@ -184,6 +184,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 |-----|-------------|
 | csi.attacherReplicaCount | Replica count of the CSI Attacher. When unspecified, Longhorn uses the default value ("3"). |
 | csi.kubeletRootDir | kubelet root directory. When unspecified, Longhorn uses the default value. |
+| csi.podAntiAffinityPreset | Configures Pod anti-affinity to prevent multiple instances on the same node. Use soft (tries to separate) or hard (must separate). When unspecified, Longhorn uses the default value ("soft"). |
 | csi.provisionerReplicaCount | Replica count of the CSI Provisioner. When unspecified, Longhorn uses the default value ("3"). |
 | csi.resizerReplicaCount | Replica count of the CSI Resizer. When unspecified, Longhorn uses the default value ("3"). |
 | csi.snapshotterReplicaCount | Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value ("3"). |
