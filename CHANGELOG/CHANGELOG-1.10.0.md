@@ -1,6 +1,8 @@
 # Longhorn v1.10.0 Release Notes
 
-Longhorn v1.10.0 delivers a range of new features, enhancements, and bug fixes focusing on improving stability, performance, and overall user experience. Key highlights include improvements to the V2 Data Engine, enhanced resilience, simplified configuration, and better observability.
+Longhorn v1.10.0 is a major release focused on improving stability, performance, and the overall user experience. This version introduces significant enhancements to our core features, including the V2 Data Engine, and streamlines configuration for easier management.
+
+The key highlights include improvements to the V2 Data Engine, enhanced resilience, simplified configuration, and better observability.
 
 We welcome feedback and contributions to help continuously improve Longhorn.
 
@@ -20,7 +22,7 @@ The deprecated `replica.status.evictionRequested` field has been removed.
 
 See [GitHub Issue #7022](https://github.com/longhorn/longhorn/issues/7022) for details.
 
-## Primery Highlights
+## Primary Highlights
 
 ### New V2 Data Engine Features
 
@@ -56,9 +58,9 @@ Longhorn now supports volume expansion for V2 Data Engine volumes. You can expan
 
 See [V2 Volume Expansion](https://longhorn.io/docs/1.10.0/v2-data-engine/features/volume-expansion) and [GitHub Issue#8022](https://github.com/longhorn/longhorn/issues/8022) for details.
 
-#### Run Without Hugepage
+#### Support for Running Without Hugepages
 
-This reduces memory pressure on low‑spec nodes and increases deployment flexibility. Performance may be lower compared to running with Hugepage.
+This reduces memory pressure on low-spec nodes and increases deployment flexibility. Performance may be lower compared to running with Hugepages.
 
 See [GitHub Issue#7066](https://github.com/longhorn/longhorn/issues/7066) for details.
 
@@ -74,7 +76,8 @@ See [GitHub Issue #2259](https://github.com/longhorn/longhorn/issues/2259) for d
 
 ### Consolidated Global Settings
 
-Longhorn settings are now unified for simpler management across V1 and V2 Data Engines:
+To simplify management, Longhorn settings are now unified across V1 and V2 Data Engines, using a new, more flexible JSON format.
+
 - **Single value (applies to all Data Engines)**: Non-JSON string (e.g., `1024`).
 - **Data-engine-specific**: JSON object (e.g., `{"v1": "value1", "v2": "value2"}`)
 - **V1-only**: JSON object with v1 key (e.g., `{"v1":"value1"}`).
