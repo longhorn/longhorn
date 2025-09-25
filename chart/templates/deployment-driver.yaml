@@ -50,6 +50,10 @@ spec:
           - name: KUBELET_ROOT_DIR
             value: {{ .Values.csi.kubeletRootDir }}
           {{- end }}
+          {{- if .Values.csi.podAntiAffinityPreset }}
+          - name: CSI_POD_ANTI_AFFINITY_PRESET
+            value: {{ .Values.csi.podAntiAffinityPreset }}
+          {{- end }}
           {{- if and .Values.image.csi.attacher.repository .Values.image.csi.attacher.tag }}
           - name: CSI_ATTACHER_IMAGE
             value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.attacher.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.attacher.repository }}:{{ .Values.image.csi.attacher.tag }}"

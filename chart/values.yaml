@@ -220,6 +220,8 @@ preUpgradeChecker:
 csi:
   # -- kubelet root directory. When unspecified, Longhorn uses the default value.
   kubeletRootDir: ~
+  # -- Configures Pod anti-affinity to prevent multiple instances on the same node. Use soft (tries to separate) or hard (must separate). When unspecified, Longhorn uses the default value ("soft").
+  podAntiAffinityPreset: ~
   # -- Replica count of the CSI Attacher. When unspecified, Longhorn uses the default value ("3").
   attacherReplicaCount: ~
   # -- Replica count of the CSI Provisioner. When unspecified, Longhorn uses the default value ("3").
