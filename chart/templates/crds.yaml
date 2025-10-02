@@ -3431,6 +3431,9 @@ spec:
                 type: string
               backingImage:
                 type: string
+                x-kubernetes-validations:
+                - message: BackingImage is immutable
+                  rule: self == oldSelf
               backupBlockSize:
                 description: BackupBlockSize indicate the block size to create backups.
                   The block size is immutable.
@@ -3476,6 +3479,9 @@ spec:
                 type: array
               encrypted:
                 type: boolean
+                x-kubernetes-validations:
+                - message: Encrypted is immutable
+                  rule: self == oldSelf
               freezeFilesystemForSnapshot:
                 description: Setting that freezes the filesystem on the root partition
                   before a snapshot is created.
