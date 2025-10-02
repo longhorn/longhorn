@@ -4,9 +4,7 @@ metadata:
   name: cifs-secret
   namespace: longhorn-system
 type: Opaque
-data:
-  CIFS_USERNAME: bG9uZ2hvcm4tY2lmcy11c2VybmFtZQ== # longhorn-cifs-username
-  CIFS_PASSWORD: bG9uZ2hvcm4tY2lmcy1wYXNzd29yZA== # longhorn-cifs-password
+data: {}
 ---
 apiVersion: v1
 kind: Secret
@@ -14,9 +12,7 @@ metadata:
   name: cifs-secret
   namespace: default
 type: Opaque
-data:
-  CIFS_USERNAME: bG9uZ2hvcm4tY2lmcy11c2VybmFtZQ== # longhorn-cifs-username
-  CIFS_PASSWORD: bG9uZ2hvcm4tY2lmcy1wYXNzd29yZA== # longhorn-cifs-password
+data: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
