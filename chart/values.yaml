@@ -574,6 +574,31 @@ ingress:
   # - name: longhorn.local-tls
   #   key:
   #   certificate:
+httproute:
+  # -- Setting that allows Longhorn to generate HTTPRoute records for the Longhorn UI service using Gateway API.
+  enabled: false
+  # -- Gateway references for HTTPRoute. Specify which Gateway(s) should handle this route.
+  parentRefs: []
+  ## Example:
+  # - name: gateway-name
+  #   namespace: gateway-namespace
+  #   # Optional fields with defaults:
+  #   # group: gateway.networking.k8s.io  # default
+  #   # kind: Gateway                      # default
+  #   # sectionName: https                 # optional, targets a specific listener
+  # -- List of hostnames for the HTTPRoute. Multiple hostnames are supported.
+  hostnames: []
+  ## Example:
+  # - longhorn.example.com
+  # - longhorn.example.org
+  # -- Default path for HTTPRoute. You can access the Longhorn UI by following the full path.
+  path: /
+  # -- Path match type for HTTPRoute. (Options: "Exact", "PathPrefix")
+  pathType: PathPrefix
+  # -- Annotations for the HTTPRoute resource in the form of key-value pairs.
+  annotations: {}
+  ## Example:
+  #  annotation-key1: "annotation-value1"
 # -- Setting that allows you to enable pod security policies (PSPs) that allow privileged Longhorn pods to start. This setting applies only to clusters running Kubernetes 1.25 and earlier, and with the built-in Pod Security admission controller enabled.
 enablePSP: false
 # -- Specify override namespace, specifically this is useful for using longhorn as sub-chart and its release namespace is not the `longhorn-system`.
