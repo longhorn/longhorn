@@ -244,6 +244,17 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | ingress.tls | bool | `false` | Setting that allows you to enable TLS on ingress records. |
 | ingress.tlsSecret | string | `"longhorn.local-tls"` | TLS secret that contains the private key and certificate to be used for TLS. This setting applies only when TLS is enabled on ingress records. |
 
+### HTTPRoute Settings
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| httproute.annotations | object | `{}` | Annotations for the HTTPRoute resource in the form of key-value pairs. |
+| httproute.enabled | bool | `false` | Setting that allows Longhorn to generate HTTPRoute records for the Longhorn UI service using Gateway API. |
+| httproute.hostnames | list | `[]` | List of hostnames for the HTTPRoute. Multiple hostnames are supported. |
+| httproute.parentRefs | list | `[]` | Gateway references for HTTPRoute. Specify which Gateway(s) should handle this route. |
+| httproute.path | string | `"/"` | Default path for HTTPRoute. You can access the Longhorn UI by following the full path. |
+| httproute.pathType | string | `"PathPrefix"` | Path match type for HTTPRoute. (Options: "Exact", "PathPrefix") |
+
 ### Private Registry Settings
 
 You can install Longhorn in an air-gapped environment with a private registry. For more information, see the **Air Gap Installation** section of the [documentation](https://longhorn.io/docs).
