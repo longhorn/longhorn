@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 UPGRADE_RESPONDER_REPO="https://github.com/longhorn/upgrade-responder.git"
 UPGRADE_RESPONDER_REPO_BRANCH="master"
