@@ -80,7 +80,7 @@ Longhorn is 100% open-source software. Project source code is spread across seve
 | Longhorn SPDK Engine           | V2 Core controller/replica logic                                       | [longhorn/longhorn-spdk-engine](https://github.com/longhorn/longhorn-spdk-engine)           |
 | iSCSI Helper                   | V1 iSCSI client and server libraries                                   | [longhorn/go-iscsi-helper](https://github.com/longhorn/go-iscsi-helper)                     |
 | SPDK Helper                    | V2 SPDK client and server libraries                                    | [longhorn/go-spdk-helper](https://github.com/longhorn/go-spdk-helper)                       |
-| Backup Store                   | Backkup libraries                                                      | [longhorn/backupstore](https://github.com/longhorn/backupstore)                             |
+| Backup Store                   | Backup libraries                                                      | [longhorn/backupstore](https://github.com/longhorn/backupstore)                             |
 | Common Libraries               |                                                                        | [longhorn/go-common-libs](https://github.com/longhorn/go-common-libs)                       |
 
 ![Longhorn UI](./longhorn-ui.png)
