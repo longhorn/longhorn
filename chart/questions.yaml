@@ -91,7 +91,7 @@ questions:
         label: Longhorn Support Bundle Kit Image Repository
         group: Longhorn Images Settings
       - variable: image.longhorn.supportBundleKit.tag
-        default: v0.0.69
+        default: v0.0.70
         description: Tag for the Longhorn Support Bundle Manager image.
         type: string
         label: Longhorn Support Bundle Kit Image Tag
@@ -104,7 +104,7 @@ questions:
         label: Longhorn CSI Attacher Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.attacher.tag
-        default: v4.9.0-20250826
+        default: v4.10.0
         description: >-
           Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
         type: string
@@ -132,7 +132,7 @@ questions:
         label: Longhorn CSI Node Driver Registrar Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.nodeDriverRegistrar.tag
-        default: v2.14.0-20250826
+        default: v2.15.0
         description: >-
           Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
         type: string
@@ -174,7 +174,7 @@ questions:
         label: Longhorn CSI Liveness Probe Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.livenessProbe.tag
-        default: v2.16.0-20250826
+        default: v2.17.0
         description: >-
           Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
         type: string
