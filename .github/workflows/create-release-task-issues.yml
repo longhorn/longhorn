@@ -54,7 +54,7 @@ jobs:
           echo "FEATURE_RELEASE=$FEATURE_RELEASE" >> $GITHUB_ENV
 
       - name: Create an issue - release task
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@main
         with:
           filename: .github/ISSUE_TEMPLATE/release.md
         env:
@@ -67,7 +67,7 @@ jobs:
           QA_CAPTAIN: ${{ github.event.inputs.qa_captain }}
 
       - name: Create an issue - fix security issue for release
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@main
         with:
           filename: .github/ISSUE_TEMPLATE/fix-cve-issues-for-release.md
         env:
@@ -76,7 +76,7 @@ jobs:
 
       - name: Create an issue - regular tasks for feature release
         if: ${{ env.FEATURE_RELEASE == 'true' }}
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@main
         with:
           filename: .github/ISSUE_TEMPLATE/regular-tasks-for-feature-release.md
         env:
@@ -87,7 +87,7 @@ jobs:
 
       - name: Create an issue - performance benchmark task for feature release
         if: ${{ env.FEATURE_RELEASE == 'true' }}
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@main
         with:
           filename: .github/ISSUE_TEMPLATE/performance-benchmark.md
         env:
