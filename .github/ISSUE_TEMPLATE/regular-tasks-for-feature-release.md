@@ -2,6 +2,7 @@
 name: Regular Tasks for Feature Release
 about: Regular tasks for a feature release
 title: "[RELEASE] Regular Tasks for Feature Release {{ env.RELEASE_VERSION }}"
+type: "Task"
 labels: ["release/task", "area/install-uninstall-upgrade"]
 assignees: ''
 ---
