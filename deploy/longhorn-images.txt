@@ -5,10 +5,10 @@ longhornio/longhorn-manager:v1.10.x-head
 longhornio/longhorn-share-manager:v1.10.x-head
 longhornio/longhorn-ui:v1.10.x-head
 longhornio/longhorn-cli:v1.10.x-head
-longhornio/csi-attacher:v4.9.0-20250826
+longhornio/csi-attacher:v4.10.0
 longhornio/csi-provisioner:v5.3.0-20250826
 longhornio/csi-resizer:v1.14.0-20250826
 longhornio/csi-snapshotter:v8.3.0-20250826
-longhornio/csi-node-driver-registrar:v2.14.0-20250826
-longhornio/livenessprobe:v2.16.0-20250826
-longhornio/support-bundle-kit:v0.0.69
+longhornio/csi-node-driver-registrar:v2.15.0
+longhornio/livenessprobe:v2.17.0
+longhornio/support-bundle-kit:v0.0.70
