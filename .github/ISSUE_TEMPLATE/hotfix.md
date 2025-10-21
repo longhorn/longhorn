@@ -2,7 +2,6 @@
 name: Hotfix
 about: Create a hotfix task
 title: "[HOTFIX] "
-type: "Task"
 labels: ["kind/hotfix", "require/important-note"]
 assignees: ''
 
