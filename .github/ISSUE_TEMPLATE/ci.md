@@ -2,7 +2,6 @@
 name: CI task
 about: Create a CI task
 title: "[CI] "
-type: "Task"
 labels: ["kind/task", "area/ci"]
 assignees: ''
 

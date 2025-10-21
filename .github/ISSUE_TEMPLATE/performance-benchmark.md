@@ -2,7 +2,6 @@
 name: Performance Benchmark
 about: Performance benchmark task for feature release
 title: "[Benchmark] Performance Benchmark for {{ env.RELEASE_VERSION }}"
-type: "Task"
 labels: ["release/task", "area/benchmark"]
 assignees: ''
 
