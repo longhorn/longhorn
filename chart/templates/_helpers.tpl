@@ -64,3 +64,17 @@ app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- .Release.Namespace -}}
 {{- end -}}
 {{- end -}}
+
+{{- /*
+multiTypeSetting helper
+Input: any value (string, number, or map)
+Output: properly quoted YAML string
+*/ -}}
+{{- define "longhorn.multiTypeSetting" -}}
+  {{- $v := . -}}
+  {{- if kindIs "map" $v -}}
+    {{- $v | toJson | quote -}}
+  {{- else -}}
+    {{- $v | quote -}}
+  {{- end -}}
+{{- end -}}
