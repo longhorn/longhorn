@@ -13,118 +13,58 @@ data:
     create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
-    {{- if kindIs "string" .Values.defaultSettings.defaultDataPath }}
     default-data-path: {{ .Values.defaultSettings.defaultDataPath | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.defaultDataPath must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
     replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaAutoBalance) }}
-    {{- if kindIs "string" .Values.defaultSettings.replicaAutoBalance }}
     replica-auto-balance: {{ .Values.defaultSettings.replicaAutoBalance | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.replicaAutoBalance must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.storageOverProvisioningPercentage) }}
-    {{- if kindIs "string" .Values.defaultSettings.storageOverProvisioningPercentage }}
     storage-over-provisioning-percentage: {{ .Values.defaultSettings.storageOverProvisioningPercentage | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.storageOverProvisioningPercentage must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.storageMinimalAvailablePercentage) }}
-    {{- if kindIs "string" .Values.defaultSettings.storageMinimalAvailablePercentage }}
     storage-minimal-available-percentage: {{ .Values.defaultSettings.storageMinimalAvailablePercentage | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.storageMinimalAvailablePercentage must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.storageReservedPercentageForDefaultDisk) }}
-    {{- if kindIs "string" .Values.defaultSettings.storageReservedPercentageForDefaultDisk }}
     storage-reserved-percentage-for-default-disk: {{ .Values.defaultSettings.storageReservedPercentageForDefaultDisk | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.storageReservedPercentageForDefaultDisk must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeChecker) }}
     upgrade-checker: {{ .Values.defaultSettings.upgradeChecker }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeResponderURL) }}
-    {{- if kindIs "string" .Values.defaultSettings.upgradeResponderURL }}
     upgrade-responder-url: {{ .Values.defaultSettings.upgradeResponderURL | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.upgradeResponderURL must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}
-    {{- if kindIs "string" .Values.defaultSettings.defaultReplicaCount }}
-    default-replica-count: {{ .Values.defaultSettings.defaultReplicaCount | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.defaultReplicaCount must be a string" }}
-    {{- end }}
+    default-replica-count: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.defaultReplicaCount }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataLocality) }}
-    {{- if kindIs "string" .Values.defaultSettings.defaultDataLocality }}
     default-data-locality: {{ .Values.defaultSettings.defaultDataLocality | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.defaultDataLocality must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultLonghornStaticStorageClass) }}
-    {{- if kindIs "string" .Values.defaultSettings.defaultLonghornStaticStorageClass }}
     default-longhorn-static-storage-class: {{ .Values.defaultSettings.defaultLonghornStaticStorageClass | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.defaultLonghornStaticStorageClass must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.failedBackupTTL) }}
-    {{- if kindIs "string" .Values.defaultSettings.failedBackupTTL }}
     failed-backup-ttl: {{ .Values.defaultSettings.failedBackupTTL | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.failedBackupTTL must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.backupExecutionTimeout) }}
-    {{- if kindIs "string" .Values.defaultSettings.backupExecutionTimeout }}
     backup-execution-timeout: {{ .Values.defaultSettings.backupExecutionTimeout | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.backupExecutionTimeout must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.restoreVolumeRecurringJobs) }}
     restore-volume-recurring-jobs: {{ .Values.defaultSettings.restoreVolumeRecurringJobs }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit }}
     recurring-successful-jobs-history-limit: {{ .Values.defaultSettings.recurringSuccessfulJobsHistoryLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.recurringSuccessfulJobsHistoryLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.recurringJobMaxRetention) }}
-    {{- if kindIs "string" .Values.defaultSettings.recurringJobMaxRetention }}
     recurring-job-max-retention: {{ .Values.defaultSettings.recurringJobMaxRetention | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.recurringJobMaxRetention must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.recurringFailedJobsHistoryLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.recurringFailedJobsHistoryLimit }}
     recurring-failed-jobs-history-limit: {{ .Values.defaultSettings.recurringFailedJobsHistoryLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.recurringFailedJobsHistoryLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.supportBundleFailedHistoryLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.supportBundleFailedHistoryLimit }}
     support-bundle-failed-history-limit: {{ .Values.defaultSettings.supportBundleFailedHistoryLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.supportBundleFailedHistoryLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
     taint-toleration: {{ $windowsDefaultSettingTaintToleration := list }}{{ $defaultSettingTaintToleration := list -}}
@@ -147,11 +87,7 @@ data:
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
-    {{- if kindIs "string" .Values.defaultSettings.priorityClass }}
     priority-class: {{ .Values.defaultSettings.priorityClass | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.priorityClass must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoSalvage) }}
     auto-salvage: {{ .Values.defaultSettings.autoSalvage }}
@@ -169,56 +105,28 @@ data:
     replica-disk-soft-anti-affinity: {{ .Values.defaultSettings.replicaDiskSoftAntiAffinity }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDownPodDeletionPolicy) }}
-    {{- if kindIs "string" .Values.defaultSettings.nodeDownPodDeletionPolicy }}
     node-down-pod-deletion-policy: {{ .Values.defaultSettings.nodeDownPodDeletionPolicy | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.nodeDownPodDeletionPolicy must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDrainPolicy) }}
-    {{- if kindIs "string" .Values.defaultSettings.nodeDrainPolicy }}
     node-drain-policy: {{ .Values.defaultSettings.nodeDrainPolicy | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.nodeDrainPolicy must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned) }}
     detach-manually-attached-volumes-when-cordoned: {{ .Values.defaultSettings.detachManuallyAttachedVolumesWhenCordoned }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaReplenishmentWaitInterval) }}
-    {{- if kindIs "string" .Values.defaultSettings.replicaReplenishmentWaitInterval }}
     replica-replenishment-wait-interval: {{ .Values.defaultSettings.replicaReplenishmentWaitInterval | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.replicaReplenishmentWaitInterval must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit }}
     concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.concurrentReplicaRebuildPerNodeLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit }}
     concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.concurrentVolumeBackupRestorePerNodeLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.disableRevisionCounter) }}
-    {{- if kindIs "string" .Values.defaultSettings.disableRevisionCounter }}
-    disable-revision-counter: {{ .Values.defaultSettings.disableRevisionCounter | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.disableRevisionCounter must be a string" }}
-    {{- end }}
+    disable-revision-counter: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.disableRevisionCounter }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedPodsImagePullPolicy) }}
-    {{- if kindIs "string" .Values.defaultSettings.systemManagedPodsImagePullPolicy }}
     system-managed-pods-image-pull-policy: {{ .Values.defaultSettings.systemManagedPodsImagePullPolicy | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.systemManagedPodsImagePullPolicy must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability) }}
     allow-volume-creation-with-degraded-availability: {{ .Values.defaultSettings.allowVolumeCreationWithDegradedAvailability }}
@@ -230,153 +138,73 @@ data:
     auto-cleanup-recurring-job-backup-snapshot: {{ .Values.defaultSettings.autoCleanupRecurringJobBackupSnapshot }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit }}
     concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}
-    {{- if kindIs "string" .Values.defaultSettings.backingImageCleanupWaitInterval }}
     backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.backingImageCleanupWaitInterval must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.backingImageRecoveryWaitInterval) }}
-    {{- if kindIs "string" .Values.defaultSettings.backingImageRecoveryWaitInterval }}
     backing-image-recovery-wait-interval: {{ .Values.defaultSettings.backingImageRecoveryWaitInterval | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.backingImageRecoveryWaitInterval must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.guaranteedInstanceManagerCPU) }}
-    {{- if kindIs "string" .Values.defaultSettings.guaranteedInstanceManagerCPU }}
-    guaranteed-instance-manager-cpu: {{ .Values.defaultSettings.guaranteedInstanceManagerCPU | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.guaranteedInstanceManagerCPU must be a string" }}
-    {{- end }}
+    guaranteed-instance-manager-cpu: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.guaranteedInstanceManagerCPU }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.kubernetesClusterAutoscalerEnabled) }}
     kubernetes-cluster-autoscaler-enabled: {{ .Values.defaultSettings.kubernetesClusterAutoscalerEnabled }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.orphanResourceAutoDeletion) }}
-    {{- if kindIs "string" .Values.defaultSettings.orphanResourceAutoDeletion }}
-    orphan-resource-auto-deletion: {{ .Values.defaultSettings.orphanResourceAutoDeletion | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.orphanResourceAutoDeletion must be a string" }}
-    {{- end }}
+    orphan-resource-auto-deletion: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.orphanResourceAutoDeletion }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.orphanResourceAutoDeletionGracePeriod) }}
-    {{- if kindIs "string" .Values.defaultSettings.orphanResourceAutoDeletionGracePeriod }}
     orphan-resource-auto-deletion-grace-period: {{ .Values.defaultSettings.orphanResourceAutoDeletionGracePeriod | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.orphanResourceAutoDeletionGracePeriod must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}
-    {{- if kindIs "string" .Values.defaultSettings.storageNetwork }}
     storage-network: {{ .Values.defaultSettings.storageNetwork | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.storageNetwork must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}
     deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.engineReplicaTimeout) }}
-    {{- if kindIs "string" .Values.defaultSettings.engineReplicaTimeout }}
-    engine-replica-timeout: {{ .Values.defaultSettings.engineReplicaTimeout | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.engineReplicaTimeout must be a string" }}
-    {{- end }}
+    engine-replica-timeout: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.engineReplicaTimeout }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrity) }}
-    {{- if kindIs "string" .Values.defaultSettings.snapshotDataIntegrity }}
-    snapshot-data-integrity: {{ .Values.defaultSettings.snapshotDataIntegrity | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.snapshotDataIntegrity must be a string" }}
-    {{- end }}
+    snapshot-data-integrity: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.snapshotDataIntegrity }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation) }}
-    {{- if kindIs "string" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation }}
-    snapshot-data-integrity-immediate-check-after-snapshot-creation: {{ .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation must be a string" }}
-    {{- end }}
+    snapshot-data-integrity-immediate-check-after-snapshot-creation: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.snapshotDataIntegrityImmediateCheckAfterSnapshotCreation }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotDataIntegrityCronjob) }}
-    {{- if kindIs "string" .Values.defaultSettings.snapshotDataIntegrityCronjob }}
-    snapshot-data-integrity-cronjob: {{ .Values.defaultSettings.snapshotDataIntegrityCronjob | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.snapshotDataIntegrityCronjob must be a string" }}
-    {{- end }}
+    snapshot-data-integrity-cronjob: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.snapshotDataIntegrityCronjob }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim) }}
     remove-snapshots-during-filesystem-trim: {{ .Values.defaultSettings.removeSnapshotsDuringFilesystemTrim }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.fastReplicaRebuildEnabled) }}
-    {{- if kindIs "string" .Values.defaultSettings.fastReplicaRebuildEnabled }}
-    fast-replica-rebuild-enabled: {{ .Values.defaultSettings.fastReplicaRebuildEnabled | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.fastReplicaRebuildEnabled must be a string" }}
-    {{- end }}
+    fast-replica-rebuild-enabled: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.fastReplicaRebuildEnabled }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaFileSyncHttpClientTimeout) }}
-    {{- if kindIs "string" .Values.defaultSettings.replicaFileSyncHttpClientTimeout }}
     replica-file-sync-http-client-timeout: {{ .Values.defaultSettings.replicaFileSyncHttpClientTimeout | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.replicaFileSyncHttpClientTimeout must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.longGRPCTimeOut) }}
-    {{- if kindIs "string" .Values.defaultSettings.longGRPCTimeOut }}
     long-grpc-timeout: {{ .Values.defaultSettings.longGRPCTimeOut | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.longGRPCTimeOut must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.logLevel) }}
-    {{- if kindIs "string" .Values.defaultSettings.logLevel }}
     log-level: {{ .Values.defaultSettings.logLevel | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.logLevel must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.logPath) }}
-    {{- if kindIs "string" .Values.defaultSettings.logPath }}
     log-path: {{ .Values.defaultSettings.logPath | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.logPath must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.backupCompressionMethod) }}
-    {{- if kindIs "string" .Values.defaultSettings.backupCompressionMethod }}
     backup-compression-method: {{ .Values.defaultSettings.backupCompressionMethod | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.backupCompressionMethod must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.backupConcurrentLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.backupConcurrentLimit }}
     backup-concurrent-limit: {{ .Values.defaultSettings.backupConcurrentLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.backupConcurrentLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.restoreConcurrentLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.restoreConcurrentLimit }}
     restore-concurrent-limit: {{ .Values.defaultSettings.restoreConcurrentLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.restoreConcurrentLimit must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultBackupBlockSize) }}
-    {{- if kindIs "string" .Values.defaultSettings.defaultBackupBlockSize }}
     default-backup-block-size: {{ .Values.defaultSettings.defaultBackupBlockSize | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.defaultBackupBlockSize must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.v1DataEngine) }}
     v1-data-engine: {{ .Values.defaultSettings.v1DataEngine }}
@@ -385,18 +213,10 @@ data:
     v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineHugepageEnabled) }}
-    {{- if kindIs "string" .Values.defaultSettings.dataEngineHugepageEnabled }}
-    data-engine-hugepage-enabled: {{ .Values.defaultSettings.dataEngineHugepageEnabled | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.dataEngineHugepageEnabled must be a string" }}
-    {{- end }}
+    data-engine-hugepage-enabled: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineHugepageEnabled }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineMemorySize) }}
-    {{- if kindIs "string" .Values.defaultSettings.dataEngineMemorySize }}
-    data-engine-memory-size: {{ .Values.defaultSettings.dataEngineMemorySize | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.dataEngineMemorySize must be a string" }}
-    {{- end }}
+    data-engine-memory-size: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineMemorySize }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
     allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
@@ -411,32 +231,16 @@ data:
     disable-snapshot-purge: {{ .Values.defaultSettings.disableSnapshotPurge }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotMaxCount) }}
-    {{- if kindIs "string" .Values.defaultSettings.snapshotMaxCount }}
     snapshot-max-count: {{ .Values.defaultSettings.snapshotMaxCount | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.snapshotMaxCount must be a string" }}
-    {{- end }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineLogLevel) }}
-    {{- if kindIs "string" .Values.defaultSettings.dataEngineLogLevel }}
-    data-engine-log-level: {{ .Values.defaultSettings.dataEngineLogLevel | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.dataEngineLogLevel must be a string" }}
-    {{- end }}
+    data-engine-log-level: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineLogLevel }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineLogFlags) }}
-    {{- if kindIs "string" .Values.defaultSettings.dataEngineLogFlags }}
-    data-engine-log-flags: {{ .Values.defaultSettings.dataEngineLogFlags | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.dataEngineLogFlags must be a string" }}
-    {{- end }}
+    data-engine-log-flags: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineLogFlags }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.freezeFilesystemForSnapshot) }}
-    {{- if kindIs "string" .Values.defaultSettings.freezeFilesystemForSnapshot }}
-    freeze-filesystem-for-snapshot: {{ .Values.defaultSettings.freezeFilesystemForSnapshot | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.freezeFilesystemForSnapshot must be a string" }}
-    {{- end }}
+    freeze-filesystem-for-snapshot: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.freezeFilesystemForSnapshot }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup) }}
     auto-cleanup-when-delete-backup: {{ .Values.defaultSettings.autoCleanupSnapshotWhenDeleteBackup }}
@@ -448,30 +252,14 @@ data:
     rwx-volume-fast-failover: {{ .Values.defaultSettings.rwxVolumeFastFailover}}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.offlineReplicaRebuilding) }}
-    {{- if kindIs "string" .Values.defaultSettings.offlineReplicaRebuilding }}
-    offline-replica-rebuilding: {{ .Values.defaultSettings.offlineReplicaRebuilding | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.offlineReplicaRebuilding must be a string" }}
-    {{- end }}
+    offline-replica-rebuilding: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.offlineReplicaRebuilding }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineCPUMask) }}
-    {{- if kindIs "string" .Values.defaultSettings.dataEngineCPUMask }}
-    data-engine-cpu-mask: {{ .Values.defaultSettings.dataEngineCPUMask | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.dataEngineCPUMask must be a string" }}
-    {{- end }}
+    data-engine-cpu-mask: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineCPUMask }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaRebuildingBandwidthLimit) }}
-    {{- if kindIs "string" .Values.defaultSettings.replicaRebuildingBandwidthLimit }}
-    replica-rebuilding-bandwidth-limit: {{ .Values.defaultSettings.replicaRebuildingBandwidthLimit | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.replicaRebuildingBandwidthLimit must be a string" }}
-    {{- end }}
+    replica-rebuilding-bandwidth-limit: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.replicaRebuildingBandwidthLimit }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout) }}
-    {{- if kindIs "string" .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout }}
     instance-manager-pod-liveness-probe-timeout: {{ .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout | quote }}
-    {{- else }}
-    {{- fail "defaultSettings.instanceManagerPodLivenessProbeTimeout must be a string" }}
-    {{- end }}
     {{- end }}
