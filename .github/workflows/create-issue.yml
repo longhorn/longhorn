@@ -1,7 +1,12 @@
-name: "[Issue Management] Create Issue"
+name: "[Issue Management] Create Backport/Automation/UI Issue"
 on:
   issues:
     types: [ labeled ]
+
+env:
+  LONGHORN_SPRINT_PROJECT_URL: https://github.com/orgs/longhorn/projects/8
+  QA_SPRINT_PROJECT_URL: https://github.com/orgs/longhorn/projects/4
+
 jobs:
   backport:
     runs-on: ubuntu-latest
@@ -79,7 +84,7 @@ jobs:
     - name: Create Backport Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] == null
       uses: dacbd/create-issue-action@main
-      id: new-issue
+      id: create-backport-issue
       with:
         token: ${{ github.token }}
         title: |
@@ -98,6 +103,14 @@ jobs:
         token: ${{ steps.app-token.outputs.token }}
         issue-number: ${{ fromJSON(steps.if-backport-issue-exists.outputs.issues)[0].number }}
         state: 'open'
+
+    - name: Add Issue to Longhorn Sprint Project
+      if: steps.create-backport-issue.outcome == 'success'
+      uses: longhorn/bot/add-to-project-action@master
+      with:
+        project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
+        issue-node-id: ${{ fromJSON(steps.create-backport-issue.outputs.json).node_id }}
+        github-token: ${{ steps.app-token.outputs.token }}
 
   automation:
     runs-on: ubuntu-latest
@@ -154,7 +167,7 @@ jobs:
       if: steps.create-automation-test-issue.outcome == 'success'
       uses: longhorn/bot/add-to-project-action@master
       with:
-        project-url: https://github.com/orgs/longhorn/projects/4
+        project-url: ${{ env.QA_SPRINT_PROJECT_URL }}
         issue-node-id: ${{ fromJSON(steps.create-automation-test-issue.outputs.json).node_id }}
         github-token: ${{ steps.app-token.outputs.token }}
 
@@ -205,9 +218,10 @@ jobs:
         echo "LABELS: $LABELS"
         echo "labels=$LABELS" >> $GITHUB_OUTPUT
 
-    - name: Create UI Test Issue
+    - name: Create UI Issue
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null && fromJSON(steps.if-ui-issue-exists.outputs.issues)[0] == null
       uses: dacbd/create-issue-action@main
+      id: create-ui-issue
       with:
         token: ${{ github.token }}
         title: |
@@ -218,3 +232,11 @@ jobs:
           cc @longhorn/dev-ui
         labels: ${{ steps.labels.outputs.labels }}, area/ui
         milestone: ${{ github.event.issue.milestone.number }}
+
+    - name: Add Issue to Longhorn Sprint Project
+      if: steps.create-ui-issue.outcome == 'success'
+      uses: longhorn/bot/add-to-project-action@master
+      with:
+        project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
+        issue-node-id: ${{ fromJSON(steps.create-ui-issue.outputs.json).node_id }}
+        github-token: ${{ steps.app-token.outputs.token }}
