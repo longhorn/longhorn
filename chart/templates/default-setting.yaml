@@ -36,6 +36,13 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeResponderURL) }}
     upgrade-responder-url: {{ .Values.defaultSettings.upgradeResponderURL | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.managerUrl) }}
+    {{- if kindIs "string" .Values.defaultSettings.managerUrl }}
+    manager-url: {{ .Values.defaultSettings.managerUrl | quote }}
+    {{- else }}
+    {{- fail "defaultSettings.managerUrl must be a string" }}
+    {{- end }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}
     default-replica-count: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.defaultReplicaCount }}
     {{- end }}
