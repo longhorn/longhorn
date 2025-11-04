@@ -126,10 +126,6 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
-        "longhornSettingBackupTarget": {
-          "dataType": "string",
-          "maxLen": 200
-        },
         "longhornSettingCrdApiVersion": {
           "dataType": "string",
           "maxLen": 200
@@ -249,6 +245,21 @@ configMap:
       },
       "extraFieldInfoSchema": {
         "longhornBackingImageCount": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetAzblobCount": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetCifsCount": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetNfsCount": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetS3Count": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetUnknownCount": {
           "dataType": "float"
         },
         "longhornDiskBlockCount": {

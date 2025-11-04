@@ -273,6 +273,21 @@ configMap:
         "longhornBackingImageCount": {
           "dataType": "float"
         },
+        "longhornBackupTargetAzblobCount": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetCifsCount": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetNfsCount": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetS3Count": {
+          "dataType": "float"
+        },
+        "longhornBackupTargetUnknownCount": {
+          "dataType": "float"
+        },
         "longhornDiskBlockCount": {
           "dataType": "float"
         },
