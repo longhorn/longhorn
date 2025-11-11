@@ -95,6 +95,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly) }}
     auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.blacklistForAutoDeletePodWhenVolumeDetachedUnexpectedly) }}
+    blacklist-for-auto-delete-pod-when-volume-detached-unexpectedly: {{ .Values.defaultSettings.blacklistForAutoDeletePodWhenVolumeDetachedUnexpectedly }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.disableSchedulingOnCordonedNode) }}
     disable-scheduling-on-cordoned-node: {{ .Values.defaultSettings.disableSchedulingOnCordonedNode }}
     {{- end }}
