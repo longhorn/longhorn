@@ -677,6 +677,13 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: null
+      - variable: defaultSettings.EndpointNetworkForRWXVolume
+        label: Endpoint Network For RWX Volume
+        description: >-
+          Specifies a dedicated network for mounting RWX (ReadWriteMany) volumes. Leave this blank to use the default Kubernetes cluster network. **Caution**: This setting should change after all RWX volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while RWX volumes are still attached.
+        group: Longhorn Default Settings
+        type: string
+        default: null
       - variable: defaultSettings.taintToleration
         label: Taint Toleration
         description: >-

@@ -222,6 +222,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornSettingEndpointNetworkForRWXVolume": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornSettingSystemManagedComponentsNodeSelector": {
           "dataType": "string",
           "maxLen": 200

@@ -164,6 +164,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}
     storage-network: {{ .Values.defaultSettings.storageNetwork | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.endpointNetworkForRWXVolume) }}
+    endpoint-network-for-rwx-volume: {{ .Values.defaultSettings.endpointNetworkForRWXVolume | quote }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.deletingConfirmationFlag) }}
     deleting-confirmation-flag: {{ .Values.defaultSettings.deletingConfirmationFlag }}
     {{- end }}
