@@ -370,6 +370,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.snapshotMaxCount | Maximum snapshot count for a volume. The value should be between 2 to 250 |
 | defaultSettings.storageMinimalAvailablePercentage | Percentage of minimum available disk capacity. When the minimum available capacity exceeds the total available capacity, the disk becomes unschedulable until more space is made available for use. The default value is "25". |
 | defaultSettings.storageNetwork | Storage network for in-cluster traffic. When unspecified, Longhorn uses the Kubernetes cluster network. |
+| defaultSettings.endpointNetworkForRWXVolume | Specifies a dedicated network for mounting RWX (ReadWriteMany) volumes. Leave this blank to use the default Kubernetes cluster network. **Caution**: This setting should change after all RWX volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while RWX volumes are still attached. |
 | defaultSettings.storageOverProvisioningPercentage | Percentage of storage that can be allocated relative to hard drive capacity. The default value is "100". |
 | defaultSettings.storageReservedPercentageForDefaultDisk | Percentage of disk space that is not allocated to the default disk on each new Longhorn node. |
 | defaultSettings.supportBundleFailedHistoryLimit | Maximum number of failed support bundles that can exist in the cluster. When the value is "0", Longhorn automatically purges all failed support bundles. |
