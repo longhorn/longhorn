@@ -28,10 +28,25 @@ spec:
               name: longhorn-frontend
               port:
                 number: 80
+{{- range .Values.ingress.extraHosts }}
+  - host: {{ . }}
+    http:
+      paths:
+        - path: {{ default "" $.Values.ingress.path }}
+          pathType: {{ default "ImplementationSpecific" $.Values.ingress.pathType }}
+          backend:
+            service:
+              name: longhorn-frontend
+              port:
+                number: 80
+{{- end }}
 {{- if .Values.ingress.tls }}
   tls:
   - hosts:
     - {{ .Values.ingress.host }}
+    {{- range .Values.ingress.extraHosts }}
+    - {{ . }}
+    {{- end }}
     secretName: {{ .Values.ingress.tlsSecret }}
 {{- end }}
 {{- end }}
