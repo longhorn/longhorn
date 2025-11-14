@@ -332,6 +332,8 @@ defaultSettings:
   orphanResourceAutoDeletionGracePeriod: ~
   # -- Storage network for in-cluster traffic. When unspecified, Longhorn uses the Kubernetes cluster network.
   storageNetwork: ~
+  # -- Dedicated network for mounting RWX (ReadWriteMany) volumes. When unspecified, Longhorn uses the Kubernetes cluster network.
+  endpointNetworkForRWXVolume: ~
   # -- Flag that prevents accidental uninstallation of Longhorn.
   deletingConfirmationFlag: ~
   # -- Timeout between the Longhorn Engine and replicas. Specify a value between "8" and "30" seconds. The default value is "8".
