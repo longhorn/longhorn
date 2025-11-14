@@ -230,6 +230,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 |-----|------|---------|-------------|
 | ingress.annotations | string | `nil` | Ingress annotations in the form of key-value pairs. |
 | ingress.enabled | bool | `false` | Setting that allows Longhorn to generate ingress records for the Longhorn UI service. |
+| ingress.extraHosts | list | `[]` | Extra hostnames for TLS (Subject Alternative Names - SAN). Used when you need multiple FQDNs for the same ingress. Example: extraHosts:   - longhorn.example.com   - longhorn-ui.internal.local |
 | ingress.host | string | `"sslip.io"` | Hostname of the Layer 7 load balancer. |
 | ingress.ingressClassName | string | `nil` | IngressClass resource that contains ingress configuration, including the name of the Ingress controller. ingressClassName can replace the kubernetes.io/ingress.class annotation used in earlier Kubernetes releases. |
 | ingress.path | string | `"/"` | Default ingress path. You can access the Longhorn UI by following the full ingress path {{host}}+{{path}}. |

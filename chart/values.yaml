@@ -507,6 +507,12 @@ ingress:
   ingressClassName: ~
   # -- Hostname of the Layer 7 load balancer.
   host: sslip.io
+  # -- Extra hostnames for TLS (Subject Alternative Names - SAN). Used when you need multiple FQDNs for the same ingress.
+  # Example:
+  # extraHosts:
+  #   - longhorn.example.com
+  #   - longhorn-ui.internal.local
+  extraHosts: []
   # -- Setting that allows you to enable TLS on ingress records.
   tls: false
   # -- Setting that allows you to enable secure connections to the Longhorn UI service via port 443.
