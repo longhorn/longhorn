@@ -17,7 +17,8 @@ print_usage() {
 exec_command() {
     COMMAND_ARG="${@}"
     LONGHORN_MANAGER=$(kubectl -n ${NS} get po -l "app=longhorn-manager" | tr '\000' '\n' | sed -n '2p' | awk '{print $1}')
-    kubectl -n "${NS}" exec -it "${LONGHORN_MANAGER}" -- bash -c "longhorn-manager migrate-for-pre-070-volumes \"$COMMAND_ARG""
+    kubectl -n "${NS}" exec -it "${LONGHORN_MANAGER}" -- longhorn-manager migrate-for-pre-070-volumes "${COMMAND_ARG}"
+
 }
 
 
@@ -28,7 +29,7 @@ case $ARG in
         ;;
     *)
         if [[ $# -ne 1 ]]; then
-            echo "Command args number shouldn't be greater than 1"
+            echo "Command args number shouldnt be greater than 1"
         fi
         exec_command "${@}"
         ;;
