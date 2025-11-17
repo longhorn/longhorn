@@ -505,6 +505,8 @@ ingress:
   ingressClassName: ~
   # -- Hostname of the Layer 7 load balancer.
   host: sslip.io
+  # -- x503v3 SAN (Subject Alternative Name) Support 
+  extraHosts: []
   # -- Setting that allows you to enable TLS on ingress records.
   tls: false
   # -- Setting that allows you to enable secure connections to the Longhorn UI service via port 443.
