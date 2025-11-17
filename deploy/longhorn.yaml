@@ -835,7 +835,6 @@ spec:
                 enum:
                 - full
                 - incremental
-                - ""
                 type: string
               labels:
                 additionalProperties:
