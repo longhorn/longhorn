@@ -266,6 +266,12 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaRebuildingBandwidthLimit) }}
     replica-rebuilding-bandwidth-limit: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.replicaRebuildingBandwidthLimit }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaRebuildingBandwidthLimit) }}
+    default-ublk-queue-depth: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.defaultUblkQueueDepth }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.replicaRebuildingBandwidthLimit) }}
+    default-ublk-number-of-queue: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.defaultUblkNumberOfQueue }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout) }}
     instance-manager-pod-liveness-probe-timeout: {{ .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout | quote }}
     {{- end }}
