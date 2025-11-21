@@ -2021,6 +2021,63 @@ spec:
                       type: string
                     filesystemType:
                       type: string
+                    healthData:
+                      additionalProperties:
+                        properties:
+                          attributes:
+                            items:
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                rawString:
+                                  type: string
+                                rawValue:
+                                  format: int64
+                                  type: integer
+                                threshold:
+                                  type: integer
+                                value:
+                                  type: integer
+                                whenFailed:
+                                  type: string
+                                worst:
+                                  type: integer
+                              type: object
+                            type: array
+                          capacity:
+                            format: int64
+                            type: integer
+                          diskName:
+                            type: string
+                          diskType:
+                            type: string
+                          firmwareVersion:
+                            type: string
+                          healthStatus:
+                            enum:
+                            - FAILED
+                            - PASSED
+                            - UNKNOWN
+                            - WARNING
+                            type: string
+                          modelName:
+                            type: string
+                          serialNumber:
+                            type: string
+                          source:
+                            enum:
+                            - SMART
+                            - SPDK
+                            type: string
+                          temperature:
+                            type: integer
+                        type: object
+                      type: object
+                    healthDataLastCollectedAt:
+                      format: date-time
+                      type: string
                     instanceManagerName:
                       type: string
                     scheduledBackingImage:
