@@ -371,6 +371,13 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: 'https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade'
+      - variable: defaultSettings.managerUrl
+        label: Manager URL
+        description: >-
+          External URL to access Longhorn Manager API. When set, this URL will be used in API responses (actions and links fields) instead of the internal pod IP. This is useful when accessing the API through Ingress or Gateway API HTTPRoute. Format: scheme://host[:port] (e.g., https://longhorn.example.com or https://longhorn.example.com:8443). Leave empty to use default behavior.
+        group: Longhorn Default Settings
+        type: string
+        default: ''
       - variable: defaultSettings.defaultReplicaCount
         label: Default Replica Count
         description: >-
