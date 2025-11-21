@@ -3637,6 +3637,7 @@ spec:
               accessMode:
                 enum:
                 - rwo
+                - rwop
                 - rwx
                 type: string
               backingImage:
