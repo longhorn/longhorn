@@ -86,6 +86,26 @@ data:
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) | quote -}}
     {{- end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintTolerationKubernetesCSI)) (.Values.global.cattle.windowsCluster.enabled) }}
+    taint-toleration-kubernetes-csi: {{ $windowsDefaultSettingTaintTolerationKubernetesCSI := list }}{{ $defaultSettingTaintTolerationKubernetesCSI := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintTolerationKubernetesCSI -}}
+        {{- $windowsDefaultSettingTaintTolerationKubernetesCSI = .Values.global.cattle.windowsCluster.defaultSetting.taintTolerationKubernetesCSI -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.taintTolerationKubernetesCSI) -}}
+        {{- $defaultSettingTaintTolerationKubernetesCSI = .Values.defaultSettings.taintTolerationKubernetesCSI -}}
+      {{- end -}}
+      {{- $taintToleration := list $windowsDefaultSettingTaintTolerationKubernetesCSI $defaultSettingTaintTolerationKubernetesCSI }}{{ join ";" (compact $taintToleration) -}}
+    {{- end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelectorKubernetesCSI)) (.Values.global.cattle.windowsCluster.enabled) }}
+    system-managed-components-node-selector-kubernetes-csi: {{ $windowsDefaultSettingNodeSelectorKubernetesCSI := list }}{{ $defaultSettingNodeSelectorKubernetesCSI := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelectorKubernetesCSI -}}
+        {{ $windowsDefaultSettingNodeSelectorKubernetesCSI = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelectorKubernetesCSI -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelectorKubernetesCSI) -}}
+        {{- $defaultSettingNodeSelectorKubernetesCSI = .Values.defaultSettings.systemManagedComponentsNodeSelectorKubernetesCSI -}}
+      {{- end -}}
+      {{- $nodeSelector := list $windowsDefaultSettingNodeSelectorKubernetesCSI $defaultSettingNodeSelectorKubernetesCSI }}{{ join ";" (compact $nodeSelector) -}}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
     priority-class: {{ .Values.defaultSettings.priorityClass | quote }}
     {{- end }}
