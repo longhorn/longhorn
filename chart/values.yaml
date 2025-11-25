@@ -453,6 +453,8 @@ longhornManager:
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
+  # -- Resource requests and limits for Longhorn Manager pods.
+  resources: ~
   # -- Node selector for Longhorn Manager. Specify the nodes allowed to run Longhorn Manager.
   nodeSelector: {}
   ## If you want to set node selector for Longhorn Manager DaemonSet, delete the `{}` in the line above
