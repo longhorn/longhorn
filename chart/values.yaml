@@ -30,10 +30,10 @@ global:
         taintToleration: cattle.io/os=linux:NoSchedule
         # -- Node selector for system-managed Longhorn components.
         systemManagedComponentsNodeSelector: kubernetes.io/os:linux
-        # -- Toleration for system-managed Kubernetes CSI components.
-        taintTolerationKubernetesCSI: cattle.io/os=linux:NoSchedule
-        # -- Node selector for system-managed Kubernetes CSI components.
-        systemManagedComponentsNodeSelectorKubernetesCSI: kubernetes.io/os:linux
+        # -- Toleration for system-managed Kubernetes CSI sidecar components.
+        CSISidecarComponentTaintToleration: cattle.io/os=linux:NoSchedule
+        # -- Node selector for system-managed Kubernetes CSI sidecar components.
+        SystemManagedCSISidecarComponentsNodeSelector: kubernetes.io/os:linux
 networkPolicies:
   # -- Setting that allows you to enable network policies that control access to Longhorn pods.
   enabled: false
@@ -281,10 +281,10 @@ defaultSettings:
   # -- Node selector for system-managed Longhorn components.
   systemManagedComponentsNodeSelector: ~
   # Specify values using a semicolon-separated list in `kubectl taint` syntax (Example: key1=value1:effect; key2=value2:effect).
-  # -- Taint or toleration for system-managed Kubernetes CSI components.
-  taintTolerationKubernetesCSI: ~
-  # -- Node selector for system-managed Kubernetes CSI components.
-  systemManagedComponentsNodeSelectorKubernetesCSI: ~
+  # -- Taint or toleration for system-managed Kubernetes CSI sidecar components.
+  CSISidecarComponentTaintToleration: ~
+  # -- Node selector for system-managed Kubernetes CSI sidecar components.
+  SystemManagedCSISidecarComponentsNodeSelector: ~
   # -- PriorityClass for system-managed Longhorn components.
   # This setting can help prevent Longhorn components from being evicted under Node Pressure.
   # Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`.

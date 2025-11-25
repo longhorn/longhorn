@@ -86,25 +86,25 @@ data:
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) | quote -}}
     {{- end }}
-    {{- if or (not (kindIs "invalid" .Values.defaultSettings.taintTolerationKubernetesCSI)) (.Values.global.cattle.windowsCluster.enabled) }}
-    taint-toleration-kubernetes-csi: {{ $windowsDefaultSettingTaintTolerationKubernetesCSI := list }}{{ $defaultSettingTaintTolerationKubernetesCSI := list -}}
-      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.taintTolerationKubernetesCSI -}}
-        {{- $windowsDefaultSettingTaintTolerationKubernetesCSI = .Values.global.cattle.windowsCluster.defaultSetting.taintTolerationKubernetesCSI -}}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.CSISidecarComponentTaintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
+    taint-toleration-kubernetes-csi: {{ $windowsDefaultSettingCSISidecarComponentTaintToleration := list }}{{ $defaultSettingCSISidecarComponentTaintToleration := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.CSISidecarComponentTaintToleration -}}
+        {{- $windowsDefaultSettingCSISidecarComponentTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.CSISidecarComponentTaintToleration -}}
       {{- end -}}
-      {{- if not (kindIs "invalid" .Values.defaultSettings.taintTolerationKubernetesCSI) -}}
-        {{- $defaultSettingTaintTolerationKubernetesCSI = .Values.defaultSettings.taintTolerationKubernetesCSI -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.CSISidecarComponentTaintToleration) -}}
+        {{- $defaultSettingCSISidecarComponentTaintToleration = .Values.defaultSettings.CSISidecarComponentTaintToleration -}}
       {{- end -}}
-      {{- $taintToleration := list $windowsDefaultSettingTaintTolerationKubernetesCSI $defaultSettingTaintTolerationKubernetesCSI }}{{ join ";" (compact $taintToleration) -}}
+      {{- $taintToleration := list $windowsDefaultSettingCSISidecarComponentTaintToleration $defaultSettingCSISidecarComponentTaintToleration }}{{ join ";" (compact $taintToleration) -}}
     {{- end }}
-    {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelectorKubernetesCSI)) (.Values.global.cattle.windowsCluster.enabled) }}
-    system-managed-components-node-selector-kubernetes-csi: {{ $windowsDefaultSettingNodeSelectorKubernetesCSI := list }}{{ $defaultSettingNodeSelectorKubernetesCSI := list -}}
-      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelectorKubernetesCSI -}}
-        {{ $windowsDefaultSettingNodeSelectorKubernetesCSI = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelectorKubernetesCSI -}}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.SystemManagedCSISidecarComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
+    system-managed-csi-sidecar-components-node-selector: {{ $windowsDefaultSettingCSISidecarComponentsNodeSelector := list }}{{ $defaultSettingCSISidecarComponentsNodeSelector := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.SystemManagedCSISidecarComponentsNodeSelector -}}
+        {{ $windowsDefaultSettingCSISidecarComponentsNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.SystemManagedCSISidecarComponentsNodeSelector -}}
       {{- end -}}
-      {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelectorKubernetesCSI) -}}
-        {{- $defaultSettingNodeSelectorKubernetesCSI = .Values.defaultSettings.systemManagedComponentsNodeSelectorKubernetesCSI -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.SystemManagedCSISidecarComponentsNodeSelector) -}}
+        {{- $defaultSettingCSISidecarComponentsNodeSelector = .Values.defaultSettings.SystemManagedCSISidecarComponentsNodeSelector -}}
       {{- end -}}
-      {{- $nodeSelector := list $windowsDefaultSettingNodeSelectorKubernetesCSI $defaultSettingNodeSelectorKubernetesCSI }}{{ join ";" (compact $nodeSelector) -}}
+      {{- $nodeSelector := list $windowsDefaultSettingCSISidecarComponentsNodeSelector $defaultSettingCSISidecarComponentsNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
     priority-class: {{ .Values.defaultSettings.priorityClass | quote }}

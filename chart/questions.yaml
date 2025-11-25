@@ -698,17 +698,17 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: null
-      - variable: defaultSettings.taintTolerationKubernetesCSI
-        label: Taint Toleration Kubernetes CSI
+      - variable: defaultSettings.CSISidecarComponentTaintToleration
+        label: Taint Toleration Kubernetes CSI sidecar components
         description: >-
-          Taint or toleration for system-managed Kubernetes CSI components. Specify values using a semicolon-separated list in `kubectl taint` syntax (Example: key1=value1:effect; key2=value2:effect). **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached.
+          Taint or toleration for system-managed Kubernetes CSI sidecar components. Specify values using a semicolon-separated list in `kubectl taint` syntax (Example: key1=value1:effect; key2=value2:effect). **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached.
         group: Longhorn Default Settings
         type: string
         default: null
-      - variable: defaultSettings.systemManagedComponentsNodeSelectorKubernetesCSI
-        label: System Managed Components NodeSelector Kubernetes CSI
+      - variable: defaultSettings.SystemManagedCSISidecarComponentsNodeSelector
+        label: System Managed Components NodeSelector Kubernetes CSI sidecar components
         description: >-
-          Node selector for system-managed Kubernetes CSI components.. **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached.
+          Node selector for system-managed Kubernetes CSI sidecar components.. **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached.
         group: Longhorn Default Settings
         type: string
         default: null
