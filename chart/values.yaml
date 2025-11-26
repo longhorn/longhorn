@@ -344,6 +344,8 @@ defaultSettings:
   snapshotDataIntegrityImmediateCheckAfterSnapshotCreation: ~
   # -- Setting that defines when Longhorn checks the integrity of data in snapshot disk files. You must use the Unix cron expression format.
   snapshotDataIntegrityCronjob: ~
+  # -- Setting that controls how many snapshot heavy task operations (such as purge and clone) can run concurrently per node. This is a best-effort mechanism: due to the distributed nature of the system, temporary oversubscription may occur. The limiter reduces worst-case overload but does not guarantee perfect enforcement.
+  snapshotHeavyTaskConcurrentLimit: ~
   # -- Setting that allows Longhorn to automatically mark the latest snapshot and its parent files as removed during a filesystem trim. Longhorn does not remove snapshots containing multiple child files.
   removeSnapshotsDuringFilesystemTrim: ~
   # -- Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check".

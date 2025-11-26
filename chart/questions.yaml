@@ -893,6 +893,13 @@ questions:
         min: 1
         max: 60
         default: 10
+      - variable: defaultSettings.snapshotHeavyTaskConcurrentLimit
+        label: Snapshot Heavy Task Concurrent Limit
+        description: >-
+          Setting that controls how many snapshot heavy task operations (such as purge and clone) can run concurrently per node. This is a best-effort mechanism: due to the distributed nature of the system, temporary oversubscription may occur. The limiter reduces worst-case overload but does not guarantee perfect enforcement.
+        type: int
+        min: 0
+        default: 5
   - variable: persistence.defaultClass
     default: 'true'
     description: Setting that allows you to specify the default Longhorn StorageClass.

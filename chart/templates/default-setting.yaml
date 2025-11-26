@@ -275,3 +275,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout) }}
     instance-manager-pod-liveness-probe-timeout: {{ .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit) }}
+    snapshot-heavy-task-concurrent-limit: {{ .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit | quote }}
+    {{- end }}
