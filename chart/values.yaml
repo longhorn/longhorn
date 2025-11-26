@@ -451,6 +451,11 @@ longhornManager:
   ## and uncomment this example block
   #  annotation-key1: "annotation-value1"
   #  annotation-key2: "annotation-value2"
+  ## If you want to customize the Longhorn Manager DaemonSet update strategy,
+  ## uncomment the example block below. The default maxUnavailable remains "100%".
+  # updateStrategy:
+  #   rollingUpdate:
+  #     maxUnavailable: "10%"
 longhornDriver:
   log:
     # -- Format of longhorn-driver logs. (Options: "plain", "json")
