@@ -276,6 +276,11 @@ defaultSettings:
   taintToleration: ~
   # -- Node selector for system-managed Longhorn components.
   systemManagedComponentsNodeSelector: ~
+  # -- Resource limits for system-managed CSI components.
+  # This setting allows you to configure CPU and memory requests/limits for CSI attacher, provisioner, resizer, snapshotter, and plugin components.
+  # Supported components: csi-attacher, csi-provisioner, csi-resizer, csi-snapshotter, longhorn-csi-plugin, node-driver-registrar, longhorn-liveness-probe.
+  # Notice that changing resource limits will cause CSI components to restart, which may temporarily affect volume provisioning and attach/detach operations until the components are ready. The value should be a JSON object with component names as keys and ResourceRequirements as values.
+  systemManagedCSIComponentsResourceLimits: ~
   # -- PriorityClass for system-managed Longhorn components.
   # This setting can help prevent Longhorn components from being evicted under Node Pressure.
   # Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`.

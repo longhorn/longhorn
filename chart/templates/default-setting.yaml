@@ -86,6 +86,9 @@ data:
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) | quote -}}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedCSIComponentsResourceLimits) }}
+    system-managed-csi-components-resource-limits: {{ .Values.defaultSettings.systemManagedCSIComponentsResourceLimits | quote }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
     priority-class: {{ .Values.defaultSettings.priorityClass | quote }}
     {{- end }}
