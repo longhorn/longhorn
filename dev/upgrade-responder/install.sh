@@ -452,6 +452,9 @@ configMap:
         },
         "longhornSettingOrphanResourceAutoDeletionGracePeriod": {
           "dataType": "float"
+        },
+        "longhornSettingSnapshotHeavyTaskConcurrentLimit": {
+          "dataType": "float"
         }
       }
     }

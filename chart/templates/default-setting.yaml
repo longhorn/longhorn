@@ -87,7 +87,7 @@ data:
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) | quote -}}
     {{- end }}
     {{- if or (not (kindIs "invalid" .Values.defaultSettings.CSISidecarComponentTaintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
-    taint-toleration-kubernetes-csi: {{ $windowsDefaultSettingCSISidecarComponentTaintToleration := list }}{{ $defaultSettingCSISidecarComponentTaintToleration := list -}}
+    csi-sidecar-taint-toleration: {{ $windowsDefaultSettingCSISidecarComponentTaintToleration := list }}{{ $defaultSettingCSISidecarComponentTaintToleration := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.CSISidecarComponentTaintToleration -}}
         {{- $windowsDefaultSettingCSISidecarComponentTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.CSISidecarComponentTaintToleration -}}
       {{- end -}}
@@ -105,6 +105,9 @@ data:
         {{- $defaultSettingCSISidecarComponentsNodeSelector = .Values.defaultSettings.SystemManagedCSISidecarComponentsNodeSelector -}}
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingCSISidecarComponentsNodeSelector $defaultSettingCSISidecarComponentsNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
+    {{- end -}}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedCSIComponentsResourceLimits) }}
+    system-managed-csi-components-resource-limits: {{ .Values.defaultSettings.systemManagedCSIComponentsResourceLimits | quote }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
     priority-class: {{ .Values.defaultSettings.priorityClass | quote }}
@@ -294,4 +297,7 @@ data:
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout) }}
     instance-manager-pod-liveness-probe-timeout: {{ .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout | quote }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit) }}
+    snapshot-heavy-task-concurrent-limit: {{ .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit | quote }}
     {{- end }}

@@ -285,6 +285,11 @@ defaultSettings:
   CSISidecarComponentTaintToleration: ~
   # -- Node selector for system-managed Kubernetes CSI sidecar components.
   SystemManagedCSISidecarComponentsNodeSelector: ~
+  # -- Resource limits for system-managed CSI components.
+  # This setting allows you to configure CPU and memory requests/limits for CSI attacher, provisioner, resizer, snapshotter, and plugin components.
+  # Supported components: csi-attacher, csi-provisioner, csi-resizer, csi-snapshotter, longhorn-csi-plugin, node-driver-registrar, longhorn-liveness-probe.
+  # Notice that changing resource limits will cause CSI components to restart, which may temporarily affect volume provisioning and attach/detach operations until the components are ready. The value should be a JSON object with component names as keys and ResourceRequirements as values.
+  systemManagedCSIComponentsResourceLimits: ~
   # -- PriorityClass for system-managed Longhorn components.
   # This setting can help prevent Longhorn components from being evicted under Node Pressure.
   # Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`.
@@ -353,6 +358,8 @@ defaultSettings:
   snapshotDataIntegrityImmediateCheckAfterSnapshotCreation: ~
   # -- Setting that defines when Longhorn checks the integrity of data in snapshot disk files. You must use the Unix cron expression format.
   snapshotDataIntegrityCronjob: ~
+  # -- Setting that controls how many snapshot heavy task operations (such as purge and clone) can run concurrently per node. This is a best-effort mechanism: due to the distributed nature of the system, temporary oversubscription may occur. The limiter reduces worst-case overload but does not guarantee perfect enforcement.
+  snapshotHeavyTaskConcurrentLimit: ~
   # -- Setting that allows Longhorn to automatically mark the latest snapshot and its parent files as removed during a filesystem trim. Longhorn does not remove snapshots containing multiple child files.
   removeSnapshotsDuringFilesystemTrim: ~
   # -- Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check".
