@@ -698,6 +698,13 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: null
+      - variable: defaultSettings.systemManagedCSIComponentsResourceLimits
+        label: System Managed CSI Components Resource Limits
+        description: >-
+          Resource limits for system managed CSI components.  This setting allows you to configure CPU and memory requests/limits for CSI attacher, provisioner, resizer, snapshotter, and plugin components. Supported components: csi-attacher, csi-provisioner, csi-resizer, csi-snapshotter, longhorn-csi-plugin, node-driver-registrar, longhorn-liveness-probe. Notice that changing resource limits will cause CSI components to restart, which may temporarily affect volume provisioning and attach/detach operations until the components are ready. The value should be a JSON object with component names as keys and ResourceRequirements as values.
+        group: Longhorn Default Settings
+        type: string
+        default: null
       - variable: defaultSettings.deletingConfirmationFlag
         label: Deleting Confirmation Flag
         description: Flag that prevents accidental uninstallation of Longhorn.
