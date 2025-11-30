@@ -145,6 +145,8 @@ service:
     type: ClusterIP
     # -- NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: null
+    # -- Class of a load balancer implementation
+    loadBalancerClass: ""
     # -- Annotation for the Longhorn UI service.
     annotations: {}
     ## If you want to set annotations for the Longhorn UI service, delete the `{}` in the line above
