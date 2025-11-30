@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 global:
   # -- Global override for container image registry.
-  imageRegistry: ""
+  imageRegistry: "docker.io"
   # -- Global override for image pull secrets for container registry.
   imagePullSecrets: []
   # -- Toleration for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.
