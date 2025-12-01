@@ -884,18 +884,21 @@ questions:
         label: Data Engine CPU Mask
         description: >-
           Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine.
+        group: Longhorn Default Settings
         type: string
         default: '{"v2":"0x1"}'
       - variable: defaultSettings.replicaRebuildingBandwidthLimit
         label: Replica Rebuilding Bandwidth Limit
         description: >-
           Applies only to the V2 Data Engine. Specifies the default write bandwidth limit, in megabytes per second (MB/s), for volume replica rebuilding. If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit.
+        group: Longhorn Default Settings
         type: string
         default: '{"v2":"0"}'
       - variable: defaultSettings.instanceManagerPodLivenessProbeTimeout
         label: Instance Manager Pod Liveness Probe Timeout
         description: >-
           In seconds. The setting specifies the timeout for the instance manager pod liveness probe. The default value is 10 seconds.
+        group: Longhorn Default Settings
         type: int
         min: 1
         max: 60
@@ -904,6 +907,7 @@ questions:
         label: Snapshot Heavy Task Concurrent Limit
         description: >-
           Setting that controls how many snapshot heavy task operations (such as purge and clone) can run concurrently per node. This is a best-effort mechanism: due to the distributed nature of the system, temporary oversubscription may occur. The limiter reduces worst-case overload but does not guarantee perfect enforcement.
+        group: Longhorn Default Settings
         type: int
         min: 0
         default: 5
