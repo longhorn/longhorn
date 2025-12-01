@@ -179,6 +179,9 @@ spec:
   {{- if and (eq .Values.service.ui.type "LoadBalancer") .Values.service.ui.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.service.ui.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if and (eq .Values.service.ui.type "LoadBalancer") .Values.service.ui.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.service.ui.loadBalancerClass }}
+  {{- end }}
   selector:
     app: longhorn-ui
   ports:
