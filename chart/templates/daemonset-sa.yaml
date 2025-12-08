@@ -179,6 +179,9 @@ kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-manager
+    {{- with .Values.longhornManager.serviceLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
   name: longhorn-backend
   namespace: {{ include "release_namespace" . }}
   {{- if .Values.longhornManager.serviceAnnotations }}
