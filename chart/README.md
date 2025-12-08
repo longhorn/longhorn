@@ -201,6 +201,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornManager.nodeSelector | object | `{}` | Node selector for Longhorn Manager. Specify the nodes allowed to run Longhorn Manager. |
 | longhornManager.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn Manager. |
 | longhornManager.serviceAnnotations | object | `{}` | Annotation for the Longhorn Manager service. |
+| longhornManager.serviceLabels | object | `{}` | Labels for the Longhorn Manager service. |
 | longhornManager.tolerations | list | `[]` | Toleration for Longhorn Manager on nodes allowed to run Longhorn components. |
 
 ### Longhorn Driver Settings

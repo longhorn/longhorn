@@ -465,6 +465,11 @@ longhornManager:
   ## and uncomment this example block
   #  annotation-key1: "annotation-value1"
   #  annotation-key2: "annotation-value2"
+  serviceLabels: {}
+  ## If you want to set labels for the Longhorn Manager service, delete the `{}` in the line above
+  ## and uncomment this example block
+  #  label-key1: "label-value1"
+  #  label-key2: "label-value2"
 longhornDriver:
   log:
     # -- Format of longhorn-driver logs. (Options: "plain", "json")
