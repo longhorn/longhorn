@@ -161,6 +161,9 @@ metadata:
     {{- if eq .Values.service.ui.type "Rancher-Proxy" }}
     kubernetes.io/cluster-service: "true"
     {{- end }}
+    {{- with .Values.service.ui.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
   name: longhorn-frontend
   namespace: {{ include "release_namespace" . }}
   {{- with .Values.service.ui.annotations }}
