@@ -153,6 +153,11 @@ service:
     ## and uncomment this example block
     #  annotation-key1: "annotation-value1"
     #  annotation-key2: "annotation-value2"
+    labels: {}
+    ## If you want to set additional labels for the Longhorn UI service, delete the `{}` in the line above
+    ## and uncomment this example block
+    #  label-key1: "label-value1"
+    #  label-key2: "label-value2"
   manager:
     # -- Service type for Longhorn Manager.
     type: ClusterIP
