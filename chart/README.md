@@ -200,7 +200,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornManager.log.format | string | `"plain"` | Format of Longhorn Manager logs. (Options: "plain", "json") |
 | longhornManager.nodeSelector | object | `{}` | Node selector for Longhorn Manager. Specify the nodes allowed to run Longhorn Manager. |
 | longhornManager.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn Manager. |
-| longhornManager.resources | object | `nil` | Resource requests and limits for Longhorn Manager pods. |
+| longhornManager.resources | string | `nil` | Resource requests and limits for Longhorn Manager pods. |
 | longhornManager.serviceAnnotations | object | `{}` | Annotation for the Longhorn Manager service. |
 | longhornManager.serviceLabels | object | `{}` |  |
 | longhornManager.tolerations | list | `[]` | Toleration for Longhorn Manager on nodes allowed to run Longhorn components. |
