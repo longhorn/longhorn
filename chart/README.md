@@ -146,8 +146,8 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | service.manager.nodePort | NodePort port number for Longhorn Manager. When unspecified, Longhorn selects a free port between 30000 and 32767. |
 | service.manager.type | Service type for Longhorn Manager. |
 | service.ui.annotations | Annotation for the Longhorn UI service. |
+| service.ui.labels |  |
 | service.ui.loadBalancerClass | Class of a load balancer implementation |
-| service.ui.labels | Labels for the Longhorn UI service. |
 | service.ui.nodePort | NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767. |
 | service.ui.type | Service type for Longhorn UI. (Options: "ClusterIP", "NodePort", "LoadBalancer", "Rancher-Proxy") |
 
@@ -201,7 +201,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornManager.nodeSelector | object | `{}` | Node selector for Longhorn Manager. Specify the nodes allowed to run Longhorn Manager. |
 | longhornManager.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn Manager. |
 | longhornManager.serviceAnnotations | object | `{}` | Annotation for the Longhorn Manager service. |
-| longhornManager.serviceLabels | object | `{}` | Labels for the Longhorn Manager service. |
+| longhornManager.serviceLabels | object | `{}` |  |
 | longhornManager.tolerations | list | `[]` | Toleration for Longhorn Manager on nodes allowed to run Longhorn components. |
 
 ### Longhorn Driver Settings
