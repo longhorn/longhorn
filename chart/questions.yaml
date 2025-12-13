@@ -1137,6 +1137,45 @@ questions:
           - Prefix
         required: true
         label: Ingress Path Type
+  - variable: httproute.enabled
+    default: 'false'
+    description: Expose app using Gateway API HTTPRoute
+    type: boolean
+    group: Services and Load Balancing
+    label: Expose app using Gateway API HTTPRoute
+    show_subquestion_if: true
+    subquestions:
+      - variable: httproute.parentRefs
+        default: '[]'
+        description: >-
+          Gateway references as JSON array. Required fields: name, namespace. Optional: group (default: gateway.networking.k8s.io), kind (default: Gateway), sectionName. Example: [{"name":"my-gateway","namespace":"default","sectionName":"https"}]
+        type: string
+        required: true
+        label: Gateway References (JSON array)
+      - variable: httproute.hostnames
+        default: '[]'
+        description: >-
+          Hostnames for HTTPRoute as JSON array (e.g., ["longhorn.example.com"])
+        type: string
+        required: true
+        label: Hostnames (JSON array)
+      - variable: httproute.path
+        default: /
+        description: >-
+          Default path for HTTPRoute. You can access the Longhorn UI by following the full path.
+        type: string
+        required: true
+        label: HTTPRoute Path
+      - variable: httproute.pathType
+        default: PathPrefix
+        description: >-
+          Path match type for HTTPRoute. (Options: "Exact", "PathPrefix")
+        type: enum
+        options:
+          - Exact
+          - PathPrefix
+        required: true
+        label: HTTPRoute Path Type
   - variable: service.ui.type
     default: Rancher-Proxy
     description: >-
