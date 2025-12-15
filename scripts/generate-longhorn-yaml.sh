@@ -9,8 +9,8 @@ DEPLOY_YAMLS=("$PRJ_DIR/deploy/longhorn.yaml" "$PRJ_DIR/deploy/longhorn-okd.yaml
 DEPLOY_YAML_TMP="$PRJ_DIR/deploy/longhorn.yaml.tmp"
 NAMESPACE=${NAMESPACE:-longhorn-system}
 
-if ! command -v helm &> /dev/null || ! helm version --short | grep -q "v3"; then
-  echo "Please install helm v3 first before generating $DEPLOY_YAML!"
+if ! command -v helm &> /dev/null || ! helm version --short | grep -q "v3\|v4"; then
+  echo "Please install helm v4 first before generating $DEPLOY_YAML!"
   exit 1
 fi
 
