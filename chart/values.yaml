@@ -420,6 +420,8 @@ defaultSettings:
   rwxVolumeFastFailover: ~
   # -- Enables automatic rebuilding of degraded replicas while the volume is detached. This setting only takes effect if the individual volume setting is set to `ignored` or `enabled`.
   offlineReplicaRebuilding: ~
+  # -- Controls whether Longhorn monitors and records health information for node disks. When disabled, disk health checks and status updates are skipped.
+  nodeDiskHealthMonitoring: ~
 # -- Setting that allows you to update the default backupstore.
 defaultBackupStore:
   # -- Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")
