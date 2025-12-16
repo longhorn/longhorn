@@ -281,3 +281,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit) }}
     snapshot-heavy-task-concurrent-limit: {{ .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDiskHealthMonitoring) }}
+    node-disk-health-monitoring: {{ .Values.defaultSettings.nameodeDiskHealthMonitoring }}
+    {{- end }}

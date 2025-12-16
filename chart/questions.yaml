@@ -911,6 +911,13 @@ questions:
         type: int
         min: 0
         default: 5
+      - variable: defaultSettings.nodeDiskHealthMonitoring
+        label: Node Disk Health Monitoring
+        description: >-
+          Controls whether Longhorn monitors and records health information for node disks. When disabled, disk health checks and status updates are skipped.
+        group: Longhorn Default Settings
+        type: boolean
+        default: true
   - variable: persistence.defaultClass
     default: 'true'
     description: Setting that allows you to specify the default Longhorn StorageClass.
