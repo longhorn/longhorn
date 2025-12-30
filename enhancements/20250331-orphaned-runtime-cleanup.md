@@ -70,7 +70,7 @@ After the enhancement, Longhorn automatically finds out the orphaned runtime ins
 **Settings**
 
   - Add setting `orphan-resource-auto-deletion`.
-    - This is a string of semicolon-seperated list. Possible items:
+    - This is a string of semicolon-separated list. Possible items:
       - `replica-data` to enable auto deletion on replica data store. This replaces the old setting `orphan-auto-deletion`.
       - `instance` to enable auto deletion on engine and replica runtime instance.
     - Default value is empty, which means to disable auto deletion for all kinds of orphaned resources.
