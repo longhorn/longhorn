@@ -36,6 +36,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.upgradeResponderURL) }}
     upgrade-responder-url: {{ .Values.defaultSettings.upgradeResponderURL | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.managerUrl) }}
+    manager-url: {{ .Values.defaultSettings.managerUrl | quote }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultReplicaCount) }}
     default-replica-count: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.defaultReplicaCount }}
     {{- end }}
@@ -85,6 +88,9 @@ data:
         {{- $defaultSettingNodeSelector = .Values.defaultSettings.systemManagedComponentsNodeSelector -}}
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) | quote -}}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedCSIComponentsResourceLimits) }}
+    system-managed-csi-components-resource-limits: {{ .Values.defaultSettings.systemManagedCSIComponentsResourceLimits | quote }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.priorityClass) }}
     priority-class: {{ .Values.defaultSettings.priorityClass | quote }}
@@ -274,4 +280,10 @@ data:
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout) }}
     instance-manager-pod-liveness-probe-timeout: {{ .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout | quote }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit) }}
+    snapshot-heavy-task-concurrent-limit: {{ .Values.defaultSettings.snapshotHeavyTaskConcurrentLimit | quote }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDiskHealthMonitoring) }}
+    node-disk-health-monitoring: {{ .Values.defaultSettings.nameodeDiskHealthMonitoring }}
     {{- end }}

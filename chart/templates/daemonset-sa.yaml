@@ -102,6 +102,10 @@ spec:
         - name: GOCOVERDIR
           value: /go-cover-dir/
         {{- end }}
+        {{- with .Values.longhornManager.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       - name: pre-pull-share-manager-image
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.shareManager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}
@@ -180,6 +184,9 @@ kind: Service
 metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
     app: longhorn-manager
+    {{- with .Values.longhornManager.serviceLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
   name: longhorn-backend
   namespace: {{ include "release_namespace" . }}
   {{- if .Values.longhornManager.serviceAnnotations }}

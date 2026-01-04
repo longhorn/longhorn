@@ -2182,6 +2182,63 @@ spec:
                       type: string
                     filesystemType:
                       type: string
+                    healthData:
+                      additionalProperties:
+                        properties:
+                          attributes:
+                            items:
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                rawString:
+                                  type: string
+                                rawValue:
+                                  format: int64
+                                  type: integer
+                                threshold:
+                                  type: integer
+                                value:
+                                  type: integer
+                                whenFailed:
+                                  type: string
+                                worst:
+                                  type: integer
+                              type: object
+                            type: array
+                          capacity:
+                            format: int64
+                            type: integer
+                          diskName:
+                            type: string
+                          diskType:
+                            type: string
+                          firmwareVersion:
+                            type: string
+                          healthStatus:
+                            enum:
+                            - FAILED
+                            - PASSED
+                            - UNKNOWN
+                            - WARNING
+                            type: string
+                          modelName:
+                            type: string
+                          serialNumber:
+                            type: string
+                          source:
+                            enum:
+                            - SMART
+                            - SPDK
+                            type: string
+                          temperature:
+                            type: integer
+                        type: object
+                      type: object
+                    healthDataLastCollectedAt:
+                      format: date-time
+                      type: string
                     instanceManagerName:
                       type: string
                     scheduledBackingImage:
@@ -4269,7 +4326,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: longhornio/longhorn-manager:master-head
+        image: docker.io/longhornio/longhorn-manager:master-head
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -4278,17 +4335,17 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - "longhornio/longhorn-engine:master-head"
+        - "docker.io/longhornio/longhorn-engine:master-head"
         - --instance-manager-image
-        - "longhornio/longhorn-instance-manager:master-head"
+        - "docker.io/longhornio/longhorn-instance-manager:master-head"
         - --share-manager-image
-        - "longhornio/longhorn-share-manager:master-head"
+        - "docker.io/longhornio/longhorn-share-manager:master-head"
         - --backing-image-manager-image
-        - "longhornio/backing-image-manager:master-head"
+        - "docker.io/longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "longhornio/support-bundle-kit:v0.0.69"
+        - "docker.io/longhornio/support-bundle-kit:v0.0.77"
         - --manager-image
-        - "longhornio/longhorn-manager:master-head"
+        - "docker.io/longhornio/longhorn-manager:master-head"
         - --service-account
         - longhorn-service-account
         - --upgrade-version-check
@@ -4340,7 +4397,7 @@ spec:
               fieldPath: spec.nodeName
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
-        image: longhornio/longhorn-share-manager:master-head
+        image: docker.io/longhornio/longhorn-share-manager:master-head
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
       volumes:
       - name: boot
@@ -4393,18 +4450,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: longhornio/longhorn-manager:master-head
+          image: docker.io/longhornio/longhorn-manager:master-head
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: longhornio/longhorn-manager:master-head
+          image: docker.io/longhornio/longhorn-manager:master-head
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - "longhornio/longhorn-manager:master-head"
+          - "docker.io/longhornio/longhorn-manager:master-head"
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -4421,17 +4478,17 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "longhornio/csi-attacher:v4.9.0-20250826"
+            value: "docker.io/longhornio/csi-attacher:v4.10.0-20251226"
           - name: CSI_PROVISIONER_IMAGE
-            value: "longhornio/csi-provisioner:v5.3.0-20250826"
+            value: "docker.io/longhornio/csi-provisioner:v5.3.0-20251226"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "longhornio/csi-node-driver-registrar:v2.14.0-20250826"
+            value: "docker.io/longhornio/csi-node-driver-registrar:v2.15.0-20251226"
           - name: CSI_RESIZER_IMAGE
-            value: "longhornio/csi-resizer:v1.14.0-20250826"
+            value: "docker.io/longhornio/csi-resizer:v2.0.0-20251226"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "longhornio/csi-snapshotter:v8.3.0-20250826"
+            value: "docker.io/longhornio/csi-snapshotter:v8.4.0-20251226"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "longhornio/livenessprobe:v2.16.0-20250826"
+            value: "docker.io/longhornio/livenessprobe:v2.17.0-20251226"
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
@@ -4494,7 +4551,7 @@ spec:
           - mountPath: /etc/tls/private
             name: longhorn-ui-tls
       - name: longhorn-ui
-        image: longhornio/longhorn-ui:master-head
+        image: docker.io/longhornio/longhorn-ui:master-head
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: nginx-cache

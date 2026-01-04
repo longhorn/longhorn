@@ -175,6 +175,16 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
   {{- end }}
 {{- end }}
 
+### HTTPRoute Settings
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{- range .Values }}
+  {{- if hasPrefix "httproute" .Key }}
+| {{ .Key }} | {{ .Type }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+  {{- end }}
+{{- end }}
+
 ### Private Registry Settings
 
 You can install Longhorn in an air-gapped environment with a private registry. For more information, see the **Air Gap Installation** section of the [documentation](https://longhorn.io/docs).
@@ -227,6 +237,7 @@ For more details, see the [ocp-readme](https://github.com/longhorn/longhorn/blob
   (hasPrefix "longhornUI" .Key)
   (hasPrefix "privateRegistry" .Key)
   (hasPrefix "ingress" .Key)
+  (hasPrefix "httproute" .Key)
   (hasPrefix "metrics" .Key)
   (hasPrefix "openshift" .Key)
   (hasPrefix "global" .Key)) }}

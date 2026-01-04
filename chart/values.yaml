@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 global:
   # -- Global override for container image registry.
-  imageRegistry: ""
+  imageRegistry: "docker.io"
   # -- Global override for image pull secrets for container registry.
   imagePullSecrets: []
   # -- Toleration for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.
@@ -85,7 +85,7 @@ image:
       # -- Repository for the Longhorn Support Bundle Manager image.
       repository: longhornio/support-bundle-kit
       # -- Tag for the Longhorn Support Bundle Manager image.
-      tag: v0.0.69
+      tag: v0.0.77
   csi:
     attacher:
       # -- Registry for the CSI attacher image. When unspecified, Longhorn uses the default value.
@@ -93,42 +93,42 @@ image:
       # -- Repository for the CSI attacher image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-attacher
       # -- Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
-      tag: v4.9.0-20250826
+      tag: v4.10.0-20251226
     provisioner:
       # -- Registry for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-provisioner
       # -- Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
-      tag: v5.3.0-20250826
+      tag: v5.3.0-20251226
     nodeDriverRegistrar:
       # -- Registry for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-node-driver-registrar
       # -- Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
-      tag: v2.14.0-20250826
+      tag: v2.15.0-20251226
     resizer:
       # -- Registry for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-resizer
       # -- Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value.
-      tag: v1.14.0-20250826
+      tag: v2.0.0-20251226
     snapshotter:
       # -- Registry for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-snapshotter
       # -- Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
-      tag: v8.3.0-20250826
+      tag: v8.4.0-20251226
     livenessProbe:
       # -- Registry for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       repository: longhornio/livenessprobe
       # -- Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
-      tag: v2.16.0-20250826
+      tag: v2.17.0-20251226
   openshift:
     oauthProxy:
       # -- Registry for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users.
@@ -145,12 +145,19 @@ service:
     type: ClusterIP
     # -- NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: null
+    # -- Class of a load balancer implementation
+    loadBalancerClass: ""
     # -- Annotation for the Longhorn UI service.
     annotations: {}
     ## If you want to set annotations for the Longhorn UI service, delete the `{}` in the line above
     ## and uncomment this example block
     #  annotation-key1: "annotation-value1"
     #  annotation-key2: "annotation-value2"
+    labels: {}
+    ## If you want to set additional labels for the Longhorn UI service, delete the `{}` in the line above
+    ## and uncomment this example block
+    #  label-key1: "label-value1"
+    #  label-key2: "label-value2"
   manager:
     # -- Service type for Longhorn Manager.
     type: ClusterIP
@@ -253,6 +260,8 @@ defaultSettings:
   upgradeChecker: ~
   # -- The Upgrade Responder sends a notification whenever a new Longhorn version that you can upgrade to becomes available. The default value is https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade.
   upgradeResponderURL: ~
+  # -- The external URL used to access the Longhorn Manager API. When set, this URL is returned in API responses (the actions and links fields) instead of the internal pod IP. This is useful when accessing the API through Ingress or Gateway API HTTPRoute. Format: scheme://host[:port] (for example, https://longhorn.example.com or https://longhorn.example.com:8443). Leave it empty to use the default behavior.
+  managerUrl: ~
   # -- Default number of replicas for volumes created using the Longhorn UI. For Kubernetes configuration, modify the `numberOfReplicas` field in the StorageClass. The default value is "{"v1":"3","v2":"3"}".
   defaultReplicaCount: ~
   # -- Default name of Longhorn static StorageClass. "storageClassName" is assigned to PVs and PVCs that are created for an existing Longhorn volume. "storageClassName" can also be used as a label, so it is possible to use a Longhorn StorageClass to bind a workload to an existing PV without creating a Kubernetes StorageClass object. "storageClassName" needs to be an existing StorageClass. The default value is "longhorn-static".
@@ -276,6 +285,11 @@ defaultSettings:
   taintToleration: ~
   # -- Node selector for system-managed Longhorn components.
   systemManagedComponentsNodeSelector: ~
+  # -- Resource limits for system-managed CSI components.
+  # This setting allows you to configure CPU and memory requests/limits for CSI attacher, provisioner, resizer, snapshotter, and plugin components.
+  # Supported components: csi-attacher, csi-provisioner, csi-resizer, csi-snapshotter, longhorn-csi-plugin, node-driver-registrar, longhorn-liveness-probe.
+  # Notice that changing resource limits will cause CSI components to restart, which may temporarily affect volume provisioning and attach/detach operations until the components are ready. The value should be a JSON object with component names as keys and ResourceRequirements as values.
+  systemManagedCSIComponentsResourceLimits: ~
   # -- PriorityClass for system-managed Longhorn components.
   # This setting can help prevent Longhorn components from being evicted under Node Pressure.
   # Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`.
@@ -344,6 +358,8 @@ defaultSettings:
   snapshotDataIntegrityImmediateCheckAfterSnapshotCreation: ~
   # -- Setting that defines when Longhorn checks the integrity of data in snapshot disk files. You must use the Unix cron expression format.
   snapshotDataIntegrityCronjob: ~
+  # -- Setting that controls how many snapshot heavy task operations (such as purge and clone) can run concurrently per node. This is a best-effort mechanism: due to the distributed nature of the system, temporary oversubscription may occur. The limiter reduces worst-case overload but does not guarantee perfect enforcement.
+  snapshotHeavyTaskConcurrentLimit: ~
   # -- Setting that allows Longhorn to automatically mark the latest snapshot and its parent files as removed during a filesystem trim. Longhorn does not remove snapshots containing multiple child files.
   removeSnapshotsDuringFilesystemTrim: ~
   # -- Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check".
@@ -406,6 +422,8 @@ defaultSettings:
   rwxVolumeFastFailover: ~
   # -- Enables automatic rebuilding of degraded replicas while the volume is detached. This setting only takes effect if the individual volume setting is set to `ignored` or `enabled`.
   offlineReplicaRebuilding: ~
+  # -- Controls whether Longhorn monitors and records health information for node disks. When disabled, disk health checks and status updates are skipped.
+  nodeDiskHealthMonitoring: ~
 # -- Setting that allows you to update the default backupstore.
 defaultBackupStore:
   # -- Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")
@@ -439,6 +457,8 @@ longhornManager:
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
+  # -- Resource requests and limits for Longhorn Manager pods.
+  resources: ~
   # -- Node selector for Longhorn Manager. Specify the nodes allowed to run Longhorn Manager.
   nodeSelector: {}
   ## If you want to set node selector for Longhorn Manager DaemonSet, delete the `{}` in the line above
@@ -558,6 +578,31 @@ ingress:
   # - name: longhorn.local-tls
   #   key:
   #   certificate:
+httproute:
+  # -- Setting that allows Longhorn to generate HTTPRoute records for the Longhorn UI service using Gateway API.
+  enabled: false
+  # -- Gateway references for HTTPRoute. Specify which Gateway(s) should handle this route.
+  parentRefs: []
+  ## Example:
+  # - name: gateway-name
+  #   namespace: gateway-namespace
+  #   # Optional fields with defaults:
+  #   # group: gateway.networking.k8s.io  # default
+  #   # kind: Gateway                      # default
+  #   # sectionName: https                 # optional, targets a specific listener
+  # -- List of hostnames for the HTTPRoute. Multiple hostnames are supported.
+  hostnames: []
+  ## Example:
+  # - longhorn.example.com
+  # - longhorn.example.org
+  # -- Default path for HTTPRoute. You can access the Longhorn UI by following the full path.
+  path: /
+  # -- Path match type for HTTPRoute. (Options: "Exact", "PathPrefix")
+  pathType: PathPrefix
+  # -- Annotations for the HTTPRoute resource in the form of key-value pairs.
+  annotations: {}
+  ## Example:
+  #  annotation-key1: "annotation-value1"
 # -- Setting that allows you to enable pod security policies (PSPs) that allow privileged Longhorn pods to start. This setting applies only to clusters running Kubernetes 1.25 and earlier, and with the built-in Pod Security admission controller enabled.
 enablePSP: false
 # -- Specify override namespace, specifically this is useful for using longhorn as sub-chart and its release namespace is not the `longhorn-system`.

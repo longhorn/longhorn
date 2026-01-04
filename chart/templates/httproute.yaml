@@ -1,0 +1,42 @@
+{{- if .Values.httproute.enabled -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: longhorn-httproute
+  namespace: {{ include "release_namespace" . }}
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-httproute
+  {{- with .Values.httproute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.httproute.parentRefs }}
+  parentRefs:
+    {{- range . }}
+    - group: {{ .group | default "gateway.networking.k8s.io" }}
+      kind: {{ .kind | default "Gateway" }}
+      name: {{ .name }}
+      {{- with .namespace }}
+      namespace: {{ . }}
+      {{- end }}
+      {{- with .sectionName }}
+      sectionName: {{ . }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.httproute.hostnames }}
+  hostnames:
+    {{- range . }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  rules:
+  - matches:
+    - path:
+        type: {{ .Values.httproute.pathType | default "PathPrefix" }}
+        value: {{ .Values.httproute.path | default "/" }}
+    backendRefs:
+    - name: longhorn-frontend
+      port: 80
+{{- end }}
