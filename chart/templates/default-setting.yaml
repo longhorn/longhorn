@@ -128,6 +128,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit) }}
     concurrent-replica-rebuild-per-node-limit: {{ .Values.defaultSettings.concurrentReplicaRebuildPerNodeLimit | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.rebuildConcurrentSyncLimit) }}
+    rebuild-concurrent-sync-limit: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.rebuildConcurrentSyncLimit }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit) }}
     concurrent-volume-backup-restore-per-node-limit: {{ .Values.defaultSettings.concurrentVolumeBackupRestorePerNodeLimit | quote }}
     {{- end }}

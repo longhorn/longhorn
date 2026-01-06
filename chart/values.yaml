@@ -316,6 +316,8 @@ defaultSettings:
   replicaReplenishmentWaitInterval: ~
   # -- Maximum number of replicas that can be concurrently rebuilt on each node.
   concurrentReplicaRebuildPerNodeLimit: ~
+  # -- Maximum number of file synchronization operations that can run concurrently during a single replica rebuild. Right now, it's for v1 data engine only.
+  rebuildConcurrentSyncLimit: ~
   # -- Maximum number of volumes that can be concurrently restored on each node using a backup. When the value is "0", restoration of volumes using a backup is disabled.
   concurrentVolumeBackupRestorePerNodeLimit: ~
   # -- Setting that disables the revision counter and thereby prevents Longhorn from tracking all write operations to a volume. When salvaging a volume, Longhorn uses properties of the "volume-head-xxx.img" file (the last file size and the last time the file was modified) to select the replica to be used for volume recovery. This setting applies only to volumes created using the Longhorn UI.
