@@ -175,8 +175,7 @@ spec:
       {{- end }}
       serviceAccountName: longhorn-service-account
   updateStrategy:
-    rollingUpdate:
-      maxUnavailable: "100%"
+{{ toYaml .Values.longhornManager.updateStrategy | indent 4 }}
 ---
 apiVersion: v1
 kind: Service
