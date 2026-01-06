@@ -4481,7 +4481,7 @@ spec:
       serviceAccountName: longhorn-service-account
   updateStrategy:
     rollingUpdate:
-      maxUnavailable: "100%"
+      maxUnavailable: 100%
 ---
 # Source: longhorn/templates/deployment-driver.yaml
 apiVersion: apps/v1
