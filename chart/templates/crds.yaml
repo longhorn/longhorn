@@ -1323,6 +1323,14 @@ spec:
                 type: boolean
               nodeID:
                 type: string
+              rebuildConcurrentSyncLimit:
+                description: |-
+                  RebuildConcurrentSyncLimit controls the maximum number of file synchronization operations that can run
+                  concurrently during a single replica rebuild.
+                  It is determined by the global setting or the volume spec field with the same name.
+                maximum: 5
+                minimum: 0
+                type: integer
               replicaAddressMap:
                 additionalProperties:
                   type: string
@@ -1474,6 +1482,13 @@ spec:
                   type: object
                 nullable: true
                 type: object
+              rebuildConcurrentSyncLimit:
+                description: |-
+                  RebuildConcurrentSyncLimit controls the maximum number of file synchronization operations that can run
+                  concurrently during a single replica rebuild.
+                  It is determined by the global setting or the volume spec field with the same name.
+                minimum: 0
+                type: integer
               rebuildStatus:
                 additionalProperties:
                   properties:
@@ -1483,7 +1498,13 @@ spec:
                     error:
                       type: string
                     fromReplicaAddress:
+                      description: Deprecated. We are now using FromReplicaAddressList
+                        to list all source replicas.
                       type: string
+                    fromReplicaAddressList:
+                      items:
+                        type: string
+                      type: array
                     isRebuilding:
                       type: boolean
                     progress:
@@ -1702,6 +1723,35 @@ spec:
                   type: object
                 nullable: true
                 type: object
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
               currentState:
                 type: string
               dataEngineStatus:
@@ -3592,6 +3642,14 @@ spec:
                 - disabled
                 - enabled
                 type: string
+              rebuildConcurrentSyncLimit:
+                description: |-
+                  RebuildConcurrentSyncLimit controls the maximum number of file synchronization operations that can run
+                  concurrently during a single replica rebuild.
+                  When set to 0, it means following the global setting.
+                maximum: 5
+                minimum: 0
+                type: integer
               replicaAutoBalance:
                 enum:
                 - ignored
