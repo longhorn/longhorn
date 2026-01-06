@@ -558,6 +558,15 @@ questions:
         type: int
         min: 0
         default: 5
+      - variable: defaultSettings.rebuildConcurrentSyncLimit
+        label: Rebuild Concurrent Sync Limit
+        description: >-
+          Maximum number of file synchronization operations that can run concurrently during a single replica rebuild. Right now, it's for v1 data engine only.
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        max: 5
+        default: 1
       - variable: defaultSettings.concurrentVolumeBackupRestorePerNodeLimit
         label: Concurrent Volume Backup Restore Per Node Limit
         description: >-
