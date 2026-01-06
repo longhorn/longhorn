@@ -1476,6 +1476,14 @@ spec:
                 type: boolean
               nodeID:
                 type: string
+              rebuildConcurrentSyncLimit:
+                description: |-
+                  RebuildConcurrentSyncLimit controls the maximum number of file synchronization operations that can run
+                  concurrently during a single replica rebuild.
+                  It is determined by the global setting or the volume spec field with the same name.
+                maximum: 5
+                minimum: 0
+                type: integer
               replicaAddressMap:
                 additionalProperties:
                   type: string
@@ -1627,6 +1635,13 @@ spec:
                   type: object
                 nullable: true
                 type: object
+              rebuildConcurrentSyncLimit:
+                description: |-
+                  RebuildConcurrentSyncLimit controls the maximum number of file synchronization operations that can run
+                  concurrently during a single replica rebuild.
+                  It is determined by the global setting or the volume spec field with the same name.
+                minimum: 0
+                type: integer
               rebuildStatus:
                 additionalProperties:
                   properties:
@@ -1636,7 +1651,13 @@ spec:
                     error:
                       type: string
                     fromReplicaAddress:
+                      description: Deprecated. We are now using FromReplicaAddressList
+                        to list all source replicas.
                       type: string
+                    fromReplicaAddressList:
+                      items:
+                        type: string
+                      type: array
                     isRebuilding:
                       type: boolean
                     progress:
@@ -3826,6 +3847,14 @@ spec:
                 - disabled
                 - enabled
                 type: string
+              rebuildConcurrentSyncLimit:
+                description: |-
+                  RebuildConcurrentSyncLimit controls the maximum number of file synchronization operations that can run
+                  concurrently during a single replica rebuild.
+                  When set to 0, it means following the global setting.
+                maximum: 5
+                minimum: 0
+                type: integer
               replicaAutoBalance:
                 enum:
                 - ignored
