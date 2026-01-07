@@ -115,25 +115,25 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.snapshotter.tag | string | `"v8.4.0-20251226"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.registry | string | `""` | Registry for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
-| image.longhorn.backingImageManager.tag | string | `"master-head"` | Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
+| image.longhorn.backingImageManager.tag | string | `"v1.11.0-rc1"` | Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.engine.registry | string | `""` | Registry for the Longhorn Engine image. |
 | image.longhorn.engine.repository | string | `"longhornio/longhorn-engine"` | Repository for the Longhorn Engine image. |
-| image.longhorn.engine.tag | string | `"master-head"` | Tag for the Longhorn Engine image. |
+| image.longhorn.engine.tag | string | `"v1.11.0-rc1"` | Tag for the Longhorn Engine image. |
 | image.longhorn.instanceManager.registry | string | `""` | Registry for the Longhorn Instance Manager image. |
 | image.longhorn.instanceManager.repository | string | `"longhornio/longhorn-instance-manager"` | Repository for the Longhorn Instance Manager image. |
-| image.longhorn.instanceManager.tag | string | `"master-head"` | Tag for the Longhorn Instance Manager image. |
+| image.longhorn.instanceManager.tag | string | `"v1.11.0-rc1"` | Tag for the Longhorn Instance Manager image. |
 | image.longhorn.manager.registry | string | `""` | Registry for the Longhorn Manager image. |
 | image.longhorn.manager.repository | string | `"longhornio/longhorn-manager"` | Repository for the Longhorn Manager image. |
-| image.longhorn.manager.tag | string | `"master-head"` | Tag for the Longhorn Manager image. |
+| image.longhorn.manager.tag | string | `"v1.11.0-rc1"` | Tag for the Longhorn Manager image. |
 | image.longhorn.shareManager.registry | string | `""` | Registry for the Longhorn Share Manager image. |
 | image.longhorn.shareManager.repository | string | `"longhornio/longhorn-share-manager"` | Repository for the Longhorn Share Manager image. |
-| image.longhorn.shareManager.tag | string | `"master-head"` | Tag for the Longhorn Share Manager image. |
+| image.longhorn.shareManager.tag | string | `"v1.11.0-rc1"` | Tag for the Longhorn Share Manager image. |
 | image.longhorn.supportBundleKit.registry | string | `""` | Registry for the Longhorn Support Bundle Manager image. |
 | image.longhorn.supportBundleKit.repository | string | `"longhornio/support-bundle-kit"` | Repository for the Longhorn Support Bundle Manager image. |
 | image.longhorn.supportBundleKit.tag | string | `"v0.0.78"` | Tag for the Longhorn Support Bundle Manager image. |
 | image.longhorn.ui.registry | string | `""` | Registry for the Longhorn UI image. |
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Repository for the Longhorn UI image. |
-| image.longhorn.ui.tag | string | `"master-head"` | Tag for the Longhorn UI image. |
+| image.longhorn.ui.tag | string | `"v1.11.0-rc1"` | Tag for the Longhorn UI image. |
 | image.openshift.oauthProxy.registry | string | `""` | Registry for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users. |
 | image.openshift.oauthProxy.repository | string | `""` | Repository for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users. |
 | image.openshift.oauthProxy.tag | string | `""` | Tag for the OAuth Proxy image. Specify OCP/OKD version 4.1 or later (including version 4.18, which is available at quay.io/openshift/origin-oauth-proxy:4.18). This setting applies only to OpenShift users. |
@@ -334,7 +334,6 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.blacklistForAutoDeletePodWhenVolumeDetachedUnexpectedly | Blacklist of controller api/kind values for the setting Automatically Delete Workload Pod when the Volume Is Detached Unexpectedly. If a workload pod is managed by a controller whose api/kind is listed in this blacklist, Longhorn will not automatically delete the pod when its volume is unexpectedly detached. Multiple controller api/kind entries can be specified, separated by semicolons. For example: `apps/StatefulSet;apps/DaemonSet`. Note that the controller api/kind is case sensitive and must exactly match the api/kind in the workload pod's owner reference. |
 | defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit | Maximum number of engines that are allowed to concurrently upgrade on each node after Longhorn Manager is upgraded. When the value is "0", Longhorn does not automatically upgrade volume engines to the new default engine image version. |
 | defaultSettings.concurrentReplicaRebuildPerNodeLimit | Maximum number of replicas that can be concurrently rebuilt on each node. |
-| defaultSettings.rebuildConcurrentSyncLimit | Maximum number of file synchronization operations that can run concurrently during a single replica rebuild. Right now, it's for v1 data engine only. |
 | defaultSettings.concurrentVolumeBackupRestorePerNodeLimit | Maximum number of volumes that can be concurrently restored on each node using a backup. When the value is "0", restoration of volumes using a backup is disabled. |
 | defaultSettings.createDefaultDiskLabeledNodes | Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster. |
 | defaultSettings.dataEngineCPUMask | Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is "{"v2":"0x1"}". |
@@ -373,6 +372,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.orphanResourceAutoDeletion | Enables Longhorn to automatically delete orphaned resources and their associated data or processes (e.g., stale replicas). Orphaned resources on failed or unknown nodes are not automatically cleaned up. You need to specify the resource types to be deleted using a semicolon-separated list (e.g., `replica-data;instance`). Available items are: `replica-data`, `instance`. |
 | defaultSettings.orphanResourceAutoDeletionGracePeriod | Specifies the wait time, in seconds, before Longhorn automatically deletes an orphaned Custom Resource (CR) and its associated resources. Note that if a user manually deletes an orphaned CR, the deletion occurs immediately and does not respect this grace period. |
 | defaultSettings.priorityClass | PriorityClass for system-managed Longhorn components. This setting can help prevent Longhorn components from being evicted under Node Pressure. Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`. |
+| defaultSettings.rebuildConcurrentSyncLimit | Maximum number of file synchronization operations that can run concurrently during a single replica rebuild. Right now, it's for v1 data engine only. |
 | defaultSettings.recurringFailedJobsHistoryLimit | Maximum number of failed recurring backup and snapshot jobs to be retained. When the value is "0", a history of failed recurring jobs is not retained. |
 | defaultSettings.recurringJobMaxRetention | Maximum number of snapshots or backups to be retained. |
 | defaultSettings.recurringSuccessfulJobsHistoryLimit | Maximum number of successful recurring backup and snapshot jobs to be retained. When the value is "0", a history of successful recurring jobs is not retained. |
