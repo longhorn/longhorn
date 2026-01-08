@@ -6,6 +6,8 @@ global:
   imageRegistry: "docker.io"
   # -- Global override for image pull secrets for container registry.
   imagePullSecrets: []
+  # -- Set container timezone (TZ env) for all Longhorn workloads. Leave empty to use container default.
+  timezone: ""
   # -- Toleration for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.
   tolerations: []
   # -- Node selector for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer.

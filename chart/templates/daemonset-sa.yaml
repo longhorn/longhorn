@@ -102,6 +102,7 @@ spec:
         - name: GOCOVERDIR
           value: /go-cover-dir/
         {{- end }}
+        {{- include "longhorn.timezoneEnv" . | nindent 8 }}
         {{- with .Values.longhornManager.resources }}
         resources:
           {{- toYaml . | nindent 10 }}
