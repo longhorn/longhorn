@@ -28,6 +28,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        {{- include "longhorn.timezoneEnv" . | nindent 8 }}
       restartPolicy: Never
       {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
       imagePullSecrets:

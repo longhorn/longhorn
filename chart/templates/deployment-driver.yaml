@@ -101,6 +101,7 @@ spec:
           - name: go-cover-dir
             mountPath: /go-cover-dir/
           {{- end }}
+          {{- include "longhorn.timezoneEnv" . | nindent 10 }}
 
       {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
       imagePullSecrets:
