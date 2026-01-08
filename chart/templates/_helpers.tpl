@@ -78,3 +78,14 @@ Output: properly quoted YAML string
     {{- $v | quote -}}
   {{- end -}}
 {{- end -}}
+
+{{/*
+Optional timezone injection for all Longhorn workloads.
+When .Values.global.timezone is set, this snippet renders a TZ env var.
+*/}}
+{{- define "longhorn.timezoneEnv" -}}
+{{- if .Values.global.timezone }}
+- name: TZ
+  value: {{ .Values.global.timezone | quote }}
+{{- end }}
+{{- end -}}

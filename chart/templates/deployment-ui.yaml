@@ -101,6 +101,7 @@ spec:
             value: "http://longhorn-backend:9500"
           - name: LONGHORN_UI_PORT
             value: "8000"
+          {{- include "longhorn.timezoneEnv" . | nindent 10 }}
       volumes:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
