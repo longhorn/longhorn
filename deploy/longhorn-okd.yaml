@@ -4453,6 +4453,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+        
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
         image: docker.io/longhornio/longhorn-share-manager:master-head
@@ -4547,6 +4548,7 @@ spec:
             value: "docker.io/longhornio/csi-snapshotter:v8.4.0-20251226"
           - name: CSI_LIVENESS_PROBE_IMAGE
             value: "docker.io/longhornio/livenessprobe:v2.17.0-20251226"
+          
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
@@ -4626,6 +4628,7 @@ spec:
             value: "http://longhorn-backend:9500"
           - name: LONGHORN_UI_PORT
             value: "8000"
+          
       volumes:
       - name: longhorn-ui-tls
         secret:
