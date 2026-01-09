@@ -82,6 +82,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | global.imagePullSecrets | list | `[]` | Global override for image pull secrets for container registry. |
 | global.imageRegistry | string | `"docker.io"` | Global override for container image registry. |
 | global.nodeSelector | object | `{}` | Node selector for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer. |
+| global.timezone | string | `""` | Set container timezone (TZ env) for all Longhorn workloads. Leave empty to use container default. |
 | global.tolerations | list | `[]` | Toleration for nodes allowed to run user-deployed components such as Longhorn Manager, Longhorn UI, and Longhorn Driver Deployer. |
 
 ### Network Policies
