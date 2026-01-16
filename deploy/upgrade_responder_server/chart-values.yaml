@@ -81,10 +81,10 @@ configMap:
           ]
         },
         {
-          "name": "v1.10.0",
-          "releaseDate": "2025-09-25T00:00:00Z",
+          "name": "v1.10.1",
+          "releaseDate": "2025-11-12T00:00:00Z",
           "tags": [
-            "latest"
+            "stable"
           ]
         }    
       ]
