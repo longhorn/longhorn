@@ -4316,7 +4316,7 @@ spec:
         - --backing-image-manager-image
         - "docker.io/longhornio/backing-image-manager:v1.10.x-head"
         - --support-bundle-manager-image
-        - "docker.io/longhornio/support-bundle-kit:v0.0.71"
+        - "docker.io/longhornio/support-bundle-kit:v0.0.78"
         - --manager-image
         - "docker.io/longhornio/longhorn-manager:v1.10.x-head"
         - --service-account
@@ -4451,17 +4451,17 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "docker.io/longhornio/csi-attacher:v4.10.0-20251030"
+            value: "docker.io/longhornio/csi-attacher:v4.10.0-20251226"
           - name: CSI_PROVISIONER_IMAGE
-            value: "docker.io/longhornio/csi-provisioner:v5.3.0-20251030"
+            value: "docker.io/longhornio/csi-provisioner:v5.3.0-20251226"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "docker.io/longhornio/csi-node-driver-registrar:v2.15.0-20251030"
+            value: "docker.io/longhornio/csi-node-driver-registrar:v2.15.0-20251226"
           - name: CSI_RESIZER_IMAGE
-            value: "docker.io/longhornio/csi-resizer:v1.14.0-20251030"
+            value: "docker.io/longhornio/csi-resizer:v1.14.0-20260119"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "docker.io/longhornio/csi-snapshotter:v8.4.0-20251030"
+            value: "docker.io/longhornio/csi-snapshotter:v8.4.0-20251226"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "docker.io/longhornio/livenessprobe:v2.17.0-20251030"
+            value: "docker.io/longhornio/livenessprobe:v2.17.0-20251226"
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
