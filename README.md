@@ -40,6 +40,7 @@ https://github.com/longhorn/longhorn/releases
 
 | Release   | Latest Version  | Stable Versions                   | Release Note                                                    | Important Note                                               | Active |
 |-----------|-----------------|-----------------------------------|-----------------------------------------------------------------|--------------------------------------------------------------|--------|
+| **1.11*** | 1.11.0          |                                   | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.11.0) | [🔗](https://longhorn.io/docs/1.11.0/important-notes)        | ✅     |
 | **1.10*** | 1.10.2          | 1.10.1                            | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.10.2) | [🔗](https://longhorn.io/docs/1.10.2/important-notes)        | ✅     |
 | **1.9***  | 1.9.2           | 1.9.2                             | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.9.2)  | [🔗](https://longhorn.io/docs/1.9.2/important-notes)         | ✅     |
 | **1.8***  | 1.8.2           | 1.8.2                             | [🔗](https://github.com/longhorn/longhorn/releases/tag/v1.8.2)  | [🔗](https://longhorn.io/docs/1.8.2/important-notes)         | ✅     |
