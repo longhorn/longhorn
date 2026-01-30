@@ -2913,6 +2913,11 @@ spec:
             properties:
               checksum:
                 type: string
+              checksumCalculatedAt:
+                description: |-
+                  ChecksumCalculatedAt is the RFC3339 timestamp indicating when the checksum
+                  for this snapshot was last calculated or updated.
+                type: string
               children:
                 additionalProperties:
                   type: boolean
@@ -3714,6 +3719,12 @@ spec:
                 - enabled
                 - fast-check
                 type: string
+              snapshotHashingRequestedAt:
+                description: |-
+                  SnapshotHashingRequestedAt is the RFC3339 timestamp when an on-demand checksum calculation is requested.
+                  When this value differs from LastOnDemandSnapshotHashingCompleteAt, the system will attempt to calculate checksums for all snapshots
+                  that do not already have a checksum.
+                type: string
               snapshotMaxCount:
                 type: integer
               snapshotMaxSize:
@@ -3833,6 +3844,12 @@ spec:
               lastBackupAt:
                 type: string
               lastDegradedAt:
+                type: string
+              lastOnDemandSnapshotHashingCompleteAt:
+                description: |-
+                  LastOnDemandSnapshotHashingCompleteAt is the RFC3339 timestamp when the
+                  most recent on-demand snapshot checksum calculation completed. When this
+                  value matches SnapshotHashingRequestedAt, the requested on-demand checksum calculation is considered complete.
                 type: string
               ownerID:
                 type: string
