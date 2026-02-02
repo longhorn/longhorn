@@ -6,6 +6,24 @@ Additionally, this version optimizes the stability of the whole system and intro
 
 For terminology and background on Longhorn releases, see [Releases](https://github.com/longhorn/longhorn#releases).
 
+> [!WARNING]
+>
+> ## Hotfix
+>
+> The `longhorn-instance-manager:v1.11.0` image is affected by a [regression issue](https://github.com/longhorn/longhorn/issues/12573) introduced by the new longhorn-instance-manager Proxy service APIs. The bug causes Proxy connection leaks in the longhorn-instance-manager pods, resulting in increased memory usage. To mitigate this issue, replace `longhornio/longhorn-instance-manager:v1.11.0` with the hotfixed image `longhornio/longhorn-instance-manager:v1.11.0-hotfix-1`.
+>
+> You can apply the update by following these steps:
+>
+> 1. **Update the `longhorn-instance-manager` image**
+>
+>    - Change the longhorn-instance-manager image tag from `v1.11.0` to `v1.11.0-hotfix-1` in the appropriate file:
+>        - For Helm: Update `values.yaml`
+>        - For manifests: Update the deployment manifest directly.
+>
+> 2. **Proceed with the upgrade**
+>
+>    - Apply the changes using your standard Helm upgrade command or reapply the updated manifest.
+
 ## Deprecation
 
 ### V2 Backing Image Deprecation
