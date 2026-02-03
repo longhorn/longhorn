@@ -1,0 +1,93 @@
+---
+# Test case for RWX volume uninterruptible sleep issue
+# Related to: https://github.com/longhorn/longhorn/issues/11907
+#
+# This test reproduces a scenario where multiple pods writing to the same file
+# on an RWX volume can cause one process to enter uninterruptible sleep (D state).
+#
+# Test Setup:
+# - Creates an RWX PVC backed by Longhorn
+# - Deploys 2 replicas of a pod that continuously append to the same file
+# - Each pod writes "$(date) $(hostname)" to /data/index.html every second
+#
+# Expected Behavior:
+# - All workload processes should continue reading/writing without problems
+# - No processes should enter uninterruptible sleep (D state)
+#
+# How to Verify:
+# 1. Apply this manifest: kubectl apply -f test-rwx-uninterruptible-sleep.yaml
+# 2. Wait for pods to be running: kubectl wait --for=condition=ready pod -l app=rwx-uninterruptible-sleep-test --timeout=300s
+# 3. SSH into the node and monitor process states:
+#    ps aux | grep "echo.*index.html"
+# 4. Check for processes in D state (uninterruptible sleep):
+#    Look for 'D' or 'Ds+' in the STAT column
+# 5. If a process enters D state, check its stack trace:
+#    cat /proc/<PID>/stack
+# 6. The bug is reproduced if one process enters D state while others continue running
+# 7. To verify the workaround, kill the alive writer process and check if the stuck process resumes
+#
+# Cleanup:
+# kubectl delete -f test-rwx-uninterruptible-sleep.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rwx-uninterruptible-sleep-test
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rwx-uninterruptible-sleep-test
+  labels:
+    app: rwx-uninterruptible-sleep-test
+  namespace: default
+spec:
+  # Use 2 replicas to reproduce the concurrent write scenario
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rwx-uninterruptible-sleep-test
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: rwx-uninterruptible-sleep-test
+    spec:
+      containers:
+        # Writer container that continuously appends to the same file
+        - image: ubuntu:xenial
+          imagePullPolicy: IfNotPresent
+          command: [ "/bin/sh", "-c" ]
+          args:
+            # Sleep 10 seconds to ensure volume is mounted, then write continuously
+            - sleep 10; touch /data/index.html; while true; do echo "$(date) $(hostname)" >> /data/index.html; sleep 1; done;
+          name: rwx-writer
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /data
+              name: rwx-volume
+        # Nginx container to serve the file (helps verify writes are happening)
+        - image: nginx:stable
+          imagePullPolicy: IfNotPresent
+          name: nginx
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: rwx-volume
+      restartPolicy: Always
+      volumes:
+        - name: rwx-volume
+          persistentVolumeClaim:
+            claimName: rwx-uninterruptible-sleep-test
