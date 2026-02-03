@@ -78,6 +78,10 @@ spec:
           - name: CSI_LIVENESS_PROBE_IMAGE
             value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.livenessProbe.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.livenessProbe.repository }}:{{ .Values.image.csi.livenessProbe.tag }}"
           {{- end }}
+          {{- if and .Values.image.csi.healthMonitor.repository .Values.image.csi.healthMonitor.tag }}
+          - name: CSI_HEALTH_MONITOR_IMAGE
+            value: "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.csi.healthMonitor.registry) }}{{ . }}/{{ end }}{{ .Values.image.csi.healthMonitor.repository }}:{{ .Values.image.csi.healthMonitor.tag }}"
+          {{- end }}
           {{- if .Values.csi.attacherReplicaCount }}
           - name: CSI_ATTACHER_REPLICA_COUNT
             value: {{ .Values.csi.attacherReplicaCount | quote }}
@@ -93,6 +97,10 @@ spec:
           {{- if .Values.csi.snapshotterReplicaCount }}
           - name: CSI_SNAPSHOTTER_REPLICA_COUNT
             value: {{ .Values.csi.snapshotterReplicaCount | quote }}
+          {{- end }}
+          {{- if .Values.csi.healthMonitorReplicaCount }}
+          - name: CSI_HEALTH_MONITOR_REPLICA_COUNT
+            value: {{ .Values.csi.healthMonitorReplicaCount | quote }}
           {{- end }}
           {{- if .Values.enableGoCoverDir }}
           - name: GOCOVERDIR
