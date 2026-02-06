@@ -2937,6 +2937,10 @@ spec:
       jsonPath: .status.ownerID
       name: Node
       type: string
+    - description: The current image of the share manager
+      jsonPath: .status.currentImage
+      name: Image
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -2975,6 +2979,9 @@ spec:
             description: ShareManagerStatus defines the observed state of the Longhorn
               share manager
             properties:
+              currentImage:
+                description: The image currently used by the share manager pod
+                type: string
               endpoint:
                 description: NFS endpoint that can access the mounted filesystem of
                   the volume
