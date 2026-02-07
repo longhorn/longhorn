@@ -4363,7 +4363,7 @@ We further notice that the rebuilding speed is depended on the data pattern insi
                     rebuild_started = True
     
                 if rebuild_started and (current_progress <= 0 or current_progress >= 100):
-                    print("Done. Sleeping for 1 hour to give chance for user to take screenshoot")
+                    print("Done. Sleeping for 1 hour to give chance for user to take screenshot")
                     time.sleep(3600) 
                     return
                 

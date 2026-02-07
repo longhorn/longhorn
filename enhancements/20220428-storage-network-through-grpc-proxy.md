@@ -40,7 +40,7 @@ https://github.com/longhorn/longhorn/issues/3546
 
 - Setup and configure the Multus `NetworkAttachmentDefinition` CRs.
 
-- Monitor for `NetworkAttachmentDefintition` CRs. The user needs to ensure the traffic is reachable between pods and across different nodes. Without monitoring, Longhorn will not get notified of the update of the `NetworkAttachmentDefinition` CRs. Thus the user should create a new `NetworkAttachmentDefinition` CR and update the `storage-network` setting.
+- Monitor for `NetworkAttachmentDefinition` CRs. The user needs to ensure the traffic is reachable between pods and across different nodes. Without monitoring, Longhorn will not get notified of the update of the `NetworkAttachmentDefinition` CRs. Thus the user should create a new `NetworkAttachmentDefinition` CR and update the `storage-network` setting.
 
 - Out-cluster data traffic. For example, backing image upload and download.
 

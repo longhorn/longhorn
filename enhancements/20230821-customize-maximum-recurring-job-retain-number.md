@@ -2,7 +2,7 @@
 
 ## Summary
 
-Hardcoding the `MaxRecurringJobRetain` to be 100 may be inadequate in some cases such as that users try to keep 125 backups onn the remote backup target.
+Hardcoding the `MaxRecurringJobRetain` to be 100 may be inadequate in some cases such as that users try to keep 125 backups on the remote backup target.
 This feature will make the `MaxRecurringJobRetain` to be customizable by users.
 
 **NOTE**:

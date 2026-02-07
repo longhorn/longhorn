@@ -69,7 +69,7 @@ There is no API change
 
 ### Implementation Overview
 
-The idea is that `VolumeControler` will set `RemountRequestedAt` when the volume needs to remount. 
+The idea is that `VolumeController` will set `RemountRequestedAt` when the volume needs to remount. 
 The `KubernetesPodController` will compare `RemountRequestedAt` with the pod's `podStartTime`. 
 If pod's `startTime` < `vol.Status.RemountRequestAt`, `KubernetesPodController` deletes the pod. 
 We don't delete the pod immediately though. 

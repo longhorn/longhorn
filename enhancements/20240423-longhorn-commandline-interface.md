@@ -68,7 +68,7 @@ As a Longhorn user, I want to troubleshoot Longhorn using the `longhornctl` to q
 - Before this enhancement: Troubleshooting Longhorn requires manual information gathering from various sources, a time-consuming process.
 - After this enhancement: The troubleshooting process is streamlined, allowing user to quickly collect information and pinpoint issues. This enhancement improves efficiency and reduces the time needed to resolve Longhorn issues.
 
-#### Story 4: Data-retrival
+#### Story 4: Data-retrieval
 
 As a Longhorn user, I want to retrieve data from Longhorn volumes using the `longhornctl` when Longhorn encounters failures.
 

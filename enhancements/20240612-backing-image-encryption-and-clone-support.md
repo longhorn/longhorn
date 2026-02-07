@@ -56,7 +56,7 @@ Noted that, it means it will cost additional space if users want to encrypt or d
 Add a field to the BackingImage
 - Secret/SecretNamespace: 
     - Pointing to the k8s secret containing the key used for encryption and decryption
-    - We use `Secret` to check if the BackingIamge is encrypted. If the BackingImage has `Secret` then it means it is encrypted.
+    - We use `Secret` to check if the BackingImage is encrypted. If the BackingImage has `Secret` then it means it is encrypted.
 
 ```
 type BackingImageSpec struct {
