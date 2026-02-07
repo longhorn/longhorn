@@ -184,7 +184,7 @@ These labels will only be added when the backup target is reconciled and the syn
         delSystemBackupsInCluster := clusterReadySystemBackupNames.Difference(backupstoreSystemBackupNames)
         for name := range delSystemBackupsInCluster {
 
-          // Add the label `DeleteCustomResourceOnly` and update the `SysytemBackup` resource
+          // Add the label `DeleteCustomResourceOnly` and update the `SystemBackup` resource
 
           if err = btc.ds.DeleteSystemBackup(name); err != nil {
             return errors.Wrapf(err, "failed to delete SystemBackup %v not exist in backupstore", name)

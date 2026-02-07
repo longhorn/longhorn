@@ -172,7 +172,7 @@ localSync = &etypes.FileLocalSync{
 	```
 
 1. Identify Local Sync Request: The sync-agent received the `FileSyncRequest` containing the `FileLocalSync` message.
-1. Perform Local File Copy: If the `FileLocalSync` messaage is provided, the sync-agent uses the provided source and target paths to directly copy the replica data within the same node. New functions will be implemented in https://github.com/longhorn/sparse-tools/ for synchronizing data contents using local files.
+1. Perform Local File Copy: If the `FileLocalSync` message is provided, the sync-agent uses the provided source and target paths to directly copy the replica data within the same node. New functions will be implemented in https://github.com/longhorn/sparse-tools/ for synchronizing data contents using local files.
 1. Fallback to TCP Transfer (if needed): In case of errors during local file copy, the sync-agent removed file created to the target directory and falls back to the approach of transferring data using TCP.
 
 ### Test Plan

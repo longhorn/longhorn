@@ -216,7 +216,7 @@ There will be no change to the HTTP API endpoints. This feature replaces the han
 | Method   | Path                                              | Description                                           |
 | -------- | ------------------------------------------------- | ----------------------------------------------------- |
 | **POST** | `/v1/supportbundles`                              | Creates SupportBundle custom resource                 |
-| **GET**  | `/v1/supportbundles/{name}/{bundleName}`          | Get the support bundle details from the SuppotBundle custom resource |
+| **GET**  | `/v1/supportbundles/{name}/{bundleName}`          | Get the support bundle details from the SupportBundle custom resource |
 | **GET**  | `/v1/supportbundles/{name}/{bundleName}/download` | Get the support bundle file from `https://<support-bundle-manager-ip>:8080/bundle` |
 
 

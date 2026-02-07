@@ -272,12 +272,12 @@ We do:
 - Create a BackingImage.
     - Get `export-type` from VolumeSnapshotClass parameter `export-type`, default to `raw.`
     - Encode the `snapshotId` as `bi://backing?backingImageDataSourceType=export-from-volume&backingImage=test-snapshot-backing&volume-name=${VolumeName}&export-type=raw`
-    - This `snaphotId` will be used in the later CSI CreateVolume and DeleteSnapshot call.
+    - This `snapshotId` will be used in the later CSI CreateVolume and DeleteSnapshot call.
 
 #### CreateVolume function
 
 - If VolumeSource type is `VolumeContentSource_Snapshot`, decode the `snapshotId` to get the parameters.
-    - `bi://backing?backingImageDataSourceType=${TYPE}&backingImage=${BACKINGIMAGE_NAME}&backingImageChecksum=${backingImageChecksum}&${OTHER_PARAMETES}`
+    - `bi://backing?backingImageDataSourceType=${TYPE}&backingImage=${BACKINGIMAGE_NAME}&backingImageChecksum=${backingImageChecksum}&${OTHER_PARAMETERS}`
 - If BackingImage with the given name already exists, create the volume.
 - If BackingImage with the given name does not exists, we prepare it first. There are 2 kinds of types which are `export-from-volume` and `download`.
     - For `download`, it means we have to prepare the BackingImage before creating the Volume. We first decode other parameters from `snapshotId` and create the BackingImage. 

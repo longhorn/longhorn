@@ -82,7 +82,7 @@ The following information is sent from each cluster node:
   > Note: this value may not be accurate if the cluster node is a virtual machine.
 - Host kernel release (`host_kernel_release`)
 - Host Os distro (`host_os_distro`)
-- Kubernetest node provider (`kubernetes_node_provider`)
+- Kubernetes node provider (`kubernetes_node_provider`)
 
 ##### Cluster Info
 The following information is sent from one of the cluster node:

@@ -117,7 +117,7 @@ Host requires `dm_crypt` kernel module as well as `cryptsetup` installed as the 
   - It exposes a crypto mapped device (/dev/mapper/[volume-name]-encrypted).
   Since the v2 volume will use the device mapper to control I/O and the `dm` device name will match the volume name, we add the suffix `-encrypted` to the encrypted `dm` device in the `/dev/mapper/` directory to resolve the naming conflict, as illustrated in the stack graph below.
 
-![v2 encrypted volume stack](./image/v2-encrpted-volume-stack.png)
+![v2 encrypted volume stack](./image/v2-encrypted-volume-stack.png)
 
 ### Test plan
 

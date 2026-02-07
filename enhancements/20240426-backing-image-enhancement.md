@@ -14,7 +14,7 @@ This feature enhances the management of BackingImages in Longhorn. With **High A
 ### Goals
 
 #### HA
-1. A user can set global high available factor for all the BackingImages or specify the number for each BackingIamge.
+1. A user can set global high available factor for all the BackingImages or specify the number for each BackingImage.
 2. Longhorn will maintain the number of BackingImage copy in the cluster.
 3. Longhorn will delete the extra BackingImage copy if it is not used for a while and the number of copy is more than the factor in the cluster.
 

@@ -107,7 +107,7 @@ value of parameter `type`. If it is `longhorn-backup`, we take a Longhorn backup
 * Check if a Longhorn snapshot with the same name as the requested CSI snapshot already exists. 
   If yes, return OK without taking a new Longhorn snapshot.
 * Take a new Longhorn snapshot. Encode the snapshotId in the format `snap://volume-name/snapshot-name`. 
-  This snaphotId will be used in the later CSI CreateVolume and DeleteSnapshot call. 
+  This snapshotId will be used in the later CSI CreateVolume and DeleteSnapshot call. 
   
 In [CreateVolume function](https://github.com/longhorn/longhorn-manager/blob/878cfb868c568396d6ebfa4ce096c5d95d9b31e3/csi/controller_server.go#L63):
 * If the VolumeContentSource is a `VolumeContentSource_Snapshot` type, decode the snapshotId in the format from the above step. 

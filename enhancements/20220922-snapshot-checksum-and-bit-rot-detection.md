@@ -51,7 +51,7 @@ Bit rot in storage is rare but real, and it can corrupt the data silently. Longh
 
 #### CLI
 Add `snapshot hash` and `snapshot hash-status` commands
-- `snaphost hash` issues a snapshot hashing request to engine.
+- `snapshot hash` issues a snapshot hashing request to engine.
   - Usage: `longhorn --url ${engine-ip}:${engine-port} snapshot hash tcp://${replica-sync-agent-ip}:${replica-sync-agent-port} --snapshot-name ${name}`
 - `snapshot hash-status` requests the snapshot hashing status from engine.
   - Usage: `longhorn --url ${engine-ip}:${engine-port} snapshot hash-status tcp://${replica-sync-agent-ip}:${replica-sync-agent-port}`
