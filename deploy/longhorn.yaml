@@ -3852,6 +3852,12 @@ spec:
                 - disabled
                 - enabled
                 type: string
+              onDemandChecksumRequestedAt:
+                description: |-
+                  OnDemandChecksumRequestedAt is the RFC3339 timestamp when an on-demand checksum calculation is requested.
+                  When this value differs from LastOnDemandChecksumCompletedAt, the system will attempt to calculate checksums for all snapshots
+                  that do not already have a checksum.
+                type: string
               rebuildConcurrentSyncLimit:
                 description: |-
                   RebuildConcurrentSyncLimit controls the maximum number of file synchronization operations that can run
@@ -4036,6 +4042,8 @@ spec:
               lastBackupAt:
                 type: string
               lastDegradedAt:
+                type: string
+              lastOnDemandChecksumCompletedAt:
                 type: string
               ownerID:
                 type: string
