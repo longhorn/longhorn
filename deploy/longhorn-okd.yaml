@@ -4103,7 +4103,7 @@ rules:
   resources: ["priorityclasses"]
   verbs: ["watch", "list"]
 - apiGroups: ["storage.k8s.io"]
-  resources: ["storageclasses", "volumeattachments", "volumeattachments/status", "csinodes", "csidrivers", "csistoragecapacities"]
+  resources: ["storageclasses", "volumeattachments", "volumeattachments/status", "volumeattributesclasses", "csinodes", "csidrivers", "csistoragecapacities"]
   verbs: ["*"]
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
