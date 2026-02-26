@@ -934,6 +934,13 @@ questions:
         group: Longhorn Default Settings
         type: boolean
         default: true
+      - variable: defaultSettings.csiAllowedTopologyKeys
+        label: CSI Allowed Topology Keys
+        description: >-
+          Comma-separated list of topology keys that the Longhorn CSI driver is allowed to pass through. When empty (default), no topology keys are passed through, and PVs will have no nodeAffinity. When configured (e.g., "topology.kubernetes.io/zone,topology.kubernetes.io/region"), only the specified keys are kept in topology segments. All other keys are filtered out from both CreateVolumeResponse.AccessibleTopology and NodeGetInfo topology.
+        group: Longhorn Default Settings
+        type: string
+        default: null
   - variable: persistence.defaultClass
     default: 'true'
     description: Setting that allows you to specify the default Longhorn StorageClass.
