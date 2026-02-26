@@ -290,3 +290,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.nodeDiskHealthMonitoring) }}
     node-disk-health-monitoring: {{ .Values.defaultSettings.nodeDiskHealthMonitoring }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.csiAllowedTopologyKeys) }}
+    csi-allowed-topology-keys: {{ .Values.defaultSettings.csiAllowedTopologyKeys | quote }}
+    {{- end }}
