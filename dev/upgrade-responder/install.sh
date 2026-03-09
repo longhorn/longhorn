@@ -31,7 +31,7 @@ wait_for_deployment() {
     fi
 
     elapsed_secs=$(($(date +%s) - ${start_time}))
-    if [[ ${elapsed_secs} -ge ${timeout_secs} ]]; then
+    if [[ ${elapsed_secs} -ge ${DEPLOYMENT_TIMEOUT_SEC} ]]; then
       echo "Timed out waiting for deployment ${deployment_name} to be running."
       exit 1
     fi
@@ -61,7 +61,9 @@ secret:
   influxDBUser: "root"
   influxDBPassword: "root"
 flags:
-  scarfEndpoint: "https://longhorn.gateway.scarf.sh/{version}"
+  scarfEndpoint:
+    - "https://longhorn.gateway.scarf.sh/{version}"
+    - "https://longhorn.gateway.scarf.sh/{version}/{longhornDistro}"  
 configMap:
   responseConfig: |-
     {
@@ -243,6 +245,10 @@ configMap:
           "maxLen": 200
         },
         "longhornSettingV2DataEngine": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornDistro": {
           "dataType": "string",
           "maxLen": 200
         }
