@@ -4368,6 +4368,12 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+<<<<<<< HEAD
+=======
+        - name: LONGHORN_DISTRO
+          value: "oss"
+        
+>>>>>>> b5733ed (feat: add env distro in longhorn manager and support multiple scarfEndpoint)
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
         image: docker.io/longhornio/longhorn-share-manager:v1.10.x-head
