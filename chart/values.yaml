@@ -453,6 +453,8 @@ longhornManager:
   log:
     # -- Format of Longhorn Manager logs. (Options: "plain", "json")
     format: plain
+  # -- Optional distro identifier used for upgrade responder reporting. Supported values: "oss", "prime", "dev".
+  distro: "oss"
   # -- PriorityClass for Longhorn Manager.
   priorityClass: *defaultPriorityClassNameRef
   # -- Toleration for Longhorn Manager on nodes allowed to run Longhorn components.
