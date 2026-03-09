@@ -235,6 +235,10 @@ configMap:
         "longhornSettingV2DataEngine": {
           "dataType": "string",
           "maxLen": 200
+        },
+        "longhornDistro": {
+          "dataType": "string",
+          "maxLen": 200
         }
       },
       "extraFieldInfoSchema": {
