@@ -98,6 +98,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+        {{- if .Values.longhornManager.distro }}
+        - name: LONGHORN_DISTRO
+          value: {{ .Values.longhornManager.distro | quote }}
+        {{- end }}
         {{- if .Values.enableGoCoverDir }}
         - name: GOCOVERDIR
           value: /go-cover-dir/
