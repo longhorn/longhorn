@@ -4368,6 +4368,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+        - name: LONGHORN_DISTRO
+          value: "oss"
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
         image: docker.io/longhornio/longhorn-share-manager:v1.10.x-head
