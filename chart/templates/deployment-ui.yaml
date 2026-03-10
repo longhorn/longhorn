@@ -61,7 +61,7 @@ spec:
       {{- if .Values.openshift.ui.route }}
       - name: oauth-proxy
         {{- if .Values.image.openshift.oauthProxy.repository }}
-        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.openshift.oauthProxy.registry) }}{{ . }}/{{ end }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
+        image: {{ with (coalesce .Values.image.openshift.oauthProxy.registry .Values.global.imageRegistry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
         {{- else }}
         image: ""
         {{- end }}
