@@ -234,7 +234,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| ingress.annotations | string | `nil` | Ingress annotations in the form of key-value pairs. |
+| ingress.annotations | object | `{}` | Ingress annotations in the form of key-value pairs. |
 | ingress.enabled | bool | `false` | Setting that allows Longhorn to generate ingress records for the Longhorn UI service. |
 | ingress.extraHosts | list | `[]` | Extra hostnames for TLS (Subject Alternative Names - SAN). Used when you need multiple FQDNs for the same ingress. Example: extraHosts:   - longhorn.example.com   - longhorn-ui.internal.local |
 | ingress.host | string | `"sslip.io"` | Hostname of the Layer 7 load balancer. |
