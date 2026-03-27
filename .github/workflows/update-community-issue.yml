@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - id: app-token
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
       with:
         app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
         private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
@@ -26,12 +26,12 @@ jobs:
         permission-organization-projects: write
 
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
     - name: Is Longhorn Member
       id: is-longhorn-member
       continue-on-error: true
-      uses: tspascoal/get-user-teams-membership@v3
+      uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
@@ -42,7 +42,7 @@ jobs:
         echo "is-longhorn-member outcome: ${{ steps.is-longhorn-member.outcome }}"
 
     - name: Get Issue
-      uses: octokit/request-action@v2.x
+      uses: octokit/request-action@b91aabaa861c777dcdb14e2387e30eddf04619ae # v3.0.0
       id: issue
       if: steps.is-longhorn-member.outcome == 'success'
       with:
@@ -50,7 +50,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
-    - uses: EndBug/project-fields@v2
+    - uses: EndBug/project-fields@0d05f57b6123b950f5373058dd715823730d162a # v2
       id: fields
       continue-on-error: true
       if: steps.is-longhorn-member.outcome == 'success'
@@ -65,7 +65,7 @@ jobs:
 
     - name: Add Issue to Community Sprint Project
       id: add-project
-      uses: actions/add-to-project@v1.0.2
+      uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       if: ${{
         steps.is-longhorn-member.outcome == 'success' &&
         steps.fields.outcome == 'success'
@@ -144,7 +144,7 @@ jobs:
         steps.fields.outcome == 'success' &&
         env.field-values != ''
         }}
-      uses: titoportas/update-project-fields@v0.1.0
+      uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
         github-token: ${{ steps.app-token.outputs.token }}
@@ -159,7 +159,7 @@ jobs:
         env.field-values != '' &&
         startsWith(env.field-values, 'Resolved')
         }}
-      uses: actions/add-to-project@v1.0.2
+      uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/8
         github-token: ${{ steps.app-token.outputs.token }}
