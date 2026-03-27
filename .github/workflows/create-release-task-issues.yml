@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
         with:
           app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
           private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
@@ -27,7 +27,7 @@ jobs:
           permission-issues: write
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Parse version information
         id: parse_version
@@ -54,7 +54,7 @@ jobs:
           echo "FEATURE_RELEASE=$FEATURE_RELEASE" >> $GITHUB_ENV
 
       - name: Create an issue - release task
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@b70f0bdf12a03e5e3f33e4f92ccb6c89deb3ebd9 # main
         with:
           filename: .github/ISSUE_TEMPLATE/release.md
         env:
@@ -67,7 +67,7 @@ jobs:
           QA_CAPTAIN: ${{ github.event.inputs.qa_captain }}
 
       - name: Create an issue - fix security issue for release
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@b70f0bdf12a03e5e3f33e4f92ccb6c89deb3ebd9 # main
         with:
           filename: .github/ISSUE_TEMPLATE/fix-cve-issues-for-release.md
         env:
@@ -76,7 +76,7 @@ jobs:
 
       - name: Create an issue - regular tasks for feature release
         if: ${{ env.FEATURE_RELEASE == 'true' }}
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@b70f0bdf12a03e5e3f33e4f92ccb6c89deb3ebd9 # main
         with:
           filename: .github/ISSUE_TEMPLATE/regular-tasks-for-feature-release.md
         env:
@@ -87,7 +87,7 @@ jobs:
 
       - name: Create an issue - performance benchmark task for feature release
         if: ${{ env.FEATURE_RELEASE == 'true' }}
-        uses: JasonEtco/create-an-issue@v2
+        uses: rancher/gh-issue-mgr/create-an-issue@b70f0bdf12a03e5e3f33e4f92ccb6c89deb3ebd9 # main
         with:
           filename: .github/ISSUE_TEMPLATE/performance-benchmark.md
         env:

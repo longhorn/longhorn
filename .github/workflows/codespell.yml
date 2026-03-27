@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       with:
         fetch-depth: 1
     - name: Check code spell
-      uses: codespell-project/actions-codespell@v2
+      uses: codespell-project/actions-codespell@406322ec52dd7b488e48c1c4b82e2a8b3a1bf630 # v2
       with:
         check_filenames: true
         skip: "*/**.yaml,*/**.yml,./scripts,./vendor,MAINTAINERS,LICENSE,go.mod,go.sum"

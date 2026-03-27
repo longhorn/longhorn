@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - id: app-token
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
       with:
         app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
         private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
@@ -33,7 +33,7 @@ jobs:
       if: env.is_longhorn_member == 'false'
       id: is-longhorn-member
       continue-on-error: true
-      uses: tspascoal/get-user-teams-membership@v3
+      uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
@@ -54,7 +54,7 @@ jobs:
 
     - name: Add Issue to Longhorn Sprint Project
       if: env.is_longhorn_member == 'true'
-      uses: actions/add-to-project@v1.0.2
+      uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/8
         github-token: ${{ steps.app-token.outputs.token }}
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - id: app-token
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
       with:
         app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
         private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
@@ -79,7 +79,7 @@ jobs:
     - name: Is Longhorn Member
       id: is-longhorn-member
       continue-on-error: true
-      uses: tspascoal/get-user-teams-membership@v3
+      uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
@@ -87,7 +87,7 @@ jobs:
 
     - name: Get Issue
       if: steps.is-longhorn-member.outcome == 'success'
-      uses: octokit/request-action@v2.x
+      uses: octokit/request-action@b91aabaa861c777dcdb14e2387e30eddf04619ae # v3.0.0
       id: issue
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.issue.number }}
@@ -99,7 +99,7 @@ jobs:
       if: |
         steps.is-longhorn-member.outcome == 'success' &&
         fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null
-      uses: actions/add-to-project@v1.0.2
+      uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
         github-token: ${{ steps.app-token.outputs.token }}
@@ -109,7 +109,7 @@ jobs:
         steps.is-longhorn-member.outcome == 'success' &&
         fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
         steps.add-project.outputs.itemId != ''
-      uses: titoportas/update-project-fields@v0.1.0
+      uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
       with:
         project-url: https://github.com/orgs/longhorn/projects/5
         github-token: ${{ steps.app-token.outputs.token }}
@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - id: app-token
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
       with:
         app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
         private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
@@ -134,7 +134,7 @@ jobs:
 
     - name: Is Longhorn Member
       id: is-longhorn-member
-      uses: tspascoal/get-user-teams-membership@v3
+      uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
@@ -142,7 +142,7 @@ jobs:
 
     - name: Add Issue to QA Sprint Project
       if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
-      uses: actions/add-to-project@v1.0.2
+      uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/4
         github-token: ${{ steps.app-token.outputs.token }}

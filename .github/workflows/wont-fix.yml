@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Check if the issue was closed with reason "not planned"
         id: check-closed-reason
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
           script: |
             if (context.payload.issue.state_reason === "not_planned") {
@@ -21,14 +21,14 @@ jobs:
 
       - name: Add wontfix label
         if: steps.check-closed-reason.outputs.result == 'true'
-        uses: actions-ecosystem/action-add-labels@v1
+        uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1
         with:
           labels: wontfix
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Clear milestone
         if: steps.check-closed-reason.outputs.result == 'true'
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
           script: |
             const issue_number = context.payload.issue.number;
