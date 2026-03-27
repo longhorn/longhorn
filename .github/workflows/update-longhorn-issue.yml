@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - id: app-token
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
       with:
         app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
         private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
@@ -28,7 +28,7 @@ jobs:
         permission-organization-projects: write
 
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
     - name: Check Longhorn Membership (including bot)
       id: check-membership
@@ -43,7 +43,7 @@ jobs:
       if: env.is_longhorn_member == 'false'
       id: is-longhorn-member
       continue-on-error: true
-      uses: tspascoal/get-user-teams-membership@v3
+      uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
       with:
         username: ${{ github.event.issue.user.login }}
         organization: longhorn
@@ -63,7 +63,7 @@ jobs:
         echo "check outcome: ${{ steps.is-longhorn-member.outcome || 'bot or N/A' }}"
 
     - name: Get Issue
-      uses: octokit/request-action@v2.x
+      uses: octokit/request-action@b91aabaa861c777dcdb14e2387e30eddf04619ae # v3.0.0
       id: issue
       if: env.is_longhorn_member == 'true'
       with:
@@ -71,7 +71,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
-    - uses: rancher/gh-issue-mgr/project-fields@main
+    - uses: rancher/gh-issue-mgr/project-fields@b70f0bdf12a03e5e3f33e4f92ccb6c89deb3ebd9 # main
       id: get-status-field
       continue-on-error: true
       if: env.is_longhorn_member == 'true'
@@ -84,7 +84,7 @@ jobs:
 
     - name: Add Issue to Longhorn Sprint Project
       id: add-project
-      uses: actions/add-to-project@v1.0.2
+      uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       if: ${{
         env.is_longhorn_member == 'true' &&
         steps.get-status-field.outcome == 'success'
@@ -97,7 +97,7 @@ jobs:
       if: |
         env.is_longhorn_member == 'true' &&
         steps.add-project.outputs.itemId != ''
-      uses: titoportas/update-project-fields@v0.1.0
+      uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
       with:
         project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
         github-token: ${{ steps.app-token.outputs.token }}
@@ -153,7 +153,7 @@ jobs:
         steps.get-status-field.outcome == 'success' &&
         env.field-values != ''
         }}
-      uses: rancher/gh-issue-mgr/update-project-fields@main
+      uses: rancher/gh-issue-mgr/update-project-fields@b70f0bdf12a03e5e3f33e4f92ccb6c89deb3ebd9 # main
       with:
         project-url: ${{ env.LONGHORN_SPRINT_PROJECT_URL }}
         github-token: ${{ steps.app-token.outputs.token }}
