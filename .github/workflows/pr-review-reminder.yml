@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4
       with:
         python-version: '3.x'
 
@@ -24,7 +24,7 @@ jobs:
         python -m pip install requests
 
     - id: app-token
-      uses: actions/create-github-app-token@v2
+      uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
       with:
         app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
         private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
@@ -37,7 +37,7 @@ jobs:
     - name: Authenticate GitHub CLI
       run: echo "${{ steps.app-token.outputs.token }}" | gh auth login --with-token
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
     - name: Pull Request Review Reminder
       env:
