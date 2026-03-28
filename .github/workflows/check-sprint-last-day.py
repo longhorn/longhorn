@@ -110,7 +110,7 @@ def is_today_is_in_last_day_of_current_sprint(github_token, project_id):
 if __name__ == "__main__":
     if len(sys.argv) < 4:
         print('Usage: python check-sprint-last-day.py github_org github_repo github_project')
-        sys.exit()
+        sys.exit(1)
 
     github_token = os.getenv("GITHUB_TOKEN")
 
