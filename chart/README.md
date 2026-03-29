@@ -198,6 +198,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| longhornManager.distro | string | `"oss"` | Optional distro identifier used for upgrade responder reporting. Supported values: "oss", "prime", "dev". |
 | longhornManager.log.format | string | `"plain"` | Format of Longhorn Manager logs. (Options: "plain", "json") |
 | longhornManager.nodeSelector | object | `{}` | Node selector for Longhorn Manager. Specify the nodes allowed to run Longhorn Manager. |
 | longhornManager.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn Manager. |
@@ -278,7 +279,7 @@ You can install Longhorn in an air-gapped environment with a private registry. F
 | metrics.serviceMonitor.enabled | bool | `false` | Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components. |
 | metrics.serviceMonitor.interval | string | `""` | Interval at which Prometheus scrapes the metrics from the target. |
 | metrics.serviceMonitor.metricRelabelings | list | `[]` | Configures the relabeling rules to apply to the samples before ingestion. See the [Prometheus Operator documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for formatting details. |
-| metrics.serviceMonitor.relabelings | list | `[]` | Configures the relabeling rules to apply the target's metadata labels. See the [Prometheus Operator documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for formatting details. |
+| metrics.serviceMonitor.relabelings | list | `[]` | Configures the relabeling rules to apply the target’s metadata labels. See the [Prometheus Operator documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for formatting details. |
 | metrics.serviceMonitor.sampleLimit | int | `0` | Per-scrape sample limit. A value of 0 (default) omits sampleLimit. |
 | metrics.serviceMonitor.scrapeTimeout | string | `""` | Timeout after which Prometheus considers the scrape to be failed. |
 
