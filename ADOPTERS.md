@@ -15,4 +15,4 @@
 | End-User | Nemlig | https://www.nemlig.com/ | A comprehensive, persistent storage solution on Kubernetes. Part of “Kubernemlig,” Nemlig’s internal, developer- and operations-friendly Platform-as-a-Service (PaaS). |
 | End-User | Child Rescue Coalition | https://childrescuecoalition.org/ | Kubernetes persistent replicated storage with automated backups. |
 | End-User | NAVER | https://www.navercorp.com/ | Production Kubernetes persistent storage supporting NAVER's internal platform and cloud-native services at scale. |
-| End-User | Walkbase | https://walkbase.com/ | Walkbase uses Longhorn for presistent storage in our bare metal kubernetes clusters. |
+| End-User | Walkbase | https://walkbase.com/ | Walkbase uses Longhorn for persistent storage in our bare metal kubernetes clusters. |
