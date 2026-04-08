@@ -144,7 +144,7 @@ This is a good place to learn about Longhorn, ask questions, and share your expe
 
 ## Community Meeting and Office Hours
 
-We host a monthly community meeting on the **3rd Thursday**, alternating between *AMER/EU-friendly* and *APAC-friendly times* - at **4 PM UTC** and **8 AM UTC** respectively. 
+We host a monthly community meeting on the **3rd Thursday**, alternating between *AMER/EU-friendly* and *APAC-friendly times* - at **4 PM UTC** and **6 AM UTC** respectively. 
 
 Everyone is welcome to join us. You can find the calendar invite [here](https://zoom-lfx.platform.linuxfoundation.org/meetings/longhorn?view=list)
 
