@@ -1,3 +1,4 @@
+{{- if .Values.persistence.createStorageClass }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -58,3 +59,4 @@ data:
       {{- if .Values.persistence.backupTargetName }}
       backupTargetName: "{{ .Values.persistence.backupTargetName }}"
       {{- end }}
+{{- end }}

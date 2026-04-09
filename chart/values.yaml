@@ -166,6 +166,8 @@ service:
     # -- NodePort port number for Longhorn Manager. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: ""
 persistence:
+  # -- Setting that allows you to create the default Longhorn StorageClass ConfigMap. Set to false to skip StorageClass creation.
+  createStorageClass: true
   # -- Setting that allows you to specify the default Longhorn StorageClass.
   defaultClass: true
   # -- Filesystem type of the default Longhorn StorageClass.
