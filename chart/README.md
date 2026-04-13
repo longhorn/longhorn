@@ -364,6 +364,9 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.fastReplicaRebuildEnabled | Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check". |
 | defaultSettings.freezeFilesystemForSnapshot | Setting that freezes the filesystem on the root partition before a snapshot is created. |
 | defaultSettings.guaranteedInstanceManagerCPU | Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod. The default value is {"v1":"12","v2":"12"}. |
+| defaultSettings.engineImagePodLivenessProbePeriod | Interval (in seconds) between liveness probes for engine image pods. The default value is 5 seconds. |
+| defaultSettings.engineImagePodLivenessProbeTimeout | Timeout (in seconds) for each liveness probe. The default value is 4 seconds. |
+| defaultSettings.engineImagePodLivenessProbeFailureThreshold | Number of consecutive failed probes before the pod is restarted. The default value is 3. |
 | defaultSettings.instanceManagerPodLivenessProbeTimeout | In seconds. The setting specifies the timeout for the instance manager pod liveness probe. The default value is 10 seconds. |
 | defaultSettings.kubernetesClusterAutoscalerEnabled | Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. |
 | defaultSettings.logLevel | Log levels that indicate the type and severity of logs in Longhorn Manager. The default value is "Info". (Options: "Panic", "Fatal", "Error", "Warn", "Info", "Debug", "Trace") |

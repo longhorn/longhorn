@@ -919,6 +919,33 @@ questions:
         min: 1
         max: 60
         default: 10
+      - variable: defaultSettings.engineImagePodLivenessProbePeriod
+        label: Engine Image Pod Liveness Probe Period
+        description: >-
+          Interval (in seconds) between liveness probes for engine image pods.
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        max: 60
+        default: 5
+      - variable: defaultSettings.engineImagePodLivenessProbeTimeout
+        label: Engine Image Pod Liveness Probe Timeout
+        description: >-
+          Time (in seconds) to wait for a liveness probe to complete before marking it as failed.
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        max: 60
+        default: 4
+      - variable: defaultSettings.engineImagePodLivenessProbeFailureThreshold
+        label: Engine Image Pod Liveness Probe Failure Threshold
+        description: >-
+          Number of consecutive failed probes required to trigger a pod restart.
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        max: 60
+        default: 3
       - variable: defaultSettings.snapshotHeavyTaskConcurrentLimit
         label: Snapshot Heavy Task Concurrent Limit
         description: >-
