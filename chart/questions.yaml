@@ -638,6 +638,27 @@ questions:
         type: int
         min: 0
         default: 0
+      - variable: defaultSettings.allowInstanceManagerAutomaticUpgrade
+        label: Allow Instance Manager Automatic Upgrade
+        description: >-
+          Allows Longhorn to automatically upgrade V2 instance managers after Longhorn Manager is upgraded. During the live upgrade, Longhorn may temporarily relocate engines, detach replicas from engines, and trigger replica rebuilding.
+        group: Longhorn Default Settings
+        type: string
+        default: '{"v2":"false"}'
+      - variable: defaultSettings.instanceManagerUpgradeStartTime
+        label: Instance Manager Upgrade Start Time
+        description: >-
+          Specifies when the rolling upgrade of V2 instance managers should begin, in RFC3339 format. Leave empty to start immediately.
+        group: Longhorn Default Settings
+        type: string
+        default: '{"v2":""}'
+      - variable: defaultSettings.instanceManagerUpgradeTimeout
+        label: Instance Manager Upgrade Timeout
+        description: >-
+          Number of minutes a single V2 instance manager upgrade attempt can remain in progress before it is aborted. The default value is 60 minutes.
+        group: Longhorn Default Settings
+        type: string
+        default: '{"v2":"60"}'
       - variable: defaultSettings.backingImageCleanupWaitInterval
         label: Backing Image Cleanup Wait Interval
         description: >-
