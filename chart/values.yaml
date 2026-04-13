@@ -402,6 +402,12 @@ defaultSettings:
   defaultUblkQueueDepth: ~
   # -- This setting specifies the default the number of queues for ublk frontend. This setting applies to volumes using the V2 Data Engine with Ublk front end. Individual volumes can override this setting by specifying their own number of queues for ublk.
   defaultUblkNumberOfQueue: ~
+  # -- In seconds. The setting specifies the interval between liveness probes for engine image pods. The default value is 5 seconds.
+  engineImagePodLivenessProbePeriod: ~
+  # -- In seconds. The setting specifies the timeout for the engine image pod liveness probe. The default value is 4 seconds.
+  engineImagePodLivenessProbeTimeout: ~
+  # -- The setting specifies the number of consecutive failed liveness probes before an engine image pod is restarted. The default value is 3.
+  engineImagePodLivenessProbeFailureThreshold: ~
   # -- In seconds. The setting specifies the timeout for the instance manager pod liveness probe. The default value is 10 seconds.
   instanceManagerPodLivenessProbeTimeout: ~
   # -- Setting that allows scheduling of empty node selector volumes to any node.

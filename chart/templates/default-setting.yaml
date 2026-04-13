@@ -281,6 +281,15 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultUblkNumberOfQueue) }}
     default-ublk-number-of-queue: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.defaultUblkNumberOfQueue }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.engineImagePodLivenessProbePeriod) }}
+    engine-image-pod-liveness-probe-period: {{ .Values.defaultSettings.engineImagePodLivenessProbePeriod | quote }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.engineImagePodLivenessProbeTimeout) }}
+    engine-image-pod-liveness-probe-timeout: {{ .Values.defaultSettings.engineImagePodLivenessProbeTimeout | quote }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.engineImagePodLivenessProbeFailureThreshold) }}
+    engine-image-pod-liveness-probe-failure-threshold: {{ .Values.defaultSettings.engineImagePodLivenessProbeFailureThreshold | quote }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout) }}
     instance-manager-pod-liveness-probe-timeout: {{ .Values.defaultSettings.instanceManagerPodLivenessProbeTimeout | quote }}
     {{- end }}
