@@ -78,6 +78,8 @@ rules:
   - engineimages
   - engines
   - instancemanagers
+  - instancemanagerupgradecontrols
+  - instancemanagerupgrades
   - nodes
   - orphans
   - recurringjobs
