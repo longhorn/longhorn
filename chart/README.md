@@ -359,14 +359,14 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.disableSchedulingOnCordonedNode | Setting that prevents Longhorn Manager from scheduling replicas on a cordoned Kubernetes node. This setting is enabled by default. |
 | defaultSettings.disableSnapshotPurge | Setting that temporarily prevents all attempts to purge volume snapshots. |
 | defaultSettings.endpointNetworkForRWXVolume | Specifies a dedicated network for mounting RWX (ReadWriteMany) volumes. Leave this blank to use the default Kubernetes cluster network. **Caution**: This setting should change after all RWX volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while RWX volumes are still attached. |
+| defaultSettings.engineImagePodLivenessProbeFailureThreshold | The setting specifies the number of consecutive failed liveness probes before an engine image pod is restarted. The default value is 3. |
+| defaultSettings.engineImagePodLivenessProbePeriod | In seconds. The setting specifies the interval between liveness probes for engine image pods. The default value is 5 seconds. |
+| defaultSettings.engineImagePodLivenessProbeTimeout | In seconds. The setting specifies the timeout for the engine image pod liveness probe. The default value is 4 seconds. |
 | defaultSettings.engineReplicaTimeout | Timeout between the Longhorn Engine and replicas. Specify a value between "8" and "30" seconds. The default value is "8". |
 | defaultSettings.failedBackupTTL | Number of minutes that Longhorn keeps a failed backup resource. When the value is "0", automatic deletion is disabled. |
 | defaultSettings.fastReplicaRebuildEnabled | Setting that allows fast rebuilding of replicas using the checksum of snapshot disk files. Before enabling this setting, you must set the snapshot-data-integrity value to "enable" or "fast-check". |
 | defaultSettings.freezeFilesystemForSnapshot | Setting that freezes the filesystem on the root partition before a snapshot is created. |
 | defaultSettings.guaranteedInstanceManagerCPU | Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod. The default value is {"v1":"12","v2":"12"}. |
-| defaultSettings.engineImagePodLivenessProbePeriod | Interval (in seconds) between liveness probes for engine image pods. The default value is 5 seconds. |
-| defaultSettings.engineImagePodLivenessProbeTimeout | Timeout (in seconds) for each liveness probe. The default value is 4 seconds. |
-| defaultSettings.engineImagePodLivenessProbeFailureThreshold | Number of consecutive failed probes before the pod is restarted. The default value is 3. |
 | defaultSettings.instanceManagerPodLivenessProbeTimeout | In seconds. The setting specifies the timeout for the instance manager pod liveness probe. The default value is 10 seconds. |
 | defaultSettings.kubernetesClusterAutoscalerEnabled | Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. |
 | defaultSettings.logLevel | Log levels that indicate the type and severity of logs in Longhorn Manager. The default value is "Info". (Options: "Panic", "Fatal", "Error", "Warn", "Info", "Debug", "Trace") |
