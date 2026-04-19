@@ -6,6 +6,9 @@ on:
     - master
     - "v*.*.*"
 
+permissions:
+  contents: read
+
 jobs:
   codespell:
     runs-on: ubuntu-latest
