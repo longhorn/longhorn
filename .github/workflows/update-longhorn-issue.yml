@@ -4,6 +4,9 @@ on:
   issues:
     types: [labeled, milestoned, assigned, unassigned]
 
+permissions:
+  contents: read
+
 env:
   LONGHORN_SPRINT_PROJECT_URL: https://github.com/orgs/longhorn/projects/8
 

@@ -19,6 +19,9 @@ on:
         default: "Longhorn Sprint"
         required: true
 
+permissions:
+  contents: read
+
 env:
   GITHUB_ORG: longhorn
   GITHUB_REPO: longhorn

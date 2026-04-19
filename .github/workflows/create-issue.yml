@@ -3,6 +3,9 @@ on:
   issues:
     types: [ labeled ]
 
+permissions:
+  contents: read
+
 env:
   LONGHORN_SPRINT_PROJECT_URL: https://github.com/orgs/longhorn/projects/8
   QA_SPRINT_PROJECT_URL: https://github.com/orgs/longhorn/projects/4

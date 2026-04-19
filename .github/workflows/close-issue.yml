@@ -2,6 +2,10 @@ name: "[Issue Management] Close Issue"
 on:
   issues:
     types: [ unlabeled ]
+
+permissions:
+  contents: read
+
 jobs:
   backport:
     runs-on: ubuntu-latest
