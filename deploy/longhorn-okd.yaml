@@ -4512,7 +4512,7 @@ rules:
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
   verbs: ["*"]
 - apiGroups: ["longhorn.io"]
-  resources: ["volumes", "volumes/status", "engines", "engines/status", "replicas", "replicas/status", "settings", "settings/status",
+  resources: ["volumes", "volumes/status", "enginefrontends", "enginefrontends/status", "engines", "engines/status", "replicas", "replicas/status", "settings", "settings/status",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
               "engineimages/finalizers", "nodes/finalizers", "instancemanagers/finalizers",
               "sharemanagers", "sharemanagers/status", "backingimages", "backingimages/status",
