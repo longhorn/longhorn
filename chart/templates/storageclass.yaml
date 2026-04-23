@@ -49,6 +49,12 @@ data:
       {{- if .Values.persistence.defaultNodeSelector.enable }}
       nodeSelector: "{{ .Values.persistence.defaultNodeSelector.selector }}"
       {{- end }}
+      {{- if .Values.persistence.shareManagerNodeSelector.enable }}
+      shareManagerNodeSelector: "{{ .Values.persistence.shareManagerNodeSelector.selector }}"
+      {{- end }}
+      {{- if .Values.persistence.shareManagerTolerations.enable }}
+      shareManagerTolerations: "{{ .Values.persistence.shareManagerTolerations.tolerations }}"
+      {{- end }}
       {{- if .Values.persistence.unmapMarkSnapChainRemoved }}
       unmapMarkSnapChainRemoved: "{{ .Values.persistence.unmapMarkSnapChainRemoved }}"
       {{- end }}

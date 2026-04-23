@@ -217,6 +217,16 @@ persistence:
     enable: false
     # -- Node selector for the default Longhorn StorageClass. Longhorn uses only nodes with the specified tags for storing volume data. (Examples: "storage,fast")
     selector: ""
+  shareManagerNodeSelector:
+    # -- Setting that allows you to enable the share manager node selector for the default Longhorn StorageClass.
+    enable: false
+    # -- Node selector for the share manager pods of the default Longhorn StorageClass. Longhorn schedules share manager pods only on nodes with the specified tags. (Examples: "storage,fast")
+    selector: ""
+  shareManagerTolerations:
+    # -- Setting that allows you to enable the share manager tolerations for the default Longhorn StorageClass.
+    enable: false
+    # -- Tolerations for the share manager pods of the default Longhorn StorageClass. Specify values using a semicolon-separated list in `kubectl taint` syntax. (Example: "key1=value1:effect; key2=value2:effect")
+    tolerations: ""
   # -- Setting that allows you to enable automatic snapshot removal during filesystem trim for a Longhorn StorageClass. (Options: "ignored", "enabled", "disabled")
   unmapMarkSnapChainRemoved: ignored
   # -- Setting that allows you to specify the data engine version for the default Longhorn StorageClass. (Options: "v1", "v2")
