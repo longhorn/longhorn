@@ -941,6 +941,13 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: null
+      - variable: defaultSettings.csiStorageCapacityTracking
+        label: CSI Storage Capacity Tracking
+        description: >-
+          Controls CSI storage capacity tracking, which allows the kube-scheduler to filter nodes that cannot fit the requested volume.
+        group: Longhorn Default Settings
+        type: boolean
+        default: false
   - variable: persistence.defaultClass
     default: 'true'
     description: Setting that allows you to specify the default Longhorn StorageClass.
