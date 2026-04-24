@@ -302,3 +302,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.csiAllowedTopologyKeys) }}
     csi-allowed-topology-keys: {{ .Values.defaultSettings.csiAllowedTopologyKeys | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.csiStorageCapacityTracking) }}
+    csi-storage-capacity-tracking: {{ .Values.defaultSettings.csiStorageCapacityTracking | quote }}
+    {{- end }}
