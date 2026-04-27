@@ -1236,6 +1236,248 @@ metadata:
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
     longhorn-manager: ""
+  name: enginefrontends.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: EngineFrontend
+    listKind: EngineFrontendList
+    plural: enginefrontends
+    shortNames:
+    - lhef
+    singular: enginefrontend
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The data engine of the engine frontend
+      jsonPath: .spec.dataEngine
+      name: Data Engine
+      type: string
+    - description: The current state of the engine frontend
+      jsonPath: .status.currentState
+      name: State
+      type: string
+    - description: The node that the engine frontend is on
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - description: The instance manager of the engine frontend
+      jsonPath: .status.instanceManagerName
+      name: InstanceManager
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: EngineFrontend is where Longhorn stores engine frontend object
+          for v2 data engine initiator.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: EngineFrontendSpec defines the desired state of the Longhorn
+              engine frontend (v2 initiator)
+            properties:
+              active:
+                type: boolean
+              dataEngine:
+                enum:
+                - v1
+                - v2
+                type: string
+              desireState:
+                type: string
+              disableFrontend:
+                type: boolean
+              engineName:
+                description: EngineName is the name of the v2 engine target (required
+                  for EngineFrontend instance creation)
+                type: string
+              frontend:
+                enum:
+                - blockdev
+                - iscsi
+                - nvmf
+                - ublk
+                - ""
+                type: string
+              image:
+                type: string
+              logRequested:
+                type: boolean
+              nodeID:
+                type: string
+              salvageRequested:
+                type: boolean
+              size:
+                description: |-
+                  Size is the desired size of the frontend device in bytes, as requested
+                  by the volume owner. The EngineFrontend controller drives the frontend
+                  device toward this size independently of the engine's target size.
+                format: int64
+                type: string
+              targetIP:
+                description: TargetIP is the IP address of the v2 engine target
+                type: string
+              targetPort:
+                description: TargetPort is the port of the v2 engine target
+                type: integer
+              ublkNumberOfQueue:
+                description: ublkNumberOfQueue controls the number of queues for ublk
+                  frontend.
+                type: integer
+              ublkQueueDepth:
+                description: ublkQueueDepth controls the depth of each queue for ublk
+                  frontend.
+                type: integer
+              volumeName:
+                type: string
+              volumeSize:
+                format: int64
+                type: string
+            type: object
+          status:
+            description: EngineFrontendStatus defines the observed state of the Longhorn
+              engine frontend
+            properties:
+              activePath:
+                description: ActivePath is the currently active frontend path address.
+                type: string
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
+              currentImage:
+                type: string
+              currentSize:
+                description: |-
+                  CurrentSize is the current size of the frontend device in bytes, as
+                  observed from the data plane. It is 0 while the engine frontend is not
+                  running.
+                format: int64
+                type: string
+              currentState:
+                type: string
+              endpoint:
+                description: Endpoint is the initiator endpoint (e.g., /dev/longhorn/vol-name)
+                type: string
+              instanceManagerName:
+                type: string
+              ip:
+                type: string
+              logFetched:
+                type: boolean
+              ownerID:
+                type: string
+              paths:
+                description: Paths describes the currently known frontend multipath
+                  state.
+                items:
+                  properties:
+                    anaState:
+                      type: string
+                    engineName:
+                      type: string
+                    nguid:
+                      type: string
+                    nqn:
+                      type: string
+                    targetIP:
+                      type: string
+                    targetPort:
+                      type: integer
+                  type: object
+                type: array
+              port:
+                type: integer
+              preferredPath:
+                description: PreferredPath is the preferred frontend path address.
+                type: string
+              salvageExecuted:
+                type: boolean
+              started:
+                type: boolean
+              starting:
+                type: boolean
+              storageIP:
+                type: string
+              switchoverPhase:
+                description: SwitchoverPhase is the last completed switchover phase
+                  reported by the data plane.
+                type: string
+              targetIP:
+                description: TargetIP is the currently connected IP address of the
+                  v2 engine target
+                type: string
+              targetPort:
+                description: TargetPort is the currently connected port of the v2
+                  engine target
+                type: integer
+              ublkID:
+                format: int32
+                type: integer
+              uuid:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
   name: engineimages.longhorn.io
 spec:
   group: longhorn.io
@@ -1929,6 +2171,80 @@ spec:
                         type: string
                     type: object
                 type: object
+              instanceEngineFrontends:
+                additionalProperties:
+                  properties:
+                    spec:
+                      properties:
+                        dataEngine:
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                    status:
+                      properties:
+                        activePath:
+                          type: string
+                        conditions:
+                          additionalProperties:
+                            type: boolean
+                          nullable: true
+                          type: object
+                        endpoint:
+                          type: string
+                        errorMsg:
+                          type: string
+                        frontend:
+                          type: string
+                        listen:
+                          type: string
+                        paths:
+                          items:
+                            properties:
+                              anaState:
+                                type: string
+                              engineName:
+                                type: string
+                              nguid:
+                                type: string
+                              nqn:
+                                type: string
+                              targetIP:
+                                type: string
+                              targetPort:
+                                type: integer
+                            type: object
+                          type: array
+                        portEnd:
+                          format: int32
+                          type: integer
+                        portStart:
+                          format: int32
+                          type: integer
+                        preferredPath:
+                          type: string
+                        resourceVersion:
+                          format: int64
+                          type: integer
+                        state:
+                          type: string
+                        targetPortEnd:
+                          format: int32
+                          type: integer
+                        targetPortStart:
+                          format: int32
+                          type: integer
+                        type:
+                          type: string
+                        ublkID:
+                          format: int32
+                          type: integer
+                        uuid:
+                          type: string
+                      type: object
+                  type: object
+                nullable: true
+                type: object
               instanceEngines:
                 additionalProperties:
                   properties:
@@ -1941,6 +2257,8 @@ spec:
                       type: object
                     status:
                       properties:
+                        activePath:
+                          type: string
                         conditions:
                           additionalProperties:
                             type: boolean
@@ -1950,14 +2268,35 @@ spec:
                           type: string
                         errorMsg:
                           type: string
+                        frontend:
+                          type: string
                         listen:
                           type: string
+                        paths:
+                          items:
+                            properties:
+                              anaState:
+                                type: string
+                              engineName:
+                                type: string
+                              nguid:
+                                type: string
+                              nqn:
+                                type: string
+                              targetIP:
+                                type: string
+                              targetPort:
+                                type: integer
+                            type: object
+                          type: array
                         portEnd:
                           format: int32
                           type: integer
                         portStart:
                           format: int32
                           type: integer
+                        preferredPath:
+                          type: string
                         resourceVersion:
                           format: int64
                           type: integer
@@ -1992,6 +2331,8 @@ spec:
                       type: object
                     status:
                       properties:
+                        activePath:
+                          type: string
                         conditions:
                           additionalProperties:
                             type: boolean
@@ -2001,14 +2342,35 @@ spec:
                           type: string
                         errorMsg:
                           type: string
+                        frontend:
+                          type: string
                         listen:
                           type: string
+                        paths:
+                          items:
+                            properties:
+                              anaState:
+                                type: string
+                              engineName:
+                                type: string
+                              nguid:
+                                type: string
+                              nqn:
+                                type: string
+                              targetIP:
+                                type: string
+                              targetPort:
+                                type: integer
+                            type: object
+                          type: array
                         portEnd:
                           format: int32
                           type: integer
                         portStart:
                           format: int32
                           type: integer
+                        preferredPath:
+                          type: string
                         resourceVersion:
                           format: int64
                           type: integer
@@ -3725,6 +4087,11 @@ spec:
       jsonPath: .status.currentNodeID
       name: Node
       type: string
+    - description: The engine switchover state
+      jsonPath: .status.switchoverState
+      name: Switchover
+      priority: 1
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -3814,6 +4181,11 @@ spec:
                 x-kubernetes-validations:
                 - message: Encrypted is immutable
                   rule: self == oldSelf
+              engineNodeID:
+                description: |-
+                  engineNodeID defines the node where the backend engine (target) runs.
+                  If empty, falls back to NodeID.
+                type: string
               freezeFilesystemForSnapshot:
                 description: Setting that freezes the filesystem on the root partition
                   before a snapshot is created.
@@ -3841,6 +4213,8 @@ spec:
               migrationNodeID:
                 type: string
               nodeID:
+                description: nodeID defines the node where the volume is attached
+                  (where the frontend initiator runs).
                 type: string
               nodeSelector:
                 items:
@@ -4003,6 +4377,10 @@ spec:
                   type: object
                 nullable: true
                 type: array
+              currentEngineNodeID:
+                description: the node that the engine (target) is currently running
+                  on.
+                type: string
               currentImage:
                 type: string
               currentMigrationNodeID:
@@ -4074,6 +4452,11 @@ spec:
               shareState:
                 type: string
               state:
+                type: string
+              switchoverState:
+                description: |-
+                  SwitchoverState describes the current progress of a v2 engine live switchover.
+                  Empty when no switchover is in progress.
                 type: string
             type: object
         type: object
