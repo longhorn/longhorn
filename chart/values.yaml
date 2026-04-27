@@ -420,6 +420,8 @@ defaultSettings:
   disableSnapshotPurge: ~
   # -- Maximum snapshot count for a volume. The value should be between 2 to 250
   snapshotMaxCount: ~
+  # -- Warning threshold for the count-based TooManySnapshots volume condition. The value should be between 2 to 250. Default is 100.
+  snapshotCountWarningThreshold: ~
   # -- Applies only to the V2 Data Engine. Specifies the log level for the Storage Performance Development Kit (SPDK) target daemon. Supported values are: Error, Warning, Notice, Info, and Debug. The default is Notice.
   dataEngineLogLevel: ~
   # -- Applies only to the V2 Data Engine. Specifies the log flags for the Storage Performance Development Kit (SPDK) target daemon.

@@ -248,6 +248,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotMaxCount) }}
     snapshot-max-count: {{ .Values.defaultSettings.snapshotMaxCount | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.snapshotCountWarningThreshold) }}
+    snapshot-count-warning-threshold: {{ .Values.defaultSettings.snapshotCountWarningThreshold | quote }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineLogLevel) }}
     data-engine-log-level: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineLogLevel }}
     {{- end }}

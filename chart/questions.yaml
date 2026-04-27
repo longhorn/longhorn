@@ -289,6 +289,15 @@ questions:
         min: 2
         max: 250
         default: 250
+      - variable: defaultSettings.snapshotCountWarningThreshold
+        label: Snapshot Count Warning Threshold
+        description: >-
+          Warning threshold for the count-based TooManySnapshots volume condition. The value should be between 2 to 250.
+        group: Longhorn Default Settings
+        type: int
+        min: 2
+        max: 250
+        default: 100
       - variable: defaultSettings.createDefaultDiskLabeledNodes
         label: Create Default Disk on Labeled Nodes
         description: >-
