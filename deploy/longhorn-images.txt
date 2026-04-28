@@ -11,4 +11,4 @@ longhornio/csi-resizer:v2.1.0-20260401
 longhornio/csi-snapshotter:v8.5.0-20260401
 longhornio/csi-node-driver-registrar:v2.16.0-20260401
 longhornio/livenessprobe:v2.18.0-20260401
-longhornio/support-bundle-kit:v0.0.83
+longhornio/support-bundle-kit:v0.0.84
