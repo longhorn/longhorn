@@ -107,7 +107,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.nodeDriverRegistrar.tag | string | `"v2.16.0-20260401"` | Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.registry | string | `""` | Registry for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
-| image.csi.provisioner.tag | string | `"v5.3.0-20260401"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
+| image.csi.provisioner.tag | string | `"v5.3.0-20260428"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.registry | string | `""` | Registry for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.tag | string | `"v2.1.0-20260401"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
