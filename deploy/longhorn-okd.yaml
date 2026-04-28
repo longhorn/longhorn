@@ -4539,7 +4539,7 @@ spec:
           - name: CSI_ATTACHER_IMAGE
             value: "docker.io/longhornio/csi-attacher:v4.11.0-20260428"
           - name: CSI_PROVISIONER_IMAGE
-            value: "docker.io/longhornio/csi-provisioner:v5.3.0-20260401"
+            value: "docker.io/longhornio/csi-provisioner:v5.3.0-20260428"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
             value: "docker.io/longhornio/csi-node-driver-registrar:v2.16.0-20260401"
           - name: CSI_RESIZER_IMAGE
