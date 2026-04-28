@@ -174,7 +174,7 @@ questions:
         label: Longhorn CSI Liveness Probe Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.livenessProbe.tag
-        default: v2.18.0-20260401
+        default: v2.18.0-20260428
         description: >-
           Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
         type: string
