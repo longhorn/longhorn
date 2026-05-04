@@ -4425,6 +4425,8 @@ spec:
                     nullable: true
                     type: array
                 type: object
+              lastAutoSalvagedAt:
+                type: string
               lastBackup:
                 type: string
               lastBackupAt:
