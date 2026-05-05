@@ -308,3 +308,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.csiStorageCapacityTracking) }}
     csi-storage-capacity-tracking: {{ .Values.defaultSettings.csiStorageCapacityTracking | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.kubernetesMetricsServerMetricsEnabled) }}
+    kubernetes-metrics-server-metrics-enabled: {{ .Values.defaultSettings.kubernetesMetricsServerMetricsEnabled }}
+    {{- end }}

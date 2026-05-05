@@ -452,6 +452,8 @@ defaultSettings:
   csiAllowedTopologyKeys: ~
   # -- Setting that controls CSI storage capacity tracking, which allows the kube-scheduler to filter nodes that cannot fit the requested volume.
   csiStorageCapacityTracking: ~
+  # -- Setting that allows Longhorn to query the Kubernetes Metrics Server ('metrics.k8s.io') for pod and node resource usage.
+  kubernetesMetricsServerMetricsEnabled: ~
 # -- Setting that allows you to update the default backupstore.
 defaultBackupStore:
   # -- Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")
