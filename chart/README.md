@@ -374,6 +374,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.guaranteedInstanceManagerCPU | Percentage of the total allocatable CPU resources on each node to be reserved for each instance manager pod. The default value is {"v1":"12","v2":"12"}. |
 | defaultSettings.instanceManagerPodLivenessProbeTimeout | In seconds. The setting specifies the timeout for the instance manager pod liveness probe. The default value is 10 seconds. |
 | defaultSettings.kubernetesClusterAutoscalerEnabled | Setting that notifies Longhorn that the cluster is using the Kubernetes Cluster Autoscaler. |
+| defaultSettings.kubernetesMetricsServerMetricsEnabled | Setting that allows Longhorn to query the Kubernetes Metrics Server ('metrics.k8s.io') for pod and node resource usage. |
 | defaultSettings.logLevel | Log levels that indicate the type and severity of logs in Longhorn Manager. The default value is "Info". (Options: "Panic", "Fatal", "Error", "Warn", "Info", "Debug", "Trace") |
 | defaultSettings.logPath | Specifies the directory on the host where Longhorn stores log files for the instance manager pod. Currently, it is only used for instance manager pods in the v2 data engine. |
 | defaultSettings.longGRPCTimeOut | Number of seconds that Longhorn allows for the completion of replica rebuilding and snapshot cloning operations. |
