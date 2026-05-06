@@ -2419,6 +2419,320 @@ metadata:
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
     longhorn-manager: ""
+  name: instancemanagerupgradecontrols.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: InstanceManagerUpgradeControl
+    listKind: InstanceManagerUpgradeControlList
+    plural: instancemanagerupgradecontrols
+    shortNames:
+    - lhimuc
+    singular: instancemanagerupgradecontrol
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: Desired instance manager image
+      jsonPath: .spec.targetImage
+      name: Target Image
+      type: string
+    - description: Node currently being upgraded
+      jsonPath: .status.currentNode
+      name: Current Node
+      type: string
+    - description: Scheduled start time
+      jsonPath: .spec.startAt
+      name: Start At
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: |-
+          InstanceManagerUpgradeControl is the singleton Longhorn CR that orchestrates
+          rolling live-upgrades of v2 instance managers across all cluster nodes.
+          It is created and maintained by the instance manager controller; users interact
+          with it by updating Spec.TargetImage or Spec.StartAt.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              InstanceManagerUpgradeControlSpec defines the desired state of the
+              InstanceManagerUpgradeControl singleton.
+            properties:
+              startAt:
+                description: |-
+                  StartAt is the RFC3339 timestamp at which the upgrade cycle should begin.
+                  If empty or in the past the upgrade starts immediately once the spec is
+                  reconciled. Users may set this to the current time to trigger an
+                  immediate upgrade.
+                type: string
+              targetImage:
+                description: |-
+                  TargetImage is the desired instance manager image for all nodes.
+                  The instance manager controller updates this field whenever a new default
+                  instance manager image is configured.
+                type: string
+            type: object
+          status:
+            description: |-
+              InstanceManagerUpgradeControlStatus defines the observed state of the
+              InstanceManagerUpgradeControl.
+            properties:
+              currentNode:
+                description: |-
+                  CurrentNode is the name of the node that is actively being upgraded.
+                  Empty when no upgrade is in progress.
+                type: string
+              nodes:
+                additionalProperties:
+                  description: NodeUpgradeInfo records the upgrade status for a single
+                    node.
+                  properties:
+                    completedAt:
+                      description: CompletedAt is the RFC3339 timestamp when the upgrade
+                        finished on this node.
+                      type: string
+                    errorMsg:
+                      description: ErrorMsg records the last error encountered while
+                        upgrading this node.
+                      type: string
+                    imuName:
+                      description: IMUName is the name of the InstanceManagerUpgrade
+                        CR created for this node.
+                      type: string
+                    retryCount:
+                      description: RetryCount tracks how many times the upgrade has
+                        been attempted for this node.
+                      type: integer
+                    startedAt:
+                      description: StartedAt is the RFC3339 timestamp when the upgrade
+                        began on this node.
+                      type: string
+                    state:
+                      description: State is the current upgrade state for this node.
+                      type: string
+                  required:
+                  - state
+                  type: object
+                description: |-
+                  Nodes holds the upgrade status for every node in the cluster.
+                  The map is pre-populated with all nodes when a new cycle starts.
+                nullable: true
+                type: object
+              ownerID:
+                description: OwnerID is the ID of the Longhorn manager pod that currently
+                  owns this CR.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
+  name: instancemanagerupgrades.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: InstanceManagerUpgrade
+    listKind: InstanceManagerUpgradeList
+    plural: instancemanagerupgrades
+    shortNames:
+    - lhimu
+    singular: instancemanagerupgrade
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The state of the instance manager upgrade
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The desired image after upgrade
+      jsonPath: .spec.targetImage
+      name: Target Image
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: |-
+          InstanceManagerUpgrade is the Longhorn CR that tracks the live upgrade of a
+          v2 instance manager and the temporary relocation of its managed engines.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: InstanceManagerUpgradeSpec defines the desired state of the
+              InstanceManagerUpgrade.
+            properties:
+              nodeID:
+                description: |-
+                  NodeID is the node where the source instance manager is running.
+                  Engines managed by the source instance manager are temporarily relocated
+                  away from this node during the upgrade and restored to it afterward.
+                type: string
+              targetImage:
+                description: TargetImage is the desired instance manager image after
+                  upgrade.
+                type: string
+            type: object
+          status:
+            description: InstanceManagerUpgradeStatus defines the observed state of
+              the InstanceManagerUpgrade.
+            properties:
+              abortReason:
+                description: |-
+                  AbortReason explains why AbortRequested was set (e.g., "timeout", "target-image-changed").
+                  This provides observability and helps the upgrade-control controller distinguish
+                  between different abort scenarios.
+                type: string
+              abortRequested:
+                description: |-
+                  AbortRequested is set by the controller when an abort condition is detected
+                  (e.g., timeout, target image change). This is controller-owned state.
+                type: boolean
+              conditions:
+                description: Conditions records the current conditions of the upgrade.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
+              engines:
+                additionalProperties:
+                  description: |-
+                    EngineRelocation records the relocation metadata of an engine during an
+                    instance manager upgrade.
+                  properties:
+                    originalNodeID:
+                      description: OriginalNodeID is the node where the engine was
+                        originally running.
+                      type: string
+                    snapshotName:
+                      description: |-
+                        SnapshotName is the name of the pre-upgrade snapshot created for this
+                        volume before relocation, used to support fast replica rebuild. It is
+                        only set when the TakeSnapshotBeforeV2DataEngineUpgrade setting is
+                        enabled and snapshot data integrity checking is enabled for the volume.
+                      type: string
+                    temporaryNodeID:
+                      description: |-
+                        TemporaryNodeID is the node the engine is temporarily relocated to
+                        while the source instance manager is being upgraded.
+                      type: string
+                  required:
+                  - originalNodeID
+                  type: object
+                description: |-
+                  Engines records the relocation plan for each engine managed by the source
+                  instance manager. The map key is the engine name.
+                nullable: true
+                type: object
+              errorMsg:
+                description: ErrorMsg records the terminal error encountered during
+                  the upgrade, if any.
+                type: string
+              ownerID:
+                description: OwnerID is the owner node ID of this InstanceManagerUpgrade.
+                type: string
+              startedAt:
+                description: |-
+                  StartedAt records when the upgrade transitioned out of Pending and began
+                  active work. It is used to enforce the upgrade timeout. This timestamp is
+                  set once and never reset, providing a single global timeline for the entire upgrade.
+                type: string
+              state:
+                description: State indicates the overall progress of the instance
+                  manager upgrade.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
   group: longhorn.io
@@ -4522,7 +4836,9 @@ rules:
               "backuptargets", "backuptargets/status", "backupvolumes", "backupvolumes/status", "backups", "backups/status",
               "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
               "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status",
-              "volumeattachments", "volumeattachments/status", "backupbackingimages", "backupbackingimages/status"]
+              "volumeattachments", "volumeattachments/status", "backupbackingimages", "backupbackingimages/status",
+              "instancemanagerupgrades", "instancemanagerupgrades/status",
+              "instancemanagerupgradecontrols", "instancemanagerupgradecontrols/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
