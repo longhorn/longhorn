@@ -4,7 +4,7 @@ UPGRADE_RESPONDER_REPO="https://github.com/longhorn/upgrade-responder.git"
 UPGRADE_RESPONDER_REPO_BRANCH="master"
 UPGRADE_RESPONDER_VALUE_YAML="upgrade-responder-value.yaml"
 UPGRADE_RESPONDER_IMAGE_REPO="longhornio/upgrade-responder"
-UPGRADE_RESPONDER_IMAGE_TAG="longhorn-head"
+UPGRADE_RESPONDER_IMAGE_TAG="master-head"
 
 INFLUXDB_URL="http://influxdb.default.svc.cluster.local:8086"
 
