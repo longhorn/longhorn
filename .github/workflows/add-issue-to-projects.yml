@@ -4,6 +4,9 @@ on:
   issues:
     types: [opened, reopened, milestoned]
 
+permissions:
+  contents: read
+
 jobs:
   longhorn:
     runs-on: ubuntu-latest

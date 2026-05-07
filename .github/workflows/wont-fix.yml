@@ -4,6 +4,9 @@ on:
   issues:
     types: [closed]
 
+permissions:
+  contents: read
+
 jobs:
   add-wontfix-label:
     runs-on: ubuntu-latest
