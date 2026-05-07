@@ -3485,6 +3485,8 @@ spec:
                 type: string
               readyToUse:
                 type: boolean
+              requestedTime:
+                type: string
               restoreSize:
                 format: int64
                 type: integer
