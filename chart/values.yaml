@@ -518,6 +518,29 @@ longhornManager:
   updateStrategy:
     rollingUpdate:
       maxUnavailable: "100%"
+longhornGlobalManager:
+  # The leader-elected longhorn-global-manager Deployment owns the cluster-wide
+  # Pod informer, collapsing the cluster-wide Pod watch fan-out from O(node
+  # count) to one active leader. It is always deployed; the longhorn-manager
+  # DaemonSet no longer hosts the cluster-wide Pod controllers
+  # (KubernetesPVController, KubernetesPodController).
+  # See enhancements/20260506-global-longhorn-manager.md.
+  # -- Number of replicas (one active leader + standbys via leader election).
+  replicas: 2
+  # -- PriorityClass for the global manager Deployment. Defaults to the
+  # same priority class as the rest of the Longhorn control plane.
+  priorityClass: *defaultPriorityClassNameRef
+  # -- Resource requests/limits for the global manager pod. Defaults to none,
+  # like the other Longhorn components; the cluster-wide Pod informer cache
+  # scales with the cluster's pod count, so consider setting limits on large
+  # clusters.
+  resources: ~
+  # -- Node tolerations for the global manager Deployment.
+  tolerations: []
+  # -- Node selector for the global manager Deployment.
+  nodeSelector: {}
+  # -- Annotations for the global manager pod template.
+  annotations: {}
 longhornDriver:
   log:
     # -- Format of longhorn-driver logs. (Options: "plain", "json")
