@@ -479,6 +479,8 @@ longhornManager:
     format: plain
   # -- Optional distro identifier used for upgrade responder reporting. Supported values: "oss", "prime", "dev".
   distro: "oss"
+  # -- Comma-separated list of distro identifiers that support upgrading from two minor versions back (n-2 to n). When a distro is listed, the upgrade path validation allows skipping one minor version.
+  twoMinorUpgradeDistros: ""
   # -- PriorityClass for Longhorn Manager.
   priorityClass: *defaultPriorityClassNameRef
   # -- Toleration for Longhorn Manager on nodes allowed to run Longhorn components.

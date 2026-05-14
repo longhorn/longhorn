@@ -102,6 +102,8 @@ spec:
         - name: LONGHORN_DISTRO
           value: {{ .Values.longhornManager.distro | quote }}
         {{- end }}
+        - name: LONGHORN_TWO_MINOR_UPGRADE_DISTROS
+          value: {{ .Values.longhornManager.twoMinorUpgradeDistros | quote }}
         {{- if .Values.enableGoCoverDir }}
         - name: GOCOVERDIR
           value: /go-cover-dir/
