@@ -4804,6 +4804,8 @@ spec:
               fieldPath: spec.nodeName
         - name: LONGHORN_DISTRO
           value: "oss"
+        - name: LONGHORN_TWO_MINOR_UPGRADE_DISTROS
+          value: ""
         
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
