@@ -42,7 +42,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- if .Values.global.cattle.systemDefaultRegistry -}}
 {{- .Values.global.cattle.systemDefaultRegistry -}}
 {{- else -}}
-{{- "" -}}
+{{- "docker.io" -}}
 {{- end -}}
 {{- end -}}
 
