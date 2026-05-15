@@ -198,7 +198,7 @@ For documentation pull requests, please make sure:
 - The content is accurate and matches the current Longhorn behavior.
 - The change is linked to a related issue when it affects user-facing behavior, troubleshooting, installation, upgrade, settings, or feature documentation.
 - The wording is clear and concise.
-- Examples, commands, and YAML snippets are tested when possible.
+- Examples, commands, and YAML snippets are tested.
 
 ## Review Process
 
