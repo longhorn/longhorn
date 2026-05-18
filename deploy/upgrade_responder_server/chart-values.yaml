@@ -88,8 +88,8 @@ configMap:
           ]
         },
         {
-          "name": "v1.11.1",
-          "releaseDate": "2026-03-11T00:00:00Z",
+          "name": "v1.11.2",
+          "releaseDate": "2026-05-05T00:00:00Z",
           "tags": [
             "stable",
             "latest"
