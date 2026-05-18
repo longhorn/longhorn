@@ -13,6 +13,9 @@ data:
       name: longhorn
       annotations:
         storageclass.kubernetes.io/is-default-class: {{ .Values.persistence.defaultClass | quote }}
+        {{- range $key, $value := .Values.persistence.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
     provisioner: driver.longhorn.io
     allowVolumeExpansion: true
     reclaimPolicy: "{{ .Values.persistence.reclaimPolicy }}"
