@@ -23,7 +23,9 @@ resources:
     memory: 256Mi
 
 flags:
-  scarfEndpoint: "https://longhorn.gateway.scarf.sh/{version}"
+  scarfEndpoint: 
+    - "https://longhorn.gateway.scarf.sh/{version}"
+    - "https://longhorn.gateway.scarf.sh/{version}/{longhornDistro}"
 
 # This configmap contains information about the latest release
 # of the application that is using this Upgrade Responder
@@ -277,6 +279,10 @@ configMap:
           "maxLen": 200
         },
         "longhornSettingV2DataEngine": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornDistro": {
           "dataType": "string",
           "maxLen": 200
         }
