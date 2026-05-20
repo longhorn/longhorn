@@ -14,37 +14,66 @@ jobs:
         string: ${{ github.event.label.name }}
         separator: /
     - name: Check if Backport Issue Exists
-      uses: actions-cool/issues-helper@200c78641dbf33838311e5a1e0c31bbdb92d7cf0 # v3
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
       id: if-backport-issue-exists
+      env:
+        BACKPORT_VERSION: ${{ steps.split.outputs._1 }}
+        ISSUE_TITLE: ${{ github.event.issue.title }}
       with:
-        actions: 'find-issues'
-        token: ${{ github.token }}
-        title-includes: |
-          [BACKPORT][v${{ steps.split.outputs._1 }}]${{ github.event.issue.title }}
+        github-token: ${{ github.token }}
+        result-encoding: json
+        script: |
+          const titleSearch = `[BACKPORT][v${process.env.BACKPORT_VERSION}]${process.env.ISSUE_TITLE}`;
+          const issues = await github.paginate(github.rest.issues.listForRepo, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'all',
+            creator: 'github-actions[bot]',
+          });
+          return issues.filter(issue => issue.title.includes(titleSearch));
     - name: Close Backport Issue
-      if: fromJSON(steps.if-backport-issue-exists.outputs.issues)[0] != null
-      uses: actions-cool/issues-helper@200c78641dbf33838311e5a1e0c31bbdb92d7cf0 # v3
+      if: fromJSON(steps.if-backport-issue-exists.outputs.result)[0] != null
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
       with:
-        actions: 'close-issue'
-        token: ${{ github.token }}
-        issue-number: ${{ fromJSON(steps.if-backport-issue-exists.outputs.issues)[0].number }}
+        github-token: ${{ github.token }}
+        script: |
+          await github.rest.issues.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: ${{ fromJSON(steps.if-backport-issue-exists.outputs.result)[0].number }},
+            state: 'closed',
+          });
 
   automation:
     runs-on: ubuntu-latest
     if: contains(github.event.label.name, 'require/automation-e2e')
     steps:
     - name: Check if Automation Issue Exists
-      uses: actions-cool/issues-helper@200c78641dbf33838311e5a1e0c31bbdb92d7cf0 # v3
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
       id: if-automation-issue-exists
+      env:
+        ISSUE_TITLE: ${{ github.event.issue.title }}
       with:
-        actions: 'find-issues'
-        token: ${{ github.token }}
-        title-includes: |
-          [TEST]${{ github.event.issue.title }}
+        github-token: ${{ github.token }}
+        result-encoding: json
+        script: |
+          const titleSearch = `[TEST]${process.env.ISSUE_TITLE}`;
+          const issues = await github.paginate(github.rest.issues.listForRepo, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'all',
+            creator: 'github-actions[bot]',
+          });
+          return issues.filter(issue => issue.title.includes(titleSearch));
     - name: Close Automation Test Issue
-      if: fromJSON(steps.if-automation-issue-exists.outputs.issues)[0] != null
-      uses: actions-cool/issues-helper@200c78641dbf33838311e5a1e0c31bbdb92d7cf0 # v3
+      if: fromJSON(steps.if-automation-issue-exists.outputs.result)[0] != null
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
       with:
-        actions: 'close-issue'
-        token: ${{ github.token }}
-        issue-number: ${{ fromJSON(steps.if-automation-issue-exists.outputs.issues)[0].number }}
+        github-token: ${{ github.token }}
+        script: |
+          await github.rest.issues.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: ${{ fromJSON(steps.if-automation-issue-exists.outputs.result)[0].number }},
+            state: 'closed',
+          });
