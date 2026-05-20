@@ -28,6 +28,7 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             state: 'all',
+            labels: 'kind/backport',
             creator: 'github-actions[bot]',
           });
           return issues.filter(issue => issue.title.includes(titleSearch));
@@ -62,6 +63,7 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             state: 'all',
+            labels: 'kind/test',
             creator: 'github-actions[bot]',
           });
           return issues.filter(issue => issue.title.includes(titleSearch));
