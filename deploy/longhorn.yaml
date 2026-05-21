@@ -4805,7 +4805,7 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         - name: LONGHORN_DISTRO
-          value: "oss"
+          value: "longhorn"
         
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
