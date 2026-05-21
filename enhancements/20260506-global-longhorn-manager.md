@@ -9,12 +9,10 @@ monitoring, environment checks). As clusters have grown, two
 scaling issues now stand out:
 
 1. **`kube-apiserver` watch fan-out from the cluster-wide Pod
-   informer.** A few Longhorn controllers need to observe workload
-   Pods across all namespaces — for example, to force-delete a
-   workload pod when a node goes down, or to track which workload is
-   using a Longhorn PV. Because every DaemonSet pod runs these
-   controllers, the cluster pays for one cluster-wide Pod watch per
-   node.
+   informer.** Every Pod change in the cluster is re-delivered by
+   `kube-apiserver` to every manager pod. The watch traffic — and
+   the work `kube-apiserver` does to serve it — scales with both
+   cluster Pod count and node count.
 
 2. **Per-pod memory from informer caches.** Each manager pod caches
    every object its informers watch. Pod cache size is determined by
