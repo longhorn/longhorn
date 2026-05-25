@@ -4752,7 +4752,7 @@ spec:
         - --backing-image-manager-image
         - "docker.io/longhornio/backing-image-manager:v1.12.0-rc3"
         - --support-bundle-manager-image
-        - "docker.io/longhornio/support-bundle-kit:v0.0.85"
+        - "docker.io/longhornio/support-bundle-kit:v0.0.86"
         - --manager-image
         - "docker.io/longhornio/longhorn-manager:v1.12.0-rc3"
         - --service-account
