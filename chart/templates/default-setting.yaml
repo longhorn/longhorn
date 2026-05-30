@@ -234,7 +234,7 @@ data:
     data-engine-memory-size: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineMemorySize }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineInterruptModeEnabled) }}
-    data-engine-memory-size: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineInterruptModeEnabled }}
+    data-engine-interrupt-mode-enabled: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineInterruptModeEnabled }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
     allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
