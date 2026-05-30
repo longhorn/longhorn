@@ -406,6 +406,8 @@ defaultSettings:
   dataEngineHugepageEnabled: ~
   # -- Applies only to the V2 Data Engine. Specifies the hugepage size, in MiB, for the Storage Performance Development Kit (SPDK) target daemon. The default value is "{"v2":"2048"}"
   dataEngineMemorySize: ~
+  # -- Applies only to the V2 Data Engine. Controls whether the Storage Performance Development Kit (SPDK) target daemon runs in interrupt mode or the default polling mode. The default value is "{"v2":"false"}"
+  dataEngineInterruptModeEnabled: ~
   # -- Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine. The default value is "{"v2":"0x1"}".
   dataEngineCPUMask: ~
   # -- This setting specifies the default write bandwidth limit (in megabytes per second) for volume replica rebuilding when using the v2 data engine (SPDK). If this value is set to 0, there will be no write bandwidth limitation. Individual volumes can override this setting by specifying their own rebuilding bandwidth limit.
