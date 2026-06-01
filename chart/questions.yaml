@@ -908,10 +908,10 @@ questions:
       - variable: defaultSettings.dataEngineCPUMask
         label: Data Engine CPU Mask
         description: >-
-          Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the number of assigned cores does not exceed the guaranteed Instance Manager CPUs for the V2 Data Engine.
+          Applies only to the V2 Data Engine. Specifies the CPU cores on which the Storage Performance Development Kit (SPDK) target daemon runs. The daemon is deployed in each Instance Manager pod. Ensure that the assigned CPU cores do not exceed the guaranteed CPUs allocated to the V2 Data Engine Instance Manager. A minimum of 2 CPU cores is recommended. SPDK uses a busy-polling reactor model where the master reactor handles both I/O polling and management RPCs. When only a single core is assigned, heavy I/O workloads can delay or starve RPC processing, resulting in increased latency, timeout events, and operational instability. Assigning 2 or more cores allows I/O and management tasks to run on separate reactors, improving responsiveness and operational stability.
         group: Longhorn Default Settings
         type: string
-        default: '{"v2":"0x1"}'
+        default: '{"v2":"0x3"}'
       - variable: defaultSettings.replicaRebuildingBandwidthLimit
         label: Replica Rebuilding Bandwidth Limit
         description: >-
