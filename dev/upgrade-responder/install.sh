@@ -384,6 +384,15 @@ configMap:
         "longhornVolumeAccessModeUnknownCount": {
           "dataType": "float"
         },
+        "longhornVolumeDataEngineV1Count": {
+          "dataType": "float"
+        },
+        "longhornVolumeDataEngineV2Count": {
+          "dataType": "float"
+        },
+        "longhornVolumeDataEngineAllCount": {
+          "dataType": "float"
+        },
         "longhornVolumeAverageActualSizeBytes": {
           "dataType": "float"
         },
