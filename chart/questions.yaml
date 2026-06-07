@@ -863,6 +863,13 @@ questions:
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: string
         default: '{"v2":"2048"}'
+      - variable: defaultSettings.dataEngineInterruptModeEnabled
+        label: V2 Data Engine
+        description: >-
+          Applies only to the V2 Data Engine. Controls whether the Storage Performance Development Kit (SPDK) target daemon runs in interrupt mode or the default polling mode.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: string
+        default: '{"v2":"false"}'
       - variable: defaultSettings.dataEngineLogLevel
         label: Data Engine Log Level
         description: >-
