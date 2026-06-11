@@ -1,8 +1,8 @@
-{{- if .Values.networkPolicies.enabled }}
+{{- if .Values.networkPolicies.restrictInternalTraffic }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: longhorn-admission-webhook
+  name: longhorn-webhook
   namespace: {{ include "release_namespace" . }}
 spec:
   podSelector:
@@ -12,6 +12,8 @@ spec:
   - Ingress
   ingress:
   - ports:
+    - protocol: TCP
+      port: 9501
     - protocol: TCP
       port: 9502
 {{- end }}
