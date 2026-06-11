@@ -1404,3 +1404,11 @@ questions:
           - rke1
           - rke2
           - k3s
+  - variable: networkPolicies.restrictInternalTraffic
+    description: >-
+      Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other.
+    group: Other Settings
+    label: Limit Internal Network Access
+    default: 'true'
+    type: boolean
+    subquestions: []

@@ -35,6 +35,8 @@ global:
 networkPolicies:
   # -- Setting that allows you to enable network policies that control access to Longhorn pods.
   enabled: false
+  # -- Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other.
+  restrictInternalTraffic: true
   # -- Distribution that determines the policy for allowing access for an ingress. (Options: "k3s", "rke2", "rke1")
   type: "k3s"
 image:
