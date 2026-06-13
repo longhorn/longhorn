@@ -15,8 +15,10 @@ jobs:
       uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
     - name: Check if PR is a backport
+      env:
+        PR_TITLE: ${{ github.event.pull_request.title }}
       run: |
-        if [[ "${{ contains(github.event.pull_request.title, 'backport #') }}" == "true" ]]; then
+        if [[ "$PR_TITLE" == *"backport #"* ]]; then
           echo "BACKPORT=true" >> "$GITHUB_ENV"
         else
           echo "BACKPORT=false" >> "$GITHUB_ENV"
@@ -24,14 +26,15 @@ jobs:
 
     - name: Extract backport branch and issue number
       if: env.BACKPORT == 'true'
+      env:
+        PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+        PR_BODY: ${{ github.event.pull_request.body }}
       run: |
         # Extract branch from the target branch of the PR
-        BRANCH=$(echo "${{ github.event.pull_request.base.ref }}")
-        BRANCH=${BRANCH%.x}   # Remove the '.x' suffix
+        BRANCH="${PR_BASE_REF%.x}"  # Remove the '.x' suffix
         BRANCH=$(echo "${BRANCH}" | sed 's/\./\\./g')   # Escape periods
         echo "BRANCH=$BRANCH" >> $GITHUB_ENV
-        
-        PR_BODY="${{ github.event.pull_request.body }}"
+
         ORIGINAL_ISSUE_NUMBER=$(printf '%s\n' "$PR_BODY" \
           | grep -oE 'longhorn/longhorn#[0-9]+' \
           | head -1 \
@@ -44,8 +47,10 @@ jobs:
         fi
 
     - name: Check if PR is from a fork
+      env:
+        PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
       run: |
-        if [[ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]]; then
+        if [[ "$PR_HEAD_REPO" != "${{ github.repository }}" ]]; then
           echo "IS_FORK=true" >> $GITHUB_ENV
         else
           echo "IS_FORK=false" >> $GITHUB_ENV
@@ -66,11 +71,12 @@ jobs:
       if: ${{ env.BACKPORT == 'true' && env.IS_FORK == 'true' && env.ORIGINAL_ISSUE_NUMBER != '' }}
       env:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        PR_HTML_URL: ${{ github.event.pull_request.html_url }}
       run: |
         for issue_number in "${{ env.ORIGINAL_ISSUE_NUMBER }}"; do
           echo "Found source issue longhorn/longhorn#${issue_number}"
           issue_title=$(gh issue view "$issue_number" --repo longhorn/longhorn --json 'title' -q '.title')
-        
+
           if [[ $? -eq 0 && -n "$issue_number" ]]; then
             backport_issue_number=$(
               curl -s "https://api.github.com/search/issues?q=repo:longhorn/longhorn+is:open+is:issue+in:title+${{ env.BRANCH }}+\"${issue_title}\"" \
@@ -80,10 +86,10 @@ jobs:
             if [[ -n "$backport_issue_number" ]]; then
               echo "Found backport issue longhorn/longhorn#${backport_issue_number}"
               echo "Linking backport issue longhorn/longhorn#${backport_issue_number}"
-              gh issue comment --repo longhorn/longhorn "${backport_issue_number}" --body "Backport PR: ${{ github.event.pull_request.html_url }}"
+              gh issue comment --repo longhorn/longhorn "${backport_issue_number}" --body "Backport PR: ${PR_HTML_URL}"
               continue
             fi
           fi
-        
+
           echo "No issue title found"
         done
