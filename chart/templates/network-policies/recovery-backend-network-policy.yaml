@@ -11,7 +11,11 @@ spec:
   policyTypes:
   - Ingress
   ingress:
-  - ports:
+  - from:
+    - podSelector:
+        matchLabels:
+          longhorn.io/component: share-manager
+    ports:
     - protocol: TCP
       port: 9503
 {{- end }}

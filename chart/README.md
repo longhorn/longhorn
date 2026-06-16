@@ -90,6 +90,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | networkPolicies.enabled | bool | `false` | Setting that allows you to enable network policies that control access to Longhorn pods. |
+| networkPolicies.kubeAPIServerSourceCIDRs | list | `[]` | Kubernetes API server source CIDRs allowed to access the Longhorn admission webhook. When empty, source filtering is disabled. |
 | networkPolicies.restrictInternalTraffic | bool | `true` | Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other. |
 | networkPolicies.type | string | `"k3s"` | Distribution that determines the policy for allowing access for an ingress. (Options: "k3s", "rke2", "rke1") |
 
@@ -237,7 +238,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornUI.podDisruptionBudget | object | `{"enabled":false,"maxUnavailable":"","minAvailable":1}` | Pod Disruption Budget for Longhorn UI. Keeps a minimum number of UI pods available during voluntary disruptions such as node drains. Effective only when `longhornUI.replicas` is greater than 1. |
 | longhornUI.podDisruptionBudget.enabled | bool | `false` | Setting that allows you to enable the Pod Disruption Budget for Longhorn UI. |
 | longhornUI.podDisruptionBudget.maxUnavailable | string | `""` | Maximum number or percentage of Longhorn UI pods that can be unavailable during a disruption. When set, it takes precedence over `longhornUI.podDisruptionBudget.minAvailable`. |
-| longhornUI.podDisruptionBudget.minAvailable | int | `1` | (string) Minimum number or percentage of Longhorn UI pods that must remain available during a disruption. Mutually exclusive with `longhornUI.podDisruptionBudget.maxUnavailable`. |
+| longhornUI.podDisruptionBudget.minAvailable | int | `1` | Minimum number or percentage of Longhorn UI pods that must remain available during a disruption. Mutually exclusive with `longhornUI.podDisruptionBudget.maxUnavailable`. |
 | longhornUI.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn UI. |
 | longhornUI.replicas | int | `2` | Replica count for Longhorn UI. |
 | longhornUI.tolerations | list | `[]` | Toleration for Longhorn UI on nodes allowed to run Longhorn components. |
@@ -290,7 +291,7 @@ You can install Longhorn in an air-gapped environment with a private registry. F
 | metrics.serviceMonitor.enabled | bool | `false` | Setting that allows the creation of a Prometheus ServiceMonitor resource for Longhorn Manager components. |
 | metrics.serviceMonitor.interval | string | `""` | Interval at which Prometheus scrapes the metrics from the target. |
 | metrics.serviceMonitor.metricRelabelings | list | `[]` | Configures the relabeling rules to apply to the samples before ingestion. See the [Prometheus Operator documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for formatting details. |
-| metrics.serviceMonitor.relabelings | list | `[]` | Configures the relabeling rules to apply the target’s metadata labels. See the [Prometheus Operator documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for formatting details. |
+| metrics.serviceMonitor.relabelings | list | `[]` | Configures the relabeling rules to apply the target's metadata labels. See the [Prometheus Operator documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for formatting details. |
 | metrics.serviceMonitor.sampleLimit | int | `0` | Per-scrape sample limit. A value of 0 (default) omits sampleLimit. |
 | metrics.serviceMonitor.scrapeTimeout | string | `""` | Timeout after which Prometheus considers the scrape to be failed. |
 

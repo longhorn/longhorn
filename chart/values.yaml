@@ -39,6 +39,8 @@ networkPolicies:
   restrictInternalTraffic: true
   # -- Distribution that determines the policy for allowing access for an ingress. (Options: "k3s", "rke2", "rke1")
   type: "k3s"
+  # -- Kubernetes API server source CIDRs allowed to access the Longhorn admission webhook. When empty, source filtering is disabled.
+  kubeAPIServerSourceCIDRs: []
 image:
   longhorn:
     engine:
@@ -584,7 +586,7 @@ longhornUI:
   podDisruptionBudget:
     # -- Setting that allows you to enable the Pod Disruption Budget for Longhorn UI.
     enabled: false
-    # -- (string) Minimum number or percentage of Longhorn UI pods that must remain available during a disruption. Mutually exclusive with `longhornUI.podDisruptionBudget.maxUnavailable`.
+    # -- Minimum number or percentage of Longhorn UI pods that must remain available during a disruption. Mutually exclusive with `longhornUI.podDisruptionBudget.maxUnavailable`.
     minAvailable: 1
     # -- Maximum number or percentage of Longhorn UI pods that can be unavailable during a disruption. When set, it takes precedence over `longhornUI.podDisruptionBudget.minAvailable`.
     maxUnavailable: ""
@@ -684,7 +686,7 @@ metrics:
     interval: ""
     # -- Timeout after which Prometheus considers the scrape to be failed.
     scrapeTimeout: ""
-    # -- Configures the relabeling rules to apply the target’s metadata labels. See the [Prometheus Operator
+    # -- Configures the relabeling rules to apply the target's metadata labels. See the [Prometheus Operator
     # documentation](https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1.Endpoint) for
     # formatting details.
     relabelings: []

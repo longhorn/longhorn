@@ -16,4 +16,14 @@ spec:
       port: 9501
     - protocol: TCP
       port: 9502
+    {{- if .Values.networkPolicies.kubeAPIServerSourceCIDRs }}
+    from:
+      - podSelector:
+          matchLabels:
+            app: longhorn-manager
+      {{- range .Values.networkPolicies.kubeAPIServerSourceCIDRs }}
+      - ipBlock:
+          cidr: {{ . | quote }}
+      {{- end }}
+    {{- end }}
 {{- end }}
