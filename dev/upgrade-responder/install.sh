@@ -248,6 +248,10 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+        "longhornV2DataEngineHugepageEnabled": {
+          "dataType": "string",
+          "maxLen": 200
+        },
         "longhornDistro": {
           "dataType": "string",
           "maxLen": 200
@@ -276,6 +280,27 @@ configMap:
           "dataType": "float"
         },
         "longhornDiskFilesystemCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverAioCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverNvmeCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverVirtioScsiCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverVirtioBlkCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverVirtioPciCount": {
+          "dataType": "float"
+        },
+        "longhornV2DataEngineCpuCores": {
+          "dataType": "float"
+        },
+        "longhornV2DataEngineHugepageSize": {
           "dataType": "float"
         },
         "longhornInstanceManagerAverageCpuUsageMilliCores": {
