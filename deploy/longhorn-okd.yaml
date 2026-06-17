@@ -4798,7 +4798,7 @@ spec:
     spec:
       containers:
       - name: longhorn-manager
-        image: docker.io/longhornio/longhorn-manager:v1.12.0
+        image: docker.io/longhornio/longhorn-manager:v1.12.x-head
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -4807,17 +4807,17 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - "docker.io/longhornio/longhorn-engine:v1.12.0"
+        - "docker.io/longhornio/longhorn-engine:v1.12.x-head"
         - --instance-manager-image
-        - "docker.io/longhornio/longhorn-instance-manager:v1.12.0"
+        - "docker.io/longhornio/longhorn-instance-manager:v1.12.x-head"
         - --share-manager-image
-        - "docker.io/longhornio/longhorn-share-manager:v1.12.0"
+        - "docker.io/longhornio/longhorn-share-manager:v1.12.x-head"
         - --backing-image-manager-image
-        - "docker.io/longhornio/backing-image-manager:v1.12.0"
+        - "docker.io/longhornio/backing-image-manager:v1.12.x-head"
         - --support-bundle-manager-image
         - "docker.io/longhornio/support-bundle-kit:v0.0.86"
         - --manager-image
-        - "docker.io/longhornio/longhorn-manager:v1.12.0"
+        - "docker.io/longhornio/longhorn-manager:v1.12.x-head"
         - --service-account
         - longhorn-service-account
         - --upgrade-version-check
@@ -4872,7 +4872,7 @@ spec:
         
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
-        image: docker.io/longhornio/longhorn-share-manager:v1.12.0
+        image: docker.io/longhornio/longhorn-share-manager:v1.12.x-head
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
       volumes:
       - name: boot
@@ -4925,18 +4925,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: docker.io/longhornio/longhorn-manager:v1.12.0
+          image: docker.io/longhornio/longhorn-manager:v1.12.x-head
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: docker.io/longhornio/longhorn-manager:v1.12.0
+          image: docker.io/longhornio/longhorn-manager:v1.12.x-head
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - "docker.io/longhornio/longhorn-manager:v1.12.0"
+          - "docker.io/longhornio/longhorn-manager:v1.12.x-head"
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -5027,7 +5027,7 @@ spec:
           - mountPath: /etc/tls/private
             name: longhorn-ui-tls
       - name: longhorn-ui
-        image: docker.io/longhornio/longhorn-ui:v1.12.0
+        image: docker.io/longhornio/longhorn-ui:v1.12.x-head
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name: nginx-cache
