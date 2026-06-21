@@ -21,11 +21,15 @@ import yaml
 
 def parse_values_yaml(filepath):
     """Parse values.yaml and return a dict of dotted-key-path -> {value, description}."""
-    with open(filepath, "r") as f:
-        lines = f.readlines()
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except FileNotFoundError:
+        print(f"Error: {filepath} not found.", file=sys.stderr)
+        sys.exit(1)
 
-    with open(filepath, "r") as f:
-        data = yaml.safe_load(f)
+    lines = content.splitlines(True)
+    data = yaml.safe_load(content)
 
     # Build a map of dotted paths to their values from the parsed YAML
     values = {}
@@ -182,8 +186,12 @@ def main():
     check_only = "--check" in sys.argv
 
     values_info = parse_values_yaml("chart/values.yaml")
-    with open("chart/questions.yaml", "r") as f:
-        questions_data = yaml.safe_load(f)
+    try:
+        with open("chart/questions.yaml", "r") as f:
+            questions_data = yaml.safe_load(f)
+    except FileNotFoundError:
+        print("Error: chart/questions.yaml not found.", file=sys.stderr)
+        sys.exit(1)
 
     changes = update_questions(questions_data, values_info, check_only=check_only)
 
