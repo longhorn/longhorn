@@ -1,0 +1,18 @@
+{{- if .Values.longhornUI.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-ui
+  name: longhorn-ui
+  namespace: {{ include "release_namespace" . }}
+spec:
+  {{- if .Values.longhornUI.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.longhornUI.podDisruptionBudget.maxUnavailable }}
+  {{- else }}
+  minAvailable: {{ .Values.longhornUI.podDisruptionBudget.minAvailable | default 1 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: longhorn-ui
+{{- end }}
