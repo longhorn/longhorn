@@ -124,12 +124,14 @@ Action items for releasing {{ env.RELEASE_VERSION }}
 - [ ] Update the [support matrix](https://www.suse.com/suse-longhorn/support-matrix/all-supported-versions/) - @asettle @rebeccazzzz
 - [ ] Update the [lifecycle page](https://www.suse.com/lifecycle/#suse-storage) - @asettle @rebeccazzzz
 
+---
+
 ### Rancher Charts
 
 **The Release Captain needs to coordinate the following items.**
 
-- [ ] Verify the chart can be installed & upgraded - {{ env.QA_CAPTAIN }}
-- [ ] rancher/image-mirrors update - @mantissahz @PhanLe1010
-- [ ] rancher/charts active branches for Rancher App Marketplace - @mantissahz @PhanLe1010
+- [ ] Prepare Rancher Chart in rancher/charts active branches for Rancher App Marketplace - @carterli0407-cell @mantissahz
+- [ ] rancher/image-mirrors update - @carterli0407-cell @mantissahz
+- [ ] Verify the Rancher Charts can be installed & upgraded - {{ env.QA_CAPTAIN }}
 
 cc @longhorn/qa @longhorn/dev
