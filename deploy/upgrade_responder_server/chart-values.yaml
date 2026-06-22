@@ -452,6 +452,42 @@ configMap:
         "longhornVolumeDataEngineAllCount": {
           "dataType": "float"
         },
+        "longhornVolumeSizeLessThan1GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize1To2GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize2To5GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize5To10GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize10To20GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize20To50GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize50To100GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize100To200GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize200To500GiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize500GiBTo1TiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSize1To2TiBCount": {
+          "dataType": "float"
+        },
+        "longhornVolumeSizeGt2TiBCount": {
+          "dataType": "float"
+        },
         "longhornVolumeAverageActualSizeBytes": {
           "dataType": "float"
         },
