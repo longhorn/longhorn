@@ -7,10 +7,13 @@ metadata:
   name: longhorn-ui
   namespace: {{ include "release_namespace" . }}
 spec:
-  {{- if .Values.longhornUI.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.longhornUI.podDisruptionBudget.maxUnavailable }}
+  {{- $pdb := .Values.longhornUI.podDisruptionBudget }}
+  {{- if ne (toString $pdb.maxUnavailable) "" }}
+  maxUnavailable: {{ $pdb.maxUnavailable }}
+  {{- else if ne (toString $pdb.minAvailable) "" }}
+  minAvailable: {{ $pdb.minAvailable }}
   {{- else }}
-  minAvailable: {{ .Values.longhornUI.podDisruptionBudget.minAvailable | default 1 }}
+  minAvailable: 1
   {{- end }}
   selector:
     matchLabels:
