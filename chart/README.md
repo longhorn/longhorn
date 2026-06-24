@@ -233,6 +233,10 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 |-----|------|---------|-------------|
 | longhornUI.affinity | object | `{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"app","operator":"In","values":["longhorn-ui"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":1}]}}` | Affinity for Longhorn UI pods. Specify the affinity you want to use for Longhorn UI. |
 | longhornUI.nodeSelector | object | `{}` | Node selector for Longhorn UI. Specify the nodes allowed to run Longhorn UI. |
+| longhornUI.podDisruptionBudget | object | `{"enabled":false,"maxUnavailable":"","minAvailable":1}` | Pod Disruption Budget for Longhorn UI. Keeps a minimum number of UI pods available during voluntary disruptions such as node drains. Effective only when `longhornUI.replicas` is greater than 1. |
+| longhornUI.podDisruptionBudget.enabled | bool | `false` | Setting that allows you to enable the Pod Disruption Budget for Longhorn UI. |
+| longhornUI.podDisruptionBudget.maxUnavailable | string | `""` | Maximum number or percentage of Longhorn UI pods that can be unavailable during a disruption. When set, it takes precedence over `longhornUI.podDisruptionBudget.minAvailable`. |
+| longhornUI.podDisruptionBudget.minAvailable | int | `1` | Minimum number or percentage of Longhorn UI pods that must remain available during a disruption. Mutually exclusive with `longhornUI.podDisruptionBudget.maxUnavailable`. |
 | longhornUI.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn UI. |
 | longhornUI.replicas | int | `2` | Replica count for Longhorn UI. |
 | longhornUI.tolerations | list | `[]` | Toleration for Longhorn UI on nodes allowed to run Longhorn components. |
