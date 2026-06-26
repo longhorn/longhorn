@@ -1996,6 +1996,9 @@ spec:
                 properties:
                   v2:
                     properties:
+                      cpuCoreNumber:
+                        format: int64
+                        type: integer
                       cpuMask:
                         type: string
                       interruptModeEnabled:
