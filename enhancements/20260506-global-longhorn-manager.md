@@ -283,10 +283,14 @@ Functional scenarios:
    (RWO and RWX).
 2. Force-delete a workload Pod with a Longhorn volume on a downed node:
    verify VolumeAttachment cleanup.
-3. Trigger a Volume remount via `Volume.Status.RemountRequestedAt`: verify
-   the workload Pod is recreated.
-4. Kill a CSI plugin Pod while an RWX volume is mounted: verify the workload
-   Pod on that node is force-deleted.
+3. Trigger a Volume remount by setting `Volume.Status.RemountRequestedAt`
+   directly: verify the controller-owned workload Pod is force-deleted and
+   recreated.
+4. Trigger a remount through a real volume event — replica auto-salvage, or a
+   share-manager entering an error state — which makes `VolumeController` set
+   `Volume.Status.RemountRequestedAt`: verify the controller-owned workload Pod,
+   in any namespace and on any node, is force-deleted by the global manager
+   (exercises the cluster-wide Pod informer and the removed per-node guard).
 5. Existing scenarios — snapshots, backups, recurring jobs, share-manager
    failover — continue to pass; they exercise controllers that stay in the
    DaemonSet.
