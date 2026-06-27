@@ -15,6 +15,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
     default-data-path: {{ .Values.defaultSettings.defaultDataPath | quote }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultControlPath) }}
+    default-control-path: {{ .Values.defaultSettings.defaultControlPath | quote }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
     replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
     {{- end }}
