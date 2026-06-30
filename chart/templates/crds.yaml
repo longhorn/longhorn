@@ -1917,6 +1917,18 @@ spec:
                     properties:
                       cpuMask:
                         type: string
+                      irqAffinityEnabled:
+                        description: |-
+                          IRQAffinityEnabled overrides the cluster-wide
+                          data-engine-irq-affinity-enabled setting for this instance manager.
+                          "true"  -> pass --enable-irq-affinity to start-spdk-tgt.
+                          "false" -> do not pass the flag.
+                          ""      -> inherit the global setting value.
+                        enum:
+                        - ""
+                        - "true"
+                        - "false"
+                        type: string
                     type: object
                 type: object
               image:
