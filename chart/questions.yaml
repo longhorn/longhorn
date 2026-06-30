@@ -926,6 +926,13 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: '{"v2":"0"}'
+      - variable: defaultSettings.dataEngineIobufLargePoolSize
+        label: Data Engine iobuf Large Pool Size
+        description: >-
+          Applies only to the V2 Data Engine. Sets the SPDK iobuf large buffer pool size (large_pool_count) on the Instance Manager's SPDK target. The Instance Manager passes the value to spdk_tgt at startup through a generated JSON configuration file, since the iobuf pool can only be sized at startup and not changed at runtime. The default value 1024 keeps SPDK's built-in behavior; values not greater than 1024 are a no-op.
+        group: Longhorn Default Settings
+        type: int
+        default: '{"v2":"1024"}'
       - variable: defaultSettings.replicaRebuildingBandwidthLimit
         label: Replica Rebuilding Bandwidth Limit
         description: >-
