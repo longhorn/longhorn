@@ -37,14 +37,14 @@ For more details, see [#13424](https://github.com/longhorn/longhorn/issues/13424
 ## Installation
 
 > [!IMPORTANT]
-**Ensure that your cluster is running Kubernetes v1.25 or later before installing Longhorn v1.11.3.**
+**Due to the upgrade of the CSI external provisioner to v6.3.0, ensure that your cluster is running Kubernetes v1.34 or later before installing Longhorn v1.11.3.**
 
 You can install Longhorn using a variety of tools, including Rancher, Kubectl, and Helm. For more information about installation methods and requirements, see [Quick Installation](https://longhorn.io/docs/1.11.3/deploy/install/) in the Longhorn documentation.
 
 ## Upgrade
 
 > [!IMPORTANT]
-**Ensure that your cluster is running Kubernetes v1.25 or later before upgrading from Longhorn v1.10.x or v1.11.0 to v1.11.3.**
+**Due to the upgrade of the CSI external provisioner to v6.3.0, ensure that your cluster is running Kubernetes v1.34 or later before upgrading from Longhorn v1.10.x or v1.11.0 to v1.11.3.**
 
 > [!IMPORTANT]
 **Users on v1.11.0 who experienced the memory leaks of longhorn-instance-manager pods [12575](https://github.com/longhorn/longhorn/issues/12575) are highly encouraged to upgrade to v1.11.3 to receive the permanent fix for the proxy connection leaks.**
