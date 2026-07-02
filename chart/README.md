@@ -90,6 +90,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | networkPolicies.enabled | bool | `false` | Setting that allows you to enable network policies that control access to Longhorn pods. |
+| networkPolicies.restrictInternalTraffic | bool | `true` | Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other. |
 | networkPolicies.type | string | `"k3s"` | Distribution that determines the policy for allowing access for an ingress. (Options: "k3s", "rke2", "rke1") |
 
 ### Image Settings
