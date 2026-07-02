@@ -116,7 +116,7 @@ image:
       # -- Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-resizer
       # -- Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value.
-      tag: v2.2.0
+      tag: v2.2.1
     snapshotter:
       # -- Registry for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       registry: ""
