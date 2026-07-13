@@ -870,6 +870,13 @@ questions:
         group: Longhorn V2 Data Engine (Experimental Feature) Settings
         type: string
         default: '{"v2":"false"}'
+      - variable: defaultSettings.dataEngineCPUIsolationEnabled
+        label: V2 Data Engine
+        description: >-
+          Applies only to the V2 Data Engine. Steers host hardware IRQs and unbound kernel workqueue workers away from the CPUs used by the SPDK target daemon, so that interrupt handling and deferred kernel work do not preempt SPDK polling reactors. The Instance Manager pod must be privileged and must mount the host root at /host. The setting takes effect only after the V2 Instance Manager pod is recreated.
+        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        type: string
+        default: '{"v2":"false"}'
       - variable: defaultSettings.dataEngineLogLevel
         label: Data Engine Log Level
         description: >-
