@@ -2408,6 +2408,154 @@ spec:
                   type: object
                 nullable: true
                 type: object
+              instanceShardGroups:
+                additionalProperties:
+                  properties:
+                    spec:
+                      properties:
+                        dataEngine:
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                    status:
+                      properties:
+                        activePath:
+                          type: string
+                        conditions:
+                          additionalProperties:
+                            type: boolean
+                          nullable: true
+                          type: object
+                        endpoint:
+                          type: string
+                        errorMsg:
+                          type: string
+                        frontend:
+                          type: string
+                        listen:
+                          type: string
+                        paths:
+                          items:
+                            properties:
+                              anaState:
+                                type: string
+                              engineName:
+                                type: string
+                              nguid:
+                                type: string
+                              nqn:
+                                type: string
+                              targetIP:
+                                type: string
+                              targetPort:
+                                type: integer
+                            type: object
+                          type: array
+                        portEnd:
+                          format: int32
+                          type: integer
+                        portStart:
+                          format: int32
+                          type: integer
+                        preferredPath:
+                          type: string
+                        resourceVersion:
+                          format: int64
+                          type: integer
+                        state:
+                          type: string
+                        targetPortEnd:
+                          format: int32
+                          type: integer
+                        targetPortStart:
+                          format: int32
+                          type: integer
+                        type:
+                          type: string
+                        ublkID:
+                          format: int32
+                          type: integer
+                        uuid:
+                          type: string
+                      type: object
+                  type: object
+                nullable: true
+                type: object
+              instanceShards:
+                additionalProperties:
+                  properties:
+                    spec:
+                      properties:
+                        dataEngine:
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                    status:
+                      properties:
+                        activePath:
+                          type: string
+                        conditions:
+                          additionalProperties:
+                            type: boolean
+                          nullable: true
+                          type: object
+                        endpoint:
+                          type: string
+                        errorMsg:
+                          type: string
+                        frontend:
+                          type: string
+                        listen:
+                          type: string
+                        paths:
+                          items:
+                            properties:
+                              anaState:
+                                type: string
+                              engineName:
+                                type: string
+                              nguid:
+                                type: string
+                              nqn:
+                                type: string
+                              targetIP:
+                                type: string
+                              targetPort:
+                                type: integer
+                            type: object
+                          type: array
+                        portEnd:
+                          format: int32
+                          type: integer
+                        portStart:
+                          format: int32
+                          type: integer
+                        preferredPath:
+                          type: string
+                        resourceVersion:
+                          format: int64
+                          type: integer
+                        state:
+                          type: string
+                        targetPortEnd:
+                          format: int32
+                          type: integer
+                        targetPortStart:
+                          format: int32
+                          type: integer
+                        type:
+                          type: string
+                        ublkID:
+                          format: int32
+                          type: integer
+                        uuid:
+                          type: string
+                      type: object
+                  type: object
+                nullable: true
+                type: object
               ip:
                 type: string
               ownerID:
@@ -3280,6 +3428,425 @@ spec:
             type: string
         required:
         - value
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
+  name: shardgroups.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: ShardGroup
+    listKind: ShardGroupList
+    plural: shardgroups
+    shortNames:
+    - lhsg
+    singular: shardgroup
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The volume that owns this ShardGroup
+      jsonPath: .spec.volumeName
+      name: Volume
+      type: string
+    - description: The aggregate health state of the EC array
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The node hosting the ShardGroup process (typically co-located with
+        the engine)
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - description: The number of failed slots
+      jsonPath: .status.failedCount
+      name: Failed
+      type: integer
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: ShardGroup is where Longhorn stores ShardGroup object.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ShardGroupSpec defines the desired state of the Longhorn
+              ShardGroup
+            properties:
+              dataChunks:
+                description: DataChunks is the k parameter of the EC array. Immutable
+                  after creation.
+                minimum: 1
+                type: integer
+              nodeID:
+                description: |-
+                  NodeID identifies the node hosting the long-lived ShardGroup process that owns the
+                  EC volume's bdev_ec, lvol store, head lvol, and NVMe-oF export. It is typically equal
+                  to Engine.Spec.NodeID for engine-process co-location. The Volume controller is the
+                  sole writer and sets this field at first attach. NodeID is NOT cleared on volume
+                  detach (the ShardGroup process keeps running across detach to preserve the lvstore
+                  and head lvol on the encoded shard blocks for fast re-attach); it only changes on
+                  engine-node failover or volume deletion.
+                type: string
+              parityChunks:
+                description: |-
+                  ParityChunks is the m parameter of the EC array. The ShardGroup tolerates up to m
+                  simultaneous shard failures. Immutable after creation.
+                minimum: 1
+                type: integer
+              stripSizeKB:
+                description: |-
+                  StripSizeKB is the EC chunk size in KiB. Must be a power of two in the range [4, 1024].
+                  Immutable after creation.
+                maximum: 1024
+                minimum: 4
+                type: integer
+              volumeName:
+                description: VolumeName is the name of the owning Volume CR. Immutable
+                  after creation.
+                type: string
+            type: object
+          status:
+            description: ShardGroupStatus defines the observed state of the Longhorn
+              ShardGroup
+            properties:
+              conditions:
+                description: |-
+                  Conditions holds the latest observations of the ShardGroup's state, such as a
+                  degraded read that returned EIO.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
+              ecShardAddressMap:
+                additionalProperties:
+                  type: string
+                description: |-
+                  ECShardAddressMap maps shard slot index (as string) to the NVMe-oF address ("ip:port")
+                  of each healthy shard instance (ShardStateNormal with a non-empty StorageIP and Port).
+                  It is the base-bdev list for the ShardGroup process's EC array, and acts as the readiness
+                  gate (together with every Shard CR being in ShardStateNormal) before the ShardGroup
+                  process is provisioned.
+                nullable: true
+                type: object
+              evictingSlots:
+                description: |-
+                  EvictingSlots is the ordered list of slot indices currently in the eviction
+                  pipeline (old Shard CR deleted, replacement not yet rebuilt). Tracked in
+                  status so VolumeEvictionController can observe progress without annotation parsing.
+                items:
+                  type: integer
+                nullable: true
+                type: array
+              failedCount:
+                description: |-
+                  FailedCount is the number of slots currently in the failed state. Slots being replaced
+                  (ShardStateReplacing) are not counted; an active rebuild is tracked separately via
+                  RebuildInProgress.
+                type: integer
+              growInProgress:
+                description: GrowInProgress indicates whether a capacity expansion
+                  is currently running.
+                type: boolean
+              headLvolUUID:
+                description: |-
+                  HeadLvolUUID is the UUID of the head lvol on the ShardGroup-process-owned lvol
+                  store. Surfaced for observability and debugging only.
+                type: string
+              instanceManagerName:
+                description: |-
+                  InstanceManagerName is the InstanceManager currently hosting the ShardGroup process,
+                  set during provisioning and cleared on teardown. During a re-bind to a new node it may
+                  still reference the previous InstanceManager until teardown completes, so consumers must
+                  validate it against Spec.NodeID before trusting the endpoint above.
+                type: string
+              intentionalDeleteSlots:
+                description: |-
+                  IntentionalDeleteSlots is the list of slot indices whose old Shard CR was
+                  deleted intentionally (admin kubectl delete, eviction, drain). The replacement
+                  Shard CR's failure-recovery debounce is bypassed for these slots so the
+                  replace+rebuild sequence runs immediately rather than after the full
+                  replica-replenishment-wait-interval. Cleared once the replacement reaches
+                  ShardStateNormal with StorageIP set, and defensively cleared on ShardGroup
+                  process re-bind.
+                items:
+                  type: integer
+                nullable: true
+                type: array
+              lvstoreUUID:
+                description: |-
+                  LvstoreUUID is reserved for the UUID of the lvol store created on bdev_ec inside the
+                  ShardGroup process. It is currently unpopulated: the ShardGroup instance does not surface
+                  the lvstore UUID over the instance-manager proto yet. Kept for forward-compatible
+                  observability; not on the engine data path.
+                type: string
+              nqn:
+                description: NQN is the NVMe-oF subsystem NQN of the ShardGroup process's
+                  exposed head lvol.
+                type: string
+              ownerID:
+                description: OwnerID is the ID of the node that owns this ShardGroup.
+                type: string
+              port:
+                description: Port is the NVMe-oF port allocated for the ShardGroup
+                  process's exposed head lvol.
+                format: int32
+                type: integer
+              processState:
+                description: ProcessState is the runtime state of the ShardGroup process
+                  owned by this CR.
+                type: string
+              rebuildInProgress:
+                description: RebuildInProgress indicates whether a background shard
+                  rebuild is currently running.
+                type: boolean
+              scrubInProgress:
+                description: ScrubInProgress indicates whether a background scrub
+                  is currently running.
+                type: boolean
+              shardRefs:
+                description: ShardRefs is an ordered list of Shard CR names, where
+                  the list index equals the EC slot index.
+                items:
+                  type: string
+                nullable: true
+                type: array
+              state:
+                description: State is the aggregate health state of the EC array.
+                enum:
+                - healthy
+                - degraded
+                - offline
+                - rebuilding
+                - growing
+                - ""
+                type: string
+              storageIP:
+                description: |-
+                  StorageIP is the storage-network IP of the InstanceManager pod hosting the ShardGroup
+                  process. Combined with Port and NQN, it forms the NVMe-oF endpoint that an EC volume's
+                  engine attaches to.
+                type: string
+              wibDirtyRegion:
+                description: WIBDirtyRegion is the number of dirty WIB regions reported
+                  by the EC bdev.
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
+  name: shards.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: Shard
+    listKind: ShardList
+    plural: shards
+    shortNames:
+    - lhsd
+    singular: shard
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The ShardGroup that owns this Shard
+      jsonPath: .spec.shardGroupName
+      name: ShardGroup
+      type: string
+    - description: The EC slot index of this Shard
+      jsonPath: .spec.slotIndex
+      name: Slot
+      type: integer
+    - description: The node that the shard instance runs on
+      jsonPath: .spec.nodeID
+      name: Node
+      type: string
+    - description: The health state of this shard slot
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The EC role of this shard slot (data or parity)
+      jsonPath: .status.role
+      name: Role
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: Shard is where Longhorn stores Shard object.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ShardSpec defines the desired state of the Longhorn Shard
+            properties:
+              diskPath:
+                description: DiskPath is the path of the disk that hosts the shard
+                  lvol.
+                type: string
+              diskUUID:
+                description: DiskUUID is the UUID of the disk that hosts the shard
+                  lvol.
+                type: string
+              evictionRequested:
+                description: |-
+                  EvictionRequested indicates this shard should be relocated to a different node or disk.
+                  Set by the node controller when the shard's node is being drained or its disk is evicted.
+                type: boolean
+              nodeID:
+                description: NodeID is the node where this shard's lvol resides and
+                  its NVMe-oF target runs.
+                type: string
+              shardGroupName:
+                description: ShardGroupName is the name of the owning ShardGroup CR.
+                  Immutable after creation.
+                type: string
+              size:
+                description: |-
+                  Size is the shard lvol size in bytes. Set by the ShardGroup controller at creation time
+                  and used for idempotent reconciliation.
+                format: int64
+                type: string
+              slotIndex:
+                description: |-
+                  SlotIndex is the zero-based position of this shard in the EC base-bdev array.
+                  Determines the shard's role: indices 0..k-1 are DATA, k..k+m-1 are PARITY.
+                  Immutable after creation.
+                minimum: 0
+                type: integer
+            type: object
+          status:
+            description: ShardStatus defines the observed state of the Longhorn Shard
+            properties:
+              lastFailureTimestamp:
+                description: LastFailureTimestamp is the RFC3339 timestamp of the
+                  most recent shard failure.
+                type: string
+              ownerID:
+                description: OwnerID is the ID of the node that owns this Shard.
+                type: string
+              port:
+                description: Port is the NVMe-oF port of the shard's target export.
+                format: int32
+                type: integer
+              rebuildProgress:
+                description: RebuildProgress is the rebuild completion percentage
+                  (0-100).
+                type: integer
+              replaceTriggered:
+                description: |-
+                  ReplaceTriggered is set to true after shard replacement has been initiated, to prevent
+                  re-issuing the replace command on subsequent cycles while SPDK advances the slot state.
+                  Cleared when the slot state transitions away from Failed.
+                type: boolean
+              role:
+                description: |-
+                  Role is the EC role of this slot (data or parity). Derived from SlotIndex and the parent
+                  ShardGroup's DataChunks; stored here for informational purposes only.
+                enum:
+                - data
+                - parity
+                - ""
+                type: string
+              state:
+                description: State is the health state of this EC shard slot.
+                enum:
+                - normal
+                - failed
+                - replacing
+                - ""
+                type: string
+              storageIP:
+                description: |-
+                  StorageIP is the IP address of the NVMe-oF target exported by the shard's InstanceManager.
+                  Populated after the shard instance is running.
+                type: string
+            type: object
         type: object
     served: true
     storage: true
@@ -4181,6 +4748,52 @@ spec:
                 - v1
                 - v2
                 type: string
+              dataLayout:
+                description: |-
+                  DataLayout declares the user's intended data layout (topology type, protection mode, and EC parameters).
+                  The entire struct is immutable after creation.
+                properties:
+                  dataChunks:
+                    description: |-
+                      DataChunks is the number of data chunks (k) in the EC array.
+                      Required when Type is sharded; must be 0 for replicated volumes.
+                    minimum: 0
+                    type: integer
+                  mode:
+                    description: |-
+                      Mode describes the specific data protection mechanism in use.
+                      Empty for V1 volumes where no SPDK-level mode applies.
+                    enum:
+                    - raid1
+                    - erasureCoding
+                    - ""
+                    type: string
+                  parityChunks:
+                    description: |-
+                      ParityChunks is the number of parity chunks (m) in the EC array.
+                      The volume tolerates up to m simultaneous disk failures.
+                      Required when Type is sharded; must be 0 for replicated volumes.
+                    minimum: 0
+                    type: integer
+                  stripSizeKB:
+                    description: |-
+                      StripSizeKB is the chunk size in KiB used by the EC bdev.
+                      Must be a power of two in the range [4, 1024].
+                      Required when Type is sharded; must be 0 for replicated volumes.
+                    minimum: 0
+                    type: integer
+                  type:
+                    description: Type describes how volume data is distributed across
+                      nodes.
+                    enum:
+                    - replicated
+                    - sharded
+                    - ""
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: DataLayout is immutable
+                  rule: self == oldSelf
               dataLocality:
                 enum:
                 - disabled
