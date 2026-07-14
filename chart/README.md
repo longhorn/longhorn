@@ -107,13 +107,13 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.nodeDriverRegistrar.tag | string | `"v2.17.0"` | Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.registry | string | `""` | Registry for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.provisioner.repository | string | `"longhornio/csi-provisioner"` | Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
-| image.csi.provisioner.tag | string | `"v5.3.0-20260514"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
+'| image.csi.provisioner.tag | string | `"v6.3.0"` | Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.registry | string | `""` | Registry for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.resizer.repository | string | `"longhornio/csi-resizer"` | Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
-| image.csi.resizer.tag | string | `"v2.1.0-20260514"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
+| image.csi.resizer.tag | string | `"v2.2.1"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.registry | string | `""` | Registry for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
-| image.csi.snapshotter.tag | string | `"v8.5.0-20260514"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
+| image.csi.snapshotter.tag | string | `"v8.6.0"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.registry | string | `""` | Registry for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.tag | string | `"v1.12.x-head"` | Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
@@ -131,7 +131,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.longhorn.shareManager.tag | string | `"v1.12.x-head"` | Tag for the Longhorn Share Manager image. |
 | image.longhorn.supportBundleKit.registry | string | `""` | Registry for the Longhorn Support Bundle Manager image. |
 | image.longhorn.supportBundleKit.repository | string | `"longhornio/support-bundle-kit"` | Repository for the Longhorn Support Bundle Manager image. |
-| image.longhorn.supportBundleKit.tag | string | `"v0.0.86"` | Tag for the Longhorn Support Bundle Manager image. |
+| image.longhorn.supportBundleKit.tag | string | `"v0.0.89"` | Tag for the Longhorn Support Bundle Manager image. |
 | image.longhorn.ui.registry | string | `""` | Registry for the Longhorn UI image. |
 | image.longhorn.ui.repository | string | `"longhornio/longhorn-ui"` | Repository for the Longhorn UI image. |
 | image.longhorn.ui.tag | string | `"v1.12.x-head"` | Tag for the Longhorn UI image. |
