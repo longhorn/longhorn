@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: longhorn-volv-pvc
+  name: longhorn-v2-replicated-pvc
   namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn-v2-data-engine
+  storageClassName: longhorn-v2-replicated
   resources:
     requests:
       storage: 2Gi
@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: volume-test
+  name: longhorn-v2-replicated-test
   namespace: default
 spec:
   restartPolicy: Always
@@ -37,4 +37,4 @@ spec:
   volumes:
   - name: volv
     persistentVolumeClaim:
-      claimName: longhorn-volv-pvc
+      claimName: longhorn-v2-replicated-pvc
