@@ -1,16 +1,19 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: longhorn-v2-data-engine
+  name: longhorn-v2-replicated
 provisioner: driver.longhorn.io
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 parameters:
-  numberOfReplicas: "3"
+  dataEngine: "v2"
+  # dataLayout is optional for replicated volumes - RAID1 is the default.
+  dataLayout.type: "replicated"
+  dataLayout.mode: "raid1"
+  numberOfReplicas: "3"             # 3-way mirror; tolerates 2 replica failures
   staleReplicaTimeout: "2880"
   fsType: "ext4"
-  dataEngine: "v2"
 #  mkfsParams: "-I 256 -b 4096 -O ^metadata_csum,^64bit"
 #  nodeSelector: "storage,fast"
 #  recurringJobSelector: '[{"name":"snap-group", "isGroup":true},
@@ -23,5 +26,3 @@ parameters:
 #  unmapMarkSnapChainRemoved: "ignored"
 #  diskSelector: "ssd,fast"
 #  nfsOptions: "soft,timeo=150,retrans=3"
-
-

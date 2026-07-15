@@ -1,0 +1,22 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn-v2-sharded
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  dataEngine: "v2"
+  # Erasure coding: data is split into k data + m parity chunks and spread
+  # across k+m nodes. This 4+2 array tolerates 2 failures at 1.5x overhead.
+  dataLayout.type: "sharded"
+  dataLayout.mode: "erasureCoding"
+  dataLayout.dataChunks: "4"        # k: data chunks
+  dataLayout.parityChunks: "2"      # m: parity chunks = failures tolerated
+  dataLayout.stripSizeKB: "64"      # chunk size in KB; power of two 4-1024, fixed at creation
+  # Required for EC; the webhook rejects the volume otherwise:
+  numberOfReplicas: "1"             # must be 1 - parity provides fault tolerance, not replicas
+  dataLocality: "disabled"          # must be disabled - chunks span k+m nodes
+  fsType: "ext4"
+# Needs at least k+m nodes (6 for 4+2) - one shard per node (hard anti-affinity).
