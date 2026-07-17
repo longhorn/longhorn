@@ -89,3 +89,95 @@ When .Values.global.timezone is set, this snippet renders a TZ env var.
   value: {{ .Values.global.timezone | quote }}
 {{- end }}
 {{- end -}}
+
+{{- define "longhorn.normalizePath" -}}
+{{- $p := trim . -}}
+{{- if eq $p "" -}}
+{{- "" -}}
+{{- else if eq $p "/" -}}
+{{- "/" -}}
+{{- else -}}
+{{- regexReplaceAll "/+$" $p "" -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "longhorn.requestedDefaultDataPath" -}}
+{{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) -}}
+{{- .Values.defaultSettings.defaultDataPath -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "longhorn.requestedDefaultControlPath" -}}
+{{- if not (kindIs "invalid" .Values.defaultSettings.defaultControlPath) -}}
+{{- .Values.defaultSettings.defaultControlPath -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "longhorn.effectiveDefaultDataPath" -}}
+{{- $existing := dict -}}
+{{- if .Capabilities.APIVersions.Has "longhorn.io/v1beta2/Setting" -}}
+{{- $existing = (lookup "longhorn.io/v1beta2" "Setting" (include "release_namespace" .) "default-data-path") | default dict -}}
+{{- end -}}
+{{- if and $existing $existing.value -}}
+{{- $existing.value -}}
+{{- else -}}
+{{- $requested := trim (include "longhorn.requestedDefaultDataPath" .) -}}
+{{- if ne $requested "" -}}
+{{- $requested -}}
+{{- else -}}
+{{- "/var/lib/longhorn/" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "longhorn.effectiveDefaultControlPath" -}}
+{{- $namespace := include "release_namespace" . -}}
+{{- $existingControl := dict -}}
+{{- if .Capabilities.APIVersions.Has "longhorn.io/v1beta2/Setting" -}}
+{{- $existingControl = (lookup "longhorn.io/v1beta2" "Setting" $namespace "default-control-path") | default dict -}}
+{{- end -}}
+{{- if and $existingControl $existingControl.value -}}
+{{- $existingControl.value -}}
+{{- else -}}
+{{- $existingData := dict -}}
+{{- if .Capabilities.APIVersions.Has "longhorn.io/v1beta2/Setting" -}}
+{{- $existingData = (lookup "longhorn.io/v1beta2" "Setting" $namespace "default-data-path") | default dict -}}
+{{- end -}}
+{{- if and $existingData $existingData.value -}}
+{{- "/var/lib/longhorn/" -}}
+{{- else -}}
+{{- $requested := trim (include "longhorn.requestedDefaultControlPath" .) -}}
+{{- if ne $requested "" -}}
+{{- $requested -}}
+{{- else -}}
+{{- "/var/lib/longhorn/" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "longhorn.validateInstallTimePathSettings" -}}
+{{- $namespace := include "release_namespace" . -}}
+{{- $existingData := dict -}}
+{{- if .Capabilities.APIVersions.Has "longhorn.io/v1beta2/Setting" -}}
+{{- $existingData = (lookup "longhorn.io/v1beta2" "Setting" $namespace "default-data-path") | default dict -}}
+{{- end -}}
+{{- $existingControl := dict -}}
+{{- if .Capabilities.APIVersions.Has "longhorn.io/v1beta2/Setting" -}}
+{{- $existingControl = (lookup "longhorn.io/v1beta2" "Setting" $namespace "default-control-path") | default dict -}}
+{{- end -}}
+{{- $requestedData := include "longhorn.normalizePath" (include "longhorn.requestedDefaultDataPath" .) -}}
+{{- $requestedControl := include "longhorn.normalizePath" (include "longhorn.requestedDefaultControlPath" .) -}}
+{{- $existingDataValue := include "longhorn.normalizePath" ($existingData.value | default "") -}}
+{{- $existingControlValue := include "longhorn.normalizePath" ($existingControl.value | default "") -}}
+{{- $legacyControlValue := include "longhorn.normalizePath" "/var/lib/longhorn/" -}}
+{{- if and $existingData (ne $requestedData "") (ne $requestedData $existingDataValue) -}}
+{{- fail (printf "default-data-path is install-time only and cannot be changed after Longhorn has been initialized (existing: %s, requested: %s)" $existingDataValue $requestedData) -}}
+{{- end -}}
+{{- if and $existingControl (ne $requestedControl "") (ne $requestedControl $existingControlValue) -}}
+{{- fail (printf "default-control-path is install-time only and cannot be changed after Longhorn has been initialized (existing: %s, requested: %s)" $existingControlValue $requestedControl) -}}
+{{- end -}}
+{{- if and (not $existingControl) $existingData (ne $requestedControl "") (ne $requestedControl $legacyControlValue) -}}
+{{- fail (printf "default-control-path is install-time only and cannot be changed after Longhorn has been initialized (existing: %s, requested: %s)" $legacyControlValue $requestedControl) -}}
+{{- end -}}
+{{- end -}}
