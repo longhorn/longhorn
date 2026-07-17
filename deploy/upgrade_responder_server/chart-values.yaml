@@ -90,10 +90,16 @@ configMap:
           ]
         },
         {
-          "name": "v1.11.2",
-          "releaseDate": "2026-05-05T00:00:00Z",
+          "name": "v1.11.3",
+          "releaseDate": "2026-07-01T00:00:00Z",
           "tags": [
             "stable",
+          ]
+        },
+        {
+          "name": "v1.12.0",
+          "releaseDate": "2026-06-02T00:00:00Z",
+          "tags": [
             "latest"
           ]
         }
