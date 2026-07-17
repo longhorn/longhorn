@@ -5747,10 +5747,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_DATA_PATH
-          value: "/var/lib/longhorn/"
-        - name: LONGHORN_CONTROL_PATH
-          value: "/var/lib/longhorn/"
         - name: LONGHORN_DISTRO
           value: "longhorn"
         

@@ -33,6 +33,8 @@ spec:
         - name: LONGHORN_DISTRO
           value: {{ .Values.longhornManager.distro | quote }}
         {{- end }}
+        - name: LONGHORN_CONTROL_PATH
+          value: {{ default "/var/lib/longhorn/" .Values.defaultSettings.defaultControlPath | quote }}
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
