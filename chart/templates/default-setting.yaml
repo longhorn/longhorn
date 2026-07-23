@@ -6,17 +6,26 @@ metadata:
   labels: {{- include "longhorn.labels" . | nindent 4 }}
 data:
   default-setting.yaml: |-
+    {{- include "longhorn.validateInstallTimePathSettings" . }}
+    {{- $existingDefaultDataPath := dict }}
+    {{- if .Capabilities.APIVersions.Has "longhorn.io/v1beta2/Setting" }}
+    {{- $existingDefaultDataPath = (lookup "longhorn.io/v1beta2" "Setting" (include "release_namespace" .) "default-data-path") | default dict }}
+    {{- end }}
+    {{- $existingDefaultControlPath := dict }}
+    {{- if .Capabilities.APIVersions.Has "longhorn.io/v1beta2/Setting" }}
+    {{- $existingDefaultControlPath = (lookup "longhorn.io/v1beta2" "Setting" (include "release_namespace" .) "default-control-path") | default dict }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowRecurringJobWhileVolumeDetached) }}
     allow-recurring-job-while-volume-detached: {{ .Values.defaultSettings.allowRecurringJobWhileVolumeDetached }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.createDefaultDiskLabeledNodes) }}
     create-default-disk-labeled-nodes: {{ .Values.defaultSettings.createDefaultDiskLabeledNodes }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
-    default-data-path: {{ .Values.defaultSettings.defaultDataPath | quote }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.defaultDataPath)) $existingDefaultDataPath }}
+    default-data-path: {{ include "longhorn.effectiveDefaultDataPath" . | quote }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultControlPath) }}
-    default-control-path: {{ .Values.defaultSettings.defaultControlPath | quote }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.defaultControlPath)) $existingDefaultControlPath $existingDefaultDataPath }}
+    default-control-path: {{ include "longhorn.effectiveDefaultControlPath" . | quote }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
     replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
