@@ -316,6 +316,11 @@ defaultSettings:
   # This setting can help prevent Longhorn components from being evicted under Node Pressure.
   # Notice that this will be applied to Longhorn user-deployed components by default if there are no priority class values set yet, such as `longhornManager.priorityClass`.
   priorityClass: &defaultPriorityClassNameRef "longhorn-critical"
+  # -- Per-component PriorityClass overrides for system-managed Longhorn components.
+  # Unset components fall back to `defaultSettings.priorityClass`.
+  # Supported components: instance-manager, engine-image, longhorn-csi-plugin, csi-attacher, csi-provisioner, csi-resizer, csi-snapshotter.
+  # WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES. The value should be a JSON object with component names as keys and PriorityClass names as values.
+  systemManagedComponentsPriorityClasses: ~
   # -- Setting that allows Longhorn to automatically salvage volumes when all replicas become faulty (for example, when the network connection is interrupted). Longhorn determines which replicas are usable and then uses these replicas for the volume. This setting is enabled by default.
   autoSalvage: ~
   # -- Setting that allows Longhorn to automatically delete a workload pod that is managed by a controller (for example, daemonset) whenever a Longhorn volume is detached unexpectedly (for example, during Kubernetes upgrades). After deletion, the controller restarts the pod and then Kubernetes handles volume reattachment and remounting.
