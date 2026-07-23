@@ -243,6 +243,19 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornUI.replicas | int | `2` | Replica count for Longhorn UI. |
 | longhornUI.tolerations | list | `[]` | Toleration for Longhorn UI on nodes allowed to run Longhorn components. |
 
+### Longhorn Global Manager Settings
+
+The following settings apply to the longhorn-global-manager Deployment, which hosts the cluster-wide Pod controllers (KubernetesPVController and KubernetesPodController) instead of running them in every Longhorn Manager DaemonSet pod.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| longhornGlobalManager.annotations | object | `{}` | Annotations for the global manager pod template. |
+| longhornGlobalManager.nodeSelector | object | `{}` | Node selector for the global manager Deployment. |
+| longhornGlobalManager.priorityClass | string | `"longhorn-critical"` | PriorityClass for the global manager Deployment. Defaults to the same priority class as the rest of the Longhorn control plane. |
+| longhornGlobalManager.replicas | int | `2` | Number of replicas (one active leader + standbys via leader election). |
+| longhornGlobalManager.resources | string | `nil` | Resource requests/limits for the global manager pod. Defaults to none, like the other Longhorn components; the cluster-wide Pod informer cache scales with the cluster's pod count, so consider setting limits on large clusters. |
+| longhornGlobalManager.tolerations | list | `[]` | Node tolerations for the global manager Deployment. |
+
 ### Ingress Settings
 
 | Key | Type | Default | Description |

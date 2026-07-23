@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-global-manager
+  name: longhorn-global-manager
+  namespace: {{ include "release_namespace" . }}
+spec:
+  replicas: {{ .Values.longhornGlobalManager.replicas }}
+  selector:
+    matchLabels:
+      app: longhorn-global-manager
+  template:
+    metadata:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+        app: longhorn-global-manager
+      {{- with .Values.longhornGlobalManager.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      containers:
+      - name: longhorn-global-manager
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        # No privileged / host paths / host network — the global manager
+        # only watches CRs and Pods through kube-apiserver.
+        command:
+        - longhorn-manager
+        {{- if eq .Values.longhornManager.log.format "json" }}
+        - -j
+        {{- end }}
+        - global
+        ports:
+        - containerPort: 9505
+          name: healthz
+        livenessProbe:
+          httpGet:
+            path: /v1/healthz
+            port: 9505
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        {{- if .Values.longhornManager.distro }}
+        - name: LONGHORN_DISTRO
+          value: {{ .Values.longhornManager.distro | quote }}
+        {{- end }}
+        {{- include "longhorn.timezoneEnv" . | nindent 8 }}
+        {{- with .Values.longhornGlobalManager.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
+      imagePullSecrets:
+        {{- $imagePullSecrets := list }}
+        {{- if kindIs "string" . }}
+          {{- $imagePullSecrets = append $imagePullSecrets (dict "name" .) }}
+        {{- else }}
+          {{- range . }}
+            {{- if kindIs "string" . }}
+                {{- $imagePullSecrets = append $imagePullSecrets (dict "name" .) }}
+            {{- else }}
+                {{- $imagePullSecrets = append $imagePullSecrets . }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- toYaml $imagePullSecrets | nindent 8 }}
+      {{- end }}
+      {{- if .Values.longhornGlobalManager.priorityClass }}
+      priorityClassName: {{ .Values.longhornGlobalManager.priorityClass | quote }}
+      {{- end }}
+      {{- if or .Values.global.tolerations .Values.longhornGlobalManager.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      tolerations:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 8 }}
+        {{- end }}
+        {{- if or .Values.global.tolerations .Values.longhornGlobalManager.tolerations }}
+{{ default .Values.global.tolerations .Values.longhornGlobalManager.tolerations | toYaml | indent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.global.nodeSelector .Values.longhornGlobalManager.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      nodeSelector:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if or .Values.global.nodeSelector .Values.longhornGlobalManager.nodeSelector }}
+{{ default .Values.global.nodeSelector .Values.longhornGlobalManager.nodeSelector | toYaml | indent 8 }}
+        {{- end }}
+      {{- end }}
+      # Spread replicas across nodes so a single node failure cannot
+      # take down both leader and standby.
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: longhorn-global-manager
+              topologyKey: kubernetes.io/hostname
+      serviceAccountName: longhorn-service-account

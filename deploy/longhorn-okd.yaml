@@ -5768,6 +5768,72 @@ spec:
       securityContext:
         runAsUser: 0
 ---
+# Source: longhorn/templates/deployment-global-manager.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    app: longhorn-global-manager
+  name: longhorn-global-manager
+  namespace: longhorn-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-global-manager
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: longhorn
+        app.kubernetes.io/instance: longhorn
+        app.kubernetes.io/version: v1.12.0-dev
+        app: longhorn-global-manager
+    spec:
+      containers:
+      - name: longhorn-global-manager
+        image: docker.io/longhornio/longhorn-manager:master-head
+        imagePullPolicy: IfNotPresent
+        # No privileged / host paths / host network — the global manager
+        # only watches CRs and Pods through kube-apiserver.
+        command:
+        - longhorn-manager
+        - global
+        ports:
+        - containerPort: 9505
+          name: healthz
+        livenessProbe:
+          httpGet:
+            path: /v1/healthz
+            port: 9505
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: LONGHORN_DISTRO
+          value: "longhorn"
+        
+      priorityClassName: "longhorn-critical"
+      # Spread replicas across nodes so a single node failure cannot
+      # take down both leader and standby.
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: longhorn-global-manager
+              topologyKey: kubernetes.io/hostname
+      serviceAccountName: longhorn-service-account
+---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: apps/v1
 kind: Deployment
