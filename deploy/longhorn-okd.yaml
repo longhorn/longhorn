@@ -3417,6 +3417,11 @@ spec:
                   later than the corresponding entry in an engine's replicaTransitionTimeMap because it is set when the volume
                   controller acknowledges the change.
                 type: string
+              linkedCloneSrcReplicaName:
+                description: |-
+                  LinkedCloneSrcReplicaName is the name of the src replica this clone replica is parented to.
+                  Immutable once set. Non-empty only for linked-clone replicas.
+                type: string
               logRequested:
                 type: boolean
               migrationEngineName:
