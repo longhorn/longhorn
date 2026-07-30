@@ -3326,6 +3326,18 @@ spec:
             description: ShardGroupSpec defines the desired state of the Longhorn
               ShardGroup
             properties:
+              creationSize:
+                description: |-
+                  CreationSize is the volume size in bytes when the lvstore is first
+                  created. The lvstore metadata region is sized from it and never grows,
+                  so in-place expansion is limited to EcLvstoreMaxGrowthFactor (10x) of
+                  this size. Zero means the lvstore does not exist yet; the creation cap
+                  applies instead. Immutable once set.
+                format: int64
+                type: integer
+                x-kubernetes-validations:
+                - message: CreationSize is immutable once set
+                  rule: oldSelf == 0 || self == oldSelf
               dataChunks:
                 description: DataChunks is the k parameter of the EC array. Immutable
                   after creation.
