@@ -430,7 +430,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.upgradeChecker | Upgrade Checker that periodically checks for new Longhorn versions. When a new version is available, a notification appears on the Longhorn UI. This setting is enabled by default |
 | defaultSettings.upgradeResponderURL | The Upgrade Responder sends a notification whenever a new Longhorn version that you can upgrade to becomes available. The default value is https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade. |
 | defaultSettings.v1DataEngine | Setting that allows you to enable the V1 Data Engine. |
-| defaultSettings.v2DataEngine | Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is an experimental feature and should not be used in production environments. |
+| defaultSettings.v2DataEngine | Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). |
 
 ---
 Please see [link](https://github.com/longhorn/longhorn) for more information.
