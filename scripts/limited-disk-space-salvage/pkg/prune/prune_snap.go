@@ -10,14 +10,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func PunchSnapshots(
-	location []byte,
-	names []string,
-	totalSectors int64,
-	sectorSize int64,
-	diskMetas sectormap.MetaFileMap,
-	dryRun bool,
-) error {
+// PunchSnapshots for every sector range with a resolved owner, it punches a hole for that range in
+// every ancestor of the owner. Sectors with no resolved owner are left untouched.
+func PunchSnapshots(location []byte, names []string, totalSectors int64, sectorSize int64, diskMetas sectormap.MetaFileMap, dryRun bool) error {
 	if totalSectors == 0 {
 		return nil
 	}

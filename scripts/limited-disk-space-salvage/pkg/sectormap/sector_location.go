@@ -9,6 +9,10 @@ import (
 
 const sectorNil = byte(0)
 
+// BuildSectorLocationMap resolves the first owner of each sector by scanning
+// layer files from newest to oldest. It returns a per-sector location map,
+// where each byte is an index into the returned names slice (0 = unclaimed,
+// 1 = backing file, 2+ = layer files in scan order).
 func BuildSectorLocationMap(newestToOldest []string, fileByName LayerFileMap, backingFileName string, totalSectors int64) (location []byte, names []string, err error) {
 	if len(newestToOldest) == 0 {
 		return nil, nil, fmt.Errorf("no layers provided")

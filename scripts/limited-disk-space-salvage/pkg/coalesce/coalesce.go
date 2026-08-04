@@ -8,6 +8,8 @@ import (
 	"github.com/longhorn/sparse-tools/sparse"
 )
 
+// PromoteToHead copies every sector range whose current owner is NOT head into head,
+// then punches a hole in that source range so the copy is not duplicated on disk.
 func PromoteToHead(location []byte, names []string, fileByName sectormap.LayerFileMap, headName string, dryRun bool) error {
 	totalSectors := int64(len(location))
 	if totalSectors == 0 {

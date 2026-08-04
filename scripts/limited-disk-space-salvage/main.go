@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/longhorn/longhorn/scripts/limited-disk-space-salvage/pkg/coalesce"
 	"github.com/longhorn/longhorn/scripts/limited-disk-space-salvage/pkg/prune"
 	"github.com/longhorn/longhorn/scripts/limited-disk-space-salvage/pkg/sectormap"
 )
@@ -72,12 +73,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Print("\nProceed with actual punching? [y/N]: ")
-	reader := bufio.NewReader(os.Stdin)
-	answer, _ := reader.ReadString('\n')
-	answer = strings.TrimSpace(strings.ToLower(answer))
-
-	if answer != "y" && answer != "yes" {
+	if !confirm("Proceed with punching ancestors?") {
 		fmt.Println("Aborted, no changes made.")
 		return
 	}
@@ -86,4 +82,26 @@ func main() {
 	if err := prune.PunchSnapshots(location, names, totalSectors, volMeta.SectorSize, diskMetas, false); err != nil {
 		panic(err)
 	}
+
+	// promote to head (consolidate live data)
+	fmt.Println("--- dry-run: promotions that would be performed ---")
+	if err := coalesce.PromoteToHead(location, names, fileByName, volMeta.Head, true); err != nil {
+		panic(err)
+	}
+	if !confirm("Proceed with promoting to head?") {
+		fmt.Println("Aborted, no changes made.")
+		return
+	}
+	fmt.Println("--- promoting non-head data into head ---")
+	if err := coalesce.PromoteToHead(location, names, fileByName, volMeta.Head, false); err != nil {
+		panic(err)
+	}
+}
+
+func confirm(prompt string) bool {
+	fmt.Printf("\n%s [y/N]: ", prompt)
+	reader := bufio.NewReader(os.Stdin)
+	answer, _ := reader.ReadString('\n')
+	answer = strings.TrimSpace(strings.ToLower(answer))
+	return answer == "y" || answer == "yes"
 }
