@@ -86,6 +86,7 @@ rules:
   - shardgroups
   - shards
   - sharemanagers
+  - snapshotgroups
   - snapshots
   - supportbundles
   - systembackups

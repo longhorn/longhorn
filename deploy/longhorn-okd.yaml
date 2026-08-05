@@ -5616,6 +5616,9 @@ rules:
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
   verbs: ["*"]
+- apiGroups: ["groupsnapshot.storage.k8s.io"]
+  resources: ["volumegroupsnapshotclasses", "volumegroupsnapshots", "volumegroupsnapshotcontents", "volumegroupsnapshotcontents/status"]
+  verbs: ["*"]
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "enginefrontends", "enginefrontends/status", "engines", "engines/status", "replicas", "replicas/status", "settings", "settings/status",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
@@ -5626,7 +5629,7 @@ rules:
               "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
               "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status",
               "volumeattachments", "volumeattachments/status", "backupbackingimages", "backupbackingimages/status",
-              "shards", "shards/status", "shardgroups", "shardgroups/status"]
+              "shards", "shards/status", "shardgroups", "shardgroups/status", "snapshotgroups", "snapshotgroups/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
