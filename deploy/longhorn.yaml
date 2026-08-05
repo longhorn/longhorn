@@ -6066,6 +6066,11 @@ spec:
             value: "docker.io/longhornio/csi-snapshotter:v8.6.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
             value: "docker.io/longhornio/livenessprobe:v2.18.0-20260428"
+          # Uncomment to enable CSI VolumeGroupSnapshot support.
+          # Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first;
+          # otherwise the CSI Snapshotter stops serving regular volume snapshots.
+          # - name: CSI_VOLUME_GROUP_SNAPSHOT_ENABLED
+          #   value: "true"
           
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
