@@ -548,6 +548,40 @@ longhornManager:
   updateStrategy:
     rollingUpdate:
       maxUnavailable: "100%"
+longhornGlobalManager:
+  # -- Replica count for the global manager. One replica is the active leader; the others are warm standbys.
+  replicas: 3
+  # -- PriorityClass for the global manager.
+  priorityClass: *defaultPriorityClassNameRef
+  # -- Affinity for global manager pods. The default spreads replicas across nodes.
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - longhorn-global-manager
+            topologyKey: kubernetes.io/hostname
+  # -- Resource requests and limits for global manager pods. Memory scales with the cluster's Pod count (cluster-wide Pod informer cache).
+  resources: ~
+  # -- Node tolerations for global manager pods.
+  tolerations: []
+  # -- Node selector for global manager pods.
+  nodeSelector: {}
+  # -- Annotations for global manager pods.
+  annotations: {}
+  # -- Pod Disruption Budget for the global manager. Keeps a minimum number of global manager pods available during voluntary disruptions such as node drains. Effective only when `longhornGlobalManager.replicas` is greater than 1.
+  podDisruptionBudget:
+    # -- Setting that allows you to enable the Pod Disruption Budget for the global manager.
+    enabled: false
+    # -- Minimum number or percentage of global manager pods that must remain available during a disruption. Mutually exclusive with `longhornGlobalManager.podDisruptionBudget.maxUnavailable`.
+    minAvailable: 1
+    # -- Maximum number or percentage of global manager pods that can be unavailable during a disruption. When set, it takes precedence over `longhornGlobalManager.podDisruptionBudget.minAvailable`.
+    maxUnavailable: ""
 longhornDriver:
   log:
     # -- Format of longhorn-driver logs. (Options: "plain", "json")
