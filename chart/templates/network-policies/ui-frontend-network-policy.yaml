@@ -30,6 +30,12 @@ spec:
           app.kubernetes.io/component: controller
           app.kubernetes.io/instance: rke2-ingress-nginx
           app.kubernetes.io/name: rke2-ingress-nginx
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: rke2-traefik
     {{- else if eq .Values.networkPolicies.type "k3s" }}
     - namespaceSelector:
         matchLabels:
