@@ -290,6 +290,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineIobufLargePoolSize) }}
     data-engine-iobuf-large-pool-size: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineIobufLargePoolSize }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineIobufSmallPoolSize) }}
+    data-engine-iobuf-small-pool-size: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineIobufSmallPoolSize }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaRebuildingBandwidthLimit) }}
     replica-rebuilding-bandwidth-limit: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.replicaRebuildingBandwidthLimit }}
     {{- end }}
