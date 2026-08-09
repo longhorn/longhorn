@@ -14,13 +14,44 @@ Before contributing code, please read the Longhorn developer guide:
 
 You can also join the Longhorn community discussions through the available Longhorn community channels.
 
-## Before Opening a Pull Request
+## Project Structure and Repositories
+
+Longhorn is spread across several repositories. The [`longhorn/longhorn`](https://github.com/longhorn/longhorn) repository is the umbrella project: it is the single place for issue tracking, enhancement proposals, release manifests (`deploy/`), the Helm chart source (`chart/`), and design documents (`enhancements/`). It does **not** contain the component source code.
+
+Source code for components and libraries lives in dedicated repositories. Open code pull requests against the repository that owns the code you are changing:
+
+| Component                      | What it does                                                           | GitHub repo                                                                                 |
+| :----------------------------- | :--------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| Longhorn Backing Image Manager | Backing image download, sync, and deletion in a disk                   | [longhorn/backing-image-manager](https://github.com/longhorn/backing-image-manager)         |
+| Longhorn Engine                | Core V1 Data Engine controller/replica logic                           | [longhorn/longhorn-engine](https://github.com/longhorn/longhorn-engine)                     |
+| Longhorn SPDK Engine           | Core V2 Data Engine controller/replica logic                           | [longhorn/longhorn-spdk-engine](https://github.com/longhorn/longhorn-spdk-engine)           |
+| Longhorn Instance Manager      | Controller/replica instance lifecycle management                       | [longhorn/longhorn-instance-manager](https://github.com/longhorn/longhorn-instance-manager) |
+| Longhorn Manager               | Longhorn orchestration, includes CSI driver for Kubernetes             | [longhorn/longhorn-manager](https://github.com/longhorn/longhorn-manager)                   |
+| Longhorn Share Manager         | NFS provisioner that exposes Longhorn volumes as ReadWriteMany volumes | [longhorn/longhorn-share-manager](https://github.com/longhorn/longhorn-share-manager)       |
+| Longhorn UI                    | The Longhorn dashboard                                                 | [longhorn/longhorn-ui](https://github.com/longhorn/longhorn-ui)                             |
+
+Regardless of which repository the code change targets, the tracking issue is always filed in [`longhorn/longhorn`](https://github.com/longhorn/longhorn/issues).
+
+## Reporting Issues and Before Opening a Pull Request
 
 Before submitting a pull request, make sure there is a related issue in the Longhorn issue tracker:
 
 - https://github.com/longhorn/longhorn/issues
 
 If no issue exists, please create one first.
+
+When creating an issue, use the correct issue template so the report is categorized properly and includes the required information:
+
+- https://github.com/longhorn/longhorn/tree/master/.github/ISSUE_TEMPLATE
+
+The selected template automatically applies the matching title prefix, and the issue title should keep that prefix, for example:
+
+- `[BUG] <description>`
+- `[FEATURE] <description>`
+- `[IMPROVEMENT] <description>`
+- `[REFACTOR] <description>`
+- `[DOC] <description>`
+- `[TEST] <description>`
 
 Having an issue for every pull request helps the community:
 
@@ -31,6 +62,16 @@ Having an issue for every pull request helps the community:
 
 Small changes such as typo fixes may be submitted directly, but larger bug fixes, behavior changes, features, refactoring, dependency updates, or chart-related changes should always be linked to an issue.
 
+## Enhancement Proposals
+
+Large features, architectural changes, or changes that affect the storage data path, upgrade behavior, or public APIs require a Longhorn Enhancement Proposal (LEP) before implementation begins.
+
+- Proposals live in the [`enhancements/`](https://github.com/longhorn/longhorn/tree/master/enhancements) directory of this repository.
+- Use an existing proposal as a template and open the proposal as a pull request for discussion.
+- Reaching agreement on the design early avoids rework and helps maintainers plan releases and backports.
+
+If you are unsure whether a change needs a proposal, open an issue first and ask the maintainers.
+
 ## Pull Request Requirements
 
 Each pull request must include:
@@ -40,6 +81,8 @@ Each pull request must include:
 3. The motivation and context for the change.
 4. The test plan and actual test results.
 5. Any known risks, limitations, compatibility concerns, or follow-up work.
+
+Every commit and the pull request description must reference the related ticket number, for example `longhorn/longhorn#1234`. This links the change back to its tracking issue.
 
 A pull request should be focused and reviewable. Avoid combining unrelated fixes, refactoring, formatting changes, and feature work in the same pull request.
 
@@ -94,6 +137,8 @@ If a pull request affects storage behavior, upgrade behavior, data path logic, s
 ## Commit and Pull Request Title Convention
 
 Pull request titles and commit titles must follow the Conventional Commits format:
+
+- https://www.conventionalcommits.org/en/v1.0.0/
 
 ```text
 <type>(optional scope): <description>
@@ -191,14 +236,25 @@ After chart changes are merged and ready for release, they will be synced to the
 
 ## Documentation Changes
 
-Documentation improvements are welcome.
+The official Longhorn product documentation published at https://longhorn.io is maintained in the [longhorn/website](https://github.com/longhorn/website) repository. Submit changes to installation, configuration, operation, troubleshooting, upgrade, and feature documentation there.
+
+Repository-specific documentation, such as README files, development instructions, Helm chart documentation, examples, and design documents, should be updated in the repository that owns that content. A change may require documentation pull requests in both the component repository and `longhorn/website`.
 
 For documentation pull requests, please make sure:
 
 - The content is accurate and matches the current Longhorn behavior.
-- The change is linked to a related issue when it affects user-facing behavior, troubleshooting, installation, upgrade, settings, or feature documentation.
+- The change is linked to a related issue in [`longhorn/longhorn`](https://github.com/longhorn/longhorn/issues) when it affects user-facing behavior, troubleshooting, installation, upgrade, settings, or feature documentation.
+- The correct documentation version is updated, and the change is applied to other supported versions when it also applies to them.
 - The wording is clear and concise.
 - Examples, commands, and YAML snippets are tested.
+
+## Backports and Release Branches
+
+Longhorn maintains multiple release branches (for example `v1.x.x`) in addition to `master`.
+
+- New work normally lands on `master` first.
+- Fixes that also affect supported releases are backported to the relevant release branches. Backport issues and pull requests are tracked with a `[BACKPORT]` prefix and the target version.
+- When reporting or fixing a bug, mention which released versions are affected so maintainers can plan backports.
 
 ## Review Process
 
@@ -225,15 +281,18 @@ If you believe you have found a security vulnerability, follow the Longhorn secu
 Before requesting review, confirm that:
 
 - [ ] There is a related issue in https://github.com/longhorn/longhorn/issues.
+- [ ] The code pull request targets the correct component repository.
 - [ ] The pull request description explains the motivation and scope.
+- [ ] The commit and pull request description reference the related ticket number (for example `longhorn/longhorn#1234`).
 - [ ] The pull request title follows Conventional Commits.
 - [ ] Each commit title follows Conventional Commits.
 - [ ] Each commit includes a valid DCO sign-off.
 - [ ] The change has been tested.
 - [ ] The test steps and results are included in the pull request description.
 - [ ] Go imports follow the Longhorn coding convention.
-- [ ] Documentation has been updated when needed.
+- [ ] Documentation has been updated in the appropriate repository when needed.
 - [ ] Chart changes are submitted to `longhorn/longhorn`, not `longhorn/charts`.
+- [ ] Backports to supported release branches are considered when needed.
 - [ ] The pull request contains only related changes.
 
 Thank you for helping improve Longhorn!
