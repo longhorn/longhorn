@@ -852,50 +852,50 @@ questions:
       - variable: defaultSettings.v2DataEngine
         label: V2 Data Engine
         description: >-
-          Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). The V2 Data Engine is an experimental feature and should not be used in production environments. **Caution**: [1] **Do not modify this setting while volumes are still attached.** [2] When the V2 Data Engine is enabled, each Instance Manager pod for the V2 Data Engine uses 1 CPU core. The high CPU usage is caused by `spdk_tgt`, a process running in each Instance Manager pod that handles input/output (IO) operations and requires intensive polling. `spdk_tgt` consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations.
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+          Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). **Caution**: [1] **Do not modify this setting while volumes are still attached.** [2] When the V2 Data Engine is enabled, each Instance Manager pod for the V2 Data Engine uses 1 CPU core. The high CPU usage is caused by `spdk_tgt`, a process running in each Instance Manager pod that handles input/output (IO) operations and requires intensive polling. `spdk_tgt` consumes 100% of a dedicated CPU core to efficiently manage and process the IO requests, ensuring optimal performance and responsiveness for storage operations.
+        group: Longhorn V2 Data Engine Settings
         type: boolean
         default: false
       - variable: defaultSettings.dataEngineHugepageEnabled
         label: V2 Data Engine
         description: >-
           Applies only to the V2 Data Engine. Enables hugepages for the Storage Performance Development Kit (SPDK) target daemon. If disabled, legacy memory is used. Allocation size is set via the Data Engine Memory Size setting.
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        group: Longhorn V2 Data Engine Settings
         type: string
         default: '{"v2":"true"}'
       - variable: defaultSettings.dataEngineMemorySize
         label: V2 Data Engine
         description: >-
           Applies only to the V2 Data Engine. Specifies the memory size, in MiB, allocated to the Storage Performance Development Kit (SPDK) target daemon. When hugepage is enabled, this defines the hugepage size; when legacy memory is used, hugepage is disabled.
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        group: Longhorn V2 Data Engine Settings
         type: string
         default: '{"v2":"2048"}'
       - variable: defaultSettings.dataEngineInterruptModeEnabled
         label: V2 Data Engine
         description: >-
           Applies only to the V2 Data Engine. Controls whether the Storage Performance Development Kit (SPDK) target daemon runs in interrupt mode or the default polling mode.
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        group: Longhorn V2 Data Engine Settings
         type: string
         default: '{"v2":"false"}'
       - variable: defaultSettings.dataEngineCPUIsolationEnabled
         label: Data Engine CPU Isolation
         description: >-
           Applies only to the V2 Data Engine. Steers host hardware IRQs, unbound kernel workqueue workers, and network Receive Packet Steering (RPS) away from the CPUs used by the Storage Performance Development Kit (SPDK) target daemon, so that interrupt handling, deferred kernel work, and network softirq processing do not preempt SPDK polling reactors. When applying the setting, Longhorn will try to restart all V2 instance-manager pods if all volumes are detached and eventually restart the instance manager pod without instances running on the instance manager. This value can be overridden per Instance Manager via Spec.DataEngineSpec.V2.CPUIsolationEnabled (set to "true" or "false" on a specific instance manager to force the value on that node; leave empty to inherit this setting).
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        group: Longhorn V2 Data Engine Settings
         type: string
         default: '{"v2":"false"}'
       - variable: defaultSettings.dataEngineLogLevel
         label: Data Engine Log Level
         description: >-
           Applies only to the V2 Data Engine. Specifies the log level for the Storage Performance Development Kit (SPDK) target daemon. Supported values are: Error, Warning, Notice, Info, and Debug. The default is Notice.
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        group: Longhorn V2 Data Engine Settings
         type: string
         default: '{"v2":"Notice"}'
       - variable: defaultSettings.dataEngineLogFlags
         label: Data Engine Log Flags
         description: >-
           Applies only to the V2 Data Engine. Specifies the log flags for the Storage Performance Development Kit (SPDK) target daemon.
-        group: Longhorn V2 Data Engine (Experimental Feature) Settings
+        group: Longhorn V2 Data Engine Settings
         type: string
         default: '{"v2":""}'
       - variable: defaultSettings.autoCleanupSnapshotWhenDeleteBackup
