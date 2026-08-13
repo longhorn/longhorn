@@ -33,7 +33,7 @@ EOD
     $OKD_ENABLED_FLAG \
     --create-namespace \
     --no-hooks \
-    --kube-version 1.34.0 \
+    --kube-version 1.25.0 \
     >>"$DEPLOY_YAML"
   < "$DEPLOY_YAML" grep -v 'helm.sh\|app.kubernetes.io/managed-by: Helm' | grep -v "helm.sh/chart:" > "$DEPLOY_YAML_TMP"
   mv "$DEPLOY_YAML_TMP" "$DEPLOY_YAML"
