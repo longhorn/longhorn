@@ -661,6 +661,19 @@ httproute:
   ## Example:
   # - longhorn.example.com
   # - longhorn.example.org
+  # -- List of allowed HTTPRouteFilter rules.
+  filters: []
+  ## Example:
+  #  - type: ExtensionRef
+  #    extensionRef:
+  #      group: traefik.io
+  #      kind: Middleware
+  #      name: oauth-forwardauth
+  #  - type: ExtensionRef
+  #    extensionRef:
+  #      group: traefik.io
+  #      kind: Middleware
+  #      name: oauth-forwardauth-service
   # -- Default path for HTTPRoute. You can access the Longhorn UI by following the full path.
   path: /
   # -- Path match type for HTTPRoute. (Options: "Exact", "PathPrefix")

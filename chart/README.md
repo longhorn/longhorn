@@ -261,14 +261,15 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 
 ### HTTPRoute Settings
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| httproute.annotations | object | `{}` | Annotations for the HTTPRoute resource in the form of key-value pairs. |
-| httproute.enabled | bool | `false` | Setting that allows Longhorn to generate HTTPRoute records for the Longhorn UI service using Gateway API. |
-| httproute.hostnames | list | `[]` | List of hostnames for the HTTPRoute. Multiple hostnames are supported. |
-| httproute.parentRefs | list | `[]` | Gateway references for HTTPRoute. Specify which Gateway(s) should handle this route. |
-| httproute.path | string | `"/"` | Default path for HTTPRoute. You can access the Longhorn UI by following the full path. |
-| httproute.pathType | string | `"PathPrefix"` | Path match type for HTTPRoute. (Options: "Exact", "PathPrefix") |
+| Key                   | Type | Default | Description                                                                                          |
+|-----------------------|------|---------|------------------------------------------------------------------------------------------------------|
+| httproute.annotations | object | `{}` | Key-value annotations to apply to the HTTPRoute resource.                                            |
+| httproute.enabled     | bool | `false` | When `true`, Longhorn generates HTTPRoute records for the Longhorn UI service using the Gateway API. |
+| httproute.hostnames   | list | `[]` | List of hostnames bound to the HTTPRoute.                                                            |
+| httproute.parentRefs  | list | `[]` | List of Gateway references specifying which Gateway(s) should handle this route.                     |
+| httproute.filters     | list | `[]` | List of Gateway API filters to attach to the HTTPRoute rule for the Longhorn UI service.             |
+| httproute.path        | string | `"/"` | The routing path used to access the Longhorn UI.                                                     |
+| httproute.pathType    | string | `"PathPrefix"` | The path match type for the HTTPRoute. Valid options are `"Exact"` or `"PathPrefix"`.                |
 
 ### Private Registry Settings
 

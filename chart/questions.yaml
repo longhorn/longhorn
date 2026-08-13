@@ -1320,6 +1320,13 @@ questions:
         type: string
         required: true
         label: Hostnames (JSON array)
+      - variable: httproute.filters
+        default: '[]'
+        description: >-
+          Gateway API filters (such as authentication middleware) to attach to the HTTPRoute rule for the Longhorn UI service. It is a JSON array of HTTPRouteFilter objects. Example: '[{"type":"ExtensionRef","extensionRef":{"group":"traefik.io","kind":"Middleware","name":"oauth-forwardauth"}}]'
+        type: string
+        required: false
+        label: Filters (JSON array)
       - variable: httproute.path
         default: /
         description: >-
