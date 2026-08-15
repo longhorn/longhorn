@@ -1175,6 +1175,13 @@ spec:
                 type: boolean
               nodeID:
                 type: string
+              nvmeTcpNrIoQueues:
+                description: |-
+                  nvmeTcpNrIoQueues limits the number of I/O queues the kernel initiator
+                  creates when connecting the blockdev frontend over NVMe-TCP.
+                  0 means inheriting the global setting default-nvme-tcp-nr-io-queues.
+                  Takes effect on (re)attach.
+                type: integer
               salvageRequested:
                 type: boolean
               size:
@@ -4655,6 +4662,13 @@ spec:
                   type: string
                 type: array
               numberOfReplicas:
+                type: integer
+              nvmeTcpNrIoQueues:
+                description: |-
+                  nvmeTcpNrIoQueues limits the number of I/O queues the kernel initiator
+                  creates when connecting the blockdev frontend over NVMe-TCP.
+                  0 means inheriting the global setting default-nvme-tcp-nr-io-queues.
+                  Takes effect on (re)attach.
                 type: integer
               offlineRebuilding:
                 description: |-
