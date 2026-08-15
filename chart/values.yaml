@@ -428,6 +428,8 @@ defaultSettings:
   defaultUblkQueueDepth: ~
   # -- This setting specifies the default the number of queues for ublk frontend. This setting applies to volumes using the V2 Data Engine with Ublk front end. Individual volumes can override this setting by specifying their own number of queues for ublk.
   defaultUblkNumberOfQueue: ~
+  # -- The default number of I/O queues the kernel initiator creates when connecting a volume frontend over NVMe-TCP. This setting applies to volumes using the V2 Data Engine with the block device front end, takes effect on (re)attach, and can be overridden per volume. 0 means unspecified (kernel default, one queue per online core).
+  defaultNvmeTcpNrIoQueues: ~
   # -- In seconds. The setting specifies the interval between liveness probes for engine image pods. The default value is 5 seconds.
   engineImagePodLivenessProbePeriod: ~
   # -- In seconds. The setting specifies the timeout for the engine image pod liveness probe. The default value is 4 seconds.
