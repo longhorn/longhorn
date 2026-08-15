@@ -961,6 +961,13 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: '{"v2":"0"}'
+      - variable: defaultSettings.defaultNvmeTcpNrIoQueues
+        label: Default NVMe-TCP Number Of IO Queues
+        description: >-
+          The default number of I/O queues the kernel initiator creates when connecting a volume frontend over NVMe-TCP. This setting applies to volumes using the V2 Data Engine with the block device front end, takes effect on (re)attach, and can be overridden per volume. 0 means unspecified (kernel default, one queue per online core).
+        group: Longhorn Default Settings
+        type: string
+        default: '{"v2":"0"}'
       - variable: defaultSettings.instanceManagerPodLivenessProbeTimeout
         label: Instance Manager Pod Liveness Probe Timeout
         description: >-
