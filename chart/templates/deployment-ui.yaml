@@ -56,6 +56,10 @@ spec:
       serviceAccountName: longhorn-ui-service-account
       affinity:
       {{- toYaml .Values.longhornUI.affinity | nindent 8 }}
+      {{- with .Values.longhornUI.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
