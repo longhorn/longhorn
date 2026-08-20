@@ -257,6 +257,8 @@ csi:
   resizerReplicaCount: ~
   # -- Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value ("3").
   snapshotterReplicaCount: ~
+  # -- Enable CSI VolumeGroupSnapshot support by turning on the CSIVolumeGroupSnapshot feature gate of the CSI Snapshotter. Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first; otherwise the CSI Snapshotter stops serving regular volume snapshots.
+  volumeGroupSnapshotEnabled: false
 defaultSettings:
   # -- Setting that allows Longhorn to automatically attach a volume and create snapshots or backups when recurring jobs are run.
   allowRecurringJobWhileVolumeDetached: ~

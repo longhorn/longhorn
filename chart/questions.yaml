@@ -273,6 +273,13 @@ questions:
           Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value ("3").
         label: Longhorn CSI Snapshotter replica count
         group: Longhorn CSI Driver Settings
+      - variable: csi.volumeGroupSnapshotEnabled
+        type: boolean
+        default: false
+        description: >-
+          Enable CSI VolumeGroupSnapshot support by turning on the CSIVolumeGroupSnapshot feature gate of the CSI Snapshotter. Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first; otherwise the CSI Snapshotter stops serving regular volume snapshots.
+        label: Longhorn CSI VolumeGroupSnapshot support
+        group: Longhorn CSI Driver Settings
       - variable: defaultSettings.allowRecurringJobWhileVolumeDetached
         label: Allow Recurring Job While Volume Is Detached
         description: >-
