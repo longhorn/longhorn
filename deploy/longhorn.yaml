@@ -5169,6 +5169,27 @@ spec:
                 type: string
               staleReplicaTimeout:
                 type: integer
+              topologyRequirement:
+                description: |-
+                  TopologyRequirement lists the failure domains the volume's replicas must
+                  be scheduled in, derived from the CSI accessible topology at creation —
+                  the same failure domains as the PV nodeAffinity terms (a node must match
+                  at least one term). Empty means unconstrained.
+                items:
+                  description: |-
+                    VolumeTopologyTerm is one failure domain a volume's replicas may be
+                    scheduled in. A node satisfies the term when its zone and region match the
+                    non-empty fields.
+                  properties:
+                    region:
+                      type: string
+                    zone:
+                      type: string
+                  type: object
+                type: array
+                x-kubernetes-validations:
+                - message: TopologyRequirement is immutable
+                  rule: self == oldSelf
               ublkNumberOfQueue:
                 description: ublkNumberOfQueue controls the number of queues for ublk
                   frontend.
