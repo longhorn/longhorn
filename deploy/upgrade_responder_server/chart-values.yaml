@@ -94,6 +94,16 @@ configMap:
           "releaseDate": "2026-03-11T00:00:00Z",
           "tags": [
             "stable",
+<<<<<<< HEAD
+=======
+          ]
+        },
+        {
+          "name": "v1.12.1",
+          "releaseDate": "2026-08-14T00:00:00Z",
+          "tags": [
+            "stable",
+>>>>>>> bb2f222 (chore: release v1.12.1 to upgrade responder)
             "latest"
           ]
         }
