@@ -4969,6 +4969,18 @@ spec:
                 - v1
                 - v2
                 type: string
+              dataEngineTransport:
+                description: |-
+                  DataEngineTransport selects the NVMe-oF transport for the internal
+                  engine<->replica fabric of a v2 volume (tcp or rdma). Empty defaults to tcp.
+                  It is immutable and has no effect on v1 volumes.
+                enum:
+                - tcp
+                - rdma
+                type: string
+                x-kubernetes-validations:
+                - message: DataEngineTransport is immutable
+                  rule: self == oldSelf
               dataLayout:
                 description: |-
                   DataLayout declares the user's intended data layout (topology type, protection mode, and EC parameters).
