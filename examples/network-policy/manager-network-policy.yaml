@@ -6,20 +6,20 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: longhorn-manager
+      longhorn.io/component: manager
   policyTypes:
   - Ingress
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: longhorn-manager
+          longhorn.io/component: manager
     - podSelector:
         matchLabels:
-          app: longhorn-ui
+          longhorn.io/component: ui
     - podSelector:
         matchLabels:
-          app: longhorn-csi-plugin
+          longhorn.io/component: csi-plugin
     - podSelector:
         matchLabels:
           longhorn.io/managed-by: longhorn-manager
@@ -30,4 +30,4 @@ spec:
           - { key: longhorn.io/job-task, operator: Exists }
     - podSelector:
         matchLabels:
-          app: longhorn-driver-deployer
+          longhorn.io/component: driver-deployer

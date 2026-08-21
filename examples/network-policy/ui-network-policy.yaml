@@ -6,7 +6,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: longhorn-ui
+      longhorn.io/component: ui
   policyTypes:
   - Ingress
   ingress:

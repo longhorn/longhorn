@@ -13,7 +13,7 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          app: longhorn-manager
+          longhorn.io/component: manager
     - podSelector:
         matchLabels:
           longhorn.io/component: instance-manager
