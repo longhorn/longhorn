@@ -18,7 +18,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- $longhornDataPath := default "/var/lib/longhorn/" .Values.defaultSettings.defaultDataPath }}
       {{- $longhornControlPath := default "/var/lib/longhorn/" .Values.defaultSettings.defaultControlPath }}
       containers:
       - name: longhorn-manager
@@ -75,12 +74,8 @@ spec:
           mountPath: /host/etc/
           readOnly: true
         - name: longhorn
-          mountPath: {{ $longhornDataPath | quote }}
-          mountPropagation: Bidirectional
-        {{- if ne $longhornControlPath $longhornDataPath }}
-        - name: longhorn-control
           mountPath: {{ $longhornControlPath | quote }}
-        {{- end }}
+          mountPropagation: Bidirectional
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
         {{- if .Values.enableGoCoverDir }}
@@ -104,10 +99,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_DATA_PATH
-          value: {{ $longhornDataPath | quote }}
-        - name: LONGHORN_CONTROL_PATH
-          value: {{ $longhornControlPath | quote }}
         {{- if .Values.longhornManager.distro }}
         - name: LONGHORN_DISTRO
           value: {{ .Values.longhornManager.distro | quote }}
@@ -140,13 +131,8 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: {{ $longhornDataPath | quote }}
-      {{- if ne $longhornControlPath $longhornDataPath }}
-      - name: longhorn-control
-        hostPath:
           path: {{ $longhornControlPath | quote }}
           type: DirectoryOrCreate
-      {{- end }}
       {{- if .Values.enableGoCoverDir }}
       - name: go-cover-dir
         hostPath:
