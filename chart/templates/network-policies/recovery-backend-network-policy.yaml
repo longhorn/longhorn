@@ -18,4 +18,8 @@ spec:
     ports:
     - protocol: TCP
       port: 9503
+    {{- range .Values.networkPolicies.recoveryBackendAdditionalIngressPorts }}
+    - protocol: TCP
+      port: {{ . }}
+    {{- end }}
 {{- end }}
