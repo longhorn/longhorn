@@ -41,6 +41,10 @@ networkPolicies:
   type: "k3s"
   # -- Kubernetes API server source CIDRs allowed to access the Longhorn admission webhook. When empty, source filtering is disabled.
   kubeAPIServerSourceCIDRs: []
+  # -- Source CIDRs observed by the CNI for V1 iSCSI initiator traffic. When empty, any source that can reach instance-manager can connect to TCP/3260.
+  v1DataEngineInitiatorSourceCIDRs: []
+  # -- Additional TCP ports used by recovery backend mesh transport.
+  recoveryBackendAdditionalIngressPorts: []
 image:
   longhorn:
     engine:

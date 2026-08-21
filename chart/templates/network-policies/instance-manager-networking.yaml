@@ -24,4 +24,14 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
+  - ports:
+    - protocol: TCP
+      port: 3260
+    {{- if .Values.networkPolicies.v1DataEngineInitiatorSourceCIDRs }}
+    from:
+      {{- range .Values.networkPolicies.v1DataEngineInitiatorSourceCIDRs }}
+      - ipBlock:
+          cidr: {{ . | quote }}
+      {{- end }}
+    {{- end }}
 {{- end }}
