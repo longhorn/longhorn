@@ -214,6 +214,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.manager.type }}
+  {{- with .Values.service.manager.trafficDistribution }}
+  trafficDistribution: {{ . }}
+  {{- end }}
   selector:
     app: longhorn-manager
   ports:

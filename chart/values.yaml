@@ -153,6 +153,8 @@ service:
   ui:
     # -- Service type for Longhorn UI. (Options: "ClusterIP", "NodePort", "LoadBalancer", "Rancher-Proxy")
     type: ClusterIP
+    # -- Traffic distribution preference for the Longhorn UI service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
     # -- NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: null
     # -- Class of a load balancer implementation
@@ -173,6 +175,14 @@ service:
     type: ClusterIP
     # -- NodePort port number for Longhorn Manager. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: ""
+    # -- Traffic distribution preference for the Longhorn Manager service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
+  admissionWebhook:
+    # -- Traffic distribution preference for the Longhorn admission webhook service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
+  recoveryBackend:
+    # -- Traffic distribution preference for the Longhorn recovery backend service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
 persistence:
   # -- Setting that allows you to create the default Longhorn StorageClass ConfigMap. Set to false to skip StorageClass creation.
   createStorageClass: true
