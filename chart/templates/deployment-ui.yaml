@@ -190,6 +190,9 @@ spec:
   {{- if and (eq .Values.service.ui.type "LoadBalancer") .Values.service.ui.loadBalancerClass }}
   loadBalancerClass: {{ .Values.service.ui.loadBalancerClass }}
   {{- end }}
+  {{- with .Values.service.ui.trafficDistribution }}
+  trafficDistribution: {{ . }}
+  {{- end }}
   selector:
     app: longhorn-ui
   ports:
