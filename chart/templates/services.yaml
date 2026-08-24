@@ -8,7 +8,7 @@ metadata:
 spec:
   type: ClusterIP
   {{- with .Values.service.admissionWebhook.trafficDistribution }}
-  trafficDistribution: {{ . }}
+  trafficDistribution: {{ . | quote }}
   {{- end }}
   selector:
     longhorn.io/admission-webhook: longhorn-admission-webhook

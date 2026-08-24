@@ -199,7 +199,7 @@ metadata:
 spec:
   type: {{ .Values.service.manager.type }}
   {{- with .Values.service.manager.trafficDistribution }}
-  trafficDistribution: {{ . }}
+  trafficDistribution: {{ . | quote }}
   {{- end }}
   selector:
     app: longhorn-manager
