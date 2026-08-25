@@ -18,8 +18,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- $longhornDataPath := default "/var/lib/longhorn/" .Values.defaultSettings.defaultDataPath }}
-      {{- $longhornControlPath := default "/var/lib/longhorn/" .Values.defaultSettings.defaultControlPath }}
       containers:
       - name: longhorn-manager
         image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
@@ -75,12 +73,8 @@ spec:
           mountPath: /host/etc/
           readOnly: true
         - name: longhorn
-          mountPath: {{ $longhornDataPath | quote }}
+          mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
-        {{- if ne $longhornControlPath $longhornDataPath }}
-        - name: longhorn-control
-          mountPath: {{ $longhornControlPath | quote }}
-        {{- end }}
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
         {{- if .Values.enableGoCoverDir }}
@@ -104,10 +98,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_DATA_PATH
-          value: {{ $longhornDataPath | quote }}
-        - name: LONGHORN_CONTROL_PATH
-          value: {{ $longhornControlPath | quote }}
         {{- if .Values.longhornManager.distro }}
         - name: LONGHORN_DISTRO
           value: {{ .Values.longhornManager.distro | quote }}
@@ -140,13 +130,7 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: {{ $longhornDataPath | quote }}
-      {{- if ne $longhornControlPath $longhornDataPath }}
-      - name: longhorn-control
-        hostPath:
-          path: {{ $longhornControlPath | quote }}
-          type: DirectoryOrCreate
-      {{- end }}
+          path: /var/lib/longhorn/
       {{- if .Values.enableGoCoverDir }}
       - name: go-cover-dir
         hostPath:

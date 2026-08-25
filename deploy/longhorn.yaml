@@ -5944,7 +5944,7 @@ spec:
           mountPath: /host/etc/
           readOnly: true
         - name: longhorn
-          mountPath: "/var/lib/longhorn/"
+          mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
@@ -5965,10 +5965,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_DATA_PATH
-          value: "/var/lib/longhorn/"
-        - name: LONGHORN_CONTROL_PATH
-          value: "/var/lib/longhorn/"
         - name: LONGHORN_DISTRO
           value: "longhorn"
         
@@ -5991,7 +5987,7 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: "/var/lib/longhorn/"
+          path: /var/lib/longhorn/
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
