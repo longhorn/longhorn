@@ -176,13 +176,19 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.storageNetwork) }}
     storage-network: {{ .Values.defaultSettings.storageNetwork | quote }}
     {{- end }}
-    {{- if kindIs "invalid" .Values.defaultSettings.dataEngineIPFamily }}
-      {{- fail "defaultSettings.dataEngineIPFamily cannot be null" }}
+    {{- if hasKey .Values.defaultSettings "dataEngineIPFamily" }}
+      {{- fail "defaultSettings.dataEngineIPFamily is not supported; use defaultSettings.preferredDataEngineIPFamily" }}
     {{- end }}
-    {{- if not (has .Values.defaultSettings.dataEngineIPFamily (list "" "ipv4" "ipv6")) }}
-      {{- fail "defaultSettings.dataEngineIPFamily must be empty, ipv4, or ipv6" }}
+    {{- if not (hasKey .Values.defaultSettings "preferredDataEngineIPFamily") }}
+      {{- fail "defaultSettings.preferredDataEngineIPFamily must be set to default, ipv4, or ipv6" }}
     {{- end }}
-    data-engine-ip-family: {{ .Values.defaultSettings.dataEngineIPFamily | quote }}
+    {{- if kindIs "invalid" .Values.defaultSettings.preferredDataEngineIPFamily }}
+      {{- fail "defaultSettings.preferredDataEngineIPFamily cannot be null" }}
+    {{- end }}
+    {{- if not (has .Values.defaultSettings.preferredDataEngineIPFamily (list "default" "ipv4" "ipv6")) }}
+      {{- fail "defaultSettings.preferredDataEngineIPFamily must be default, ipv4, or ipv6" }}
+    {{- end }}
+    preferred-data-engine-ip-family: {{ .Values.defaultSettings.preferredDataEngineIPFamily | quote }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.endpointNetworkForRWXVolume) }}
     endpoint-network-for-rwx-volume: {{ .Values.defaultSettings.endpointNetworkForRWXVolume | quote }}
     {{- end }}

@@ -2059,6 +2059,8 @@ spec:
                           type: string
                         frontend:
                           type: string
+                        ipFamily:
+                          type: string
                         listen:
                           type: string
                         paths:
@@ -2132,6 +2134,8 @@ spec:
                         errorMsg:
                           type: string
                         frontend:
+                          type: string
+                        ipFamily:
                           type: string
                         listen:
                           type: string
@@ -2207,6 +2211,8 @@ spec:
                           type: string
                         frontend:
                           type: string
+                        ipFamily:
+                          type: string
                         listen:
                           type: string
                         paths:
@@ -2280,6 +2286,8 @@ spec:
                         errorMsg:
                           type: string
                         frontend:
+                          type: string
+                        ipFamily:
                           type: string
                         listen:
                           type: string
@@ -2355,6 +2363,8 @@ spec:
                           type: string
                         frontend:
                           type: string
+                        ipFamily:
+                          type: string
                         listen:
                           type: string
                         paths:
@@ -2405,6 +2415,9 @@ spec:
                 nullable: true
                 type: object
               ip:
+                type: string
+              ipFamily:
+                nullable: true
                 type: string
               ownerID:
                 type: string
@@ -4801,7 +4814,7 @@ spec:
               topologyRequirement:
                 description: |-
                   TopologyRequirement lists the failure domains the volume's replicas must
-                  be scheduled in, derived from the CSI accessible topology at creation —
+                  be scheduled in, derived from the CSI accessible topology at creation -
                   the same failure domains as the PV nodeAffinity terms (a node must match
                   at least one term). Empty means unconstrained.
                 items:

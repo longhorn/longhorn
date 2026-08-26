@@ -3,7 +3,7 @@ categories:
 namespace: longhorn-system
 questions:
   - variable: image.defaultImage
-    default: 'true'
+    default: "true"
     description: Use default Longhorn images
     label: Use Default Images
     type: boolean
@@ -186,7 +186,7 @@ questions:
       URL of a private registry. When unspecified, Longhorn uses the default system registry.
     group: Private Registry Settings
     type: string
-    default: ''
+    default: ""
     subquestions: []
   - variable: privateRegistry.registrySecret
     label: Private registry secret name
@@ -194,10 +194,10 @@ questions:
       If create a new private registry secret is true, create a Kubernetes secret with this name; else use the existing secret of this name. Use it to pull images from your private registry.
     group: Private Registry Settings
     type: string
-    default: ''
+    default: ""
     subquestions: []
   - variable: privateRegistry.createSecret
-    default: 'true'
+    default: "true"
     description: Set to true to automatically create a new private registry secret.
     type: boolean
     group: Private Registry Settings
@@ -208,14 +208,14 @@ questions:
         label: Private registry user
         description: User account used for authenticating with a private registry.
         type: string
-        default: ''
+        default: ""
       - variable: privateRegistry.registryPasswd
         label: Private registry password
         description: Password for authenticating with a private registry.
         type: password
-        default: ''
+        default: ""
   - variable: longhorn.default_setting
-    default: 'false'
+    default: "false"
     description: >-
       Customize the default settings before installing Longhorn for the first time. This option will only work if the cluster hasn't installed Longhorn.
     label: Customize Default Settings
@@ -279,7 +279,7 @@ questions:
           Setting that allows Longhorn to automatically attach a volume and create snapshots or backups when recurring jobs are run.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.snapshotMaxCount
         label: Snapshot Maximum Count
         description: >-
@@ -304,7 +304,7 @@ questions:
           Setting that allows Longhorn to automatically create a default disk only on nodes with the label "node.longhorn.io/create-default-disk=true" (if no other disks exist). When this setting is disabled, Longhorn creates a default disk on each node that is added to the cluster.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.defaultDataPath
         label: Default Data Path
         description: >-
@@ -335,7 +335,7 @@ questions:
           Allow scheduling on nodes with existing healthy replicas of the same volume. By default, false.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.replicaAutoBalance
         label: Replica Auto Balance
         description: >-
@@ -379,21 +379,21 @@ questions:
           Upgrade Checker that periodically checks for new Longhorn versions. When a new version is available, a notification appears on the Longhorn UI. This setting is enabled by default.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.upgradeResponderURL
         label: Upgrade Responder URL
         description: >-
           The Upgrade Responder sends a notification whenever a new Longhorn version that you can upgrade to becomes available. The default value is "https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade".
         group: Longhorn Default Settings
         type: string
-        default: 'https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade'
+        default: "https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade"
       - variable: defaultSettings.managerUrl
         label: Manager URL
         description: >-
           The external URL used to access the Longhorn Manager API. When set, this URL is returned in API responses (the actions and links fields) instead of the internal pod IP. This is useful when accessing the API through Ingress or Gateway API HTTPRoute. Format: scheme://host[:port] (for example, https://longhorn.example.com or https://longhorn.example.com:8443). Leave it empty to use the default behavior. Warning: Internal components (including longhorn-driver-deployer and longhorn-csi-plugin) follow the links returned in API responses. If this URL passes through proxy middleware (such as an OAuth2 proxy, ingress auth, or any other HTTP-intercepting layer), those components may receive an unexpected response (such as an HTML redirect) instead of JSON, causing errors such as "invalid character '<' looking for beginning of value" and CSI driver deployment failure.
         group: Longhorn Default Settings
         type: string
-        default: ''
+        default: ""
       - variable: defaultSettings.defaultReplicaCount
         label: Default Replica Count
         description: >-
@@ -430,7 +430,7 @@ questions:
           Restore recurring jobs from the backup volume on the backup target and create recurring jobs if not exist during a backup restoration.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.recurringSuccessfulJobsHistoryLimit
         label: Cronjob Successful Jobs History Limit
         description: >-
@@ -467,7 +467,7 @@ questions:
           Setting that allows Longhorn to automatically salvage volumes when all replicas become faulty (for example, when the network connection is interrupted). Longhorn determines which replicas are usable and then uses these replicas for the volume. This setting is enabled by default.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.autoDeletePodWhenVolumeDetachedUnexpectedly
         label: >-
           Automatically Delete Workload Pod when The Volume Is Detached Unexpectedly
@@ -475,7 +475,7 @@ questions:
           Setting that allows Longhorn to automatically delete a workload pod that is managed by a controller (for example, daemonset) whenever a Longhorn volume is detached unexpectedly (for example, during Kubernetes upgrades). After deletion, the controller restarts the pod and then Kubernetes handles volume reattachment and remounting.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.blacklistForAutoDeletePodWhenVolumeDetachedUnexpectedly
         label: >-
           Blacklist for Automatically Delete Workload Pod when The Volume Is Detached Unexpectedly
@@ -490,35 +490,35 @@ questions:
           Setting that prevents Longhorn Manager from scheduling replicas on a cordoned Kubernetes node. This setting is enabled by default.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.replicaZoneSoftAntiAffinity
         label: Replica Zone Level Soft Anti-Affinity
         description: >-
           Allow scheduling new Replicas of Volume to the Nodes in the same Zone as existing healthy Replicas. Nodes don't belong to any Zone will be treated as in the same Zone. Notice that Longhorn relies on label `topology.kubernetes.io/zone=<Zone name of the node>` in the Kubernetes node object to identify the zone. By, default true.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.replicaDiskSoftAntiAffinity
         label: Replica Disk Level Soft Anti-Affinity
         description: >-
           Allow scheduling on disks with existing healthy replicas of the same volume. By default, true.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.allowEmptyNodeSelectorVolume
         label: Allow Empty Node Selector Volume
         description: >-
           Setting that allows scheduling of empty node selector volumes to any node.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.allowEmptyDiskSelectorVolume
         label: Allow Empty Disk Selector Volume
         description: >-
           Setting that allows scheduling of empty disk selector volumes to any disk.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.nodeDownPodDeletionPolicy
         label: Pod Deletion Policy When Node is Down
         description: >-
@@ -550,7 +550,7 @@ questions:
           Setting that allows automatic detaching of manually-attached volumes when a node is cordoned.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.priorityClass
         label: Priority Class
         description: >-
@@ -615,21 +615,21 @@ questions:
           Setting that allows you to create and attach a volume without having all replicas scheduled at the time of creation.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.autoCleanupSystemGeneratedSnapshot
         label: Automatically Cleanup System Generated Snapshot
         description: >-
           Setting that allows Longhorn to automatically clean up the system-generated snapshot after replica rebuilding is completed.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.autoCleanupRecurringJobBackupSnapshot
         label: Automatically Cleanup Recurring Job Backup Snapshot
         description: >-
           Setting that allows Longhorn to automatically clean up the snapshot generated by a recurring backup job.
         group: Longhorn Default Settings
         type: boolean
-        default: 'true'
+        default: "true"
       - variable: defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit
         label: Concurrent Automatic Engine Upgrade Per Node Limit
         description: >-
@@ -674,7 +674,7 @@ questions:
           Setting that temporarily prevents all attempts to purge volume snapshots.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.freezeFilesystemForSnapshot
         description: >-
           Setting that freezes the filesystem on the root partition before a snapshot is created.
@@ -701,7 +701,7 @@ questions:
           Specifies the wait time, in seconds, before Longhorn automatically deletes an orphaned Custom Resource (CR) and its associated resources. Note that if a user manually deletes an orphaned CR, the deletion occurs immediately and does not respect this grace period.
         group: Longhorn Default Settings
         type: int
-        default: '300'
+        default: "300"
       - variable: defaultSettings.storageNetwork
         label: Storage Network
         description: >-
@@ -709,17 +709,17 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: null
-      - variable: defaultSettings.dataEngineIPFamily
-        label: Data Engine IP Family
+      - variable: defaultSettings.preferredDataEngineIPFamily
+        label: Preferred Data Engine IP Family
         description: >-
-          Specifies the non-null IP address family setting shared by Longhorn V1/V2 data-engine and backing-image (BI) management components. Leave it empty to preserve legacy node-default address selection. Explicit `ipv4` or `ipv6` values are strict: the selected family must be available on the configured network, with no fallback to the opposite family or another network. **Caution**: Change this setting only after all volumes are detached because instance-manager pods must be recreated to apply it. You cannot modify this setting while volumes are still attached.
+          Preferred IP family for Longhorn data-engine and backing-image management traffic. The default value (`default`) preserves legacy node-default address selection. Allowed values are exactly `default`, `ipv4`, and `ipv6`; null and empty values are unsupported. An explicit family is strict and never falls back to the other family or another network. **Danger Zone**: Change this setting only after all volumes are detached. Backing Image Manager (BIM) and Backing Image Data Source (BIDS) pods restart to apply it, while capable V2 Instance Manager pods remain running. You cannot modify this setting while volumes are still attached.
         group: Longhorn Default Settings
         type: enum
         options:
-          - ""
+          - default
           - ipv4
           - ipv6
-        default: ""
+        default: default
       - variable: defaultSettings.EndpointNetworkForRWXVolume
         label: Endpoint Network For RWX Volume
         description: >-
@@ -753,7 +753,7 @@ questions:
         description: Flag that prevents accidental uninstallation of Longhorn.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.engineReplicaTimeout
         label: Timeout between Engine and Replica
         description: >-
@@ -793,7 +793,7 @@ questions:
           This setting allows Longhorn filesystem trim feature to automatically mark the latest snapshot and its ancestors as removed and stops at the snapshot containing multiple children.
         group: Longhorn Default Settings
         type: boolean
-        default: 'false'
+        default: "false"
       - variable: defaultSettings.fastReplicaRebuildEnabled
         label: Fast Replica Rebuild Enabled
         description: >-
@@ -807,14 +807,14 @@ questions:
           In seconds. The setting specifies the HTTP client timeout to the file sync server.
         group: Longhorn Default Settings
         type: int
-        default: '30'
+        default: "30"
       - variable: defaultSettings.longGRPCTimeOut
         label: Long gRPC Timeout
         description: >-
           Number of seconds that Longhorn allows for the completion of replica rebuilding and snapshot cloning operations.
         group: Longhorn Default Settings
         type: int
-        default: '86400'
+        default: "86400"
       - variable: defaultSettings.backupCompressionMethod
         label: Backup Compression Method
         description: Setting that allows you to specify a backup compression method.
@@ -836,9 +836,9 @@ questions:
         group: Longhorn Default Settings
         type: enum
         options:
-          - '2'
-          - '16'
-        default: '2'
+          - "2"
+          - "16"
+        default: "2"
       - variable: defaultSettings.restoreConcurrentLimit
         label: Restore Concurrent Limit Per Backup
         description: >-
@@ -1052,7 +1052,7 @@ questions:
         type: boolean
         default: true
   - variable: persistence.defaultClass
-    default: 'true'
+    default: "true"
     description: Setting that allows you to specify the default Longhorn StorageClass.
     label: Default Storage Class
     group: Longhorn Storage Class Settings
@@ -1101,9 +1101,9 @@ questions:
     required: true
     type: enum
     options:
-      - 'true'
-      - 'false'
-    default: 'true'
+      - "true"
+      - "false"
+    default: "true"
     subquestions: []
   - variable: persistence.defaultClassReplicaCount
     description: Replica count of the default Longhorn StorageClass.
@@ -1234,11 +1234,11 @@ questions:
         group: Longhorn Storage Class Settings
         type: enum
         options:
-          - ''
+          - ""
           - download
           - upload
           - export-from-volume
-        default: ''
+        default: ""
       - variable: persistence.backingImage.dataSourceParameters
         description: >-
           Data source parameters of a backing image used in a Longhorn StorageClass. You can specify a JSON string of a map. (Example: `'{"url":"https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'`) **Caution** [1] This field is useful only if the backing image name is specified. [2] Ensure that quotes are used correctly when specifying parameters.
@@ -1278,7 +1278,7 @@ questions:
     default: default
     subquestions: []
   - variable: ingress.enabled
-    default: 'false'
+    default: "false"
     description: Expose app using Layer 7 Load Balancer - ingress
     type: boolean
     group: Services and Load Balancing
@@ -1310,7 +1310,7 @@ questions:
         required: true
         label: Ingress Path Type
   - variable: httproute.enabled
-    default: 'false'
+    default: "false"
     description: Expose app using Gateway API HTTPRoute
     type: boolean
     group: Services and Load Balancing
@@ -1318,21 +1318,21 @@ questions:
     show_subquestion_if: true
     subquestions:
       - variable: httproute.parentRefs
-        default: '[]'
+        default: "[]"
         description: >-
           Gateway references as JSON array. Required fields: name, namespace. Optional: group (default: gateway.networking.k8s.io), kind (default: Gateway), sectionName. Example: [{"name":"my-gateway","namespace":"default","sectionName":"https"}]
         type: string
         required: true
         label: Gateway References (JSON array)
       - variable: httproute.hostnames
-        default: '[]'
+        default: "[]"
         description: >-
           Hostnames for HTTPRoute as JSON array (e.g., ["longhorn.example.com"])
         type: string
         required: true
         label: Hostnames (JSON array)
       - variable: httproute.filters
-        default: '[]'
+        default: "[]"
         description: >-
           Gateway API filters (such as authentication middleware) to attach to the HTTPRoute rule for the Longhorn UI service. It is a JSON array of HTTPRouteFilter objects. Example: '[{"type":"ExtensionRef","extensionRef":{"group":"traefik.io","kind":"Middleware","name":"oauth-forwardauth"}}]'
         type: string
@@ -1355,6 +1355,18 @@ questions:
           - PathPrefix
         required: true
         label: HTTPRoute Path Type
+  - variable: service.ipFamilyPolicy
+    default: ""
+    description: >-
+      IP family policy for Longhorn Services. Leave empty to preserve the current Kubernetes default. (Options: "", "SingleStack", "PreferDualStack", "RequireDualStack")
+    type: enum
+    options:
+      - ""
+      - SingleStack
+      - PreferDualStack
+      - RequireDualStack
+    label: Service IP Family Policy
+    group: Services and Load Balancing
   - variable: service.ui.type
     default: Rancher-Proxy
     description: >-
@@ -1371,7 +1383,7 @@ questions:
     show_subquestion_if: NodePort
     subquestions:
       - variable: service.ui.nodePort
-        default: ''
+        default: ""
         description: >-
           NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767.
         type: int
@@ -1380,7 +1392,7 @@ questions:
         show_if: service.ui.type=NodePort||service.ui.type=LoadBalancer
         label: UI Service NodePort number
   - variable: longhorn.default_resource
-    default: 'false'
+    default: "false"
     description: >-
       Customize the default resource before installing Longhorn for the first time. This option will only work if the cluster hasn't installed Longhorn.
     label: Customize Default Resources
@@ -1410,7 +1422,7 @@ questions:
         min: 0
         default: 300
   - variable: enablePSP
-    default: 'false'
+    default: "false"
     description: >-
       Setting that allows you to enable pod security policies (PSPs) that allow privileged Longhorn pods to start. This setting applies only to clusters running Kubernetes 1.25 and earlier, and with the built-in Pod Security admission controller enabled.
     label: Pod Security Policy
@@ -1418,7 +1430,7 @@ questions:
     group: Other Settings
     subquestions: []
   - variable: global.cattle.windowsCluster.enabled
-    default: 'false'
+    default: "false"
     description: Setting that allows Longhorn to run on a Rancher Windows cluster.
     label: Rancher Windows Cluster
     type: boolean
@@ -1429,7 +1441,7 @@ questions:
       Setting that allows you to enable network policies that control access to Longhorn pods. **Caution** The Rancher Proxy will work only if this feature is enabled and a custom NetworkPolicy is added.
     group: Other Settings
     label: Network Policies
-    default: 'false'
+    default: "false"
     type: boolean
     subquestions:
       - variable: networkPolicies.type
@@ -1448,6 +1460,6 @@ questions:
       Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other.
     group: Other Settings
     label: Limit Internal Network Access
-    default: 'true'
+    default: "true"
     type: boolean
     subquestions: []

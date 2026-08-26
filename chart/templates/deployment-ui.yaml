@@ -27,6 +27,10 @@ metadata:
   annotations:
     service.alpha.openshift.io/serving-cert-secret-name: longhorn-ui-tls
 spec:
+  {{- $openshiftUIIPFamilyPolicy := include "longhorn.ipFamilyPolicy" . }}
+  {{- if $openshiftUIIPFamilyPolicy }}
+  {{- $openshiftUIIPFamilyPolicy | nindent 2 }}
+  {{- end }}
   ports:
   - name: longhorn-ui
     port: {{ .Values.openshift.ui.port | default 443 }}
@@ -180,6 +184,10 @@ spec:
   type: ClusterIP
   {{- else }}
   type: {{ .Values.service.ui.type }}
+  {{- end }}
+  {{- $uiIPFamilyPolicy := include "longhorn.ipFamilyPolicy" . }}
+  {{- if $uiIPFamilyPolicy }}
+  {{- $uiIPFamilyPolicy | nindent 2 }}
   {{- end }}
   {{- if and .Values.service.ui.loadBalancerIP (eq .Values.service.ui.type "LoadBalancer") }}
   loadBalancerIP: {{ .Values.service.ui.loadBalancerIP }}
