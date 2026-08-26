@@ -89,3 +89,15 @@ When .Values.global.timezone is set, this snippet renders a TZ env var.
   value: {{ .Values.global.timezone | quote }}
 {{- end }}
 {{- end -}}
+{{/*
+longhorn.ipFamilyPolicy renders the optional Service IP family policy.
+*/}}
+{{- define "longhorn.ipFamilyPolicy" -}}
+{{- $policy := .Values.service.ipFamilyPolicy -}}
+{{- if not (and (kindIs "string" $policy) (has $policy (list "" "SingleStack" "PreferDualStack" "RequireDualStack"))) -}}
+{{- fail "service.ipFamilyPolicy must be empty, SingleStack, PreferDualStack, or RequireDualStack" -}}
+{{- end -}}
+{{- if ne $policy "" }}
+ipFamilyPolicy: {{ $policy }}
+{{- end -}}
+{{- end -}}

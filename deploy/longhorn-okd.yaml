@@ -18,6 +18,7 @@ description: "Ensure Longhorn pods have the highest priority to prevent any unex
 globalDefault: false
 preemptionPolicy: PreemptLowerPriority
 value: 1000000000
+
 ---
 # Source: longhorn/templates/network-policies/backing-image-data-source-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -45,6 +46,7 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
+
 ---
 # Source: longhorn/templates/network-policies/backing-image-manager-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -72,6 +74,7 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
+
 ---
 # Source: longhorn/templates/network-policies/instance-manager-networking.yaml
 apiVersion: networking.k8s.io/v1
@@ -102,6 +105,7 @@ spec:
   - ports:
     - protocol: TCP
       port: 3260
+
 ---
 # Source: longhorn/templates/network-policies/manager-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -137,6 +141,7 @@ spec:
     - podSelector:
         matchLabels:
           app: longhorn-driver-deployer
+
 ---
 # Source: longhorn/templates/network-policies/recovery-backend-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -158,6 +163,7 @@ spec:
     ports:
     - protocol: TCP
       port: 9503
+
 ---
 # Source: longhorn/templates/network-policies/webhook-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -177,6 +183,7 @@ spec:
       port: 9501
     - protocol: TCP
       port: 9502
+
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -188,6 +195,7 @@ metadata:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
+
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -201,6 +209,7 @@ metadata:
     app.kubernetes.io/version: v1.12.0-dev
   annotations:
     serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"longhorn-ui"}}'
+
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -225,6 +234,7 @@ metadata:
     app.kubernetes.io/version: v1.12.0-dev
 data:
   default-resource.yaml: |-
+
 ---
 # Source: longhorn/templates/default-setting.yaml
 apiVersion: v1
@@ -240,6 +250,8 @@ data:
   default-setting.yaml: |-
     priority-class: "longhorn-critical"
     disable-revision-counter: "{\"v1\":\"true\"}"
+    preferred-data-engine-ip-family: "default"
+
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
@@ -273,6 +285,7 @@ data:
       disableRevisionCounter: "true"
       dataEngine: "v1"
       backupTargetName: "default"
+
 ---
 # Source: longhorn/templates/crds.yaml
 # Generated crds.yaml from github.com/longhorn/longhorn-manager/k8s/pkg/apis and the crds.yaml will be copied to longhorn/longhorn chart/templates and cannot be directly used by kubectl apply.
@@ -411,6 +424,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -552,6 +566,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -735,6 +750,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -906,6 +922,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1096,6 +1113,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1237,6 +1255,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1391,6 +1410,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1640,6 +1660,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1792,6 +1813,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2174,6 +2196,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2736,6 +2759,8 @@ spec:
                 type: object
               ip:
                 type: string
+              ipFamily:
+                type: string
               ownerID:
                 type: string
               proxyApiMinVersion:
@@ -2748,6 +2773,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3036,6 +3062,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3159,6 +3186,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3336,6 +3364,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3572,6 +3601,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3652,6 +3682,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3923,6 +3954,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4083,6 +4115,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4178,6 +4211,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4456,6 +4490,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4596,6 +4631,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4731,6 +4767,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4872,6 +4909,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4985,6 +5023,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5133,6 +5172,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5465,7 +5505,7 @@ spec:
               topologyRequirement:
                 description: |-
                   TopologyRequirement lists the failure domains the volume's replicas must
-                  be scheduled in, derived from the CSI accessible topology at creation —
+                  be scheduled in, derived from the CSI accessible topology at creation:
                   the same failure domains as the PV nodeAffinity terms (a node must match
                   at least one term). Empty means unconstrained.
                 items:
@@ -5635,6 +5675,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5718,6 +5759,7 @@ rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterrolebindings", "clusterroles"]
   verbs: ["*"]
+
 ---
 # Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5733,6 +5775,7 @@ rules:
   resources: ["securitycontextconstraints"]
   resourceNames: ["anyuid", "privileged"]
   verbs: ["use"]
+
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5751,6 +5794,7 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
   namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5769,6 +5813,7 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-support-bundle
   namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5793,6 +5838,7 @@ subjects:
 - kind: ServiceAccount
   name: default  # supportbundle-agent-support-bundle uses default sa
   namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5826,6 +5872,7 @@ rules:
 - apiGroups: ["discovery.k8s.io"]
   resources: ["endpointslices"]
   verbs: ["*"]
+
 ---
 # Source: longhorn/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5841,6 +5888,7 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
   namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: v1
@@ -5861,6 +5909,7 @@ spec:
   - name: manager
     port: 9500
     targetPort: manager
+
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: v1
@@ -5882,6 +5931,7 @@ spec:
     targetPort: 8443
   selector:
     app: longhorn-ui
+
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 kind: Service
@@ -5903,6 +5953,7 @@ spec:
     port: 80
     targetPort: http
     nodePort: null
+
 ---
 # Source: longhorn/templates/services.yaml
 apiVersion: v1
@@ -5923,6 +5974,7 @@ spec:
   - name: admission-webhook
     port: 9502
     targetPort: admission-wh
+
 ---
 # Source: longhorn/templates/services.yaml
 apiVersion: v1
@@ -5943,6 +5995,7 @@ spec:
   - name: recovery-backend
     port: 9503
     targetPort: recov-backend
+
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: apps/v1
@@ -6070,6 +6123,7 @@ spec:
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 100%
+
 ---
 # Source: longhorn/templates/deployment-driver.yaml
 apiVersion: apps/v1
@@ -6145,6 +6199,7 @@ spec:
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
+
 ---
 # Source: longhorn/templates/deployment-global-manager.yaml
 apiVersion: apps/v1
@@ -6215,6 +6270,7 @@ spec:
               topologyKey: kubernetes.io/hostname
             weight: 1
       serviceAccountName: longhorn-service-account
+
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: apps/v1
@@ -6302,6 +6358,7 @@ spec:
       - emptyDir: {}
         name: var-run
       priorityClassName: "longhorn-critical"
+
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #

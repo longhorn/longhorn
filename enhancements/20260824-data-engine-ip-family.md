@@ -2,544 +2,536 @@
 
 ## Summary
 
-This proposal introduces the `data-engine-ip-family` setting so that users can choose which address family Longhorn uses for data-engine and backing-image traffic in a dual-stack Kubernetes cluster.
+This enhancement combines issue 13050 (data-engine IP-family rollout) with the
+reusable Backing Image work in issue 13864. The implementation has one immutable
+owner of data-engine family: the Instance Manager daemon process. The
+`--ip-family` argument is selected when that process starts and applies to every
+V1 and V2 data-engine object in the process. It is not selected independently by
+an Engine, EngineFrontend, Replica, or Backup create request.
 
-A dual-stack Pod can have both IPv4 and IPv6 addresses, but Kubernetes and the CNI still designate one address as primary. Without an explicit Longhorn setting, data-plane components inherit that local ordering. Different kubelet preferences can therefore cause some Longhorn Pods to publish IPv4 endpoints while others publish IPv6 endpoints. This is valid legacy behavior, but it does not provide the uniform family selection required by clusters that are migrating traffic to IPv6 or intentionally keeping storage traffic on IPv4.
+The `preferred-data-engine-ip-family` Danger Zone setting controls the desired
+startup argument for Instance Manager Pods. Its values are `default`, `ipv4`,
+and `ipv6`; `default` preserves the existing unspecified-family behavior. The
+setting is applied only while all volumes are detached. A running Instance
+Manager is not mutated in place: a pod whose argument differs is marked
+unsynchronized and must be recreated through the normal pod lifecycle.
 
-The setting supports three values:
+The data-engine network role and workload-facing network role remain separate.
+An Engine chooses its backend target address from the selected process family
+(`GetIPForPodByNetworkAndFamily`). An EngineFrontend normally exports the
+backend Engine target address supplied by the manager; it does not invent a
+second host-facing NVMe/TCP address. Its local family-based address fallback is
+only for disabled frontends serving internal gRPC commands.
+`endpoint-network-for-rwx-volume` continues to select the workload-facing NFS
+network.
+Issue 13864 provides the generic automatic BI address capability without
+depending on the 13050 setting. Omitted-family internal BI transfers use the
+common storage-first resolver: a usable `lhnet1` address is selected first,
+and a primary Pod IP is used only when `lhnet1` is absent. A present but
+unreadable or unusable `lhnet1` is an error. Explicit BI family selection is
+independent of the Instance Manager process and is supplied by the BIM/BIDS
+process startup family from the configured setting.
+`PrepareDownload` is a separate manager HTTP-proxy path: it uses
+`GetBackingImageDownloadAddress` and returns the primary `POD_IP`; it must not
+use storage-network selection or the preferred data-engine family.
 
-| Value | User-visible behavior |
-| --- | --- |
-| `""` (empty string) | Preserve pre-change address selection. Each component uses its legacy primary/default address behavior. In a mixed Pod-preference topology, Longhorn endpoints can be a mixture of IPv4 and IPv6. |
-| `ipv4` | Require IPv4 for V1 and V2 data-engine endpoints, listeners, and backing-image management traffic. |
-| `ipv6` | Require IPv6 for V1 and V2 data-engine endpoints, listeners, and backing-image management traffic. |
-
-An explicit family is strict. If a configured storage network cannot provide the requested family, Longhorn does not silently use the opposite family or move traffic to the cluster network. The affected component remains unsynchronized or unavailable until the network or setting is corrected.
+Kubernetes Service policy is independent. The optional
+`service.ipFamilyPolicy` chart value accepts `""`, `SingleStack`,
+`PreferDualStack`, and `RequireDualStack`. Empty omits `spec.ipFamilyPolicy` and
+preserves Kubernetes' default `SingleStack`. Dynamic Share Manager Services
+continue to be reconciled with `PreferDualStack`; generic Service creation is
+not globally changed.
 
 ### Related Issues
 
 - https://github.com/longhorn/longhorn/issues/13050
+- https://github.com/longhorn/longhorn/issues/13864
 
 ## Motivation
 
-Longhorn supports Kubernetes cluster networking and an optional Multus storage network. Both can be dual-stack, but before this enhancement Longhorn generally used the Pod's primary address or an IPv4-oriented storage-network fallback. That behavior has several limitations:
+Longhorn may use the Kubernetes Pod network or an optional Multus storage
+network, and either may be dual-stack. Before this enhancement, operators could
+not consistently select one family for all data-engine processes when Pod
+address ordering differed between nodes. A process-owned startup choice gives
+all objects in that process the same family-selection policy and listener
+constraints without changing the V1 `PortArgs` transport or persisted
+Replica/Frontend metadata. With unspecified `default`, observed addresses may
+still follow network/interface ordering; only an explicit family is strict.
 
-- A cluster cannot explicitly move all Longhorn data traffic to IPv6 while retaining IPv4 as the Kubernetes primary family.
-- An IPv6-primary cluster cannot explicitly keep Longhorn data traffic on IPv4.
-- Nodes with different kubelet address preferences can publish a mixture of endpoint families.
-- V1 engine and replica processes can advertise one family while listening without an explicit family contract.
-- V2 SPDK objects need one immutable family for listener and callback address selection.
-- Backing Image Manager and Backing Image Data Source Pods previously advertised their primary Pod address independently from the data-engine family.
-- A configured storage network can hide a family mismatch until a component attempts to connect.
-
-The enhancement provides one global family choice for Longhorn's backend data plane while preserving the legacy behavior when users configure the setting as the empty string.
+Backing Image transfers also need deterministic network selection, but their
+storage transfer path and manager-facing download proxy have different network
+roles. A single rule for both would either send storage traffic over the wrong
+network or make manager HTTP downloads unreachable. The implementation keeps
+those paths distinct.
 
 ## Goals
 
-- Add one global `data-engine-ip-family` setting with exactly three allowed string values: `""`, `ipv4`, and `ipv6`.
-- Preserve pre-change behavior when the setting is the empty string.
-- Require the effective `defaultSettings.dataEngineIPFamily` chart value to be a non-null string; explicit `null` or a missing chart default is invalid.
-- Select one consistent family for explicit V1 and V2 engine and replica traffic.
-- Apply the same setting to Backing Image Manager and Backing Image Data Source transfer endpoints.
-- Keep configured storage networks authoritative for backend traffic.
-- Fail closed when the requested family is unavailable.
-- Keep IPv6 host-port values syntactically valid.
-- Roll out family changes only while all volumes are detached.
-- Preserve existing backing-image files and metadata when backing-image management Pods restart.
-- Avoid new protobuf or CRD schema fields.
+- Add `default`, `ipv4`, and `ipv6` to the 13050 setting; omit the daemon
+  `--ip-family` argument for `default` and pass `ipv4` or `ipv6` explicitly.
+- Apply one immutable family to all V1 and V2 instances in each process.
+- Keep `default` compatible with existing unspecified-family data-engine
+  selection.
+- Enforce an all-volumes-detached gate before applying a changed setting.
+- Detect a running Pod whose `--ip-family` differs and report it unsynchronized;
+  converge by normal Pod recreation, not in-place mutation.
+- Keep storage-network selection authoritative for explicit backend traffic and
+  fail closed when the requested family is unavailable.
+- Preserve persisted Replica and EngineFrontend formats and existing recovery
+  ownership rules.
+- Keep Engine backend addressing separate from EngineFrontend host-facing
+  export addressing and from the RWX endpoint network.
+- Provide the 13864 generic BI automatic address capability independently of
+  the 13050 setting; explicit selection remains process-owned.
+- Use storage-first selection for internal BI transfers and primary Pod IP for
+  the `PrepareDownload` manager HTTP-proxy path.
+- Preserve the existing Kubernetes Service policy contract and Share Manager
+  behavior described below.
 
 ## Non-goals
 
-- Configuring Kubernetes, kubelet, CNI, Multus, NetworkAttachmentDefinition, routing, or firewall rules.
-- Changing the cluster's primary `cluster-cidr` or `service-cidr` family.
-- Giving different Longhorn data engines different global families.
-- Selecting the workload-facing RWX NFS export family.
-- Changing `endpoint-network-for-rwx-volume` semantics.
-- Adding user-facing V2 BackingImage support. V2 BackingImage resources and BI-backed V2 volumes remain unsupported by the current manager validation contract.
-- Automatically falling back from an explicit family to the opposite family.
+- Per-create or per-instance family fields in V2 APIs, CRDs, or SPDK metadata.
+- A process-wide family RPC setter or live listener mutation.
+- Adding a new API capability version for IP-family support.
+- Adding family metadata to Replica xattrs, Replica Head metadata, or the
+  EngineFrontend persisted record.
+- Changing `endpoint-network-for-rwx-volume` or selecting the workload NFS
+  family from the backend setting.
+- Changing BI CR, UUID, file-map, or on-disk file reuse behavior.
+- Falling back from an explicit family to the opposite family or to the cluster
+  network.
+- Adding user-facing V2 BackingImage, Shard, or ShardGroup manager lifecycles.
+- Configuring Kubernetes, kubelet, CNI, Multus, routing, or firewall rules.
 
 ## Terminology and Network Boundaries
 
-### Cluster network
+### Process IP family
 
-The Kubernetes Pod network used by Longhorn control-plane and data-plane Pods when no storage network is configured.
+The family parsed from the Instance Manager daemon `--ip-family` argument. The
+daemon accepts an empty value, `ipv4`, or `ipv6`; the setting's user-facing
+`default` value is serialized as empty. It is immutable for the process and is
+inherited by every V1 and V2 data-engine object hosted there.
+
+### Backend data-engine address
+
+The address selected by an Engine for its storage listener and target. With a
+configured storage network, selection is authoritative to that network; without
+one, the Pod network is used. `GetIPForPodByNetworkAndFamily` performs the
+family-constrained selection.
+
+### EngineFrontend host-facing address
+
+The NVMe/TCP frontend exports the backend Engine target address supplied by the
+manager (`TargetAddress`/`TargetIP`). It is not a separately selected local
+frontend address. If the frontend is disabled and the target is empty, the
+server uses its process-family Pod address only for local internal gRPC
+commands.
 
 ### Storage network
 
-The optional Multus network configured by `storage-network`. Longhorn uses it for in-cluster backend data traffic. When configured, it is authoritative for explicit family selection.
+The optional Multus network configured by `storage-network` is authoritative
+for explicit backend data-engine and internal BI transfer selection. A present
+but unusable `lhnet1` is an error for automatic storage-first BI selection.
 
 ### Primary Pod IP
 
-The address in `pod.status.podIP`. In a dual-stack Pod, `pod.status.podIPs` contains both families, but the first address is the primary address selected by Kubernetes and the CNI.
+The primary Pod IP is used by the manager-facing `PrepareDownload` proxy
+address getter. For internal BI automatic selection it is used only when
+`lhnet1` is absent and the primary value validates. For BIM and BIDS,
+`Status.IP` is the manager-selected Pod-network control address, while
+`Status.StorageIP` is the internal transfer address. Explicit family selection
+can make the control address differ from the primary `POD_IP`; the download
+helper still returns the primary address.
 
-### Explicit family
+### Generic BI automatic resolver
 
-A non-empty `data-engine-ip-family` value. An explicit family requires a matching usable address.
+The 13864 resolver used by BI Receive, Send, and internal transfer/status paths
+when no family is supplied. It selects the first usable address on `lhnet1` in
+interface/CNI order. If `lhnet1` is present but unreadable or has no usable
+candidate, it returns an error and does not use `POD_IP`. If `lhnet1` is absent,
+it validates and returns primary `POD_IP`. Explicit family selection is owned by
+the 13050 process setting.
 
-### Legacy or unspecified family
+### PrepareDownload address
 
-An empty `data-engine-ip-family` value. Components preserve their pre-change selection and fallback behavior.
+`PrepareDownload` is manager HTTP-proxy traffic, not a storage transfer address.
+`GetBackingImageDownloadAddress` returns the primary `POD_IP` so the manager can
+reach the backing-image HTTP endpoint. It does not consult storage-first BI
+selection and does not inherit `preferred-data-engine-ip-family`.
 
-### Chart input contract
+### Applied setting
 
-`defaultSettings.dataEngineIPFamily` is a required non-null string in the effective chart values. The only accepted values are `""`, `ipv4`, and `ipv6`. Users may omit an override and receive the chart default `""`; explicitly setting `null`, or removing the chart default so the effective value is nil, is invalid.
+The manager's setting status indicates whether the desired startup family has
+been safely applied to managed Instance Manager Pods. It is not per-process
+runtime state and is not proof that every endpoint is currently reachable.
 
-### RWX endpoint network
+### Service IP family policy
 
-The workload-facing NFS network selected by `endpoint-network-for-rwx-volume`. This is independent from the backend data-engine family.
+`service.ipFamilyPolicy` controls Kubernetes Service VIP family allocation (and
+headless Service family behavior). It does not select Pod addresses, backend
+listeners, EngineFrontend targets, BI download addresses, or RWX NFS networks.
 
 ## Proposal
 
-### New Global Setting
-
-`data-engine-ip-family`:
-
-- Type: `String`
-- Default: `""`
-- Category: `Danger Zone`
-- Choices:
-  - `""`
-  - `ipv4`
-  - `ipv6`
-- Data-engine-specific: `false`
-
-The setting applies to both V1 and V2 data engines and to BI management components shared by those data engines.
-
-The Helm value is:
-
-```yaml
-defaultSettings:
-  dataEngineIPFamily: ""
-```
-
-The chart always renders `data-engine-ip-family: ""` in the default-setting ConfigMap for the empty-string value, including when users provide no override. Manager registers the setting with the same empty default. Manager-side missing-setting autofill for an existing cluster is separate from chart validation and does not make an explicit `null` Helm value valid.
-
-### User Experience
-
-#### Fresh installation
-
-Users normally set the value to the empty string to retain legacy behavior:
-
-```yaml
-defaultSettings:
-  dataEngineIPFamily: ""
-```
-
-Users who require IPv4 set:
-
-```yaml
-defaultSettings:
-  dataEngineIPFamily: ipv4
-```
-
-Users who require IPv6 set:
-
-```yaml
-defaultSettings:
-  dataEngineIPFamily: ipv6
-```
-
-#### Runtime change
-
-Users must detach all volumes before changing the setting. Longhorn rejects or defers application while any volume is attached because Instance Manager, Backing Image Manager, and Backing Image Data Source Pods may need replacement.
-
-After the setting changes:
-
-1. Instance Manager Pods converge to the desired family argument.
-2. Backing Image Manager and active Backing Image Data Source Pods with stale arguments are deleted.
-3. Existing controllers recreate the Pods.
-4. Existing backing-image CRs, UUIDs, file maps, and disk files are reused; no backing-image copy migration is performed.
-5. New V1 processes and V2 SPDK objects publish endpoints from the requested family.
-
-### Value Semantics in a Dual-Stack Cluster
-
-#### Empty
-
-Empty means compatibility, not cluster-wide family enforcement.
-
-- Manager omits `--ip-family` from Instance Manager, BIM, and BIDS Pod commands.
-- V1 child processes retain the legacy `--listen :<port>` form.
-- V2 uses `IPFamilyUnspecified` and the common resolver's legacy behavior.
-- BIM sync advertisement retains its raw primary `POD_IP` behavior.
-- Status endpoints use existing primary/CNI selection.
-
-If worker Pods have different primary-family ordering, Longhorn can publish mixed IPv4 and IPv6 endpoints. Users who require uniform endpoints must select an explicit family.
-
-#### IPv4
-
-- Manager adds `--ip-family ipv4` to managed data-plane and BI management Pods.
-- V1 engine and replica children listen on `0.0.0.0:<port>`.
-- Manager publishes IPv4 engine, replica, BIM, and BIDS addresses.
-- V2 SPDK objects use IPv4 listeners, expose addresses, and callbacks.
-- BIM and BIDS transfer endpoints use IPv4.
-
-#### IPv6
-
-- Manager adds `--ip-family ipv6` to managed data-plane and BI management Pods.
-- V1 engine and replica children listen on `[::]:<port>`.
-- Manager publishes IPv6 engine, replica, BIM, and BIDS addresses.
-- V2 SPDK objects use IPv6 listeners, expose addresses, and callbacks.
-- BIM and BIDS transfer endpoints use bracket-safe IPv6 host-port values.
-
-## Design
-
-### End-to-End Control Flow
-
-```text
-Helm value
-    |
-    v
-Default Setting ConfigMap
-    |
-    v
-Setting: data-engine-ip-family
-    |
-    +--------------------------+---------------------------+
-    |                          |                           |
-    v                          v                           v
-Instance Manager Pods          BIM Pods                    BIDS Pods
---ip-family                    --ip-family                 --ip-family
-    |                          |                           |
-    |                          +-------------+-------------+
-    |                                        |
-    v                                        v
-named-container authority              typed BIM resolver
-    |                                  sync/download/export
-    |
-    +--------------------------+
-    |                          |
-    v                          v
-V1 PortArgs                   V2 SPDK Server
-    |                          IPFamily
-    v                          |
-V1 engine/replica             v
---listen host:port            V2 objects/listeners/callbacks
-```
-
-### Named-Container Authority
-
-Manager reads the family from the expected container, not from an arbitrary sidecar:
-
-- `instance-manager`
-- `backing-image-manager`
-- `backing-image-data-source`
-
-For BIM and BIDS, manager parses the combined container `command` and `args` because their flags are carried in `command`. For Instance Manager, the family is normally carried in `args`.
-
-The parser distinguishes:
-
-- flag absent;
-- one valid split or equals-form flag;
-- malformed or missing value;
-- duplicate flags;
-- unknown value.
-
-Malformed, duplicated, unknown, mismatched, or missing authoritative-container observations do not synchronize.
-
-### V1 Data Engine
-
-Manager does not add a new V1 engine CLI family flag. It uses the existing `PortArgs` transport between manager and Instance Manager.
-
-| Family | Manager PortArgs prefix | Completed child argument |
-| --- | --- | --- |
-| Empty | `--listen,:` | `--listen :<allocated-port>` |
-| IPv4 | `--listen,0.0.0.0:` | `--listen 0.0.0.0:<allocated-port>` |
-| IPv6 | `--listen,[::]:` | `--listen [::]:<allocated-port>` |
-
-Instance Manager already appends the allocated port, splits the comma-delimited prefix, and forwards the result to the V1 process. Longhorn Engine already accepts these listen values.
-
-The same mapping applies to:
-
-- engine creation;
-- replica creation;
-- Instance Manager API versions below 4 through Process Manager;
-- API version 4 and later through Instance Service;
-- engine upgrade and replacement.
-
-No Instance Manager protobuf or Longhorn Engine production change is required for V1.
-
-### V2 Data Engine
-
-Instance Manager parses `--ip-family` into `commonnet.IPFamily` and passes it to the SPDK server. The server stores one immutable family for its lifetime and passes it to new and recovered objects:
-
-- Engine
-- Replica
-- Shard
-- ShardGroup
-- EngineFrontend
-- internal SPDK BackingImage
-- Backup
-
-Family-aware V2 call sites use `commonnet.GetIPForPodByFamily`. Explicit IPv6 host-port values use `net.JoinHostPort` or an equivalent bracket-safe path.
-
-Changing the family requires Instance Manager Pod replacement. Existing server objects are not mutated in place.
-
-### Backing Image Manager and Data Source
-
-BIM and BIDS consume the same `data-engine-ip-family` setting. No separate BI setting is introduced.
-
-Both commands accept an optional family:
-
-```text
-backing-image-manager daemon --ip-family <family>
-backing-image-manager data-source --ip-family <family>
-```
-
-The family is immutable for the process lifetime and is passed through canonical constructors to BIM and BIDS services.
-
-Family-aware operations include:
-
-- BIM receive addresses;
-- BIM send addresses;
-- `PrepareDownload` sync-server addresses;
-- BIDS export-from-volume receiver addresses;
-- manager-published BIM and BIDS status addresses.
-
-The BIM implementation has one initializer per operation. The family is an explicit dependency, not mutable global state. Tests inject an address resolver through an internal function parameter.
-
-An empty-string setting retains the legacy raw `POD_IP` behavior for the BIM sync advertisement. Explicit families use the typed common resolver and fail when the requested family is unavailable.
-
-### BIM and BIDS Rollout
-
-The setting controller first enforces the all-volumes-detached gate. It then compares the desired setting with each named BIM/BIDS container.
-
-- Matching Pods are untouched.
-- Missing, malformed, duplicate, or mismatched arguments cause Pod deletion.
-- Already deleting or missing Pods are ignored.
-- BIM and BIDS CRs are not replaced.
-- BI UUIDs and file maps are not changed.
-- Recreated BIM Pods detect and reuse existing disk files.
-
-This uses the existing BIM Pod restart and upgrade path and avoids additional backing-image copy migration.
-
-### Status Address Selection
-
-Manager provides container-aware family selectors for:
-
-- cluster Pod addresses;
-- configured storage-network addresses.
-
-For explicit families, selection is strict. A missing family returns `ErrorInvalidState`. BIM/BIDS status IP fields are cleared and persisted before returning a selector error so stale opposite-family endpoints cannot remain published.
-
-Existing Instance Manager compatibility wrappers preserve their prior malformed/absent fallback behavior while new generic container-aware selectors remain strict for BIM/BIDS.
-
-### Common Resolver
-
-The common resolver supports:
-
-- `IPFamilyUnspecified`;
-- `IPFamilyIPv4`;
-- `IPFamilyIPv6`.
-
-Unspecified mode preserves legacy behavior. Explicit mode:
-
-1. Checks `lhnet1` when present.
-2. Requires the requested family on an authoritative storage interface.
-3. Checks the Pod's owning interface when the primary Pod IP is the opposite family.
-4. Rejects malformed, link-local, opposite-family, or unavailable addresses.
-5. Does not silently fall back to the other family.
-
-IPv6 selection accepts usable global-unicast addresses, including ULA addresses, and rejects link-local addresses that would require an interface zone.
-
-### Storage Network Interaction
-
-When `storage-network` is empty:
-
-- explicit family selection uses the matching cluster Pod IP;
-- the empty-string setting uses legacy primary Pod behavior.
-
-When `storage-network` is configured:
-
-- the configured network is authoritative;
-- the Multus network-status annotation must contain the requested family;
-- manager and runtime resolvers do not use the opposite family;
-- manager does not move backend data traffic to the cluster network as a fallback.
+### Setting and chart contract
+
+`preferred-data-engine-ip-family` is a Danger Zone string setting:
+
+- Default: `default`.
+- Choices: `default`, `ipv4`, `ipv6`.
+- A Helm effective value must be a non-null string with one of those values.
+- The chart default-setting ConfigMap renders `default` when no override is
+  supplied.
+- Explicit `null` and unsupported values are rejected by chart validation.
 
 Example:
 
-```text
-data-engine-ip-family = ipv6
-storage-network = IPv4-only NAD
+```yaml
+defaultSettings:
+  preferredDataEngineIPFamily: default
 ```
 
-Result:
+The chart also exposes the independent Service option:
 
-- the desired family remains IPv6;
-- no usable backend family is selected;
-- Instance Manager reports `SettingSynced=False`;
-- affected status endpoints are cleared or withheld;
-- V1, V2, BIM, and BIDS operations cannot converge until IPv6 becomes available or the setting changes.
+```yaml
+service:
+  ipFamilyPolicy: PreferDualStack
+```
 
-The actual usable data-plane family is none, not IPv4.
+### Runtime application and observed-family state
 
-### RWX Network Boundary
+Changing the setting requires all volumes to be detached. Admission rejects
+the change while volumes are attached, leaving the setting, Instance Manager
+Pod UIDs, startup arguments, and data-engine behavior unchanged.
 
-The setting affects the backend engine and replica traffic used by an RWX volume, but it does not select the workload-facing NFS export network.
+The manager records the observed Pod argument in
+`InstanceManager.status.ipFamily` during Pod status synchronization. The field
+is a string: `""` means default address selection, while `ipv4` and `ipv6`
+record an explicit family. It is not initialized from the desired Setting or
+peer consensus. It describes Pod configuration, not readiness; current state
+and usable endpoint addresses remain subject to their existing checks.
 
-The NFS endpoint remains owned by:
+The manager compares the observed status family with the desired setting,
+treating the empty status string as `default`. The existing `handlePod`
+lifecycle recreates mismatched Pods, subject to its existing live-instance
+and resource-safety checks. No separate IP-family reconciliation phase or
+controller-side setting enum validator is needed. The replacement process
+starts with the new argument; a live listener is not mutated in place.
 
-- the Kubernetes Share Manager Service when `endpoint-network-for-rwx-volume` is empty;
-- the dedicated Multus endpoint network when that setting is configured.
+BIM and BIDS reconcile their own Pod arguments against the same setting
+through their existing Pod lifecycle. They do not require an Instance Manager
+initialization marker or a separate peer-consensus barrier. BIM restart reuses
+completed backing-image files and UUIDs.
 
-Ganesha NFSv4 listens on available Pod interfaces. Coupling the NFS frontend to `data-engine-ip-family` would prevent valid configurations such as an IPv6 storage backend with an IPv4 workload-facing NFS network.
+Existing attached or attaching volumes continue using the family of their
+current Instance Manager process. New objects inherit the process family after
+that process has converged. A process cannot serve different V1/V2 families by
+mixing create requests.
+
+### Family propagation
+
+The daemon parses an empty value, `ipv4`, or `ipv6` once at startup. Empty is
+the transport representation of user-facing `default`. It passes the result to
+its SPDK server and all hosted Engine, EngineFrontend, Replica, Backup, and
+internal BackingImage objects. The SPDK and Instance Manager RPC create
+contracts do not gain `ip_family` fields. There is no capability negotiation or
+version bump for this feature.
+
+V1 managers retain `PortArgs`. The process startup family constrains the
+addresses used by the V1 engine and replica listeners; no new V1 family
+transport is required. V2 Engine and Replica listeners, exposes, callbacks,
+and Backup operations use the immutable process family.
+
+The EngineFrontend manager supplies the backend Engine target address. On
+reconnect, the persisted target address remains the source of the NVMe/TCP
+endpoint, and the recovered frontend is constructed with the Instance Manager
+process family. An explicitly configured family conflict in persisted target
+addresses is logged as a warning; it does not introduce a new recovery
+rejection or cleanup lifecycle. No family field is added to the persisted record.
+
+Recovered and fresh Replica/Frontend objects are constructed with the hosting
+process family. Replica recovery reconstructs logical state and selects its
+bound address when preparing exposure; it has no persisted family/address
+field to validate. The server passes its configured family explicitly to
+`NewBackup`, including when no Replica exists. Backup does not infer its family
+from Replica state. Restore retains the hosting Replica's process family; no
+xattr or durable family metadata is invented.
+
+### Address selection and strictness
+
+For explicit `ipv4` or `ipv6` backend selection, a matching usable address must
+exist on the authoritative storage network, or on the Pod network when no
+storage network is configured. Missing, malformed, or opposite-family addresses
+are errors. No opposite-family or cluster-network fallback is permitted.
+
+The `default` data-engine family is unspecified and preserves legacy address
+selection. It must not be described as an explicit raw-`POD_IP` path.
+Internal BI Receive, Send, and storage transfer operations use the 13864
+storage-first resolver when family is omitted. Explicit BI family selection is
+independent of the data-engine process and comes from the BIM/BIDS process
+startup family. `PrepareDownload` instead calls
+`GetBackingImageDownloadAddress` and uses primary `POD_IP` for manager HTTP
+proxy reachability; neither storage selection nor the 13050 setting changes
+that address.
+
+IPv6 host-port formatting remains bracket-safe. A wildcard listener must not be
+characterized as IPv4-only: Go `net.Listen("tcp", ...)` may accept both
+families on supported Linux configurations.
+
+### Kubernetes Service policy
+
+`service.ipFamilyPolicy` accepts exactly `""`, `SingleStack`, `PreferDualStack`,
+and `RequireDualStack`. Empty omits `spec.ipFamilyPolicy`, retaining
+Kubernetes' default `SingleStack`. Non-empty values are rendered on:
+
+- `longhorn-backend`;
+- `longhorn-frontend`;
+- conditional OpenShift `longhorn-ui`;
+- admission webhook; and
+- recovery backend Services.
+
+Dynamic Share Manager selector and headless Services always use
+`PreferDualStack`, with Kubernetes single-stack fallback. Existing objects are
+updated in place, preserving their Service UID and existing primary ClusterIP
+when present. Generic `DataStore.CreateService` remains policy-agnostic for
+SystemRollout and system backup restore behavior.
 
 ## Compatibility and Upgrade Strategy
 
-### Empty default
+### Default compatibility
 
-The chart and manager defaults are both the empty string. A fresh chart installation always emits `data-engine-ip-family: ""` in the default-setting ConfigMap, including when users omit an override. An existing cluster may receive manager-side autofill when its setting is missing, but that behavior is separate from chart validation and does not make an explicit `null` Helm value valid. Existing clusters retain their pre-change behavior without an automatic family rollout.
+The chart default is `default`, and existing data-engine address selection is
+preserved. Existing Pods keep their current startup family until a setting
+change passes the detached-volume gate and normal Pod recreation occurs.
 
-### Existing Instance Manager Pods
+Issue 13864 BI operations are independently usable without the 13050 setting.
+Their internal omitted-family operations use storage-first resolution, while
+`PrepareDownload` uses primary `POD_IP` through its dedicated getter. Explicit
+BI family selection follows the BIM/BIDS process startup family, and a present
+unusable `lhnet1` is an internal BI resolution error, not a primary-IP fallback.
 
-Earlier development versions generated explicit IPv4 Instance Manager arguments by default. An empty-string setting accepts an existing explicit IPv4 IM Pod as synchronized to avoid an upgrade-only replacement. Newly generated Pods for the empty-string setting omit the flag.
+### Safe rollout
 
-BIM/BIDS did not previously receive an explicit family flag, so empty-string mode synchronizes only with an absent BIM/BIDS flag.
+1. Deploy code and images that understand the setting and daemon argument.
+2. Keep the setting at `default` while existing volumes remain attached.
+3. Detach every volume before selecting `ipv4` or `ipv6`.
+4. Wait for each Instance Manager Pod to be recreated with the desired
+   `--ip-family` and for synchronization to become healthy.
+5. Start or attach workloads only after the applied gate succeeds.
+6. Validate BI internal transfers and `PrepareDownload` separately; the latter
+   must reach the manager proxy through primary `POD_IP`.
 
-### Mixed component versions
+A running old Instance Manager does not gain a new family through an API
+request. Mixed-version operation is limited to the behavior supported by the
+running daemon and must not be represented as per-instance family capability.
 
-- A new manager and old Instance Manager can still use V1 family-aware `PortArgs` because IM forwards them opaquely.
-- V2 explicit family support requires the new Instance Manager and SPDK engine dependencies.
-- BIM/BIDS explicit support requires a backing-image-manager image that accepts `--ip-family`.
-- Manager must not generate the BIM/BIDS flag until the configured backing-image-manager image supports it.
+### Service policy compatibility
 
-### Rollout order
-
-1. Publish the family-aware common library.
-2. Update and publish SPDK engine with the common library.
-3. Update and publish Instance Manager with the common library and SPDK engine.
-4. Update and publish Backing Image Manager with the common library.
-5. Update Manager with the new component image versions and orchestration.
-6. Update the Longhorn chart.
+The empty Service policy preserves historical manifests. `PreferDualStack` is
+fallback-compatible on a single-stack cluster; `RequireDualStack` may be
+rejected or remain unavailable when both Service families cannot be allocated.
+Changing a Service policy can affect VIP or external LoadBalancer allocation;
+provider support must be checked before selecting `RequireDualStack`.
 
 ## Failure Modes
 
-| Failure | Behavior |
+| Failure | Required behavior |
 | --- | --- |
-| Invalid setting value | Manager setting validation rejects it. |
-| Explicit `null`, missing effective chart default, or unsupported Helm chart value | Chart rendering rejects the input; no default-setting ConfigMap is rendered. Omitting a user override uses the chart default `""`. |
-| Invalid direct CLI family | IM or BIM/BIDS startup rejects it before server construction. |
-| Setting changed with attached volumes | Setting remains unapplied; managed Pods are not replaced. |
-| Explicit family missing from PodIPs | Endpoint selection returns `ErrorInvalidState`; stale status is cleared. |
-| Explicit family missing from storage network | Component fails closed; no cluster-network or opposite-family fallback. |
-| Malformed or duplicate named-container args | Pod is unsynchronized and replaced when safe. |
-| Named container missing | Sidecar flags are ignored; no authority is inferred. |
-| IPv6 link-local address encountered | Address is rejected as an unusable endpoint. |
-| BIM/BIDS Pod family is stale | Setting controller deletes only the stale Pod; existing CR/file data is reused. |
-| BIM/BIDS selector fails | Published IP and StorageIP are cleared before retry. |
-| V1 engine upgrade | Replacement receives the same family-aware `PortArgs`. |
-| Mixed Pod preference with the empty-string setting | Mixed IPv4/IPv6 endpoints are allowed as legacy behavior. |
-| Mixed Pod preference with explicit setting | All usable endpoints converge to the selected family. |
+| Invalid setting or Helm value | Validation rejects it; no invalid setting is applied. |
+| Attached volume during setting change | Admission rejects the change; the setting, process args, and Pod UIDs do not change. |
+| Running Pod has a different `--ip-family` | Observed status differs from the setting; existing Pod lifecycle handles recreation. |
+| Explicit backend family unavailable | Endpoint selection fails closed; no opposite-family or cluster fallback. |
+| Present unusable `lhnet1` for internal BI automatic resolution | BI storage selection fails; primary `POD_IP` is not used. |
+| Absent `lhnet1` with invalid primary `POD_IP` | Automatic internal BI resolution fails closed. |
+| `PrepareDownload` request | `GetBackingImageDownloadAddress` supplies primary `POD_IP`; it is independent of storage selection and the preferred family. |
+| Active listener family change requested | Listener is not mutated; process recreation is required. |
+| Malformed or explicitly mismatched persisted EngineFrontend address | Warn and retain the existing recovery path; do not add an IP-family rejection. |
+| Recovered Replica | Hosting process family remains authoritative; no family xattr or Head metadata is invented. |
+| Backup/restore family | Backup receives the hosting server family explicitly; restore uses the hosting Replica's process family. |
+| Empty Service policy | Static manifests omit the field; Kubernetes uses `SingleStack`. |
+| Unsupported Service policy | Helm validation rejects it. |
+| `RequireDualStack` on single-stack infrastructure | Service creation/update or external allocation can fail or remain unavailable. |
+| Existing Share Manager Service | Reconcile in place with `PreferDualStack`, preserving UID and primary ClusterIP when present. |
 
 ## API Changes
 
-No new Kubernetes CRD or protobuf field is required.
+The 13050 setting, observed Instance Manager status, and chart values are the
+public configuration/state changes: `preferred-data-engine-ip-family`,
+`InstanceManager.status.ipFamily`, and `service.ipFamilyPolicy`. The Instance
+Manager status field is a string with `""` as the default and `ipv4` or `ipv6`
+for explicit Pod configuration. There is no pointer-based uninitialized state.
+No family field is added to Engine, EngineFrontend, Replica, or Backup objects.
 
-The existing generic Setting CR stores the new string value. Existing Instance Manager request fields carry V1 `PortArgs`. V2 family is an internal typed process value.
+The Instance Manager daemon command accepts an empty `--ip-family` value,
+`ipv4`, or `ipv6`; empty is the transport representation of user-facing
+`default`. This is process startup configuration, not a request-level API.
+Existing Instance Manager and SPDK protobuf create messages remain unchanged:
+no per-instance `ip_family` field or IP-family capability version is added.
 
-Backing Image Manager internal constructors now require `commonnet.IPFamily` explicitly. This is an internal component API change coordinated with the manager image update.
+Manager-facing status reports retain separate `Status.IP` and `Status.StorageIP`
+roles; neither is synonymous with raw primary `POD_IP`. The hosting server
+passes the Backup family independently of the optional Replica address.
+`GetBackingImageDownloadAddress` is the manager-facing download address
+contract and returns primary `POD_IP`.
 
 ## Implementation
 
-### go-common-libs
+### longhorn/longhorn-instance-manager
 
-- Add typed IP-family parsing and family-aware Pod address resolution.
-- Preserve the zero-argument resolver for existing consumers.
-- Reject non-global-unicast IPv6 endpoint candidates.
-- Preserve legacy unspecified fallback behavior.
+- Parse and validate daemon `--ip-family` at startup.
+- Initialize the SPDK server and hosted objects with that immutable family.
+- Keep control services reachable through their existing listener contract.
+- Do not add a family setter, per-instance create field, capability version, or
+  in-place family mutation.
 
-### longhorn-spdk-engine
+### longhorn/longhorn-spdk-engine
 
-- Store one family on the SPDK server.
-- Propagate it to all new and recovered V2 objects.
-- Use bracket-safe host-port formatting.
+- Use process family for Engine backend address selection through
+  `GetIPForPodByNetworkAndFamily`.
+- Keep EngineFrontend NVMe/TCP export bound to the manager-supplied backend
+  `TargetAddress`/`TargetIP`.
+- Use local process-family Pod address only for disabled-frontend internal gRPC
+  fallback.
+- Preserve EngineFrontend persisted target addresses and construct recovered
+  frontends with the process family. Warn about explicit family conflicts
+  without adding a recovery rejection or deriving family from the record.
+- Pass the server family explicitly to Backup; retain Replica process-family
+  ownership for restore.
+- Do not extend deprecated V2 backing-image behavior.
+- Preserve V1 `PortArgs` and existing file, xattr, and Head metadata behavior.
 
-### longhorn-instance-manager
+### longhorn/backing-image-manager and longhorn/go-common-libs
 
-- Add optional `--ip-family` to the daemon.
-- Parse it before V2 server startup.
-- Pass the typed family to the SPDK server.
-- Continue forwarding V1 `PortArgs` opaquely.
+- Implement the 13864 automatic BI address capability.
+- Use storage-first `lhnet1` resolution for internal Receive, Send, and transfer
+  paths; error when a present interface is unreadable or unusable.
+- Use primary `POD_IP` only when `lhnet1` is absent for automatic internal BI
+  resolution.
+- Keep `GetBackingImageDownloadAddress` on the manager HTTP-proxy path using
+  primary `POD_IP`, independently of storage selection and the preferred
+  data-engine setting.
+- Keep wildcard listeners and BIM/BIDS startup-family behavior; do not add a
+  per-operation BI family API.
 
-### backing-image-manager
+### longhorn/longhorn-manager
 
-- Add optional family flags to daemon and data-source commands.
-- Pass family as an immutable constructor dependency.
-- Select family-aware transfer and export addresses.
-- Preserve raw `POD_IP` sync advertisement for unspecified mode.
+- Register and validate the Danger Zone setting and detached-volume gate.
+- Render the desired daemon argument in managed Instance Manager Pod specs.
+- Refresh observed `InstanceManager.status.ipFamily` from Pod arguments and
+  compare that status with the desired setting without reparsing the arguments.
+- Use the empty status string for default selection; keep readiness and
+  endpoint/storage-network validation separate from observed configuration.
+- Reconcile family changes through the existing `handlePod` lifecycle and
+  preserve its live-instance and resource-safety checks.
+- Let BIM and BIDS reconcile their own startup arguments without an
+  Instance Manager initialization or peer-consensus barrier.
+- Keep backend, EngineFrontend, BI internal-transfer, and download-proxy
+  address roles separate, including `Status.IP` versus `Status.StorageIP`.
+- Reconcile Share Manager Services with `PreferDualStack` without changing
+  generic `DataStore.CreateService`.
 
-### longhorn-manager
+### longhorn/longhorn chart
 
-- Register and validate the setting.
-- Generate and observe Instance Manager, BIM, and BIDS family arguments.
-- Select family-aware cluster/storage status endpoints.
-- Generate V1 family-aware `PortArgs`.
-- Restart stale managed Pods after the detachment gate.
-- Reuse existing backing-image files without copy migration.
-
-### longhorn chart
-
-- Require `defaultSettings.dataEngineIPFamily` to be a non-null string with exactly three allowed values: `""`, `ipv4`, and `ipv6`; the default is `""`.
-- Always render `data-engine-ip-family` in the default-setting ConfigMap, including the empty string.
-- Reject explicit `null`, a missing effective chart default, and other unsupported values during template rendering; omitting a user override uses the empty-string default.
+- Validate non-null `defaultSettings.preferredDataEngineIPFamily` with default
+  `default` and exact choices `default`, `ipv4`, `ipv6`.
+- Add optional Service policy with exact choices `""`, `SingleStack`,
+  `PreferDualStack`, and `RequireDualStack`.
+- Omit the Service field when empty and apply it to the five static Service
+  templates, including conditional OpenShift UI.
 
 ## Test Plan
 
-All acceptance testing is end to end and follows user-visible installation, configuration, workload, and recovery workflows. Regular V1 and V2 volumes are covered. Backing-image-backed volume coverage is V1 only because user-facing V2 BackingImage support is not guaranteed.
+Tests must verify observable contracts, not merely flags. Run on a disposable
+cluster with dual-stack or single-stack networks as appropriate.
 
-### Fresh installation with the empty default
+### Generic BI capability (issue 13864)
 
-1. Install Longhorn without overriding `defaultSettings.dataEngineIPFamily`.
-2. Verify the rendered default-setting ConfigMap contains `data-engine-ip-family: ""`.
-3. Verify the Longhorn Setting value is the empty string and all managed Pods omit `--ip-family`.
-4. Provision three-replica V1 and V2 volumes, write distinct data, detach, reattach, and verify exact readback.
-5. Create a deterministic BackingImage, verify BIDS downloads it, verify BIM copies become ready on all workers, and create a V1 BI-backed volume that exposes the expected embedded data.
-6. Verify an explicit Helm `null` value is rejected before installation.
+1. With dual-stack `lhnet1`, run Receive and Send without a family and verify
+   storage-first selection of the first usable address in interface order.
+2. Make `lhnet1` present but unreadable or unusable and verify internal BI
+   resolution fails without primary-IP fallback.
+3. Remove `lhnet1`, provide valid primary `POD_IP`, and verify automatic
+   internal BI operations use it; invalid primary values fail.
+4. Run `PrepareDownload` and verify the manager HTTP proxy reaches the BI
+   endpoint through raw primary `POD_IP`, independently of storage selection or
+   the preferred family.
+5. Verify explicit family behavior by using separate BIM/BIDS startup families,
+   not independent per-operation BI request fields.
 
-### Select IPv6 on an IPv4-primary dual-stack cluster
+### Process family and lifecycle
 
-1. Start with attached V1 and V2 volumes containing known data.
-2. Attempt to set `data-engine-ip-family=ipv6` while volumes are attached and verify Longhorn defers the change without replacing managed Pods.
-3. Detach all volumes, apply `ipv6`, and wait until Instance Managers, BIM, and BIDS have converged.
-4. Verify V1 engine and replica listeners use `[::]:<port>`, V2 listeners use IPv6, and published endpoints are IPv6.
-5. Verify existing BIM Pods restart through the normal upgrade path, retain the same BI UUID and file maps, and reuse existing files without copy migration.
-6. Create a fresh BackingImage and verify BIDS download and BIM transfer endpoints use IPv6.
-7. Reattach the original V1 and V2 volumes and verify exact data, then provision fresh V1 and V2 volumes and verify I/O.
-8. Create a fresh V1 BI-backed volume and verify the embedded data.
+1. Start an Instance Manager with empty, `ipv4`, and `ipv6` arguments and create
+   V1/V2 Engine, EngineFrontend, Replica, and Backup objects; verify each uses
+   the hosting process policy and no create request selects another family.
+2. Under `default`, provision three-replica V1 and V2 volumes, write distinct
+   data, detach and reattach, and verify exact readback.
+3. With attached volumes, attempt to change the setting and verify admission
+   rejects it; the setting, Pod UIDs, arguments, and workload family stay unchanged.
+4. Detach all volumes, change the setting, and verify mismatched Pods are
+   recreated through the normal lifecycle. Verify status reflects the new Pod
+   arguments: `""` for default, or the explicit `ipv4`/`ipv6` value.
+5. Verify a live listener is never mutated in place and a newly created object
+   after recreation uses the new family.
+6. Verify explicit storage-network mismatch fails closed without opposite-family
+   or cluster-network fallback.
+7. After each explicit-family rollout, reattach the existing V1 and V2 volumes
+   and verify their pre-transition data exactly. Provision fresh V1, V2, and
+   V1 BI-backed volumes, write new data, and verify exact readback.
 
-### Select IPv4 on an IPv6-primary dual-stack cluster
+### Address roles and recovery
 
-1. Repeat the attached-volume gate and detachment workflow with `data-engine-ip-family=ipv4`.
-2. Verify V1 engine and replica listeners use `0.0.0.0:<port>`, V2 listeners use IPv4, and published endpoints are IPv4 even when IPv6 is the primary Pod family.
-3. Verify BIM/BIDS restart, existing-file reuse, fresh BackingImage download, and V1 BI-backed volume data.
-4. Reattach original V1 and V2 volumes, verify exact data, and verify fresh V1 and V2 volume I/O.
+1. Verify an Engine backend target uses the process family on the authoritative
+   network.
+2. Verify a host-facing EngineFrontend exports the manager-supplied backend
+   target, not an independently selected local frontend address.
+3. Disable the frontend and verify only its internal gRPC fallback uses the
+   process-family Pod address.
+4. Restart a Replica and verify recovery uses the hosting process family and
+   existing physical state without writing family xattrs or Head metadata.
+5. Restart an EngineFrontend with a persisted target address from another
+   explicitly configured family; verify a warning and the unchanged recovery
+   path, rather than a new family-specific rejection.
+6. Verify Backup uses the server's configured family with or without a Replica;
+   verify restore retains its hosting Replica's process family.
 
-### Mixed Pod address preference
+### Observed status, BI rollout, and Service policy
 
-1. On an IPv4-primary cluster, configure exactly two workers with kubelet `node-ip=::` preference while leaving the third worker IPv4-preferred.
-2. Verify Node and cluster CIDR primary-family ordering does not change, while fresh PodIP ordering changes only on the selected workers.
-3. With the empty-string setting, verify IM, BIM, and BIDS endpoints follow each Pod's legacy primary family and regular V1/V2 volumes remain healthy.
-4. Set explicit IPv6 and verify every data-engine and BI management endpoint converges to IPv6.
-5. Repeat on an IPv6-primary cluster with exactly two workers using kubelet `node-ip=0.0.0.0`, then verify explicit IPv4 convergence.
-6. If kubelet restarts leave stale manager or CSI Service endpoints, verify safe Pod recreation restores provisioning without patching status or EndpointSlices.
-
-### Storage-network mismatch
-
-1. Configure an IPv4-only storage network and request `data-engine-ip-family=ipv6`.
-2. Verify Instance Manager, BIM, and BIDS status endpoints are withheld or cleared, synchronization does not report success, and no component falls back to IPv4 or the cluster network.
-3. Repeat with an IPv6-only storage network and an explicit IPv4 request.
-4. Configure a dual-stack storage network and verify explicit IPv4 and IPv6 each select the requested storage-network family.
-
-### RWX regression
-
-1. Provision RWX workloads backed by regular V1 and V2 volumes under explicit IPv4 and IPv6 data-engine settings.
-2. Mount each export from multiple workload Pods and verify shared read/write behavior.
-3. Verify the workload-facing NFS endpoint remains controlled by the Kubernetes Service or `endpoint-network-for-rwx-volume`, independent from `data-engine-ip-family`.
+1. Verify `InstanceManager.status.ipFamily` reflects observed Pod arguments,
+   using `""` for default. Changing only the desired setting must not copy it
+   into status before the Pod arguments change.
+2. Verify BIM/BIDS startup arguments follow the configured setting through
+   their existing Pod lifecycle, without an Instance Manager initialization
+   or peer-consensus barrier.
+3. Verify a deterministic BIDS download, BIM copies ready on all workers, and a
+   V1 BI-backed volume exposes exact embedded data. Verify BI download proxy
+   reachability separately through primary `POD_IP`.
+4. Verify existing BI CRs, UUIDs, file maps, and disk files are reused.
+5. Render each Service policy value and verify exact static Service behavior;
+   empty omits the field and invalid/null values fail Helm validation.
+6. Verify conditional OpenShift UI receives the selected policy.
+7. Verify Share Manager selector/headless Services reconcile in place to
+   `PreferDualStack`, preserve UID and primary ClusterIP, and fall back safely
+   on single-stack clusters.
+8. Verify RWX NFS reachability remains controlled by the Service or
+   `endpoint-network-for-rwx-volume`, independently of backend family.
+9. Verify generic `DataStore.CreateService` callers used by SystemRollout and
+   system backup restore do not inherit a global policy.
+10. On dual-stack workers with opposite primary Pod ordering, verify `default`
+    preserves unspecified data-engine selection without forcing one observed
+    family; verify explicit `ipv4` and `ipv6` remain strict.
 
 ## Risks and Limitations
 
-- The cluster and CNI must actually assign the requested family to every relevant Pod/network.
-- Mixed Pod preference can expose stale or asymmetric Kubernetes Service endpoints during kubelet restarts; controllers and endpoint health require operational monitoring.
-- Setting `status.applied=true` does not by itself prove every Instance Manager endpoint is usable. Per-component synchronization and status remain important.
-- A storage-network mismatch leaves components unavailable by design.
-- Old BIM images do not understand `--ip-family`; rollout order must prevent a new manager from passing the flag to an old image.
-- User-facing V2 BI-backed volumes remain unsupported independently from this enhancement.
+- A process restart is required to change family; this is intentionally gated by
+  volume detachment and can delay rollout.
+- Process family consistency does not prove endpoint reachability. Network
+  assignment, routing, CNI, and kube-proxy remain environmental requirements.
+- EngineFrontend host-facing reachability depends on the manager-supplied
+  backend target; it is not repaired by selecting a separate frontend address.
+- Internal BI storage resolution fails on a present unusable `lhnet1`, whereas
+  `PrepareDownload` intentionally uses primary `POD_IP`; these paths must not be
+  conflated.
+- `PreferDualStack` does not guarantee two VIPs on single-stack infrastructure.
+  `RequireDualStack` may make Services unavailable when both families cannot be
+  allocated.
+- User-facing V2 BackingImage, Shard, and ShardGroup manager lifecycles remain
+  outside this enhancement.

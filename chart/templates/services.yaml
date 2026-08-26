@@ -10,6 +10,10 @@ spec:
   {{- with .Values.service.admissionWebhook.trafficDistribution }}
   trafficDistribution: {{ . | quote }}
   {{- end }}
+  {{- $admissionIPFamilyPolicy := include "longhorn.ipFamilyPolicy" . }}
+  {{- if $admissionIPFamilyPolicy }}
+  {{- $admissionIPFamilyPolicy | nindent 2 }}
+  {{- end }}
   selector:
     longhorn.io/admission-webhook: longhorn-admission-webhook
   ports:
@@ -28,6 +32,10 @@ spec:
   type: ClusterIP
   {{- with .Values.service.recoveryBackend.trafficDistribution }}
   trafficDistribution: {{ . }}
+  {{- end }}
+  {{- $recoveryIPFamilyPolicy := include "longhorn.ipFamilyPolicy" . }}
+  {{- if $recoveryIPFamilyPolicy }}
+  {{- $recoveryIPFamilyPolicy | nindent 2 }}
   {{- end }}
   selector:
     longhorn.io/recovery-backend: longhorn-recovery-backend
