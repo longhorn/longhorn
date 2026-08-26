@@ -4180,6 +4180,284 @@ metadata:
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
     longhorn-manager: ""
+  name: snapshotgroups.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: SnapshotGroup
+    listKind: SnapshotGroupList
+    plural: snapshotgroups
+    shortNames:
+    - lhsnapg
+    singular: snapshotgroup
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The lifecycle phase of the group
+      jsonPath: .status.phase
+      name: Phase
+      type: string
+    - description: True when the group is Ready and every member is still usable
+      jsonPath: .status.readyToUse
+      name: ReadyToUse
+      type: boolean
+    - description: The latest member creation time, set when the group becomes Ready
+      jsonPath: .status.creationTime
+      name: CreationTime
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: SnapshotGroup is the Schema for the snapshotgroups API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              SnapshotGroupSpec defines the desired state of the Longhorn SnapshotGroup.
+              The whole spec is immutable after creation: a group is a point-in-time
+              request, so changing members later has no meaning.
+            properties:
+              deadlineSeconds:
+                default: 300
+                description: |-
+                  DeadlineSeconds is the deadline for taking every member snapshot,
+                  measured from the group's metadata.creationTimestamp. When the field is
+                  omitted, the CRD default applies. Go clients cannot omit the field: an
+                  unset field arrives as 0, and the mutating webhook replaces the 0 with
+                  the default.
+                format: int64
+                maximum: 3600
+                minimum: 10
+                type: integer
+              labels:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Labels are engine snapshot labels applied to every member (Snapshot
+                  spec.labels). They are not visible to Kubernetes label selectors.
+                  Reserved recurring-job label keys are rejected at admission.
+                nullable: true
+                type: object
+              members:
+                description: |-
+                  Members is the fixed member set, resolved from Volumes or VolumeSelector
+                  and stamped by the mutating webhook at admission. It may not be set by
+                  the user.
+                items:
+                  description: |-
+                    SnapshotGroupMember identifies one member of the group: the volume and the
+                    name of its member Snapshot CR, generated at admission.
+                  properties:
+                    snapshotName:
+                      type: string
+                    volumeName:
+                      type: string
+                  required:
+                  - snapshotName
+                  - volumeName
+                  type: object
+                nullable: true
+                type: array
+              volumeSelector:
+                description: |-
+                  VolumeSelector selects the member volumes by their labels. Exactly one of
+                  Volumes or VolumeSelector may be set at creation.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                          type: string
+                        values:
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              volumes:
+                description: |-
+                  Volumes explicitly lists the member volumes. Exactly one of Volumes or
+                  VolumeSelector may be set at creation; the mutating webhook resolves the
+                  selection into Members at admission.
+                items:
+                  type: string
+                nullable: true
+                type: array
+            type: object
+          status:
+            description: SnapshotGroupStatus defines the observed state of the Longhorn
+              SnapshotGroup
+            properties:
+              conditions:
+                description: |-
+                  Conditions holds the latest observations of the SnapshotGroup's state,
+                  such as Degraded.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
+              creationTime:
+                description: |-
+                  CreationTime is the latest member creation time, set when the group
+                  becomes Ready.
+                type: string
+              error:
+                description: Error is set when the group fails (deadline, name collision).
+                type: string
+              members:
+                description: |-
+                  Members is the observed state of every member, one entry per spec
+                  member. It is the primary debugging signal: each entry carries the
+                  member's last error and creation time.
+                items:
+                  description: |-
+                    SnapshotGroupMemberStatus is the observed state of one member, mirrored from
+                    its Snapshot CR.
+                  properties:
+                    creationTime:
+                      description: |-
+                        CreationTime is the engine snapshot creation time, mirrored from the
+                        member Snapshot. It is kept when the member is later lost.
+                      type: string
+                    error:
+                      description: |-
+                        Error is the last member error. A member Snapshot CR that disappeared
+                        after the group became Ready is recorded with the synthetic error
+                        "member snapshot deleted"; an unusable member keeps its own mirrored
+                        error.
+                      type: string
+                    readyToUse:
+                      description: |-
+                        ReadyToUse mirrors the member Snapshot while the group is InProgress.
+                        After the group is Ready, a member later deleted or unusable is recorded
+                        here as false: member entries always tell the per-member truth.
+                      type: boolean
+                    snapshotName:
+                      type: string
+                    volumeName:
+                      type: string
+                  required:
+                  - snapshotName
+                  - volumeName
+                  type: object
+                nullable: true
+                type: array
+              ownerID:
+                description: OwnerID is the ID of the node that owns this SnapshotGroup.
+                type: string
+              phase:
+                description: |-
+                  Phase is the lifecycle phase: empty until the first reconcile, then
+                  InProgress -> Ready | Failed.
+                enum:
+                - InProgress
+                - Ready
+                - Failed
+                - ""
+                type: string
+              readyToUse:
+                description: |-
+                  ReadyToUse is true when the group is Ready and every member snapshot
+                  is still individually ready: group readiness is the AND of member
+                  readiness, following the Kubernetes VolumeGroupSnapshot convention. It
+                  drops to false when a member is lost or unusable after Ready and
+                  recovers once every member is whole again; the Degraded condition
+                  carries the per-member detail. A failed, partial, or empty group is
+                  never reported ready.
+                type: boolean
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
   name: snapshots.longhorn.io
 spec:
   group: longhorn.io
@@ -5394,6 +5672,9 @@ rules:
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
   verbs: ["*"]
+- apiGroups: ["groupsnapshot.storage.k8s.io"]
+  resources: ["volumegroupsnapshotclasses", "volumegroupsnapshots", "volumegroupsnapshotcontents", "volumegroupsnapshotcontents/status"]
+  verbs: ["*"]
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "enginefrontends", "enginefrontends/status", "engines", "engines/status", "replicas", "replicas/status", "settings", "settings/status",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
@@ -5404,7 +5685,7 @@ rules:
               "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
               "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status",
               "volumeattachments", "volumeattachments/status", "backupbackingimages", "backupbackingimages/status",
-              "shards", "shards/status", "shardgroups", "shardgroups/status"]
+              "shards", "shards/status", "shardgroups", "shardgroups/status", "snapshotgroups", "snapshotgroups/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -5695,7 +5976,7 @@ spec:
         - --backing-image-manager-image
         - "docker.io/longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "docker.io/longhornio/support-bundle-kit:v0.0.84"
+        - "docker.io/longhornio/support-bundle-kit:v0.0.93"
         - --manager-image
         - "docker.io/longhornio/longhorn-manager:master-head"
         - --service-account
@@ -5726,7 +6007,7 @@ spec:
           mountPath: /host/etc/
           readOnly: true
         - name: longhorn
-          mountPath: "/var/lib/longhorn/"
+          mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
@@ -5747,10 +6028,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_DATA_PATH
-          value: "/var/lib/longhorn/"
-        - name: LONGHORN_CONTROL_PATH
-          value: "/var/lib/longhorn/"
         - name: LONGHORN_DISTRO
           value: "longhorn"
         
@@ -5773,7 +6050,7 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: "/var/lib/longhorn/"
+          path: /var/lib/longhorn/
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
@@ -5837,17 +6114,22 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "docker.io/longhornio/csi-attacher:v4.11.0-20260428"
+            value: "docker.io/longhornio/csi-attacher:v4.12.0"
           - name: CSI_PROVISIONER_IMAGE
-            value: "docker.io/longhornio/csi-provisioner:v5.3.0-20260428"
+            value: "docker.io/longhornio/csi-provisioner:v6.3.0"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "docker.io/longhornio/csi-node-driver-registrar:v2.16.0-20260428"
+            value: "docker.io/longhornio/csi-node-driver-registrar:v2.17.0"
           - name: CSI_RESIZER_IMAGE
-            value: "docker.io/longhornio/csi-resizer:v2.1.0-20260428"
+            value: "docker.io/longhornio/csi-resizer:v2.2.1"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "docker.io/longhornio/csi-snapshotter:v8.5.0-20260428"
+            value: "docker.io/longhornio/csi-snapshotter:v8.6.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "docker.io/longhornio/livenessprobe:v2.18.0-20260428"
+            value: "docker.io/longhornio/livenessprobe:v2.19.0"
+          # Uncomment to enable CSI VolumeGroupSnapshot support.
+          # Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first;
+          # otherwise the CSI Snapshotter stops serving regular volume snapshots.
+          # - name: CSI_VOLUME_GROUP_SNAPSHOT_ENABLED
+          #   value: "true"
           
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account

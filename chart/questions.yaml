@@ -91,7 +91,7 @@ questions:
         label: Longhorn Support Bundle Kit Image Repository
         group: Longhorn Images Settings
       - variable: image.longhorn.supportBundleKit.tag
-        default: v0.0.84
+        default: v0.0.93
         description: Tag for the Longhorn Support Bundle Manager image.
         type: string
         label: Longhorn Support Bundle Kit Image Tag
@@ -104,7 +104,7 @@ questions:
         label: Longhorn CSI Attacher Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.attacher.tag
-        default: v4.11.0-20260428
+        default: v4.12.0
         description: >-
           Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
         type: string
@@ -118,7 +118,7 @@ questions:
         label: Longhorn CSI Provisioner Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.provisioner.tag
-        default: v5.3.0-20260428
+        default: v6.3.0
         description: >-
           Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
         type: string
@@ -132,7 +132,7 @@ questions:
         label: Longhorn CSI Node Driver Registrar Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.nodeDriverRegistrar.tag
-        default: v2.16.0-20260428
+        default: v2.17.0
         description: >-
           Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
         type: string
@@ -146,7 +146,7 @@ questions:
         label: Longhorn CSI Driver Resizer Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.resizer.tag
-        default: v2.1.0-20260428
+        default: v2.2.1
         description: >-
           Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value.
         type: string
@@ -160,7 +160,7 @@ questions:
         label: Longhorn CSI Driver Snapshotter Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.snapshotter.tag
-        default: v8.5.0-20260428
+        default: v8.6.0
         description: >-
           Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
         type: string
@@ -174,7 +174,7 @@ questions:
         label: Longhorn CSI Liveness Probe Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.livenessProbe.tag
-        default: v2.18.0-20260428
+        default: v2.19.0
         description: >-
           Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
         type: string
@@ -273,6 +273,13 @@ questions:
           Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value ("3").
         label: Longhorn CSI Snapshotter replica count
         group: Longhorn CSI Driver Settings
+      - variable: csi.volumeGroupSnapshotEnabled
+        type: boolean
+        default: false
+        description: >-
+          Enable CSI VolumeGroupSnapshot support by turning on the CSIVolumeGroupSnapshot feature gate of the CSI Snapshotter. Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first; otherwise the CSI Snapshotter stops serving regular volume snapshots.
+        label: Longhorn CSI VolumeGroupSnapshot support
+        group: Longhorn CSI Driver Settings
       - variable: defaultSettings.allowRecurringJobWhileVolumeDetached
         label: Allow Recurring Job While Volume Is Detached
         description: >-
@@ -308,14 +315,7 @@ questions:
       - variable: defaultSettings.defaultDataPath
         label: Default Data Path
         description: >-
-          Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. When this setting is a block device path, runtime and control-plane paths are configured separately by default-control-path. The default value is "/var/lib/longhorn/".
-        group: Longhorn Default Settings
-        type: string
-        default: /var/lib/longhorn/
-      - variable: defaultSettings.defaultControlPath
-        label: Default Control Path
-        description: >-
-          Default path to use for storing runtime and control-plane artifacts on a host. This setting must be an absolute directory path. Engine binaries, metadata, sockets, and logs are stored under this path. The default value is "/var/lib/longhorn/".
+          Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. The default value is "/var/lib/longhorn/".
         group: Longhorn Default Settings
         type: string
         default: /var/lib/longhorn/

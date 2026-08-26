@@ -94,6 +94,16 @@ spec:
           - name: CSI_SNAPSHOTTER_REPLICA_COUNT
             value: {{ .Values.csi.snapshotterReplicaCount | quote }}
           {{- end }}
+          {{- if .Values.csi.volumeGroupSnapshotEnabled }}
+          - name: CSI_VOLUME_GROUP_SNAPSHOT_ENABLED
+            value: "true"
+          {{- else }}
+          # Uncomment to enable CSI VolumeGroupSnapshot support.
+          # Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first;
+          # otherwise the CSI Snapshotter stops serving regular volume snapshots.
+          # - name: CSI_VOLUME_GROUP_SNAPSHOT_ENABLED
+          #   value: "true"
+          {{- end }}
           {{- if .Values.enableGoCoverDir }}
           - name: GOCOVERDIR
             value: /go-cover-dir/
