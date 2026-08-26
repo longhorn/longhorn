@@ -7,6 +7,10 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
+  {{- $admissionIPFamilyPolicy := include "longhorn.ipFamilyPolicy" . }}
+  {{- if $admissionIPFamilyPolicy }}
+  {{- $admissionIPFamilyPolicy | nindent 2 }}
+  {{- end }}
   selector:
     longhorn.io/admission-webhook: longhorn-admission-webhook
   ports:
@@ -23,6 +27,10 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
+  {{- $recoveryIPFamilyPolicy := include "longhorn.ipFamilyPolicy" . }}
+  {{- if $recoveryIPFamilyPolicy }}
+  {{- $recoveryIPFamilyPolicy | nindent 2 }}
+  {{- end }}
   selector:
     longhorn.io/recovery-backend: longhorn-recovery-backend
   ports:
