@@ -150,6 +150,8 @@ image:
   # -- Image pull policy that applies to all user-deployed Longhorn components, such as Longhorn Manager, Longhorn driver, and Longhorn UI.
   pullPolicy: IfNotPresent
 service:
+  # -- IP family policy for Longhorn Services. (Options: "", "SingleStack", "PreferDualStack", "RequireDualStack")
+  ipFamilyPolicy: ""
   ui:
     # -- Service type for Longhorn UI. (Options: "ClusterIP", "NodePort", "LoadBalancer", "Rancher-Proxy")
     type: ClusterIP
@@ -374,6 +376,8 @@ defaultSettings:
   orphanResourceAutoDeletionGracePeriod: ~
   # -- Storage network for in-cluster traffic. When unspecified, Longhorn uses the Kubernetes cluster network.
   storageNetwork: ~
+  # -- Preferred IP family for Longhorn data-engine and backing-image management traffic. The default value ("default") preserves legacy node-default address selection. Allowed values are exactly "default", "ipv4", and "ipv6"; null and empty values are unsupported. An explicit family is strict and never falls back to the other family or another network. **Danger Zone**: Change this setting only after all volumes are detached. Backing Image Manager (BIM) and Backing Image Data Source (BIDS) pods restart to apply it, while capable V2 Instance Manager pods remain running. You cannot modify this setting while volumes are still attached.
+  preferredDataEngineIPFamily: default
   # -- Specifies a dedicated network for mounting RWX (ReadWriteMany) volumes. Leave this blank to use the default Kubernetes cluster network. **Caution**: This setting should change after all RWX volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while RWX volumes are still attached.
   endpointNetworkForRWXVolume: ~
   # -- Flag that prevents accidental uninstallation of Longhorn.

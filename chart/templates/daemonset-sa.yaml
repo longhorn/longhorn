@@ -198,6 +198,10 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.manager.type }}
+  {{- $managerIPFamilyPolicy := include "longhorn.ipFamilyPolicy" . }}
+  {{- if $managerIPFamilyPolicy }}
+  {{- $managerIPFamilyPolicy | nindent 2 }}
+  {{- end }}
   selector:
     app: longhorn-manager
   ports:
