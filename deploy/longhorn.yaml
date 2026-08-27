@@ -1358,6 +1358,14 @@ spec:
                 format: date-time
                 nullable: true
                 type: string
+              linkedCloneSourceSnapshot:
+                description: The source snapshot of the backed up volume, set only
+                  when it was a linked clone.
+                type: string
+              linkedCloneSourceVolume:
+                description: The source volume of the backed up volume, set only when
+                  it was a linked clone.
+                type: string
               messages:
                 additionalProperties:
                   type: string
