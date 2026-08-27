@@ -118,11 +118,11 @@ Action items for releasing {{ env.RELEASE_VERSION }}
 
 **After marking the release as a `stable` release, Release Captain needs to coordinate the following items**
 
-- [ ] Update https://github.com/longhorn/longhorn/blob/master/deploy/upgrade_responder_server/chart-values.yaml - @PhanLe1010
+- [ ] Update https://github.com/longhorn/longhorn/blob/master/deploy/upgrade_responder_server/chart-values.yaml - @mantissahz
   - PR: <!--URL of the pull request-->
 - [ ] Add another request for the rancher charts for the next patch release - @rebeccazzzz  
-- [ ] Update the [support matrix](https://www.suse.com/suse-longhorn/support-matrix/all-supported-versions/) - @asettle @rebeccazzzz
-- [ ] Update the [lifecycle page](https://www.suse.com/lifecycle/#suse-storage) - @asettle @rebeccazzzz
+- [ ] Update the [support matrix](https://www.suse.com/suse-longhorn/support-matrix/all-supported-versions/) - @rebeccazzzz
+- [ ] Update the [lifecycle page](https://www.suse.com/lifecycle/#suse-storage) - @rebeccazzzz
 
 ---
 
@@ -131,7 +131,7 @@ Action items for releasing {{ env.RELEASE_VERSION }}
 **The Release Captain needs to coordinate the following items.**
 
 - [ ] Prepare Rancher Chart in rancher/charts active branches for Rancher App Marketplace - @carterli0407-cell @mantissahz
-- [ ] rancher/image-mirrors update - @carterli0407-cell @mantissahz
+- [ ] rancher/image-mirrors update - @carterli0407-cell @carterli0407-cell @mantissahz
 - [ ] Verify the Rancher Charts can be installed & upgraded - {{ env.QA_CAPTAIN }}
 
 cc @longhorn/qa @longhorn/dev
