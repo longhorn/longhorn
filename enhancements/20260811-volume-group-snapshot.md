@@ -485,7 +485,7 @@ Interface #2128 depends on:
 | Toggle enabled while the group CRDs are missing | The driver deployer fails fast naming the missing CRDs; the gated sidecar is never deployed into its silent startup hang, so per-volume snapshots keep working. Installing the CRDs (or disabling the toggle) and re-running the upgrade recovers. |
 | Member backup errors during upload (`bak`) | The fan-out RPC (Create or Get) returns Internal naming the failed members; the sidecar retries; deleting the failed Backup CR lets the next retry recreate it, matching per-volume behavior. |
 | Backup target unreachable during upload (`bak`) | Uploads stall and the group never reports ready. No deadline applies, because the deadline bounds only taking the snapshots; the behavior matches a stalled per-volume backup. |
-| Backup target unreachable during delete (`bak`) | Backup deletion blocks and retries per existing per-volume semantics, for every member; the group CR is not deleted until the labeled backups are gone, so retried Delete RPCs pick up the remaining backups. |
+| Backup target unreachable during delete (`bak`) | Deletion follows the existing per-volume behavior: with the target unavailable, each member Backup CR is removed without touching the backup store, so the delete completes immediately. The backup data stays on the target and resurfaces as ungrouped Backup CRs once the target recovers. Member backups are still swept before the group CR, so a retried Delete picks up any survivors. |
 | Plugin restart between the group snapshot and upload completion (`bak`) | Nothing is lost, because the plugin keeps no state of its own: the handle records the group type, a retried Create or Get creates only the member Backup CRs that are still missing, and readiness is recomputed by listing the group-labeled backups. |
 | `GetVolumeGroupSnapshot` on a `bak` group before uploads complete | `ready_to_use` is computed live from the member backups: false while any upload is in flight, true once every member backup completes, even before the fan-out stamps the backups-completed annotation. Once the annotation is written, it stays true. |
 
@@ -498,7 +498,7 @@ Interface #2128 depends on:
 - Idempotency: controller restarts, repeated reconciles, and retried CSI RPCs never duplicate a member snapshot or backup.
 - Terminal phases: a group failed at the deadline stays Failed; the restore-guard annotation prevents re-snapshotting; deleting a member snapshot after Ready degrades the group and drops `status.readyToUse` to false, while the Kubernetes `VolumeGroupSnapshot` keeps `READYTOUSE=true` because the sidecar stops polling a ready content - a divergence that needs a guarding test.
 - Restore: a member PVC restores from its handle, for both types.
-- Deletion paths: through each entry point; a member that is its volume's latest snapshot (deferred purge), detached member volumes, a missing group, and `bak` deletion against an unreachable backup target.
+- Deletion paths: through each entry point; a member that is its volume's latest snapshot (deferred purge), detached member volumes, a missing group, and `bak` deletion against an unreachable backup target: the CRs delete immediately without remote cleanup, and the remote backups reappear after the target recovers, matching per-volume behavior.
 
 ### Upgrade strategy
 
