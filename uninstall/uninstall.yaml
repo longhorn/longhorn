@@ -143,7 +143,7 @@ spec:
         env:
         - name: LONGHORN_NAMESPACE
           value: longhorn-system
-        image: longhornio/longhorn-manager:master-head
+        image: longhornio/longhorn-manager:v1.13.0-rc1
         imagePullPolicy: IfNotPresent
         name: longhorn-uninstall
       restartPolicy: Never
