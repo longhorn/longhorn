@@ -20,7 +20,7 @@ spec:
     from:
       - podSelector:
           matchLabels:
-            longhorn.io/component: manager
+            app: longhorn-manager
       {{- range .Values.networkPolicies.kubeAPIServerSourceCIDRs }}
       - ipBlock:
           cidr: {{ . | quote }}
