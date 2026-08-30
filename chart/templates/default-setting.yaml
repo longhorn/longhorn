@@ -89,6 +89,26 @@ data:
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) | quote -}}
     {{- end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.CSISidecarComponentTaintToleration)) (.Values.global.cattle.windowsCluster.enabled) }}
+    csi-sidecar-taint-toleration: {{ $windowsDefaultSettingCSISidecarComponentTaintToleration := list }}{{ $defaultSettingCSISidecarComponentTaintToleration := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.CSISidecarComponentTaintToleration -}}
+        {{- $windowsDefaultSettingCSISidecarComponentTaintToleration = .Values.global.cattle.windowsCluster.defaultSetting.CSISidecarComponentTaintToleration -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.CSISidecarComponentTaintToleration) -}}
+        {{- $defaultSettingCSISidecarComponentTaintToleration = .Values.defaultSettings.CSISidecarComponentTaintToleration -}}
+      {{- end -}}
+      {{- $taintToleration := list $windowsDefaultSettingCSISidecarComponentTaintToleration $defaultSettingCSISidecarComponentTaintToleration }}{{ join ";" (compact $taintToleration) -}}
+    {{- end }}
+    {{- if or (not (kindIs "invalid" .Values.defaultSettings.SystemManagedCSISidecarComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
+    system-managed-csi-sidecar-components-node-selector: {{ $windowsDefaultSettingCSISidecarComponentsNodeSelector := list }}{{ $defaultSettingCSISidecarComponentsNodeSelector := list -}}
+      {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.SystemManagedCSISidecarComponentsNodeSelector -}}
+        {{ $windowsDefaultSettingCSISidecarComponentsNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.SystemManagedCSISidecarComponentsNodeSelector -}}
+      {{- end -}}
+      {{- if not (kindIs "invalid" .Values.defaultSettings.SystemManagedCSISidecarComponentsNodeSelector) -}}
+        {{- $defaultSettingCSISidecarComponentsNodeSelector = .Values.defaultSettings.SystemManagedCSISidecarComponentsNodeSelector -}}
+      {{- end -}}
+      {{- $nodeSelector := list $windowsDefaultSettingCSISidecarComponentsNodeSelector $defaultSettingCSISidecarComponentsNodeSelector }}{{ join ";" (compact $nodeSelector) -}}
+    {{- end -}}
     {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedCSIComponentsResourceLimits) }}
     system-managed-csi-components-resource-limits: {{ .Values.defaultSettings.systemManagedCSIComponentsResourceLimits | quote }}
     {{- end }}
