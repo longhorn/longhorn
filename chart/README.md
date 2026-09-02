@@ -251,6 +251,24 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornUI.tolerations | list | `[]` | Toleration for Longhorn UI on nodes allowed to run Longhorn components. |
 | longhornUI.topologySpreadConstraints | list | `[]` | Topology spread constraints for Longhorn UI pods. Unlike `longhornUI.affinity`, these can guarantee that replicas stay spread across a topology domain during a rolling update or a mass reschedule. |
 
+### Longhorn Global Manager Settings
+
+The following settings apply to the longhorn-global-manager Deployment, which hosts the cluster-wide Pod controllers (KubernetesPVController and KubernetesPodController) instead of running them in every Longhorn Manager DaemonSet pod.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| longhornGlobalManager.affinity | object | `{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"app","operator":"In","values":["longhorn-global-manager"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":1}]}}` | Affinity for global manager pods. The default spreads replicas across nodes. |
+| longhornGlobalManager.annotations | object | `{}` | Annotations for global manager pods. |
+| longhornGlobalManager.nodeSelector | object | `{}` | Node selector for global manager pods. |
+| longhornGlobalManager.podDisruptionBudget | object | `{"enabled":false,"maxUnavailable":"","minAvailable":1}` | Pod Disruption Budget for the global manager. Keeps a minimum number of global manager pods available during voluntary disruptions such as node drains. Effective only when `longhornGlobalManager.replicas` is greater than 1. |
+| longhornGlobalManager.podDisruptionBudget.enabled | bool | `false` | Setting that allows you to enable the Pod Disruption Budget for the global manager. |
+| longhornGlobalManager.podDisruptionBudget.maxUnavailable | string | `""` | Maximum number or percentage of global manager pods that can be unavailable during a disruption. When set, it takes precedence over `longhornGlobalManager.podDisruptionBudget.minAvailable`. |
+| longhornGlobalManager.podDisruptionBudget.minAvailable | int | `1` | Minimum number or percentage of global manager pods that must remain available during a disruption. Mutually exclusive with `longhornGlobalManager.podDisruptionBudget.maxUnavailable`. |
+| longhornGlobalManager.priorityClass | string | `"longhorn-critical"` | PriorityClass for the global manager. |
+| longhornGlobalManager.replicas | int | `3` | Replica count for the global manager. One replica is the active leader; the others are warm standbys. |
+| longhornGlobalManager.resources | string | `nil` | Resource requests and limits for global manager pods. Memory scales with the cluster's Pod count (cluster-wide Pod informer cache). |
+| longhornGlobalManager.tolerations | list | `[]` | Node tolerations for global manager pods. |
+
 ### Ingress Settings
 
 | Key | Type | Default | Description |
