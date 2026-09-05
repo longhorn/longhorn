@@ -45,6 +45,8 @@ networkPolicies:
   v1DataEngineInitiatorSourceCIDRs: []
   # -- Additional TCP ports used by recovery backend mesh transport.
   recoveryBackendAdditionalIngressPorts: []
+  # -- Sources permitted to scrape Longhorn Manager metrics on TCP/9500 when `restrictInternalTraffic` is enabled. Each entry is a NetworkPolicy peer. TCP/9500 also serves the Longhorn Manager REST API, so scope every entry as narrowly as the scraper allows, for example a `namespaceSelector` and a `podSelector` in one entry rather than a namespace on its own. When empty, only the Longhorn components already listed in the policy can reach Longhorn Manager.
+  metricsScrapeSources: []
 image:
   longhorn:
     engine:
