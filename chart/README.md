@@ -91,6 +91,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 |-----|------|---------|-------------|
 | networkPolicies.enabled | bool | `false` | Setting that allows you to enable network policies that control access to Longhorn pods. |
 | networkPolicies.kubeAPIServerSourceCIDRs | list | `[]` | Kubernetes API server source CIDRs allowed to access the Longhorn admission webhook. When empty, source filtering is disabled. |
+| networkPolicies.metricsScrapeSources | list | `[]` | Sources permitted to scrape Longhorn Manager metrics on TCP/9500 when `restrictInternalTraffic` is enabled. Each entry is a NetworkPolicy peer. TCP/9500 also serves the Longhorn Manager REST API, so scope every entry as narrowly as the scraper allows, for example a `namespaceSelector` and a `podSelector` in one entry rather than a namespace on its own. When empty, only the Longhorn components already listed in the policy can reach Longhorn Manager. |
 | networkPolicies.recoveryBackendAdditionalIngressPorts | list | `[]` | Additional TCP ports used by recovery backend mesh transport. |
 | networkPolicies.restrictInternalTraffic | bool | `true` | Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other. |
 | networkPolicies.type | string | `"k3s"` | Distribution that determines the policy for allowing access for an ingress. (Options: "k3s", "rke2", "rke1") |
