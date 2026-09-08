@@ -6088,7 +6088,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.12.0-dev
+    app.kubernetes.io/version: v1.13.0-rc1
     app: longhorn-global-manager
   name: longhorn-global-manager
   namespace: longhorn-system
@@ -6102,12 +6102,12 @@ spec:
       labels:
         app.kubernetes.io/name: longhorn
         app.kubernetes.io/instance: longhorn
-        app.kubernetes.io/version: v1.12.0-dev
+        app.kubernetes.io/version: v1.13.0-rc1
         app: longhorn-global-manager
     spec:
       containers:
       - name: longhorn-global-manager
-        image: docker.io/longhornio/longhorn-manager:master-head
+        image: docker.io/longhornio/longhorn-manager:v1.13.0-rc1
         imagePullPolicy: IfNotPresent
         command:
         - longhorn-manager
