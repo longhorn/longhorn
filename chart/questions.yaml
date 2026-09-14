@@ -558,6 +558,12 @@ questions:
         group: Longhorn Default Settings
         type: string
         default: longhorn-critical
+      - variable: defaultSettings.systemManagedComponentsPriorityClasses
+        label: System Managed Components Priority Classes
+        description: >-
+          Optional JSON object for per-component PriorityClass overrides for system-managed Longhorn components. Unset components fall back to defaultSettings.priorityClass. Supported components: instance-manager, engine-image, longhorn-csi-plugin, csi-attacher, csi-provisioner, csi-resizer, csi-snapshotter. WARNING: DO NOT CHANGE THIS SETTING WITH ATTACHED VOLUMES.
+        group: Longhorn Default Settings
+        type: multiline
       - variable: defaultSettings.replicaReplenishmentWaitInterval
         label: Replica Replenishment Wait Interval
         description: >-
