@@ -2891,7 +2891,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.12.0-dev
+    app.kubernetes.io/version: v1.13.0-rc2
     longhorn-manager: ""
   name: instancemanagerupgrades.longhorn.io
 spec:
@@ -3078,7 +3078,7 @@ metadata:
   labels:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.12.0-dev
+    app.kubernetes.io/version: v1.13.0-rc2
     longhorn-manager: ""
   name: nodes.longhorn.io
 spec:
