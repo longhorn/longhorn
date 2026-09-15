@@ -6271,3 +6271,7 @@ spec:
       - emptyDir: {}
         name: var-run
       priorityClassName: "longhorn-critical"
+
+---
+# Source: longhorn/templates/validate-psp-install.yaml
+#
