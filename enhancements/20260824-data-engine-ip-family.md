@@ -35,12 +35,9 @@ process startup family from the configured setting.
 `GetBackingImageDownloadAddress` and returns the primary `POD_IP`; it must not
 use storage-network selection or the preferred data-engine family.
 
-Kubernetes Service policy is independent. The optional
-`service.ipFamilyPolicy` chart value accepts `""`, `SingleStack`,
-`PreferDualStack`, and `RequireDualStack`. Empty omits `spec.ipFamilyPolicy` and
-preserves Kubernetes' default `SingleStack`. Dynamic Share Manager Services
-continue to be reconciled with `PreferDualStack`; generic Service creation is
-not globally changed.
+The setting covers data-plane traffic only. Kubernetes control-plane Services
+and their Helm chart configuration remain unchanged. Dynamic Share Manager
+Services retain their existing data-plane-specific reconciliation behavior.
 
 ### Related Issues
 
@@ -84,8 +81,8 @@ those paths distinct.
   the 13050 setting; explicit selection remains process-owned.
 - Use storage-first selection for internal BI transfers and primary Pod IP for
   the `PrepareDownload` manager HTTP-proxy path.
-- Preserve the existing Kubernetes Service policy contract and Share Manager
-  behavior described below.
+- Keep Kubernetes control-plane Service manifests and Helm values unchanged.
+- Preserve existing Share Manager data-plane Service behavior.
 
 ## Non-goals
 
@@ -101,6 +98,7 @@ those paths distinct.
   network.
 - Adding user-facing V2 BackingImage, Shard, or ShardGroup manager lifecycles.
 - Configuring Kubernetes, kubelet, CNI, Multus, routing, or firewall rules.
+- Configuring IP families for Kubernetes control-plane Services.
 
 ## Terminology and Network Boundaries
 
@@ -164,38 +162,21 @@ The manager's setting status indicates whether the desired startup family has
 been safely applied to managed Instance Manager Pods. It is not per-process
 runtime state and is not proof that every endpoint is currently reachable.
 
-### Service IP family policy
+### Control-plane Services
 
-`service.ipFamilyPolicy` controls Kubernetes Service VIP family allocation (and
-headless Service family behavior). It does not select Pod addresses, backend
-listeners, EngineFrontend targets, BI download addresses, or RWX NFS networks.
+Kubernetes control-plane Services and their Helm values are outside this
+enhancement and remain unchanged.
 
 ## Proposal
 
-### Setting and chart contract
+### Runtime Setting contract
 
-`preferred-data-engine-ip-family` is a Danger Zone string setting:
+`Setting/preferred-data-engine-ip-family` is a Danger Zone string setting:
 
 - Default: `default`.
 - Choices: `default`, `ipv4`, `ipv6`.
-- A Helm effective value must be a non-null string with one of those values.
-- The chart default-setting ConfigMap renders `default` when no override is
-  supplied.
-- Explicit `null` and unsupported values are rejected by chart validation.
-
-Example:
-
-```yaml
-defaultSettings:
-  preferredDataEngineIPFamily: default
-```
-
-The chart also exposes the independent Service option:
-
-```yaml
-service:
-  ipFamilyPolicy: PreferDualStack
-```
+- Invalid values are rejected by runtime Setting validation.
+- The setting is changed through the Settings CR/API, not through a Helm value.
 
 ### Runtime application and observed-family state
 
@@ -277,19 +258,9 @@ IPv6 host-port formatting remains bracket-safe. A wildcard listener must not be
 characterized as IPv4-only: Go `net.Listen("tcp", ...)` may accept both
 families on supported Linux configurations.
 
-### Kubernetes Service policy
+### Share Manager data-plane Services
 
-`service.ipFamilyPolicy` accepts exactly `""`, `SingleStack`, `PreferDualStack`,
-and `RequireDualStack`. Empty omits `spec.ipFamilyPolicy`, retaining
-Kubernetes' default `SingleStack`. Non-empty values are rendered on:
-
-- `longhorn-backend`;
-- `longhorn-frontend`;
-- conditional OpenShift `longhorn-ui`;
-- admission webhook; and
-- recovery backend Services.
-
-Dynamic Share Manager selector and headless Services always use
+Dynamic Share Manager selector and headless Services continue to use
 `PreferDualStack`, with Kubernetes single-stack fallback. Existing objects are
 updated in place, preserving their Service UID and existing primary ClusterIP
 when present. Generic `DataStore.CreateService` remains policy-agnostic for
@@ -299,7 +270,7 @@ SystemRollout and system backup restore behavior.
 
 ### Default compatibility
 
-The chart default is `default`, and existing data-engine address selection is
+The runtime Setting default is `default`, and existing data-engine address selection is
 preserved. Existing Pods keep their current startup family until a setting
 change passes the detached-volume gate and normal Pod recreation occurs.
 
@@ -324,19 +295,17 @@ A running old Instance Manager does not gain a new family through an API
 request. Mixed-version operation is limited to the behavior supported by the
 running daemon and must not be represented as per-instance family capability.
 
-### Service policy compatibility
+### Share Manager Service compatibility
 
-The empty Service policy preserves historical manifests. `PreferDualStack` is
-fallback-compatible on a single-stack cluster; `RequireDualStack` may be
-rejected or remain unavailable when both Service families cannot be allocated.
-Changing a Service policy can affect VIP or external LoadBalancer allocation;
-provider support must be checked before selecting `RequireDualStack`.
+`PreferDualStack` remains fallback-compatible for dynamic Share Manager
+Services on single-stack clusters. This fixed data-plane policy does not alter
+static control-plane Services or introduce a Helm value.
 
 ## Failure Modes
 
 | Failure | Required behavior |
 | --- | --- |
-| Invalid setting or Helm value | Validation rejects it; no invalid setting is applied. |
+| Invalid setting | Runtime validation rejects it; no invalid setting is applied. |
 | Attached volume during setting change | Admission rejects the change; the setting, process args, and Pod UIDs do not change. |
 | Running Pod has a different `--ip-family` | Observed status differs from the setting; existing Pod lifecycle handles recreation. |
 | Explicit backend family unavailable | Endpoint selection fails closed; no opposite-family or cluster fallback. |
@@ -347,16 +316,13 @@ provider support must be checked before selecting `RequireDualStack`.
 | Malformed or explicitly mismatched persisted EngineFrontend address | Warn and retain the existing recovery path; do not add an IP-family rejection. |
 | Recovered Replica | Hosting process family remains authoritative; no family xattr or Head metadata is invented. |
 | Backup/restore family | Backup receives the hosting server family explicitly; restore uses the hosting Replica's process family. |
-| Empty Service policy | Static manifests omit the field; Kubernetes uses `SingleStack`. |
-| Unsupported Service policy | Helm validation rejects it. |
-| `RequireDualStack` on single-stack infrastructure | Service creation/update or external allocation can fail or remain unavailable. |
 | Existing Share Manager Service | Reconcile in place with `PreferDualStack`, preserving UID and primary ClusterIP when present. |
 
 ## API Changes
 
-The 13050 setting, observed Instance Manager status, and chart values are the
-public configuration/state changes: `preferred-data-engine-ip-family`,
-`InstanceManager.status.ipFamily`, and `service.ipFamilyPolicy`. The Instance
+The public configuration/state changes are the
+`preferred-data-engine-ip-family` runtime Setting and
+`InstanceManager.status.ipFamily`. The Instance
 Manager status field is a string with `""` as the default and `ipv4` or `ipv6`
 for explicit Pod configuration. There is no pointer-based uninitialized state.
 No family field is added to Engine, EngineFrontend, Replica, or Backup objects.
@@ -429,14 +395,9 @@ contract and returns primary `POD_IP`.
 - Reconcile Share Manager Services with `PreferDualStack` without changing
   generic `DataStore.CreateService`.
 
-### longhorn/longhorn chart
-
-- Validate non-null `defaultSettings.preferredDataEngineIPFamily` with default
-  `default` and exact choices `default`, `ipv4`, `ipv6`.
-- Add optional Service policy with exact choices `""`, `SingleStack`,
-  `PreferDualStack`, and `RequireDualStack`.
-- Omit the Service field when empty and apply it to the five static Service
-  templates, including conditional OpenShift UI.
+The chart carries only the generated CRD schema for the runtime Setting and
+Instance Manager status. It adds no IP-family Helm value and does not change
+static control-plane Service templates.
 
 ## Test Plan
 
@@ -493,7 +454,7 @@ cluster with dual-stack or single-stack networks as appropriate.
 6. Verify Backup uses the server's configured family with or without a Replica;
    verify restore retains its hosting Replica's process family.
 
-### Observed status, BI rollout, and Service policy
+### Observed status and BI rollout
 
 1. Verify `InstanceManager.status.ipFamily` reflects observed Pod arguments,
    using `""` for default. Changing only the desired setting must not copy it
@@ -505,19 +466,17 @@ cluster with dual-stack or single-stack networks as appropriate.
    V1 BI-backed volume exposes exact embedded data. Verify BI download proxy
    reachability separately through primary `POD_IP`.
 4. Verify existing BI CRs, UUIDs, file maps, and disk files are reused.
-5. Render each Service policy value and verify exact static Service behavior;
-   empty omits the field and invalid/null values fail Helm validation.
-6. Verify conditional OpenShift UI receives the selected policy.
-7. Verify Share Manager selector/headless Services reconcile in place to
+5. Verify Share Manager selector/headless Services reconcile in place to
    `PreferDualStack`, preserve UID and primary ClusterIP, and fall back safely
    on single-stack clusters.
-8. Verify RWX NFS reachability remains controlled by the Service or
+6. Verify RWX NFS reachability remains controlled by the Service or
    `endpoint-network-for-rwx-volume`, independently of backend family.
-9. Verify generic `DataStore.CreateService` callers used by SystemRollout and
-   system backup restore do not inherit a global policy.
-10. On dual-stack workers with opposite primary Pod ordering, verify `default`
-    preserves unspecified data-engine selection without forcing one observed
-    family; verify explicit `ipv4` and `ipv6` remain strict.
+7. Verify static control-plane Services and generic
+   `DataStore.CreateService` callers used by SystemRollout and system backup
+   restore remain unchanged.
+8. On dual-stack workers with opposite primary Pod ordering, verify `default`
+   preserves unspecified data-engine selection without forcing one observed
+   family; verify explicit `ipv4` and `ipv6` remain strict.
 
 ## Risks and Limitations
 
@@ -530,8 +489,7 @@ cluster with dual-stack or single-stack networks as appropriate.
 - Internal BI storage resolution fails on a present unusable `lhnet1`, whereas
   `PrepareDownload` intentionally uses primary `POD_IP`; these paths must not be
   conflated.
-- `PreferDualStack` does not guarantee two VIPs on single-stack infrastructure.
-  `RequireDualStack` may make Services unavailable when both families cannot be
-  allocated.
+- `PreferDualStack` does not guarantee two Share Manager Service VIPs on
+  single-stack infrastructure; Kubernetes fallback preserves availability.
 - User-facing V2 BackingImage, Shard, and ShardGroup manager lifecycles remain
   outside this enhancement.

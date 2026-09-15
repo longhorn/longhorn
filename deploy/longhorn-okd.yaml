@@ -250,7 +250,6 @@ data:
   default-setting.yaml: |-
     priority-class: "longhorn-critical"
     disable-revision-counter: "{\"v1\":\"true\"}"
-    preferred-data-engine-ip-family: "default"
 
 ---
 # Source: longhorn/templates/storageclass.yaml
