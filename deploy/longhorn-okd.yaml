@@ -6362,7 +6362,6 @@ spec:
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
-
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 # https://github.com/openshift/oauth-proxy/blob/master/contrib/sidecar.yaml
