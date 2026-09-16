@@ -1,5 +1,11 @@
 # V2 Volume Encryption
 
+## Update (2026-09-22, v1.13.0)
+
+[Issue #14020](https://github.com/longhorn/longhorn/issues/14020) updates the CSI Secret configuration for V2 volumes as well. The original proposal and examples below are preserved as historical design context.
+
+Current encrypted-volume StorageClasses should use node-stage, node-publish, and node-expand Secret references instead of `csi.storage.k8s.io/provisioner-secret-name` and `csi.storage.k8s.io/provisioner-secret-namespace`. Longhorn's CSI controller does not consume the encryption key during provisioning; the kubelet supplies it for staging, publishing, and node-side expansion. See the current [volume encryption guidance](https://longhorn.io/docs/1.13.0/advanced-resources/security/volume-encryption/).
+
 ## Summary
 
 This enhancement adds support for user configured (storage class, secrets) encrypted v2 volumes.
@@ -19,7 +25,7 @@ This enhancement adds support for user configured (storage class, secrets) encry
 There are two candidates for the v2 volume encryption.
 
 1. The `dm_crypt` kernel module (Linux kernel device-mapper crypto target) as the v1 volume encryption.  
-  Device-Mapper’s “crypt” target provides transparent encryption of block devices using the kernel crypto API.
+  Device-Mapper's "crypt" target provides transparent encryption of block devices using the kernel crypto API.
 
 2. The SPDK [Crypto Virtual Bdev Module](https://spdk.io/doc/bdev.html).  
   The SPDK has the crypto virtual bdev module to provide at rest data encryption for any underlying bdev. The module relies on the `SPDK Accel Framework` to provide all cryptographic functionality.

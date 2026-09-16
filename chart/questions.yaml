@@ -230,6 +230,13 @@ questions:
         type: string
         label: Kubelet Root Directory
         group: Longhorn CSI Driver Settings
+      - variable: csi.allowControllerSecretAccess
+        type: boolean
+        default: 'true'
+        description: >-
+          Grant CSI controller sidecars cluster-wide get access to Kubernetes Secrets. Enabled by default for compatibility with existing Secret references. Disable only when Longhorn StorageClasses use no provisioner or controller-side Secret parameters and no existing PV requires controller-side Secret access. Encrypted volumes must retain their node-stage, node-publish, and node-expand Secret references.
+        label: Enable CSI Sidecar Secret Access
+        group: Longhorn CSI Driver Settings
       - variable: csi.podAntiAffinityPreset
         type: string
         label: Longhorn CSI Pod AntiAffinity Preset
