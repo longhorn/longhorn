@@ -97,7 +97,7 @@ image:
       # -- Repository for the Longhorn Support Bundle Manager image.
       repository: longhornio/support-bundle-kit
       # -- Tag for the Longhorn Support Bundle Manager image.
-      tag: v0.0.95
+      tag: v0.0.96
   csi:
     attacher:
       # -- Registry for the CSI attacher image. When unspecified, Longhorn uses the default value.
@@ -105,7 +105,7 @@ image:
       # -- Repository for the CSI attacher image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-attacher
       # -- Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
-      tag: v4.12.0
+      tag: v4.13.0
     provisioner:
       # -- Registry for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       registry: ""
@@ -119,7 +119,7 @@ image:
       # -- Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-node-driver-registrar
       # -- Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
-      tag: v2.17.0
+      tag: v2.18.0
     resizer:
       # -- Registry for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       registry: ""
@@ -140,7 +140,7 @@ image:
       # -- Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       repository: longhornio/livenessprobe
       # -- Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
-      tag: v2.19.0
+      tag: v2.20.0
   openshift:
     oauthProxy:
       # -- Registry for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users.
