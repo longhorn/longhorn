@@ -189,12 +189,12 @@ type BackingImageSpec struct {
       encrypted: "true"
       backingImage: "parrot-cloned-encrypted"
       backingImageDataSourceType: "clone"
-      csi.storage.k8s.io/provisioner-secret-name: "longhorn-crypto"
-      csi.storage.k8s.io/provisioner-secret-namespace: "longhorn-system"
       csi.storage.k8s.io/node-publish-secret-name: "longhorn-crypto"
       csi.storage.k8s.io/node-publish-secret-namespace: "longhorn-system"
       csi.storage.k8s.io/node-stage-secret-name: "longhorn-crypto"
       csi.storage.k8s.io/node-stage-secret-namespace: "longhorn-system"
+      csi.storage.k8s.io/node-expand-secret-name: "longhorn-crypto"
+      csi.storage.k8s.io/node-expand-secret-namespace: "longhorn-system"
     ```
 - Create PVC
     ```
