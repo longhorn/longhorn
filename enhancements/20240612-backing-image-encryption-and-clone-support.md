@@ -1,5 +1,11 @@
 # BackingImage Encryption Support
 
+## Update (2026-09-22, v1.13.0)
+
+[Issue #14020](https://github.com/longhorn/longhorn/issues/14020) updates the volume StorageClass Secret configuration. The original proposal and examples below are preserved as historical design context.
+
+Current encrypted-volume StorageClasses should use node-stage, node-publish, and node-expand Secret references instead of `csi.storage.k8s.io/provisioner-secret-name` and `csi.storage.k8s.io/provisioner-secret-namespace`. Longhorn's CSI controller does not consume the encryption key during provisioning; the kubelet supplies it for node-side operations. This does not remove the separate encryption Secret settings required for backing-image cloning. See the current [volume encryption guidance](https://longhorn.io/docs/1.13.0/advanced-resources/security/volume-encryption/).
+
 ## Summary
 
 Longhorn supports encrypted volumes by utilizing a Linux kernel-based disk encryption solution (LUKS, Linux Unified Key Setup). If users want to use BackingImage with encrypted Volume, the BackingImage needs to be encrypted as well. This feature allows users to clone the existing BackingImage and encrypt the content during cloning.
