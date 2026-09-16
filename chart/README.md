@@ -200,6 +200,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 
 | Key | Description |
 |-----|-------------|
+| csi.allowControllerSecretAccess | Grant CSI controller sidecars cluster-wide get access to Kubernetes Secrets. Enabled by default for compatibility with existing Secret references. Disable only when Longhorn StorageClasses use no provisioner or controller-side Secret parameters and no existing PV requires controller-side Secret access. Encrypted volumes must retain their node-stage, node-publish, and node-expand Secret references. |
 | csi.attacherReplicaCount | Replica count of the CSI Attacher. When unspecified, Longhorn uses the default value ("3"). |
 | csi.kubeletRootDir | kubelet root directory. When unspecified, Longhorn uses the default value. |
 | csi.podAntiAffinityPreset | Configures Pod anti-affinity to prevent multiple instances on the same node. Use soft (tries to separate) or hard (must separate). When unspecified, Longhorn uses the default value ("soft"). |
