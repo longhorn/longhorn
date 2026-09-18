@@ -213,6 +213,17 @@ metadata:
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
 ---
+# Source: longhorn/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: longhorn-csi-service-account
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+---
 # Source: longhorn/templates/default-resource.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -6056,6 +6067,54 @@ rules:
   resourceNames: ["anyuid", "privileged"]
   verbs: ["use"]
 ---
+# Source: longhorn/templates/clusterrole.yaml
+# Permissions for the CSI attacher, provisioner, resizer, and snapshotter.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-csi-role
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+rules:
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["get", "list", "watch", "create", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "update"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims/status"]
+  verbs: ["patch"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["list", "watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses", "csinodes"]
+  verbs: ["list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["volumeattachments"]
+  verbs: ["list", "watch", "patch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["volumeattachments/status"]
+  verbs: ["patch"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshotclasses"]
+  verbs: ["list", "watch"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshots"]
+  verbs: ["get", "list", "watch", "update"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshotcontents"]
+  verbs: ["get", "list", "watch", "patch"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshotcontents/status"]
+  verbs: ["update", "patch"]
+---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -6110,10 +6169,31 @@ subjects:
   name: longhorn-service-account
   namespace: longhorn-system
 - kind: ServiceAccount
+  name: longhorn-csi-service-account
+  namespace: longhorn-system
+- kind: ServiceAccount
   name: longhorn-ui-service-account
   namespace: longhorn-system
 - kind: ServiceAccount
   name: default  # supportbundle-agent-support-bundle uses default sa
+  namespace: longhorn-system
+---
+# Source: longhorn/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: longhorn-csi-bind
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: longhorn-csi-role
+subjects:
+- kind: ServiceAccount
+  name: longhorn-csi-service-account
   namespace: longhorn-system
 ---
 # Source: longhorn/templates/role.yaml
@@ -6149,6 +6229,41 @@ rules:
   resources: ["endpointslices"]
   verbs: ["*"]
 ---
+# Source: longhorn/templates/role.yaml
+# Namespace-scoped permissions for CSI sidecar leader election and
+# CSIStorageCapacity owner-reference discovery.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: longhorn-csi-role
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+rules:
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    # Lease creation cannot be restricted by resourceNames.
+    verbs: ["create"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    resourceNames:
+      - driver-longhorn-io
+      - external-attacher-leader-driver-longhorn-io
+      - external-resizer-driver-longhorn-io
+      - external-snapshotter-leader-driver-longhorn-io
+    verbs: ["get", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["csistoragecapacities"]
+    verbs: ["list", "watch", "create", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get"]
+---
 # Source: longhorn/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -6162,6 +6277,21 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
+  namespace: longhorn-system
+---
+# Source: longhorn/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: longhorn-csi-bind
+  namespace: longhorn-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: longhorn-csi-role
+subjects:
+- kind: ServiceAccount
+  name: longhorn-csi-service-account
   namespace: longhorn-system
 ---
 # Source: longhorn/templates/daemonset-sa.yaml

@@ -19,7 +19,7 @@ This enhancement adds support for user configured (storage class, secrets) encry
 There are two candidates for the v2 volume encryption.
 
 1. The `dm_crypt` kernel module (Linux kernel device-mapper crypto target) as the v1 volume encryption.  
-  Device-Mapper’s “crypt” target provides transparent encryption of block devices using the kernel crypto API.
+  Device-Mapper's "crypt" target provides transparent encryption of block devices using the kernel crypto API.
 
 2. The SPDK [Crypto Virtual Bdev Module](https://spdk.io/doc/bdev.html).  
   The SPDK has the crypto virtual bdev module to provide at rest data encryption for any underlying bdev. The module relies on the `SPDK Accel Framework` to provide all cryptographic functionality.
@@ -96,10 +96,10 @@ parameters:
   ...
   encrypted: "true"
   dataEngine: "v2"
-  csi.storage.k8s.io/provisioner-secret-name: "longhorn-crypto"
-  csi.storage.k8s.io/provisioner-secret-namespace: "longhorn-system"
   csi.storage.k8s.io/node-publish-secret-name: "longhorn-crypto"
   csi.storage.k8s.io/node-publish-secret-namespace: "longhorn-system"
+  csi.storage.k8s.io/node-stage-secret-name: "longhorn-crypto"
+  csi.storage.k8s.io/node-stage-secret-namespace: "longhorn-system"
   csi.storage.k8s.io/node-expand-secret-name: "longhorn-crypto"
   csi.storage.k8s.io/node-expand-secret-namespace: "longhorn-system"
 ```

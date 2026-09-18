@@ -44,13 +44,12 @@ how to create and use an encrypted volume.
 
 Creation and usage of an encrypted volume requires 2 things:
 - the storage class needs to specify `encrypted: "true"` as part of its parameters.
-- secrets need to be created and reference for the csi operations need to be setup.
+- a Secret must be referenced by the node-side CSI operations.
 - see below examples for different types of secret usage.
 
-The kubernetes sidecars are responsible for retrieval of the secret and passing it to the csi driver.
-If the secret hasn't been created the PVC will remain in the Pending State.
-And the side cars will retry secret retrieval periodically, once it's available the sidecar container will call
-`Controller::CreateVolume` and pass the secret after which longhorn will create a volume.
+The encryption key is not read during controller-side PVC provisioning. When a workload uses the volume, the kubelet fetches the Secret referenced by the node-side parameters and supplies the key during staging and publishing. If the Secret is missing or cannot be read, workload staging or mounting fails; PVC provisioning does not wait for the Secret. The node-expand Secret is also required for online filesystem expansion.
+
+> Do not configure `csi.storage.k8s.io/provisioner-secret-name` or `csi.storage.k8s.io/provisioner-secret-namespace` for Longhorn encryption. Provisioning does not read the encryption key; use only node-side Secret references.
 
 #### Create storage class that utilizes a global secret (all volumes use the same key)
 The below storage class uses a global secret named `longhorn-crypto` in the `longhorn-system` namespace.
@@ -66,12 +65,12 @@ parameters:
   staleReplicaTimeout: "2880" # 48 hours in minutes
   fromBackup: ""
   encrypted: "true"
-  csi.storage.k8s.io/provisioner-secret-name: "longhorn-crypto"
-  csi.storage.k8s.io/provisioner-secret-namespace: "longhorn-system"
   csi.storage.k8s.io/node-publish-secret-name: "longhorn-crypto"
   csi.storage.k8s.io/node-publish-secret-namespace: "longhorn-system"
   csi.storage.k8s.io/node-stage-secret-name: "longhorn-crypto"
   csi.storage.k8s.io/node-stage-secret-namespace: "longhorn-system"
+  csi.storage.k8s.io/node-expand-secret-name: "longhorn-crypto"
+  csi.storage.k8s.io/node-expand-secret-namespace: "longhorn-system"
 ```
 
 The global secret reference by the `longhorn-crypto-global` storage class.
@@ -92,7 +91,7 @@ stringData:
 
 #### Create storage class that utilizes per volume secrets
 The below storage class uses a per volume secret, the name and namespace of the secret is based on the pvc values.
-These templates will be resolved by the external sidecars and the resolved values end up as Secret refs on the PV.
+These templates will be resolved by the external sidecars and the resolved node-side values end up as Secret refs on the PV.
 ```yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -105,12 +104,12 @@ parameters:
   staleReplicaTimeout: "2880" # 48 hours in minutes
   fromBackup: ""
   encrypted: "true"
-  csi.storage.k8s.io/provisioner-secret-name: ${pvc.name}
-  csi.storage.k8s.io/provisioner-secret-namespace: ${pvc.namespace}
   csi.storage.k8s.io/node-publish-secret-name: ${pvc.name}
   csi.storage.k8s.io/node-publish-secret-namespace: ${pvc.namespace}
   csi.storage.k8s.io/node-stage-secret-name: ${pvc.name}
   csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+  csi.storage.k8s.io/node-expand-secret-name: ${pvc.name}
+  csi.storage.k8s.io/node-expand-secret-namespace: ${pvc.namespace}
 ```
 
 
@@ -165,12 +164,12 @@ We utilize the below parameters from a secret,
 - wait for pod up and healthy
 - check if the customized options of the cipher are correct
 
-#### Missing Secret for encrypted volume creation
+#### Missing Secret for encrypted volume staging
 - create a storage class with (encrypted=true) and either a global secret or a per volume secret
 - create a pvc that references the created storage class
+- verify the pvc is provisioned without the encryption Secret
 - create a pod that uses that pvc for a volume mount
-- verify pvc remains in pending state
-- verify pod remains in creation state
+- verify workload staging or mounting fails because the node-side Secret is unavailable
 
 #### Verify encryption of volume
 - create a storage class with (encrypted=true) and either a global secret or a per volume secret
