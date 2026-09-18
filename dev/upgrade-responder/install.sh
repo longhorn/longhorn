@@ -248,7 +248,42 @@ configMap:
           "dataType": "string",
           "maxLen": 200
         },
+<<<<<<< HEAD
+=======
+        "longhornV2DataEngineHugepageEnabled": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornV2DataEngineInterruptModeEnabled": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornV2DataEngineCPUIsolationEnabled": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+>>>>>>> b074ca9 (chore(upgrade-responder): update chart-values.yaml and install.sh)
         "longhornDistro": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingDefaultUblkQueueDepth": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingDefaultUblkNumberOfQueue": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingReplicaRebuildConcurrentSyncLimit": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingDefaultNvmeTcpNrIoQueues": {
+          "dataType": "string",
+          "maxLen": 200
+        },
+        "longhornSettingAllowInstanceManagerAutomaticUpgrade": {
           "dataType": "string",
           "maxLen": 200
         }
@@ -278,6 +313,39 @@ configMap:
         "longhornDiskFilesystemCount": {
           "dataType": "float"
         },
+<<<<<<< HEAD
+=======
+        "longhornBlockTypeDiskDriverAioCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverNvmeCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverVirtioScsiCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverVirtioBlkCount": {
+          "dataType": "float"
+        },
+        "longhornBlockTypeDiskDriverVirtioPciCount": {
+          "dataType": "float"
+        },
+        "longhornV2DataEngineCpuCores": {
+          "dataType": "float"
+        },
+        "longhornV2DataEngineHugepageSize": {
+          "dataType": "float"
+        },
+        "longhornV2DataEngineIobufSmallPoolSize": {
+          "dataType": "float"
+        },
+        "longhornV2DataEngineIobufLargePoolSize": {
+          "dataType": "float"
+        },
+        "longhornV2DataEngineNumberOfCPUCores": {
+          "dataType": "float"
+        },
+>>>>>>> b074ca9 (chore(upgrade-responder): update chart-values.yaml and install.sh)
         "longhornInstanceManagerAverageCpuUsageMilliCores": {
           "dataType": "float"
         },
@@ -460,6 +528,21 @@ configMap:
           "dataType": "float"
         },
         "longhornSettingSnapshotHeavyTaskConcurrentLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingSupportBundleNodeCollectionTimeout": {
+          "dataType": "float"
+        },
+        "longhornSettingReplicaAutoBalanceDiskPressurePercentage": {
+          "dataType": "float"
+        },
+        "longhornSettingConcurrentBackingImageReplenishPerNodeLimit": {
+          "dataType": "float"
+        },
+        "longhornSettingDefaultMinNumberOfBackingImageCopies": {
+          "dataType": "float"
+        },
+        "longhornSettingDefaultBackupBlockSize": {
           "dataType": "float"
         }
       }
