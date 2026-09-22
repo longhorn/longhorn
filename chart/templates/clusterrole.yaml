@@ -88,6 +88,25 @@ rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterrolebindings", "clusterroles"]
   verbs: ["*"]
+---
+# A namespace admin binds this role to let the hook executor exec there.
+# Admission checks each of these rules with a SubjectAccessReview before
+# accepting hooks.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-hook-executor
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create", "get"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get"]
 {{- if .Values.openshift.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
