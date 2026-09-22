@@ -222,6 +222,18 @@ metadata:
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
 ---
+# Source: longhorn/templates/serviceaccount.yaml
+# Used by the longhorn-hook-executor Deployment.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: longhorn-hook-executor
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+---
 # Source: longhorn/templates/default-resource.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -6555,6 +6567,29 @@ rules:
   verbs: ["*"]
 ---
 # Source: longhorn/templates/clusterrole.yaml
+# A namespace admin binds this role to let the hook executor exec there.
+# Admission checks each of these rules with a SubjectAccessReview before
+# accepting hooks.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-hook-executor
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+rules:
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create", "get"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get"]
+---
+# Source: longhorn/templates/clusterrole.yaml
 # Permissions for the CSI attacher, provisioner, resizer, and snapshotter.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -6757,6 +6792,35 @@ rules:
     resources: ["replicasets"]
     verbs: ["get"]
 ---
+# Source: longhorn/templates/role.yaml
+# Lets the hook executor track SnapshotGroups and report hook progress in
+# the Longhorn namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: longhorn-hook-executor
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["snapshotgroups"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["longhorn.io"]
+  resources: ["snapshotgroups/status"]
+  verbs: ["update"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumes", "settings"]
+  verbs: ["list", "watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["get", "create", "update"]
+---
 # Source: longhorn/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -6785,6 +6849,21 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: longhorn-csi-service-account
+  namespace: longhorn-system
+---
+# Source: longhorn/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: longhorn-hook-executor
+  namespace: longhorn-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: longhorn-hook-executor
+subjects:
+- kind: ServiceAccount
+  name: longhorn-hook-executor
   namespace: longhorn-system
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
