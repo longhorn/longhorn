@@ -6607,6 +6607,41 @@ rules:
   verbs: ["get"]
 ---
 # Source: longhorn/templates/clusterrole.yaml
+# Kubernetes adds these rules to the built-in admin and edit ClusterRoles,
+# so users with admin or edit access to a namespace can create and manage
+# VolumeHookPolicies there. A VolumeHookPolicy defines commands that run
+# inside pods, so creating one requires the same trust as exec access.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-volumehookpolicy-edit
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["*"]
+---
+# Source: longhorn/templates/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-volumehookpolicy-view
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get", "list", "watch"]
+---
+# Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
