@@ -498,6 +498,10 @@ defaultSettings:
   csiStorageCapacityTracking: ~
   # -- Setting that allows Longhorn to query the Kubernetes Metrics Server ('metrics.k8s.io') for pod and node resource usage.
   kubernetesMetricsServerMetricsEnabled: ~
+  # -- Number of times the hook executor runs a member's post-command in one pod when the command fails or times out, before it gives up and marks the pod PostFailed. The snapshot group controller uses the same number, with `hookReleaseTimeout`, to bound how long a deleting hooked group waits for its release before abandoning it.
+  hookReleaseAttempts: ~
+  # -- Seconds each post-command attempt may run before the hook executor cancels its exec session and counts the attempt as timed out. Cancelling the session does not kill the process in the pod.
+  hookReleaseTimeout: ~
 # -- Setting that allows you to update the default backupstore.
 defaultBackupStore:
   # -- Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")
