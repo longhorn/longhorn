@@ -177,6 +177,18 @@ The following settings apply to the longhorn-global-manager Deployment, which ho
   {{- end }}
 {{- end }}
 
+### Longhorn Hook Executor Settings
+
+The following settings apply to the longhorn-hook-executor Deployment, which runs VolumeHookPolicy pre and post commands inside application pods before and after a SnapshotGroup takes its snapshots. It runs under its own ServiceAccount so the pod exec permission is not granted to the Longhorn Manager.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{- range .Values }}
+  {{- if hasPrefix "longhornHookExecutor" .Key }}
+| {{ .Key }} | {{ .Type }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+  {{- end }}
+{{- end }}
+
 ### Ingress Settings
 
 | Key | Type | Default | Description |
@@ -246,6 +258,7 @@ For more details, see the [ocp-readme](https://github.com/longhorn/longhorn/blob
   (hasPrefix "csi" .Key)
   (hasPrefix "longhornManager" .Key)
   (hasPrefix "longhornGlobalManager" .Key)
+  (hasPrefix "longhornHookExecutor" .Key)
   (hasPrefix "longhornDriver" .Key)
   (hasPrefix "longhornUI" .Key)
   (hasPrefix "privateRegistry" .Key)
