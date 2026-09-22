@@ -272,6 +272,24 @@ The following settings apply to the longhorn-global-manager Deployment, which ho
 | longhornGlobalManager.tolerations | list | `[]` | Node tolerations for global manager pods. |
 | longhornGlobalManager.topologySpreadConstraints | list | `[]` | Topology spread constraints for global manager pods. Unlike `longhornGlobalManager.affinity`, these can guarantee that replicas stay spread across a topology domain during a rolling update or a mass reschedule. |
 
+### Longhorn Hook Executor Settings
+
+The following settings apply to the longhorn-hook-executor Deployment, which runs VolumeHookPolicy pre and post commands inside application pods before and after a SnapshotGroup takes its snapshots. It runs under its own ServiceAccount so the pod exec permission is not granted to the Longhorn Manager.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| longhornHookExecutor.affinity | object | `{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"app","operator":"In","values":["longhorn-hook-executor"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":1}]}}` | Affinity for hook executor pods. The default spreads replicas across nodes. |
+| longhornHookExecutor.annotations | object | `{}` | Annotations for hook executor pods. |
+| longhornHookExecutor.nodeSelector | object | `{}` | Node selector for hook executor pods. |
+| longhornHookExecutor.pauseWorkers | int | `5` | Maximum number of SnapshotGroups whose pre-commands run at the same time. The release side is not bounded by this value. |
+| longhornHookExecutor.podDisruptionBudget | object | `{"enabled":false,"maxUnavailable":1}` | Pod Disruption Budget for the hook executor. Effective only when `longhornHookExecutor.replicas` is greater than 1. |
+| longhornHookExecutor.podDisruptionBudget.enabled | bool | `false` | Setting that allows you to enable the Pod Disruption Budget for the hook executor. |
+| longhornHookExecutor.podDisruptionBudget.maxUnavailable | int | `1` | Maximum number of hook executor pods that can be unavailable during a voluntary disruption such as a node drain. Keep this at least 1 so a drain can always proceed while the standby takes over the leader Lease. |
+| longhornHookExecutor.priorityClass | string | `"longhorn-critical"` | PriorityClass for the hook executor. |
+| longhornHookExecutor.replicas | int | `2` | Replica count for the hook executor. One replica is the active leader; the other is a warm standby. The executor runs VolumeHookPolicy pre and post commands inside application pods. |
+| longhornHookExecutor.resources | string | `nil` | Resource requests and limits for hook executor pods. |
+| longhornHookExecutor.tolerations | list | `[]` | Node tolerations for hook executor pods. |
+
 ### Ingress Settings
 
 | Key | Type | Default | Description |
