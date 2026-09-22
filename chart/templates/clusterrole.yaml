@@ -107,6 +107,33 @@ rules:
 - apiGroups: ["longhorn.io"]
   resources: ["volumehookpolicies"]
   verbs: ["get"]
+---
+# Kubernetes adds these rules to the built-in admin and edit ClusterRoles,
+# so users with admin or edit access to a namespace can create and manage
+# VolumeHookPolicies there. A VolumeHookPolicy defines commands that run
+# inside pods, so creating one requires the same trust as exec access.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-volumehookpolicy-edit
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-volumehookpolicy-view
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get", "list", "watch"]
 {{- if .Values.openshift.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
