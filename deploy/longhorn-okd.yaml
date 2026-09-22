@@ -18,7 +18,6 @@ description: "Ensure Longhorn pods have the highest priority to prevent any unex
 globalDefault: false
 preemptionPolicy: PreemptLowerPriority
 value: 1000000000
-
 ---
 # Source: longhorn/templates/network-policies/backing-image-data-source-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -46,7 +45,6 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
-
 ---
 # Source: longhorn/templates/network-policies/backing-image-manager-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -74,7 +72,6 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
-
 ---
 # Source: longhorn/templates/network-policies/instance-manager-networking.yaml
 apiVersion: networking.k8s.io/v1
@@ -105,7 +102,6 @@ spec:
   - ports:
     - protocol: TCP
       port: 3260
-
 ---
 # Source: longhorn/templates/network-policies/manager-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -141,7 +137,6 @@ spec:
     - podSelector:
         matchLabels:
           app: longhorn-driver-deployer
-
 ---
 # Source: longhorn/templates/network-policies/recovery-backend-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -163,7 +158,6 @@ spec:
     ports:
     - protocol: TCP
       port: 9503
-
 ---
 # Source: longhorn/templates/network-policies/webhook-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -183,7 +177,6 @@ spec:
       port: 9501
     - protocol: TCP
       port: 9502
-
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -195,7 +188,6 @@ metadata:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
-
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -209,7 +201,6 @@ metadata:
     app.kubernetes.io/version: v1.12.0-dev
   annotations:
     serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"longhorn-ui"}}'
-
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -221,7 +212,6 @@ metadata:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
-
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -246,7 +236,6 @@ metadata:
     app.kubernetes.io/version: v1.12.0-dev
 data:
   default-resource.yaml: |-
-
 ---
 # Source: longhorn/templates/default-setting.yaml
 apiVersion: v1
@@ -262,7 +251,6 @@ data:
   default-setting.yaml: |-
     priority-class: "longhorn-critical"
     disable-revision-counter: "{\"v1\":\"true\"}"
-
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
@@ -296,7 +284,6 @@ data:
       disableRevisionCounter: "true"
       dataEngine: "v1"
       backupTargetName: "default"
-
 ---
 # Source: longhorn/templates/crds.yaml
 # Generated crds.yaml from github.com/longhorn/longhorn-manager/k8s/pkg/apis and the crds.yaml will be copied to longhorn/longhorn chart/templates and cannot be directly used by kubectl apply.
@@ -435,7 +422,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -577,7 +563,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -761,7 +746,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -933,7 +917,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1124,7 +1107,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1266,7 +1248,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1421,7 +1402,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1671,7 +1651,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1824,7 +1803,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2207,7 +2185,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2782,7 +2759,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2916,7 +2892,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3104,7 +3079,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3393,7 +3367,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3517,7 +3490,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3726,7 +3698,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3963,7 +3934,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4044,7 +4014,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4316,7 +4285,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4477,7 +4445,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4573,7 +4540,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4602,6 +4568,10 @@ spec:
     - description: The lifecycle phase of the group
       jsonPath: .status.phase
       name: Phase
+      type: string
+    - description: Pre and post hook command progress; empty when spec.hooks is none
+      jsonPath: .status.hookProgress
+      name: HookProgress
       type: string
     - description: True when the group is Ready and every member is still usable
       jsonPath: .status.readyToUse
@@ -4643,17 +4613,37 @@ spec:
               request, so changing members later has no meaning.
             properties:
               deadlineSeconds:
-                default: 300
                 description: |-
-                  DeadlineSeconds is the deadline for taking every member snapshot,
-                  measured from the group's metadata.creationTimestamp. When the field is
-                  omitted, the CRD default applies. Go clients cannot omit the field: an
-                  unset field arrives as 0, and the mutating webhook replaces the 0 with
-                  the default.
+                  DeadlineSeconds bounds how long the whole group may take, measured from
+                  metadata.creationTimestamp. When omitted or 0, admission sets 300, or 60
+                  for a hooked group because the deadline also bounds the time between the
+                  pre- and post-commands. The default is set by the webhook, not the
+                  schema, because it depends on Hooks.
                 format: int64
                 maximum: 3600
                 minimum: 10
                 type: integer
+              hookOperation:
+                description: |-
+                  HookOperation is the operation the hooks run for: snapshot or backup.
+                  Set only for a hooked group; admission defaults it to snapshot.
+                enum:
+                - snapshot
+                - backup
+                type: string
+                x-kubernetes-validations:
+                - message: hookOperation is immutable
+                  rule: self == oldSelf
+              hooks:
+                default: none
+                description: |-
+                  Hooks selects whether VolumeHookPolicy commands run around the member
+                  snapshots: none (default) or command.
+                enum:
+                - none
+                - command
+                - ""
+                type: string
               labels:
                 additionalProperties:
                   type: string
@@ -4673,6 +4663,33 @@ spec:
                     SnapshotGroupMember identifies one member of the group: the volume and the
                     name of its member Snapshot CR, generated at admission.
                   properties:
+                    hookPolicyRef:
+                      description: |-
+                        HookPolicyRef is the VolumeHookPolicy that applies to this member. The
+                        mutating webhook sets it at admission for a hooked group. It is unset
+                        when Hooks is none.
+                      properties:
+                        generation:
+                          description: Generation is the policy's metadata.generation
+                            at admission.
+                          format: int64
+                          minimum: 1
+                          type: integer
+                        name:
+                          minLength: 1
+                          type: string
+                        namespace:
+                          minLength: 1
+                          type: string
+                        uid:
+                          description: UID is the policy's metadata.uid at admission.
+                          type: string
+                      required:
+                      - generation
+                      - name
+                      - namespace
+                      - uid
+                      type: object
                     snapshotName:
                       type: string
                     volumeName:
@@ -4785,6 +4802,162 @@ spec:
               error:
                 description: Error is set when the group fails (deadline, name collision).
                 type: string
+              hookProgress:
+                description: |-
+                  HookProgress summarizes hook progress for the HookProgress printer
+                  column, for example "pre 2/3" or "post done". The hook executor
+                  maintains it. Empty when Hooks is none.
+                type: string
+              hooks:
+                description: |-
+                  Hooks records the hook outcome of each member. An entry's snapshotName
+                  matches the member in spec.members. Only the hook executor writes it. It
+                  never includes the command itself or its output.
+                items:
+                  description: HookStatus is the hook state of one member, owned by
+                    the hook executor.
+                  properties:
+                    phase:
+                      description: Phase is the member's overall hook state.
+                      enum:
+                      - Pending
+                      - PreRunning
+                      - PreDone
+                      - PreFailed
+                      - PostRunning
+                      - PostDone
+                      - PostFailed
+                      - ""
+                      type: string
+                    pods:
+                      description: Pods are the pods the hooks ran in for this member.
+                      items:
+                        description: |-
+                          HookPodStatus is the hook outcome in one pod of a member. It records the
+                          pod and the hook that ran the pre-command, so the post-command can target
+                          the same pod and hook without resolving them again.
+                        properties:
+                          containerIDs:
+                            description: |-
+                              ContainerIDs are the IDs of every container in the pod when the
+                              pre-command ran. A change before the group is Ready means a process
+                              restarted in between.
+                            items:
+                              type: string
+                            nullable: true
+                            type: array
+                          exitCode:
+                            description: ExitCode is the last command's exit code,
+                              if it exited.
+                            format: int32
+                            type: integer
+                          hookName:
+                            description: |-
+                              HookName is the policy hook that ran in this pod. The post-command is
+                              taken from the same hook regardless of the pod's labels by then.
+                            type: string
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                          phase:
+                            description: Phase is this pod's hook state.
+                            enum:
+                            - Pending
+                            - PreRunning
+                            - PreDone
+                            - PreFailed
+                            - PostRunning
+                            - PostDone
+                            - PostFailed
+                            - ""
+                            type: string
+                          reason:
+                            description: |-
+                              Reason is why the last step ended as it did; empty for a clean run. A
+                              PostDone pod may carry PodNotFound or PolicyChanged, meaning the
+                              post-command could not run as recorded.
+                            enum:
+                            - VolumeConflict
+                            - PodConflict
+                            - PolicyNotFound
+                            - PolicyChanged
+                            - PodNotFound
+                            - HookNotMatched
+                            - HookNotFound
+                            - ExitNonZero
+                            - Timeout
+                            - ExecFailed
+                            - Interrupted
+                            - ""
+                            type: string
+                          releaseAttempts:
+                            description: |-
+                              ReleaseAttempts counts post-command attempts that may have started a
+                              process in the pod. The executor increments it before each attempt, so
+                              a restart mid-attempt cannot lose the count and exceed the retry cap.
+                            format: int32
+                            type: integer
+                          uid:
+                            description: |-
+                              UID is the pod's metadata.uid when the pre-command ran. A same-name pod
+                              with a different UID is a replacement that never ran it.
+                            type: string
+                        required:
+                        - hookName
+                        - name
+                        - namespace
+                        - uid
+                        type: object
+                      nullable: true
+                      type: array
+                    pvcRef:
+                      description: |-
+                        PVCRef is the member volume's claim, recorded so the member's pods can
+                        still be listed after the volume's kubernetesStatus is gone.
+                      properties:
+                        name:
+                          minLength: 1
+                          type: string
+                        namespace:
+                          minLength: 1
+                          type: string
+                      required:
+                      - name
+                      - namespace
+                      type: object
+                    reason:
+                      description: |-
+                        Reason is why no command could run for this member. Set only when Pods
+                        is empty.
+                      enum:
+                      - VolumeConflict
+                      - PodConflict
+                      - PolicyNotFound
+                      - PolicyChanged
+                      - PodNotFound
+                      - HookNotMatched
+                      - HookNotFound
+                      - ExitNonZero
+                      - Timeout
+                      - ExecFailed
+                      - Interrupted
+                      - ""
+                      type: string
+                    snapshotName:
+                      description: SnapshotName matches the member in spec.members.
+                      type: string
+                  required:
+                  - snapshotName
+                  type: object
+                nullable: true
+                type: array
+              hooksStartedAt:
+                description: |-
+                  HooksStartedAt is when the executor started on the first member. The
+                  time between creationTimestamp and this is queue wait, not hook time.
+                format: date-time
+                type: string
               members:
                 description: |-
                   Members is the observed state of every member, one entry per spec
@@ -4828,13 +5001,33 @@ spec:
                 type: string
               phase:
                 description: |-
-                  Phase is the lifecycle phase: empty until the first reconcile, then
-                  InProgress -> Ready | Failed.
+                  Phase is the lifecycle phase. It is empty until the first reconcile,
+                  then moves InProgress -> Ready or Failed. A hooked group passes through
+                  RunningPreHooks first.
                 enum:
+                - RunningPreHooks
                 - InProgress
                 - Ready
                 - Failed
                 - ""
+                type: string
+              postHooksDoneAt:
+                description: |-
+                  PostHooksDoneAt is when every recorded pod reached PostDone or
+                  PostFailed. Unset when nothing was paused.
+                format: date-time
+                type: string
+              preHooksDone:
+                description: |-
+                  PreHooksDone is set by the hook executor once every member's
+                  pre-command has succeeded. It is the controller's signal to leave
+                  RunningPreHooks.
+                type: boolean
+              preHooksDoneAt:
+                description: |-
+                  PreHooksDoneAt is when the last pre-command succeeded, set by the
+                  executor. The application is paused from here until PostHooksDoneAt.
+                format: date-time
                 type: string
               readyToUse:
                 description: |-
@@ -4852,7 +5045,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4993,7 +5185,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5129,7 +5320,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5271,7 +5461,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5385,7 +5574,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5534,7 +5722,245 @@ spec:
     storage: true
     subresources:
       status: {}
-
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
+  name: volumehookpolicies.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: VolumeHookPolicy
+    listKind: VolumeHookPolicyList
+    plural: volumehookpolicies
+    shortNames:
+    - lhvhp
+    singular: volumehookpolicy
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: |-
+          VolumeHookPolicy is the Schema for the volumehookpolicies API. It lives
+          in the application's namespace and has no status. Writing a policy is
+          equivalent to pods/exec in its namespace, because the executor runs the
+          author's commands in that namespace's pods.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              VolumeHookPolicySpec selects the PVCs a policy covers and the hooks to run
+              in the pods that mount them. A policy covers only PVCs in its own
+              namespace.
+            properties:
+              hooks:
+                description: |-
+                  Hooks lists the hooks. With more than one hook, every hook needs a Name
+                  and a PodSelector so that each pod matches exactly one hook.
+                items:
+                  description: VolumeHookPolicyHook is one hook of a policy. Exec
+                    is the only handler.
+                  properties:
+                    exec:
+                      description: Exec runs a pre/post command pair in the selected
+                        pods.
+                      properties:
+                        container:
+                          description: |-
+                            Container is the container the commands run in. Required when a
+                            matched pod has more than one regular container or native sidecar
+                            (init container with restartPolicy Always).
+                          type: string
+                        podSelector:
+                          description: |-
+                            PodSelector selects which of the pods mounting a covered PVC run this
+                            hook. Every running pod that mounts a member volume must match exactly
+                            one hook. May be omitted only when the policy has a single hook, in
+                            which case the hook matches every pod.
+                          properties:
+                            matchExpressions:
+                              description: matchExpressions is a list of label selector
+                                requirements. The requirements are ANDed.
+                              items:
+                                description: |-
+                                  A label selector requirement is a selector that contains values, a key, and an operator that
+                                  relates the key and values.
+                                properties:
+                                  key:
+                                    description: key is the label key that the selector
+                                      applies to.
+                                    type: string
+                                  operator:
+                                    description: |-
+                                      operator represents a key's relationship to a set of values.
+                                      Valid operators are In, NotIn, Exists and DoesNotExist.
+                                    type: string
+                                  values:
+                                    description: |-
+                                      values is an array of string values. If the operator is In or NotIn,
+                                      the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                      the values array must be empty. This array is replaced during a strategic
+                                      merge patch.
+                                    items:
+                                      type: string
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                              x-kubernetes-list-type: atomic
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: |-
+                                matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                operator is "In", and the values array contains only "value". The requirements are ANDed.
+                              type: object
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        postCommand:
+                          description: |-
+                            PostCommand runs in each matched pod after the operation completes or
+                            fails. It must be idempotent and safe to run even if PreCommand never
+                            completed.
+                          items:
+                            type: string
+                          minItems: 1
+                          type: array
+                        preCommand:
+                          description: |-
+                            PreCommand runs in each matched pod before the operation starts. It
+                            must be idempotent and leave the application in a consistent state
+                            until PostCommand runs.
+                          items:
+                            type: string
+                          minItems: 1
+                          type: array
+                      required:
+                      - postCommand
+                      - preCommand
+                      type: object
+                    name:
+                      description: |-
+                        Name identifies the hook in status and events. Required when the
+                        policy has more than one hook; a single hook defaults to "default".
+                      type: string
+                    operations:
+                      description: |-
+                        Operations lists the operations this hook runs before and after. When
+                        omitted, the hook runs for every operation.
+                      items:
+                        description: HookOperation is a Longhorn operation that hooks
+                          can run before and after.
+                        enum:
+                        - snapshot
+                        - backup
+                        type: string
+                      type: array
+                      x-kubernetes-list-type: set
+                  required:
+                  - exec
+                  type: object
+                minItems: 1
+                type: array
+              pvcNames:
+                description: |-
+                  PVCNames lists covered PersistentVolumeClaims by name, for claims that
+                  carry no labels to select on, such as those a StatefulSet creates. Set
+                  exactly one of PVCSelector and PVCNames.
+                items:
+                  type: string
+                type: array
+              pvcSelector:
+                description: |-
+                  PVCSelector selects covered PersistentVolumeClaims by label. Set
+                  exactly one of PVCSelector and PVCNames.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                          type: string
+                        values:
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+            required:
+            - hooks
+            type: object
+            x-kubernetes-validations:
+            - message: exactly one of pvcSelector and pvcNames must be set
+              rule: has(self.pvcSelector) != has(self.pvcNames)
+        type: object
+    served: true
+    storage: true
+    subresources: {}
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -6037,7 +6463,6 @@ spec:
     storage: true
     subresources:
       status: {}
-
 ---
 # Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6123,7 +6548,6 @@ rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterrolebindings", "clusterroles"]
   verbs: ["*"]
-
 ---
 # Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6139,7 +6563,6 @@ rules:
   resources: ["securitycontextconstraints"]
   resourceNames: ["anyuid", "privileged"]
   verbs: ["use"]
-
 ---
 # Source: longhorn/templates/clusterrole.yaml
 # Permissions for the CSI attacher, provisioner, resizer, and snapshotter.
@@ -6188,7 +6611,6 @@ rules:
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotcontents/status"]
   verbs: ["update", "patch"]
-
 ---
 # Source: longhorn/templates/clusterrole.yaml
 # Static Secret access for the CSI attacher, provisioner, resizer, and snapshotter.
@@ -6204,7 +6626,6 @@ rules:
 - apiGroups: [""]
   resources: ["secrets"]
   verbs: ["get"]
-
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6223,7 +6644,6 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
   namespace: longhorn-system
-
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6242,7 +6662,6 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-support-bundle
   namespace: longhorn-system
-
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6270,7 +6689,6 @@ subjects:
 - kind: ServiceAccount
   name: default  # supportbundle-agent-support-bundle uses default sa
   namespace: longhorn-system
-
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6289,7 +6707,6 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-csi-service-account
   namespace: longhorn-system
-
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6308,7 +6725,6 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-csi-service-account
   namespace: longhorn-system
-
 ---
 # Source: longhorn/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6342,7 +6758,6 @@ rules:
 - apiGroups: ["discovery.k8s.io"]
   resources: ["endpointslices"]
   verbs: ["*"]
-
 ---
 # Source: longhorn/templates/role.yaml
 # Namespace-scoped permissions for CSI sidecar leader election and
@@ -6378,7 +6793,6 @@ rules:
   - apiGroups: ["apps"]
     resources: ["replicasets"]
     verbs: ["get"]
-
 ---
 # Source: longhorn/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6394,7 +6808,6 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
   namespace: longhorn-system
-
 ---
 # Source: longhorn/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6410,7 +6823,6 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-csi-service-account
   namespace: longhorn-system
-
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: v1
@@ -6431,7 +6843,6 @@ spec:
   - name: manager
     port: 9500
     targetPort: manager
-
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: v1
@@ -6453,7 +6864,6 @@ spec:
     targetPort: 8443
   selector:
     app: longhorn-ui
-
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 kind: Service
@@ -6475,7 +6885,6 @@ spec:
     port: 80
     targetPort: http
     nodePort: null
-
 ---
 # Source: longhorn/templates/services.yaml
 apiVersion: v1
@@ -6496,7 +6905,6 @@ spec:
   - name: admission-webhook
     port: 9502
     targetPort: admission-wh
-
 ---
 # Source: longhorn/templates/services.yaml
 apiVersion: v1
@@ -6517,7 +6925,6 @@ spec:
   - name: recovery-backend
     port: 9503
     targetPort: recov-backend
-
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: apps/v1
@@ -6645,7 +7052,6 @@ spec:
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 100%
-
 ---
 # Source: longhorn/templates/deployment-driver.yaml
 apiVersion: apps/v1
@@ -6721,7 +7127,6 @@ spec:
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
-
 ---
 # Source: longhorn/templates/deployment-global-manager.yaml
 apiVersion: apps/v1
@@ -6792,7 +7197,6 @@ spec:
               topologyKey: kubernetes.io/hostname
             weight: 1
       serviceAccountName: longhorn-service-account
-
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: apps/v1
@@ -6880,7 +7284,6 @@ spec:
       - emptyDir: {}
         name: var-run
       priorityClassName: "longhorn-critical"
-
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #
