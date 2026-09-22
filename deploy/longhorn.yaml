@@ -73,6 +73,20 @@ spec:
         matchLabels:
           longhorn.io/component: backing-image-data-source
 ---
+# Source: longhorn/templates/network-policies/hook-executor-network-policy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: longhorn-hook-executor
+  namespace: longhorn-system
+spec:
+  podSelector:
+    matchLabels:
+      app: longhorn-hook-executor
+  policyTypes:
+  - Ingress
+  ingress: []
+---
 # Source: longhorn/templates/network-policies/instance-manager-networking.yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -6946,6 +6960,27 @@ spec:
   - name: recovery-backend
     port: 9503
     targetPort: recov-backend
+---
+# Source: longhorn/templates/services.yaml
+# Exposes the hook executor metrics endpoint.
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    app: longhorn-hook-executor
+  name: longhorn-hook-executor
+  namespace: longhorn-system
+spec:
+  type: ClusterIP
+  selector:
+    app: longhorn-hook-executor
+  ports:
+  - name: metrics
+    port: 9506
+    targetPort: healthz
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: apps/v1
