@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rustfs-secret
+  namespace: default
+type: Opaque
+data: {}
+---
+# same secret for longhorn-system namespace
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rustfs-secret
+  namespace: longhorn-system
+type: Opaque
+data: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-test-rustfs
+  namespace: default
+  labels:
+    app: longhorn-test-rustfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: longhorn-test-rustfs
+  template:
+    metadata:
+      labels:
+        app: longhorn-test-rustfs
+    spec:
+      volumes:
+      - name: rustfs-volume
+        emptyDir: {}
+      # RustFS has no bucket auto-provisioning; a directory at the volume root is a bucket.
+      initContainers:
+      - name: create-backupbucket
+        image: rustfs/rustfs:1.0.0
+        command: ["sh", "-c", "mkdir -p /data/backupbucket"]
+        volumeMounts:
+        - name: rustfs-volume
+          mountPath: "/data"
+      containers:
+      - name: rustfs
+        image: rustfs/rustfs:1.0.0
+        env:
+        - name: RUSTFS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rustfs-secret
+              key: AWS_ACCESS_KEY_ID
+        - name: RUSTFS_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rustfs-secret
+              key: AWS_SECRET_ACCESS_KEY
+        - name: RUSTFS_VOLUMES
+          value: "/data"
+        - name: RUSTFS_ADDRESS
+          value: "0.0.0.0:9000"
+        - name: RUSTFS_CONSOLE_ENABLE
+          value: "false"
+        ports:
+        - containerPort: 9000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        volumeMounts:
+        - name: rustfs-volume
+          mountPath: "/data"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rustfs-service
+  namespace: default
+spec:
+  selector:
+    app: longhorn-test-rustfs
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+  sessionAffinity: ClientIP
