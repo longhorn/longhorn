@@ -10,27 +10,27 @@ assignees: ''
 
 ## What's the task? Please describe
 
-Action items for releasing {{ env.RELEASE_VERSION }}
+Action items for releasing {{ env.RELEASE_VERSION }}.
 
 ## Roles
 
-- Release captain: {{ env.RELEASE_CAPTAIN }} <!--responsible for RD efforts of release development and coordinating with QA captain-->
-- QA captain: {{ env.QA_CAPTAIN }} <!--responsible for coordinating QA efforts of release testing tasks-->
+- Release Captain: {{ env.RELEASE_CAPTAIN }} <!--drives the release process and coordinates with the QA Captain-->
+- QA Captain: {{ env.QA_CAPTAIN }} <!--drives the release testing process and coordinates with the QA team-->
 
 ## Describe the sub-tasks
 
 ### Pre-Release
 
-#### Release Captain Tasks
+#### Release Captain
 
 > [!IMPORTANT]
-> The Release Captain needs to finish the following items
+> The Release Captain completes these items.
 
-- [ ] This tasks are only needed when doing a feature release such as {{ env.MAJOR_MINOR_VERSION }}.
-  - [ ] Before creating RC1, create a new release branch for the following component repositories by triggering [▶️ Create Longhorn Repository Branches Action](https://github.com/longhorn/release/actions/workflows/create-repo-branches.yml), and then create RC1 from the new branch. Leave the master branch for the next feature release development.
-  - [ ] Add the new branch {{ env.BRANCH_NAME }} to [renovate configuration](https://github.com/longhorn/release/blob/main/renovate-default.json).
-    - [ ] PR: <!--URL of the pull request-->
-  - [ ] After creating the new release branch, update the version file in each repo by [▶️ Update Longhorn Repository Version File in Default Branch Action](https://github.com/longhorn/release/actions/workflows/update-repo-version-file.yml).
+- [ ] Feature release only ({{ env.MAJOR_MINOR_VERSION }}):
+  - [ ] Create the release branch {{ env.BRANCH_NAME }} in each component repository by triggering [▶️ Create Longhorn Repository Branches Action](https://github.com/longhorn/release/actions/workflows/create-repo-branches.yml). RC1 and later builds come from this branch; master stays open for the next feature release.
+  - [ ] Add the new branch {{ env.BRANCH_NAME }} to the [renovate configuration](https://github.com/longhorn/release/blob/main/renovate-default.json).
+    - PR: <!--URL of the pull request-->
+  - [ ] After the release branch exists, update the version file on the default branch of each component repository by triggering [▶️ Update Longhorn Repository Version File in Default Branch Action](https://github.com/longhorn/release/actions/workflows/update-repo-version-file.yml):
     - longhorn-manager
     - longhorn-ui
     - longhorn-tests
@@ -38,100 +38,109 @@ Action items for releasing {{ env.RELEASE_VERSION }}
     - longhorn-instance-manager
     - longhorn-share-manager
     - backing-image-manager
-    - longhorn-spdk-engine (needed after GA)
+    - longhorn-spdk-engine (after GA)
     - cli
-  - [ ] Update `jobs.release.strategy.matrix` in [sprint release](https://github.com/longhorn/release/blob/main/.github/workflows/release-sprint.yml).
-    - [ ] PR: <!--URL of the pull request-->
-- [ ] Trigger the RC release build by [▶️ Release-Preview Action](https://github.com/longhorn/release/actions/workflows/release-preview.yml).
+  - [ ] Update `jobs.release.strategy.matrix` in [release-sprint.yml](https://github.com/longhorn/release/blob/main/.github/workflows/release-sprint.yml).
+    - PR: <!--URL of the pull request-->
+- [ ] Trigger the RC build by [▶️ Release-Preview Action](https://github.com/longhorn/release/actions/workflows/release-preview.yml).
 
-#### QA Captain Tasks
+#### QA Captain
 
-> [!IMPORTANT]  
-> The QA captain needs to coordinate the following items before the GA release.
+> [!IMPORTANT]
+> The QA Captain coordinates these items before GA.
 
-- [ ] Regression test plan (manual)
-- [ ] Update Longhorn official document
-  - [ ] Update `Best Practices>Operating System` and `Best Practices>Kubernetes>Kubernetes Version`
-    - [ ] PR: <!--URL of the pull request-->
-- [ ] Run e2e regression for pre-GA milestones (`install`, `upgrade`)
+- [ ] Prepare the manual regression test plan.
+- [ ] Update the Longhorn documentation: `Best Practices > Operating System` and `Best Practices > Kubernetes > Kubernetes Version`.
+  - PR: <!--URL of the pull request-->
+- [ ] Run e2e regression for pre-GA milestones (`install`, `upgrade`).
 - [ ] Run security testing of container images for pre-GA milestones.
-  - [ ] Investigate and fix the security issues. The issues are tracked by the sub-issue `Fix CVE issues for {{ env.RELEASE_VERSION }}` - @c3y1huang
-  - [ ] Create security issues at upstream for unresolved CVEs in CSI sidecar images - @c3y1huang
+  - [ ] Address the reported CVEs. Tracked in sub-issue `Fix CVE issues for {{ env.RELEASE_VERSION }}` - @c3y1huang
+  - [ ] Open upstream issues for unresolved CVEs in CSI sidecar images - @c3y1huang
 
 ---
 
 ### Release
 
-#### Release Captain Tasks for the GA Build
+#### Release Captain: Build GA
 
 > [!IMPORTANT]
-> The Release Captain needs to finish the following items
+> The Release Captain completes these items.
 
-- [ ] This tasks are only needed when doing a feature release such as {{ env.MAJOR_MINOR_VERSION }}.
-  - [ ] Ensure the sub-issue `Regular Tasks for Feature Release for {{ env.MAJOR_MINOR_VERSION }}` is completed.
-- [ ] Ensure the sub-issue `Fix CVE issues for {{ env.RELEASE_VERSION }}` is completed.
+- [ ] Feature release only ({{ env.MAJOR_MINOR_VERSION }}):
+  - [ ] Confirm sub-issue `Regular Tasks for Feature Release for {{ env.MAJOR_MINOR_VERSION }}` is complete.
+- [ ] Confirm sub-issue `Fix CVE issues for {{ env.RELEASE_VERSION }}` is complete.
 - [ ] Update image versions in [chart/README.md](https://github.com/longhorn/longhorn/tree/{{ env.RELEASE_VERSION }}/chart/README.md).
   - PR: <!--URL of the pull request-->
-- [ ] Trigger the GA release build by [▶️ Release Action](https://github.com/longhorn/release/actions/workflows/release.yml).
+- [ ] Trigger the GA build by [▶️ Release Action](https://github.com/longhorn/release/actions/workflows/release.yml).
 
-#### QA Captain Tasks for the GA Build
+#### QA Captain: Validate GA
 
-> [!IMPORTANT]  
-> The QA captain needs to coordinate the following items before the GA release.
+> [!IMPORTANT]
+> The QA Captain coordinates these items before GA.
 
-- [ ] Run security testing of container images for GA build
-- [ ] Verify longhorn chart PR to ensure all artifacts are ready for GA build (`install`, `upgrade`)
-- [ ] Run core testing (install, upgrade) for the GA build
+- [ ] Run security testing of container images for the GA build.
+- [ ] Verify the longhorn chart PR has all artifacts for the GA build (`install`, `upgrade`).
+- [ ] Run core testing (`install`, `upgrade`) for the GA build:
   - Upgrade from the previous patch of the same feature release.
   - Upgrade from the last patch of the previous feature release.
 
-#### Release Captain Tasks after Completing the GA Build Validation
+#### Release Captain: Publish GA
 
-- [ ] Create a release note ([CHANGELOG](https://github.com/longhorn/longhorn/tree/{{ env.RELEASE_VERSION }}/CHANGELOG)).
+> [!IMPORTANT]
+> The Release Captain completes these items.
+
+- [ ] Write the release note in [CHANGELOG](https://github.com/longhorn/longhorn/tree/{{ env.RELEASE_VERSION }}/CHANGELOG).
   - [ ] Deprecation note.
     - PR: <!--URL of the pull request-->
-  - [ ] Update notes including highlighted notes, deprecation, compatible changes, and others impacting the current users.
+  - [ ] Highlights, compatibility changes, and other changes that affect current users.
     - PR: <!--URL of the pull request-->
-- [ ] Update [Longhorn official documentation](https://github.com/longhorn/website).
-  - [ ] Update [config.toml](https://github.com/longhorn/website/blob/master/config.toml) and publish the new version of doc and add a next patch version of dev doc.
+- [ ] Update the [Longhorn documentation](https://github.com/longhorn/website).
+  - [ ] Update [config.toml](https://github.com/longhorn/website/blob/master/config.toml) and copy `content/docs/{{ env.RELEASE_VERSION }}` to the next patch `-dev` directory.
+    - PR: <!--URL of the pull request-->
   - [ ] Update image versions in `References > Helm Values` and `Snapshot and Backups > CSI Snapshot Support > Enable CSI Snapshot Support on a Cluster`.
     - PR: <!--URL of the pull request-->
   - [ ] Update `Important Notes`.
     - PR: <!--URL of the pull request-->
 - [ ] Publish the GA release in [longhorn/longhorn](https://github.com/longhorn/longhorn) and [longhorn/cli](https://github.com/longhorn/cli).
-- [ ] Release longhorn/chart from the release branch to publish to [ArtifactHub](https://artifacthub.io/packages/helm/longhorn/longhorn) by [▶️ Release Charts on Demand Action](https://github.com/longhorn/charts/actions/workflows/release-ondemand.yml).
-  <!-- Set "Use workflow from" to "master" and "Release branch" to "v<x.y>.x" -->
-- [ ] Mark the release as `latest` release in longhorn/longhorn [README.md](https://github.com/longhorn/longhorn).
+- [ ] Publish the chart from the release branch to [ArtifactHub](https://artifacthub.io/packages/helm/longhorn/longhorn) by [▶️ Release Charts on Demand Action](https://github.com/longhorn/charts/actions/workflows/release-ondemand.yml).
+  - Set `Use workflow from` to `master` and `Release branch` to `v<x.y>.x`.
+- [ ] Mark the release as `latest` in [README.md](https://github.com/longhorn/longhorn).
   - PR: <!--URL of the pull request-->
-- [ ] Update `jobs.release.strategy.matrix` in [sprint release](https://github.com/longhorn/release/blob/main/.github/workflows/release-sprint.yml).
+- [ ] Update `jobs.release.strategy.matrix` in [release-sprint.yml](https://github.com/longhorn/release/blob/main/.github/workflows/release-sprint.yml).
   - PR: <!--URL of the pull request-->
-- [ ] Update Longhorn image tags in longhorn/longhorn/chart/values.yaml in the development branch by triggering [▶️ Update Longhorn Repository Branch Image Tags](https://github.com/longhorn/longhorn/actions/workflows/update-branch-image-tags.yaml).
+- [ ] Update the image tags in chart/values.yaml on the development branch by triggering [▶️ Update Longhorn Repository Branch Image Tags](https://github.com/longhorn/longhorn/actions/workflows/update-branch-image-tags.yaml).
+  - PR: <!--URL of the pull request-->
 
 ---
 
 ### Post-Release
 
-- [ ] Mark the release as `stable` release and update stable versions in https://github.com/longhorn/longhorn/blob/master/support-versions.txt
-  - For the first stable release, we need to consider several factors and reach a consensus by maintainers before claiming it stable.
-  - For any patch release after a stable release, we need to wait 1-2 weeks for user feedback.
-  - PR: <!--URL of the pull request-->
+> [!IMPORTANT]
+> The Release Captain coordinates these items.
 
-**After marking the release as a `stable` release, Release Captain needs to coordinate the following items**
-
-- [ ] Update https://github.com/longhorn/longhorn/blob/master/deploy/upgrade_responder_server/chart-values.yaml - @mantissahz
-  - PR: <!--URL of the pull request-->
-- [ ] Add another request for the rancher charts for the next patch release - @rebeccazzzz  
 - [ ] Update the [support matrix](https://www.suse.com/suse-longhorn/support-matrix/all-supported-versions/) - @rebeccazzzz
 - [ ] Update the [lifecycle page](https://www.suse.com/lifecycle/#suse-storage) - @rebeccazzzz
 
----
+#### Stable Release
 
-### Rancher Charts
+> [!NOTE]
+> - A feature release (x.y.0) is never marked stable.
+> - The first stable release of a release line requires maintainer consensus.
+> - Later patch releases wait 1-2 weeks for user feedback before being marked stable.
 
-**The Release Captain needs to coordinate the following items.**
+- [ ] Mark the release as `stable` and update [support-versions.txt](https://github.com/longhorn/longhorn/blob/master/support-versions.txt).
+  - PR: <!--URL of the pull request-->
+- [ ] Update [upgrade_responder_server/chart-values.yaml](https://github.com/longhorn/longhorn/blob/master/deploy/upgrade_responder_server/chart-values.yaml) - @mantissahz
+  - PR: <!--URL of the pull request-->
 
-- [ ] Prepare Rancher Chart in rancher/charts active branches for Rancher App Marketplace - @carterli0407-cell @mantissahz
-- [ ] rancher/image-mirrors update - @carterli0407-cell @carterli0407-cell @mantissahz
-- [ ] Verify the Rancher Charts can be installed & upgraded - {{ env.QA_CAPTAIN }}
+#### Rancher Charts
+
+> [!IMPORTANT]
+> Start these tasks only after the release is marked `stable`.
+
+- [ ] Prepare the Rancher chart in the active rancher/charts branches for the Rancher App Marketplace - @carterli0407-cell @mantissahz
+- [ ] Update rancher/image-mirrors - @carterli0407-cell @mantissahz
+- [ ] Verify the Rancher chart installs and upgrades - {{ env.QA_CAPTAIN }}
+- [ ] Request the Rancher chart for the next patch release - @rebeccazzzz
 
 cc @longhorn/qa @longhorn/dev
