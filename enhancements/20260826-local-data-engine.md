@@ -84,9 +84,10 @@ operations, while reads and writes to existing mounts continue uninterrupted.
 ### User Experience In Detail
 
 The administrator enables the local data engine and adds an LVM-type disk to a Longhorn Node resource. The
-instance manager contains the required `lvm2` tools, so the host does not need to provide them. When the disk
-is registered, the instance manager verifies that it has no existing filesystem or partition table,
-initializes it as a physical volume, and creates its volume group.
+first LVM disk on a node starts the local instance-manager pod there. The instance manager contains the
+required `lvm2` tools, so the host does not need to provide them. When the disk is registered, the instance
+manager verifies that it has no existing filesystem or partition table, initializes it as a physical volume,
+and creates its volume group.
 
 The host prerequisites are the ones Longhorn already requires. The instance-manager pod is privileged and
 mounts the host root filesystem for every data engine, so it already reaches the host's block devices and
@@ -274,6 +275,15 @@ blocked in security-restricted environments, udev integration is disabled entire
 `--config 'devices { external_device_info_source = "none" } activation { udev_sync = 0 udev_rules = 0 }'`.
 LVM and device-mapper then work without udev, managing device nodes themselves and synchronously in the
 host-bound `/dev`.
+
+### Instance Manager Placement
+
+The local data engine serves only `strict-local` volumes, so a node without an LVM disk never hosts a local
+volume and does not need a local instance manager. Longhorn runs the local instance-manager pod on a node
+only while the node has at least one `lvm` disk: adding the first LVM disk creates the pod, and removing the
+last one removes it once its volume group is torn down and no instance is running. Nodes with only `block` or
+`filesystem` disks never reserve the local engine's instance-manager resources. v1 and v2 keep their current
+behaviour, since their engine process may run on a node without disks.
 
 ### Continuous I/O During Instance Manager Restart or Upgrade
 
