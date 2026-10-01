@@ -103,23 +103,6 @@ jobs:
           echo "Updating to Closed since it's closed"
           echo "field-values=Closed" >> $GITHUB_ENV
 
-        # If the issue is reopened with status Closed, update to In Progress
-        elif [[ "${{ github.event_name }}" == "issues" && 
-                "${{ github.event.action }}" == "reopened" && 
-                "${{ steps.fields.outputs.values }}" == "Closed" ]]; then
-
-          echo "Updating to In Progress"
-          echo "field-values=In Progress,[0]" >> $GITHUB_ENV
-
-        # If a comment is added or edited and the status is not Resolved or Closed by non-longhorn member, update to In Progress
-        elif [[ $team_count -eq 0 && 
-                "${{ github.event_name }}" == "issue_comment" && 
-                ( "${{ github.event.action }}" == "created" || "${{ github.event.action }}" == "edited" ) && 
-                ( "${{ steps.fields.outputs.values }}" != "Resolved" && "${{ steps.fields.outputs.values }}" != "Closed" ) ]]; then
-
-          echo "Updating to In Progress"
-          echo "field-values=In Progress,[0]" >> $GITHUB_ENV
-
         # If the issue is labeled as invalid, wontfix or duplicated, update to Closed
         elif [[ "${{ github.event_name }}" == "issues" && 
                 "${{ github.event.action }}" == "labeled" && 
