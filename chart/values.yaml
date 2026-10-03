@@ -615,6 +615,18 @@ longhornDriver:
 longhornUI:
   # -- Replica count for Longhorn UI.
   replicas: 2
+  # -- Readiness probe for Longhorn UI. The default HTTP check uses the Longhorn API through the UI proxy.
+  readinessProbe:
+    # -- Enable the UI readiness probe. With the default API check, a backend outage makes UI pods unready.
+    enabled: false
+    initialDelaySeconds: 1
+    periodSeconds: 1
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+    httpGet:
+      path: /v1
+      port: 8000
   # -- PriorityClass for Longhorn UI.
   priorityClass: *defaultPriorityClassNameRef
   # -- Affinity for Longhorn UI pods. Specify the affinity you want to use for Longhorn UI.

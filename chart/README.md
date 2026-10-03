@@ -249,6 +249,8 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornUI.podDisruptionBudget.maxUnavailable | string | `""` | Maximum number or percentage of Longhorn UI pods that can be unavailable during a disruption. When set, it takes precedence over `longhornUI.podDisruptionBudget.minAvailable`. |
 | longhornUI.podDisruptionBudget.minAvailable | int | `1` | Minimum number or percentage of Longhorn UI pods that must remain available during a disruption. Mutually exclusive with `longhornUI.podDisruptionBudget.maxUnavailable`. |
 | longhornUI.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn UI. |
+| longhornUI.readinessProbe | object | `{"enabled":false,"failureThreshold":3,"httpGet":{"path":"/v1","port":8000},"initialDelaySeconds":1,"periodSeconds":1,"successThreshold":1,"timeoutSeconds":1}` | Readiness probe for Longhorn UI. The default HTTP check uses the Longhorn API through the UI proxy. |
+| longhornUI.readinessProbe.enabled | bool | `false` | Enable the UI readiness probe. With the default API check, a backend outage makes UI pods unready. |
 | longhornUI.replicas | int | `2` | Replica count for Longhorn UI. |
 | longhornUI.tolerations | list | `[]` | Toleration for Longhorn UI on nodes allowed to run Longhorn components. |
 | longhornUI.topologySpreadConstraints | list | `[]` | Topology spread constraints for Longhorn UI pods. Unlike `longhornUI.affinity`, these can guarantee that replicas stay spread across a topology domain during a rolling update or a mass reschedule. |
