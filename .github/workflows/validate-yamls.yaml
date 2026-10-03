@@ -22,7 +22,7 @@ jobs:
       - name: Install yamllint
         run: |
           sudo apt-get update
-          sudo apt-get install -y yamllint
+          sudo apt-get install -y yamllint python3-venv
           
       - name: Create yamllint config
         run: |
@@ -38,3 +38,14 @@ jobs:
           
       - name: Validate YAML file
         run: yamllint -c .yamllint chart/questions.yaml
+
+      - name: Set up Helm
+        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4.3.1
+        with:
+          version: v3.19.0
+
+      - name: Test Helm chart
+        run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install -r chart/tests/requirements.txt
+          .venv/bin/python -m unittest discover -s chart/tests -v
