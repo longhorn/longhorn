@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    # The default GITHUB_TOKEN is not used in this job; all API calls
-    # are made with the GitHub App token created below.
+    # The default GITHUB_TOKEN is not used in this job.
+    # All GitHub API calls are made with the GitHub App token created below.
     permissions: {}
 
     steps:
@@ -35,11 +35,18 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const issue = context.payload.issue;
+
             const invalidLabel = 'needs-template';
+            const ignoredLabels = new Set([
+              invalidLabel,
+              'wontfix'
+            ]);
 
             // Skip issues created by bots (e.g. auto-generated backport issues).
             if (issue.user.type === 'Bot') {
-              console.log(`Skip issue #${issue.number}: created by bot ${issue.user.login}.`);
+              console.log(
+                `Skip issue #${issue.number}: created by bot ${issue.user.login}.`
+              );
               return;
             }
 
@@ -52,6 +59,7 @@ jobs:
                   issue_number: issue.number,
                   name: invalidLabel
                 });
+
                 console.log(
                   `Removed "${invalidLabel}" label from issue #${issue.number}.`
                 );
@@ -67,36 +75,46 @@ jobs:
               }
             }
 
-            // Treat a reopen by someone with repository write access as a
-            // manual override. The issue is allowed to remain open regardless
-            // of its current requirements.
+            // A reopen performed by someone with repository write access
+            // is treated as a manual override.
+            //
+            // In this case, allow the issue to remain open regardless of
+            // whether it currently meets the issue requirements.
             if (context.payload.action === 'reopened') {
               const sender = context.payload.sender.login;
 
               try {
-                const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
-                  owner,
-                  repo,
-                  username: sender
-                });
+                const { data } =
+                  await github.rest.repos.getCollaboratorPermissionLevel({
+                    owner,
+                    repo,
+                    username: sender
+                  });
 
-                if (['admin', 'maintain', 'write'].includes(data.permission)) {
+                if (
+                  ['admin', 'maintain', 'write'].includes(data.permission)
+                ) {
                   console.log(
-                    `Skip issue #${issue.number}: reopened by ${sender} (${data.permission}).`
+                    `Skip issue #${issue.number}: reopened by ` +
+                    `${sender} (${data.permission}).`
                   );
+
                   await removeInvalidLabel();
                   return;
                 }
               } catch (error) {
-                // If the permission lookup fails, fall through and validate normally.
+                // If the permission lookup fails, fall through to normal
+                // validation instead of treating the user as a maintainer.
                 console.log(
-                  `Could not determine permission for ${sender}: ${error.message}`
+                  `Could not determine permission for ${sender}: ` +
+                  `${error.message}`
                 );
               }
             }
 
-            // Re-fetch the issue so labels applied by other automation after the
-            // event fired are taken into account (the payload is a snapshot).
+            // Re-fetch the issue because the issue event payload is only a
+            // snapshot. Other automation may have added or removed labels
+            // after the event was generated.
             const { data: freshIssue } = await github.rest.issues.get({
               owner,
               repo,
@@ -107,35 +125,54 @@ jobs:
               typeof label === 'string' ? label : label.name
             );
 
-            // Matches a non-empty, single "[xxxx]" tag with no nested brackets.
+            // Matches a non-empty [xxxx] tag without nested brackets.
+            //
+            // Examples:
+            //   [BUG]            -> valid
+            //   [FEATURE]        -> valid
+            //   [BUG FIX]        -> valid
+            //   []               -> invalid
+            //   [ BUG]           -> invalid
+            //   [[BUG]]          -> invalid
+            //   [BUG             -> invalid
             const typeTag = '\\[[^\\[\\]\\s][^\\[\\]]*\\]';
 
-            // Requirement 1: The issue title must start with [xxxx].
+            // Requirement 1:
+            // The issue title must start with [xxxx].
             const hasIssueTypeInTitle =
               new RegExp(`^${typeTag}`).test(freshIssue.title);
 
-            // Requirement 2: The issue must have at least one issue type label
-            // whose entire name matches the [xxxx] format.
+            // Requirement 2:
+            // The issue must have at least one issue type label whose entire
+            // name matches [xxxx].
             //
-            // "needs-template" and "wontfix" are not issue type labels.
-            const hasIssueTypeLabel = labelNames.some(name =>
-              name !== invalidLabel &&
-              name !== 'wontfix' &&
-              new RegExp(`^${typeTag}$`).test(name)
-            );
+            // "needs-template" and "wontfix" are workflow/status labels,
+            // not issue type labels, so they are explicitly ignored here.
+            const hasIssueTypeLabel = labelNames.some(name => {
+              if (ignoredLabels.has(name)) {
+                return false;
+              }
 
-            // The needs-template label indicates that the issue previously
-            // failed validation. A valid issue should not retain this label.
-            const hasNeedsTemplateLabel = labelNames.includes(invalidLabel);
+              return new RegExp(`^${typeTag}$`).test(name);
+            });
 
-            // If the issue is valid, allow it to remain open.
+            const hasNeedsTemplateLabel =
+              labelNames.includes(invalidLabel);
+
+            // The issue is valid when:
+            //   1. The title starts with [xxxx], and
+            //   2. At least one label is a [xxxx] issue type label.
             //
-            // On reopen, remove the needs-template label after the issue has
-            // been fixed. This allows the label to act as a temporary marker
-            // rather than a permanent label.
+            // "wontfix" does not affect validity as long as another valid
+            // issue type label exists.
             if (hasIssueTypeInTitle && hasIssueTypeLabel) {
-              console.log(`Issue #${issue.number} meets all requirements.`);
+              console.log(
+                `Issue #${issue.number} meets all requirements.`
+              );
 
+              // needs-template is only a temporary validation marker.
+              // If the issue was previously invalid and has now been fixed
+              // and reopened, remove the marker automatically.
               if (
                 context.payload.action === 'reopened' &&
                 hasNeedsTemplateLabel
@@ -146,6 +183,7 @@ jobs:
               return;
             }
 
+            // Build a list of the actual requirements that are missing.
             const missingRequirements = [];
 
             if (!hasIssueTypeInTitle) {
@@ -160,12 +198,6 @@ jobs:
               );
             }
 
-            if (hasNeedsTemplateLabel) {
-              missingRequirements.push(
-                '- The issue must not have the `needs-template` label.'
-              );
-            }
-
             const body = [
               '## Issue Requirements Not Met',
               '',
@@ -173,7 +205,6 @@ jobs:
               '',
               '1. The issue title must start with an issue type in the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`.',
               '2. The issue must have at least one issue type label whose entire name matches the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`. Labels such as `needs-template` and `wontfix` do not satisfy this requirement.',
-              '3. The issue must not have the `needs-template` label.',
               '',
               'The following requirement(s) are missing:',
               '',
@@ -182,7 +213,8 @@ jobs:
               'Please fix the issue and reopen it, or open a new issue using one of the provided templates.'
             ].join('\n');
 
-            // Close first so the comment accurately reflects the issue state.
+            // Close the issue first so that the comment accurately reflects
+            // the resulting issue state.
             await github.rest.issues.update({
               owner,
               repo,
@@ -191,8 +223,11 @@ jobs:
               state_reason: 'not_planned'
             });
 
-            // The needs-template label is supplemental; a failure to add it
-            // should not prevent the user-facing comment from being posted.
+            // Add needs-template as a temporary marker indicating that the
+            // issue failed validation.
+            //
+            // Failure to add the label should not prevent the validation
+            // comment from being posted.
             try {
               await github.rest.issues.addLabels({
                 owner,
@@ -200,6 +235,10 @@ jobs:
                 issue_number: issue.number,
                 labels: [invalidLabel]
               });
+
+              console.log(
+                `Added "${invalidLabel}" label to issue #${issue.number}.`
+              );
             } catch (error) {
               console.log(
                 `Could not add the "${invalidLabel}" label: ${error.message}`
@@ -214,5 +253,6 @@ jobs:
             });
 
             console.log(
-              `Issue #${issue.number} was closed because it does not meet the requirements.`
+              `Issue #${issue.number} was closed because it does not meet ` +
+              `the requirements.`
             );
