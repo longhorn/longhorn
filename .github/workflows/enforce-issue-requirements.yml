@@ -37,7 +37,10 @@ jobs:
             const issue = context.payload.issue;
 
             const invalidLabel = 'needs-template';
-            const ignoredLabels = new Set([
+
+            // These labels are not issue type labels.
+            // They must be ignored when looking for a [xxxx] issue type label.
+            const ignoredIssueTypeLabels = new Set([
               invalidLabel,
               'wontfix'
             ]);
@@ -64,6 +67,7 @@ jobs:
                   `Removed "${invalidLabel}" label from issue #${issue.number}.`
                 );
               } catch (error) {
+                // GitHub returns 404 when the label does not exist.
                 if (error.status === 404) {
                   console.log(
                     `Label "${invalidLabel}" is not present on issue #${issue.number}.`
@@ -75,11 +79,10 @@ jobs:
               }
             }
 
-            // A reopen performed by someone with repository write access
-            // is treated as a manual override.
+            // If an issue is reopened by someone with repository write access,
+            // treat it as a manual override.
             //
-            // In this case, allow the issue to remain open regardless of
-            // whether it currently meets the issue requirements.
+            // In this case, do not validate the issue requirements.
             if (context.payload.action === 'reopened') {
               const sender = context.payload.sender.login;
 
@@ -104,7 +107,7 @@ jobs:
                 }
               } catch (error) {
                 // If the permission lookup fails, fall through to normal
-                // validation instead of treating the user as a maintainer.
+                // validation. Do not treat the user as a maintainer.
                 console.log(
                   `Could not determine permission for ${sender}: ` +
                   `${error.message}`
@@ -125,15 +128,19 @@ jobs:
               typeof label === 'string' ? label : label.name
             );
 
+            console.log(`Issue #${issue.number} title: ${freshIssue.title}`);
+            console.log(`Issue #${issue.number} labels: ${labelNames.join(', ')}`);
+
             // Matches a non-empty [xxxx] tag without nested brackets.
             //
             // Examples:
-            //   [BUG]            -> valid
-            //   [FEATURE]        -> valid
-            //   [BUG FIX]        -> valid
-            //   []               -> invalid
-            //   [ BUG]           -> invalid
-            //   [[BUG]]          -> invalid
+            //   [BUG]             -> valid
+            //   [FEATURE]         -> valid
+            //   [IMPROVEMENT]     -> valid
+            //   [BUG FIX]         -> valid
+            //   []                -> invalid
+            //   [ BUG]            -> invalid
+            //   [[BUG]]           -> invalid
             //   [BUG             -> invalid
             const typeTag = '\\[[^\\[\\]\\s][^\\[\\]]*\\]';
 
@@ -146,10 +153,13 @@ jobs:
             // The issue must have at least one issue type label whose entire
             // name matches [xxxx].
             //
-            // "needs-template" and "wontfix" are workflow/status labels,
-            // not issue type labels, so they are explicitly ignored here.
+            // "wontfix" and "needs-template" are explicitly ignored here.
+            //
+            // IMPORTANT:
+            // Ignoring "wontfix" does NOT make the issue valid.
+            // It simply means that "wontfix" cannot satisfy Requirement 2.
             const hasIssueTypeLabel = labelNames.some(name => {
-              if (ignoredLabels.has(name)) {
+              if (ignoredIssueTypeLabels.has(name)) {
                 return false;
               }
 
@@ -159,12 +169,24 @@ jobs:
             const hasNeedsTemplateLabel =
               labelNames.includes(invalidLabel);
 
-            // The issue is valid when:
-            //   1. The title starts with [xxxx], and
-            //   2. At least one label is a [xxxx] issue type label.
+            console.log(
+              `hasIssueTypeInTitle: ${hasIssueTypeInTitle}`
+            );
+
+            console.log(
+              `hasIssueTypeLabel: ${hasIssueTypeLabel}`
+            );
+
+            console.log(
+              `hasNeedsTemplateLabel: ${hasNeedsTemplateLabel}`
+            );
+
+            // The issue is valid only when BOTH requirements are satisfied:
             //
-            // "wontfix" does not affect validity as long as another valid
-            // issue type label exists.
+            //   1. Title starts with [xxxx]
+            //   2. At least one label matches [xxxx]
+            //
+            // "wontfix" alone is NOT sufficient.
             if (hasIssueTypeInTitle && hasIssueTypeLabel) {
               console.log(
                 `Issue #${issue.number} meets all requirements.`
