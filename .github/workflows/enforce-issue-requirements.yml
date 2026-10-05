@@ -43,7 +43,33 @@ jobs:
               return;
             }
 
-            // Treat a reopen by someone with repository write access as a manual override.
+            // Remove the needs-template label if it exists.
+            async function removeInvalidLabel() {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner,
+                  repo,
+                  issue_number: issue.number,
+                  name: invalidLabel
+                });
+                console.log(
+                  `Removed "${invalidLabel}" label from issue #${issue.number}.`
+                );
+              } catch (error) {
+                if (error.status === 404) {
+                  console.log(
+                    `Label "${invalidLabel}" is not present on issue #${issue.number}.`
+                  );
+                  return;
+                }
+
+                throw error;
+              }
+            }
+
+            // Treat a reopen by someone with repository write access as a
+            // manual override. The issue is allowed to remain open regardless
+            // of its current requirements.
             if (context.payload.action === 'reopened') {
               const sender = context.payload.sender.login;
 
@@ -58,6 +84,7 @@ jobs:
                   console.log(
                     `Skip issue #${issue.number}: reopened by ${sender} (${data.permission}).`
                   );
+                  await removeInvalidLabel();
                   return;
                 }
               } catch (error) {
@@ -76,6 +103,10 @@ jobs:
               issue_number: issue.number
             });
 
+            const labelNames = freshIssue.labels.map(label =>
+              typeof label === 'string' ? label : label.name
+            );
+
             // Matches a non-empty, single "[xxxx]" tag with no nested brackets.
             const typeTag = '\\[[^\\[\\]\\s][^\\[\\]]*\\]';
 
@@ -83,17 +114,35 @@ jobs:
             const hasIssueTypeInTitle =
               new RegExp(`^${typeTag}`).test(freshIssue.title);
 
-            // Requirement 2: The issue must have at least one [xxxx] label.
-            const labelNames = freshIssue.labels.map(label =>
-              typeof label === 'string' ? label : label.name
-            );
-
+            // Requirement 2: The issue must have at least one issue type label
+            // whose entire name matches the [xxxx] format.
+            //
+            // "needs-template" and "wontfix" are not issue type labels.
             const hasIssueTypeLabel = labelNames.some(name =>
+              name !== invalidLabel &&
+              name !== 'wontfix' &&
               new RegExp(`^${typeTag}$`).test(name)
             );
 
+            // The needs-template label indicates that the issue previously
+            // failed validation. A valid issue should not retain this label.
+            const hasNeedsTemplateLabel = labelNames.includes(invalidLabel);
+
+            // If the issue is valid, allow it to remain open.
+            //
+            // On reopen, remove the needs-template label after the issue has
+            // been fixed. This allows the label to act as a temporary marker
+            // rather than a permanent label.
             if (hasIssueTypeInTitle && hasIssueTypeLabel) {
               console.log(`Issue #${issue.number} meets all requirements.`);
+
+              if (
+                context.payload.action === 'reopened' &&
+                hasNeedsTemplateLabel
+              ) {
+                await removeInvalidLabel();
+              }
+
               return;
             }
 
@@ -107,7 +156,13 @@ jobs:
 
             if (!hasIssueTypeLabel) {
               missingRequirements.push(
-                '- The issue must have at least one issue type label in the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`.'
+                '- The issue must have at least one issue type label whose entire name matches the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`. Labels such as `needs-template` and `wontfix` do not satisfy this requirement.'
+              );
+            }
+
+            if (hasNeedsTemplateLabel) {
+              missingRequirements.push(
+                '- The issue must not have the `needs-template` label.'
               );
             }
 
@@ -117,7 +172,8 @@ jobs:
               'This issue has been automatically closed because it does not meet one or more of the following requirements:',
               '',
               '1. The issue title must start with an issue type in the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`.',
-              '2. The issue must have at least one issue type label in the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`.',
+              '2. The issue must have at least one issue type label whose entire name matches the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`. Labels such as `needs-template` and `wontfix` do not satisfy this requirement.',
+              '3. The issue must not have the `needs-template` label.',
               '',
               'The following requirement(s) are missing:',
               '',
