@@ -38,11 +38,10 @@ jobs:
 
             const invalidLabel = 'needs-template';
 
-            // These labels are not issue type labels.
-            // They must be ignored when looking for a [xxxx] issue type label.
-            const ignoredIssueTypeLabels = new Set([
+            // These labels must not be considered valid kind labels.
+            const ignoredLabels = new Set([
               invalidLabel,
-              'wontfix'
+              'wontfix',
             ]);
 
             // Skip issues created by bots (e.g. auto-generated backport issues).
@@ -60,7 +59,7 @@ jobs:
                   owner,
                   repo,
                   issue_number: issue.number,
-                  name: invalidLabel
+                  name: invalidLabel,
                 });
 
                 console.log(
@@ -91,7 +90,7 @@ jobs:
                   await github.rest.repos.getCollaboratorPermissionLevel({
                     owner,
                     repo,
-                    username: sender
+                    username: sender,
                   });
 
                 if (
@@ -121,7 +120,7 @@ jobs:
             const { data: freshIssue } = await github.rest.issues.get({
               owner,
               repo,
-              issue_number: issue.number
+              issue_number: issue.number,
             });
 
             const labelNames = freshIssue.labels.map(label =>
@@ -129,7 +128,9 @@ jobs:
             );
 
             console.log(`Issue #${issue.number} title: ${freshIssue.title}`);
-            console.log(`Issue #${issue.number} labels: ${labelNames.join(', ')}`);
+            console.log(
+              `Issue #${issue.number} labels: ${labelNames.join(', ')}`
+            );
 
             // Matches a non-empty [xxxx] tag without nested brackets.
             //
@@ -141,7 +142,7 @@ jobs:
             //   []                -> invalid
             //   [ BUG]            -> invalid
             //   [[BUG]]           -> invalid
-            //   [BUG             -> invalid
+            //   [BUG              -> invalid
             const typeTag = '\\[[^\\[\\]\\s][^\\[\\]]*\\]';
 
             // Requirement 1:
@@ -150,20 +151,20 @@ jobs:
               new RegExp(`^${typeTag}`).test(freshIssue.title);
 
             // Requirement 2:
-            // The issue must have at least one issue type label whose entire
-            // name matches [xxxx].
+            // The issue must have at least one kind/* label.
             //
-            // "wontfix" and "needs-template" are explicitly ignored here.
-            //
-            // IMPORTANT:
-            // Ignoring "wontfix" does NOT make the issue valid.
-            // It simply means that "wontfix" cannot satisfy Requirement 2.
+            // Examples:
+            //   kind/test       -> valid
+            //   kind/bug        -> valid
+            //   kind/feature    -> valid
+            //   needs-template  -> ignored
+            //   wontfix         -> ignored
             const hasIssueTypeLabel = labelNames.some(name => {
-              if (ignoredIssueTypeLabels.has(name)) {
+              if (ignoredLabels.has(name)) {
                 return false;
               }
 
-              return new RegExp(`^${typeTag}$`).test(name);
+              return /^kind\/[a-z0-9][a-z0-9-]*$/.test(name);
             });
 
             const hasNeedsTemplateLabel =
@@ -174,7 +175,7 @@ jobs:
             );
 
             console.log(
-              `hasIssueTypeLabel: ${hasIssueTypeLabel}`
+              `hasKindLabel: ${hasIssueTypeLabel}`
             );
 
             console.log(
@@ -184,7 +185,7 @@ jobs:
             // The issue is valid only when BOTH requirements are satisfied:
             //
             //   1. Title starts with [xxxx]
-            //   2. At least one label matches [xxxx]
+            //   2. At least one label matches kind/*
             //
             // "wontfix" alone is NOT sufficient.
             if (hasIssueTypeInTitle && hasIssueTypeLabel) {
@@ -216,7 +217,7 @@ jobs:
 
             if (!hasIssueTypeLabel) {
               missingRequirements.push(
-                '- The issue must have at least one issue type label whose entire name matches the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`. Labels such as `needs-template` and `wontfix` do not satisfy this requirement.'
+                '- The issue must have at least one `kind/*` label, such as `kind/test`, `kind/bug`, or `kind/feature`. Labels such as `needs-template` and `wontfix` do not satisfy this requirement.'
               );
             }
 
@@ -226,7 +227,7 @@ jobs:
               'This issue has been automatically closed because it does not meet one or more of the following requirements:',
               '',
               '1. The issue title must start with an issue type in the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`.',
-              '2. The issue must have at least one issue type label whose entire name matches the `[xxxx]` format, such as `[BUG]`, `[FEATURE]`, or `[IMPROVEMENT]`. Labels such as `needs-template` and `wontfix` do not satisfy this requirement.',
+              '2. The issue must have at least one `kind/*` label, such as `kind/test`, `kind/bug`, or `kind/feature`. Labels such as `needs-template` and `wontfix` do not satisfy this requirement.',
               '',
               'The following requirement(s) are missing:',
               '',
@@ -242,7 +243,7 @@ jobs:
               repo,
               issue_number: issue.number,
               state: 'closed',
-              state_reason: 'not_planned'
+              state_reason: 'not_planned',
             });
 
             // Add needs-template as a temporary marker indicating that the
@@ -255,7 +256,7 @@ jobs:
                 owner,
                 repo,
                 issue_number: issue.number,
-                labels: [invalidLabel]
+                labels: [invalidLabel],
               });
 
               console.log(
@@ -271,7 +272,7 @@ jobs:
               owner,
               repo,
               issue_number: issue.number,
-              body
+              body,
             });
 
             console.log(
