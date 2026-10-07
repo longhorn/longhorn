@@ -46,3 +46,6 @@ while IFS= read -r line; do
   yq -i "$key = \"$tag\"" chart/values.yaml
 
 done < "deploy/longhorn-images.txt"
+
+# Keep the HIP-0015 helm.sh/images annotation in chart/Chart.yaml in sync with chart/values.yaml
+bash "$(dirname "${BASH_SOURCE[0]}")/update-chart-images-annotation.sh"
