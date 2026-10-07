@@ -68,6 +68,7 @@ jobs:
       uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       if: ${{
         steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
         steps.fields.outcome == 'success'
         }}
       with:
@@ -81,15 +82,8 @@ jobs:
         steps.add-project.outputs.itemId != '' 
         }}
       run: |
-        teams=${{ steps.is-longhorn-member.outputs.teams }}
-        teams=${teams:1:-1}
-        IFS=',' read -r -a team_array <<< "$teams"
-        team_count=${#team_array[@]}
-        echo "team_count: $team_count"
-
-        # If the issue is milestoned by longhorn member, update to Resolved
-        if [[ $team_count -gt 0 && 
-              "${{ github.event_name }}" == "issues" && 
+        # Community reporters can't set milestones, so a milestoned event is from a Longhorn member
+        if [[ "${{ github.event_name }}" == "issues" && 
               "${{ github.event.action }}" == "milestoned" ]]; then
 
           echo "Updating to Resolved since it's milestoned by longhorn member"
