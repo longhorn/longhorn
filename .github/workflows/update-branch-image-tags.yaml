@@ -97,6 +97,9 @@ jobs:
         yq eval '.image.longhorn.shareManager.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
         yq eval '.image.longhorn.backingImageManager.tag = "${{ inputs.branch }}-head"' -i chart/values.yaml
 
+    - name: Update helm.sh/images Annotation in chart/Chart.yaml
+      run: bash ./scripts/update-chart-images-annotation.sh
+
     - name: Regenerate Manifests
       run: bash ./scripts/generate-longhorn-yaml.sh
 
