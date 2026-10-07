@@ -576,6 +576,16 @@ longhornGlobalManager:
                   values:
                     - longhorn-global-manager
             topologyKey: kubernetes.io/hostname
+  # -- Topology spread constraints for global manager pods. Unlike `longhornGlobalManager.affinity`, these can guarantee that replicas stay spread across a topology domain during a rolling update or a mass reschedule.
+  topologySpreadConstraints: []
+  ## If you want to set topology spread constraints for the global manager Deployment, delete the `[]` in the line above
+  ## and uncomment this example block
+  # - maxSkew: 1
+  #   topologyKey: topology.kubernetes.io/zone
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app: longhorn-global-manager
   # -- Resource requests and limits for global manager pods. Memory scales with the cluster's Pod count (cluster-wide Pod informer cache).
   resources: ~
   # -- Node tolerations for global manager pods.
