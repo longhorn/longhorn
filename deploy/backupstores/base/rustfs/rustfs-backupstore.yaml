@@ -60,7 +60,7 @@ spec:
         - name: RUSTFS_VOLUMES
           value: "/data"
         - name: RUSTFS_ADDRESS
-          value: "0.0.0.0:9000"
+          value: "[::]:9000"
         - name: RUSTFS_CONSOLE_ENABLE
           value: "false"
         ports:
