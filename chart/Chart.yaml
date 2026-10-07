@@ -5,24 +5,52 @@ appVersion: v1.12.0-dev
 kubeVersion: ">=1.34.0-0"
 description: Longhorn is a distributed block storage system for Kubernetes.
 keywords:
-- longhorn
-- storage
-- distributed
-- block
-- device
-- iscsi
-- nfs
+  - longhorn
+  - storage
+  - distributed
+  - block
+  - device
+  - iscsi
+  - nfs
 home: https://github.com/longhorn/longhorn
 sources:
-- https://github.com/longhorn/longhorn
-- https://github.com/longhorn/longhorn-engine
-- https://github.com/longhorn/longhorn-instance-manager
-- https://github.com/longhorn/longhorn-share-manager
-- https://github.com/longhorn/longhorn-manager
-- https://github.com/longhorn/longhorn-ui
-- https://github.com/longhorn/longhorn-tests
-- https://github.com/longhorn/backing-image-manager
+  - https://github.com/longhorn/longhorn
+  - https://github.com/longhorn/longhorn-engine
+  - https://github.com/longhorn/longhorn-instance-manager
+  - https://github.com/longhorn/longhorn-share-manager
+  - https://github.com/longhorn/longhorn-manager
+  - https://github.com/longhorn/longhorn-ui
+  - https://github.com/longhorn/longhorn-tests
+  - https://github.com/longhorn/backing-image-manager
 maintainers:
-- name: Longhorn maintainers
-  email: maintainers@longhorn.io
+  - name: Longhorn maintainers
+    email: maintainers@longhorn.io
 icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/icon/color/longhorn-icon-color.png
+annotations:
+  helm.sh/images: |-
+    - name: longhorn-engine
+      image: longhornio/longhorn-engine:master-head
+    - name: longhorn-manager
+      image: longhornio/longhorn-manager:master-head
+    - name: longhorn-ui
+      image: longhornio/longhorn-ui:master-head
+    - name: longhorn-instance-manager
+      image: longhornio/longhorn-instance-manager:master-head
+    - name: longhorn-share-manager
+      image: longhornio/longhorn-share-manager:master-head
+    - name: backing-image-manager
+      image: longhornio/backing-image-manager:master-head
+    - name: support-bundle-kit
+      image: longhornio/support-bundle-kit:v0.0.93
+    - name: csi-attacher
+      image: longhornio/csi-attacher:v4.12.0
+    - name: csi-provisioner
+      image: longhornio/csi-provisioner:v6.3.0
+    - name: csi-node-driver-registrar
+      image: longhornio/csi-node-driver-registrar:v2.17.0
+    - name: csi-resizer
+      image: longhornio/csi-resizer:v2.2.1
+    - name: csi-snapshotter
+      image: longhornio/csi-snapshotter:v8.6.0
+    - name: livenessprobe
+      image: longhornio/livenessprobe:v2.19.0
