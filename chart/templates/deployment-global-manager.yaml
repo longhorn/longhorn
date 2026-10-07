@@ -98,4 +98,8 @@ spec:
       {{- end }}
       affinity:
       {{- toYaml .Values.longhornGlobalManager.affinity | nindent 8 }}
+      {{- with .Values.longhornGlobalManager.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: longhorn-service-account
