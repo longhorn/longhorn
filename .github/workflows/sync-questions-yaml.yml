@@ -1,0 +1,64 @@
+name: "[Chart Management] Sync questions.yaml with values.yaml"
+
+on:
+  schedule:
+    # Run once a day at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync-questions:
+    runs-on: ubuntu-latest
+    steps:
+    - id: app-token
+      uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2
+      with:
+        app-id: ${{ secrets.LONGHORN_GITHUB_BOT_APP_ID }}
+        private-key: ${{ secrets.LONGHORN_GITHUB_BOT_PRIVATE_KEY }}
+        owner: ${{ github.repository_owner }}
+        permission-contents: write
+        permission-pull-requests: write
+
+    - name: Checkout repository
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+    - name: Set up Python
+      uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install pyyaml
+
+    - name: Check for differences
+      id: check
+      run: |
+        if python3 scripts/sync-questions-with-values.py --check; then
+          echo "in_sync=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "in_sync=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Sync questions.yaml
+      if: steps.check.outputs.in_sync == 'false'
+      run: python3 scripts/sync-questions-with-values.py
+
+    - name: Create pull request
+      if: steps.check.outputs.in_sync == 'false'
+      uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
+      with:
+        token: ${{ steps.app-token.outputs.token }}
+        commit-message: "chart: sync questions.yaml with values.yaml"
+        title: "chart: sync questions.yaml with values.yaml"
+        body: |
+          Auto-generated PR to sync `chart/questions.yaml` default values and
+          descriptions with `chart/values.yaml`.
+
+          This PR was created by the periodic sync workflow.
+
+          Closes longhorn/longhorn#6788
+        branch: auto-sync-questions-yaml
+        delete-branch: true
