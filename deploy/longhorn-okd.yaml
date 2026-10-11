@@ -18,6 +18,7 @@ description: "Ensure Longhorn pods have the highest priority to prevent any unex
 globalDefault: false
 preemptionPolicy: PreemptLowerPriority
 value: 1000000000
+
 ---
 # Source: longhorn/templates/network-policies/backing-image-data-source-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -45,6 +46,7 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
+
 ---
 # Source: longhorn/templates/network-policies/backing-image-manager-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -72,6 +74,7 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
+
 ---
 # Source: longhorn/templates/network-policies/instance-manager-networking.yaml
 apiVersion: networking.k8s.io/v1
@@ -99,6 +102,10 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
+  - ports:
+    - protocol: TCP
+      port: 3260
+
 ---
 # Source: longhorn/templates/network-policies/manager-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -134,6 +141,7 @@ spec:
     - podSelector:
         matchLabels:
           app: longhorn-driver-deployer
+
 ---
 # Source: longhorn/templates/network-policies/recovery-backend-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -155,6 +163,7 @@ spec:
     ports:
     - protocol: TCP
       port: 9503
+
 ---
 # Source: longhorn/templates/network-policies/webhook-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -174,6 +183,7 @@ spec:
       port: 9501
     - protocol: TCP
       port: 9502
+
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -185,6 +195,7 @@ metadata:
     app.kubernetes.io/name: longhorn
     app.kubernetes.io/instance: longhorn
     app.kubernetes.io/version: v1.12.0-dev
+
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
@@ -198,12 +209,25 @@ metadata:
     app.kubernetes.io/version: v1.12.0-dev
   annotations:
     serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"longhorn-ui"}}'
+
 ---
 # Source: longhorn/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: longhorn-support-bundle
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+
+---
+# Source: longhorn/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: longhorn-csi-service-account
   namespace: longhorn-system
   labels:
     app.kubernetes.io/name: longhorn
@@ -222,6 +246,7 @@ metadata:
     app.kubernetes.io/version: v1.12.0-dev
 data:
   default-resource.yaml: |-
+
 ---
 # Source: longhorn/templates/default-setting.yaml
 apiVersion: v1
@@ -237,6 +262,7 @@ data:
   default-setting.yaml: |-
     priority-class: "longhorn-critical"
     disable-revision-counter: "{\"v1\":\"true\"}"
+
 ---
 # Source: longhorn/templates/storageclass.yaml
 apiVersion: v1
@@ -270,6 +296,7 @@ data:
       disableRevisionCounter: "true"
       dataEngine: "v1"
       backupTargetName: "default"
+
 ---
 # Source: longhorn/templates/crds.yaml
 # Generated crds.yaml from github.com/longhorn/longhorn-manager/k8s/pkg/apis and the crds.yaml will be copied to longhorn/longhorn chart/templates and cannot be directly used by kubectl apply.
@@ -408,6 +435,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -549,6 +577,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -732,6 +761,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -903,6 +933,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1093,6 +1124,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1234,6 +1266,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1357,6 +1390,14 @@ spec:
                 format: date-time
                 nullable: true
                 type: string
+              linkedCloneSourceSnapshot:
+                description: The source snapshot of the backed up volume, set only
+                  when it was a linked clone.
+                type: string
+              linkedCloneSourceVolume:
+                description: The source volume of the backed up volume, set only when
+                  it was a linked clone.
+                type: string
               messages:
                 additionalProperties:
                   type: string
@@ -1380,6 +1421,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1629,6 +1671,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -1781,6 +1824,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2163,6 +2207,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2248,6 +2293,8 @@ spec:
                                      workqueues away from the SPDK reactor CPUs).
                           "false" -> do not pass the flags.
                           ""      -> inherit the global setting value.
+                          This field is ignored when interrupt mode is enabled, since the SPDK
+                          reactors no longer busy-poll and CPU isolation is always disabled.
                         enum:
                         - ""
                         - "true"
@@ -2735,6 +2782,329 @@ spec:
     storage: true
     subresources:
       status: {}
+
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
+  name: instancemanagerupgradecontrols.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: InstanceManagerUpgradeControl
+    listKind: InstanceManagerUpgradeControlList
+    plural: instancemanagerupgradecontrols
+    shortNames:
+    - lhimuc
+    singular: instancemanagerupgradecontrol
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: Desired instance manager image
+      jsonPath: .spec.targetImage
+      name: Target Image
+      type: string
+    - description: Node currently being upgraded
+      jsonPath: .status.currentNode
+      name: Current Node
+      type: string
+    - description: Scheduled start time
+      jsonPath: .spec.startAt
+      name: Start At
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: |-
+          InstanceManagerUpgradeControl is the singleton Longhorn CR that orchestrates
+          rolling live upgrades of v2 instance managers across all cluster nodes.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              InstanceManagerUpgradeControlSpec defines the desired state of the
+              InstanceManagerUpgradeControl singleton.
+            properties:
+              startAt:
+                description: StartAt is the RFC3339 timestamp at which the upgrade
+                  cycle should begin.
+                type: string
+              targetImage:
+                description: TargetImage is the desired instance manager image for
+                  all nodes.
+                type: string
+            type: object
+          status:
+            description: |-
+              InstanceManagerUpgradeControlStatus defines the observed state of the
+              InstanceManagerUpgradeControl.
+            properties:
+              currentNode:
+                description: CurrentNode is the name of the node that is actively
+                  being upgraded.
+                type: string
+              nodes:
+                additionalProperties:
+                  description: NodeUpgradeInfo records the upgrade status for a single
+                    node.
+                  properties:
+                    completedAt:
+                      description: CompletedAt is the RFC3339 timestamp when the upgrade
+                        finished on this node.
+                      type: string
+                    errorMsg:
+                      description: ErrorMsg records the last error encountered while
+                        upgrading this node.
+                      type: string
+                    imuName:
+                      description: IMUName is the name of the InstanceManagerUpgrade
+                        CR created for this node.
+                      type: string
+                    retryCount:
+                      description: RetryCount tracks how many times the upgrade has
+                        been attempted for this node.
+                      type: integer
+                    startedAt:
+                      description: StartedAt is the RFC3339 timestamp when the upgrade
+                        began on this node.
+                      type: string
+                    state:
+                      description: State is the current upgrade state for this node.
+                      type: string
+                  required:
+                  - state
+                  type: object
+                description: |-
+                  Nodes holds the upgrade status for nodes participating in the current or
+                  most recent upgrade cycle.
+                nullable: true
+                type: object
+              ownerID:
+                description: OwnerID is the ID of the Longhorn manager pod that currently
+                  owns this CR.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
+  name: instancemanagerupgrades.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: InstanceManagerUpgrade
+    listKind: InstanceManagerUpgradeList
+    plural: instancemanagerupgrades
+    shortNames:
+    - lhimu
+    singular: instancemanagerupgrade
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The state of the instance manager upgrade
+      jsonPath: .status.state
+      name: State
+      type: string
+    - description: The desired image after upgrade
+      jsonPath: .spec.targetImage
+      name: Target Image
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: |-
+          InstanceManagerUpgrade is the Longhorn CR that tracks the live upgrade of a
+          v2 instance manager.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: InstanceManagerUpgradeSpec defines the desired state of the
+              InstanceManagerUpgrade.
+            properties:
+              nodeID:
+                description: NodeID is the node where the source instance manager
+                  is running.
+                type: string
+              targetImage:
+                description: TargetImage is the desired instance manager image after
+                  upgrade.
+                type: string
+            required:
+            - nodeID
+            - targetImage
+            type: object
+          status:
+            description: InstanceManagerUpgradeStatus defines the observed state of
+              the InstanceManagerUpgrade.
+            properties:
+              abortReason:
+                description: AbortReason explains why AbortRequested was set.
+                type: string
+              abortRequested:
+                description: AbortRequested is set by the controller when an abort
+                  condition is detected.
+                type: boolean
+              conditions:
+                description: Conditions records the current conditions of the upgrade.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
+              engines:
+                additionalProperties:
+                  description: |-
+                    EngineRelocation records the relocation metadata of an engine during an
+                    instance manager upgrade.
+                  properties:
+                    originalNodeID:
+                      description: OriginalNodeID is the node where the engine was
+                        originally running.
+                      type: string
+                    temporaryNodeID:
+                      description: |-
+                        TemporaryNodeID is the node the engine is temporarily relocated to while
+                        the source instance manager is being upgraded.
+                      type: string
+                  required:
+                  - originalNodeID
+                  type: object
+                description: |-
+                  Engines records the relocation plan for each engine managed by the source
+                  instance manager. The map key is the volume name.
+                nullable: true
+                type: object
+              errorMsg:
+                description: ErrorMsg records the terminal error encountered during
+                  the upgrade, if any.
+                type: string
+              ownerID:
+                description: OwnerID is the owner node ID of this InstanceManagerUpgrade.
+                type: string
+              plannedDetachedReplicas:
+                additionalProperties:
+                  items:
+                    description: |-
+                      PlannedDetachedReplica records a backend that should be temporarily detached
+                      from an engine during an instance manager upgrade.
+                    properties:
+                      address:
+                        description: |-
+                          Address is the raw replica backend address recorded when the detach plan
+                          is created.
+                        type: string
+                      name:
+                        description: Name is the replica name.
+                        type: string
+                    required:
+                    - address
+                    - name
+                    type: object
+                  type: array
+                description: |-
+                  PlannedDetachedReplicas records the replicas that should be temporarily
+                  detached from engines during the instance manager upgrade. The map key is
+                  the volume name.
+                nullable: true
+                type: object
+              startedAt:
+                description: StartedAt records when the timed or active portion of
+                  the upgrade began.
+                type: string
+              state:
+                description: State indicates the overall progress of the instance
+                  manager upgrade.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3023,6 +3393,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3146,6 +3517,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3185,10 +3557,20 @@ spec:
       jsonPath: .spec.cron
       name: Cron
       type: string
+    - description: Whether snapshots/backups are retained based on count ("count-based")
+        or age ("age-based")
+      jsonPath: .spec.retentionPolicy
+      name: RetentionPolicy
+      type: string
     - description: The number of snapshots/backups to keep for the volume
       jsonPath: .spec.retain
-      name: Retain
+      name: RetainCount
       type: integer
+    - description: Snapshots/backups older than this duration are cleaned up when
+        the retention policy is "age-based"
+      jsonPath: .spec.retainAge
+      name: RetainAge
+      type: string
     - description: The concurrent job to run by each cron job
       jsonPath: .spec.concurrency
       name: Concurrency
@@ -3253,8 +3635,34 @@ spec:
                   Support parameters: "full-backup-interval", "volume-backup-policy".
                 type: object
               retain:
-                description: The retain count of the snapshot/backup.
+                description: |-
+                  The retain count of the snapshot/backup.
+                  Retain represents the number of snapshots/backups to retain and only when the retention policy is "count-based".
                 type: integer
+              retainAge:
+                description: |-
+                  The retention age of the snapshot/backup, specified as a Go duration string,
+                  such as "10m", "24h", or "8760h". Note that Go durations have no day or year unit,
+                  so a day is "24h". Snapshots/backups older than this are cleaned up by the recurring job.
+                  Only takes effect when the retention policy is "age-based".
+                  If the retention policy is "age-based", this value is 0s, the recurring job will not start.
+                type: string
+                x-kubernetes-validations:
+                - message: retainAge must be a positive duration
+                  rule: '!self.startsWith(''-'')'
+              retentionPolicy:
+                default: count-based
+                description: |-
+                  The retention policy that determines whether the recurring job cleans up
+                  snapshots/backups based on their count or age. Can be "count-based" or
+                  "age-based". The two policies work independently: "count-based" (the default)
+                  retains the configured number of newest snapshots/backups and ignores
+                  RetainAge, while "age-based" retains snapshots/backups no older than RetainAge
+                  and ignores Retain.
+                enum:
+                - count-based
+                - age-based
+                type: string
               task:
                 description: |-
                   The recurring job task.
@@ -3274,6 +3682,37 @@ spec:
             description: RecurringJobStatus defines the observed state of the Longhorn
               recurring job
             properties:
+              conditions:
+                description: Records the outcome of the latest run of the recurring
+                  job.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
               executionCount:
                 description: The number of jobs that have been triggered.
                 type: integer
@@ -3287,6 +3726,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3523,6 +3963,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3603,6 +4044,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3874,6 +4316,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4034,6 +4477,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4129,6 +4573,286 @@ spec:
     storage: true
     subresources:
       status: {}
+
+---
+# Source: longhorn/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    longhorn-manager: ""
+  name: snapshotgroups.longhorn.io
+spec:
+  group: longhorn.io
+  names:
+    kind: SnapshotGroup
+    listKind: SnapshotGroupList
+    plural: snapshotgroups
+    shortNames:
+    - lhsnapg
+    singular: snapshotgroup
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The lifecycle phase of the group
+      jsonPath: .status.phase
+      name: Phase
+      type: string
+    - description: True when the group is Ready and every member is still usable
+      jsonPath: .status.readyToUse
+      name: ReadyToUse
+      type: boolean
+    - description: The latest member creation time, set when the group becomes Ready
+      jsonPath: .status.creationTime
+      name: CreationTime
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: SnapshotGroup is the Schema for the snapshotgroups API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              SnapshotGroupSpec defines the desired state of the Longhorn SnapshotGroup.
+              The whole spec is immutable after creation: a group is a point-in-time
+              request, so changing members later has no meaning.
+            properties:
+              deadlineSeconds:
+                default: 300
+                description: |-
+                  DeadlineSeconds is the deadline for taking every member snapshot,
+                  measured from the group's metadata.creationTimestamp. When the field is
+                  omitted, the CRD default applies. Go clients cannot omit the field: an
+                  unset field arrives as 0, and the mutating webhook replaces the 0 with
+                  the default.
+                format: int64
+                maximum: 3600
+                minimum: 10
+                type: integer
+              labels:
+                additionalProperties:
+                  type: string
+                description: |-
+                  Labels are engine snapshot labels applied to every member (Snapshot
+                  spec.labels). They are not visible to Kubernetes label selectors.
+                  Reserved recurring-job label keys are rejected at admission.
+                nullable: true
+                type: object
+              members:
+                description: |-
+                  Members is the fixed member set, resolved from Volumes or VolumeSelector
+                  and stamped by the mutating webhook at admission. It may not be set by
+                  the user.
+                items:
+                  description: |-
+                    SnapshotGroupMember identifies one member of the group: the volume and the
+                    name of its member Snapshot CR, generated at admission.
+                  properties:
+                    snapshotName:
+                      type: string
+                    volumeName:
+                      type: string
+                  required:
+                  - snapshotName
+                  - volumeName
+                  type: object
+                nullable: true
+                type: array
+              volumeSelector:
+                description: |-
+                  VolumeSelector selects the member volumes by their labels. Exactly one of
+                  Volumes or VolumeSelector may be set at creation.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                          type: string
+                        values:
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              volumes:
+                description: |-
+                  Volumes explicitly lists the member volumes. Exactly one of Volumes or
+                  VolumeSelector may be set at creation; the mutating webhook resolves the
+                  selection into Members at admission.
+                items:
+                  type: string
+                nullable: true
+                type: array
+            type: object
+          status:
+            description: SnapshotGroupStatus defines the observed state of the Longhorn
+              SnapshotGroup
+            properties:
+              conditions:
+                description: |-
+                  Conditions holds the latest observations of the SnapshotGroup's state,
+                  such as Degraded.
+                items:
+                  properties:
+                    lastProbeTime:
+                      description: Last time we probed the condition.
+                      type: string
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      type: string
+                    message:
+                      description: Human-readable message indicating details about
+                        last transition.
+                      type: string
+                    reason:
+                      description: Unique, one-word, CamelCase reason for the condition's
+                        last transition.
+                      type: string
+                    status:
+                      description: |-
+                        Status is the status of the condition.
+                        Can be True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the condition.
+                      type: string
+                  type: object
+                nullable: true
+                type: array
+              creationTime:
+                description: |-
+                  CreationTime is the latest member creation time, set when the group
+                  becomes Ready.
+                type: string
+              error:
+                description: Error is set when the group fails (deadline, name collision).
+                type: string
+              members:
+                description: |-
+                  Members is the observed state of every member, one entry per spec
+                  member. It is the primary debugging signal: each entry carries the
+                  member's last error and creation time.
+                items:
+                  description: |-
+                    SnapshotGroupMemberStatus is the observed state of one member, mirrored from
+                    its Snapshot CR.
+                  properties:
+                    creationTime:
+                      description: |-
+                        CreationTime is the engine snapshot creation time, mirrored from the
+                        member Snapshot. It is kept when the member is later lost.
+                      type: string
+                    error:
+                      description: |-
+                        Error is the last member error. A member Snapshot CR that disappeared
+                        after the group became Ready is recorded with the synthetic error
+                        "member snapshot deleted"; an unusable member keeps its own mirrored
+                        error.
+                      type: string
+                    readyToUse:
+                      description: |-
+                        ReadyToUse mirrors the member Snapshot while the group is InProgress.
+                        After the group is Ready, a member later deleted or unusable is recorded
+                        here as false: member entries always tell the per-member truth.
+                      type: boolean
+                    snapshotName:
+                      type: string
+                    volumeName:
+                      type: string
+                  required:
+                  - snapshotName
+                  - volumeName
+                  type: object
+                nullable: true
+                type: array
+              ownerID:
+                description: OwnerID is the ID of the node that owns this SnapshotGroup.
+                type: string
+              phase:
+                description: |-
+                  Phase is the lifecycle phase: empty until the first reconcile, then
+                  InProgress -> Ready | Failed.
+                enum:
+                - InProgress
+                - Ready
+                - Failed
+                - ""
+                type: string
+              readyToUse:
+                description: |-
+                  ReadyToUse is true when the group is Ready and every member snapshot
+                  is still individually ready: group readiness is the AND of member
+                  readiness, following the Kubernetes VolumeGroupSnapshot convention. It
+                  drops to false when a member is lost or unusable after Ready and
+                  recovers once every member is whole again; the Degraded condition
+                  carries the per-member detail. A failed, partial, or empty group is
+                  never reported ready.
+                type: boolean
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4269,6 +4993,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4404,6 +5129,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4545,6 +5271,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4658,6 +5385,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4806,6 +5534,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5135,6 +5864,27 @@ spec:
                 type: string
               staleReplicaTimeout:
                 type: integer
+              topologyRequirement:
+                description: |-
+                  TopologyRequirement lists the failure domains the volume's replicas must
+                  be scheduled in, derived from the CSI accessible topology at creation —
+                  the same failure domains as the PV nodeAffinity terms (a node must match
+                  at least one term). Empty means unconstrained.
+                items:
+                  description: |-
+                    VolumeTopologyTerm is one failure domain a volume's replicas may be
+                    scheduled in. A node satisfies the term when its zone and region match the
+                    non-empty fields.
+                  properties:
+                    region:
+                      type: string
+                    zone:
+                      type: string
+                  type: object
+                type: array
+                x-kubernetes-validations:
+                - message: TopologyRequirement is immutable
+                  rule: self == oldSelf
               ublkNumberOfQueue:
                 description: ublkNumberOfQueue controls the number of queues for ublk
                   frontend.
@@ -5287,6 +6037,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5334,6 +6085,9 @@ rules:
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotclasses", "volumesnapshots", "volumesnapshotcontents", "volumesnapshotcontents/status"]
   verbs: ["*"]
+- apiGroups: ["groupsnapshot.storage.k8s.io"]
+  resources: ["volumegroupsnapshotclasses", "volumegroupsnapshots", "volumegroupsnapshotcontents", "volumegroupsnapshotcontents/status"]
+  verbs: ["*"]
 - apiGroups: ["longhorn.io"]
   resources: ["volumes", "volumes/status", "enginefrontends", "enginefrontends/status", "engines", "engines/status", "replicas", "replicas/status", "settings", "settings/status",
               "engineimages", "engineimages/status", "nodes", "nodes/status", "instancemanagers", "instancemanagers/status",
@@ -5344,7 +6098,9 @@ rules:
               "recurringjobs", "recurringjobs/status", "orphans", "orphans/status", "snapshots", "snapshots/status",
               "supportbundles", "supportbundles/status", "systembackups", "systembackups/status", "systemrestores", "systemrestores/status",
               "volumeattachments", "volumeattachments/status", "backupbackingimages", "backupbackingimages/status",
-              "shards", "shards/status", "shardgroups", "shardgroups/status"]
+              "shards", "shards/status", "shardgroups", "shardgroups/status", "snapshotgroups", "snapshotgroups/status",
+              "instancemanagerupgrades", "instancemanagerupgrades/status",
+              "instancemanagerupgradecontrols", "instancemanagerupgradecontrols/status"]
   verbs: ["*"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
@@ -5367,6 +6123,7 @@ rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterrolebindings", "clusterroles"]
   verbs: ["*"]
+
 ---
 # Source: longhorn/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5382,6 +6139,72 @@ rules:
   resources: ["securitycontextconstraints"]
   resourceNames: ["anyuid", "privileged"]
   verbs: ["use"]
+
+---
+# Source: longhorn/templates/clusterrole.yaml
+# Permissions for the CSI attacher, provisioner, resizer, and snapshotter.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-csi-role
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+rules:
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["get", "list", "watch", "create", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "update"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims/status"]
+  verbs: ["patch"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["list", "watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses", "csinodes"]
+  verbs: ["list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["volumeattachments"]
+  verbs: ["list", "watch", "patch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["volumeattachments/status"]
+  verbs: ["patch"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshotclasses"]
+  verbs: ["list", "watch"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshots"]
+  verbs: ["get", "list", "watch", "update"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshotcontents"]
+  verbs: ["get", "list", "watch", "patch"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshotcontents/status"]
+  verbs: ["update", "patch"]
+
+---
+# Source: longhorn/templates/clusterrole.yaml
+# Static Secret access for the CSI attacher, provisioner, resizer, and snapshotter.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-csi-secret-role
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5400,6 +6223,7 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
   namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5418,6 +6242,7 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-support-bundle
   namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5437,11 +6262,53 @@ subjects:
   name: longhorn-service-account
   namespace: longhorn-system
 - kind: ServiceAccount
+  name: longhorn-csi-service-account
+  namespace: longhorn-system
+- kind: ServiceAccount
   name: longhorn-ui-service-account
   namespace: longhorn-system
 - kind: ServiceAccount
   name: default  # supportbundle-agent-support-bundle uses default sa
   namespace: longhorn-system
+
+---
+# Source: longhorn/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: longhorn-csi-bind
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: longhorn-csi-role
+subjects:
+- kind: ServiceAccount
+  name: longhorn-csi-service-account
+  namespace: longhorn-system
+
+---
+# Source: longhorn/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: longhorn-csi-secret-bind
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: longhorn-csi-secret-role
+subjects:
+- kind: ServiceAccount
+  name: longhorn-csi-service-account
+  namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5475,6 +6342,43 @@ rules:
 - apiGroups: ["discovery.k8s.io"]
   resources: ["endpointslices"]
   verbs: ["*"]
+
+---
+# Source: longhorn/templates/role.yaml
+# Namespace-scoped permissions for CSI sidecar leader election and
+# CSIStorageCapacity owner-reference discovery.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: longhorn-csi-role
+  namespace: longhorn-system
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+rules:
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    # Lease creation cannot be restricted by resourceNames.
+    verbs: ["create"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    resourceNames:
+      - driver-longhorn-io
+      - external-attacher-leader-driver-longhorn-io
+      - external-resizer-driver-longhorn-io
+      - external-snapshotter-leader-driver-longhorn-io
+    verbs: ["get", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["csistoragecapacities"]
+    verbs: ["list", "watch", "create", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get"]
+
 ---
 # Source: longhorn/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -5490,6 +6394,23 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
   namespace: longhorn-system
+
+---
+# Source: longhorn/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: longhorn-csi-bind
+  namespace: longhorn-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: longhorn-csi-role
+subjects:
+- kind: ServiceAccount
+  name: longhorn-csi-service-account
+  namespace: longhorn-system
+
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: v1
@@ -5510,6 +6431,7 @@ spec:
   - name: manager
     port: 9500
     targetPort: manager
+
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: v1
@@ -5531,6 +6453,7 @@ spec:
     targetPort: 8443
   selector:
     app: longhorn-ui
+
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 kind: Service
@@ -5552,6 +6475,7 @@ spec:
     port: 80
     targetPort: http
     nodePort: null
+
 ---
 # Source: longhorn/templates/services.yaml
 apiVersion: v1
@@ -5572,6 +6496,7 @@ spec:
   - name: admission-webhook
     port: 9502
     targetPort: admission-wh
+
 ---
 # Source: longhorn/templates/services.yaml
 apiVersion: v1
@@ -5592,6 +6517,7 @@ spec:
   - name: recovery-backend
     port: 9503
     targetPort: recov-backend
+
 ---
 # Source: longhorn/templates/daemonset-sa.yaml
 apiVersion: apps/v1
@@ -5635,7 +6561,7 @@ spec:
         - --backing-image-manager-image
         - "docker.io/longhornio/backing-image-manager:master-head"
         - --support-bundle-manager-image
-        - "docker.io/longhornio/support-bundle-kit:v0.0.84"
+        - "docker.io/longhornio/support-bundle-kit:v0.0.93"
         - --manager-image
         - "docker.io/longhornio/longhorn-manager:master-head"
         - --service-account
@@ -5666,7 +6592,7 @@ spec:
           mountPath: /host/etc/
           readOnly: true
         - name: longhorn
-          mountPath: "/var/lib/longhorn/"
+          mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
@@ -5687,10 +6613,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_DATA_PATH
-          value: "/var/lib/longhorn/"
-        - name: LONGHORN_CONTROL_PATH
-          value: "/var/lib/longhorn/"
         - name: LONGHORN_DISTRO
           value: "longhorn"
         
@@ -5713,7 +6635,7 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: "/var/lib/longhorn/"
+          path: /var/lib/longhorn/
       - name: longhorn-grpc-tls
         secret:
           secretName: longhorn-grpc-tls
@@ -5723,6 +6645,7 @@ spec:
   updateStrategy:
     rollingUpdate:
       maxUnavailable: 100%
+
 ---
 # Source: longhorn/templates/deployment-driver.yaml
 apiVersion: apps/v1
@@ -5777,22 +6700,99 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "docker.io/longhornio/csi-attacher:v4.11.0-20260428"
+            value: "docker.io/longhornio/csi-attacher:v4.12.0"
           - name: CSI_PROVISIONER_IMAGE
-            value: "docker.io/longhornio/csi-provisioner:v5.3.0-20260428"
+            value: "docker.io/longhornio/csi-provisioner:v6.3.0"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "docker.io/longhornio/csi-node-driver-registrar:v2.16.0-20260428"
+            value: "docker.io/longhornio/csi-node-driver-registrar:v2.17.0"
           - name: CSI_RESIZER_IMAGE
-            value: "docker.io/longhornio/csi-resizer:v2.1.0-20260428"
+            value: "docker.io/longhornio/csi-resizer:v2.2.1"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "docker.io/longhornio/csi-snapshotter:v8.5.0-20260428"
+            value: "docker.io/longhornio/csi-snapshotter:v8.6.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
-            value: "docker.io/longhornio/livenessprobe:v2.18.0-20260428"
+            value: "docker.io/longhornio/livenessprobe:v2.19.0"
+          # Uncomment to enable CSI VolumeGroupSnapshot support.
+          # Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first;
+          # otherwise the CSI Snapshotter stops serving regular volume snapshots.
+          # - name: CSI_VOLUME_GROUP_SNAPSHOT_ENABLED
+          #   value: "true"
           
       priorityClassName: "longhorn-critical"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
+
+---
+# Source: longhorn/templates/deployment-global-manager.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: longhorn
+    app.kubernetes.io/instance: longhorn
+    app.kubernetes.io/version: v1.12.0-dev
+    app: longhorn-global-manager
+  name: longhorn-global-manager
+  namespace: longhorn-system
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: longhorn-global-manager
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: longhorn
+        app.kubernetes.io/instance: longhorn
+        app.kubernetes.io/version: v1.12.0-dev
+        app: longhorn-global-manager
+    spec:
+      containers:
+      - name: longhorn-global-manager
+        image: docker.io/longhornio/longhorn-manager:master-head
+        imagePullPolicy: IfNotPresent
+        command:
+        - longhorn-manager
+        - -d
+        - global
+        ports:
+        - containerPort: 9505
+          name: healthz
+        readinessProbe:
+          httpGet:
+            path: /v1/healthz
+            port: 9505
+        livenessProbe:
+          httpGet:
+            path: /v1/healthz
+            port: 9505
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: LONGHORN_DISTRO
+          value: "longhorn"
+        
+      priorityClassName: "longhorn-critical"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - longhorn-global-manager
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      serviceAccountName: longhorn-service-account
+
 ---
 # Source: longhorn/templates/deployment-ui.yaml
 apiVersion: apps/v1
@@ -5880,6 +6880,7 @@ spec:
       - emptyDir: {}
         name: var-run
       priorityClassName: "longhorn-critical"
+
 ---
 # Source: longhorn/templates/validate-psp-install.yaml
 #

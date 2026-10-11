@@ -165,6 +165,18 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
   {{- end }}
 {{- end }}
 
+### Longhorn Global Manager Settings
+
+The following settings apply to the longhorn-global-manager Deployment, which hosts the cluster-wide Pod controllers (KubernetesPVController and KubernetesPodController) instead of running them in every Longhorn Manager DaemonSet pod.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+{{- range .Values }}
+  {{- if hasPrefix "longhornGlobalManager" .Key }}
+| {{ .Key }} | {{ .Type }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} |
+  {{- end }}
+{{- end }}
+
 ### Ingress Settings
 
 | Key | Type | Default | Description |
@@ -233,6 +245,7 @@ For more details, see the [ocp-readme](https://github.com/longhorn/longhorn/blob
   (hasPrefix "persistence" .Key)
   (hasPrefix "csi" .Key)
   (hasPrefix "longhornManager" .Key)
+  (hasPrefix "longhornGlobalManager" .Key)
   (hasPrefix "longhornDriver" .Key)
   (hasPrefix "longhornUI" .Key)
   (hasPrefix "privateRegistry" .Key)

@@ -86,6 +86,8 @@ Every commit and the pull request description must reference the related ticket 
 
 A pull request should be focused and reviewable. Avoid combining unrelated fixes, refactoring, formatting changes, and feature work in the same pull request.
 
+For stale pull requests, see [Community Contribution Triage and Stale Pull Requests](#community-contribution-triage-and-stale-pull-requests).
+
 ## Testing Requirements
 
 Every pull request must be tested before submission.
@@ -269,6 +271,27 @@ Maintainers and reviewers may ask for:
 - Smaller or more focused pull requests.
 
 Please keep discussions constructive and technical. Review comments are part of the normal contribution process and help maintain Longhorn quality.
+
+## Community Contribution Triage and Stale Pull Requests
+
+Pull requests may be marked stale when they have had no meaningful activity for an extended period. Before closing a stale pull request, Longhorn members should determine whether the change is still valuable to the project.
+
+If the contributor is still interested in continuing the work, review should continue as usual. If there is no response and the pull request is still valuable, a Longhorn member may adopt the work and preserve the original contributor's credit, for example by keeping authorship where appropriate or using a `Co-authored-by` trailer in the final commit.
+
+Use the following workflow for stale pull requests:
+
+```mermaid
+flowchart TD
+    A[PR becomes inactive] --> B["LH member asks:<br/>'Are you still interested in continuing?'"]
+    B -->|Yes| C[Continue review]
+    B -->|No response| D{Is the PR valuable?}
+    D -->|No| E[Mark as stale]
+    E --> F[Close]
+    D -->|Yes| G{Can a LH member take over?}
+    G -->|Yes| H[Adopt / take over the work]
+    H --> I[Preserve the contributor's credit]
+    G -->|No| E
+```
 
 ## Security Issues
 

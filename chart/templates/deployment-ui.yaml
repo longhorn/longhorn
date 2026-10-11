@@ -56,12 +56,16 @@ spec:
       serviceAccountName: longhorn-ui-service-account
       affinity:
       {{- toYaml .Values.longhornUI.affinity | nindent 8 }}
+      {{- with .Values.longhornUI.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
       - name: oauth-proxy
         {{- if .Values.image.openshift.oauthProxy.repository }}
-        image: {{ with (coalesce .Values.image.openshift.oauthProxy.registry .Values.global.imageRegistry (include "registry_url" .)) }}{{ . }}/{{ end }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.openshift.oauthProxy.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.openshift.oauthProxy.repository }}:{{ .Values.image.openshift.oauthProxy.tag }}
         {{- else }}
         image: ""
         {{- end }}
@@ -84,7 +88,7 @@ spec:
       {{- end }}
       {{- end }}
       - name: longhorn-ui
-        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.ui.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.ui.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.ui.repository }}:{{ .Values.image.longhorn.ui.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
         - name: nginx-cache
@@ -185,6 +189,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.service.ui.type "LoadBalancer") .Values.service.ui.loadBalancerClass }}
   loadBalancerClass: {{ .Values.service.ui.loadBalancerClass }}
+  {{- end }}
+  {{- with .Values.service.ui.trafficDistribution }}
+  trafficDistribution: {{ . | quote }}
   {{- end }}
   selector:
     app: longhorn-ui

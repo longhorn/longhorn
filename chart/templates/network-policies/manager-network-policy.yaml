@@ -32,4 +32,11 @@ spec:
     - podSelector:
         matchLabels:
           app: longhorn-driver-deployer
+{{- with .Values.networkPolicies.metricsScrapeSources }}
+  - from:
+{{ toYaml . | indent 4 }}
+    ports:
+    - protocol: TCP
+      port: 9500
+{{- end }}
 {{- end }}

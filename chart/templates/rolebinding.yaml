@@ -11,3 +11,17 @@ subjects:
 - kind: ServiceAccount
   name: longhorn-service-account
   namespace: {{ include "release_namespace" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: longhorn-csi-bind
+  namespace: {{ include "release_namespace" . }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: longhorn-csi-role
+subjects:
+- kind: ServiceAccount
+  name: longhorn-csi-service-account
+  namespace: {{ include "release_namespace" . }}

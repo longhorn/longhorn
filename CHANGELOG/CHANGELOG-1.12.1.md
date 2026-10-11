@@ -28,7 +28,8 @@ Linked-clone volumes now support most operations available to regular volumes, i
 
 For more information, see [Issue #12552](https://github.com/longhorn/longhorn/issues/12552) and [CSI Volume Clone](https://longhorn.io/docs/1.12.1/snapshots-and-backups/csi-volume-clone).
 
-> **Notice:** V2 fast cloning does not currently support volume backup and restore. This improvement is tracked in [Issue #13714](https://github.com/longhorn/longhorn/issues/13714).
+> [!NOTE]
+**V2 fast cloning does not currently support volume backup and restore. This improvement is tracked in [Issue #13714](https://github.com/longhorn/longhorn/issues/13714).**
 
 ### Storage Sharding (Experimental)
 
@@ -49,6 +50,10 @@ Longhorn v1.12.1 enables ingress `NetworkPolicy` resources for internal componen
 Longhorn has validated the internal network policies with the following Kubernetes distribution and CNI plugin combinations. See the [CNI Plugin Compatibility](https://longhorn.io/docs/1.12.1/best-practices/#cni-plugin-compatibility) table for the validated combinations. The minimum required Kubernetes version is v1.25.
 
 For more information and troubleshooting guidance, see [Internal Network Policies](https://longhorn.io/docs/1.12.1/important-notes/#internal-network-policies) and [Issue #13438](https://github.com/longhorn/longhorn/issues/13438).
+
+> [!NOTE]
+**ServiceMonitor discovery does not automatically authorize network traffic. Cross-namespace Prometheus scrapers might be blocked by the Longhorn Manager's network policy. To allow this traffic, apply a scoped additive policy as detailed in the [Prometheus and Grafana setup](https://longhorn.io/docs/1.12.1/monitoring/prometheus-and-grafana-setup/) guide.**
+
 
 ### Instance Manager gRPC mTLS Coverage
 
@@ -85,7 +90,8 @@ Longhorn reserves an additional 16 MiB of raw capacity for the LUKS2 metadata us
 - **V1 Data Engine**: This correction was introduced in Longhorn v1.12.0. Existing encrypted V1 volumes created with v1.11.x or earlier receive the additional capacity automatically when their engine image is upgraded to v1.12 or later. Encrypted migratable V1 volumes cannot be live-migrated until they are upgraded to the version (>= v1.12.0).
 - **V2 Data Engine**: Longhorn v1.12.1 applies the correction to newly created encrypted V2 volumes.
 
-> **Notice:** Encrypted V2 volumes created before v1.12.1, and volumes restored from the backup of such volumes, do not receive the additional 16 MiB of raw capacity and continue to expose 16 MiB less than requested. Existing data is preserved.
+> [!NOTE]
+**Encrypted V2 volumes created before v1.12.1, and volumes restored from the backup of such volumes, do not receive the additional 16 MiB of raw capacity and continue to expose 16 MiB less than requested. Existing data is preserved.**
 
 For more information, see [Issue #9205](https://github.com/longhorn/longhorn/issues/9205) and [Issue #13163](https://github.com/longhorn/longhorn/issues/13163).
 
@@ -187,7 +193,6 @@ For information about issues identified after this release, see [Release-Known-I
 ## Contributors
 
 - @COLDTURNIP 
-- @Copilot 
 - @bachmanity1 
 - @c3y1huang 
 - @carterli0407-cell 

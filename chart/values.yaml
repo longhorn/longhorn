@@ -41,6 +41,12 @@ networkPolicies:
   type: "k3s"
   # -- Kubernetes API server source CIDRs allowed to access the Longhorn admission webhook. When empty, source filtering is disabled.
   kubeAPIServerSourceCIDRs: []
+  # -- Source CIDRs observed by the CNI for V1 iSCSI initiator traffic. When empty, any source that can reach instance-manager can connect to TCP/3260.
+  v1DataEngineInitiatorSourceCIDRs: []
+  # -- Additional TCP ports used by recovery backend mesh transport.
+  recoveryBackendAdditionalIngressPorts: []
+  # -- Sources permitted to scrape Longhorn Manager metrics on TCP/9500 when `restrictInternalTraffic` is enabled. Each entry is a NetworkPolicy peer. TCP/9500 also serves the Longhorn Manager REST API, so scope every entry as narrowly as the scraper allows, for example a `namespaceSelector` and a `podSelector` in one entry rather than a namespace on its own. When empty, only the Longhorn components already listed in the policy can reach Longhorn Manager.
+  metricsScrapeSources: []
 image:
   longhorn:
     engine:
@@ -91,7 +97,7 @@ image:
       # -- Repository for the Longhorn Support Bundle Manager image.
       repository: longhornio/support-bundle-kit
       # -- Tag for the Longhorn Support Bundle Manager image.
-      tag: v0.0.84
+      tag: v0.0.93
   csi:
     attacher:
       # -- Registry for the CSI attacher image. When unspecified, Longhorn uses the default value.
@@ -99,42 +105,42 @@ image:
       # -- Repository for the CSI attacher image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-attacher
       # -- Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
-      tag: v4.11.0-20260428
+      tag: v4.12.0
     provisioner:
       # -- Registry for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-provisioner
       # -- Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
-      tag: v5.3.0-20260428
+      tag: v6.3.0
     nodeDriverRegistrar:
       # -- Registry for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-node-driver-registrar
       # -- Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
-      tag: v2.16.0-20260428
+      tag: v2.17.0
     resizer:
       # -- Registry for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Resizer image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-resizer
       # -- Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value.
-      tag: v2.1.0-20260428
+      tag: v2.2.1
     snapshotter:
       # -- Registry for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-snapshotter
       # -- Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
-      tag: v8.5.0-20260428
+      tag: v8.6.0
     livenessProbe:
       # -- Registry for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       registry: ""
       # -- Repository for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       repository: longhornio/livenessprobe
       # -- Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
-      tag: v2.18.0-20260428
+      tag: v2.19.0
   openshift:
     oauthProxy:
       # -- Registry for the OAuth Proxy image. Specify the upstream image (for example, "quay.io/openshift/origin-oauth-proxy"). This setting applies only to OpenShift users.
@@ -149,6 +155,8 @@ service:
   ui:
     # -- Service type for Longhorn UI. (Options: "ClusterIP", "NodePort", "LoadBalancer", "Rancher-Proxy")
     type: ClusterIP
+    # -- Traffic distribution preference for the Longhorn UI service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
     # -- NodePort port number for Longhorn UI. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: null
     # -- Class of a load balancer implementation
@@ -169,6 +177,14 @@ service:
     type: ClusterIP
     # -- NodePort port number for Longhorn Manager. When unspecified, Longhorn selects a free port between 30000 and 32767.
     nodePort: ""
+    # -- Traffic distribution preference for the Longhorn Manager service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
+  admissionWebhook:
+    # -- Traffic distribution preference for the Longhorn admission webhook service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
+  recoveryBackend:
+    # -- Traffic distribution preference for the Longhorn recovery backend service. (Options: "PreferSameZone", "PreferSameNode") When unspecified, Kubernetes distributes traffic across all endpoints.
+    trafficDistribution: ""
 persistence:
   # -- Setting that allows you to create the default Longhorn StorageClass ConfigMap. Set to false to skip StorageClass creation.
   createStorageClass: true
@@ -257,6 +273,10 @@ csi:
   resizerReplicaCount: ~
   # -- Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value ("3").
   snapshotterReplicaCount: ~
+  # -- Grant CSI controller sidecars cluster-wide get access to Kubernetes Secrets. Enabled by default for compatibility with existing Secret references. Disable only when Longhorn StorageClasses use no provisioner or controller-side Secret parameters and no existing PV requires controller-side Secret access. Encrypted volumes must retain their node-stage, node-publish, and node-expand Secret references.
+  allowControllerSecretAccess: true
+  # -- Enable CSI VolumeGroupSnapshot support by turning on the CSIVolumeGroupSnapshot feature gate of the CSI Snapshotter. Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first; otherwise the CSI Snapshotter stops serving regular volume snapshots.
+  volumeGroupSnapshotEnabled: false
 defaultSettings:
   # -- Setting that allows Longhorn to automatically attach a volume and create snapshots or backups when recurring jobs are run.
   allowRecurringJobWhileVolumeDetached: ~
@@ -264,8 +284,6 @@ defaultSettings:
   createDefaultDiskLabeledNodes: ~
   # -- Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. The default value is "/var/lib/longhorn/".
   defaultDataPath: ~
-  # -- Default path to use for storing runtime and control-plane artifacts on a host. This setting must be an absolute directory path. The default value is "/var/lib/longhorn/".
-  defaultControlPath: ~
   # -- Default data locality. A Longhorn volume has data locality if a local replica of the volume exists on the same node as the pod that is using the volume.
   defaultDataLocality: ~
   # -- Setting that allows scheduling on nodes with healthy replicas of the same volume. This setting is disabled by default.
@@ -359,6 +377,12 @@ defaultSettings:
   autoCleanupRecurringJobBackupSnapshot: ~
   # -- Maximum number of engines that are allowed to concurrently upgrade on each node after Longhorn Manager is upgraded. When the value is "0", Longhorn does not automatically upgrade volume engines to the new default engine image version.
   concurrentAutomaticEngineUpgradePerNodeLimit: ~
+  # -- Setting that allows Longhorn to automatically upgrade V2 instance managers after Longhorn Manager is upgraded.
+  allowInstanceManagerAutomaticUpgrade: ~
+  # -- Specifies when the rolling upgrade of V2 instance managers should begin, in RFC3339 format. Leave empty to start immediately.
+  instanceManagerUpgradeStartTime: ~
+  # -- Number of minutes a single V2 instance manager upgrade attempt can remain in progress before it is aborted.
+  instanceManagerUpgradeTimeout: ~
   # -- Number of minutes that Longhorn waits before cleaning up the backing image file when no replicas in the disk are using it.
   backingImageCleanupWaitInterval: ~
   # -- Number of seconds that Longhorn waits before downloading a backing image file again when the status of all image disk files changes to "failed" or "unknown".
@@ -539,6 +563,50 @@ longhornManager:
   updateStrategy:
     rollingUpdate:
       maxUnavailable: "100%"
+longhornGlobalManager:
+  # -- Replica count for the global manager. One replica is the active leader; the others are warm standbys.
+  replicas: 3
+  # -- PriorityClass for the global manager.
+  priorityClass: *defaultPriorityClassNameRef
+  # -- Affinity for global manager pods. The default spreads replicas across nodes.
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - longhorn-global-manager
+            topologyKey: kubernetes.io/hostname
+  # -- Topology spread constraints for global manager pods. Unlike `longhornGlobalManager.affinity`, these can guarantee that replicas stay spread across a topology domain during a rolling update or a mass reschedule.
+  topologySpreadConstraints: []
+  ## If you want to set topology spread constraints for the global manager Deployment, delete the `[]` in the line above
+  ## and uncomment this example block
+  # - maxSkew: 1
+  #   topologyKey: topology.kubernetes.io/zone
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app: longhorn-global-manager
+  # -- Resource requests and limits for global manager pods. Memory scales with the cluster's Pod count (cluster-wide Pod informer cache).
+  resources: ~
+  # -- Node tolerations for global manager pods.
+  tolerations: []
+  # -- Node selector for global manager pods.
+  nodeSelector: {}
+  # -- Annotations for global manager pods.
+  annotations: {}
+  # -- Pod Disruption Budget for the global manager. Keeps a minimum number of global manager pods available during voluntary disruptions such as node drains. Effective only when `longhornGlobalManager.replicas` is greater than 1.
+  podDisruptionBudget:
+    # -- Setting that allows you to enable the Pod Disruption Budget for the global manager.
+    enabled: false
+    # -- Minimum number or percentage of global manager pods that must remain available during a disruption. Mutually exclusive with `longhornGlobalManager.podDisruptionBudget.maxUnavailable`.
+    minAvailable: 1
+    # -- Maximum number or percentage of global manager pods that can be unavailable during a disruption. When set, it takes precedence over `longhornGlobalManager.podDisruptionBudget.minAvailable`.
+    maxUnavailable: ""
 longhornDriver:
   log:
     # -- Format of longhorn-driver logs. (Options: "plain", "json")
@@ -577,6 +645,16 @@ longhornUI:
                   values:
                     - longhorn-ui
             topologyKey: kubernetes.io/hostname
+  # -- Topology spread constraints for Longhorn UI pods. Unlike `longhornUI.affinity`, these can guarantee that replicas stay spread across a topology domain during a rolling update or a mass reschedule.
+  topologySpreadConstraints: []
+  ## If you want to set topology spread constraints for Longhorn UI Deployment, delete the `[]` in the line above
+  ## and uncomment this example block
+  # - maxSkew: 1
+  #   topologyKey: topology.kubernetes.io/zone
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app: longhorn-ui
   # -- Toleration for Longhorn UI on nodes allowed to run Longhorn components.
   tolerations: []
   ## If you want to set tolerations for Longhorn UI Deployment, delete the `[]` in the line above
@@ -666,6 +744,19 @@ httproute:
   ## Example:
   # - longhorn.example.com
   # - longhorn.example.org
+  # -- List of allowed HTTPRouteFilter rules.
+  filters: []
+  ## Example:
+  #  - type: ExtensionRef
+  #    extensionRef:
+  #      group: traefik.io
+  #      kind: Middleware
+  #      name: oauth-forwardauth
+  #  - type: ExtensionRef
+  #    extensionRef:
+  #      group: traefik.io
+  #      kind: Middleware
+  #      name: oauth-forwardauth-service
   # -- Default path for HTTPRoute. You can access the Longhorn UI by following the full path.
   path: /
   # -- Path match type for HTTPRoute. (Options: "Exact", "PathPrefix")

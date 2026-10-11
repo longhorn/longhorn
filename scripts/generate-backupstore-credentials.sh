@@ -14,7 +14,7 @@ set -euo pipefail
 : "${CIFS_USERNAME:=}"
 : "${CIFS_PASSWORD:=}"
 
-# MinIO / S3-compatible
+# RustFS / S3-compatible
 : "${AWS_ACCESS_KEY_ID:=}"
 : "${AWS_SECRET_ACCESS_KEY:=}"
 : "${AWS_ENDPOINTS:=}"
@@ -23,7 +23,7 @@ set -euo pipefail
 
 #########################################
 
-readonly SUPPORTED_BACKENDS=("azurite" "cifs" "minio" "nfs")
+readonly SUPPORTED_BACKENDS=("azurite" "cifs" "nfs" "rustfs")
 
 # Always work relative to the repo root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -64,8 +64,8 @@ generate_backend() {
     case "$backend" in
         azurite) generate_azurite_backend "$TARGET_DIR" ;;
         cifs) generate_cifs_backend "$TARGET_DIR" ;;
-        minio) generate_minio_backend "$TARGET_DIR" ;;
         nfs) generate_nfs_backend "$TARGET_DIR" ;;
+        rustfs) generate_rustfs_backend "$TARGET_DIR" ;;
         *)
             echo "Unsupported backend: $backend"
             exit 1
@@ -122,52 +122,88 @@ patches:
 EOF
 }
 
-generate_minio_backend() {
+generate_rustfs_backend() {
     local TARGET_DIR=$1
 
     check_env_or_fail AWS_ACCESS_KEY_ID
     check_env_or_fail AWS_SECRET_ACCESS_KEY
     check_env_or_fail AWS_ENDPOINTS
 
-    if $BASE64_ENCODE; then
-        if [[ "$AWS_ENDPOINTS" == https://* ]]; then
-            check_env_or_fail AWS_CERT
-            check_env_or_fail AWS_CERT_KEY
-        fi
-    else
-        if ! decoded_endpoint=$(echo "$AWS_ENDPOINTS" | base64 --decode 2>/dev/null); then
+    local endpoint="$AWS_ENDPOINTS"
+    if ! $BASE64_ENCODE; then
+        if ! endpoint=$(echo "$AWS_ENDPOINTS" | base64 --decode 2>/dev/null); then
             echo "ERROR: Failed to decode AWS_ENDPOINTS. Must be valid base64." >&2
             exit 1
         fi
-
-        if [[ "$decoded_endpoint" == https://* ]]; then
-            check_env_or_fail AWS_CERT
-            check_env_or_fail AWS_CERT_KEY
-        fi
     fi
 
-    generate_patch_with_ns longhorn-system minio-secret minio-backupstore-secret \
-        AWS_ACCESS_KEY_ID "$AWS_ACCESS_KEY_ID" \
-        AWS_SECRET_ACCESS_KEY "$AWS_SECRET_ACCESS_KEY" \
-        AWS_ENDPOINTS "$AWS_ENDPOINTS" \
-        AWS_CERT "$AWS_CERT" \
-        AWS_CERT_KEY "$AWS_CERT_KEY"
+    local tls_enabled=false
+    local secret_data=(
+        AWS_ACCESS_KEY_ID "$AWS_ACCESS_KEY_ID"
+        AWS_SECRET_ACCESS_KEY "$AWS_SECRET_ACCESS_KEY"
+        AWS_ENDPOINTS "$AWS_ENDPOINTS"
+    )
+    if [[ "$endpoint" == https://* ]]; then
+        tls_enabled=true
+        check_env_or_fail AWS_CERT
+        check_env_or_fail AWS_CERT_KEY
+        secret_data+=(AWS_CERT "$AWS_CERT" AWS_CERT_KEY "$AWS_CERT_KEY")
+    fi
 
-    generate_patch_with_ns default minio-secret minio-backupstore-secret \
-        AWS_ACCESS_KEY_ID "$AWS_ACCESS_KEY_ID" \
-        AWS_SECRET_ACCESS_KEY "$AWS_SECRET_ACCESS_KEY" \
-        AWS_ENDPOINTS "$AWS_ENDPOINTS" \
-        AWS_CERT "$AWS_CERT" \
-        AWS_CERT_KEY "$AWS_CERT_KEY"
+    generate_patch_with_ns longhorn-system rustfs-secret rustfs-backupstore-secret "${secret_data[@]}"
+    generate_patch_with_ns default rustfs-secret rustfs-backupstore-secret "${secret_data[@]}"
 
     cat <<EOF > "${TARGET_DIR}/kustomization.yaml"
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../base/minio
+  - ../../../base/rustfs
 patches:
-  - path: minio-backupstore-secret-patch-longhorn-system.yaml
-  - path: minio-backupstore-secret-patch-default.yaml
+  - path: rustfs-backupstore-secret-patch-longhorn-system.yaml
+  - path: rustfs-backupstore-secret-patch-default.yaml
+EOF
+
+    if $tls_enabled; then
+        generate_rustfs_tls_patch "$TARGET_DIR"
+        echo "  - path: rustfs-backupstore-tls-patch.yaml" >> "${TARGET_DIR}/kustomization.yaml"
+    fi
+}
+
+# RustFS serves plain HTTP unless RUSTFS_TLS_PATH points at a directory
+# holding rustfs_cert.pem and rustfs_key.pem.
+generate_rustfs_tls_patch() {
+    local TARGET_DIR=$1
+
+    cat <<EOF > "${TARGET_DIR}/rustfs-backupstore-tls-patch.yaml"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-test-rustfs
+  namespace: default
+spec:
+  template:
+    spec:
+      volumes:
+      - name: rustfs-certificates
+        secret:
+          secretName: rustfs-secret
+          items:
+          - key: AWS_CERT
+            path: rustfs_cert.pem
+          - key: AWS_CERT_KEY
+            path: rustfs_key.pem
+      containers:
+      - name: rustfs
+        env:
+        - name: RUSTFS_TLS_PATH
+          value: "/opt/tls"
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+        volumeMounts:
+        - name: rustfs-certificates
+          mountPath: "/opt/tls"
+          readOnly: true
 EOF
 }
 
@@ -227,8 +263,21 @@ fail_if_base64_encoded() {
     fi
 }
 
+# Decoding alone is not a reliable test: BSD/macOS base64 silently skips
+# characters outside the alphabet, so plaintext would look encoded.
 is_base64() {
-    echo "$1" | base64 --decode >/dev/null 2>&1
+    local val="$1"
+
+    [[ -n "$val" ]] || return 1
+    [[ "$val" =~ ^[A-Za-z0-9+/]+={0,2}$ ]] || return 1
+    (( ${#val} % 4 == 0 )) || return 1
+
+    printf '%s' "$val" | base64 --decode >/dev/null 2>&1 || return 1
+
+    # Plaintext like AWS access key IDs is valid base64 too, but decodes to binary.
+    local non_printable
+    non_printable=$(printf '%s' "$val" | base64 --decode 2>/dev/null | LC_ALL=C tr -d '[:print:][:space:]' | wc -c)
+    (( non_printable == 0 ))
 }
 
 # Entry point
@@ -240,12 +289,12 @@ while [[ $# -gt 0 ]]; do
         --no-encode)
             BASE64_ENCODE=false
             ;;
-        azurite|cifs|minio|nfs|all)
+        azurite|cifs|nfs|rustfs|all)
             BACKEND=$1
             ;;
         *)
             echo "Unknown option or argument: $1"
-            echo "Usage: $0 [azurite|cifs|minio|nfs|all] [--no-encode]"
+            echo "Usage: $0 [azurite|cifs|nfs|rustfs|all] [--no-encode]"
             exit 1
             ;;
     esac
@@ -253,8 +302,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$BACKEND" ]]; then
-    echo "Error: Must specify one of: azurite, cifs, minio, nfs or all"
-    echo "Usage: $0 [azurite|cifs|minio|nfs|all] [--no-encode]"
+    echo "Error: Must specify one of: azurite, cifs, nfs, rustfs or all"
+    echo "Usage: $0 [azurite|cifs|nfs|rustfs|all] [--no-encode]"
     exit 1
 fi
 

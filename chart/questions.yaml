@@ -91,7 +91,7 @@ questions:
         label: Longhorn Support Bundle Kit Image Repository
         group: Longhorn Images Settings
       - variable: image.longhorn.supportBundleKit.tag
-        default: v0.0.84
+        default: v0.0.93
         description: Tag for the Longhorn Support Bundle Manager image.
         type: string
         label: Longhorn Support Bundle Kit Image Tag
@@ -104,7 +104,7 @@ questions:
         label: Longhorn CSI Attacher Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.attacher.tag
-        default: v4.11.0-20260428
+        default: v4.12.0
         description: >-
           Tag for the CSI attacher image. When unspecified, Longhorn uses the default value.
         type: string
@@ -118,7 +118,7 @@ questions:
         label: Longhorn CSI Provisioner Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.provisioner.tag
-        default: v5.3.0-20260428
+        default: v6.3.0
         description: >-
           Tag for the CSI Provisioner image. When unspecified, Longhorn uses the default value.
         type: string
@@ -132,7 +132,7 @@ questions:
         label: Longhorn CSI Node Driver Registrar Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.nodeDriverRegistrar.tag
-        default: v2.16.0-20260428
+        default: v2.17.0
         description: >-
           Tag for the CSI Node Driver Registrar image. When unspecified, Longhorn uses the default value.
         type: string
@@ -146,7 +146,7 @@ questions:
         label: Longhorn CSI Driver Resizer Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.resizer.tag
-        default: v2.1.0-20260428
+        default: v2.2.1
         description: >-
           Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value.
         type: string
@@ -160,7 +160,7 @@ questions:
         label: Longhorn CSI Driver Snapshotter Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.snapshotter.tag
-        default: v8.5.0-20260428
+        default: v8.6.0
         description: >-
           Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
         type: string
@@ -174,7 +174,7 @@ questions:
         label: Longhorn CSI Liveness Probe Image Repository
         group: Longhorn CSI Driver Images
       - variable: image.csi.livenessProbe.tag
-        default: v2.18.0-20260428
+        default: v2.19.0
         description: >-
           Tag for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
         type: string
@@ -230,6 +230,13 @@ questions:
         type: string
         label: Kubelet Root Directory
         group: Longhorn CSI Driver Settings
+      - variable: csi.allowControllerSecretAccess
+        type: boolean
+        default: 'true'
+        description: >-
+          Grant CSI controller sidecars cluster-wide get access to Kubernetes Secrets. Enabled by default for compatibility with existing Secret references. Disable only when Longhorn StorageClasses use no provisioner or controller-side Secret parameters and no existing PV requires controller-side Secret access. Encrypted volumes must retain their node-stage, node-publish, and node-expand Secret references.
+        label: Enable CSI Sidecar Secret Access
+        group: Longhorn CSI Driver Settings
       - variable: csi.podAntiAffinityPreset
         type: string
         label: Longhorn CSI Pod AntiAffinity Preset
@@ -273,6 +280,13 @@ questions:
           Replica count of the CSI Snapshotter. When unspecified, Longhorn uses the default value ("3").
         label: Longhorn CSI Snapshotter replica count
         group: Longhorn CSI Driver Settings
+      - variable: csi.volumeGroupSnapshotEnabled
+        type: boolean
+        default: false
+        description: >-
+          Enable CSI VolumeGroupSnapshot support by turning on the CSIVolumeGroupSnapshot feature gate of the CSI Snapshotter. Requires the VolumeGroupSnapshot CRDs (groupsnapshot.storage.k8s.io) to be installed first; otherwise the CSI Snapshotter stops serving regular volume snapshots.
+        label: Longhorn CSI VolumeGroupSnapshot support
+        group: Longhorn CSI Driver Settings
       - variable: defaultSettings.allowRecurringJobWhileVolumeDetached
         label: Allow Recurring Job While Volume Is Detached
         description: >-
@@ -308,14 +322,7 @@ questions:
       - variable: defaultSettings.defaultDataPath
         label: Default Data Path
         description: >-
-          Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. When this setting is a block device path, runtime and control-plane paths are configured separately by default-control-path. The default value is "/var/lib/longhorn/".
-        group: Longhorn Default Settings
-        type: string
-        default: /var/lib/longhorn/
-      - variable: defaultSettings.defaultControlPath
-        label: Default Control Path
-        description: >-
-          Default path to use for storing runtime and control-plane artifacts on a host. This setting must be an absolute directory path. Engine binaries, metadata, sockets, and logs are stored under this path. The default value is "/var/lib/longhorn/".
+          Default path to use for storing data on a host. An absolute directory path indicates a filesystem-type disk used by the V1 Data Engine, while a path to a block device indicates a block-type disk used by the V2 Data Engine. The default value is "/var/lib/longhorn/".
         group: Longhorn Default Settings
         type: string
         default: /var/lib/longhorn/
@@ -644,6 +651,27 @@ questions:
         type: int
         min: 0
         default: 0
+      - variable: defaultSettings.allowInstanceManagerAutomaticUpgrade
+        label: Allow Instance Manager Automatic Upgrade
+        description: >-
+          Allows Longhorn to automatically upgrade V2 instance managers after Longhorn Manager is upgraded. During the live upgrade, Longhorn may temporarily relocate engines, detach replicas from engines, and trigger replica rebuilding.
+        group: Longhorn Default Settings
+        type: string
+        default: '{"v2":"false"}'
+      - variable: defaultSettings.instanceManagerUpgradeStartTime
+        label: Instance Manager Upgrade Start Time
+        description: >-
+          Specifies when the rolling upgrade of V2 instance managers should begin, in RFC3339 format. Leave empty to start immediately.
+        group: Longhorn Default Settings
+        type: string
+        default: '{"v2":""}'
+      - variable: defaultSettings.instanceManagerUpgradeTimeout
+        label: Instance Manager Upgrade Timeout
+        description: >-
+          Number of minutes a single V2 instance manager upgrade attempt can remain in progress before it is aborted. The default value is 60 minutes.
+        group: Longhorn Default Settings
+        type: string
+        default: '{"v2":"60"}'
       - variable: defaultSettings.backingImageCleanupWaitInterval
         label: Backing Image Cleanup Wait Interval
         description: >-
@@ -1326,6 +1354,13 @@ questions:
         type: string
         required: true
         label: Hostnames (JSON array)
+      - variable: httproute.filters
+        default: '[]'
+        description: >-
+          Gateway API filters (such as authentication middleware) to attach to the HTTPRoute rule for the Longhorn UI service. It is a JSON array of HTTPRouteFilter objects. Example: '[{"type":"ExtensionRef","extensionRef":{"group":"traefik.io","kind":"Middleware","name":"oauth-forwardauth"}}]'
+        type: string
+        required: false
+        label: Filters (JSON array)
       - variable: httproute.path
         default: /
         description: >-

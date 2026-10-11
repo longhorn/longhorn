@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-to-longhorn-manager
+  namespace: longhorn-system
+spec:
+  podSelector:
+    matchLabels:
+      app: longhorn-manager
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Keep both selectors in this from item; Kubernetes ANDs them.
+        # Change the namespace value to the namespace where Prometheus runs.
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: default
+          # Change these labels to identify only the Prometheus scraper pods.
+          podSelector:
+            matchLabels:
+              longhorn.io/metrics-scraper: "true"
+      ports:
+        - protocol: TCP
+          port: 9500

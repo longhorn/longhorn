@@ -1,4 +1,19 @@
 {{- if .Values.httproute.enabled -}}
+  {{- $filters := .Values.httproute.filters -}}
+  {{- if $filters }}
+    {{- if not (kindIs "slice" $filters) }}
+      {{- fail "httproute.filters must be a YAML list of HTTPRouteFilter objects" }}
+    {{- end }}
+    {{- range $index, $filter := $filters }}
+      {{- if not (kindIs "map" $filter) }}
+        {{- fail (printf "httproute.filters[%d] must be an HTTPRouteFilter object" $index) }}
+      {{- end }}
+      {{- $type := get $filter "type" }}
+      {{- if or (not (kindIs "string" $type)) (empty $type) }}
+        {{- fail (printf "httproute.filters[%d].type must be a non-empty string" $index) }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -36,6 +51,10 @@ spec:
     - path:
         type: {{ .Values.httproute.pathType | default "PathPrefix" }}
         value: {{ .Values.httproute.path | default "/" }}
+    {{- with .Values.httproute.filters }}
+    filters:
+      {{- toYaml . | nindent 10 }}
+    {{- end }}
     backendRefs:
     - name: longhorn-frontend
       port: 80

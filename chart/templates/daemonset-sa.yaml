@@ -18,11 +18,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- $longhornDataPath := default "/var/lib/longhorn/" .Values.defaultSettings.defaultDataPath }}
-      {{- $longhornControlPath := default "/var/lib/longhorn/" .Values.defaultSettings.defaultControlPath }}
       containers:
       - name: longhorn-manager
-        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         securityContext:
           privileged: true
@@ -34,17 +32,17 @@ spec:
         {{- end }}
         - daemon
         - --engine-image
-        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.engine.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.engine.repository }}:{{ .Values.image.longhorn.engine.tag }}"
+        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.engine.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.engine.repository }}:{{ .Values.image.longhorn.engine.tag }}"
         - --instance-manager-image
-        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.instanceManager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.instanceManager.repository }}:{{ .Values.image.longhorn.instanceManager.tag }}"
+        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.instanceManager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.instanceManager.repository }}:{{ .Values.image.longhorn.instanceManager.tag }}"
         - --share-manager-image
-        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.shareManager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}"
+        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.shareManager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}"
         - --backing-image-manager-image
-        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.backingImageManager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.backingImageManager.repository }}:{{ .Values.image.longhorn.backingImageManager.tag }}"
+        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.backingImageManager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.backingImageManager.repository }}:{{ .Values.image.longhorn.backingImageManager.tag }}"
         - --support-bundle-manager-image
-        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.supportBundleKit.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.supportBundleKit.repository }}:{{ .Values.image.longhorn.supportBundleKit.tag }}"
+        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.supportBundleKit.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.supportBundleKit.repository }}:{{ .Values.image.longhorn.supportBundleKit.tag }}"
         - --manager-image
-        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
+        - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}"
         - --service-account
         - longhorn-service-account
         {{- if .Values.preUpgradeChecker.upgradeVersionCheck}}
@@ -75,12 +73,8 @@ spec:
           mountPath: /host/etc/
           readOnly: true
         - name: longhorn
-          mountPath: {{ $longhornDataPath | quote }}
+          mountPath: /var/lib/longhorn/
           mountPropagation: Bidirectional
-        {{- if ne $longhornControlPath $longhornDataPath }}
-        - name: longhorn-control
-          mountPath: {{ $longhornControlPath | quote }}
-        {{- end }}
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
         {{- if .Values.enableGoCoverDir }}
@@ -104,10 +98,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: LONGHORN_DATA_PATH
-          value: {{ $longhornDataPath | quote }}
-        - name: LONGHORN_CONTROL_PATH
-          value: {{ $longhornControlPath | quote }}
         {{- if .Values.longhornManager.distro }}
         - name: LONGHORN_DISTRO
           value: {{ .Values.longhornManager.distro | quote }}
@@ -123,7 +113,7 @@ spec:
         {{- end }}
       - name: pre-pull-share-manager-image
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.shareManager.registry) }}{{ . }}/{{ end }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.shareManager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
       volumes:
       - name: boot
@@ -140,13 +130,7 @@ spec:
           path: /etc/
       - name: longhorn
         hostPath:
-          path: {{ $longhornDataPath | quote }}
-      {{- if ne $longhornControlPath $longhornDataPath }}
-      - name: longhorn-control
-        hostPath:
-          path: {{ $longhornControlPath | quote }}
-          type: DirectoryOrCreate
-      {{- end }}
+          path: /var/lib/longhorn/
       {{- if .Values.enableGoCoverDir }}
       - name: go-cover-dir
         hostPath:
@@ -214,6 +198,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.manager.type }}
+  {{- with .Values.service.manager.trafficDistribution }}
+  trafficDistribution: {{ . | quote }}
+  {{- end }}
   selector:
     app: longhorn-manager
   ports:

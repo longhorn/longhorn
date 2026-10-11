@@ -1,5 +1,13 @@
 # Add PV encryption support
 
+## Update (2026-09-22, v1.13.0)
+
+[Issue #14020](https://github.com/longhorn/longhorn/issues/14020) updates the recommended CSI Secret configuration. The original proposal, examples, and test plan below are preserved as historical design context.
+
+For current Longhorn encryption configurations, use node-stage, node-publish, and node-expand Secret references. Do not configure `csi.storage.k8s.io/provisioner-secret-name` or `csi.storage.k8s.io/provisioner-secret-namespace`: Longhorn's CSI controller does not consume the encryption key during provisioning. With node-only references, the PVC can be provisioned before the Secret exists; the kubelet fetches the Secret for node-side operations, and a missing key prevents staging or mounting. Preserve the node-expand references for online filesystem expansion.
+
+Legacy provisioner-side references still cause the external-provisioner to fetch the Secret before calling Longhorn. The default CSI Secret GET grant preserves compatibility. Before setting `csi.allowControllerSecretAccess=false`, migrate legacy StorageClasses and check existing PV controller-side Secret requirements. See the current [volume encryption guidance](https://longhorn.io/docs/1.13.0/advanced-resources/security/volume-encryption/) and [StorageClass migration guide](https://longhorn.io/kb/how-to-migrate-encrypted-volumes-to-node-only-secrets/).
+
 ## Summary
 
 This enhancement adds support for user configured (storage class, secrets) encrypted volumes,

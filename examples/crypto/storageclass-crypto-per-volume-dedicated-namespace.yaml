@@ -9,24 +9,12 @@ parameters:
   staleReplicaTimeout: "2880" # 48 hours in minutes
   fromBackup: ""
   encrypted: "true"
-  # we currently don't need secrets for volume creation
-  # but it allows for failing the CreateVolume call early
-  # if the required secret has not been setup yet.
-  csi.storage.k8s.io/provisioner-secret-name: ${pvc.name}
-  csi.storage.k8s.io/provisioner-secret-namespace: "longhorn-system"
+  # The key is read during node staging/publishing, not volume provisioning.
+  # Ensure the referenced Secret exists before starting a workload.
   csi.storage.k8s.io/node-publish-secret-name: ${pvc.name}
   csi.storage.k8s.io/node-publish-secret-namespace: "longhorn-system"
   csi.storage.k8s.io/node-stage-secret-name: ${pvc.name}
   csi.storage.k8s.io/node-stage-secret-namespace: "longhorn-system"
-  # These two are for online expansion of encrypto volumes.
-  # But you need to enable the CSINodeExpandSecret feature gate for
-  # the kube-apiserver and kubelet. For more details, see:
-  # https://kubernetes.io/blog/2022/09/21/kubernetes-1-25-use-secrets-while-expanding-csi-volumes-on-node-alpha/
-  # csi.storage.k8s.io/node-expand-secret-name: ${pvc.name}
-  # csi.storage.k8s.io/node-expand-secret-namespace: "longhorn-system"
-  # we only need crypto keys for node operations, I left these as examples
-  # in case we implement external key vaults in the future
-  # csi.storage.k8s.io/controller-publish-secret-name: ${pvc.name}
-  # csi.storage.k8s.io/controller-publish-secret-namespace: "longhorn-system"
-  # csi.storage.k8s.io/controller-expand-secret-name: ${pvc.name}
-  # csi.storage.k8s.io/controller-expand-secret-namespace: "longhorn-system"
+  # These two are for online expansion of encrypted volumes.
+  csi.storage.k8s.io/node-expand-secret-name: ${pvc.name}
+  csi.storage.k8s.io/node-expand-secret-namespace: "longhorn-system"

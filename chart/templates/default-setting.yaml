@@ -15,9 +15,6 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.defaultDataPath) }}
     default-data-path: {{ .Values.defaultSettings.defaultDataPath | quote }}
     {{- end }}
-    {{- if not (kindIs "invalid" .Values.defaultSettings.defaultControlPath) }}
-    default-control-path: {{ .Values.defaultSettings.defaultControlPath | quote }}
-    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.replicaSoftAntiAffinity) }}
     replica-soft-anti-affinity: {{ .Values.defaultSettings.replicaSoftAntiAffinity }}
     {{- end }}
@@ -157,6 +154,15 @@ data:
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit) }}
     concurrent-automatic-engine-upgrade-per-node-limit: {{ .Values.defaultSettings.concurrentAutomaticEngineUpgradePerNodeLimit | quote }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.allowInstanceManagerAutomaticUpgrade) }}
+    allow-instance-manager-automatic-upgrade: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.allowInstanceManagerAutomaticUpgrade }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerUpgradeStartTime) }}
+    instance-manager-upgrade-start-time: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.instanceManagerUpgradeStartTime }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.instanceManagerUpgradeTimeout) }}
+    instance-manager-upgrade-timeout: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.instanceManagerUpgradeTimeout }}
     {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.backingImageCleanupWaitInterval) }}
     backing-image-cleanup-wait-interval: {{ .Values.defaultSettings.backingImageCleanupWaitInterval | quote }}
