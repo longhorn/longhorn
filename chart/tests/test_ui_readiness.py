@@ -42,10 +42,10 @@ class TestUIReadiness(unittest.TestCase):
         self.assertIsNotNone(probe)
         self.assertEqual(probe["httpGet"], {"path": "/v1", "port": 8000})
         self.assertEqual(probe["initialDelaySeconds"], 1)
-        self.assertEqual(probe["periodSeconds"], 1)
-        self.assertEqual(probe["timeoutSeconds"], 1)
+        self.assertEqual(probe["periodSeconds"], 10)
+        self.assertEqual(probe["timeoutSeconds"], 5)
         self.assertEqual(probe["successThreshold"], 1)
-        self.assertEqual(probe["failureThreshold"], 3)
+        self.assertEqual(probe["failureThreshold"], 5)
         self.assertNotIn("enabled", probe)
         self.assertIn(8000, [port["containerPort"] for port in ui["ports"]])
 

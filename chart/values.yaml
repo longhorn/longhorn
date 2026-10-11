@@ -630,10 +630,10 @@ longhornUI:
     # -- Enable the UI readiness probe. With the default API check, a backend outage makes UI pods unready.
     enabled: false
     initialDelaySeconds: 1
-    periodSeconds: 1
-    timeoutSeconds: 1
+    periodSeconds: 10
+    timeoutSeconds: 5
     successThreshold: 1
-    failureThreshold: 3
+    failureThreshold: 5
     httpGet:
       path: /v1
       port: 8000
