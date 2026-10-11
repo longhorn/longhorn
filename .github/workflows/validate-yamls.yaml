@@ -38,3 +38,9 @@ jobs:
           
       - name: Validate YAML file
         run: yamllint -c .yamllint chart/questions.yaml
+      
+      - name: Verify helm.sh/images annotation is in sync with values.yaml
+        run: |
+          bash ./scripts/update-chart-images-annotation.sh
+          git diff --exit-code chart/Chart.yaml || \
+            (echo "Run scripts/update-chart-images-annotation.sh and commit chart/Chart.yaml" && exit 1)
