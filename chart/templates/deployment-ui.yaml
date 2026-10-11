@@ -52,6 +52,7 @@ spec:
     metadata:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-ui
+        longhorn.io/component: ui
     spec:
       serviceAccountName: longhorn-ui-service-account
       affinity:
