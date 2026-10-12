@@ -108,11 +108,13 @@ workload.
 - Add one data-engine identifier for the local data engine.
 - Add `lvm` as a disk type.
 - Add the `local-data-engine` setting that enables or disables the local data engine.
-- Add the `local-data-engine-provisioning-mode` setting, with the options `thick` and `thin`.
-- Add an immutable Volume spec field recording the effective provisioning mode. It is empty for v1 and v2
-  volumes.
-- Add a `localProvisioningMode` StorageClass parameter.
-- Add the `local-data-engine-storage-layout` setting, with the options `per-disk` and `per-node`.
+- Add the data-engine-specific `data-engine-provisioning-mode` setting, with the options `thick` and `thin`
+  and the default `{"local":"thick"}`. Only the local data engine is listed for now.
+- Add an immutable `provisioningMode` Volume spec field recording the effective provisioning mode. It is
+  empty for v1 and v2 volumes.
+- Add a `provisioningMode` StorageClass parameter.
+- Add the data-engine-specific `data-engine-storage-layout` setting, with the options `per-disk` and
+  `per-node` and the default `{"local":"per-disk"}`. Only the local data engine is listed for now.
 - Extend the node environment check to require the `dm_thin_pool` kernel module when the local data engine
   is enabled in thin mode. No other host prerequisite is added.
 - Extend the instance-manager protobuf data-engine and disk-type enumerations.
@@ -185,19 +187,21 @@ consumption and write amplification can therefore increase as snapshots accumula
 
 #### Provisioning options
 
-The local data engine operates in one cluster-wide provisioning mode:
+The local data engine operates in one cluster-wide provisioning mode, selected by the local entry of the
+`data-engine-provisioning-mode` setting:
 
 - **`thick`** (default) fully allocates each LV. It does not support over-provisioning.
 - **`thin`** uses thin LVs and zeroes newly allocated pool chunks before exposing them.
 
 Thick is the default because it offers the most predictable performance. The mode can change only when no
 local data engine volumes exist. Each local StorageClass may declare its expected mode through the
-`localProvisioningMode` parameter. If the parameter is omitted, it defaults to `thick`. Provisioning is
+`provisioningMode` parameter. If the parameter is omitted, it defaults to `thick`. Provisioning is
 rejected when the StorageClass mode differs from the cluster-wide mode, preventing an outdated StorageClass
 from silently creating a different kind of volume.
 
-Each Volume records the effective provisioning mode in an immutable spec field. This field remains
-authoritative for expansion, actual-size accounting, snapshot validation. It is empty for v1 and v2 volumes.
+Each Volume records the effective provisioning mode in the immutable `provisioningMode` spec field. This
+field remains authoritative for expansion, actual-size accounting, snapshot validation. It is empty for v1
+and v2 volumes.
 
 In thin mode, creating the first volume in a VG creates a thin pool named `longhorn-thin-pool`. The
 pool reserves 5 GiB of the VG for metadata, metadata repair, and future metadata expansion, and uses the
@@ -224,7 +228,8 @@ accounting unambiguous. This can be revisited if there is demand for mixing the 
 
 ### Node storage layout
 
-The local data engine operates in one cluster-wide storage layout:
+The local data engine operates in one cluster-wide storage layout, selected by the local entry of the
+`data-engine-storage-layout` setting:
 
 - **`per-disk`** (default) creates a separate VG for each LVM disk.
 - **`per-node`** adds all LVM disks on a node to one shared VG. This layout is risky because failure of a
