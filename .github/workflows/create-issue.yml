@@ -1,7 +1,7 @@
 name: "[Issue Management] Create Issue"
 on:
   issues:
-    types: [ labeled ]
+    types: [labeled]
 jobs:
   backport:
     runs-on: ubuntu-latest
