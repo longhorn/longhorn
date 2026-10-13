@@ -77,6 +77,10 @@ spec:
           mountPropagation: Bidirectional
         - name: longhorn-grpc-tls
           mountPath: /tls-files/
+        # Vault login token for the keys of vault-encrypted volumes; read only when one exists.
+        - name: vault-token
+          mountPath: /var/run/secrets/longhorn.io/vault
+          readOnly: true
         {{- if .Values.enableGoCoverDir }}
         - name: go-cover-dir
           mountPath: /go-cover-dir/
@@ -141,6 +145,13 @@ spec:
         secret:
           secretName: longhorn-grpc-tls
           optional: true
+      - name: vault-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: vault
+              expirationSeconds: 600
+              path: token
       {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
       imagePullSecrets:
         {{- $imagePullSecrets := list }}
