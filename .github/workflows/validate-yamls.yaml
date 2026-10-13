@@ -16,41 +16,26 @@ jobs:
   validate-yamls:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5   # v4
         with:
-<<<<<<< HEAD
           ref: ${{ github.event.pull_request.head.sha }}
           
-=======
-          fetch-depth: 1
-
->>>>>>> e3619f7 (feat(chart): add HIP-0015 helm.sh/images annotation)
       - name: Install yamllint
         run: |
           sudo apt-get update
           sudo apt-get install -y yamllint
-
+          
       - name: Create yamllint config
         run: |
           cat > .yamllint <<EOF
           extends: default
-
+          
           rules:
             line-length: disable
             trailing-spaces: disable
             document-start: disable
             empty-lines: disable
           EOF
-
+          
       - name: Validate YAML file
-<<<<<<< HEAD
         run: yamllint -c .yamllint chart/questions.yaml
-=======
-        run: yamllint -c .yamllint chart/questions.yaml
-
-      - name: Verify helm.sh/images annotation is in sync with values.yaml
-        run: |
-          bash ./scripts/update-chart-images-annotation.sh
-          git diff --exit-code chart/Chart.yaml || \
-            (echo "Run scripts/update-chart-images-annotation.sh and commit chart/Chart.yaml" && exit 1)
->>>>>>> e3619f7 (feat(chart): add HIP-0015 helm.sh/images annotation)

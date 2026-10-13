@@ -1,7 +1,7 @@
 name: "[Issue Management] Close Issue"
 on:
   issues:
-    types: [ unlabeled ]
+    types: [unlabeled]
 jobs:
   backport:
     runs-on: ubuntu-latest
