@@ -29,27 +29,27 @@ icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/ic
 annotations:
   helm.sh/images: |-
     - name: longhorn-engine
-      image: longhornio/longhorn-engine:master-head
+      image: longhornio/longhorn-engine:v1.9.x-head
     - name: longhorn-manager
-      image: longhornio/longhorn-manager:master-head
+      image: longhornio/longhorn-manager:v1.9.x-head
     - name: longhorn-ui
-      image: longhornio/longhorn-ui:master-head
+      image: longhornio/longhorn-ui:v1.9.x-head
     - name: longhorn-instance-manager
-      image: longhornio/longhorn-instance-manager:master-head
+      image: longhornio/longhorn-instance-manager:v1.9.x-head
     - name: longhorn-share-manager
-      image: longhornio/longhorn-share-manager:master-head
+      image: longhornio/longhorn-share-manager:v1.9.x-head
     - name: backing-image-manager
-      image: longhornio/backing-image-manager:master-head
+      image: longhornio/backing-image-manager:v1.9.x-head
     - name: support-bundle-kit
-      image: longhornio/support-bundle-kit:v0.0.93
+      image: longhornio/support-bundle-kit:v0.0.87
     - name: csi-attacher
       image: longhornio/csi-attacher:v4.12.0
     - name: csi-provisioner
-      image: longhornio/csi-provisioner:v6.3.0
+      image: longhornio/csi-provisioner:v5.3.0-20260428
     - name: csi-node-driver-registrar
       image: longhornio/csi-node-driver-registrar:v2.17.0
     - name: csi-resizer
-      image: longhornio/csi-resizer:v2.2.1
+      image: longhornio/csi-resizer:v1.14.0-20260429
     - name: csi-snapshotter
       image: longhornio/csi-snapshotter:v8.6.0
     - name: livenessprobe
