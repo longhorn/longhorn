@@ -236,6 +236,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngine) }}
     v2-data-engine: {{ .Values.defaultSettings.v2DataEngine }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.v2DataEngineRdmaDeviceResource) }}
+    v2-data-engine-rdma-device-resource: {{ .Values.defaultSettings.v2DataEngineRdmaDeviceResource | quote }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineHugepageEnabled) }}
     data-engine-hugepage-enabled: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineHugepageEnabled }}
     {{- end }}

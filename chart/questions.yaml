@@ -884,6 +884,13 @@ questions:
         group: Longhorn V2 Data Engine Settings
         type: boolean
         default: false
+      - variable: defaultSettings.v2DataEngineRdmaDeviceResource
+        label: V2 Data Engine RDMA Device Resource
+        description: >-
+          Applies only to the V2 Data Engine. Name of the extended resource, advertised by an RDMA shared device plugin (for example k8s-rdma-shared-dev-plugin), that each V2 Instance Manager pod should request to gain access to the RoCE verbs device for NVMe-oF RDMA transport. When empty (default), the Instance Manager keeps the legacy privileged host-mount access.
+        group: Longhorn V2 Data Engine Settings
+        type: string
+        default:
       - variable: defaultSettings.dataEngineHugepageEnabled
         label: V2 Data Engine
         description: >-

@@ -466,6 +466,7 @@ During installation, you can either allow Longhorn to use the default system set
 | defaultSettings.upgradeResponderURL | The Upgrade Responder sends a notification whenever a new Longhorn version that you can upgrade to becomes available. The default value is https://longhorn-upgrade-responder.rancher.io/v1/checkupgrade. |
 | defaultSettings.v1DataEngine | Setting that allows you to enable the V1 Data Engine. |
 | defaultSettings.v2DataEngine | Setting that allows you to enable the V2 Data Engine, which is based on the Storage Performance Development Kit (SPDK). |
+| defaultSettings.v2DataEngineRdmaDeviceResource | Applies only to the V2 Data Engine. Name of the extended resource, advertised by an RDMA shared device plugin (for example k8s-rdma-shared-dev-plugin), that each V2 Instance Manager pod should request to gain access to the RoCE verbs device for NVMe-oF RDMA transport. When empty (default), the Instance Manager keeps the legacy privileged host-mount access. |
 
 ---
 Please see [link](https://github.com/longhorn/longhorn) for more information.
