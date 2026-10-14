@@ -8,7 +8,7 @@ longhornio/longhorn-cli:v1.11.x-head
 longhornio/csi-attacher:v4.13.0
 longhornio/csi-provisioner:v6.4.0
 longhornio/csi-resizer:v2.3.0
-longhornio/csi-snapshotter:v8.6.0
+longhornio/csi-snapshotter:v8.7.0
 longhornio/csi-node-driver-registrar:v2.18.0
 longhornio/livenessprobe:v2.20.0
 longhornio/support-bundle-kit:v1.0.0
