@@ -51,6 +51,6 @@ annotations:
     - name: csi-resizer
       image: longhornio/csi-resizer:v2.2.1
     - name: csi-snapshotter
-      image: longhornio/csi-snapshotter:v8.6.0
+      image: longhornio/csi-snapshotter:v8.7.0
     - name: livenessprobe
       image: longhornio/livenessprobe:v2.19.0
