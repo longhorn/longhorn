@@ -115,6 +115,10 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.shareManager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.shareManager.repository }}:{{ .Values.image.longhorn.shareManager.tag }}
         command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
+        {{- with .Values.longhornManager.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       volumes:
       - name: boot
         hostPath:
