@@ -1,7 +1,7 @@
 apiVersion: v1
 name: longhorn
-version: 1.12.1
-appVersion: v1.12.1
+version: 1.12.2-rc1
+appVersion: v1.12.2-rc1
 kubeVersion: ">=1.25.0-0"
 description: Longhorn is a distributed block storage system for Kubernetes.
 keywords:
@@ -29,17 +29,17 @@ icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/ic
 annotations:
   helm.sh/images: |-
     - name: longhorn-engine
-      image: longhornio/longhorn-engine:v1.12.x-head
+      image: longhornio/longhorn-engine:v1.12.2-rc1
     - name: longhorn-manager
-      image: longhornio/longhorn-manager:v1.12.x-head
+      image: longhornio/longhorn-manager:v1.12.2-rc1
     - name: longhorn-ui
-      image: longhornio/longhorn-ui:v1.12.x-head
+      image: longhornio/longhorn-ui:v1.12.2-rc1
     - name: longhorn-instance-manager
-      image: longhornio/longhorn-instance-manager:v1.12.x-head
+      image: longhornio/longhorn-instance-manager:v1.12.2-rc1
     - name: longhorn-share-manager
-      image: longhornio/longhorn-share-manager:v1.12.x-head
+      image: longhornio/longhorn-share-manager:v1.12.2-rc1
     - name: backing-image-manager
-      image: longhornio/backing-image-manager:v1.12.x-head
+      image: longhornio/backing-image-manager:v1.12.2-rc1
     - name: support-bundle-kit
       image: longhornio/support-bundle-kit:v1.0.0
     - name: csi-attacher
