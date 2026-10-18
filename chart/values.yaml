@@ -658,6 +658,8 @@ longhornUI:
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
+  # -- Resource requests and limits for Longhorn UI pods.
+  resources: ~
   # -- Node selector for Longhorn UI. Specify the nodes allowed to run Longhorn UI.
   nodeSelector: {}
   ## If you want to set node selector for Longhorn UI Deployment, delete the `{}` in the line above
