@@ -79,24 +79,6 @@ Output: properly quoted YAML string
   {{- end -}}
 {{- end -}}
 
-{{- /*
-systemManagedComponentsNodeSelector helper
-Input: any value (string, list, or map)
-Output: semicolon-separated `key:value` pairs, the format the
-`system-managed-components-node-selector` setting validates against.
-A map or a list of `key=value` entries (Kubernetes selector syntax) is
-normalized; an entry that still has no `:` separator fails at render time
-instead of failing the setting sync in longhorn-manager after install.
-*/ -}}
-{{/*
-Normalize defaultSettings.systemManagedComponentsNodeSelector into the
-"key1:value1;key2:value2" form the setting validates. Accepts a string, a map,
-or a list whose items are strings or single/multi-key maps. A "key=value" entry
-is converted only when it holds exactly one "=" and no ":"; label keys and
-values can contain neither character, so that never changes the entry's meaning.
-Every resulting pair must be a valid label, otherwise rendering fails, so nothing
-reaches longhorn-manager that it would ignore or accept as a garbage key.
-*/}}
 {{/*
 Normalize defaultSettings.systemManagedComponentsNodeSelector into the
 "key1:value1;key2:value2" form the setting validates. Accepts a string, a map,
