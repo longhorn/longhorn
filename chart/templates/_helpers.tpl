@@ -109,6 +109,8 @@ ignore or accept as a garbage key.
         {{- $e = trim $e -}}
         {{- if $e -}}
           {{- $orig := $e -}}
+          {{- /* longhorn-manager trims around the separator, so "key: value" works today */ -}}
+          {{- $e = regexReplaceAll "\\s*([:=])\\s*" $e "${1}" -}}
           {{- if and (not (contains ":" $e)) (eq (len (splitList "=" $e)) 2) -}}
             {{- $e = replace "=" ":" $e -}}
           {{- end -}}
