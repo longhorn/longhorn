@@ -48,10 +48,9 @@ Measured results for the design described here are in the companion report,
 
 ### Advantages over using standalone LVM storage providers
 
-- Automatic physical volume and volume group management. Unlike TopoLVM and OpenEBS LocalPV-LVM, which
-  require administrators to create and manage volume groups in advance, Longhorn will manage:
-  - Physical volume initialization.
-  - Volume group creation and expansion.
+- No mandatory manual LVM preparation. TopoLVM and OpenEBS LocalPV-LVM require administrators to create
+  volume groups in advance. Longhorn turns one or more empty disks into a volume group itself, and still
+  accepts administrator-created volume groups for any other layout.
 - Integrated backup and restore.
   - TopoLVM and OpenEBS LocalPV-LVM do not offer backup and restore natively and rely on third-party tools
     such as Velero.
@@ -83,11 +82,13 @@ operations, while reads and writes to existing mounts continue uninterrupted.
 
 ### User Experience In Detail
 
-The administrator enables the local data engine and adds an LVM-type disk to a Longhorn Node resource. The
-first LVM disk on a node starts the local instance-manager pod there. The instance manager contains the
-required `lvm2` tools, so the host does not need to provide them. When the disk is registered, the instance
-manager verifies that it has no existing filesystem or partition table, initializes it as a physical volume,
-and creates its volume group.
+The administrator enables the local data engine and adds an `lvm` disk to a Longhorn Node resource, giving
+as its path either one or more empty block devices or the name of a volume group they created. The first
+LVM disk on a node starts the local instance-manager pod there. The instance manager contains the required
+`lvm2` tools, so the host does not need to provide them for Longhorn's own operations. For block devices,
+the instance manager initializes each as a physical volume and creates one volume group across them. For a
+volume group name, it verifies that the group holds no logical volumes and takes it over. Either way, the
+disk Longhorn sees from then on is the volume group, and its path cannot be edited afterwards.
 
 The host prerequisites are the ones Longhorn already requires. The instance-manager pod is privileged and
 mounts the host root filesystem for every data engine, so it already reaches the host's block devices and
@@ -106,15 +107,16 @@ workload.
 ### API Changes
 
 - Add one data-engine identifier for the local data engine.
-- Add `lvm` as a disk type.
+- Add `lvm` as a disk type. Its `path` is either one or more empty block devices separated by `;`, or the
+  name of an existing volume group.
+- Reject any change to the `path` of an existing `lvm` disk in the node admission webhook. Devices cannot
+  be added to or removed from a volume group in the first version.
 - Add the `local-data-engine` setting that enables or disables the local data engine.
 - Add the data-engine-specific `data-engine-provisioning-mode` setting, with the options `thick` and `thin`
   and the default `{"local":"thick"}`. Only the local data engine is listed for now.
 - Add an immutable `provisioningMode` Volume spec field recording the effective provisioning mode. It is
   empty for v1 and v2 volumes.
 - Add a `provisioningMode` StorageClass parameter.
-- Add the data-engine-specific `data-engine-storage-layout` setting, with the options `per-disk` and
-  `per-node` and the default `{"local":"per-disk"}`. Only the local data engine is listed for now.
 - Extend the node environment check to require the `dm_thin_pool` kernel module when the local data engine
   is enabled in thin mode. No other host prerequisite is added.
 - Extend the instance-manager protobuf data-engine and disk-type enumerations.
@@ -137,6 +139,7 @@ and `v3` remain alternatives until the LEP review is complete.
 | Thick LV | An LV that reserves its full physical capacity at creation and maps logical blocks to fixed VG extents. |
 | Thin pool | A special LV holding the data and metadata of thin LVs. |
 | Thin LV | An LV that reserves virtual capacity only and allocates chunks from a thin pool as it is written, which is what allows over-provisioning. |
+| Disk | In the local data engine, a Longhorn disk is a VG. Longhorn allocates LVs from it and identifies it by the VG UUID. |
 
 ### Object Model
 
@@ -226,45 +229,68 @@ capacity that is neither in use nor available. A dedicated disk type per mode wo
 problem, but it adds another disk concept for administrators to manage. One cluster-wide mode keeps capacity
 accounting unambiguous. This can be revisited if there is demand for mixing the two.
 
-### Node storage layout
+### Disks Are Volume Groups
 
-The local data engine operates in one cluster-wide storage layout, selected by the local entry of the
-`data-engine-storage-layout` setting:
+In the local data engine, a disk is a volume group. Longhorn allocates LVs from the VG, reports the VG's
+capacity, and identifies the disk by the VG UUID. It does not manage or depend on the VG's internal layout.
+How many PVs the VG has and what they sit on are the administrator's decisions. There is no storage layout
+setting.
 
-- **`per-disk`** (default) creates a separate VG for each LVM disk.
-- **`per-node`** adds all LVM disks on a node to one shared VG. This layout is risky because failure of a
-  single member disk can make all local volumes on the node unusable.
-
-#### Per-disk mode
-
-```text
-Disk 1 ─► PV 1 ─► VG 1
-Disk 2 ─► PV 2 ─► VG 2
-Disk 3 ─► PV 3 ─► VG 3
-```
-
-Every disk reports its VG capacity and is independently schedulable.
-
-#### Per-node mode
+The `path` of an `lvm` disk is either one or more block devices separated by `;`, such as `/dev/sda` or
+`/dev/sda;/dev/sdb`, or the name of an existing VG, given as `<vg>` or `/dev/<vg>`. The instance manager
+detects which on registration:
 
 ```text
-Disk 1 ─► PV 1 (representative) ─┐
-Disk 2 ─► PV 2 (member)          ├─► one node VG
-Disk 3 ─► PV 3 (member)         ─┘
+every path element is a block device
+  ├─ all empty: no filesystem, partition table, or LVM signature
+  │     → pvcreate each, vgcreate longhorn-vg-<random> across them, tagged; the disk is that VG
+  └─ any element not empty → rejected, naming the device
+
+path is a single element that is not a block device → treated as a VG name
+  ├─ VG exists and contains no LVs
+  │     → tagged and adopted; the disk is that VG
+  ├─ VG exists and contains LVs, including a pre-made thin pool
+  │     → rejected, naming the LVs
+  └─ no such VG → rejected, stating that the path is neither a block device nor a VG
+
+anything else, such as a list mixing devices and names → rejected
 ```
 
-The representative disk reports the shared VG capacity and receives all replica assignments. Other members
-remain visible and ready but report zero schedulable capacity, preventing the shared capacity from being
-counted more than once.
+Creating a VG from several devices is all or nothing: on a partial failure the instance manager removes the
+PV signatures and devices-file entries it added, so a retry starts from empty devices.
 
-Each disk is identified by its PV UUID. VGs use opaque, randomly generated names such as`longhorn-vg-a7f3c921`.
+The block-device form builds a VG from empty disks without manual LVM work. Any other layout is built by the
+administrator and registered by name. Once registered, the two forms are indistinguishable to Longhorn.
 
-Adding a disk in `per-node` mode extends the existing VG. If the VG contains a managed thin pool, the new
-capacity also extends that pool.
+#### Ownership and re-registration
 
-The layout can change only while every node has at most one LVM disk. The representative disk cannot be
-removed while the VG has other PVs; member disks must be removed first. No disk can be removed while its VG
-contains LVs.
+Every VG Longhorn creates or adopts carries a Longhorn VG tag. Registration is idempotent: a device list
+whose PVs already form one tagged VG, or the name of a tagged VG, returns the existing disk and reactivates
+its LVs that carry an engine tag. This is how a disk that still holds volumes is re-registered after
+`/var/lib/longhorn` and the Node resource are lost, as v1 and v2 do from the disk config file and the
+lvstore.
+
+#### Identity and duplicates
+
+The disk UUID is the VG UUID; the path is used only at registration. The node admission webhook rejects a
+device listed in two disk entries on a node. Any other way of registering one VG twice yields the same disk
+UUID, and the node controller's existing duplicate disk ID handling marks the second entry not ready.
+
+#### Capacity and health
+
+Disk status reports the VG's size and free extents, or the managed thin pool's capacity and usage when the
+pool exists. Longhorn never extends or reduces a VG in the first version. If the administrator grows an
+adopted VG with `vgextend`, Longhorn picks up the new free capacity on its next status refresh and, in thin
+mode, extends the managed thin pool into it. Health data is collected from the VG's physical volumes.
+
+#### Editing and removal
+
+The `path` of an `lvm` disk is immutable; the node admission webhook rejects any change. Devices cannot be
+added to or removed from a VG in the first version. To change the member set, remove the disk and register
+it again. Editing the device set of an empty VG and online extension may be added later.
+
+A disk can be removed only while its VG contains no LVs. Removal deletes the VG and the PV signatures of all
+its devices, whether Longhorn created the VG or adopted it, and drops its devices-file entries.
 
 ### LVM command execution
 
@@ -272,7 +298,9 @@ All instance-manager LVM commands use `--devicesfile longhorn.devices`. Longhorn
 host and mounts it into local instance-manager pods, keeping the managed-device set consistent across pod
 restarts and upgrades. This cleanly isolates Longhorn-managed LVM storage from other LVM configurations on
 the host, prevents Longhorn from modifying unrelated devices, and avoids failures or hangs caused by LVM
-scanning unresponsive devices that do not belong to Longhorn.
+scanning unresponsive devices that do not belong to Longhorn. An empty block device is added to the file
+when it is registered. For an administrator-created VG, `vgimportdevices` adds exactly that VG's physical
+volumes, so only devices backing registered VGs are ever visible to Longhorn's LVM commands.
 
 LVM normally delegates device-node management to udev and synchronizes through udev cookies, which would
 require the instance-manager pod to share the host IPC namespace. Because host IPC is invasive and may be
@@ -286,7 +314,7 @@ host-bound `/dev`.
 The local data engine serves only `strict-local` volumes, so a node without an LVM disk never hosts a local
 volume and does not need a local instance manager. Longhorn runs the local instance-manager pod on a node
 only while the node has at least one `lvm` disk: adding the first LVM disk creates the pod, and removing the
-last one removes it once its volume group is torn down and no instance is running. Nodes with only `block` or
+last one removes it once the disk is deregistered and no instance is running. Nodes with only `block` or
 `filesystem` disks never reserve the local engine's instance-manager resources. v1 and v2 keep their current
 behaviour, since their engine process may run on a node without disks.
 
