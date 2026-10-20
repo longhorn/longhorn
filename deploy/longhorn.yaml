@@ -6527,6 +6527,11 @@ rules:
 - apiGroups: ["longhorn.io"]
   resources: ["volumehookpolicies"]
   verbs: ["get", "list", "watch"]
+# Lets the webhook check that the hook executor may exec in a member's
+# namespace before it accepts a SnapshotGroup with hooks.
+- apiGroups: ["authorization.k8s.io"]
+  resources: ["subjectaccessreviews"]
+  verbs: ["create"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
   verbs: ["get", "list", "watch"]
