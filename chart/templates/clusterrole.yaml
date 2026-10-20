@@ -59,6 +59,9 @@ rules:
               "instancemanagerupgrades", "instancemanagerupgrades/status",
               "instancemanagerupgradecontrols", "instancemanagerupgradecontrols/status"]
   verbs: ["*"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get", "list", "watch"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
   verbs: ["get", "list", "watch"]
