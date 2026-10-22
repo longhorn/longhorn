@@ -6685,6 +6685,15 @@ rules:
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotcontents/status"]
   verbs: ["update", "patch"]
+- apiGroups: ["groupsnapshot.storage.k8s.io"]
+  resources: ["volumegroupsnapshotclasses"]
+  verbs: ["list", "watch"]
+- apiGroups: ["groupsnapshot.storage.k8s.io"]
+  resources: ["volumegroupsnapshotcontents"]
+  verbs: ["get", "list", "watch", "patch"]
+- apiGroups: ["groupsnapshot.storage.k8s.io"]
+  resources: ["volumegroupsnapshotcontents/status"]
+  verbs: ["update", "patch"]
 ---
 # Source: longhorn/templates/clusterrole.yaml
 # Static Secret access for the CSI attacher, provisioner, resizer, and snapshotter.
