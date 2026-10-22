@@ -191,7 +191,6 @@ rules:
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotcontents/status"]
   verbs: ["update", "patch"]
-{{- if .Values.csi.volumeGroupSnapshotEnabled }}
 - apiGroups: ["groupsnapshot.storage.k8s.io"]
   resources: ["volumegroupsnapshotclasses"]
   verbs: ["list", "watch"]
@@ -201,7 +200,6 @@ rules:
 - apiGroups: ["groupsnapshot.storage.k8s.io"]
   resources: ["volumegroupsnapshotcontents/status"]
   verbs: ["update", "patch"]
-{{- end }}
 {{- if .Values.csi.allowControllerSecretAccess }}
 ---
 # Static Secret access for the CSI attacher, provisioner, resizer, and snapshotter.
