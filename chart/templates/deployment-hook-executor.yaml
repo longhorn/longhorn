@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-hook-executor
+  name: longhorn-hook-executor
+  namespace: {{ include "release_namespace" . }}
+spec:
+  replicas: {{ .Values.longhornHookExecutor.replicas }}
+  selector:
+    matchLabels:
+      app: longhorn-hook-executor
+  template:
+    metadata:
+      labels: {{- include "longhorn.labels" . | nindent 8 }}
+        app: longhorn-hook-executor
+      {{- with .Values.longhornHookExecutor.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        {{- if not .Values.openshift.enabled }}
+        runAsUser: 65534
+        runAsGroup: 65534
+        {{- end }}
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: longhorn-hook-executor
+        image: {{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.manager.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.manager.repository }}:{{ .Values.image.longhorn.manager.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        command:
+        - longhorn-manager
+        - -d
+        {{- if eq .Values.longhornManager.log.format "json" }}
+        - -j
+        {{- end }}
+        - hook-executor
+        - --pause-workers
+        - {{ .Values.longhornHookExecutor.pauseWorkers | quote }}
+        ports:
+        - containerPort: 9506
+          name: healthz
+        readinessProbe:
+          httpGet:
+            path: /v1/healthz
+            port: 9506
+        livenessProbe:
+          httpGet:
+            path: /v1/healthz
+            port: 9506
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        {{- include "longhorn.timezoneEnv" . | nindent 8 }}
+        {{- with .Values.longhornHookExecutor.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- with (coalesce .Values.global.imagePullSecrets .Values.privateRegistry.registrySecret) }}
+      imagePullSecrets:
+        {{- $imagePullSecrets := list }}
+        {{- if kindIs "string" . }}
+          {{- $imagePullSecrets = append $imagePullSecrets (dict "name" .) }}
+        {{- else }}
+          {{- range . }}
+            {{- if kindIs "string" . }}
+                {{- $imagePullSecrets = append $imagePullSecrets (dict "name" .) }}
+            {{- else }}
+                {{- $imagePullSecrets = append $imagePullSecrets . }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- toYaml $imagePullSecrets | nindent 8 }}
+      {{- end }}
+      {{- if .Values.longhornHookExecutor.priorityClass }}
+      priorityClassName: {{ .Values.longhornHookExecutor.priorityClass | quote }}
+      {{- end }}
+      {{- if or .Values.global.tolerations .Values.longhornHookExecutor.tolerations .Values.global.cattle.windowsCluster.enabled }}
+      tolerations:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.tolerations }}
+{{ toYaml .Values.global.cattle.windowsCluster.tolerations | indent 6 }}
+        {{- end }}
+        {{- if or .Values.global.tolerations .Values.longhornHookExecutor.tolerations }}
+{{ default .Values.global.tolerations .Values.longhornHookExecutor.tolerations | toYaml | indent 6 }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.global.nodeSelector .Values.longhornHookExecutor.nodeSelector .Values.global.cattle.windowsCluster.enabled }}
+      nodeSelector:
+        {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.nodeSelector }}
+{{ toYaml .Values.global.cattle.windowsCluster.nodeSelector | indent 8 }}
+        {{- end }}
+        {{- if or .Values.global.nodeSelector .Values.longhornHookExecutor.nodeSelector }}
+{{ default .Values.global.nodeSelector .Values.longhornHookExecutor.nodeSelector | toYaml | indent 8 }}
+        {{- end }}
+      {{- end }}
+      affinity:
+      {{- toYaml .Values.longhornHookExecutor.affinity | nindent 8 }}
+      serviceAccountName: longhorn-hook-executor

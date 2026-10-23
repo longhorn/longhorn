@@ -35,3 +35,20 @@ spec:
   - name: recovery-backend
     port: 9503
     targetPort: recov-backend
+---
+# Exposes the hook executor metrics endpoint.
+apiVersion: v1
+kind: Service
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-hook-executor
+  name: longhorn-hook-executor
+  namespace: {{ include "release_namespace" . }}
+spec:
+  type: ClusterIP
+  selector:
+    app: longhorn-hook-executor
+  ports:
+  - name: metrics
+    port: 9506
+    targetPort: healthz
