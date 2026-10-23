@@ -80,6 +80,57 @@ Output: properly quoted YAML string
 {{- end -}}
 
 {{/*
+Normalize defaultSettings.systemManagedComponentsNodeSelector into the
+"key1:value1;key2:value2" form the setting validates. Accepts a string, a map,
+or a list whose items are strings or single/multi-key maps. A "key=value" entry
+is converted only when it holds exactly one "=" and no ":"; label keys and
+values can contain neither character, so that never changes the entry's meaning.
+Every resulting pair must be a valid label, otherwise rendering fails with the
+entry as the user wrote it, so nothing reaches longhorn-manager that it would
+ignore or accept as a garbage key.
+*/}}
+{{- define "longhorn.systemManagedComponentsNodeSelector" -}}
+  {{- $v := . -}}
+  {{- $entries := list -}}
+  {{- $origins := list -}}
+  {{- $items := list -}}
+  {{- if kindIs "map" $v -}}{{- $items = list $v -}}
+  {{- else if kindIs "slice" $v -}}{{- $items = $v -}}
+  {{- else -}}{{- $items = list (toString $v) -}}
+  {{- end -}}
+  {{- range $item := $items -}}
+    {{- if kindIs "map" $item -}}
+      {{- range $k := keys $item | sortAlpha -}}
+        {{- $entries = append $entries (printf "%s:%v" $k (get $item $k)) -}}
+        {{- $origins = append $origins (printf "%v" $item) -}}
+      {{- end -}}
+    {{- else if kindIs "string" $item -}}
+      {{- range $e := splitList ";" $item -}}
+        {{- $e = trim $e -}}
+        {{- if $e -}}
+          {{- $orig := $e -}}
+          {{- /* longhorn-manager trims around the separator, so "key: value" works today */ -}}
+          {{- $e = regexReplaceAll "\\s*([:=])\\s*" $e "${1}" -}}
+          {{- if and (not (contains ":" $e)) (eq (len (splitList "=" $e)) 2) -}}
+            {{- $e = replace "=" ":" $e -}}
+          {{- end -}}
+          {{- $entries = append $entries $e -}}
+          {{- $origins = append $origins $orig -}}
+        {{- end -}}
+      {{- end -}}
+    {{- else -}}
+      {{- fail (printf "defaultSettings.systemManagedComponentsNodeSelector entry %v is invalid: list items must be strings or maps" $item) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- range $i, $e := $entries -}}
+    {{- if not (regexMatch "^([a-z0-9]([-a-z0-9.]*[a-z0-9])?/)?[A-Za-z0-9]([-A-Za-z0-9_.]*[A-Za-z0-9])?:([A-Za-z0-9]([-A-Za-z0-9_.]*[A-Za-z0-9])?)?$" $e) -}}
+      {{- fail (printf "defaultSettings.systemManagedComponentsNodeSelector entry %q is invalid: the setting expects colon-separated label pairs like \"key1:value1;key2:value2\" (a map or a list of key=value entries is also accepted)" (index $origins $i)) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- join ";" $entries -}}
+{{- end -}}
+
+{{/*
 Optional timezone injection for all Longhorn workloads.
 When .Values.global.timezone is set, this snippet renders a TZ env var.
 */}}

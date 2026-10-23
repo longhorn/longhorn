@@ -324,6 +324,8 @@ defaultSettings:
   # Specify values using a semicolon-separated list in `kubectl taint` syntax (Example: key1=value1:effect; key2=value2:effect).
   taintToleration: ~
   # -- Node selector for system-managed Longhorn components.
+  # Specify values using a semicolon-separated list of colon-separated key-value pairs (Example: key1:value1; key2:value2).
+  # A YAML map, or a list whose entries are `key=value` strings or maps, is also accepted and normalized to that format.
   systemManagedComponentsNodeSelector: ~
   # -- Resource limits for system-managed CSI components.
   # This setting allows you to configure CPU and memory requests/limits for CSI attacher, provisioner, resizer, snapshotter, and plugin components.
