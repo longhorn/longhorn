@@ -16,6 +16,10 @@ rules:
 - apiGroups: [""]
   resources: ["secrets", "services", "endpoints", "configmaps", "serviceaccounts", "pods/log"]
   verbs: ["get", "list", "watch"]
+# Vault reviews the vault-audience token with the token itself, so no reviewer secret is needed.
+- apiGroups: ["authentication.k8s.io"]
+  resources: ["tokenreviews"]
+  verbs: ["create"]
 - apiGroups: [""]
   resources: ["events", "persistentvolumes", "persistentvolumeclaims", "persistentvolumeclaims/status", "nodes"]
   verbs: ["*"]
