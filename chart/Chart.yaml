@@ -41,16 +41,16 @@ annotations:
     - name: backing-image-manager
       image: longhornio/backing-image-manager:v1.12.2-rc1
     - name: support-bundle-kit
-      image: longhornio/support-bundle-kit:v1.0.2
+      image: longhornio/support-bundle-kit:v1.0.3
     - name: csi-attacher
-      image: longhornio/csi-attacher:v4.13.0
+      image: longhornio/csi-attacher:v4.13.0-20261028
     - name: csi-provisioner
-      image: longhornio/csi-provisioner:v5.3.0
+      image: longhornio/csi-provisioner:v5.3.0-20261028
     - name: csi-node-driver-registrar
-      image: longhornio/csi-node-driver-registrar:v2.18.0
+      image: longhornio/csi-node-driver-registrar:v2.18.0-20261028
     - name: csi-resizer
-      image: longhornio/csi-resizer:v2.3.0
+      image: longhornio/csi-resizer:v2.3.0-20261028
     - name: csi-snapshotter
-      image: longhornio/csi-snapshotter:v8.7.0
+      image: longhornio/csi-snapshotter:v8.7.0-20261028
     - name: livenessprobe
-      image: longhornio/livenessprobe:v2.20.0
+      image: longhornio/livenessprobe:v2.20.0-20261028
