@@ -45,7 +45,7 @@ networkPolicies:
   v1DataEngineInitiatorSourceCIDRs: []
   # -- Additional TCP ports used by recovery backend mesh transport.
   recoveryBackendAdditionalIngressPorts: []
-  # -- Sources permitted to scrape Longhorn Manager metrics on TCP/9500 when `restrictInternalTraffic` is enabled. Each entry is a NetworkPolicy peer. TCP/9500 also serves the Longhorn Manager REST API, so scope every entry as narrowly as the scraper allows, for example a `namespaceSelector` and a `podSelector` in one entry rather than a namespace on its own. When empty, only the Longhorn components already listed in the policy can reach Longhorn Manager.
+  # -- Sources permitted to scrape Longhorn Manager metrics on TCP/9500 and hook executor metrics on TCP/9506 when `restrictInternalTraffic` is enabled. Each entry is a NetworkPolicy peer. TCP/9500 also serves the Longhorn Manager REST API, so scope every entry as narrowly as the scraper allows, for example a `namespaceSelector` and a `podSelector` in one entry rather than a namespace on its own. When empty, only the Longhorn components already listed in the policy can reach Longhorn Manager, and nothing can reach the hook executor.
   metricsScrapeSources: []
 image:
   longhorn:
@@ -498,6 +498,10 @@ defaultSettings:
   csiStorageCapacityTracking: ~
   # -- Setting that allows Longhorn to query the Kubernetes Metrics Server ('metrics.k8s.io') for pod and node resource usage.
   kubernetesMetricsServerMetricsEnabled: ~
+  # -- Number of times the hook executor runs a member's post-command in one pod when the command fails or times out, before it gives up and marks the pod PostFailed. The snapshot group controller uses the same number, with `hookReleaseTimeout`, to bound how long a deleting hooked group waits for its release before abandoning it.
+  hookReleaseAttempts: ~
+  # -- Seconds each post-command attempt may run before the hook executor cancels its exec session and counts the attempt as timed out. Cancelling the session does not kill the process in the pod.
+  hookReleaseTimeout: ~
 # -- Setting that allows you to update the default backupstore.
 defaultBackupStore:
   # -- Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE")
@@ -602,6 +606,40 @@ longhornGlobalManager:
     minAvailable: 1
     # -- Maximum number or percentage of global manager pods that can be unavailable during a disruption. When set, it takes precedence over `longhornGlobalManager.podDisruptionBudget.minAvailable`.
     maxUnavailable: ""
+longhornHookExecutor:
+  # -- Replica count for the hook executor. One replica is the active leader; the other is a warm standby. The executor runs VolumeHookPolicy pre and post commands inside application pods.
+  replicas: 2
+  # -- Maximum number of SnapshotGroups whose pre-commands run at the same time. The release side is not bounded by this value.
+  pauseWorkers: 5
+  # -- PriorityClass for the hook executor.
+  priorityClass: *defaultPriorityClassNameRef
+  # -- Affinity for hook executor pods. The default spreads replicas across nodes.
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - longhorn-hook-executor
+            topologyKey: kubernetes.io/hostname
+  # -- Resource requests and limits for hook executor pods.
+  resources: ~
+  # -- Node tolerations for hook executor pods.
+  tolerations: []
+  # -- Node selector for hook executor pods.
+  nodeSelector: {}
+  # -- Annotations for hook executor pods.
+  annotations: {}
+  # -- Pod Disruption Budget for the hook executor. Effective only when `longhornHookExecutor.replicas` is greater than 1.
+  podDisruptionBudget:
+    # -- Setting that allows you to enable the Pod Disruption Budget for the hook executor.
+    enabled: false
+    # -- Maximum number of hook executor pods that can be unavailable during a voluntary disruption such as a node drain. Keep this at least 1 so a drain can always proceed while the standby takes over the leader Lease.
+    maxUnavailable: 1
 longhornDriver:
   log:
     # -- Format of longhorn-driver logs. (Options: "plain", "json")
