@@ -6619,7 +6619,7 @@ spec:
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
         image: docker.io/longhornio/longhorn-share-manager:master-head
-        command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
+        command: ["sh", "-c", "echo share-manager image pulled && trap 'exit 0' TERM && { sleep infinity & wait; }"]
       volumes:
       - name: boot
         hostPath:
