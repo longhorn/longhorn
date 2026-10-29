@@ -1,0 +1,74 @@
+name: "[PR Management] ASCII Check"
+
+# Reject non-ASCII and invisible/control characters introduced by a pull
+# request. See scripts/development/ascii-checker.sh for the rules and
+# scripts/development/ascii-checker-relaxed-paths.txt for relaxed paths.
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ascii-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  ascii-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      CHECKER: scripts/development/ascii-checker.sh
+    steps:
+      # Check out the default PR merge ref, not the PR head: open PRs whose
+      # branches predate the checker get it from the merge result. Changed
+      # files are taken from the merge result compared with BASE_SHA, so their
+      # paths exist in the checkout even when the base renamed them; commits
+      # are taken from BASE_SHA..HEAD_SHA.
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check PR title
+        if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          printf '%s\n' "${PR_TITLE}" | "${CHECKER}" --label "PR title" -
+
+      - name: Check changed files and file names
+        if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
+        run: |
+          git diff -z --name-only --diff-filter=ACMR "${BASE_SHA}" HEAD >"${RUNNER_TEMP}/changed-files"
+          mapfile -d '' -t files <"${RUNNER_TEMP}/changed-files"
+          if [[ ${#files[@]} -eq 0 ]]; then
+            echo "No added, copied, modified, or renamed files."
+            exit 0
+          fi
+          "${CHECKER}" -- "${files[@]}"
+
+      - name: Check commit messages
+        if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
+        run: |
+          git rev-list --no-merges --reverse "${BASE_SHA}..${HEAD_SHA}" >"${RUNNER_TEMP}/commits"
+          status=0
+          while read -r sha; do
+            git log -1 --format=%B "${sha}" |
+              "${CHECKER}" --commit-message --label "commit ${sha:0:12}" - || status=1
+          done <"${RUNNER_TEMP}/commits"
+          exit "${status}"

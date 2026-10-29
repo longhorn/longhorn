@@ -224,6 +224,39 @@ When aliases are used, keep them grouped consistently with nearby imports and ex
 
 Before submitting a pull request, run the relevant formatting and validation commands for the repository you are changing.
 
+## ASCII-Only Content
+
+Files, file names, commit messages, and pull request titles must contain printable ASCII characters only: tab, line feed (CRLF line endings are accepted), and the range 0x20-0x7E. Characters such as em dashes, curly quotes, arrows, box-drawing characters, and emoji make code search with `grep` unreliable and render poorly in some terminals, log collectors, and support environments. Invisible and bidirectional (BiDi) Unicode characters can also make code look different to a reviewer than to a compiler or shell ([Trojan Source](https://arxiv.org/abs/2111.00169), CVE-2021-42574 and CVE-2021-42694).
+
+The `[PR Management] ASCII Check` workflow enforces this on every pull request in `longhorn/longhorn`. It checks the full content and name of every file the pull request adds or modifies, each commit message, and the pull request title. The checker lives in `longhorn/longhorn`, but you can run it from any Longhorn repository by launching it from its raw URL. Run it before pushing, replacing `origin/master` with your target branch:
+
+```bash
+# Download the checker, stop if the download fails, then run it with bash.
+ascii_checker() {
+  local script
+  script=$(curl -fsSL https://raw.githubusercontent.com/longhorn/longhorn/master/scripts/development/ascii-checker.sh) || return 2
+  bash <(printf '%s\n' "${script}") "$@"
+}
+
+# Files changed since the target branch, plus untracked files
+{ git -c core.quotepath=off diff --name-only --diff-filter=ACMR --merge-base origin/master
+  git -c core.quotepath=off ls-files --others --exclude-standard
+} | ascii_checker -f -
+
+# Commit messages on your branch (%n keeps a blank line between messages)
+git log --format=%B%n origin/master..HEAD | ascii_checker --commit-message -
+```
+
+The checker needs bash and Python 3.7 or later. The `ascii_checker` function works in bash and zsh. It downloads the checker first, so a failed download returns an error instead of running an empty script and reporting success. It then runs the checker through process substitution, `bash <(...)`: bash reads the checker from a file descriptor such as `/dev/fd/63`, so its stdin stays connected to the `git` pipe that supplies the file list or commit messages. Avoid `curl ... | bash`, where stdin would carry the checker itself; the checker refuses `-f -` and `-` in that mode. In a `longhorn/longhorn` checkout, you can run `scripts/development/ascii-checker.sh` directly instead.
+
+Each finding includes the file, line, column, and Unicode name of the character, and a suggested ASCII replacement for common characters. Run `ascii_checker --help` for all options. Keep in mind:
+
+- The whole file is checked, so replace existing non-ASCII characters in any file you modify.
+- In `longhorn/longhorn`, files matching [`scripts/development/ascii-checker-relaxed-paths.txt`](./scripts/development/ascii-checker-relaxed-paths.txt) (release notes, enhancement proposals, and issue templates) may contain non-ASCII text, but invisible, BiDi, and control characters are still rejected. The local script applies this list automatically; with `ascii_checker`, add `--relaxed-from <(curl -fsSL https://raw.githubusercontent.com/longhorn/longhorn/master/scripts/development/ascii-checker-relaxed-paths.txt)`.
+- Contributor names in `Signed-off-by`, `Co-authored-by`, and similar trailers may contain non-ASCII letters when the trailers form their own paragraph, as in the trailer block at the end of a message. The same line inside prose is checked strictly.
+- Express intentional non-ASCII data, such as test strings, with escape sequences.
+- The content of binary files is not checked.
+
 ## Chart Changes
 
 Do not submit pull requests directly to:
@@ -313,6 +346,7 @@ Before requesting review, confirm that:
 - [ ] The change has been tested.
 - [ ] The test steps and results are included in the pull request description.
 - [ ] Go imports follow the Longhorn coding convention.
+- [ ] Changed files, commit messages, and the pull request title contain ASCII characters only.
 - [ ] Documentation has been updated in the appropriate repository when needed.
 - [ ] Chart changes are submitted to `longhorn/longhorn`, not `longhorn/charts`.
 - [ ] Backports to supported release branches are considered when needed.
