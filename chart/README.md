@@ -95,7 +95,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | networkPolicies.recoveryBackendAdditionalIngressPorts | list | `[]` | Additional TCP ports used by recovery backend mesh transport. |
 | networkPolicies.restrictInternalTraffic | bool | `true` | Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other. |
 | networkPolicies.type | string | `"k3s"` | Distribution that determines the policy for allowing access for an ingress. (Options: "k3s", "rke2", "rke1") |
-| networkPolicies.v1DataEngineInitiatorSourceCIDRs | list | `[]` | Source CIDRs observed by the CNI for V1 iSCSI initiator traffic. When empty, any source that can reach instance-manager can connect to TCP/3260. |
+| networkPolicies.v1DataEngineInitiatorSourceCIDRs | list | `[]` | Source CIDRs allowed to connect to the V1 iSCSI target on TCP/3260 of instance-manager pods. When empty, no TCP/3260 rule is generated, and only traffic from the pod's own node is allowed, which covers the V1 initiator on CNIs that follow the Kubernetes NetworkPolicy node-local allowance. Set this when the CNI rewrites the source of host traffic, for example `169.254.7.127/32` and `fd16:9254:7127:1337:ffff:ffff:ffff:ffff/128` for Istio Ambient, or when volumes use the `iscsi` frontend with initiators outside the node. |
 
 ### Image Settings
 
