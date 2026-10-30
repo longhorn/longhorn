@@ -41,7 +41,7 @@ networkPolicies:
   type: "k3s"
   # -- Kubernetes API server source CIDRs allowed to access the Longhorn admission webhook. When empty, source filtering is disabled.
   kubeAPIServerSourceCIDRs: []
-  # -- Source CIDRs observed by the CNI for V1 iSCSI initiator traffic. When empty, any source that can reach instance-manager can connect to TCP/3260.
+  # -- Source CIDRs allowed to connect to the V1 iSCSI target on TCP/3260 of instance-manager pods when `restrictInternalTraffic` is enabled. When empty, no dedicated TCP/3260 rule is generated, so only the Longhorn components already allowed by the instance-manager policy and traffic from the pod's own node can connect. Node-local traffic covers the V1 initiator on CNIs that follow the Kubernetes NetworkPolicy node-local allowance. Set this when the CNI rewrites the source of host traffic, for example `169.254.7.127/32` and `fd16:9254:7127:1337:ffff:ffff:ffff:ffff/128` for Istio Ambient, or when volumes use the `iscsi` frontend with initiators outside the node.
   v1DataEngineInitiatorSourceCIDRs: []
   # -- Additional TCP ports used by recovery backend mesh transport.
   recoveryBackendAdditionalIngressPorts: []
