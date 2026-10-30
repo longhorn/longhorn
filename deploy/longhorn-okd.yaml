@@ -102,9 +102,6 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
-  - ports:
-    - protocol: TCP
-      port: 3260
 
 ---
 # Source: longhorn/templates/network-policies/manager-network-policy.yaml
