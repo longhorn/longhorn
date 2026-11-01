@@ -1,6 +1,8 @@
 # Default values for longhorn.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+# -- Installation capability. v1-capable preserves mixed-engine behavior and iSCSI requirements. v2-only requires explicit V1=false/V2=true settings and a V2 StorageClass when chart-owned. Use a manager release supporting this option.
+dataEngineMode: v1-capable
 global:
   # -- Global override for container image registry.
   imageRegistry: ""

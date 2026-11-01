@@ -2,6 +2,15 @@ categories:
   - storage
 namespace: longhorn-system
 questions:
+  - variable: dataEngineMode
+    default: v1-capable
+    description: Installation capability. v2-only requires explicit V1 disabled and V2 enabled settings, a V2 chart-owned StorageClass, and a compatible manager release. Migrate existing V1 storage before opting in.
+    label: Data Engine Installation Capability
+    type: enum
+    options:
+      - v1-capable
+      - v2-only
+    group: Longhorn Settings
   - variable: image.defaultImage
     default: 'true'
     description: Use default Longhorn images
