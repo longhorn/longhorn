@@ -1,0 +1,22 @@
+{{- if .Values.networkPolicies.restrictInternalTraffic }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: longhorn-hook-executor
+  namespace: {{ include "release_namespace" . }}
+spec:
+  podSelector:
+    matchLabels:
+      app: longhorn-hook-executor
+  policyTypes:
+  - Ingress
+  ingress:
+{{- with .Values.networkPolicies.metricsScrapeSources }}
+  - from:
+{{ toYaml . | indent 4 }}
+    ports:
+    - protocol: TCP
+      port: 9506
+{{- else }} []
+{{- end }}
+{{- end }}

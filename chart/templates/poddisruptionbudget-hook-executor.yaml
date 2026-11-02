@@ -1,0 +1,14 @@
+{{- if and .Values.longhornHookExecutor.podDisruptionBudget.enabled (gt (int .Values.longhornHookExecutor.replicas) 1) }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    app: longhorn-hook-executor
+  name: longhorn-hook-executor
+  namespace: {{ include "release_namespace" . }}
+spec:
+  maxUnavailable: {{ .Values.longhornHookExecutor.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: longhorn-hook-executor
+{{- end }}

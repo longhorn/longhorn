@@ -58,3 +58,29 @@ rules:
   - apiGroups: ["apps"]
     resources: ["replicasets"]
     verbs: ["get"]
+---
+# Lets the hook executor track SnapshotGroups and report hook progress in
+# the Longhorn namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: longhorn-hook-executor
+  namespace: {{ include "release_namespace" . }}
+  labels:
+    {{- include "longhorn.labels" . | nindent 4 }}
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["snapshotgroups"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["longhorn.io"]
+  resources: ["snapshotgroups/status"]
+  verbs: ["update"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumes", "settings"]
+  verbs: ["list", "watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: ["get", "create", "update"]

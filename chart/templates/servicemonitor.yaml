@@ -40,4 +40,46 @@ spec:
     metricRelabelings:
       {{- toYaml . | nindent 8 }}
     {{- end }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: longhorn-hook-executor-servicemonitor
+  namespace: {{ include "release_namespace" . }}
+  labels:
+    {{- include "longhorn.labels" . | nindent 4 }}
+    name: longhorn-hook-executor-servicemonitor
+    {{- with .Values.metrics.serviceMonitor.additionalLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.metrics.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.metrics.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: longhorn-hook-executor
+  namespaceSelector:
+    matchNames:
+    - {{ include "release_namespace" . }}
+  endpoints:
+  - port: metrics
+    {{- with .Values.metrics.serviceMonitor.interval }}
+    interval: {{ . }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.scrapeTimeout }}
+    scrapeTimeout: {{ . }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.relabelings }}
+    relabelings:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
 {{- end }}

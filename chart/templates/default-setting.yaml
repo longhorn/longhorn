@@ -338,3 +338,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.kubernetesMetricsServerMetricsEnabled) }}
     kubernetes-metrics-server-metrics-enabled: {{ .Values.defaultSettings.kubernetesMetricsServerMetricsEnabled }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.hookReleaseAttempts) }}
+    hook-release-attempts: {{ .Values.defaultSettings.hookReleaseAttempts | quote }}
+    {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.hookReleaseTimeout) }}
+    hook-release-timeout: {{ .Values.defaultSettings.hookReleaseTimeout | quote }}
+    {{- end }}

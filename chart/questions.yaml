@@ -1068,6 +1068,24 @@ questions:
         group: Longhorn Default Settings
         type: boolean
         default: true
+      - variable: defaultSettings.hookReleaseAttempts
+        label: Hook Release Attempts
+        description: >-
+          Number of times the hook executor runs a member's post-command in one pod when the command fails or times out, before it gives up and marks the pod PostFailed. The snapshot group controller uses the same number, with the release timeout, to bound how long a deleting hooked group waits for its release before abandoning it.
+        group: Longhorn Default Settings
+        type: int
+        min: 1
+        max: 20
+        default: 3
+      - variable: defaultSettings.hookReleaseTimeout
+        label: Hook Release Timeout
+        description: >-
+          Seconds each post-command attempt may run before the hook executor cancels its exec session and counts the attempt as timed out. Cancelling the session does not kill the process in the pod.
+        group: Longhorn Default Settings
+        type: int
+        min: 5
+        max: 600
+        default: 60
   - variable: persistence.defaultClass
     default: 'true'
     description: Setting that allows you to specify the default Longhorn StorageClass.
