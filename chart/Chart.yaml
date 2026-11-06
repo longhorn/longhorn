@@ -41,7 +41,7 @@ annotations:
     - name: backing-image-manager
       image: longhornio/backing-image-manager:v1.12.2-rc4
     - name: support-bundle-kit
-      image: longhornio/support-bundle-kit:v1.0.3
+      image: longhornio/support-bundle-kit:v1.0.4
     - name: csi-attacher
       image: longhornio/csi-attacher:v4.13.0-20261028
     - name: csi-provisioner
