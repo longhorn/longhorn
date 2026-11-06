@@ -100,6 +100,12 @@ spec:
         ports:
         - containerPort: 8000
           name: http
+        {{- with .Values.longhornUI.readinessProbe }}
+        {{- if .enabled }}
+        readinessProbe:
+          {{- omit . "enabled" | toYaml | nindent 10 }}
+        {{- end }}
+        {{- end }}
         env:
           - name: LONGHORN_MANAGER_IP
             value: "http://longhorn-backend:9500"
