@@ -89,3 +89,21 @@ When .Values.global.timezone is set, this snippet renders a TZ env var.
   value: {{ .Values.global.timezone | quote }}
 {{- end }}
 {{- end -}}
+
+{{/* Validate installation capability even when all optional hooks are disabled. */}}
+{{- define "longhorn.validateDataEngineMode" -}}
+{{- $mode := .Values.dataEngineMode -}}
+{{- if not (kindIs "string" $mode) -}}
+  {{- fail "dataEngineMode must be v1-capable or v2-only" -}}
+{{- else if not (or (eq $mode "v1-capable") (eq $mode "v2-only")) -}}
+  {{- fail "dataEngineMode must be v1-capable or v2-only" -}}
+{{- end -}}
+{{- if eq $mode "v2-only" -}}
+  {{- if or (ne (toString .Values.defaultSettings.v1DataEngine) "false") (ne (toString .Values.defaultSettings.v2DataEngine) "true") -}}
+    {{- fail "v2-only requires explicit defaultSettings.v1DataEngine=false and defaultSettings.v2DataEngine=true" -}}
+  {{- end -}}
+  {{- if and .Values.persistence.createStorageClass (ne .Values.persistence.dataEngine "v2") -}}
+    {{- fail "v2-only requires persistence.dataEngine=v2 when persistence.createStorageClass=true" -}}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
