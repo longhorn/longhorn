@@ -48,7 +48,7 @@ Longhorn v1.13.0 supports live upgrade of V2 volumes, so the V2 instance manager
 > [!IMPORTANT]
 > **Upgrade path:**
 >
-> V2 live upgrade to v1.13.0 is supported only from Longhorn v1.12.2. When upgrading from v1.12.0 or v1.12.1, or when the [prerequisites](https://longhorn.io/docs/1.13.0/deploy/upgrade/v2-instance-upgrade/#prerequisites) are not met, detach all V2 volumes and ensure their replicas are stopped before upgrading.
+> V2 live upgrade to v1.13.0 is **not supported**. During a live upgrade, replicas are rebuilt while volumes are serving I/O, and several V2 replica rebuild and live-upgrade issues discovered after v1.13.0 ([Issue #14411](https://github.com/longhorn/longhorn/issues/14411), [Issue #14482](https://github.com/longhorn/longhorn/issues/14482), [Issue #14424](https://github.com/longhorn/longhorn/issues/14424), and [Issue #14353](https://github.com/longhorn/longhorn/issues/14353)) can cause `spdk_tgt` in the instance-manager pods to crash or the upgrade to get stuck. Detach all V2 volumes and ensure their replicas are stopped before upgrading to v1.13.0.
 
 [GitHub Issue #9104](https://github.com/longhorn/longhorn/issues/9104)
 
@@ -192,7 +192,7 @@ You can install Longhorn using a variety of tools, including Rancher, kubectl, a
 
 Longhorn only allows upgrades from supported versions. For more information about upgrade paths and procedures, see [Upgrade](https://longhorn.io/docs/1.13.0/deploy/upgrade/) in the Longhorn documentation.
 
-Automated pre-upgrade checks do not cover all scenarios. Before upgrading, review the manual checks in [Important Notes](https://longhorn.io/docs/1.13.0/important-notes/#manual-checks-before-upgrade), and for V2 volumes confirm the [live upgrade prerequisites](https://longhorn.io/docs/1.13.0/deploy/upgrade/v2-instance-upgrade/#prerequisites) or detach them and ensure their replicas are stopped before upgrading.
+Automated pre-upgrade checks do not cover all scenarios. Before upgrading to v1.13.0, review the manual checks in [Important Notes](https://longhorn.io/docs/1.13.0/important-notes/#manual-checks-before-upgrade), and detach all V2 volumes and ensure their replicas are stopped before upgrading.
 
 ## Post-Release Known Issues
 
