@@ -1,0 +1,17 @@
+# Paths that scripts/development/ascii-checker.sh checks with --dangerous-only
+# instead of the strict ASCII-only rule. Non-ASCII text such as diagrams, names,
+# or emoji is accepted in these files, but BiDi controls, zero-width and other
+# invisible characters, and control characters are still rejected.
+#
+# Patterns are relative to the repository root. "*" and "?" do not match "/",
+# "**" matches across directories, and a trailing "/" matches everything below.
+# Keep this list short; prefer converting files to ASCII over adding entries.
+
+# Release notes, mostly generated or historical.
+CHANGELOG/**
+
+# Longhorn Enhancement Proposals with box-drawing diagrams.
+enhancements/**
+
+# Issue forms and templates rendered to users on GitHub.
+.github/ISSUE_TEMPLATE/**
