@@ -1,0 +1,21 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: longhorn-v2-shared-block
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  dataEngine: "v2"
+  # sharedBlock allows a ReadWriteMany block volume to be attached to multiple
+  # nodes at the same time. A single engine serves all attached nodes, so they
+  # share one NVMe reservation state.
+  # Requirements: ReadWriteMany access mode, Block volume mode, the "blockdev"
+  # frontend (default), no encryption, and data locality other than strict-local.
+  sharedBlock: "true"
+  numberOfReplicas: "3"
+  staleReplicaTimeout: "2880"
+#  migratable: "true"  # allowed; a shared block volume never live-migrates its engine
+#  nodeSelector: "storage,fast"
+#  diskSelector: "nvme"
