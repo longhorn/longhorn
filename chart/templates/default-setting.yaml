@@ -82,10 +82,10 @@ data:
     {{- if or (not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector)) (.Values.global.cattle.windowsCluster.enabled) }}
     system-managed-components-node-selector: {{ $windowsDefaultSettingNodeSelector := list }}{{ $defaultSettingNodeSelector := list -}}
       {{- if and .Values.global.cattle.windowsCluster.enabled .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
-        {{ $windowsDefaultSettingNodeSelector = .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
+        {{- $windowsDefaultSettingNodeSelector = include "longhorn.systemManagedComponentsNodeSelector" .Values.global.cattle.windowsCluster.defaultSetting.systemManagedComponentsNodeSelector -}}
       {{- end -}}
       {{- if not (kindIs "invalid" .Values.defaultSettings.systemManagedComponentsNodeSelector) -}}
-        {{- $defaultSettingNodeSelector = .Values.defaultSettings.systemManagedComponentsNodeSelector -}}
+        {{- $defaultSettingNodeSelector = include "longhorn.systemManagedComponentsNodeSelector" .Values.defaultSettings.systemManagedComponentsNodeSelector -}}
       {{- end -}}
       {{- $nodeSelector := list $windowsDefaultSettingNodeSelector $defaultSettingNodeSelector }}{{ join ";" (compact $nodeSelector) | quote -}}
     {{- end }}
