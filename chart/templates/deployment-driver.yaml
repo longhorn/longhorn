@@ -13,6 +13,7 @@ spec:
     metadata:
       labels: {{- include "longhorn.labels" . | nindent 8 }}
         app: longhorn-driver-deployer
+        longhorn.io/component: driver-deployer
     spec:
       initContainers:
         - name: wait-longhorn-manager
