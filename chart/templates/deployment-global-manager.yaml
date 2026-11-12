@@ -30,6 +30,10 @@ spec:
         - -j
         {{- end }}
         - global
+        {{- if eq .Values.dataEngineMode "v2-only" }}
+        - --data-engine-mode
+        - v2-only
+        {{- end }}
         ports:
         - containerPort: 9505
           name: healthz

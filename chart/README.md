@@ -22,7 +22,30 @@ Longhorn is 100% open source software. Project source code is spread across a nu
 1. A container runtime compatible with Kubernetes (Docker v1.13+, containerd v1.3.7+, etc.)
 2. Kubernetes >= v1.34
 3. Make sure `bash`, `curl`, `findmnt`, `grep`, `awk` and `blkid` has been installed in all nodes of the Kubernetes cluster.
-4. Make sure `open-iscsi` has been installed, and the `iscsid` daemon is running on all nodes of the Kubernetes cluster. For GKE, recommended Ubuntu as guest OS image since it contains `open-iscsi` already.
+4. In the default `v1-capable` mode, make sure `open-iscsi` is installed and the `iscsid` daemon is running on all nodes. This includes mixed V1/V2 installations. For GKE, Ubuntu includes `open-iscsi` already.
+
+## V2-only installation capability
+
+`dataEngineMode: v2-only` selects an explicit installation capability supported by a compatible Longhorn Manager release. It is separate from enabling V2 alongside V1. The default `v1-capable` mode preserves existing manager commands and iSCSI prerequisites.
+
+For a fresh V2-only installation with a chart-owned StorageClass, set:
+
+```yaml
+dataEngineMode: v2-only
+defaultSettings:
+  v1DataEngine: false
+  v2DataEngine: true
+persistence:
+  dataEngine: v2
+```
+
+The chart rejects an unresolved or conflicting engine tuple, including when upgrade hooks are disabled. Daemon, global manager and pre-upgrade commands receive the capability explicitly. The manager separately checks live storage and runtime before starting. V2 nodes still require their normal V2 disk, CPU, kernel, NVMe/TCP and memory/hugepage prerequisites; this option does not provision them.
+
+For an existing installation, retain iSCSI throughout migration. Move or restore every V1 volume and retained snapshot that must be kept, prove V2 recovery, and retire V1 engines, replicas and instance-manager runtime before selecting V2-only mode. This value does not convert existing data, snapshots or immutable StorageClass parameters. Remove host iSCSI dependencies only after the V2-only rollout is verified on every node.
+
+Apply and verify the explicit engine settings and StorageClass ownership while still in `v1-capable` mode first, then opt into `v2-only` in a separate upgrade. The pre-upgrade check receives the requested capability but validates the installed settings and runtime before the new ConfigMap is applied.
+
+The chart's `longhorn-storageclass` ConfigMap causes the manager to delete and recreate the generated `longhorn` StorageClass when its embedded definition changes. Prepare and select an external V2 StorageClass and set `persistence.createStorageClass=false` during an existing installation's migration, or establish that the chart-owned class already has matching parameters. The chart cannot verify that live ownership or parameter match during rendering.
 
 ## Upgrading to Kubernetes v1.25+
 
@@ -344,6 +367,7 @@ For more details, see the [ocp-readme](https://github.com/longhorn/longhorn/blob
 | Key | Default | Description |
 |-----|---------|-------------|
 | annotations | `{}` | Annotation for the Longhorn Manager DaemonSet pods. This setting is optional. |
+| dataEngineMode | `"v1-capable"` | Installation capability. v1-capable preserves mixed-engine behavior and iSCSI requirements. v2-only requires explicit V1=false/V2=true settings and a V2 StorageClass when chart-owned. Use a manager release supporting this option. |
 | defaultBackupStore | `{"backupTarget":null,"backupTargetCredentialSecret":null,"pollInterval":null}` | Setting that allows you to update the default backupstore. |
 | defaultBackupStore.backupTarget | `nil` | Endpoint used to access the default backupstore. (Options: "NFS", "CIFS", "AWS", "GCP", "AZURE") |
 | defaultBackupStore.backupTargetCredentialSecret | `nil` | Name of the Kubernetes secret associated with the default backup target. |

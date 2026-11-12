@@ -63,8 +63,8 @@ data:
       {{- end }}
       {{- if .Values.persistence.disableRevisionCounter }}
       disableRevisionCounter: "{{ .Values.persistence.disableRevisionCounter }}"
-      dataEngine: "{{ .Values.persistence.dataEngine }}"
       {{- end }}
+      dataEngine: "{{ .Values.persistence.dataEngine }}"
       {{- if .Values.persistence.backupTargetName }}
       backupTargetName: "{{ .Values.persistence.backupTargetName }}"
       {{- end }}
