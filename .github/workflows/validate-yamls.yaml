@@ -12,6 +12,26 @@ permissions:
   contents: read
 
 jobs:
+  test-helm-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Helm
+        uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4.3.1
+        with:
+          version: v3.19.0
+
+      - name: Test Helm chart
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+          python3 -m venv .venv
+          .venv/bin/python -m pip install -r chart/tests/requirements.txt
+          .venv/bin/python -m unittest discover -s chart/tests -v
+
   validate-yamls:
     runs-on: ubuntu-latest
     steps:
