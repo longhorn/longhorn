@@ -6502,7 +6502,7 @@ spec:
         - --backing-image-manager-image
         - "docker.io/longhornio/backing-image-manager:v1.13.1-rc1"
         - --support-bundle-manager-image
-        - "docker.io/longhornio/support-bundle-kit:v1.1.0"
+        - "docker.io/longhornio/support-bundle-kit:v1.1.1"
         - --manager-image
         - "docker.io/longhornio/longhorn-manager:v1.13.1-rc1"
         - --service-account
