@@ -102,9 +102,6 @@ spec:
     - podSelector:
         matchLabels:
           longhorn.io/component: backing-image-data-source
-  - ports:
-    - protocol: TCP
-      port: 3260
 
 ---
 # Source: longhorn/templates/network-policies/manager-network-policy.yaml
@@ -2049,6 +2046,19 @@ spec:
               currentState:
                 type: string
               endpoint:
+                type: string
+              engineRestoreError:
+                description: |-
+                  EngineRestoreError is set when a backup restore fails with an error
+                  that cannot be attributed to a current replica, for example when the
+                  backup target is unreachable or the replica that failed has already
+                  been removed from the engine. It is cleared when the next restore
+                  attempt starts, and set again if that attempt fails. Longhorn retries
+                  the restore within a time budget and then gives up. Only the V2 Data
+                  Engine reports it.
+
+                  Errors attributed to a current replica appear in that replica's
+                  RestoreStatus entry instead and fail only that replica.
                 type: string
               instanceManagerName:
                 type: string
@@ -5865,7 +5875,7 @@ spec:
               topologyRequirement:
                 description: |-
                   TopologyRequirement lists the failure domains the volume's replicas must
-                  be scheduled in, derived from the CSI accessible topology at creation —
+                  be scheduled in, derived from the CSI accessible topology at creation -
                   the same failure domains as the PV nodeAffinity terms (a node must match
                   at least one term). Empty means unconstrained.
                 items:
@@ -6550,7 +6560,7 @@ spec:
       - name: pre-pull-share-manager-image
         imagePullPolicy: IfNotPresent
         image: docker.io/longhornio/longhorn-share-manager:master-head
-        command: ["sh", "-c", "echo share-manager image pulled && sleep infinity"]
+        command: ["sh", "-c", "echo share-manager image pulled && trap 'exit 0' TERM && { sleep infinity & wait; }"]
       volumes:
       - name: boot
         hostPath:
@@ -6639,7 +6649,7 @@ spec:
           - name: CSI_RESIZER_IMAGE
             value: "docker.io/longhornio/csi-resizer:v2.2.1"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "docker.io/longhornio/csi-snapshotter:v8.6.0"
+            value: "docker.io/longhornio/csi-snapshotter:v8.7.0"
           - name: CSI_LIVENESS_PROBE_IMAGE
             value: "docker.io/longhornio/livenessprobe:v2.19.0"
           # Uncomment to enable CSI VolumeGroupSnapshot support.

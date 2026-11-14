@@ -41,7 +41,7 @@ networkPolicies:
   type: "k3s"
   # -- Kubernetes API server source CIDRs allowed to access the Longhorn admission webhook. When empty, source filtering is disabled.
   kubeAPIServerSourceCIDRs: []
-  # -- Source CIDRs observed by the CNI for V1 iSCSI initiator traffic. When empty, any source that can reach instance-manager can connect to TCP/3260.
+  # -- Source CIDRs allowed to access the V1 iSCSI target on TCP/3260 of instance-manager pods when `restrictInternalTraffic` is enabled. When empty, no dedicated TCP/3260 ingress rule is generated. Access remains subject to the existing instance-manager `NetworkPolicy` rules and the Kubernetes node-local traffic allowance. Set this value if the CNI does not exempt node-originated iSCSI traffic from `NetworkPolicy` enforcement, or if iSCSI initiators outside the node require access. Use the narrowest CIDRs matching the effective source addresses observed by the CNI.
   v1DataEngineInitiatorSourceCIDRs: []
   # -- Additional TCP ports used by recovery backend mesh transport.
   recoveryBackendAdditionalIngressPorts: []
@@ -133,7 +133,7 @@ image:
       # -- Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
       repository: longhornio/csi-snapshotter
       # -- Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value.
-      tag: v8.6.0
+      tag: v8.7.0
     livenessProbe:
       # -- Registry for the CSI liveness probe image. When unspecified, Longhorn uses the default value.
       registry: ""
@@ -663,6 +663,8 @@ longhornUI:
   #   operator: "Equal"
   #   value: "value"
   #   effect: "NoSchedule"
+  # -- Resource requests and limits for Longhorn UI pods.
+  resources: ~
   # -- Node selector for Longhorn UI. Specify the nodes allowed to run Longhorn UI.
   nodeSelector: {}
   ## If you want to set node selector for Longhorn UI Deployment, delete the `{}` in the line above

@@ -95,7 +95,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | networkPolicies.recoveryBackendAdditionalIngressPorts | list | `[]` | Additional TCP ports used by recovery backend mesh transport. |
 | networkPolicies.restrictInternalTraffic | bool | `true` | Setting that allows you to enable network policies for internal Longhorn components. When enabled, only authorized Longhorn components are allowed to communicate with each other. |
 | networkPolicies.type | string | `"k3s"` | Distribution that determines the policy for allowing access for an ingress. (Options: "k3s", "rke2", "rke1") |
-| networkPolicies.v1DataEngineInitiatorSourceCIDRs | list | `[]` | Source CIDRs observed by the CNI for V1 iSCSI initiator traffic. When empty, any source that can reach instance-manager can connect to TCP/3260. |
+| networkPolicies.v1DataEngineInitiatorSourceCIDRs | list | `[]` | Source CIDRs allowed to access the V1 iSCSI target on TCP/3260 of instance-manager pods when `restrictInternalTraffic` is enabled. When empty, no dedicated TCP/3260 ingress rule is generated. Access remains subject to the existing instance-manager `NetworkPolicy` rules and the Kubernetes node-local traffic allowance. Set this value if the CNI does not exempt node-originated iSCSI traffic from `NetworkPolicy` enforcement, or if iSCSI initiators outside the node require access. Use the narrowest CIDRs matching the effective source addresses observed by the CNI. |
 
 ### Image Settings
 
@@ -118,7 +118,7 @@ The `values.yaml` contains items used to tweak a deployment of this chart.
 | image.csi.resizer.tag | string | `"v2.2.1"` | Tag for the CSI Resizer image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.registry | string | `""` | Registry for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.csi.snapshotter.repository | string | `"longhornio/csi-snapshotter"` | Repository for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
-| image.csi.snapshotter.tag | string | `"v8.6.0"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
+| image.csi.snapshotter.tag | string | `"v8.7.0"` | Tag for the CSI Snapshotter image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.registry | string | `""` | Registry for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.repository | string | `"longhornio/backing-image-manager"` | Repository for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
 | image.longhorn.backingImageManager.tag | string | `"master-head"` | Tag for the Backing Image Manager image. When unspecified, Longhorn uses the default value. |
@@ -250,6 +250,7 @@ Longhorn consists of user-deployed components (for example, Longhorn Manager, Lo
 | longhornUI.podDisruptionBudget.minAvailable | int | `1` | Minimum number or percentage of Longhorn UI pods that must remain available during a disruption. Mutually exclusive with `longhornUI.podDisruptionBudget.maxUnavailable`. |
 | longhornUI.priorityClass | string | `"longhorn-critical"` | PriorityClass for Longhorn UI. |
 | longhornUI.replicas | int | `2` | Replica count for Longhorn UI. |
+| longhornUI.resources | string | `nil` | Resource requests and limits for Longhorn UI pods. |
 | longhornUI.tolerations | list | `[]` | Toleration for Longhorn UI on nodes allowed to run Longhorn components. |
 | longhornUI.topologySpreadConstraints | list | `[]` | Topology spread constraints for Longhorn UI pods. Unlike `longhornUI.affinity`, these can guarantee that replicas stay spread across a topology domain during a rolling update or a mass reschedule. |
 

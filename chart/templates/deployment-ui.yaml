@@ -106,6 +106,10 @@ spec:
           - name: LONGHORN_UI_PORT
             value: "8000"
           {{- include "longhorn.timezoneEnv" . | nindent 10 }}
+        {{- with .Values.longhornUI.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       volumes:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
