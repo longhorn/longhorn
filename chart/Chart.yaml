@@ -29,17 +29,17 @@ icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/longhorn/ic
 annotations:
   helm.sh/images: |-
     - name: longhorn-engine
-      image: longhornio/longhorn-engine:v1.12.2
+      image: longhornio/longhorn-engine:v1.12.x-head
     - name: longhorn-manager
-      image: longhornio/longhorn-manager:v1.12.2
+      image: longhornio/longhorn-manager:v1.12.x-head
     - name: longhorn-ui
-      image: longhornio/longhorn-ui:v1.12.2
+      image: longhornio/longhorn-ui:v1.12.x-head
     - name: longhorn-instance-manager
-      image: longhornio/longhorn-instance-manager:v1.12.2
+      image: longhornio/longhorn-instance-manager:v1.12.x-head
     - name: longhorn-share-manager
-      image: longhornio/longhorn-share-manager:v1.12.2
+      image: longhornio/longhorn-share-manager:v1.12.x-head
     - name: backing-image-manager
-      image: longhornio/backing-image-manager:v1.12.2
+      image: longhornio/backing-image-manager:v1.12.x-head
     - name: support-bundle-kit
       image: longhornio/support-bundle-kit:v1.0.5
     - name: csi-attacher
