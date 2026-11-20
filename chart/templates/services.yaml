@@ -7,6 +7,9 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
+  {{- with .Values.service.admissionWebhook.trafficDistribution }}
+  trafficDistribution: {{ . | quote }}
+  {{- end }}
   selector:
     longhorn.io/admission-webhook: longhorn-admission-webhook
   ports:
@@ -23,6 +26,9 @@ metadata:
   namespace: {{ include "release_namespace" . }}
 spec:
   type: ClusterIP
+  {{- with .Values.service.recoveryBackend.trafficDistribution }}
+  trafficDistribution: {{ . }}
+  {{- end }}
   selector:
     longhorn.io/recovery-backend: longhorn-recovery-backend
   ports:

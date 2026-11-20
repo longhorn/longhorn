@@ -106,6 +106,10 @@ spec:
           - name: LONGHORN_UI_PORT
             value: "8000"
           {{- include "longhorn.timezoneEnv" . | nindent 10 }}
+        {{- with .Values.longhornUI.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       volumes:
       {{- if .Values.openshift.enabled }}
       {{- if .Values.openshift.ui.route }}
@@ -189,6 +193,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.service.ui.type "LoadBalancer") .Values.service.ui.loadBalancerClass }}
   loadBalancerClass: {{ .Values.service.ui.loadBalancerClass }}
+  {{- end }}
+  {{- with .Values.service.ui.trafficDistribution }}
+  trafficDistribution: {{ . | quote }}
   {{- end }}
   selector:
     app: longhorn-ui

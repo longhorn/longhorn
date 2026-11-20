@@ -4,7 +4,8 @@ This directory provides manifest templates to deploy **test-ready backup targets
 
 - Azurite (Azure Blob-compatible)
 - CIFS (SMB mount)
-- MinIO (S3-compatible object storage)
+- NFS
+- RustFS (S3-compatible object storage)
 
 All secrets are generated **dynamically** at runtime using Kustomize patches, to avoid committing hardcoded credentials.
 
@@ -29,12 +30,12 @@ deploy/backupstores/
 │   ├── cifs
 │   │   ├── cifs-backupstore.yaml
 │   │   └── kustomization.yaml
-│   ├── minio
+│   ├── nfs
 │   │   ├── kustomization.yaml
-│   │   └── minio-backupstore.yaml
-│   └── nfs
+│   │   └── nfs-backupstore.yaml
+│   └── rustfs
 │       ├── kustomization.yaml
-│       └── nfs-backupstore.yaml
+│       └── rustfs-backupstore.yaml
 ├── overlays
 │   └── generated-credentials
 │       ├── all
@@ -46,12 +47,13 @@ deploy/backupstores/
 │       │   ├── cifs-backupstore-secret-patch-default.yaml
 │       │   ├── cifs-backupstore-secret-patch-longhorn-system.yaml
 │       │   └── kustomization.yaml
-│       ├── minio
-│       │   ├── kustomization.yaml
-│       │   ├── minio-backupstore-secret-patch-default.yaml
-│       │   └── minio-backupstore-secret-patch-longhorn-system.yaml
-│       └── nfs
-│           └── kustomization.yaml
+│       ├── nfs
+│       │   └── kustomization.yaml
+│       └── rustfs
+│           ├── kustomization.yaml
+│           ├── rustfs-backupstore-secret-patch-default.yaml
+│           ├── rustfs-backupstore-secret-patch-longhorn-system.yaml
+│           └── rustfs-backupstore-tls-patch.yaml   # only when AWS_ENDPOINTS is https://
 └── README.md
 
 ```
@@ -87,24 +89,35 @@ export AZBLOB_ENDPOINT="http://azblob-service.default:10000"
 export CIFS_USERNAME="example-cifs-username"
 export CIFS_PASSWORD="example-cifs-password"
 
-# MinIO 
-export AWS_ACCESS_KEY_ID="example-minio-access-key"
-export AWS_SECRET_ACCESS_KEY="example-minio-secret-key"
-export AWS_ENDPOINTS="https://minio-service.default:9000"
-export AWS_CERT="example-base64-cert"         
-export AWS_CERT_KEY="example-base64-cert-key"
+# RustFS 
+export AWS_ACCESS_KEY_ID="example-rustfs-access-key"
+export AWS_SECRET_ACCESS_KEY="example-rustfs-secret-key"
+export AWS_ENDPOINTS="http://rustfs-service.default:9000"
+```
+
+TLS is opt-in and driven by the `AWS_ENDPOINTS` scheme. To serve the S3 API over HTTPS, use an `https://` endpoint and provide a certificate valid for `rustfs-service.default`:
+
+```bash
+openssl req -x509 -nodes -newkey rsa:2048 -days 3650 \
+  -keyout rustfs_key.pem -out rustfs_cert.pem \
+  -subj "/CN=rustfs-service.default" \
+  -addext "subjectAltName=DNS:rustfs-service.default,DNS:rustfs-service.default.svc"
+
+export AWS_ENDPOINTS="https://rustfs-service.default:9000"
+export AWS_CERT="$(cat rustfs_cert.pem)"
+export AWS_CERT_KEY="$(cat rustfs_key.pem)"
 ```
 
 ### Options
 
-- `<backend>`: One of `azurite`, `cifs`, `minio`, `nfs` or `all`. Required.
+- `<backend>`: One of `azurite`, `cifs`, `nfs`, `rustfs` or `all`. Required.
 - `--no-encode` (optional): Indicates that the provided values are already base64-encoded and should be used as-is without additional encoding.
 ### Usage
 
 **Generate credentials for a single backend**
 
 ```bash
-./scripts/generate-backupstore-credentials.sh minio 
+./scripts/generate-backupstore-credentials.sh rustfs 
 ```
 
 **Generate credentials for all backends**
@@ -116,19 +129,25 @@ export AWS_CERT_KEY="example-base64-cert-key"
 **By default, secrets are base64-encoded. Use --no-encode if the input is already base64.**
 
 ```bash
-./scripts/generate-backupstore-credentials.sh minio --no-encode
+./scripts/generate-backupstore-credentials.sh rustfs --no-encode
 ```
 
 ### Deploy / Delete
 
+Azurite, CIFS and RustFS also place a credential secret in `longhorn-system`, so that namespace must exist first — either install Longhorn beforehand or run:
+
+```bash
+kubectl create namespace longhorn-system
+```
+
 **Deploy / Delete one backend**
 
 ```bash
-kubectl apply -k deploy/backupstores/overlays/generated-credentials/minio
+kubectl apply -k deploy/backupstores/overlays/generated-credentials/rustfs
 ```
 
 ```bash
-kubectl delete -k deploy/backupstores/overlays/generated-credentials/minio
+kubectl delete -k deploy/backupstores/overlays/generated-credentials/rustfs
 ```
 
 **Deploy / Delete all**
@@ -140,3 +159,32 @@ kubectl apply -k deploy/backupstores/overlays/generated-credentials/all
 ```bash
 kubectl delete -k deploy/backupstores/overlays/generated-credentials/all
 ```
+
+---
+
+## Backup Target Settings
+
+Once a backend is deployed, point Longhorn at it with the following backup target URL and credential secret:
+
+| Backend | Backup target URL | Credential secret |
+| --- | --- | --- |
+| RustFS | `s3://backupbucket@us-east-1/backupstore` | `rustfs-secret` |
+| NFS | `nfs://longhorn-test-nfs-svc.default:/opt/backupstore` | — |
+| CIFS | `cifs://longhorn-test-cifs-svc.default/backupstore` | `cifs-secret` |
+| Azurite | `azblob://longhorn-test-azurite@core.windows.net/` | `azblob-secret` |
+
+S3 URLs follow `s3://<bucket>@<region>/<path>`. The server address is not part of the URL; Longhorn reads it from `AWS_ENDPOINTS` in the credential secret. For RustFS, the `backupbucket` bucket is pre-created by the deployment's init container.
+
+For example, to configure the default backup target for RustFS:
+
+```bash
+kubectl -n longhorn-system patch backuptarget default --type merge -p '{
+  "spec": {
+    "backupTargetURL": "s3://backupbucket@us-east-1/backupstore",
+    "credentialSecret": "rustfs-secret",
+    "pollInterval": "30s"
+  }
+}'
+```
+
+> The `<url>$<secret>` form (e.g. `s3://backupbucket@us-east-1/backupstore$rustfs-secret`) seen in longhorn-tests is a test-harness convention that is split into the two fields above; it is not a valid Longhorn backup target URL.

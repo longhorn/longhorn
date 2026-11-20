@@ -40,7 +40,10 @@ jobs:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Set Final Membership Flag
-      if: env.is_longhorn_member == 'false' && fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      if: |
+        env.is_longhorn_member == 'false' &&
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
       run: echo "is_longhorn_member=true" >> $GITHUB_ENV
 
     - name: Debug Membership Status
@@ -103,6 +106,7 @@ jobs:
 
     - name: Update Item To New
       if: |
+        github.event.action == 'opened' &&
         steps.is-longhorn-member.outcome == 'success' &&
         fromJSON(steps.is-longhorn-member.outputs.teams)[0] == null &&
         steps.add-project.outputs.itemId != ''
@@ -131,6 +135,7 @@ jobs:
 
     - name: Is Longhorn Member
       id: is-longhorn-member
+      continue-on-error: true
       uses: tspascoal/get-user-teams-membership@57e9f42acd78f4d0f496b3be4368fc5f62696662 # v3
       with:
         username: ${{ github.event.issue.user.login }}
@@ -138,7 +143,9 @@ jobs:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
     - name: Add Issue to QA Sprint Project
-      if: fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
+      if: |
+        steps.is-longhorn-member.outcome == 'success' &&
+        fromJSON(steps.is-longhorn-member.outputs.teams)[0] != null
       uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
       with:
         project-url: https://github.com/orgs/longhorn/projects/4

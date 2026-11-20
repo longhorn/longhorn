@@ -17,3 +17,4 @@
 | End-User | NAVER | https://www.navercorp.com/ | Production Kubernetes persistent storage supporting NAVER's internal platform and cloud-native services at scale. |
 | End-User | Walkbase | https://walkbase.com/ | Walkbase uses Longhorn for persistent storage in our bare metal kubernetes clusters. |
 | End-User | JTEKT | https://www.jtekt.co.jp | Longhorn is the storage solution for an on-premise K8s cluster used as internal developer platform |
+| End-User | Wordfully | https://wordfully.ai | Wordfully uses Longhorn for persistent storage supporting backend workloads on Kubernetes. |

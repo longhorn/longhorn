@@ -14,6 +14,8 @@ if ! command -v helm &> /dev/null || ! helm version --short | grep -q "v3\|v4"; 
   exit 1
 fi
 
+bash "$PRJ_DIR/scripts/update-chart-images-annotation.sh"
+
 for DEPLOY_YAML in ${DEPLOY_YAMLS[@]}; do
   cat <<EOD > "$DEPLOY_YAML"
 ---

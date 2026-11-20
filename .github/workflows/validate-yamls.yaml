@@ -18,23 +18,29 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 1
-          
+
       - name: Install yamllint
         run: |
           sudo apt-get update
           sudo apt-get install -y yamllint
-          
+
       - name: Create yamllint config
         run: |
           cat > .yamllint <<EOF
           extends: default
-          
+
           rules:
             line-length: disable
             trailing-spaces: disable
             document-start: disable
             empty-lines: disable
           EOF
-          
+
       - name: Validate YAML file
         run: yamllint -c .yamllint chart/questions.yaml
+
+      - name: Verify helm.sh/images annotation is in sync with values.yaml
+        run: |
+          bash ./scripts/update-chart-images-annotation.sh
+          git diff --exit-code chart/Chart.yaml || \
+            (echo "Run scripts/update-chart-images-annotation.sh and commit chart/Chart.yaml" && exit 1)
