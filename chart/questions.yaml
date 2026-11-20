@@ -754,7 +754,7 @@ questions:
       - variable: defaultSettings.systemManagedComponentsNodeSelector
         label: System Managed Components NodeSelector
         description: >-
-          Node selector for system-managed Longhorn components.. **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached.
+          Node selector for system-managed Longhorn components. Specify values using a semicolon-separated list of colon-separated key-value pairs (Example: key1:value1; key2:value2). A YAML map, or a list whose entries are `key=value` strings or maps, is also accepted and normalized to that format. **Caution**: This setting should change after all volumes are detached because some Longhorn component pods must be recreated to apply the setting. You cannot modify this setting while volumes are still attached.
         group: Longhorn Default Settings
         type: string
         default: null
