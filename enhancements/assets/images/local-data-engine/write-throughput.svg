@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1515" height="689" viewBox="0 0 1515 689">
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="56" font-family="Arial, sans-serif" font-size="25" fill="#6f6f6f">Write Throughput (MiB/s)</text>
+<line x1="95" y1="614.0" x2="945" y2="614.0" stroke="#c9c9c9" stroke-width="1"/>
+<text x="85" y="619.0" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#333">0</text>
+<line x1="95" y1="563.6" x2="945" y2="563.6" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="95" y1="513.2" x2="945" y2="513.2" stroke="#c9c9c9" stroke-width="1"/>
+<text x="85" y="518.2" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#333">600</text>
+<line x1="95" y1="462.8" x2="945" y2="462.8" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="95" y1="412.4" x2="945" y2="412.4" stroke="#c9c9c9" stroke-width="1"/>
+<text x="85" y="417.4" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#333">1,200</text>
+<line x1="95" y1="362.0" x2="945" y2="362.0" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="95" y1="311.6" x2="945" y2="311.6" stroke="#c9c9c9" stroke-width="1"/>
+<text x="85" y="316.6" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#333">1,800</text>
+<line x1="95" y1="261.2" x2="945" y2="261.2" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="95" y1="210.8" x2="945" y2="210.8" stroke="#c9c9c9" stroke-width="1"/>
+<text x="85" y="215.8" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#333">2,400</text>
+<line x1="95" y1="160.4" x2="945" y2="160.4" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="95" y1="110.0" x2="945" y2="110.0" stroke="#c9c9c9" stroke-width="1"/>
+<text x="85" y="115.0" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#333">3,000</text>
+<line x1="95" y1="614" x2="945" y2="614" stroke="#333" stroke-width="1"/>
+<rect x="317.0" y="210.3" width="42" height="403.7" fill="#999999"><title>Direct NVMe (baseline): 2,403.03</title></rect>
+<rect x="369.0" y="588.0" width="42" height="26.0" fill="#ff1010"><title>v1 strict-local: 154.85</title></rect>
+<rect x="421.0" y="508.0" width="42" height="106.0" fill="#c6d9f1"><title>v2 best-effort, 1 CPU: 631.22</title></rect>
+<rect x="473.0" y="266.9" width="42" height="347.1" fill="#8db4e2"><title>v2 best-effort, 4 CPUs: 2,065.96</title></rect>
+<rect x="525.0" y="211.9" width="42" height="402.1" fill="#4f81bd"><title>v2 best-effort, 8 CPUs: 2,393.71</title></rect>
+<rect x="577.0" y="212.0" width="42" height="402.0" fill="#1f4e79"><title>v2 best-effort, 16 CPUs: 2,393.02</title></rect>
+<rect x="629.0" y="210.7" width="42" height="403.3" fill="#70ad47"><title>Local engine, thick: 2,400.33</title></rect>
+<rect x="681.0" y="210.0" width="42" height="404.0" fill="#f2c94c"><title>Local engine, thin: 2,404.74</title></rect>
+<text x="520.0" y="642" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#333">1 replica</text>
+<rect x="995" y="100" width="13" height="13" fill="#999999"/>
+<text x="1017" y="112" font-family="Arial, sans-serif" font-size="14" fill="#333">Direct NVMe (baseline)</text>
+<rect x="995" y="134" width="13" height="13" fill="#ff1010"/>
+<text x="1017" y="146" font-family="Arial, sans-serif" font-size="14" fill="#333">v1 strict-local</text>
+<rect x="995" y="168" width="13" height="13" fill="#c6d9f1"/>
+<text x="1017" y="180" font-family="Arial, sans-serif" font-size="14" fill="#333">v2 best-effort, 1 CPU</text>
+<rect x="995" y="202" width="13" height="13" fill="#8db4e2"/>
+<text x="1017" y="214" font-family="Arial, sans-serif" font-size="14" fill="#333">v2 best-effort, 4 CPUs</text>
+<rect x="995" y="236" width="13" height="13" fill="#4f81bd"/>
+<text x="1017" y="248" font-family="Arial, sans-serif" font-size="14" fill="#333">v2 best-effort, 8 CPUs</text>
+<rect x="995" y="270" width="13" height="13" fill="#1f4e79"/>
+<text x="1017" y="282" font-family="Arial, sans-serif" font-size="14" fill="#333">v2 best-effort, 16 CPUs</text>
+<rect x="995" y="304" width="13" height="13" fill="#70ad47"/>
+<text x="1017" y="316" font-family="Arial, sans-serif" font-size="14" fill="#333">Local engine, thick</text>
+<rect x="995" y="338" width="13" height="13" fill="#f2c94c"/>
+<text x="1017" y="350" font-family="Arial, sans-serif" font-size="14" fill="#333">Local engine, thin</text>
+</svg>
