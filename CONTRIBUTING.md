@@ -12,6 +12,8 @@ Before contributing code, please read the Longhorn developer guide:
 
 - [Getting started with Longhorn development](https://github.com/longhorn/longhorn/wiki/Getting-started-with-Longhorn-Development)
 
+If you use AI assistance (LLMs, coding assistants, or agents) for your contribution, please also read and aim your agent to the [AI Contributions Guide](.github/ai-contributions.md).
+
 You can also join the Longhorn community discussions through the available Longhorn community channels.
 
 ## Project Structure and Repositories
