@@ -248,6 +248,9 @@ data:
     {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineCPUIsolationEnabled) }}
     data-engine-cpu-isolation-enabled: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineCPUIsolationEnabled }}
     {{- end }}
+    {{- if not (kindIs "invalid" .Values.defaultSettings.dataEngineDedicatedMainCoreEnabled) }}
+    data-engine-dedicated-main-core-enabled: {{ include "longhorn.multiTypeSetting" .Values.defaultSettings.dataEngineDedicatedMainCoreEnabled }}
+    {{- end }}
     {{- if not (kindIs "invalid" .Values.defaultSettings.allowEmptyNodeSelectorVolume) }}
     allow-empty-node-selector-volume: {{ .Values.defaultSettings.allowEmptyNodeSelectorVolume }}
     {{- end }}

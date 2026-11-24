@@ -912,6 +912,13 @@ questions:
         group: Longhorn V2 Data Engine Settings
         type: string
         default: '{"v2":"false"}'
+      - variable: defaultSettings.dataEngineDedicatedMainCoreEnabled
+        label: Data Engine Dedicated Main Core
+        description: >-
+          Applies only to the V2 Data Engine. Specifies whether the first (lowest-numbered) core of the Storage Performance Development Kit (SPDK) target daemon's CPU cores is dedicated to the admin (main) reactor, which handles management RPCs. When disabled, the I/O pollers run on every assigned core, and the admin reactor shares the first core with them. Changing this setting recreates the V2 Instance Manager pods that have no running instances.
+        group: Longhorn V2 Data Engine Settings
+        type: string
+        default: '{"v2":"true"}'
       - variable: defaultSettings.dataEngineLogLevel
         label: Data Engine Log Level
         description: >-
