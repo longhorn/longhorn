@@ -1,0 +1,15 @@
+{{- /*
+The backup store settings moved from defaultSettings to defaultBackupStore in
+v1.8.0. Helm drops unknown values without a word, so a values file still using
+the old keys renders and installs cleanly - with no backup target configured.
+Fail instead, and name the replacement.
+*/ -}}
+{{- if not (kindIs "invalid" .Values.defaultSettings.backupTarget) }}
+{{- fail "defaultSettings.backupTarget moved to defaultBackupStore.backupTarget in v1.8.0. The value under defaultSettings has no effect." }}
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.backupTargetCredentialSecret) }}
+{{- fail "defaultSettings.backupTargetCredentialSecret moved to defaultBackupStore.backupTargetCredentialSecret in v1.8.0. The value under defaultSettings has no effect." }}
+{{- end }}
+{{- if not (kindIs "invalid" .Values.defaultSettings.backupstorePollInterval) }}
+{{- fail "defaultSettings.backupstorePollInterval moved to defaultBackupStore.pollInterval in v1.8.0. The value under defaultSettings has no effect." }}
+{{- end }}
