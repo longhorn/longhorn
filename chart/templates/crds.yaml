@@ -2429,6 +2429,8 @@ spec:
                 type: object
               ip:
                 type: string
+              ipFamily:
+                type: string
               ownerID:
                 type: string
               proxyApiMinVersion:
