@@ -59,6 +59,14 @@ rules:
               "instancemanagerupgrades", "instancemanagerupgrades/status",
               "instancemanagerupgradecontrols", "instancemanagerupgradecontrols/status"]
   verbs: ["*"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get", "list", "watch"]
+# Lets the webhook check that the hook executor may exec in a member's
+# namespace before it accepts a SnapshotGroup with hooks.
+- apiGroups: ["authorization.k8s.io"]
+  resources: ["subjectaccessreviews"]
+  verbs: ["create"]
 - apiGroups: ["coordination.k8s.io"]
   resources: ["leases"]
   verbs: ["get", "list", "watch"]
@@ -80,6 +88,52 @@ rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterrolebindings", "clusterroles"]
   verbs: ["*"]
+---
+# A namespace admin binds this role to let the hook executor exec there.
+# Admission checks each of these rules with a SubjectAccessReview before
+# accepting hooks.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-hook-executor
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create", "get"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list"]
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get"]
+---
+# Kubernetes adds these rules to the built-in admin and edit ClusterRoles,
+# so users with admin or edit access to a namespace can create and manage
+# VolumeHookPolicies there. A VolumeHookPolicy defines commands that run
+# inside pods, so creating one requires the same trust as exec access.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-volumehookpolicy-edit
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: longhorn-volumehookpolicy-view
+  labels: {{- include "longhorn.labels" . | nindent 4 }}
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules:
+- apiGroups: ["longhorn.io"]
+  resources: ["volumehookpolicies"]
+  verbs: ["get", "list", "watch"]
 {{- if .Values.openshift.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -137,7 +191,6 @@ rules:
 - apiGroups: ["snapshot.storage.k8s.io"]
   resources: ["volumesnapshotcontents/status"]
   verbs: ["update", "patch"]
-{{- if .Values.csi.volumeGroupSnapshotEnabled }}
 - apiGroups: ["groupsnapshot.storage.k8s.io"]
   resources: ["volumegroupsnapshotclasses"]
   verbs: ["list", "watch"]
@@ -147,7 +200,6 @@ rules:
 - apiGroups: ["groupsnapshot.storage.k8s.io"]
   resources: ["volumegroupsnapshotcontents/status"]
   verbs: ["update", "patch"]
-{{- end }}
 {{- if .Values.csi.allowControllerSecretAccess }}
 ---
 # Static Secret access for the CSI attacher, provisioner, resizer, and snapshotter.
