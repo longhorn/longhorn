@@ -538,7 +538,7 @@ cli
     - Checking if the replica is in use.
     - Running `launch-simple-longhorn ${VOLUME_NAME} ${VOLUME_SIZE} &`
     - Creating pre-stop script.
-    - Mouting the device to the target host path.
+    - Mounting the device to the target host path.
 - The DaemonSet includes:
     - A shared volume mount for the result output to `replica.json`.
     - An init-container executing `longhornctl-local get replica` for collecting the replica information and output to the `replica.json` in the shared volume mount.
