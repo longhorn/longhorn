@@ -31,6 +31,10 @@ spec:
         - -j
         {{- end }}
         - daemon
+        {{- if eq .Values.dataEngineMode "v2-only" }}
+        - --data-engine-mode
+        - v2-only
+        {{- end }}
         - --engine-image
         - "{{ with (coalesce .Values.global.imageRegistry (include "registry_url" .) .Values.image.longhorn.engine.registry "docker.io") }}{{ . }}/{{ end }}{{ .Values.image.longhorn.engine.repository }}:{{ .Values.image.longhorn.engine.tag }}"
         - --instance-manager-image
