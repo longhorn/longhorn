@@ -1,0 +1,150 @@
+# NVMe reservation demo for a shared block volume.
+#
+# Two pods on different nodes use the same shared block volume. Each pod
+# registers its own reservation key and tries to acquire a Write Exclusive -
+# Registrants Only reservation: the first one succeeds and the other one gets a
+# reservation conflict, since both nodes share one reservation state. Then each
+# pod writes to the volume every 10 seconds and logs the result.
+#
+# The pods install and use blkpr (util-linux >= 2.39), which issues the Linux block layer
+# persistent reservation ioctls on /dev/longhorn/<volume>. nvme-cli cannot be
+# used on this device: it is a device-mapper device, which forwards the generic
+# persistent reservation ioctls to the NVMe device but not NVMe passthrough
+# commands.
+#
+# Usage:
+#   kubectl apply -f storageclass.yaml -f reservation_demo.yaml
+#   kubectl logs -l app=longhorn-v2-shared-block-reservation-demo --prefix -f
+#
+# Fence a pod by removing its registration. Its writes then fail with a
+# reservation conflict, while the other pod keeps writing:
+#   kubectl exec <pod> -- sh -c 'blkpr -c register -K "$(cat /tmp/key)" -k 0 /dev/longhorn/shared-block'
+#
+# Check the reservation state from a node with nvme-cli:
+#   nvme resv-report /dev/nvmeXnY --eds -o json
+#
+# If the host requests persistence through power loss when it registers,
+# Longhorn keeps the state across detach, engine node changes, and cluster
+# restarts. Check the persisted state in the volume status:
+#   kubectl -n longhorn-system get volumes.longhorn.io <volume> -o jsonpath='{.status.reservation}'
+#
+# Longhorn does not block IO without a reservation. While the volume is
+# available on multiple nodes and no reservation is held, the volume condition
+# UnreservedSharedAccess is True and a Warning event is emitted. Concurrent
+# writes are then only safe if the application coordinates them, e.g. through
+# the lock manager of GFS2 or OCFS2.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-v2-shared-block-reservation-demo
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Block
+  storageClassName: longhorn-v2-shared-block
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-v2-shared-block-reservation-demo
+  namespace: default
+data:
+  demo.sh: |
+    #!/bin/sh
+    DEV=/dev/longhorn/shared-block
+
+    if ! command -v blkpr >/dev/null; then
+      echo "blkpr is not available, util-linux >= 2.39 is required"
+      exit 1
+    fi
+
+    # Derive a reservation key from the pod name, so that each pod has its own
+    # key and keeps it across container restarts.
+    KEY="0x$(printf '%s' "${POD_NAME}" | sha1sum | cut -c1-12)"
+    echo "${KEY}" > /tmp/key
+    echo "pod ${POD_NAME} on node ${NODE_NAME} uses reservation key ${KEY}"
+
+    # Register the key, replacing any key this host registered before.
+    if blkpr -c register -k "${KEY}" -f ignore-key "${DEV}"; then
+      echo "registered key ${KEY}"
+    else
+      echo "failed to register key ${KEY}"
+    fi
+
+    # Only one pod can hold the reservation; the other one gets a conflict.
+    if blkpr -c reserve -k "${KEY}" -t write-exclusive-reg-only "${DEV}"; then
+      echo "acquired the write-exclusive-reg-only reservation"
+    else
+      echo "failed to acquire the reservation, it is held by another registrant"
+    fi
+
+    # Registrants can write with a Registrants Only reservation. Each pod writes
+    # its own 4KiB block.
+    OFFSET=$(( $(printf '%d' "0x$(printf '%s' "${POD_NAME}" | sha1sum | cut -c1-4)") % 1024 ))
+    while true; do
+      if printf '%s %s\n' "${POD_NAME}" "$(date)" | dd of="${DEV}" bs=4096 seek="${OFFSET}" count=1 conv=sync oflag=direct 2>/dev/null; then
+        echo "$(date) write succeeded"
+      else
+        echo "$(date) write failed"
+      fi
+      sleep 10
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-v2-shared-block-reservation-demo
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-v2-shared-block-reservation-demo
+  template:
+    metadata:
+      labels:
+        app: longhorn-v2-shared-block-reservation-demo
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: longhorn-v2-shared-block-reservation-demo
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: reservation-demo
+          # blkpr is in the util-linux-misc package of Alpine.
+          image: alpine:3.20
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c", "apk add --no-cache util-linux-misc coreutils && exec /bin/sh /scripts/demo.sh"]
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          securityContext:
+            # Older kernels require CAP_SYS_ADMIN for persistent reservation ioctls.
+            capabilities:
+              add: ["SYS_ADMIN"]
+          volumeDevices:
+            - devicePath: /dev/longhorn/shared-block
+              name: shared-block-vol
+          volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+      volumes:
+        - name: shared-block-vol
+          persistentVolumeClaim:
+            claimName: longhorn-v2-shared-block-reservation-demo
+        - name: scripts
+          configMap:
+            name: longhorn-v2-shared-block-reservation-demo

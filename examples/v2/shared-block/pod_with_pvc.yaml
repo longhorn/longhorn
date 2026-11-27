@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longhorn-v2-shared-block-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Block
+  storageClassName: longhorn-v2-shared-block
+  resources:
+    requests:
+      storage: 2Gi
+---
+# Two pods on different nodes use the same shared block volume at the same time.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-v2-shared-block-test
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: longhorn-v2-shared-block-test
+  template:
+    metadata:
+      labels:
+        app: longhorn-v2-shared-block-test
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: longhorn-v2-shared-block-test
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: volume-test
+          image: nginx:stable-alpine
+          imagePullPolicy: IfNotPresent
+          volumeDevices:
+            - devicePath: /dev/longhorn/shared-block
+              name: shared-block-vol
+          ports:
+            - containerPort: 80
+      volumes:
+        - name: shared-block-vol
+          persistentVolumeClaim:
+            claimName: longhorn-v2-shared-block-pvc

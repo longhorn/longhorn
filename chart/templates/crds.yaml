@@ -1793,6 +1793,49 @@ spec:
                   from not being in the ReplicaModeMap to being in it). This information is sometimes required by other controllers
                   (e.g. the volume controller uses it to determine the correct value for replica.Spec.lastHealthyAt).
                 type: object
+              reservation:
+                description: |-
+                  reservation is the NVMe reservation state the target of a shared block
+                  engine persists through power loss, as last reported by the engine.
+                nullable: true
+                properties:
+                  epoch:
+                    description: |-
+                      epoch identifies the generation of the state. It increases when the
+                      engine moves to another node.
+                    format: int64
+                    type: integer
+                  holderHostID:
+                    description: holderHostID is the NVMe host identifier of the holder.
+                    type: string
+                  holderKey:
+                    description: holderKey is the reservation key of the holder in
+                      hexadecimal.
+                    type: string
+                  nodeID:
+                    description: nodeID is the node of the engine of this epoch.
+                    type: string
+                  registrants:
+                    description: |-
+                      registrants are the hosts registered to the reservation. It is empty if
+                      no host requested persistence.
+                    items:
+                      properties:
+                        hostID:
+                          description: hostID is the NVMe host identifier of the registrant.
+                          type: string
+                        key:
+                          description: key is the reservation key of the registrant
+                            in hexadecimal.
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  type:
+                    description: type is the reservation type (1 to 6), or 0 if there
+                      is no reservation.
+                    type: integer
+                type: object
               restoreStatus:
                 additionalProperties:
                   properties:
@@ -2109,6 +2152,52 @@ spec:
                           type: integer
                         preferredPath:
                           type: string
+                        reservation:
+                          description: |-
+                            reservation is the persisted NVMe reservation state of a shared block
+                            engine if it is known. Its nodeID is not set.
+                          nullable: true
+                          properties:
+                            epoch:
+                              description: |-
+                                epoch identifies the generation of the state. It increases when the
+                                engine moves to another node.
+                              format: int64
+                              type: integer
+                            holderHostID:
+                              description: holderHostID is the NVMe host identifier
+                                of the holder.
+                              type: string
+                            holderKey:
+                              description: holderKey is the reservation key of the
+                                holder in hexadecimal.
+                              type: string
+                            nodeID:
+                              description: nodeID is the node of the engine of this
+                                epoch.
+                              type: string
+                            registrants:
+                              description: |-
+                                registrants are the hosts registered to the reservation. It is empty if
+                                no host requested persistence.
+                              items:
+                                properties:
+                                  hostID:
+                                    description: hostID is the NVMe host identifier
+                                      of the registrant.
+                                    type: string
+                                  key:
+                                    description: key is the reservation key of the
+                                      registrant in hexadecimal.
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                            type:
+                              description: type is the reservation type (1 to 6),
+                                or 0 if there is no reservation.
+                              type: integer
+                          type: object
                         resourceVersion:
                           format: int64
                           type: integer
@@ -2183,6 +2272,52 @@ spec:
                           type: integer
                         preferredPath:
                           type: string
+                        reservation:
+                          description: |-
+                            reservation is the persisted NVMe reservation state of a shared block
+                            engine if it is known. Its nodeID is not set.
+                          nullable: true
+                          properties:
+                            epoch:
+                              description: |-
+                                epoch identifies the generation of the state. It increases when the
+                                engine moves to another node.
+                              format: int64
+                              type: integer
+                            holderHostID:
+                              description: holderHostID is the NVMe host identifier
+                                of the holder.
+                              type: string
+                            holderKey:
+                              description: holderKey is the reservation key of the
+                                holder in hexadecimal.
+                              type: string
+                            nodeID:
+                              description: nodeID is the node of the engine of this
+                                epoch.
+                              type: string
+                            registrants:
+                              description: |-
+                                registrants are the hosts registered to the reservation. It is empty if
+                                no host requested persistence.
+                              items:
+                                properties:
+                                  hostID:
+                                    description: hostID is the NVMe host identifier
+                                      of the registrant.
+                                    type: string
+                                  key:
+                                    description: key is the reservation key of the
+                                      registrant in hexadecimal.
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                            type:
+                              description: type is the reservation type (1 to 6),
+                                or 0 if there is no reservation.
+                              type: integer
+                          type: object
                         resourceVersion:
                           format: int64
                           type: integer
@@ -2257,6 +2392,52 @@ spec:
                           type: integer
                         preferredPath:
                           type: string
+                        reservation:
+                          description: |-
+                            reservation is the persisted NVMe reservation state of a shared block
+                            engine if it is known. Its nodeID is not set.
+                          nullable: true
+                          properties:
+                            epoch:
+                              description: |-
+                                epoch identifies the generation of the state. It increases when the
+                                engine moves to another node.
+                              format: int64
+                              type: integer
+                            holderHostID:
+                              description: holderHostID is the NVMe host identifier
+                                of the holder.
+                              type: string
+                            holderKey:
+                              description: holderKey is the reservation key of the
+                                holder in hexadecimal.
+                              type: string
+                            nodeID:
+                              description: nodeID is the node of the engine of this
+                                epoch.
+                              type: string
+                            registrants:
+                              description: |-
+                                registrants are the hosts registered to the reservation. It is empty if
+                                no host requested persistence.
+                              items:
+                                properties:
+                                  hostID:
+                                    description: hostID is the NVMe host identifier
+                                      of the registrant.
+                                    type: string
+                                  key:
+                                    description: key is the reservation key of the
+                                      registrant in hexadecimal.
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                            type:
+                              description: type is the reservation type (1 to 6),
+                                or 0 if there is no reservation.
+                              type: integer
+                          type: object
                         resourceVersion:
                           format: int64
                           type: integer
@@ -2331,6 +2512,52 @@ spec:
                           type: integer
                         preferredPath:
                           type: string
+                        reservation:
+                          description: |-
+                            reservation is the persisted NVMe reservation state of a shared block
+                            engine if it is known. Its nodeID is not set.
+                          nullable: true
+                          properties:
+                            epoch:
+                              description: |-
+                                epoch identifies the generation of the state. It increases when the
+                                engine moves to another node.
+                              format: int64
+                              type: integer
+                            holderHostID:
+                              description: holderHostID is the NVMe host identifier
+                                of the holder.
+                              type: string
+                            holderKey:
+                              description: holderKey is the reservation key of the
+                                holder in hexadecimal.
+                              type: string
+                            nodeID:
+                              description: nodeID is the node of the engine of this
+                                epoch.
+                              type: string
+                            registrants:
+                              description: |-
+                                registrants are the hosts registered to the reservation. It is empty if
+                                no host requested persistence.
+                              items:
+                                properties:
+                                  hostID:
+                                    description: hostID is the NVMe host identifier
+                                      of the registrant.
+                                    type: string
+                                  key:
+                                    description: key is the reservation key of the
+                                      registrant in hexadecimal.
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                            type:
+                              description: type is the reservation type (1 to 6),
+                                or 0 if there is no reservation.
+                              type: integer
+                          type: object
                         resourceVersion:
                           format: int64
                           type: integer
@@ -2405,6 +2632,52 @@ spec:
                           type: integer
                         preferredPath:
                           type: string
+                        reservation:
+                          description: |-
+                            reservation is the persisted NVMe reservation state of a shared block
+                            engine if it is known. Its nodeID is not set.
+                          nullable: true
+                          properties:
+                            epoch:
+                              description: |-
+                                epoch identifies the generation of the state. It increases when the
+                                engine moves to another node.
+                              format: int64
+                              type: integer
+                            holderHostID:
+                              description: holderHostID is the NVMe host identifier
+                                of the holder.
+                              type: string
+                            holderKey:
+                              description: holderKey is the reservation key of the
+                                holder in hexadecimal.
+                              type: string
+                            nodeID:
+                              description: nodeID is the node of the engine of this
+                                epoch.
+                              type: string
+                            registrants:
+                              description: |-
+                                registrants are the hosts registered to the reservation. It is empty if
+                                no host requested persistence.
+                              items:
+                                properties:
+                                  hostID:
+                                    description: hostID is the NVMe host identifier
+                                      of the registrant.
+                                    type: string
+                                  key:
+                                    description: key is the reservation key of the
+                                      registrant in hexadecimal.
+                                    type: string
+                                type: object
+                              nullable: true
+                              type: array
+                            type:
+                              description: type is the reservation type (1 to 6),
+                                or 0 if there is no reservation.
+                              type: integer
+                          type: object
                         resourceVersion:
                           format: int64
                           type: integer
@@ -5412,6 +5685,16 @@ spec:
                 type: string
               revisionCounterDisabled:
                 type: boolean
+              sharedBlock:
+                description: |-
+                  sharedBlock allows the RWX block volume to be attached to multiple nodes at
+                  the same time. A single engine serves the engine frontends on all attached
+                  nodes, so they share one NVMe reservation state. Only supported by the v2
+                  data engine.
+                type: boolean
+                x-kubernetes-validations:
+                - message: SharedBlock is immutable
+                  rule: self == oldSelf
               size:
                 format: int64
                 type: string
@@ -5537,6 +5820,14 @@ spec:
                 type: boolean
               frontendDisabled:
                 type: boolean
+              frontendNodeIDs:
+                description: |-
+                  frontendNodeIDs lists the nodes a shared block volume is currently
+                  available on, i.e., the nodes with a running engine frontend.
+                items:
+                  type: string
+                nullable: true
+                type: array
               isStandby:
                 type: boolean
               kubernetesStatus:
@@ -5588,6 +5879,50 @@ spec:
                 type: string
               remountRequestedAt:
                 type: string
+              reservation:
+                description: |-
+                  reservation is the NVMe reservation state of a shared block volume that
+                  persists through power loss. It is synced from the engine, and restored
+                  to the engine when the engine moves to another node.
+                nullable: true
+                properties:
+                  epoch:
+                    description: |-
+                      epoch identifies the generation of the state. It increases when the
+                      engine moves to another node.
+                    format: int64
+                    type: integer
+                  holderHostID:
+                    description: holderHostID is the NVMe host identifier of the holder.
+                    type: string
+                  holderKey:
+                    description: holderKey is the reservation key of the holder in
+                      hexadecimal.
+                    type: string
+                  nodeID:
+                    description: nodeID is the node of the engine of this epoch.
+                    type: string
+                  registrants:
+                    description: |-
+                      registrants are the hosts registered to the reservation. It is empty if
+                      no host requested persistence.
+                    items:
+                      properties:
+                        hostID:
+                          description: hostID is the NVMe host identifier of the registrant.
+                          type: string
+                        key:
+                          description: key is the reservation key of the registrant
+                            in hexadecimal.
+                          type: string
+                      type: object
+                    nullable: true
+                    type: array
+                  type:
+                    description: type is the reservation type (1 to 6), or 0 if there
+                      is no reservation.
+                    type: integer
+                type: object
               restoreInitiated:
                 type: boolean
               restoreRequired:
